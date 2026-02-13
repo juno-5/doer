@@ -585,7 +585,7 @@ input[type="checkbox"] {
         padding: 0.25em 0.375em;
     }
 
-    .zulip-icon {
+    .doer-icon {
         font-size: 1.15em;
         width: 1.15em;
         height: 1.15em;
@@ -1604,7 +1604,7 @@ label.preferences-radio-choice-label {
 
             background-color: hsl(0deg 0% 0% / 2%);
 
-            #channel-folder-settings .zulip-icon-preview {
+            #channel-folder-settings .doer-icon-preview {
                 font-size: 1.25em;
             }
         }
@@ -1777,7 +1777,7 @@ label.preferences-radio-choice-label {
             position: relative;
             top: -0.0625em; /* 1px at 16px */
 
-            .zulip-icon {
+            .doer-icon {
                 width: 1em; /* 15px at 16px */
                 height: 1em; /* 15px at 16px */
                 font-size: 0.9375em; /* 15px at 16px */
@@ -2260,7 +2260,7 @@ label.preferences-radio-choice-label {
                 color: var(--color-text-clear-search-button-hover);
             }
 
-            .zulip-icon-close {
+            .doer-icon-close {
                 align-self: center;
             }
         }

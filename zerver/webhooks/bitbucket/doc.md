@@ -1,6 +1,6 @@
-# Zulip Bitbucket integration
+# Doer Bitbucket integration
 
-Zulip supports both Git and Mercurial notifications from Bitbucket.
+Doer supports both Git and Mercurial notifications from Bitbucket.
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Zulip supports both Git and Mercurial notifications from Bitbucket.
 1. On your repository's web page, go to **Settings**. Select
    **Webhooks**, and then click **Add webhook**.
 
-1. Set **Title** to a title of your choice, such as `Zulip`. Set **URL**
+1. Set **Title** to a title of your choice, such as `Doer`. Set **URL**
    to the URL generated above, and toggle the **Active** checkbox.
    Select the **Triggers** you'd like to be notified about, and click
    **Save**.

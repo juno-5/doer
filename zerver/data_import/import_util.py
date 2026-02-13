@@ -62,10 +62,10 @@ DATA_IMPORT_CLIENTS = {
     # This has no functional impact other than ensuring low IDs.
     "Internal": 1,
     "website": 2,
-    "ZulipMobile": 3,
-    "ZulipElectron": 4,
+    "DoerMobile": 3,
+    "DoerElectron": 4,
     # Special client key to be used for data import messages.
-    "ZulipDataImport": 5,
+    "DoerDataImport": 5,
 }
 
 
@@ -171,7 +171,7 @@ def build_user_profile(
     dct = model_to_dict(obj)
 
     """
-    Even though short_name is no longer in the Zulip
+    Even though short_name is no longer in the Doer
     UserProfile, it's helpful to have it in our import
     dictionaries for legacy reasons.
     """
@@ -180,7 +180,7 @@ def build_user_profile(
 
 
 def build_avatar(
-    zulip_user_id: int,
+    doer_user_id: int,
     realm_id: int,
     avatar_url: str,
     timestamp: Any,
@@ -191,7 +191,7 @@ def build_avatar(
         realm_id=realm_id,
         content_type=None,
         avatar_version=1,
-        user_profile_id=zulip_user_id,
+        user_profile_id=doer_user_id,
         last_modified=timestamp,
         s3_path="",
         size="",
@@ -552,8 +552,8 @@ def build_message(
 ) -> ZerverFieldsT:
     # check and remove NULL Bytes if any.
     content = normalize_body_for_import(content)
-    zulip_message = Message(
-        rendered_content_version=1,  # this is Zulip specific
+    doer_message = Message(
+        rendered_content_version=1,  # this is Doer specific
         id=message_id,
         content=content,
         rendered_content=rendered_content,
@@ -564,16 +564,16 @@ def build_message(
     )
     if is_direct_message_type:
         topic_name = Message.DM_TOPIC
-    zulip_message.set_topic_name(topic_name)
-    zulip_message_dict = model_to_dict(
-        zulip_message, exclude=["recipient", "sender", "sending_client"]
+    doer_message.set_topic_name(topic_name)
+    doer_message_dict = model_to_dict(
+        doer_message, exclude=["recipient", "sender", "sending_client"]
     )
-    zulip_message_dict["sender"] = user_id
-    zulip_message_dict["sending_client"] = DATA_IMPORT_CLIENTS["ZulipDataImport"]
-    zulip_message_dict["recipient"] = recipient_id
-    zulip_message_dict["date_sent"] = date_sent
+    doer_message_dict["sender"] = user_id
+    doer_message_dict["sending_client"] = DATA_IMPORT_CLIENTS["DoerDataImport"]
+    doer_message_dict["recipient"] = recipient_id
+    doer_message_dict["date_sent"] = date_sent
 
-    return zulip_message_dict
+    return doer_message_dict
 
 
 def build_attachment(
@@ -836,7 +836,7 @@ def long_term_idle_helper(
     message_iterator: Iterator[ZerverFieldsT],
     user_from_message: Callable[[ZerverFieldsT], ExternalId | None],
     timestamp_from_message: Callable[[ZerverFieldsT], float],
-    zulip_user_id_from_user: Callable[[ExternalId], int],
+    doer_user_id_from_user: Callable[[ExternalId], int],
     all_user_ids_iterator: Iterator[ExternalId],
     zerver_userprofile: list[ZerverFieldsT],
 ) -> set[int]:
@@ -844,7 +844,7 @@ def long_term_idle_helper(
     or have sent a message within the last 60 days as active.
     Everyone else is treated as long-term idle, which means they will
     have a slightly slower first page load when coming back to
-    Zulip.
+    Doer.
     """
     sender_counts: dict[ExternalId, int] = defaultdict(int)
     recent_senders: set[ExternalId] = set()
@@ -871,8 +871,8 @@ def long_term_idle_helper(
     for user_id in all_user_ids_iterator:
         if user_id in recent_senders:
             continue
-        zulip_user_id = zulip_user_id_from_user(user_id)
-        long_term_idle.add(zulip_user_id)
+        doer_user_id = doer_user_id_from_user(user_id)
+        long_term_idle.add(doer_user_id)
 
     for user_profile_row in zerver_userprofile:
         if user_profile_row["id"] in long_term_idle:

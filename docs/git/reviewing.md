@@ -1,7 +1,7 @@
 # Review changes
 
 **Note** - The following section covers reviewing changes on your local
-clone. Please read the section on [code reviews][zulip-rtd-review] for a guide
+clone. Please read the section on [code reviews][doer-rtd-review] for a guide
 on reviewing changes by other contributors.
 
 ## Changes on (local) working tree
@@ -61,4 +61,4 @@ Display changes you've committed so far since creating a branch from `upstream/m
 $ git diff upstream/main...HEAD
 ```
 
-[zulip-rtd-review]: ../contributing/code-reviewing.md
+[doer-rtd-review]: ../contributing/code-reviewing.md

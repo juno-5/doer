@@ -1,6 +1,6 @@
-# Zulip Transifex integration
+# Doer Transifex integration
 
-Get Transifex notifications in Zulip!
+Get Transifex notifications in Doer!
 
 {start_tabs}
 

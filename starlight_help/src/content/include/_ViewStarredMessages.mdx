@@ -2,10 +2,10 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import MobileMenu from "../include/_MobileMenu.mdx";
 
-import StarIcon from "~icons/zulip-icon/star";
+import StarIcon from "~icons/doer-icon/star";
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -15,10 +15,10 @@ import StarIcon from "~icons/zulip-icon/star";
          section is collapsed) in the left sidebar.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also [search your starred messages](/help/search-for-messages)
       using the `is:starred` filter.
-    </ZulipTip>
+    </DoerTip>
 
     <KeyboardTip>
       Use <kbd>\*</kbd> to view your starred messages.

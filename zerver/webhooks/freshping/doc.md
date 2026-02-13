@@ -1,6 +1,6 @@
-# Zulip Freshping integration
+# Doer Freshping integration
 
-Receive Freshping notifications in Zulip!
+Receive Freshping notifications in Doer!
 
 {start_tabs}
 

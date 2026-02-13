@@ -1,6 +1,6 @@
-# Zulip Opsgenie integration
+# Doer Opsgenie integration
 
-Get Zulip notifications for your Opsgenie events!
+Get Doer notifications for your Opsgenie events!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Zulip notifications for your Opsgenie events!
 1. Go to <https://app.opsgenie.com/integration>. Click on
    **Add New Integrations**, and select **Webhook**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Set
+1. Set **Name** to a name of your choice, such as `Doer`. Set
    **Webhook URL** to the URL generated above, and click on
    **Save Integration**.
 

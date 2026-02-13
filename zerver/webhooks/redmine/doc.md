@@ -1,6 +1,6 @@
-# Zulip Redmine integration
+# Doer Redmine integration
 
-Get notifications for Redmine issues in Zulip!
+Get notifications for Redmine issues in Doer!
 
 {start_tabs}
 

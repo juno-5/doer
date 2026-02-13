@@ -22,7 +22,7 @@ class StreamingSourceWithSize:
     reader: Callable[[], ReadableStream]
 
 
-class ZulipUploadBackend:
+class DoerUploadBackend:
     # Message attachment uploads
     def get_public_upload_root_url(self) -> str:
         raise NotImplementedError

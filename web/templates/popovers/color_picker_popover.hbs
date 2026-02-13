@@ -13,8 +13,8 @@
                 &nbsp;
                 {{/if}}
             </div>
-            <button class="color_picker_confirm_button icon-button icon-button-square icon-button-neutral tippy-zulip-delayed-tooltip" data-tooltip-template-id="color-picker-confirm-button-tooltip-template" aria-label="{{t 'Confirm new color' }}" tabindex="0">
-                <i class="zulip-icon zulip-icon-check"></i>
+            <button class="color_picker_confirm_button icon-button icon-button-square icon-button-neutral tippy-doer-delayed-tooltip" data-tooltip-template-id="color-picker-confirm-button-tooltip-template" aria-label="{{t 'Confirm new color' }}" tabindex="0">
+                <i class="doer-icon doer-icon-check"></i>
             </button>
         </div>
     </div>
@@ -24,7 +24,7 @@
                 {{#each stream_color_palette as |row|}}
                     {{#each row as |hex_color|}}
                         <input type="radio" id="color-{{hex_color}}" class="color-swatch-input" name="color-picker-select" data-swatch-color="{{hex_color}}" {{#if (eq hex_color ../../stream_color)}}checked{{/if}} />
-                        <label role="menuitemradio" class="color-swatch-label tippy-zulip-delayed-tooltip" for="color-{{hex_color}}" style="background-color: {{hex_color}};" aria-label="{{hex_color}}" data-tippy-content="{{hex_color}}" data-swatch-color="{{hex_color}}" data-row="{{@../index}}" data-column="{{@index}}" tabindex="0"></label>
+                        <label role="menuitemradio" class="color-swatch-label tippy-doer-delayed-tooltip" for="color-{{hex_color}}" style="background-color: {{hex_color}};" aria-label="{{hex_color}}" data-tippy-content="{{hex_color}}" data-swatch-color="{{hex_color}}" data-row="{{@../index}}" data-column="{{@index}}" tabindex="0"></label>
                     {{/each}}
                 {{/each}}
             </div>

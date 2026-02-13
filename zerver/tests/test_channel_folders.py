@@ -9,42 +9,42 @@ from zerver.actions.channel_folders import (
     try_reorder_realm_channel_folders,
 )
 from zerver.actions.streams import do_change_stream_folder, do_deactivate_stream
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import ChannelFolder
 from zerver.models.realms import get_realm
 from zerver.models.streams import get_stream
 
 
-class ChannelFoldersTestCase(ZulipTestCase):
+class ChannelFoldersTestCase(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         iago = self.example_user("iago")
         desdemona = self.example_user("desdemona")
         lear_user = self.lear_user("cordelia")
 
         check_add_channel_folder(
-            zulip_realm,
+            doer_realm,
             "Frontend",
             "Channels for frontend discussions",
             acting_user=iago,
         )
         check_add_channel_folder(
-            zulip_realm, "Backend", "Channels for **backend** discussions", acting_user=iago
+            doer_realm, "Backend", "Channels for **backend** discussions", acting_user=iago
         )
         check_add_channel_folder(
-            zulip_realm, "Marketing", "Channels for marketing discussions", acting_user=desdemona
+            doer_realm, "Marketing", "Channels for marketing discussions", acting_user=desdemona
         )
         check_add_channel_folder(
             lear_user.realm, "Devops", "Channels for devops discussions", acting_user=lear_user
         )
 
 
-class ChannelFolderCreationTest(ZulipTestCase):
+class ChannelFolderCreationTest(DoerTestCase):
     def test_creating_channel_folder(self) -> None:
         self.login("shiva")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         params = {"name": "Frontend", "description": ""}
         result = self.client_post("/json/channel_folders/create", params)
@@ -63,7 +63,7 @@ class ChannelFolderCreationTest(ZulipTestCase):
 
     def test_creating_channel_folder_with_duplicate_name(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         params = {"name": "Frontend", "description": ""}
         result = self.client_post("/json/channel_folders/create", params)
@@ -88,7 +88,7 @@ class ChannelFolderCreationTest(ZulipTestCase):
 
     def test_rendered_description_for_channel_folder(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         params = {"name": "Frontend", "description": "Channels for frontend discussions"}
         result = self.client_post("/json/channel_folders/create", params)
@@ -141,12 +141,12 @@ class GetChannelFoldersTest(ChannelFoldersTestCase):
     def test_get_channel_folders(self) -> None:
         iago = self.example_user("iago")
         desdemona = self.example_user("desdemona")
-        zulip_realm = iago.realm
-        frontend_folder = ChannelFolder.objects.get(name="Frontend", realm=zulip_realm)
-        backend_folder = ChannelFolder.objects.get(name="Backend", realm=zulip_realm)
-        marketing_folder = ChannelFolder.objects.get(name="Marketing", realm=zulip_realm)
+        doer_realm = iago.realm
+        frontend_folder = ChannelFolder.objects.get(name="Frontend", realm=doer_realm)
+        backend_folder = ChannelFolder.objects.get(name="Backend", realm=doer_realm)
+        marketing_folder = ChannelFolder.objects.get(name="Marketing", realm=doer_realm)
 
-        def check_channel_folders_in_zulip_realm(
+        def check_channel_folders_in_doer_realm(
             channel_folders: list[dict[str, Any]], marketing_folder_included: bool = True
         ) -> None:
             if marketing_folder_included:
@@ -192,32 +192,32 @@ class GetChannelFoldersTest(ChannelFoldersTestCase):
         self.login("iago")
         result = self.client_get("/json/channel_folders")
         channel_folders_data = orjson.loads(result.content)["channel_folders"]
-        check_channel_folders_in_zulip_realm(channel_folders_data)
+        check_channel_folders_in_doer_realm(channel_folders_data)
 
         # Check member user can also see all channel folders.
         self.login("hamlet")
         result = self.client_get("/json/channel_folders")
         channel_folders_data = orjson.loads(result.content)["channel_folders"]
-        check_channel_folders_in_zulip_realm(channel_folders_data)
+        check_channel_folders_in_doer_realm(channel_folders_data)
 
         # Check guest can also see all channel folders.
         self.login("polonius")
         result = self.client_get("/json/channel_folders")
         channel_folders_data = orjson.loads(result.content)["channel_folders"]
-        check_channel_folders_in_zulip_realm(channel_folders_data)
+        check_channel_folders_in_doer_realm(channel_folders_data)
 
         marketing_folder.is_archived = True
         marketing_folder.save()
 
         result = self.client_get("/json/channel_folders")
         channel_folders_data = orjson.loads(result.content)["channel_folders"]
-        check_channel_folders_in_zulip_realm(channel_folders_data, False)
+        check_channel_folders_in_doer_realm(channel_folders_data, False)
 
         result = self.client_get(
             "/json/channel_folders", {"include_archived": orjson.dumps(True).decode()}
         )
         channel_folders_data = orjson.loads(result.content)["channel_folders"]
-        check_channel_folders_in_zulip_realm(channel_folders_data)
+        check_channel_folders_in_doer_realm(channel_folders_data)
 
     def test_get_channel_folders_according_to_order(self) -> None:
         iago = self.example_user("iago")
@@ -240,7 +240,7 @@ class GetChannelFoldersTest(ChannelFoldersTestCase):
 
 class UpdateChannelFoldersTest(ChannelFoldersTestCase):
     def test_updating_channel_folder_name(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel_folder = ChannelFolder.objects.get(name="Frontend", realm=realm)
         channel_folder_id = channel_folder.id
 
@@ -287,7 +287,7 @@ class UpdateChannelFoldersTest(ChannelFoldersTestCase):
         )
 
     def test_updating_channel_folder_description(self) -> None:
-        channel_folder = ChannelFolder.objects.get(name="Frontend", realm=get_realm("zulip"))
+        channel_folder = ChannelFolder.objects.get(name="Frontend", realm=get_realm("doer"))
         channel_folder_id = channel_folder.id
 
         self.login("hamlet")
@@ -328,7 +328,7 @@ class UpdateChannelFoldersTest(ChannelFoldersTestCase):
 
     def test_archiving_and_unarchiving_channel_folder(self) -> None:
         desdemona = self.example_user("desdemona")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel_folder = ChannelFolder.objects.get(name="Frontend", realm=realm)
         channel_folder_id = channel_folder.id
 
@@ -380,7 +380,7 @@ class UpdateChannelFoldersTest(ChannelFoldersTestCase):
 class ReorderChannelFolderTest(ChannelFoldersTestCase):
     def test_reorder(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             ChannelFolder.objects.filter(realm=realm)
             .order_by("-order")
@@ -396,7 +396,7 @@ class ReorderChannelFolderTest(ChannelFoldersTestCase):
 
     def test_reorder_duplicates(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             ChannelFolder.objects.filter(realm=realm)
             .order_by("-order")
@@ -414,7 +414,7 @@ class ReorderChannelFolderTest(ChannelFoldersTestCase):
 
     def test_reorder_unauthorized(self) -> None:
         self.login("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             ChannelFolder.objects.filter(realm=realm)
             .order_by("-order")

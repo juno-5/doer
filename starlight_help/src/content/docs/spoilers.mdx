@@ -5,12 +5,12 @@ title: Spoilers
 import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import SpoilersExamples from "../include/_SpoilersExamples.mdx";
 import SpoilersIntro from "../include/_SpoilersIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import SpoilerIcon from "~icons/zulip-icon/spoiler";
+import SpoilerIcon from "~icons/doer-icon/spoiler";
 
 <SpoilersIntro />
 
@@ -27,11 +27,11 @@ import SpoilerIcon from "~icons/zulip-icon/spoiler";
       1. Replace `Header` with the desired heading text.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use the **Spoiler**
       (<SpoilerIcon />) icon
       to remove existing spoiler formatting from the selected text.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via Markdown">
@@ -49,10 +49,10 @@ import SpoilerIcon from "~icons/zulip-icon/spoiler";
          ````
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       A message can contain both spoilers and other content, and you can combine
       spoilers with other formatting.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 

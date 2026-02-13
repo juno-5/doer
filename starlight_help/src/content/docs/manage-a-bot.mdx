@@ -6,15 +6,15 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 
-import CopyIcon from "~icons/zulip-icon/copy";
-import DownloadIcon from "~icons/zulip-icon/download";
-import RefreshIcon from "~icons/zulip-icon/refresh-cw";
-import UserCogIcon from "~icons/zulip-icon/user-cog";
+import CopyIcon from "~icons/doer-icon/copy";
+import DownloadIcon from "~icons/doer-icon/download";
+import RefreshIcon from "~icons/doer-icon/refresh-cw";
+import UserCogIcon from "~icons/doer-icon/user-cog";
 
-Zulip lets you manage the properties of any bot for which you are the owner.
+Doer lets you manage the properties of any bot for which you are the owner.
 Organization [administrators](/help/user-roles) can also manage any
 active bot in the organization.
 
@@ -85,11 +85,11 @@ configuration file.
      clipboard.
 </FlattenedSteps>
 
-<ZulipTip>
+<DoerTip>
   You can also click the **download** (<DownloadIcon />) icon above the **Bots**
   table to download a single configuration file for all of your active **outgoing
   webhook** bots.
-</ZulipTip>
+</DoerTip>
 
 ## Get a bot's API key
 
@@ -102,10 +102,10 @@ Only a bot's owner has access to its API key.
      and scroll down to **API key**.
   1. Click the **copy** <CopyIcon /> icon to copy the bot's API key to your clipboard.
 
-  <ZulipTip>
+  <DoerTip>
     To generate a new API key, click the **generate new API key** (<RefreshIcon />)
     icon.
-  </ZulipTip>
+  </DoerTip>
 </FlattenedSteps>
 
 ## Related articles

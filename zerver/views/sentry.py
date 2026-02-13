@@ -46,7 +46,7 @@ def sentry_tunnel(
 
     # Adjust the payload to explicitly contain the IP address of the
     # user we see.  If left blank, Sentry will assume the IP it
-    # received the request from, which is Zulip's, which can make
+    # received the request from, which is Doer's, which can make
     # debugging more complicated.
     updated_body = request.body
     # If we fail to update the body for any reason, leave it as-is; it

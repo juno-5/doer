@@ -30,10 +30,10 @@ class Command(BaseCommand):
         tls_cert: str | None = None
         tls_key: str | None = None
         if os.access("/etc/ssl/certs/zulip.combined-chain.crt", os.R_OK) and os.access(
-            "/etc/ssl/private/zulip.key", os.R_OK
+            "/etc/ssl/private/doer.key", os.R_OK
         ):
             tls_cert = "/etc/ssl/certs/zulip.combined-chain.crt"
-            tls_key = "/etc/ssl/private/zulip.key"
+            tls_key = "/etc/ssl/private/doer.key"
         elif os.access("/etc/ssl/certs/ssl-cert-snakeoil.pem", os.R_OK) and os.access(
             "/etc/ssl/private/ssl-cert-snakeoil.key", os.R_OK
         ):

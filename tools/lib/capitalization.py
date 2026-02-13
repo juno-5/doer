@@ -49,14 +49,14 @@ IGNORED_PHRASES = [
     r"WordPress",
     r"YouTube",
     r"Zoom",
-    r"Zulip",
-    r"Zulip Server",
-    r"Zulip Account Security",
-    r"Zulip Security",
-    r"Zulip Cloud",
-    r"Zulip Cloud Standard",
-    r"Zulip Cloud Plus",
-    r"Zulip Desktop",
+    r"Doer",
+    r"Doer Server",
+    r"Doer Account Security",
+    r"Doer Security",
+    r"Doer Cloud",
+    r"Doer Cloud Standard",
+    r"Doer Cloud Plus",
+    r"Doer Desktop",
     r"BigBlueButton",
     r"Constructor Groups",
     # Code things
@@ -117,7 +117,7 @@ IGNORED_PHRASES = [
     r"^greetings$",
     r"^moving messages$",
     r"^start a conversation$",
-    r"^welcome to Zulip!$",
+    r"^welcome to Doer!$",
     r"^general chat$",
     # These are used as example short names (e.g. an uncapitalized context):
     r"^marketing$",
@@ -189,7 +189,7 @@ IGNORED_PHRASES = [
     # Used in pills for unfollowed topics.
     r"unfollowed",
     # This is a reference to a setting/secret and should be lowercase.
-    r"zulip_org_id",
+    r"doer_org_id",
     # These are custom time unit options for modal dropdowns
     r"minutes",
     r"hours",

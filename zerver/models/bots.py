@@ -35,7 +35,7 @@ class Service(models.Model):
     # Interface / API version of the service.
     interface = models.PositiveSmallIntegerField(default=1)
 
-    # Valid interfaces are {generic, zulip_bot_service, slack}
+    # Valid interfaces are {generic, doer_bot_service, slack}
     GENERIC = 1
     SLACK = 2
 

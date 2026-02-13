@@ -1,24 +1,24 @@
 # API changelog
 
-This page documents changes to the Zulip Server API over time. See
-also the [Zulip release lifecycle][release-lifecycle] for background
-on why this API changelog is important, and the [Zulip server
+This page documents changes to the Doer Server API over time. See
+also the [Doer release lifecycle][release-lifecycle] for background
+on why this API changelog is important, and the [Doer server
 changelog][server-changelog].
 
 The API feature levels system used in this changelog is designed to
-make it possible to write API clients, such as the Zulip mobile and
-terminal apps, that work with a wide range of Zulip server
-versions. Every change to the Zulip API is recorded briefly here and
+make it possible to write API clients, such as the Doer mobile and
+terminal apps, that work with a wide range of Doer server
+versions. Every change to the Doer API is recorded briefly here and
 with full details in **Changes** entries in the API documentation for
 the modified endpoint(s).
 
-When using an API endpoint whose behavior has changed, Zulip API
-clients should check the `zulip_feature_level` field, present in the
+When using an API endpoint whose behavior has changed, Doer API
+clients should check the `doer_feature_level` field, present in the
 [`GET /server_settings`](/api/get-server-settings) and [`POST
 /register`](/api/register-queue) responses, to determine the API
-format used by the Zulip server that they are interacting with.
+format used by the Doer server that they are interacting with.
 
-## Changes in Zulip 12.0
+## Changes in Doer 12.0
 
 **Feature level 460**
 
@@ -188,7 +188,7 @@ element to plain escaped text.
 
 * [`GET /events`](/api/get-events): The deprecated `update_display_settings`
   and `update_global_notifications` event types are no longer sent to any
-  clients. These legacy event types were deprecated in Zulip 5.0 (feature
+  clients. These legacy event types were deprecated in Doer 5.0 (feature
   level 89) and replaced by the `user_settings` event type.
 
 **Feature level 438**
@@ -286,11 +286,11 @@ group DM conversations.
 Feature levels 421-424 reserved for future use in 11.x maintenance
 releases.
 
-## Changes in Zulip 11.0
+## Changes in Doer 11.0
 
 **Feature level 421**
 
-No changes; API feature level used for the Zulip 11.0 release.
+No changes; API feature level used for the Doer 11.0 release.
 
 **Feature level 420**
 
@@ -367,8 +367,8 @@ No changes; API feature level used for the Zulip 11.0 release.
   `server` and `realm_id` fields, which were unused.
 * Mobile push notification payloads for FCM to remove push
   notifications no longer contain the legacy pre-2019
-  `zulip_message_id` field; all functional clients support the newer
-  `zulip_message_ids`.
+  `doer_message_id` field; all functional clients support the newer
+  `doer_message_ids`.
 * Mobile push notification payloads for FCM to for new messages no
   longer contain the (unused) `content_truncated` boolean field.
 - E2EE mobile push notification payloads now have a [modernized and
@@ -561,9 +561,9 @@ No changes; API feature level used for the Zulip 11.0 release.
 
 * [Markdown message
   formatting](/api/message-formatting#removed-features): Previously,
-  Zulip's Markdown syntax had special support for previewing Dropbox
+  Doer's Markdown syntax had special support for previewing Dropbox
   albums. Dropbox albums no longer exist, and links to Dropbox folders
-  now consistently use Zulip's standard open graph preview markup.
+  now consistently use Doer's standard open graph preview markup.
 
 **Feature level 394**
 
@@ -747,18 +747,18 @@ No changes; API feature level used for the Zulip 11.0 release.
 Feature levels 373-376 reserved for future use in 10.x maintenance
 releases.
 
-## Changes in Zulip 10.1
+## Changes in Doer 10.1
 
 **Feature level 372**
 
 * [`POST /typing`](/api/set-typing-status): The `"(no topic)"` value
   when used for `topic` parameter is now interpreted as an empty string.
 
-## Changes in Zulip 10.0
+## Changes in Doer 10.0
 
 **Feature level 371**
 
-No changes; feature level used for Zulip 10.0 release.
+No changes; feature level used for Doer 10.0 release.
 
 **Feature level 370**
 
@@ -1035,8 +1035,8 @@ No changes; feature level used for Zulip 10.0 release.
 
 * `POST /remotes/server/register/transfer`,
   `POST /remotes/server/register/verify_challenge`,
-  `POST /zulip-services/verify/{access_token}/`: Added new API
-  endpoints for transferring Zulip services registrations.
+  `POST /doer-services/verify/{access_token}/`: Added new API
+  endpoints for transferring Doer services registrations.
 * `POST /remotes/server/register`: Added new response format for
   hostnames that are already registered.
 
@@ -1672,7 +1672,7 @@ deactivated groups.
 
 * [`POST /users/{user_id}/subscription`](/api/subscribe): In the response,
   users are identified by their numeric user ID rather than by their
-  Zulip API email address.
+  Doer API email address.
 
 **Feature level 288**
 
@@ -1691,7 +1691,7 @@ deactivated groups.
   formatting](/api/message-formatting#images): Added
   `data-original-dimensions` attributes to placeholder images
   (`image-loading-placeholder`), containing the dimensions of the
-  original image. This change was also backported to the Zulip 9.x
+  original image. This change was also backported to the Doer 9.x
   series, at feature level 278.
 
 **Feature level 286**
@@ -1710,7 +1710,7 @@ deactivated groups.
 
 * [`GET /events`](/api/get-events), [`GET /messages`](/api/get-messages),
   [`GET /messages/{message_id}`](/api/get-message),
-  [outgoing webhook payloads](/api/outgoing-webhook-payload#zulip-format):
+  [outgoing webhook payloads](/api/outgoing-webhook-payload#doer-format):
   Removed the `prev_rendered_content_version` field from the `edit_history`
   object within message objects and the `update_message` event type as it
   is an internal server implementation detail not used by any client.
@@ -1759,7 +1759,7 @@ deactivated groups.
 Feature level 279 is reserved for future use in 9.x maintenance
 releases.
 
-## Changes in Zulip 9.2
+## Changes in Doer 9.2
 
 **Feature level 278**
 
@@ -1769,11 +1769,11 @@ releases.
   (`image-loading-placeholder`), containing the dimensions of the
   original image. Backported change from feature level 287.
 
-## Changes in Zulip 9.0
+## Changes in Doer 9.0
 
 **Feature level 277**
 
-No changes; feature level used for Zulip 9.0 release.
+No changes; feature level used for Doer 9.0 release.
 
 **Feature level 276**
 
@@ -1951,8 +1951,8 @@ No changes; feature level used for Zulip 9.0 release.
   to be displayed to clients is sent. Onboarding step now has one-time
   notices as the only valid type. Prior to this, both hotspots and
   one-time notices were valid types of onboarding steps. There is no compatibility
-  support, as we expect that only official Zulip clients will interact with
-  this data. Currently, no client other than the Zulip web app uses this.
+  support, as we expect that only official Doer clients will interact with
+  this data. Currently, no client other than the Doer web app uses this.
 
 **Feature level 258**
 
@@ -1984,7 +1984,7 @@ No changes; feature level used for Zulip 9.0 release.
 
 **Feature level 255**
 
-* "Stream" was renamed to "Channel" across strings in the Zulip API
+* "Stream" was renamed to "Channel" across strings in the Doer API
   and UI. Clients supporting a range of server versions are encouraged
   to use different strings based on the server's API feature level for
   consistency. Note that feature level marks the strings transition
@@ -2087,15 +2087,15 @@ No changes; feature level used for Zulip 9.0 release.
   respectively, to use a dictionary rather than a boolean as the value
   for each authentication method. The new dictionaries are more
   extensively and contain fields indicating whether the backend is
-  unavailable to the current realm due to Zulip Cloud plan
+  unavailable to the current realm due to Doer Cloud plan
   restrictions or any other reason.
 
 **Feature level 242**
 
 * [`POST /register`](/api/register-queue), [`POST /events`](/api/get-events),
-  `PATCH /realm`: Added `zulip_update_announcements_stream_id` realm setting,
+  `PATCH /realm`: Added `doer_update_announcements_stream_id` realm setting,
   which is the ID of the of the stream to which automated messages announcing
-  new features or other end-user updates about the Zulip software are sent.
+  new features or other end-user updates about the Doer software are sent.
 
 **Feature level 241**
 
@@ -2115,11 +2115,11 @@ No changes; feature level used for Zulip 9.0 release.
 Feature levels 238-239 are reserved for future use in 8.x maintenance
 releases.
 
-## Changes in Zulip 8.0
+## Changes in Doer 8.0
 
 **Feature level 237**
 
-No changes; feature level used for Zulip 8.0 release.
+No changes; feature level used for Doer 8.0 release.
 
 **Feature level 236**
 
@@ -2160,7 +2160,7 @@ No changes; feature level used for Zulip 8.0 release.
   existing users) and hotspots (which are used in new user tutorials).
   This endpoint marks both types of onboarding steps, i.e. `hotspot`
   and `one_time_notice`, as read by the user. There is no compatibility
-  support for `/users/me/hotspots` as no client other than the Zulip
+  support for `/users/me/hotspots` as no client other than the Doer
   web app used the endpoint prior to these changes.
 
 **Feature level 232**
@@ -2277,14 +2277,14 @@ No changes; feature level used for Zulip 8.0 release.
 
 * [`POST /users/me/apns_device_token`](/api/add-apns-token):
   The `appid` parameter is now required.
-  Previously it defaulted to the server setting `ZULIP_IOS_APP_ID`,
-  defaulting to "org.zulip.Zulip".
+  Previously it defaulted to the server setting `DOER_IOS_APP_ID`,
+  defaulting to "org.zulip.Doer".
 
 * `POST /remotes/server/register`: The `ios_app_id` parameter is now
   required when `kind` is 1, i.e. when registering an APNs token.
   Previously it was ignored, and the push bouncer effectively
   assumed its value was the server setting `APNS_TOPIC`,
-  defaulting to "org.zulip.Zulip".
+  defaulting to "org.zulip.Doer".
 
 **Feature level 222**
 
@@ -2360,7 +2360,7 @@ No changes; feature level used for Zulip 8.0 release.
   optional parameter, `stream_id`. Now, `to` is used only for `"direct"` type.
   In the case of `"stream"` type, `stream_id` and `topic` are used.
 
-* Note that stream typing notifications were not enabled in any Zulip client
+* Note that stream typing notifications were not enabled in any Doer client
   prior to feature level 215.
 
 **Feature level 214**
@@ -2398,7 +2398,7 @@ No changes; feature level used for Zulip 8.0 release.
   This replaces the use of `"result": "partially_completed"` (introduced
   in feature levels 154 and 153), so that these endpoints now send a
   `result` string of either `"success"` or `"error"`, like the rest of
-  the Zulip API.
+  the Doer API.
 
 **Feature level 210**
 
@@ -2489,7 +2489,7 @@ No changes; feature level used for Zulip 8.0 release.
 
 **Feature level 201**
 
-* `POST /zulip-outgoing-webhook`: Renamed the notification trigger
+* `POST /doer-outgoing-webhook`: Renamed the notification trigger
   `private_message` to `direct_message`.
 
 **Feature level 200**
@@ -2611,11 +2611,11 @@ No changes; feature level used for Zulip 8.0 release.
 Feature levels 186-187 are reserved for future use in 7.x maintenance
 releases.
 
-## Changes in Zulip 7.0
+## Changes in Doer 7.0
 
 **Feature level 185**
 
-No changes; feature level used for Zulip 7.0 release.
+No changes; feature level used for Doer 7.0 release.
 
 **Feature level 184**
 
@@ -2657,7 +2657,7 @@ No changes; feature level used for Zulip 7.0 release.
 
 * [`POST /invites`](/api/send-invites): Added support for invitations specifying
   the empty list as the user's initial stream subscriptions. Previously, this
-  returned an error. This change was also backported to Zulip 6.2, and
+  returned an error. This change was also backported to Doer 6.2, and
   is available at feature levels 157-158 as well.
 
 **Feature level 179**
@@ -2693,7 +2693,7 @@ No changes; feature level used for Zulip 7.0 release.
   The `dm` operator replaces and deprecates the `pm-with` operator.
   The `is:dm` filter replaces and deprecates the `is:private` filter.
   The `dm-including` operator replaces and deprecates the `group-pm-with`
-  operator. Because existing Zulip messages may have links with these
+  operator. Because existing Doer messages may have links with these
   legacy filters, they are still supported for backwards-compatibility.
 
 **Feature level 176**
@@ -2888,20 +2888,20 @@ No changes; feature level used for Zulip 7.0 release.
 Feature level 158 is reserved for future use in 6.x maintenance
 releases.
 
-## Changes in Zulip 6.2
+## Changes in Doer 6.2
 
 **Feature level 157**
 
 * [`POST /invites`](/api/send-invites): Added support for invitations specifying
   the empty list as the user's initial stream subscriptions. Previously, this
-  returned an error. This change was backported from the Zulip 7.0
+  returned an error. This change was backported from the Doer 7.0
   branch, and thus is available at feature levels 157-158 and 180+.
 
-## Changes in Zulip 6.0
+## Changes in Doer 6.0
 
 **Feature level 156**
 
-No changes; feature level used for Zulip 6.0 release.
+No changes; feature level used for Doer 6.0 release.
 
 **Feature level 155**
 
@@ -3122,7 +3122,7 @@ user's profile.
 * [`POST /register`](/api/register-queue),
   [`GET /events`](/api/get-events), `PATCH /realm`: Added realm setting
   `want_advertise_in_communities_directory` for organizations to give
-  permission to be advertised in the Zulip communities directory.
+  permission to be advertised in the Doer communities directory.
 
 **Feature level 128**
 
@@ -3166,11 +3166,11 @@ user's profile.
 Feature levels 123-124 are reserved for future use in 5.x maintenance
 releases.
 
-## Changes in Zulip 5.0
+## Changes in Doer 5.0
 
 **Feature level 122**
 
-No changes; feature level used for Zulip 5.0 release.
+No changes; feature level used for Doer 5.0 release.
 
 **Feature level 121**
 
@@ -3276,7 +3276,7 @@ No changes; feature level used for Zulip 5.0 release.
 
 * In the mobile application authentication flow, the authenticated
   user's `user_id` is now included in the parameters encoded in the
-  final `zulip://` redirect URL.
+  final `doer://` redirect URL.
 
 **Feature level 107**
 
@@ -3445,13 +3445,13 @@ No changes; feature level used for Zulip 5.0 release.
 
 **Feature level 88**
 
-* [`POST /register`](/api/register-queue): Added `zulip_merge_base`
+* [`POST /register`](/api/register-queue): Added `doer_merge_base`
   field to the response.
-* [`GET /events`](/api/get-events): Added new `zulip_merge_base`
+* [`GET /events`](/api/get-events): Added new `doer_merge_base`
   field to the `restart` event.
 * [`GET /server_settings`](/api/get-server-settings): Added
-  `zulip_merge_base` to the responses which can be used to
-  make "About Zulip" widgets in clients.
+  `doer_merge_base` to the responses which can be used to
+  make "About Doer" widgets in clients.
 
 **Feature level 87**
 
@@ -3607,11 +3607,11 @@ No changes; feature level used for Zulip 5.0 release.
 Feature levels 66-69 are reserved for future use in 4.x maintenance
 releases.
 
-## Changes in Zulip 4.0
+## Changes in Doer 4.0
 
 **Feature level 65**
 
-No changes; feature level used for Zulip 4.0 release.
+No changes; feature level used for Doer 4.0 release.
 
 **Feature level 64**
 
@@ -3665,8 +3665,8 @@ No changes; feature level used for Zulip 4.0 release.
   user objects sent in `realm_user` events.
 * [`POST /register`](/api/register-queue): Added `role` field
   in the user objects returned in the `realm_users` field.
-* [`GET /events`](/api/get-events): Added new `zulip_version` and
-  `zulip_feature_level` fields to the `restart` event.
+* [`GET /events`](/api/get-events): Added new `doer_version` and
+  `doer_feature_level` fields to the `restart` event.
 
 **Feature level 58**
 
@@ -3879,7 +3879,7 @@ user to be a stream administrator at this feature level.
 Feature levels 28 and 29 are reserved for future use in 3.x bug fix
 releases.
 
-## Changes in Zulip 3.1
+## Changes in Doer 3.1
 
 **Feature level 27**
 
@@ -3894,11 +3894,11 @@ releases.
 * [`GET /messages`](/api/get-messages) : Removed `short_name` field from
   `display_recipient` array objects.
 
-## Changes in Zulip 3.0
+## Changes in Doer 3.0
 
 **Feature level 25**
 
-No changes; feature level used for Zulip 3.0 release.
+No changes; feature level used for Doer 3.0 release.
 
 **Feature level 24**
 
@@ -3908,8 +3908,8 @@ No changes; feature level used for Zulip 3.0 release.
 
 **Feature level 23**
 
-* `GET/PUT/POST /users/me/pointer`: Removed.  Zulip 3.0 removes the
-  `pointer` concept from Zulip; this legacy data structure was
+* `GET/PUT/POST /users/me/pointer`: Removed.  Doer 3.0 removes the
+  `pointer` concept from Doer; this legacy data structure was
   replaced by tracking unread messages and loading views centered on
   the first unread message.
 
@@ -3924,7 +3924,7 @@ No changes; feature level used for Zulip 3.0 release.
   relevant).
 * [`GET /invites`](/api/get-invites): Now encodes the user ID of the person
    who created the invitation as `invited_by_user_id`, replacing the previous
-   `ref` field (which had that user's Zulip display email address).
+   `ref` field (which had that user's Doer display email address).
 * [`POST /register`](/api/register-queue): The encoding of an
   unlimited `realm_message_retention_days` in the response was changed
   from `null` to `-1`.
@@ -3962,7 +3962,7 @@ No changes; feature level used for Zulip 3.0 release.
 **Feature level 16**
 
 * [`GET /users/me`](/api/get-own-user): Removed `pointer` from the response,
-  as the "pointer" concept is being removed in Zulip.
+  as the "pointer" concept is being removed in Doer.
 * Changed the rendered HTML markup for mentioning a time to use the
   `<time>` HTML tag.  It is OK for clients to ignore the previous time
   mention markup, as the feature was not advertised before this change.
@@ -4021,7 +4021,7 @@ No changes; feature level used for Zulip 3.0 release.
 * [`POST /users/me/subscriptions`](/api/subscribe), [`DELETE
   /users/me/subscriptions`](/api/unsubscribe): Other users to
   subscribe/unsubscribe, declared in the `principals` parameter, can
-  now be referenced by user_id, rather than Zulip display email
+  now be referenced by user_id, rather than Doer display email
   address.
 * [`PATCH /messages/{message_id}`](/api/update-message): Added
   `send_notification_to_old_thread` and
@@ -4078,14 +4078,14 @@ No changes; feature level used for Zulip 3.0 release.
   `server_inline_url_embed_preview`, `server_avatar_changes_disabled` and
   `server_name_changes_disabled` fields are now available via
   `POST /register` to make them accessible to all the clients;
-  they were only internally available to Zulip's web app prior to this.
+  they were only internally available to Doer's web app prior to this.
 
 **Feature level 3**
 
-* [`POST /register`](/api/register-queue): `zulip_version` and
-  `zulip_feature_level` are always returned in the endpoint response.
+* [`POST /register`](/api/register-queue): `doer_version` and
+  `doer_feature_level` are always returned in the endpoint response.
   Previously, they were only present if `event_types` included
-  `zulip_version`.
+  `doer_version`.
 * Added new `presence_enabled` user notification setting; previously
   [presence](/help/status-and-availability) was always enabled.
 
@@ -4112,10 +4112,10 @@ No changes; feature level used for Zulip 3.0 release.
   `prev_stream` is present in `snapshot` objects within `message_history`
   object when a message was moved to another stream.
 * [`GET /server_settings`](/api/get-server-settings): Added
-  `zulip_feature_level`, which can be used by clients to detect which
+  `doer_feature_level`, which can be used by clients to detect which
   of the features described in this changelog are supported.
-* [`POST /register`](/api/register-queue): Added `zulip_feature_level`
-  to the response if `zulip_version` is among the requested
+* [`POST /register`](/api/register-queue): Added `doer_feature_level`
+  to the response if `doer_version` is among the requested
   `event_types`.
 * [`GET /users`](/api/get-users): User objects for bots now
   contain a `bot_owner_id`, replacing the previous `bot_owner` field
@@ -4137,7 +4137,7 @@ No changes; feature level used for Zulip 3.0 release.
 * [`GET /user_uploads/{realm_id_str}/{filename}`](/api/get-file-temporary-url):
   New endpoint added for requesting a temporary URL for an uploaded
   file that does not require authentication to access (e.g., for passing
-  from a Zulip desktop, mobile, or terminal app to the user's default
+  from a Doer desktop, mobile, or terminal app to the user's default
   browser).
 * [`POST /register`](/api/register-queue), [`GET /events`](/api/get-events),
   `PATCH /realm`: Nobody added as an option for the realm setting
@@ -4155,7 +4155,7 @@ No changes; feature level used for Zulip 3.0 release.
   `PATCH /realm`: None added as an option for the realm setting
   `video_chat_provider` to disable video call UI.
 
-## Changes in Zulip 2.1
+## Changes in Doer 2.1
 
 * [`POST /register`](/api/register-queue): Added
   `realm_default_external_accounts` to endpoint response.
@@ -4203,7 +4203,7 @@ No changes; feature level used for Zulip 3.0 release.
   `is_muted` (with the opposite meaning).
 * Custom profile fields: Added `EXTERNAL_ACCOUNT` field type.
 
-## Changes in Zulip 2.0
+## Changes in Doer 2.0
 
 * [`PATCH /users/me/subscriptions/muted_topics`](/api/mute-topic):
   Added support for using stream IDs to specify the stream in which to

@@ -5,7 +5,7 @@ from typing import Any
 
 from django.conf import settings
 from django.utils.translation import gettext as _
-from zulip_bots.lib import BotIdentity, RateLimit
+from doer_bots.lib import BotIdentity, RateLimit
 
 from zerver.actions.message_flags import do_update_message_flags
 from zerver.actions.message_send import (
@@ -34,7 +34,7 @@ def get_bot_handler(service_name: str) -> Any:
             configured_service = embedded_bot_service.name
     if not configured_service:
         return None
-    bot_module_name = f"zulip_bots.bots.{configured_service}.{configured_service}"
+    bot_module_name = f"doer_bots.bots.{configured_service}.{configured_service}"
     bot_module: Any = importlib.import_module(bot_module_name)
     return bot_module.handler_class()
 

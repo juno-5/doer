@@ -1094,7 +1094,7 @@ export function initialize(): void {
                 // See issue #4331 for more details.
                 //
                 // We do the same when copying a code block, since the
-                // most likely next action within Zulip is to paste it
+                // most likely next action within Doer is to paste it
                 // into compose and modify it.
                 $("textarea#compose-textarea").trigger("focus");
                 return;

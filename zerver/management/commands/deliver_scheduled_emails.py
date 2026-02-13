@@ -15,7 +15,7 @@ from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
 from zerver.lib.logging_util import log_to_file
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.send_email import EmailNotDeliveredError, queue_scheduled_emails
 from zerver.models import ScheduledEmail
 
@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 log_to_file(logger, settings.EMAIL_DELIVERER_LOG_PATH)
 
 
-class Command(ZulipBaseCommand):
-    help = """Send emails queued by various parts of Zulip
+class Command(DoerBaseCommand):
+    help = """Send emails queued by various parts of Doer
 for later delivery.
 
 Run this command under supervisor.

@@ -1,23 +1,23 @@
 # Documenting an integration
 
-In order for a [Zulip
+In order for a [Doer
 integration](https://zulip.com/api/integrations-overview) to be useful
-to users, it must be documented. Zulip's common system for documenting
+to users, it must be documented. Doer's common system for documenting
 integrations involves writing Markdown files, either at
 `zerver/webhooks/{webhook_name}/doc.md` (for webhook integrations) or
 `templates/zerver/integrations/{integration_name}.md` (for other
 integrations).
 
 The [integrations][api-integrations] in
-[zulip/python-zulip-api][api-repo] have their corresponding Markdown files
-at `zulip/integrations/{integration_name}/doc.md`, which are imported into
-[zulip/zulip][zulip-repo] at
+[doer/python-doer-api][api-repo] have their corresponding Markdown files
+at `doer/integrations/{integration_name}/doc.md`, which are imported into
+[doer/doer][doer-repo] at
 `static/generated/integrations/{integration_name}/doc.md` using the
 `tools/setup/generate_bots_integrations_static_files.py` script.
 
-[api-repo]: https://github.com/zulip/python-zulip-api/
-[api-integrations]: https://github.com/zulip/python-zulip-api/tree/main/zulip/integrations
-[zulip-repo]: https://github.com/zulip/zulip
+[api-repo]: https://github.com/doer/python-doer-api/
+[api-integrations]: https://github.com/doer/python-doer-api/tree/main/doer/integrations
+[doer-repo]: https://github.com/doer/doer
 
 Typically, the documentation process involves the following steps:
 
@@ -25,7 +25,7 @@ Typically, the documentation process involves the following steps:
   integration, including what URLs to use, etc. See
   [Writing guidelines](#writing-guidelines) for detailed writing guidelines.
 
-  Zulip's pre-defined Markdown macros can be used for some of these steps.
+  Doer's pre-defined Markdown macros can be used for some of these steps.
   See [Markdown macros](#markdown-macros) for further details.
 
 - Make sure you've added your integration to `zerver/lib/integrations.py` in
@@ -36,7 +36,7 @@ Typically, the documentation process involves the following steps:
   configures your integration to appear on the `/integrations` page, and
   makes it possible to automatically generate the screenshot of an example
   message, which is important so that these screenshots can be easily
-  updated as Zulip's design changes.
+  updated as Doer's design changes.
 
 - You'll need to add an SVG graphic of your integration's logo under the
   `static/images/integrations/logos/<name>.svg`, where `<name>` is the
@@ -78,7 +78,7 @@ Typically, the documentation process involves the following steps:
   the screenshot showing the channel/topic bar for the message, not just the
   message body.
 
-[example-commit]: https://github.com/zulip/zulip/commit/f6e847d026013097ecdc484ec6675680ce76aa84
+[example-commit]: https://github.com/doer/doer/commit/f6e847d026013097ecdc484ec6675680ce76aa84
 
 ## Markdown macros
 
@@ -88,30 +88,30 @@ repeated content in our documentation.
 
 The source for macros is the Markdown files under
 `templates/zerver/integrations/include/` in the
-[main Zulip server repository](https://github.com/zulip/zulip). If you find
+[main Doer server repository](https://github.com/doer/doer). If you find
 multiple instances of particular content in the documentation, you can
 always create a new macro by adding a new file to that folder.
 
-Here are a few common macros used to document Zulip's integrations:
+Here are a few common macros used to document Doer's integrations:
 
 - `{!create-channel.md!}` macro - Recommends that users create a dedicated
   channel for a given integration. Usually the first step is setting up an
   integration or incoming webhook. For an example rendering, see **Step 1** of
-  [the docs for Zulip's Zendesk integration][zendesk].
+  [the docs for Doer's Zendesk integration][zendesk].
 
 - `{!create-an-incoming-webhook.md!}` macro - Instructs users to create a bot
   for a given integration and select **Incoming webhook** as the **Bot type**.
   This macro is usually used right after `{!create-channel.md!}`. For an example
-  rendering, see **Step 2** of [the docs for Zulip's Zendesk integration][zendesk].
+  rendering, see **Step 2** of [the docs for Doer's Zendesk integration][zendesk].
 
 - `{!create-a-generic-bot.md!}` macro - Instructs users to create a bot
   for a given integration and select **Generic bot** as the **Bot type**. For an
-  example rendering, see [the docs for Zulip's Matrix integration][matrix].
+  example rendering, see [the docs for Doer's Matrix integration][matrix].
 
 - `{!generate-webhook-url-basic.md!}` - Instructs user how to get the URL for a
   bot for a given integration. Note that this macro should not be used with the
   `{!create-channel.md!}` macro. For an example rendering, see **Step 2** of
-  [the docs for Zulip's GitHub integration][github-integration].
+  [the docs for Doer's GitHub integration][github-integration].
 
 - `{!generate-integration-url.md!}` - Instructs user how to get the URL for a
   bot for a given integration. An example URL is generated automatically for
@@ -127,28 +127,28 @@ Here are a few common macros used to document Zulip's integrations:
   successful setup of a given integration. This macro is usually used at
   the end of the documentation, right before the sample message screenshot.
   For an example rendering, see the end of
-  [the docs for Zulip's GitHub integration][github-integration].
+  [the docs for Doer's GitHub integration][github-integration].
 
 - `{!event-filtering-additional-feature.md!}` macro - If a webhook integration
   supports event filtering, then this adds a section with the specific
   events that can be filtered for the integration. Should be included in
   the documentation if `all_event_types` is set in the webhook integration
   view. For an example see, the **Filtering incoming events** section in
-  [Zulip's GitLab integration][gitlab].
+  [Doer's GitLab integration][gitlab].
 
-- `{!download-python-bindings.md!}` macro - Links to Zulip's
-  [API page](https://zulip.com/api/) to download and install Zulip's
+- `{!download-python-bindings.md!}` macro - Links to Doer's
+  [API page](https://zulip.com/api/) to download and install Doer's
   API bindings. This macro is usually used in non-webhook integration docs under
   `templates/zerver/integrations/<integration_name>.md`. For an example
   rendering, see **Step 3** of
-  [the docs for Zulip's Codebase integration][codebase].
+  [the docs for Doer's Codebase integration][codebase].
 
-- `{!change-zulip-config-file.md!}` macro - Instructs users to create a bot and
+- `{!change-doer-config-file.md!}` macro - Instructs users to create a bot and
   specify said bot's credentials in the config file for a given non-webhook
   integration. This macro is usually used in non-webhook integration docs under
   `templates/zerver/integrations/<integration_name>.md`. For an example
   rendering, see **Step 4** of
-  [the docs for Zulip's Codebase integration][codebase].
+  [the docs for Doer's Codebase integration][codebase].
 
 - `{!webhook-url-with-bot-email.md!}` - Used in certain non-webhook integrations
   to generate URLs of the form:
@@ -158,7 +158,7 @@ Here are a few common macros used to document Zulip's integrations:
   ```
 
   For an example rendering, see
-  [Zulip's Beanstalk integration](https://zulip.com/integrations/beanstalk).
+  [Doer's Beanstalk integration](https://zulip.com/integrations/beanstalk).
 
 [github-integration]: https://zulip.com/integrations/github
 [zendesk]: https://zulip.com/integrations/zendesk
@@ -167,7 +167,7 @@ Here are a few common macros used to document Zulip's integrations:
 [beanstalk]: https://zulip.com/integrations/beanstalk
 [front]: https://zulip.com/integrations/front
 [gitlab]: https://zulip.com/integrations/gitlab
-[integrations-file]: https://github.com/zulip/zulip/blob/main/zerver/lib/integrations.py
+[integrations-file]: https://github.com/doer/doer/blob/main/zerver/lib/integrations.py
 
 ## Writing guidelines
 
@@ -213,7 +213,7 @@ concrete guidelines.
 ### Guidelines for specific steps
 
 Most doc files should start with a generic sentence about the
-integration, for example, "Get `webhook name` notifications in Zulip!"
+integration, for example, "Get `webhook name` notifications in Doer!"
 A typical doc will then have the following steps.
 
 ##### "Create the channel" step
@@ -252,7 +252,7 @@ A typical doc will then have the following steps.
   clear.
 
 Lastly, end with the `congrats.md` macro and a screenshot of a sample message
-within Zulip.
+within Doer.
 
 ### Screenshots
 
@@ -268,18 +268,18 @@ to find. A few things to keep in mind:
 
 ## Markdown features
 
-Zulip's Markdown processor allows you to include several special features in
+Doer's Markdown processor allows you to include several special features in
 your documentation to help improve its readability:
 
 - Since raw HTML is supported in Markdown, you can include arbitrary
   HTML/CSS in your documentation as needed.
 
 - Code blocks allow you to highlight syntax, similar to
-  [Zulip's own Markdown](https://zulip.com/help/format-your-message-using-markdown).
+  [Doer's own Markdown](https://zulip.com/help/format-your-message-using-markdown).
 
 - Anchor tags can be used to link to headers in other documents.
 
-- Inline [icons](#icons) are used to refer to features in the Zulip UI.
+- Inline [icons](#icons) are used to refer to features in the Doer UI.
 
 - Utilize [macros](#markdown-macros) to limit repeated content in the documentation.
 
@@ -325,7 +325,7 @@ Tips are more common than warnings.
 ```md
 !!! warn ""
 
-    **Note**: Zulip also supports configuring this integration as a
+    **Note**: Doer also supports configuring this integration as a
     webhook in Sentry.
 ```
 
@@ -360,4 +360,4 @@ instructions
 only declaring a single tab, which is often used for the main set of
 instructions for setting up an integration.
 
-[tabbed-sections-code]: https://github.com/zulip/zulip/blob/main/zerver/lib/markdown/tabbed_sections.py
+[tabbed-sections-code]: https://github.com/doer/doer/blob/main/zerver/lib/markdown/tabbed_sections.py

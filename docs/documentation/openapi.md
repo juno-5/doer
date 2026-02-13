@@ -5,11 +5,11 @@ OpenAPI file can be used by various tools to generate documentation
 for the API or even basic client-side bindings for dozens of
 programming languages.
 
-Zulip's API is described in `zerver/openapi/zulip.yaml`. Our aim is
-for that file to fully describe every endpoint in the Zulip API, and
-for the Zulip test suite to fail should the API every change without a
+Doer's API is described in `zerver/openapi/doer.yaml`. Our aim is
+for that file to fully describe every endpoint in the Doer API, and
+for the Doer test suite to fail should the API every change without a
 corresponding adjustment to the documentation. In particular,
-essentially all content in Zulip's [REST API
+essentially all content in Doer's [REST API
 documentation](api.md) is generated from our OpenAPI
 file.
 
@@ -21,9 +21,9 @@ files. See the [OpenAPI specification][openapi-spec].
 [openapi-spec]: https://swagger.io/docs/specification/about/
 
 This library isn't in production use yet, but it is our current plan
-for how Zulip's API documentation will work.
+for how Doer's API documentation will work.
 
-## Working with the `zulip.yaml` file
+## Working with the `doer.yaml` file
 
 An OpenAPI specification file has three general parts: information and
 configuration, endpoint definitions, and object schemas referenced by
@@ -34,7 +34,7 @@ compose a larger definition from individual objects with `allOf:`
 
 ### Configuration
 
-These objects, at the top of `zulip.yaml`, identify the API, define
+These objects, at the top of `doer.yaml`, identify the API, define
 the backend host for the working examples, list supported schemes and
 types of authentication, and configure other settings. Once defined,
 information in this section rarely changes.
@@ -46,7 +46,7 @@ For example, the `swagger` and `info` objects look like this:
 openapi: 3.0.1
 info:
   version: 1.0.0
-  title: Zulip REST API
+  title: Doer REST API
   description: Powerful open source group chat.
   contact:
     url: https://zulip.com
@@ -138,9 +138,9 @@ MessageResponse:
 ```
 
 You can find more examples, including GET requests and nested objects, in
-`zerver/openapi/zulip.yaml`.
+`zerver/openapi/doer.yaml`.
 
-## Zulip Swagger YAML style:
+## Doer Swagger YAML style:
 
 We're collecting decisions we've made on how our Swagger YAML files
 should be organized here:

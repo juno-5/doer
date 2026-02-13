@@ -7,14 +7,14 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import MessageActions from "../include/_MessageActions.mdx";
 import MessageLongPressMenu from "../include/_MessageLongPressMenu.mdx";
 import ViewEmojiReactions from "../include/_ViewEmojiReactions.mdx";
 
-import ChevronRightIcon from "~icons/zulip-icon/chevron-right";
-import MoreVerticalSpreadIcon from "~icons/zulip-icon/more-vertical-spread";
-import SmileIcon from "~icons/zulip-icon/smile";
+import ChevronRightIcon from "~icons/doer-icon/chevron-right";
+import MoreVerticalSpreadIcon from "~icons/doer-icon/more-vertical-spread";
+import SmileIcon from "~icons/doer-icon/smile";
 
 Emoji reactions let you quickly respond to a message. For example, 👍 is
 commonly used to express agreement or confirm that you've [read the
@@ -36,10 +36,10 @@ message.
          with your mouse.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To add multiple reactions without closing the emoji picker, hold the
       <kbd>Shift</kbd> key while selecting emoji.
-    </ZulipTip>
+    </DoerTip>
 
     <KeyboardTip>
       Use <kbd>:</kbd> to add any reaction, <kbd>=</kbd> to add the first
@@ -67,10 +67,10 @@ message.
       1. Click on an existing emoji reaction to add or remove your reaction.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       To make it easy to see which reactions you have added, they are
       highlighted in a different color.
-    </ZulipTip>
+    </DoerTip>
 
     <KeyboardTip>
       You can also toggle the first emoji reaction on the selected message by
@@ -83,10 +83,10 @@ message.
       1. Tap on an existing emoji reaction to add or remove your reaction.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       To make it easy to see which reactions you have added, they are
       highlighted in a different color.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 

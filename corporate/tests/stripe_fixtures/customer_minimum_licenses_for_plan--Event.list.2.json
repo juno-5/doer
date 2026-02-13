@@ -59,7 +59,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -102,7 +102,7 @@
             "phone": null,
             "tax_id": null
           },
-          "calculated_statement_descriptor": "ZULIP CLOUD PLUS",
+          "calculated_statement_descriptor": "DOER CLOUD PLUS",
           "captured": true,
           "created": 1000000000,
           "currency": "usd",
@@ -186,7 +186,7 @@
           "shipping": null,
           "source": null,
           "source_transfer": null,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -264,7 +264,7 @@
               {
                 "amount": 72000,
                 "currency": "usd",
-                "description": "Zulip Cloud Plus",
+                "description": "Doer Cloud Plus",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -343,7 +343,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -433,7 +433,7 @@
               {
                 "amount": 72000,
                 "currency": "usd",
-                "description": "Zulip Cloud Plus",
+                "description": "Doer Cloud Plus",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -512,7 +512,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -612,7 +612,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -690,7 +690,7 @@
               {
                 "amount": 72000,
                 "currency": "usd",
-                "description": "Zulip Cloud Plus",
+                "description": "Doer Cloud Plus",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -769,7 +769,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -819,7 +819,7 @@
           "currency": "usd",
           "customer": "customer_minimum_licenses_for_plan--Customer.create.1.json",
           "date": 1000000000,
-          "description": "Zulip Cloud Plus",
+          "description": "Doer Cloud Plus",
           "discountable": false,
           "discounts": [],
           "id": "customer_minimum_licenses_for_plan--Event.list.2.json",
@@ -956,7 +956,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Plus",
+          "statement_descriptor": "Doer Cloud Plus",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -996,7 +996,7 @@
           "currency": "usd",
           "default_source": null,
           "delinquent": false,
-          "description": "zulip (Zulip Dev)",
+          "description": "doer (Doer Dev)",
           "discount": null,
           "email": "hamlet@zulip.com",
           "id": "customer_minimum_licenses_for_plan--Customer.create.1.json",
@@ -1010,7 +1010,7 @@
           "livemode": false,
           "metadata": {
             "realm_id": "1",
-            "realm_str": "zulip"
+            "realm_str": "doer"
           },
           "name": null,
           "next_invoice_sequence": 1,

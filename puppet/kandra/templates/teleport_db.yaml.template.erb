@@ -45,5 +45,5 @@ db_service:
         # to replicas.
         - name: "is_replica"
           command:
-            ["sudo", "-u", "zulip", "psql", "-tc", "select pg_is_in_recovery()"]
+            ["sudo", "-u", "doer", "psql", "-tc", "select pg_is_in_recovery()"]
           period: 1h

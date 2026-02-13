@@ -2,25 +2,25 @@
 #
 class kandra::prometheus::node {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
-  $version = $zulip::common::versions['node_exporter']['version']
+  $version = $doer::common::versions['node_exporter']['version']
   $dir = "/srv/zulip-node_exporter-${version}"
   $bin = "${dir}/node_exporter"
 
-  zulip::external_dep { 'node_exporter':
+  doer::external_dep { 'node_exporter':
     version        => $version,
-    url            => "https://github.com/prometheus/node_exporter/releases/download/v${version}/node_exporter-${version}.linux-${zulip::common::goarch}.tar.gz",
-    tarball_prefix => "node_exporter-${version}.linux-${zulip::common::goarch}",
+    url            => "https://github.com/prometheus/node_exporter/releases/download/v${version}/node_exporter-${version}.linux-${doer::common::goarch}.tar.gz",
+    tarball_prefix => "node_exporter-${version}.linux-${doer::common::goarch}",
     bin            => [$bin],
     cleanup_after  => [Service[supervisor]],
   }
 
   kandra::firewall_allow { 'node_exporter': port => '9100' }
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_node_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_node_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],

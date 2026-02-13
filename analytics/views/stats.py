@@ -27,7 +27,7 @@ from zerver.decorator import (
     require_server_admin,
     require_server_admin_api,
     to_utc_datetime,
-    zulip_login_required,
+    doer_login_required,
 )
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.i18n import get_and_set_request_language, get_language_translation_data
@@ -39,7 +39,7 @@ from zerver.models import Client, Realm, Stream, UserProfile
 from zerver.models.realms import get_realm
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RemoteInstallationCount, RemoteRealmCount, RemoteZulipServer
+    from zilencer.models import RemoteInstallationCount, RemoteRealmCount, RemoteDoerServer
 
 MAX_TIME_FOR_FULL_ANALYTICS_GENERATION = timedelta(days=1, minutes=30)
 
@@ -99,12 +99,12 @@ def render_stats(
     )
 
 
-@zulip_login_required
+@doer_login_required
 def stats(request: HttpRequest) -> HttpResponse:
     assert request.user.is_authenticated
     realm = request.user.realm
     if request.user.is_guest:
-        # TODO: Make @zulip_login_required pass the UserProfile so we
+        # TODO: Make @doer_login_required pass the UserProfile so we
         # can use @require_human_non_guest_user
         raise JsonableError(_("Not allowed for guest users"))
     return render_stats(request, "", realm, analytics_ready=is_analytics_ready(realm))
@@ -132,7 +132,7 @@ def stats_for_remote_realm(
     request: HttpRequest, *, remote_server_id: PathOnly[int], remote_realm_id: PathOnly[int]
 ) -> HttpResponse:
     assert settings.ZILENCER_ENABLED
-    server = RemoteZulipServer.objects.get(id=remote_server_id)
+    server = RemoteDoerServer.objects.get(id=remote_server_id)
     return render_stats(
         request,
         f"/remote/{server.id}/realm/{remote_realm_id}",
@@ -214,7 +214,7 @@ def get_chart_data_for_remote_realm(
     end: Annotated[datetime | None, BeforeValidator(to_utc_datetime)] = None,
 ) -> HttpResponse:
     assert settings.ZILENCER_ENABLED
-    server = RemoteZulipServer.objects.get(id=remote_server_id)
+    server = RemoteDoerServer.objects.get(id=remote_server_id)
     return do_get_chart_data(
         request,
         user_profile,
@@ -237,7 +237,7 @@ def stats_for_installation(request: HttpRequest) -> HttpResponse:
 @require_server_admin
 def stats_for_remote_installation(request: HttpRequest, remote_server_id: int) -> HttpResponse:
     assert settings.ZILENCER_ENABLED
-    server = RemoteZulipServer.objects.get(id=remote_server_id)
+    server = RemoteDoerServer.objects.get(id=remote_server_id)
     return render_stats(
         request,
         f"/remote/{server.id}/installation",
@@ -283,7 +283,7 @@ def get_chart_data_for_remote_installation(
     end: Annotated[datetime | None, BeforeValidator(to_utc_datetime)] = None,
 ) -> HttpResponse:
     assert settings.ZILENCER_ENABLED
-    server = RemoteZulipServer.objects.get(id=remote_server_id)
+    server = RemoteDoerServer.objects.get(id=remote_server_id)
     return do_get_chart_data(
         request,
         user_profile,
@@ -334,7 +334,7 @@ def do_get_chart_data(
     for_installation: bool = False,
     remote: bool = False,
     remote_realm_id: int | None = None,
-    server: Optional["RemoteZulipServer"] = None,
+    server: Optional["RemoteDoerServer"] = None,
     stream: Stream | None = None,
 ) -> HttpResponse:
     TableType: TypeAlias = (
@@ -594,22 +594,22 @@ def client_label_map(name: str) -> str:
         return "Web app"
     if name.startswith("desktop app"):
         return "Old desktop app"
-    if name == "ZulipElectron":
+    if name == "DoerElectron":
         return "Desktop app"
-    if name == "ZulipTerminal":
+    if name == "DoerTerminal":
         return "Terminal app"
-    if name == "ZulipAndroid":
+    if name == "DoerAndroid":
         return "Ancient Android app"
     if name == "ZulipiOS":
         return "Ancient iOS app"
-    if name == "ZulipMobile":
+    if name == "DoerMobile":
         return "Old mobile app (React Native)"
-    if name in ["ZulipFlutter", "ZulipMobile/flutter"]:
+    if name in ["DoerFlutter", "DoerMobile/flutter"]:
         return "Mobile app (Flutter)"
-    if name in ["ZulipPython", "API: Python"]:
+    if name in ["DoerPython", "API: Python"]:
         return "Python API"
-    if name.startswith("Zulip") and name.endswith("Webhook"):
-        return name.removeprefix("Zulip").removesuffix("Webhook") + " webhook"
+    if name.startswith("Doer") and name.endswith("Webhook"):
+        return name.removeprefix("Doer").removesuffix("Webhook") + " webhook"
     return name
 
 

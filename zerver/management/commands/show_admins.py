@@ -4,10 +4,10 @@ from typing import Any
 from django.core.management.base import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Show the owners and administrators in an organization."""
 
     @override

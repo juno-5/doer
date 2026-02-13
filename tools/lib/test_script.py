@@ -5,10 +5,10 @@ import sys
 from argparse import ArgumentParser
 from collections.abc import Iterable
 
-from scripts.lib.zulip_tools import get_dev_uuid_var_path
+from scripts.lib.doer_tools import get_dev_uuid_var_path
 from version import PROVISION_VERSION
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def get_version_file() -> str:
@@ -119,7 +119,7 @@ def find_js_test_files(test_dir: str, files: Iterable[str]) -> list[str]:
 
 
 def prepare_puppeteer_run(is_firefox: bool = False) -> None:
-    os.chdir(ZULIP_PATH)
+    os.chdir(DOER_PATH)
     # This will determine if the browser will be firefox or chrome.
     os.environ["PUPPETEER_PRODUCT"] = "firefox" if is_firefox else "chrome"
     subprocess.check_call(["node", "install.mjs"], cwd="node_modules/puppeteer")

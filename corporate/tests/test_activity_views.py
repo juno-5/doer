@@ -9,14 +9,14 @@ from corporate.lib.stripe import add_months
 from corporate.models.customers import Customer
 from corporate.models.licenses import LicenseLedger
 from corporate.models.plans import CustomerPlan
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Client, UserActivity, UserProfile
 from zerver.models.realm_audit_logs import AuditLogEventType
 from zilencer.models import (
     RemoteRealm,
     RemoteRealmAuditLog,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
     get_remote_customer_user_count,
     get_remote_server_guest_and_non_guest_count,
 )
@@ -118,7 +118,7 @@ data_list = [
 ]
 
 
-class ActivityTest(ZulipTestCase):
+class ActivityTest(DoerTestCase):
     @mock.patch("stripe.Customer.list", return_value=[])
     def test_activity(self, unused_mock: mock.Mock) -> None:
         self.login("hamlet")
@@ -165,13 +165,13 @@ class ActivityTest(ZulipTestCase):
             is_renewal=True,
             plan=plan,
         )
-        server = RemoteZulipServer.objects.create(
+        server = RemoteDoerServer.objects.create(
             uuid=str(uuid.uuid4()),
             api_key="magic_secret_api_key",
             hostname="demo.example.com",
             contact_email="email@example.com",
         )
-        RemoteZulipServerAuditLog.objects.create(
+        RemoteDoerServerAuditLog.objects.create(
             event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
             server=server,
             event_time=server.last_updated,
@@ -203,7 +203,7 @@ class ActivityTest(ZulipTestCase):
             self.assertEqual(result.status_code, 200)
 
         with self.assert_database_query_count(13):
-            result = self.client_get("/realm_activity/zulip/")
+            result = self.client_get("/realm_activity/doer/")
             self.assertEqual(result.status_code, 200)
 
         iago = self.example_user("iago")
@@ -278,7 +278,7 @@ class ActivityTest(ZulipTestCase):
             )
 
         def add_audit_log_data(
-            server: RemoteZulipServer, remote_realm: RemoteRealm | None, realm_id: int | None
+            server: RemoteDoerServer, remote_realm: RemoteRealm | None, realm_id: int | None
         ) -> None:
             extra_data = {
                 RemoteRealmAuditLog.ROLE_COUNT: {
@@ -309,16 +309,16 @@ class ActivityTest(ZulipTestCase):
                 )
 
         for i in range(6):
-            hostname = f"zulip-{i}.example.com"
-            remote_server = RemoteZulipServer.objects.create(
+            hostname = f"doer-{i}.example.com"
+            remote_server = RemoteDoerServer.objects.create(
                 hostname=hostname, contact_email=f"admin@{hostname}", uuid=uuid.uuid4()
             )
-            RemoteZulipServerAuditLog.objects.create(
+            RemoteDoerServerAuditLog.objects.create(
                 event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
                 server=remote_server,
                 event_time=remote_server.last_updated,
             )
-            # We want at least one RemoteZulipServer that has no RemoteRealm
+            # We want at least one RemoteDoerServer that has no RemoteRealm
             # as an example of a pre-8.0 release registered remote server.
             if i > 2:
                 realm_name = f"realm-name-{i}"
@@ -333,13 +333,13 @@ class ActivityTest(ZulipTestCase):
                 )
 
         # Remote server on complimentary access plan
-        server = RemoteZulipServer.objects.get(hostname="zulip-1.example.com")
+        server = RemoteDoerServer.objects.get(hostname="doer-1.example.com")
         customer = Customer.objects.create(remote_server=server)
         add_plan(customer, tier=CustomerPlan.TIER_SELF_HOSTED_LEGACY)
         add_audit_log_data(server, remote_realm=None, realm_id=2)
 
         # Remote server paid plan - multiple realms
-        server = RemoteZulipServer.objects.get(hostname="zulip-2.example.com")
+        server = RemoteDoerServer.objects.get(hostname="doer-2.example.com")
         customer = Customer.objects.create(remote_server=server)
         add_plan(customer, tier=CustomerPlan.TIER_SELF_HOSTED_BASIC)
         add_audit_log_data(server, remote_realm=None, realm_id=3)

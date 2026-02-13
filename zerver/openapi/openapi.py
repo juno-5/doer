@@ -1,8 +1,8 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
 # This file contains helper functions to interact with the OpenAPI
-# definitions and validate that Zulip's implementation matches what is
+# definitions and validate that Doer's implementation matches what is
 # described in our documentation.
 
 import json
@@ -19,7 +19,7 @@ from openapi_core.validation.exceptions import ValidationError as OpenAPIValidat
 from pydantic import BaseModel
 
 OPENAPI_SPEC_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "../openapi/zulip.yaml")
+    os.path.join(os.path.dirname(__file__), "../openapi/doer.yaml")
 )
 
 # A list of endpoint-methods such that the endpoint
@@ -493,7 +493,7 @@ def validate_test_response(request: Request, response: Response) -> bool:
 
 def validate_schema(schema: dict[str, Any]) -> None:
     """Check if opaque objects are present in the OpenAPI spec; this is an
-    important part of our policy for ensuring every detail of Zulip's
+    important part of our policy for ensuring every detail of Doer's
     API responses is correct.
 
     This is done by checking for the presence of the
@@ -605,7 +605,7 @@ def validate_test_request(
 Error!  The OpenAPI schema for {method} {url} is not consistent
 with the parameters passed in this HTTP request.  Consider:
 
-* Updating the OpenAPI schema defined in zerver/openapi/zulip.yaml
+* Updating the OpenAPI schema defined in zerver/openapi/doer.yaml
 * Adjusting the test to pass valid parameters.  If the test
   fails due to intentionally_undocumented features, you need to pass
   `intentionally_undocumented=True` to self.client_{method.lower()} or

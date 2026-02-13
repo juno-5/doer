@@ -4,16 +4,16 @@ import time_machine
 from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zilencer.lib.remote_counts import MissingDataError, compute_max_monthly_messages
-from zilencer.models import RemoteInstallationCount, RemoteZulipServer
+from zilencer.models import RemoteInstallationCount, RemoteDoerServer
 
 
-class RemoteCountTest(ZulipTestCase):
+class RemoteCountTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         self.server_uuid = "6cde5f7a-1f7e-4978-9716-49f69ebfc9fe"
-        self.server = RemoteZulipServer(
+        self.server = RemoteDoerServer(
             uuid=self.server_uuid,
             api_key="magic_secret_api_key",
             hostname="demo.example.com",

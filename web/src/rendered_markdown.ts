@@ -318,7 +318,7 @@ export const update_elements = ($content: JQuery): void => {
     });
 
     // Display the view-code-in-playground and the copy-to-clipboard button inside the div.codehilite element,
-    // and add a `zulip-code-block` class to it to detect it easily in `compose_paste.ts`.
+    // and add a `doer-code-block` class to it to detect it easily in `compose_paste.ts`.
     $content.find("div.codehilite").each(function (): void {
         const $codehilite = $(this);
         const $pre = $codehilite.find("pre");
@@ -364,7 +364,7 @@ export const update_elements = ($content: JQuery): void => {
                 show_check_icon: true,
             });
         });
-        $codehilite.addClass("zulip-code-block");
+        $codehilite.addClass("doer-code-block");
     });
 
     $content.find("audio").each(function (): void {

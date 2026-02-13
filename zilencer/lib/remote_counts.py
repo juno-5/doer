@@ -4,14 +4,14 @@ from django.db import connection
 from django.utils.timezone import now as timezone_now
 from psycopg2.sql import SQL, Literal
 
-from zilencer.models import RemoteInstallationCount, RemoteZulipServer
+from zilencer.models import RemoteInstallationCount, RemoteDoerServer
 
 
 class MissingDataError(Exception):
     pass
 
 
-def compute_max_monthly_messages(remote_server: RemoteZulipServer) -> int:
+def compute_max_monthly_messages(remote_server: RemoteDoerServer) -> int:
     # Calculate the maximum amount of messages that the server had within a month.
     # out of the last 3 months.
 

@@ -12,8 +12,8 @@ def setup_path() -> None:
     if sys.prefix != venv:
         sys.path = list(
             filter(
-                # zulip-py3-venv was an historical virtualenv symlink
-                lambda p: "/zulip-py3-venv/" not in p and "/.venv/" not in p,
+                # doer-py3-venv was an historical virtualenv symlink
+                lambda p: "/doer-py3-venv/" not in p and "/.venv/" not in p,
                 sys.path,
             )
         )

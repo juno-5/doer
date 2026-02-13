@@ -266,7 +266,7 @@ export function initialize(): void {
 
     // We send a stop-typing notification immediately when compose is
     // closed/cancelled
-    $(document).on("compose_canceled.zulip compose_finished.zulip", () => {
+    $(document).on("compose_canceled.doer compose_finished.doer", () => {
         typing_status.update(
             worker,
             null,

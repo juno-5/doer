@@ -1948,16 +1948,16 @@
     --font-weight-message-reaction: 600;
 
     /* Message feed loading indicator colors */
-    --color-zulip-logo: light-dark(
+    --color-doer-logo: light-dark(
         hsl(0deg 0% 0% / 34%),
         hsl(0deg 0% 100% / 50%)
     );
-    --color-zulip-logo-loading: light-dark(hsl(0deg 0% 27%), hsl(0deg 0% 100%));
+    --color-doer-logo-loading: light-dark(hsl(0deg 0% 27%), hsl(0deg 0% 100%));
     --color-recent-view-loading-spinner: light-dark(
         hsl(0deg 0% 27%),
         hsl(0deg 0% 100% / 60%)
     );
-    --color-zulip-logo-z: light-dark(hsl(0deg 0% 100%), hsl(214deg 27% 18%));
+    --color-doer-logo-z: light-dark(hsl(0deg 0% 100%), hsl(214deg 27% 18%));
 
     /* Message collapsing/condensing button colors */
     --color-show-more-less-button-background: light-dark(
@@ -2244,29 +2244,29 @@
        this file is not imported on billing pages. */
 
     /* Zulip-style button colors. */
-    --color-background-zulip-button: light-dark(
+    --color-background-doer-button: light-dark(
         hsl(0deg 0% 100%),
         hsl(0deg 0% 0% / 20%)
     );
-    --color-background-zulip-button-hover: light-dark(
-        var(--color-background-zulip-button),
+    --color-background-doer-button-hover: light-dark(
+        var(--color-background-doer-button),
         hsl(0deg 0% 0% / 15%)
     );
-    --color-background-zulip-button-active: light-dark(
+    --color-background-doer-button-active: light-dark(
         hsl(0deg 0% 95%),
-        var(--color-background-zulip-button-hover)
+        var(--color-background-doer-button-hover)
     );
-    --color-background-zulip-button-disabled: light-dark(
+    --color-background-doer-button-disabled: light-dark(
         hsl(0deg 0% 93%),
-        var(--color-background-zulip-button)
+        var(--color-background-doer-button)
     );
-    --color-border-zulip-button: light-dark(
+    --color-border-doer-button: light-dark(
         hsl(0deg 0% 80%),
         hsl(0deg 0% 0% / 60%)
     );
-    --color-border-zulip-button-interactive: light-dark(
+    --color-border-doer-button-interactive: light-dark(
         hsl(0deg 0% 60%),
-        var(--color-border-zulip-button)
+        var(--color-border-doer-button)
     );
 
     /* Zulip-style checkbox values. */

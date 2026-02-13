@@ -1,14 +1,14 @@
 # Directory structure
 
-This page documents the directory structure of the [Zulip server and
-web app project](https://github.com/zulip/zulip). You may also find
+This page documents the directory structure of the [Doer server and
+web app project](https://github.com/doer/doer). You may also find
 the [new application feature
 tutorial](../tutorials/new-feature-tutorial.md) helpful for
 understanding the flow through these files.
 
 ### Core Python files
 
-Zulip uses the [Django web
+Doer uses the [Django web
 framework](https://docs.djangoproject.com/en/5.0/), so a lot of these
 paths will be familiar to Django developers.
 
@@ -18,7 +18,7 @@ paths will be familiar to Django developers.
 
 - `zerver/models/*.py`
   [Django models](https://docs.djangoproject.com/en/5.0/topics/db/models/)
-  files. Defines Zulip's database tables.
+  files. Defines Doer's database tables.
 
 - `zerver/lib/*.py` Most library code.
 
@@ -29,7 +29,7 @@ paths will be familiar to Django developers.
 
 - `zerver/views/*.py` Most [Django views](https://docs.djangoproject.com/en/5.0/topics/http/views/).
 
-- `zerver/webhooks/` Webhook views and tests for [Zulip's incoming webhook integrations](../webhooks/incoming-webhooks-overview.md).
+- `zerver/webhooks/` Webhook views and tests for [Doer's incoming webhook integrations](../webhooks/incoming-webhooks-overview.md).
 
 - `zerver/tornado/views.py` Tornado views.
 
@@ -43,7 +43,7 @@ paths will be familiar to Django developers.
 
 ### HTML templates
 
-See [our docs](../subsystems/html-css.md) for details on Zulip's
+See [our docs](../subsystems/html-css.md) for details on Doer's
 templating systems.
 
 - `templates/zerver/` For [Jinja2](http://jinja.pocoo.org/) templates
@@ -55,9 +55,9 @@ templating systems.
 
 ### JavaScript, TypeScript, and other frontend assets
 
-- `web/src/` Zulip's own JavaScript and TypeScript sources.
+- `web/src/` Doer's own JavaScript and TypeScript sources.
 
-- `web/styles/` Zulip's own CSS.
+- `web/styles/` Doer's own CSS.
 
 - `web/images/` Images bundled with webpack.
 
@@ -111,10 +111,10 @@ Django context (i.e. with database access).
 - `scripts/setup/` Scripts that production deployments will only run
   once, during installation.
 
-- `tools/` Scripts used only in a Zulip development environment.
-  These are not included in production release tarballs for Zulip, so
+- `tools/` Scripts used only in a Doer development environment.
+  These are not included in production release tarballs for Doer, so
   that we can include scripts here one wouldn't want someone to run in
-  production accidentally (e.g., things that delete the Zulip database
+  production accidentally (e.g., things that delete the Doer database
   without prompting).
 
 - `tools/setup/` Subdirectory of `tools/` for things only used during
@@ -128,10 +128,10 @@ Django context (i.e. with database access).
 
 ### API and bots
 
-- See the [Zulip API repository](https://github.com/zulip/python-zulip-api).
-  Zulip's Python API bindings, a number of Zulip integrations and
-  bots, and a framework for running and testing Zulip bots, used to be
-  developed in the main Zulip server repo but are now in their own repo.
+- See the [Doer API repository](https://github.com/doer/python-doer-api).
+  Doer's Python API bindings, a number of Doer integrations and
+  bots, and a framework for running and testing Doer bots, used to be
+  developed in the main Doer server repo but are now in their own repo.
 
 - `templates/zerver/integrations/` (within `templates/zerver/`, above).
   Documentation for these integrations.
@@ -142,9 +142,9 @@ Django context (i.e. with database access).
 
 This is used to deploy essentially all configuration in production.
 
-- `puppet/zulip/` For configuration for production deployments.
+- `puppet/doer/` For configuration for production deployments.
 
-- `puppet/zulip/manifests/profile/standalone.pp` Main manifest for Zulip standalone deployments.
+- `puppet/doer/manifests/profile/standalone.pp` Main manifest for Doer standalone deployments.
 
 ---
 
@@ -152,10 +152,10 @@ This is used to deploy essentially all configuration in production.
 
 - `confirmation` Email confirmation system.
 
-- `analytics` Analytics for the Zulip server administrator (needs work to
-  be useful to normal Zulip sites).
+- `analytics` Analytics for the Doer server administrator (needs work to
+  be useful to normal Doer sites).
 
-- `corporate` The old Zulip.com website. Not included in production
+- `corporate` The old Doer.com website. Not included in production
   distribution.
 
 - `zilencer` Primarily used to hold management commands that aren't

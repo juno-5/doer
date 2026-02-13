@@ -101,7 +101,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -179,7 +179,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "paid",
           "status_transitions": {
             "finalized_at": 1000000000,

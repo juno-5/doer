@@ -9,7 +9,7 @@ from typing_extensions import override
 
 from zerver.actions.user_groups import add_subgroups_to_user_group, check_add_user_group
 from zerver.lib.exceptions import JsonableError
-from zerver.lib.test_classes import ZulipTransactionTestCase
+from zerver.lib.test_classes import DoerTransactionTestCase
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.lib.user_groups import access_user_group_for_update
 from zerver.models import NamedUserGroup, Realm, UserGroup, UserProfile
@@ -62,7 +62,7 @@ def dev_update_subgroups(
     return None
 
 
-class UserGroupRaceConditionTestCase(ZulipTransactionTestCase):
+class UserGroupRaceConditionTestCase(DoerTransactionTestCase):
     created_user_groups: list[NamedUserGroup] = []
     counter = 0
     CHAIN_LENGTH = 3
@@ -103,7 +103,7 @@ class UserGroupRaceConditionTestCase(ZulipTransactionTestCase):
         return groups
 
     def test_lock_subgroups_with_respect_to_supergroup(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login("iago")
         iago = self.example_user("iago")
 

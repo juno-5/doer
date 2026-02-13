@@ -5,10 +5,10 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_send_realm_reactivation_email
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Sends realm reactivation email to admins"""
 
     @override

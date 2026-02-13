@@ -9,7 +9,7 @@ import requests
 from django.conf import settings
 from django.utils.encoding import smart_str
 
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.lib.cache import cache_with_key, preview_url_cache_key
 from zerver.lib.outgoing_http import OutgoingSession
 from zerver.lib.pysa import mark_sanitized
@@ -28,12 +28,12 @@ link_regex = re.compile(
 )
 
 # Use Chrome User-Agent, since some sites refuse to work on old browsers
-ZULIP_URL_PREVIEW_USER_AGENT = (
-    f"Mozilla/5.0 (compatible; ZulipURLPreview/{ZULIP_VERSION}; +{settings.ROOT_DOMAIN_URI})"
+DOER_URL_PREVIEW_USER_AGENT = (
+    f"Mozilla/5.0 (compatible; DoerURLPreview/{DOER_VERSION}; +{settings.ROOT_DOMAIN_URI})"
 )
 
 # FIXME: This header and timeout are not used by pyoembed, when trying to autodiscover!
-HEADERS = {"User-Agent": ZULIP_URL_PREVIEW_USER_AGENT}
+HEADERS = {"User-Agent": DOER_URL_PREVIEW_USER_AGENT}
 TIMEOUT = 15
 
 

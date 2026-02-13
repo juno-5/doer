@@ -18,7 +18,7 @@ from analytics.lib.counts import CountStat, LoggingCountStat
 from analytics.models import InstallationCount, RealmCount, UserCount
 from corporate.lib.stripe import RemoteRealmBillingSession
 from corporate.models.plans import CustomerPlan
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.actions.create_realm import do_create_realm
 from zerver.actions.realm_settings import (
     do_change_realm_org_type,
@@ -52,7 +52,7 @@ if settings.ZILENCER_ENABLED:
         RemoteRealm,
         RemoteRealmAuditLog,
         RemoteRealmCount,
-        RemoteZulipServer,
+        RemoteDoerServer,
     )
 
 
@@ -76,19 +76,19 @@ class AnalyticsBouncerTest(BouncerTestCase):
     @activate_push_notification_service()
     @responses.activate
     def test_analytics_failure_api(self) -> None:
-        assert settings.ZULIP_SERVICES_URL is not None
-        ANALYTICS_URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/server/analytics"
+        assert settings.DOER_SERVICES_URL is not None
+        ANALYTICS_URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/server/analytics"
         ANALYTICS_STATUS_URL = ANALYTICS_URL + "/status"
 
         with (
             responses.RequestsMock() as resp,
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_warning,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_warning,
         ):
             resp.add(responses.GET, ANALYTICS_STATUS_URL, body=ConnectionError())
             Realm.objects.all().update(push_notifications_enabled=True)
             send_server_data_to_push_bouncer()
             self.assertEqual(
-                "WARNING:zulip.analytics:ConnectionError while trying to connect to push notification bouncer",
+                "WARNING:doer.analytics:ConnectionError while trying to connect to push notification bouncer",
                 mock_warning.output[0],
             )
             self.assertTrue(resp.assert_call_count(ANALYTICS_STATUS_URL, 1))
@@ -98,7 +98,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
         # that push notifications have recently worked fine.
         with (
             responses.RequestsMock() as resp,
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_warning,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_warning,
         ):
             resp.add(responses.GET, ANALYTICS_STATUS_URL, body=ConnectionError())
             Realm.objects.all().update(push_notifications_enabled=True)
@@ -106,7 +106,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
             send_server_data_to_push_bouncer()
             self.assertEqual(
-                "WARNING:zulip.analytics:ConnectionError while trying to connect to push notification bouncer",
+                "WARNING:doer.analytics:ConnectionError while trying to connect to push notification bouncer",
                 mock_warning.output[0],
             )
             self.assertTrue(resp.assert_call_count(ANALYTICS_STATUS_URL, 1))
@@ -119,7 +119,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
             with time_machine.travel(now() + timedelta(minutes=61), tick=False):
                 send_server_data_to_push_bouncer()
                 self.assertEqual(
-                    "WARNING:zulip.analytics:ConnectionError while trying to connect to push notification bouncer",
+                    "WARNING:doer.analytics:ConnectionError while trying to connect to push notification bouncer",
                     mock_warning.output[1],
                 )
                 self.assertTrue(resp.assert_call_count(ANALYTICS_STATUS_URL, 2))
@@ -131,14 +131,14 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
         with (
             responses.RequestsMock() as resp,
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_warning,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_warning,
         ):
             resp.add(responses.GET, ANALYTICS_STATUS_URL, body="This is not JSON")
             Realm.objects.all().update(push_notifications_enabled=True)
             send_server_data_to_push_bouncer()
             self.assertTrue(
                 mock_warning.output[0].startswith(
-                    f"ERROR:zulip.analytics:Exception communicating with {settings.ZULIP_SERVICES_URL}\nTraceback",
+                    f"ERROR:doer.analytics:Exception communicating with {settings.DOER_SERVICES_URL}\nTraceback",
                 )
             )
             self.assertTrue(resp.assert_call_count(ANALYTICS_STATUS_URL, 1))
@@ -157,7 +157,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
         with (
             responses.RequestsMock() as resp,
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_warning,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_warning,
         ):
             Realm.objects.all().update(push_notifications_enabled=True)
             resp.add(
@@ -168,7 +168,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
             )
             send_server_data_to_push_bouncer()
             self.assertIn(
-                "WARNING:zulip.analytics:Some problem",
+                "WARNING:doer.analytics:Some problem",
                 mock_warning.output[0],
             )
             self.assertTrue(resp.assert_call_count(ANALYTICS_STATUS_URL, 1))
@@ -176,7 +176,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
         with (
             responses.RequestsMock() as resp,
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_warning,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_warning,
         ):
             Realm.objects.all().update(push_notifications_enabled=True)
             resp.add(
@@ -196,7 +196,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
             )
             send_server_data_to_push_bouncer()
             self.assertIn(
-                "WARNING:zulip.analytics:Some problem",
+                "WARNING:doer.analytics:Some problem",
                 mock_warning.output[0],
             )
             self.assertTrue(resp.assert_call_count(ANALYTICS_URL, 1))
@@ -208,8 +208,8 @@ class AnalyticsBouncerTest(BouncerTestCase):
         """This is a variant of the below test_push_api, but using the full
         push notification bouncer flow
         """
-        assert settings.ZULIP_SERVICES_URL is not None
-        ANALYTICS_URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/server/analytics"
+        assert settings.DOER_SERVICES_URL is not None
+        ANALYTICS_URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/server/analytics"
         ANALYTICS_STATUS_URL = ANALYTICS_URL + "/status"
         user = self.example_user("hamlet")
         end_time = self.TIME_ZERO
@@ -228,7 +228,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
         audit_log_max_id = audit_log.id
 
         remote_server.refresh_from_db()
-        assert remote_server.last_version == ZULIP_VERSION
+        assert remote_server.last_version == DOER_VERSION
 
         remote_audit_log_count = RemoteRealmAuditLog.objects.count()
 
@@ -548,11 +548,11 @@ class AnalyticsBouncerTest(BouncerTestCase):
             end_time=end_time,
             value=5,
         )
-        with self.assertLogs("zulip.analytics", level="WARNING") as warn_log:
+        with self.assertLogs("doer.analytics", level="WARNING") as warn_log:
             send_server_data_to_push_bouncer()
         self.assertEqual(
             warn_log.output,
-            ["WARNING:zulip.analytics:Invalid property mobile_pushes_received::day"],
+            ["WARNING:doer.analytics:Invalid property mobile_pushes_received::day"],
         )
         # The analytics endpoint call counts increase by 1, but the actual RemoteCounts remain unchanged,
         # since syncing the data failed.
@@ -791,9 +791,9 @@ class AnalyticsBouncerTest(BouncerTestCase):
         self.assertEqual(RealmCount.objects.count(), 1)
 
         self.assertEqual(RemoteRealmCount.objects.count(), 0)
-        with self.assertLogs("zulip.analytics", level="WARNING") as m:
+        with self.assertLogs("doer.analytics", level="WARNING") as m:
             send_server_data_to_push_bouncer()
-        self.assertEqual(m.output, ["WARNING:zulip.analytics:Invalid property invalid count stat"])
+        self.assertEqual(m.output, ["WARNING:doer.analytics:Invalid property invalid count stat"])
         self.assertEqual(RemoteRealmCount.objects.count(), 0)
 
     @activate_push_notification_service()
@@ -806,11 +806,11 @@ class AnalyticsBouncerTest(BouncerTestCase):
         handling for this edge case nonetheless.
         """
 
-        original_server = RemoteZulipServer.objects.get(uuid=self.server.uuid)
+        original_server = RemoteDoerServer.objects.get(uuid=self.server.uuid)
         # Start by deleting existing registration, to have a clean slate.
         RemoteRealm.objects.all().delete()
 
-        second_server = RemoteZulipServer.objects.create(
+        second_server = RemoteDoerServer.objects.create(
             uuid=uuid.uuid4(),
             api_key="magic_secret_api_key2",
             hostname="demo2.example.com",
@@ -833,12 +833,12 @@ class AnalyticsBouncerTest(BouncerTestCase):
         )
 
         with (
-            self.assertLogs("zulip.analytics", level="WARNING") as mock_log_host,
+            self.assertLogs("doer.analytics", level="WARNING") as mock_log_host,
             self.assertLogs("zilencer.views") as mock_log_bouncer,
         ):
             send_server_data_to_push_bouncer()
         self.assertEqual(
-            mock_log_host.output, ["WARNING:zulip.analytics:Duplicate registration detected."]
+            mock_log_host.output, ["WARNING:doer.analytics:Duplicate registration detected."]
         )
         self.assertIn(
             "INFO:zilencer.views:"
@@ -846,13 +846,13 @@ class AnalyticsBouncerTest(BouncerTestCase):
             mock_log_bouncer.output[0],
         )
 
-    # Servers on Zulip 2.0.6 and earlier only send realm_counts and installation_counts data,
+    # Servers on Doer 2.0.6 and earlier only send realm_counts and installation_counts data,
     # and don't send realmauditlog_rows. Make sure that continues to work.
     @activate_push_notification_service()
     @responses.activate
     def test_old_two_table_format(self) -> None:
         self.add_mock_response()
-        # Send fixture generated with Zulip 2.0 code
+        # Send fixture generated with Doer 2.0 code
         send_to_push_bouncer(
             "POST",
             "server/analytics",
@@ -862,8 +862,8 @@ class AnalyticsBouncerTest(BouncerTestCase):
                 "version": '"2.0.6+git"',
             },
         )
-        assert settings.ZULIP_SERVICES_URL is not None
-        ANALYTICS_URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/server/analytics"
+        assert settings.DOER_SERVICES_URL is not None
+        ANALYTICS_URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/server/analytics"
         self.assertTrue(responses.assert_call_count(ANALYTICS_URL, 1))
         self.assertEqual(RemoteRealmCount.objects.count(), 1)
         self.assertEqual(RemoteInstallationCount.objects.count(), 0)
@@ -1037,7 +1037,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
             expected_extra_data={},
         )
         # Invalid extra_data
-        with self.assertLogs("zulip.analytics", level="WARNING") as m:
+        with self.assertLogs("doer.analytics", level="WARNING") as m:
             verify_request_with_overridden_extra_data(
                 request_extra_data="{malformedjson:",
                 skip_audit_log_check=True,
@@ -1161,7 +1161,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                 "corporate.lib.stripe.RemoteRealmBillingSession.get_next_billing_cycle",
                 return_value=dummy_date,
             ) as m,
-            self.assertLogs("zulip.analytics", level="INFO") as info_log,
+            self.assertLogs("doer.analytics", level="INFO") as info_log,
         ):
             send_server_data_to_push_bouncer(consider_usage_statistics=False)
             m.assert_called()
@@ -1173,7 +1173,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                     dummy_date,
                 )
             self.assertIn(
-                "INFO:zulip.analytics:Reported 0 records",
+                "INFO:doer.analytics:Reported 0 records",
                 info_log.output[0],
             )
 
@@ -1194,7 +1194,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                 "corporate.lib.stripe.RemoteRealmBillingSession.get_next_billing_cycle",
                 return_value=dummy_date,
             ) as m,
-            self.assertLogs("zulip.analytics", level="INFO") as info_log,
+            self.assertLogs("doer.analytics", level="INFO") as info_log,
         ):
             send_server_data_to_push_bouncer(consider_usage_statistics=False)
             m.assert_called()
@@ -1206,7 +1206,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                     dummy_date,
                 )
             self.assertIn(
-                "INFO:zulip.analytics:Reported 0 records",
+                "INFO:doer.analytics:Reported 0 records",
                 info_log.output[0],
             )
 
@@ -1245,7 +1245,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                 "corporate.lib.stripe.get_current_plan_by_customer",
                 return_value=dummy_customer_plan,
             ),
-            self.assertLogs("zulip.analytics", level="INFO") as info_log,
+            self.assertLogs("doer.analytics", level="INFO") as info_log,
         ):
             send_server_data_to_push_bouncer(consider_usage_statistics=False)
             m.assert_called()
@@ -1257,7 +1257,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                     None,
                 )
             self.assertIn(
-                "INFO:zulip.analytics:Reported 0 records",
+                "INFO:doer.analytics:Reported 0 records",
                 info_log.output[0],
             )
 
@@ -1303,7 +1303,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
         with (
             mock.patch("zerver.lib.remote_server.send_to_push_bouncer") as m,
-            self.assertLogs("zulip.analytics", level="WARNING") as exception_log,
+            self.assertLogs("doer.analytics", level="WARNING") as exception_log,
         ):
             get_response = {
                 "last_realm_count_id": 0,
@@ -1325,7 +1325,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
                 self.assertFalse(realm.push_notifications_enabled)
         self.assertEqual(
             exception_log.output,
-            ["WARNING:zulip.analytics:Some problem"],
+            ["WARNING:doer.analytics:Some problem"],
         )
 
         send_server_data_to_push_bouncer(consider_usage_statistics=False)
@@ -1362,7 +1362,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
     @responses.activate
     def test_deleted_realm(self) -> None:
         self.add_mock_response()
-        logger = logging.getLogger("zulip.analytics")
+        logger = logging.getLogger("doer.analytics")
 
         realm_info = get_realms_info_for_push_bouncer()
 
@@ -1392,7 +1392,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
         self.assertEqual(
             analytics_logger.output,
             [
-                "WARNING:zulip.analytics:"
+                "WARNING:doer.analytics:"
                 f"Received unexpected realm UUID from bouncer {deleted_realm_uuid}"
             ],
         )
@@ -1418,7 +1418,7 @@ class AnalyticsBouncerTest(BouncerTestCase):
 
         self.assertEqual(remote_realm_for_deleted_realm.registration_deactivated, False)
         self.assertEqual(remote_realm_for_deleted_realm.realm_locally_deleted, True)
-        self.assertEqual(analytics_logger.output, ["WARNING:zulip.analytics:Dummy warning"])
+        self.assertEqual(analytics_logger.output, ["WARNING:doer.analytics:Dummy warning"])
 
         audit_log = RemoteRealmAuditLog.objects.latest("id")
         self.assertEqual(audit_log.event_type, AuditLogEventType.REMOTE_REALM_LOCALLY_DELETED)

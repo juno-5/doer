@@ -80,7 +80,7 @@ class DeferredWorker(QueueProcessingWorker):
 
                 retry_event(self.queue_name, event, failure_processor)
         elif event["type"] == "realm_export":
-            output_dir = tempfile.mkdtemp(prefix="zulip-export-")
+            output_dir = tempfile.mkdtemp(prefix="doer-export-")
             user_profile = get_user_profile_by_id(event["user_profile_id"])
             realm = user_profile.realm
             export_event = None

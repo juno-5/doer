@@ -6,11 +6,11 @@ from zerver.actions.realm_settings import (
     clean_deactivated_realm_data,
     delete_expired_demo_organizations,
 )
-from zerver.lib.management import ZulipBaseCommand, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_unless_locked
 from zerver.lib.retention import archive_messages, clean_archived_data
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     @abort_unless_locked
     def handle(self, *args: Any, **options: str) -> None:

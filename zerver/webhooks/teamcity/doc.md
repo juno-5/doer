@@ -1,6 +1,6 @@
-# Zulip TeamCity integration
+# Doer TeamCity integration
 
-Get Zulip notifications for your TeamCity builds!
+Get Doer notifications for your TeamCity builds!
 
 {start_tabs}
 
@@ -33,9 +33,9 @@ Get Zulip notifications for your TeamCity builds!
 
 ### Personal Builds
 
-When a user runs a personal build in TeamCity, if Zulip can map their
-TeamCity username to a Zulip user (by matching it to a Zulip user's
-email address or full name), then that Zulip user will receive a direct
+When a user runs a personal build in TeamCity, if Doer can map their
+TeamCity username to a Doer user (by matching it to a Doer user's
+email address or full name), then that Doer user will receive a direct
 message with the result of their personal build.
 
 ### Related documentation

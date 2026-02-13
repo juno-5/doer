@@ -7,7 +7,7 @@ from django.test import override_settings
 from typing_extensions import ParamSpec
 
 from zerver.lib.cache import cache_delete, get_realm_used_upload_space_cache_key
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import create_s3_buckets, find_key_by_email, use_s3_backend
 from zerver.lib.upload import (
     create_attachment,
@@ -24,7 +24,7 @@ from zerver.views.tusd import TusEvent, TusHook, TusHTTPRequest, TusUpload
 ParamT = ParamSpec("ParamT")
 
 
-class TusdHooksTest(ZulipTestCase):
+class TusdHooksTest(DoerTestCase):
     def test_non_localhost(self) -> None:
         request = TusHook(
             type="pre-create",
@@ -37,9 +37,9 @@ class TusdHooksTest(ZulipTestCase):
                     is_final=False,
                     is_partial=False,
                     meta_data={
-                        "filename": "zulip.txt",
+                        "filename": "doer.txt",
                         "filetype": "text/plain",
-                        "name": "zulip.txt",
+                        "name": "doer.txt",
                         "type": "text/plain",
                     },
                     offset=0,
@@ -79,9 +79,9 @@ class TusdHooksTest(ZulipTestCase):
                     is_final=False,
                     is_partial=False,
                     meta_data={
-                        "filename": "zulip.txt",
+                        "filename": "doer.txt",
                         "filetype": "text/plain",
-                        "name": "zulip.txt",
+                        "name": "doer.txt",
                         "type": "text/plain",
                     },
                     offset=0,
@@ -106,7 +106,7 @@ class TusdHooksTest(ZulipTestCase):
         self.assertEqual(result.status_code, 400)
 
 
-class TusdPreCreateTest(ZulipTestCase):
+class TusdPreCreateTest(DoerTestCase):
     def request(self, key: str = "") -> TusHook:
         return TusHook(
             type="pre-create",
@@ -119,9 +119,9 @@ class TusdPreCreateTest(ZulipTestCase):
                     is_final=False,
                     is_partial=False,
                     meta_data={
-                        "filename": "zulip.txt",
+                        "filename": "doer.txt",
                         "filetype": "text/plain",
-                        "name": "zulip.txt",
+                        "name": "doer.txt",
                         "type": "text/plain",
                         "key": key,
                     },
@@ -146,7 +146,7 @@ class TusdPreCreateTest(ZulipTestCase):
         self.assertEqual(result_json.get("HttpResponse", None), None)
         self.assertEqual(result_json.get("RejectUpload", False), False)
         self.assertEqual(list(result_json["ChangeFileInfo"].keys()), ["ID"])
-        self.assertTrue(result_json["ChangeFileInfo"]["ID"].endswith("/zulip.txt"))
+        self.assertTrue(result_json["ChangeFileInfo"]["ID"].endswith("/doer.txt"))
 
     def test_unauthed_rejected(self) -> None:
         result = self.client_post(
@@ -175,7 +175,7 @@ class TusdPreCreateTest(ZulipTestCase):
         self.assertEqual(result_json.get("HttpResponse", None), None)
         self.assertEqual(result_json.get("RejectUpload", False), False)
         self.assertEqual(list(result_json["ChangeFileInfo"].keys()), ["ID"])
-        self.assertTrue(result_json["ChangeFileInfo"]["ID"].endswith("/zulip.txt"))
+        self.assertTrue(result_json["ChangeFileInfo"]["ID"].endswith("/doer.txt"))
 
     def test_api_key_bad_auth(self) -> None:
         result = self.client_post(
@@ -233,7 +233,7 @@ class TusdPreCreateTest(ZulipTestCase):
         request = self.request()
         request.event.upload.size = 1024 * 1024 * 5  # 5MB
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.plan_type = Realm.PLAN_TYPE_LIMITED
         realm.save()
 
@@ -284,7 +284,7 @@ class TusdPreCreateTest(ZulipTestCase):
         realm.save(update_fields=["custom_upload_quota_gb"])
 
         path_id = upload_message_attachment(
-            "zulip.txt", "text/plain", b"zulip!", hamlet, hamlet.realm
+            "doer.txt", "text/plain", b"doer!", hamlet, hamlet.realm
         )[0].removeprefix("/user_uploads/")
         attachment = Attachment.objects.get(path_id=path_id)
         attachment.size = assert_is_not_none(realm.upload_quota_bytes()) - 10
@@ -337,13 +337,13 @@ class TusdPreCreateTest(ZulipTestCase):
 
         info = TusUpload(
             id=filename,
-            size=len("zulip!"),
+            size=len("doer!"),
             offset=0,
             size_is_deferred=False,
             meta_data={
                 "filename": filename,
                 "filetype": "text/plain",
-                "name": "zulip.zip",
+                "name": "doer.zip",
                 "type": "text/plain",
                 "key": confirmation_key,
             },
@@ -451,7 +451,7 @@ class TusdPreCreateTest(ZulipTestCase):
         self.assertEqual(result_json["RejectUpload"], True)
 
 
-class TusdPreFinishTest(ZulipTestCase):
+class TusdPreFinishTest(DoerTestCase):
     def request(self, info: TusUpload) -> TusHook:
         return TusHook(
             type="pre-finish",
@@ -472,26 +472,26 @@ class TusdPreFinishTest(ZulipTestCase):
 
         # Act like tusd does -- put the file and its .info in place
         path_id = upload_backend.generate_message_upload_path(
-            str(hamlet.realm.id), sanitize_name("zulip.txt")
+            str(hamlet.realm.id), sanitize_name("doer.txt")
         )
         upload_backend.upload_message_attachment(
             path_id,
-            "zulip.txt",
+            "doer.txt",
             "text/plain",
-            b"zulip!",
+            b"doer!",
             hamlet,
             hamlet.realm,
         )
 
         info = TusUpload(
             id=path_id,
-            size=len("zulip!"),
+            size=len("doer!"),
             offset=0,
             size_is_deferred=False,
             meta_data={
-                "filename": "zulip.txt",
+                "filename": "doer.txt",
                 "filetype": "text/plain",
-                "name": "zulip.txt",
+                "name": "doer.txt",
                 "type": "text/plain",
             },
             is_final=False,
@@ -501,7 +501,7 @@ class TusdPreFinishTest(ZulipTestCase):
         )
         upload_backend.upload_message_attachment(
             f"{path_id}.info",
-            "zulip.txt.info",
+            "doer.txt.info",
             "application/octet-stream",
             info.model_dump_json().encode(),
             hamlet,
@@ -519,14 +519,14 @@ class TusdPreFinishTest(ZulipTestCase):
         self.assertEqual(result_json["HttpResponse"]["StatusCode"], 200)
         self.assertEqual(
             orjson.loads(result_json["HttpResponse"]["Body"]),
-            {"url": f"/user_uploads/{path_id}", "filename": "zulip.txt"},
+            {"url": f"/user_uploads/{path_id}", "filename": "doer.txt"},
         )
         self.assertEqual(
             result_json["HttpResponse"]["Header"], {"Content-Type": "application/json"}
         )
 
         attachment = Attachment.objects.get(path_id=path_id)
-        self.assertEqual(attachment.size, len("zulip!"))
+        self.assertEqual(attachment.size, len("doer!"))
         self.assertEqual(attachment.content_type, 'text/plain; charset="ascii"')
 
         # Assert that the .info file is still there -- tusd needs it
@@ -544,12 +544,12 @@ class TusdPreFinishTest(ZulipTestCase):
             str(hamlet.realm.id), sanitize_name("")
         )
         upload_backend.upload_message_attachment(
-            path_id, "", "ignored", b"zulip!", hamlet, hamlet.realm
+            path_id, "", "ignored", b"doer!", hamlet, hamlet.realm
         )
 
         info = TusUpload(
             id=path_id,
-            size=len("zulip!"),
+            size=len("doer!"),
             offset=0,
             size_is_deferred=False,
             meta_data={},
@@ -585,7 +585,7 @@ class TusdPreFinishTest(ZulipTestCase):
         )
 
         attachment = Attachment.objects.get(path_id=path_id)
-        self.assertEqual(attachment.size, len("zulip!"))
+        self.assertEqual(attachment.size, len("doer!"))
         self.assertEqual(attachment.content_type, "application/octet-stream")
 
         assert settings.LOCAL_FILES_DIR is not None
@@ -606,7 +606,7 @@ class TusdPreFinishTest(ZulipTestCase):
         self.assertTrue(path_id.endswith("/some-example.png"))
         info = TusUpload(
             id=path_id,
-            size=len("zulip!"),
+            size=len("doer!"),
             offset=0,
             size_is_deferred=False,
             meta_data={
@@ -621,7 +621,7 @@ class TusdPreFinishTest(ZulipTestCase):
             storage=None,
         )
         bucket.Object(path_id).put(
-            Body=b"zulip!",
+            Body=b"doer!",
             ContentType="application/octet-stream",
             Metadata={k: v.encode("ascii", "replace").decode() for k, v in info.meta_data.items()},
         )
@@ -648,7 +648,7 @@ class TusdPreFinishTest(ZulipTestCase):
         )
 
         attachment = Attachment.objects.get(path_id=path_id)
-        self.assertEqual(attachment.size, len("zulip!"))
+        self.assertEqual(attachment.size, len("doer!"))
         self.assertEqual(attachment.content_type, "image/png")
 
         assert settings.LOCAL_FILES_DIR is None
@@ -736,7 +736,7 @@ class TusdPreFinishTest(ZulipTestCase):
         self.assertEqual(bucket.Object(path_id).get()["ContentType"], "text/plain")
 
 
-class TusdPreTerminateTest(ZulipTestCase):
+class TusdPreTerminateTest(DoerTestCase):
     def request(self, info: TusUpload) -> TusHook:
         return TusHook(
             type="pre-terminate",
@@ -757,21 +757,21 @@ class TusdPreTerminateTest(ZulipTestCase):
 
         # Act like tusd does -- put the file and its .info in place
         path_id = upload_backend.generate_message_upload_path(
-            str(hamlet.realm.id), sanitize_name("zulip.txt")
+            str(hamlet.realm.id), sanitize_name("doer.txt")
         )
         upload_backend.upload_message_attachment(
-            path_id, "zulip.txt", "text/plain", b"zulip!", hamlet, hamlet.realm
+            path_id, "doer.txt", "text/plain", b"doer!", hamlet, hamlet.realm
         )
 
         info = TusUpload(
             id=path_id,
-            size=len("zulip!"),
+            size=len("doer!"),
             offset=0,
             size_is_deferred=False,
             meta_data={
-                "filename": "zulip.txt",
+                "filename": "doer.txt",
                 "filetype": "text/plain",
-                "name": "zulip.txt",
+                "name": "doer.txt",
                 "type": "text/plain",
             },
             is_final=False,
@@ -791,10 +791,10 @@ class TusdPreTerminateTest(ZulipTestCase):
 
         # Make the attachment
         create_attachment(
-            "zulip.txt",
+            "doer.txt",
             path_id,
             "text/plain",
-            b"zulip!",
+            b"doer!",
             hamlet,
             hamlet.realm,
         )

@@ -293,7 +293,7 @@ def get_realm_authentication_methods_for_page_params_api(
         return result_dict
 
     # The rest of the function is only for the mechanism of restricting
-    # certain backends based on the realm's plan type on Zulip Cloud.
+    # certain backends based on the realm's plan type on Doer Cloud.
 
     from corporate.models.plans import CustomerPlan
 
@@ -410,7 +410,7 @@ def do_set_realm_stream(
         "moderation_request_channel",
         "new_stream_announcements_stream",
         "signup_announcements_stream",
-        "zulip_update_announcements_stream",
+        "doer_update_announcements_stream",
     ],
     stream: Stream | None,
     stream_id: int,
@@ -431,10 +431,10 @@ def do_set_realm_stream(
         old_value = realm.signup_announcements_stream_id
         realm.signup_announcements_stream = stream
         property = "signup_announcements_stream_id"
-    elif field == "zulip_update_announcements_stream":
-        old_value = realm.zulip_update_announcements_stream_id
-        realm.zulip_update_announcements_stream = stream
-        property = "zulip_update_announcements_stream_id"
+    elif field == "doer_update_announcements_stream":
+        old_value = realm.doer_update_announcements_stream_id
+        realm.doer_update_announcements_stream = stream
+        property = "doer_update_announcements_stream_id"
     else:
         raise AssertionError("Invalid realm stream field.")
 
@@ -489,11 +489,11 @@ def do_set_realm_signup_announcements_stream(
     )
 
 
-def do_set_realm_zulip_update_announcements_stream(
+def do_set_realm_doer_update_announcements_stream(
     realm: Realm, stream: Stream | None, stream_id: int, *, acting_user: UserProfile | None
 ) -> None:
     do_set_realm_stream(
-        realm, "zulip_update_announcements_stream", stream, stream_id, acting_user=acting_user
+        realm, "doer_update_announcements_stream", stream, stream_id, acting_user=acting_user
     )
 
 
@@ -563,7 +563,7 @@ def do_deactivate_realm(
     """
     Deactivate this realm. Do NOT deactivate the users -- we need to be able to
     tell the difference between users that were intentionally deactivated,
-    e.g. by a realm admin, and users who can't currently use Zulip because their
+    e.g. by a realm admin, and users who can't currently use Doer because their
     realm has been deactivated.
     """
     if realm.deactivated:
@@ -815,7 +815,7 @@ def do_change_realm_org_type(
         event_time=timezone_now(),
         acting_user=acting_user,
         extra_data={
-            # Prior to Zulip 12.0, RealmAuditLog entries for this
+            # Prior to Doer 12.0, RealmAuditLog entries for this
             # incorrectly used the strings "old_value" and "new_value"
             # as keys here.
             RealmAuditLog.OLD_VALUE: old_value,
@@ -844,7 +844,7 @@ def do_change_realm_max_invites(realm: Realm, max_invites: int, acting_user: Use
         event_time=timezone_now(),
         acting_user=acting_user,
         extra_data={
-            # Prior to Zulip 12.0, RealmAuditLog entries for this
+            # Prior to Doer 12.0, RealmAuditLog entries for this
             # incorrectly used the strings "old_value" and "new_value"
             # as keys here.
             RealmAuditLog.OLD_VALUE: old_value,
@@ -904,7 +904,7 @@ def do_change_realm_plan_type(
         event_time=timezone_now(),
         acting_user=acting_user,
         extra_data={
-            # Prior to Zulip 12.0, RealmAuditLog entries for this
+            # Prior to Doer 12.0, RealmAuditLog entries for this
             # incorrectly used the strings "old_value" and "new_value"
             # as keys here.
             RealmAuditLog.OLD_VALUE: old_value,

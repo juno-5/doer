@@ -6,13 +6,13 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import ChannelSettingsNavbarTip from "../include/_ChannelSettingsNavbarTip.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 import SelectChannelViewPermissions from "../include/_SelectChannelViewPermissions.mdx";
 
-Zulip lets you configure who can edit message topics and move topics between
+Doer lets you configure who can edit message topics and move topics between
 channels. These permissions can be granted to any combination of
 [roles](/help/user-roles), [groups](/help/user-groups), and individual
 [users](/help/introduction-to-users).
@@ -69,9 +69,9 @@ Permissions for moving messages between channels can be configured separately.
 
 ## Set a time limit for editing topics
 
-<ZulipTip>
+<DoerTip>
   The time limit you set will not apply to administrators and moderators.
-</ZulipTip>
+</DoerTip>
 
 <FlattenedSteps>
   <NavigationSteps target="settings/organization-permissions" />
@@ -114,9 +114,9 @@ Permissions for moving messages between channels can be configured separately.
 
 ## Set a time limit for moving messages between channels
 
-<ZulipTip>
+<DoerTip>
   The time limit you set will not apply to administrators and moderators.
-</ZulipTip>
+</DoerTip>
 
 <FlattenedSteps>
   <NavigationSteps target="settings/organization-permissions" />

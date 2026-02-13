@@ -1,7 +1,7 @@
-# Zulip Heroku integration
+# Doer Heroku integration
 
-Receive notifications in Zulip whenever a new version of an app
-is pushed to Heroku using the Zulip Heroku plugin!
+Receive notifications in Doer whenever a new version of an app
+is pushed to Heroku using the Doer Heroku plugin!
 
 {start_tabs}
 
@@ -16,7 +16,7 @@ is pushed to Heroku using the Zulip Heroku plugin!
    just added.
 
 1. Set **URL** to the URL generated above. Click **Save and Send Test**
-   to send a test message to your Zulip organization.
+   to send a test message to your Doer organization.
 
 {end_tabs}
 

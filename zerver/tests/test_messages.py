@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.utils.timezone import now as timezone_now
 
 from zerver.actions.message_send import get_active_presence_idle_user_ids
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, UserPresence, UserProfile
 from zerver.models.recipients import (
     bulk_get_direct_message_group_user_ids,
@@ -12,7 +12,7 @@ from zerver.models.recipients import (
 )
 
 
-class MissedMessageTest(ZulipTestCase):
+class MissedMessageTest(DoerTestCase):
     def test_presence_idle_user_ids(self) -> None:
         UserPresence.objects.all().delete()
 
@@ -75,7 +75,7 @@ class MissedMessageTest(ZulipTestCase):
         assert_active_presence_idle_user_ids([othello.id])
 
 
-class TestBulkGetDirectMessageGroupUserIds(ZulipTestCase):
+class TestBulkGetDirectMessageGroupUserIds(DoerTestCase):
     def test_bulk_get_direct_message_group_user_ids(self) -> None:
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")

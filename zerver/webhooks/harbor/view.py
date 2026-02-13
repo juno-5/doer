@@ -21,9 +21,9 @@ IGNORED_EVENTS = [
 ]
 
 
-def guess_zulip_user_from_harbor(harbor_username: str, realm: Realm) -> UserProfile | None:
+def guess_doer_user_from_harbor(harbor_username: str, realm: Realm) -> UserProfile | None:
     try:
-        # Try to find a matching user in Zulip
+        # Try to find a matching user in Doer
         # We search a user's full name, short name,
         # and beginning of email address
         user = UserProfile.objects.filter(
@@ -99,7 +99,7 @@ def api_harbor_webhook(
     operator_username = "**{}**".format(payload["operator"].tame(check_string))
 
     if operator_username != "auto":
-        operator_profile = guess_zulip_user_from_harbor(operator_username, user_profile.realm)
+        operator_profile = guess_doer_user_from_harbor(operator_username, user_profile.realm)
 
     if operator_profile:
         operator_username = f"@**{operator_profile.full_name}**"  # nocoverage

@@ -30,7 +30,7 @@
             "action":"update",
             "name":"Testing pull requests with Story",
             "story_type":"feature",
-            "app_url":"https://app.shortcut.com/zulip/story/28",
+            "app_url":"https://app.shortcut.com/doer/story/28",
             "changes":{
                 "started":{
                     "new":true,

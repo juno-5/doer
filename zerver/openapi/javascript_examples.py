@@ -1,22 +1,22 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
-# This Python file wraps the test suite for Zulip's JavaScript API
+# This Python file wraps the test suite for Doer's JavaScript API
 # examples and validates the responses against our OpenAPI definitions.
 
 import json
 import os
 import subprocess
 
-from zulip import Client
+from doer import Client
 
 from zerver.openapi.openapi import validate_against_openapi_schema
 
 
 def test_js_bindings(client: Client) -> None:
-    os.environ["ZULIP_USERNAME"] = client.email
-    os.environ["ZULIP_API_KEY"] = client.api_key
-    os.environ["ZULIP_REALM"] = client.base_url.removesuffix("/api/")
+    os.environ["DOER_USERNAME"] = client.email
+    os.environ["DOER_API_KEY"] = client.api_key
+    os.environ["DOER_REALM"] = client.base_url.removesuffix("/api/")
 
     output = subprocess.check_output(
         args=["node", "--unhandled-rejections=strict", "zerver/openapi/javascript_examples.js"],

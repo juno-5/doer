@@ -7,20 +7,20 @@ from analytics.lib.counts import COUNT_STATS, CountStat
 from analytics.lib.time_utils import time_range
 from analytics.models import FillState, RealmCount, StreamCount, UserCount
 from analytics.views.stats import rewrite_client_arrays, sort_by_totals, sort_client_labels
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timestamp import ceiling_to_day, ceiling_to_hour, datetime_to_timestamp
 from zerver.models import Client
 from zerver.models.realms import get_realm
 
 
-class TestStatsEndpoint(ZulipTestCase):
+class TestStatsEndpoint(DoerTestCase):
     def test_stats(self) -> None:
         self.user = self.example_user("hamlet")
         self.login_user(self.user)
         result = self.client_get("/stats")
         self.assertEqual(result.status_code, 200)
         # Check that we get something back
-        self.assert_in_response("Zulip analytics for", result)
+        self.assert_in_response("Doer analytics for", result)
 
     def test_guest_user_cant_access_stats(self) -> None:
         self.user = self.example_user("polonius")
@@ -35,7 +35,7 @@ class TestStatsEndpoint(ZulipTestCase):
         user = self.example_user("hamlet")
         self.login_user(user)
 
-        result = self.client_get("/stats/realm/zulip/")
+        result = self.client_get("/stats/realm/doer/")
         self.assertEqual(result.status_code, 302)
 
         result = self.client_get("/stats/realm/not_existing_realm/")
@@ -48,9 +48,9 @@ class TestStatsEndpoint(ZulipTestCase):
         result = self.client_get("/stats/realm/not_existing_realm/")
         self.assertEqual(result.status_code, 404)
 
-        result = self.client_get("/stats/realm/zulip/")
+        result = self.client_get("/stats/realm/doer/")
         self.assertEqual(result.status_code, 200)
-        self.assert_in_response("Zulip analytics for", result)
+        self.assert_in_response("Doer analytics for", result)
 
     def test_stats_for_installation(self) -> None:
         user = self.example_user("hamlet")
@@ -65,14 +65,14 @@ class TestStatsEndpoint(ZulipTestCase):
 
         result = self.client_get("/stats/installation")
         self.assertEqual(result.status_code, 200)
-        self.assert_in_response("Zulip analytics for", result)
+        self.assert_in_response("Doer analytics for", result)
 
 
-class TestGetChartData(ZulipTestCase):
+class TestGetChartData(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
         self.user = self.example_user("hamlet")
         self.stream_id = self.get_stream_id(self.get_streams(self.user)[0])
         self.login_user(self.user)
@@ -447,7 +447,7 @@ class TestGetChartData(ZulipTestCase):
         self.assert_json_error_contains(result, "Unknown chart name")
 
     def test_analytics_not_running(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         self.assertEqual(FillState.objects.count(), 0)
 
@@ -460,7 +460,7 @@ class TestGetChartData(ZulipTestCase):
             self.assertEqual(
                 m.output,
                 [
-                    f"WARNING:root:User from realm zulip attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: 0001-01-01 00:00:00+00:00 (last successful analytics update). Is the analytics cron job running?"
+                    f"WARNING:root:User from realm doer attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: 0001-01-01 00:00:00+00:00 (last successful analytics update). Is the analytics cron job running?"
                 ],
             )
 
@@ -475,7 +475,7 @@ class TestGetChartData(ZulipTestCase):
             self.assertEqual(
                 m.output,
                 [
-                    f"WARNING:root:User from realm zulip attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: 0001-01-01 00:00:00+00:00 (last successful analytics update). Is the analytics cron job running?"
+                    f"WARNING:root:User from realm doer attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: 0001-01-01 00:00:00+00:00 (last successful analytics update). Is the analytics cron job running?"
                 ],
             )
 
@@ -509,7 +509,7 @@ class TestGetChartData(ZulipTestCase):
             self.assertEqual(
                 m.output,
                 [
-                    f"WARNING:root:User from realm zulip attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: {end_time} (last successful analytics update). Is the analytics cron job running?"
+                    f"WARNING:root:User from realm doer attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: {end_time} (last successful analytics update). Is the analytics cron job running?"
                 ],
             )
 
@@ -542,7 +542,7 @@ class TestGetChartData(ZulipTestCase):
             self.assertEqual(
                 m.output,
                 [
-                    f"WARNING:root:User from realm zulip attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: {end_time} (last successful analytics update). Is the analytics cron job running?"
+                    f"WARNING:root:User from realm doer attempted to access /stats, but the computed start time: {realm.date_created} (creation of realm or installation) is later than the computed end time: {end_time} (last successful analytics update). Is the analytics cron job running?"
                 ],
             )
 
@@ -560,7 +560,7 @@ class TestGetChartData(ZulipTestCase):
         self.login_user(user)
 
         result = self.client_get(
-            "/json/analytics/chart_data/realm/zulip", {"chart_name": "number_of_humans"}
+            "/json/analytics/chart_data/realm/doer", {"chart_name": "number_of_humans"}
         )
         self.assert_json_error(result, "Must be an server administrator", 400)
 
@@ -577,7 +577,7 @@ class TestGetChartData(ZulipTestCase):
         self.assert_json_error(result, "Invalid organization", 400)
 
         result = self.client_get(
-            "/json/analytics/chart_data/realm/zulip", {"chart_name": "number_of_humans"}
+            "/json/analytics/chart_data/realm/doer", {"chart_name": "number_of_humans"}
         )
         self.assert_json_success(result)
 
@@ -602,7 +602,7 @@ class TestGetChartData(ZulipTestCase):
         self.assert_json_success(result)
 
 
-class TestGetChartDataHelpers(ZulipTestCase):
+class TestGetChartDataHelpers(DoerTestCase):
     def test_sort_by_totals(self) -> None:
         empty: list[int] = []
         value_arrays = {"c": [0, 1], "a": [9], "b": [1, 1, 1], "d": empty}
@@ -616,7 +616,7 @@ class TestGetChartDataHelpers(ZulipTestCase):
         self.assertEqual(sort_client_labels(data), ["a", "b", "c", "d", "e", "f", "g", "h"])
 
 
-class TestTimeRange(ZulipTestCase):
+class TestTimeRange(DoerTestCase):
     def test_time_range(self) -> None:
         HOUR = timedelta(hours=1)
         DAY = timedelta(days=1)
@@ -651,7 +651,7 @@ class TestTimeRange(ZulipTestCase):
         )
 
 
-class TestMapArrays(ZulipTestCase):
+class TestMapArrays(DoerTestCase):
     def test_map_arrays(self) -> None:
         a = {
             "desktop app 1.0": [1, 2, 3],
@@ -659,16 +659,16 @@ class TestMapArrays(ZulipTestCase):
             "desktop app 3.0": [21, 22, 23],
             "website": [1, 2, 3],
             "ZulipiOS": [1, 2, 3],
-            "ZulipElectron": [2, 5, 7],
-            "ZulipMobile": [1, 2, 3],
-            "ZulipMobile/flutter": [1, 1, 1],
-            "ZulipFlutter": [1, 1, 1],
-            "ZulipPython": [1, 2, 3],
+            "DoerElectron": [2, 5, 7],
+            "DoerMobile": [1, 2, 3],
+            "DoerMobile/flutter": [1, 1, 1],
+            "DoerFlutter": [1, 1, 1],
+            "DoerPython": [1, 2, 3],
             "API: Python": [1, 2, 3],
             "SomethingRandom": [4, 5, 6],
-            "ZulipGitHubWebhook": [7, 7, 9],
-            "ZulipAndroid": [64, 63, 65],
-            "ZulipTerminal": [9, 10, 11],
+            "DoerGitHubWebhook": [7, 7, 9],
+            "DoerAndroid": [64, 63, 65],
+            "DoerTerminal": [9, 10, 11],
         }
         result = rewrite_client_arrays(a)
         self.assertEqual(

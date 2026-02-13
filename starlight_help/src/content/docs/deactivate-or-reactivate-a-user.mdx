@@ -6,15 +6,15 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import ManageThisUser from "../include/_ManageThisUser.mdx";
 import ManageUserTabTip from "../include/_ManageUserTabTip.mdx";
 
-import UserCircleDeactivatedIcon from "~icons/zulip-icon/user-circle-deactivated";
-import UserPlusIcon from "~icons/zulip-icon/user-plus";
-import UserXIcon from "~icons/zulip-icon/user-x";
+import UserCircleDeactivatedIcon from "~icons/doer-icon/user-circle-deactivated";
+import UserPlusIcon from "~icons/doer-icon/user-plus";
+import UserXIcon from "~icons/doer-icon/user-x";
 
 ## Deactivating a user
 
@@ -22,7 +22,7 @@ import UserXIcon from "~icons/zulip-icon/user-x";
 
 When you deactivate a user:
 
-* The user will be immediately logged out of all Zulip sessions, including
+* The user will be immediately logged out of all Doer sessions, including
   desktop, web and mobile apps.
 * The user's credentials for logging in will no longer work, including password
   login and [any other login options](/help/configure-authentication-methods)
@@ -39,12 +39,12 @@ When you deactivate a user:
   invitation](/help/restrict-account-creation#set-whether-invitations-are-required-to-join),
   this user will not be able to rejoin with the same email account.
 
-<ZulipNote>
+<DoerNote>
   You must go through the deactivation process below to fully remove a user's
-  access to your Zulip organization. Changing a user's password or removing
-  their single sign-on account will not log them out of their open Zulip
+  access to your Doer organization. Changing a user's password or removing
+  their single sign-on account will not log them out of their open Doer
   sessions, or disable their API keys.
-</ZulipNote>
+</DoerNote>
 
 ### Deactivate a user
 
@@ -74,9 +74,9 @@ When you deactivate a user:
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   Organization administrators cannot deactivate organization owners.
-</ZulipTip>
+</DoerTip>
 
 ## Reactivating a user
 
@@ -114,10 +114,10 @@ bots will be deactivated until the user manually
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   You may want to [review and adjust](/help/manage-user-channel-subscriptions)
   the reactivated user's channel subscriptions.
-</ZulipTip>
+</DoerTip>
 
 ## Related articles
 

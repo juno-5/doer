@@ -40,5 +40,5 @@ class GocdHookTests(WebhookTestCase):
 - **Started**: <time:Aug 29, 2024, 3:59:18 PM>
 - **Finished**: <time:Aug 29, 2024, 4:00:15 PM>
 - **Failed**: `check-backend-lints`, `test-frontend-js`
-- **Passed**: `check-backend-tests`, `zulip-ci-debian-12`"""
+- **Passed**: `check-backend-tests`, `doer-ci-debian-12`"""
         self.check_webhook("pipeline_with_mixed_job_result", expected_topic, expected_message)

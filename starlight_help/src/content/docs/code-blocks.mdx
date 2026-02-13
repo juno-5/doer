@@ -7,19 +7,19 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import CodeBlocksExamples from "../include/_CodeBlocksExamples.mdx";
 import CodeBlocksIntro from "../include/_CodeBlocksIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import CodeIcon from "~icons/zulip-icon/code";
+import CodeIcon from "~icons/doer-icon/code";
 
 <CodeBlocksIntro />
 
 ## Insert code formatting
 
-Zulip's compose box has a smart **Code** (<CodeIcon />) button, which inserts contextually appropriate code
+Doer's compose box has a smart **Code** (<CodeIcon />) button, which inserts contextually appropriate code
 formatting:
 
 * If no text is selected, the button inserts code block (` ``` `) formatting.
@@ -41,10 +41,10 @@ formatting:
          Select the language from the auto-complete suggestions.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use the **Code** (<CodeIcon />)
       icon to remove existing code formatting from the selected text.
-    </ZulipTip>
+    </DoerTip>
 
     <KeyboardTip>
       You can also use <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>
@@ -73,10 +73,10 @@ formatting:
          ```
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use `~~~` to start code blocks, or just indent the code 4 or more
       spaces.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -87,7 +87,7 @@ formatting:
 ## Language tagging
 
 Tagging a code block with a language enables syntax highlighting and
-(if configured) [code playgrounds](#code-playgrounds). Zulip supports syntax
+(if configured) [code playgrounds](#code-playgrounds). Doer supports syntax
 highlighting for hundreds of languages.
 
 A code block can be tagged by typing the language name after the fence
@@ -123,7 +123,7 @@ code blocks without any syntax highlighting (e.g., to paste an error message).
 Code playgrounds are interactive in-browser development environments
 that are designed to make it convenient to edit
 and debug code. Code playgrounds can be configured for any programming language.
-Zulip code blocks that are tagged with the language will have a button visible
+Doer code blocks that are tagged with the language will have a button visible
 on hover that allows you to open the code block in the code playground site.
 
 ### Add a custom code playground
@@ -145,14 +145,14 @@ When a code block is labeled as `rust` (either explicitly or by organization
 default), users would get an on-hover option to open the code block in the
 specified code playground.
 
-<ZulipTip>
+<DoerTip>
   Code playgrounds use [RFC 6570](https://www.rfc-editor.org/rfc/rfc6570.html)
-  compliant URL templates to describe how links should be generated. Zulip's
+  compliant URL templates to describe how links should be generated. Doer's
   rendering engine will pass the URL-encoded code from the code block as the
   `code` parameter, denoted as `{code}` in this URL template, in order to
   generate the URL. You can refer to parts of the documentation on URL
   templates from [adding a custom linkifier](/help/add-a-custom-linkifier).
-</ZulipTip>
+</DoerTip>
 
 ### Examples of playground URL templates
 

@@ -17,7 +17,7 @@ are the steps required:
 
 ## Find work to be completed
 
-In Zulip's server and web app [repository](https://github.com/zulip/zulip), pull
+In Doer's server and web app [repository](https://github.com/doer/doer), pull
 requests that have significant work towards something valuable are often tagged
 with a [completion candidate][completion-candidate] label. You can review
 this label for unfinished work that you find interesting and have the skills to
@@ -72,7 +72,7 @@ preserving the original authorship of commits.
 However, it's normal to find yourself making changes to commits
 originally authored by other contributors, whether resolving merge
 conflicts when doing `git rebase` or fixing bugs to create an
-atomically correct commit compliant with Zulip's [commit
+atomically correct commit compliant with Doer's [commit
 guidelines](../contributing/commit-discipline.md).
 
 When you do that, it's your responsibility to ensure the resulting
@@ -122,7 +122,7 @@ In addition to the usual [guidance](../contributing/reviewable-prs.md) for
 putting together your pull request, there are a few key points to keep in mind.
 
 - **Take responsibility for the work.** Any time you propose changes to the
-  Zulip project, you are accountable for those changes. Do your very best to verify that they are correct.
+  Doer project, you are accountable for those changes. Do your very best to verify that they are correct.
 
   - Don't submit code you don't understand — dig in to figure out what it's
     doing, even if you didn't write it. This is a great way to catch bugs and
@@ -150,5 +150,5 @@ putting together your pull request, there are a few key points to keep in mind.
     - "I didn't use the work in PRs #12345 and #23154, because both didn't work
       properly when a user opened their own profile."
 
-[completion-candidate]: https://github.com/zulip/zulip/pulls?q=is%3Aopen+is%3Apr+label%3A%22completion+candidate%22
+[completion-candidate]: https://github.com/doer/doer/pulls?q=is%3Aopen+is%3Apr+label%3A%22completion+candidate%22
 [coauthor-git-guide]: https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors

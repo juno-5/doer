@@ -15,7 +15,7 @@
 
       "connectors": ["is", "isn't", "was", "wasn't", "has been"] ,
 
-      "emoji": [":thumbs_up:", ":thumbs_down:", ":shirt:", ":zulip:", ":tada:", ":earth_asia:",
+      "emoji": [":thumbs_up:", ":thumbs_down:", ":shirt:", ":doer:", ":tada:", ":earth_asia:",
         ":cop:", ":8ball:", ":boat:", ":egg:", ":heartpulse:", ":moon_ceremony:", ":cupid:", ":mag:"],
       "links":
        ["https://zulip.readthedocs.io/en/latest/subsystems/emoji.html",
@@ -47,11 +47,11 @@
       "images": [
             "[seahorse](/static/images/characters/seahorse.png)\n",
             "[starr](/static/images/characters/starr.png)\n",
-            "[topics](/static/images/story-tutorial/zulip-topic.png)\n",
-            "[On_it!](/static/images/story-tutorial/zulip-compose.png)\n",
-            "[streams](/static/images/story-tutorial/zulip-streams.png)\n",
-            "[stream_selected](/static/images/story-tutorial/zulip-streams-selected-original.png)\n",
-            "[unreads](/static/images/story-tutorial/zulip-streams-unreads.png)\n"
+            "[topics](/static/images/story-tutorial/doer-topic.png)\n",
+            "[On_it!](/static/images/story-tutorial/doer-compose.png)\n",
+            "[streams](/static/images/story-tutorial/doer-streams.png)\n",
+            "[stream_selected](/static/images/story-tutorial/doer-streams-selected-original.png)\n",
+            "[unreads](/static/images/story-tutorial/doer-streams-unreads.png)\n"
       ],
 
       "maths": [

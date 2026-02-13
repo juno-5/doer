@@ -50,7 +50,7 @@ const MIN_MARK_AS_UNREAD_COUNT_KNOWN = 50;
 const MIN_MARK_AS_UNREAD_COUNT_LOWER_BOUND = 10;
 const UNREAD_COUNT_STEP_SIZE = 25;
 
-// When you start Zulip, window_focused should be true, but it might not be the
+// When you start Doer, window_focused should be true, but it might not be the
 // case after a server-initiated reload.
 let window_focused = document.hasFocus();
 
@@ -115,7 +115,7 @@ function handle_skipped_unsubscribed_streams(
     ignored_because_not_subscribed_channels: number[],
 ): void {
     if (ignored_because_not_subscribed_channels.length > 0) {
-        // Zulip has an invariant that all unread messages must be in streams
+        // Doer has an invariant that all unread messages must be in streams
         // the user is subscribed to. Notify the user if messages from
         // unsubscribed streams are ignored by the server.
         const streams = ignored_because_not_subscribed_channels.map((stream_id) =>

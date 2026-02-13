@@ -5,32 +5,32 @@ title: Writing interactive bots
 import {Steps} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 
-Zulip's API has a powerful framework for interactive bots that react to messages
-in Zulip. This page will guide you through writing your own interactive bot.
+Doer's API has a powerful framework for interactive bots that react to messages
+in Doer. This page will guide you through writing your own interactive bot.
 
-* [Installing a development version of the Zulip bots package](#installing-a-development-version-of-the-zulip-bots-package)
+* [Installing a development version of the Doer bots package](#installing-a-development-version-of-the-doer-bots-package)
 * [Bot template](#bot-template)
 * [Testing a bot's output](#testing-a-bots-output)
 * [Troubleshooting](#troubleshooting)
 
-## Installing a development version of the Zulip bots package
+## Installing a development version of the Doer bots package
 
 This will provide convenient tooling for developing and testing your bot.
 
 <FlattenedSteps>
-  1. Clone the [python-zulip-api](https://github.com/zulip/python-zulip-api)
+  1. Clone the [python-doer-api](https://github.com/doer/python-doer-api)
      repository:
 
      ```
-     git clone https://github.com/zulip/python-zulip-api.git
+     git clone https://github.com/doer/python-doer-api.git
      ```
 
   1. Navigate into your cloned repository:
 
      ```
-     cd python-zulip-api
+     cd python-doer-api
      ```
 
   1. Install all requirements in a Python virtualenv:
@@ -43,15 +43,15 @@ This will provide convenient tooling for developing and testing your bot.
      enter the new virtualenv. The command will be of the form `source .../activate`.
 
   1. You should now see the name of your virtualenv preceding your prompt (e.g.,
-     `(zulip-api-py3-venv)`).
+     `(doer-api-py3-venv)`).
 </FlattenedSteps>
 
-<ZulipNote>
-  `provision` installs the `zulip`, `zulip_bots`, and
-  `zulip_botserver` packages in developer mode. This enables you to
+<DoerNote>
+  `provision` installs the `doer`, `doer_bots`, and
+  `doer_botserver` packages in developer mode. This enables you to
   modify these packages and then run your modified code without
   having to first re-install the packages or re-provision.
-</ZulipNote>
+</DoerNote>
 
 ## Bot template
 
@@ -88,23 +88,23 @@ placed in the same directory as `<my-bot>.py`.
 ## Testing a bot's output
 
 You can see how a bot reacts to a message without setting it up on a server,
-using the `zulip-bot-shell` tool.
+using the `doer-bot-shell` tool.
 
 <Steps>
-  1. [Install all requirements](#installing-a-development-version-of-the-zulip-bots-package).
-  1. Run `zulip-bot-shell` to test one of the bots in
-     [`zulip_bots/bots`](https://github.com/zulip/python-zulip-api/tree/main/zulip_bots/zulip_bots/bots).
+  1. [Install all requirements](#installing-a-development-version-of-the-doer-bots-package).
+  1. Run `doer-bot-shell` to test one of the bots in
+     [`doer_bots/bots`](https://github.com/doer/python-doer-api/tree/main/doer_bots/doer_bots/bots).
 </Steps>
 
 Example invocations:
 
 ```
-> zulip-bot-shell converter
+> doer-bot-shell converter
 
 Enter your message: "12 meter yard"
 Response: 12.0 meter = 13.12336 yard
 
-> zulip-bot-shell -b ~/followup.conf followup
+> doer-bot-shell -b ~/followup.conf followup
 
 Enter your message: "Task completed"
 Response: stream: followup topic: foo_sender@zulip.com
@@ -119,13 +119,13 @@ config file (e.g., \~/giphy.conf), which only applies to certain types of bots.
 
 ### I modified my bot's code, yet the changes don't seem to have an effect
 
-Ensure that you restarted the `zulip-run-bot` script.
+Ensure that you restarted the `doer-run-bot` script.
 
 ### My bot won't start
 
 * Ensure that your API config file is correct (download the config file from the server).
-* Ensure that you bot script is located in `zulip_bots/bots/<my-bot>/`
-* Are you using your own Zulip development server? Ensure that you run your bot outside
+* Ensure that you bot script is located in `doer_bots/bots/<my-bot>/`
+* Are you using your own Doer development server? Ensure that you run your bot outside
   the Vagrant environment.
 
 ## Related articles

@@ -1,6 +1,6 @@
-# Zulip Taiga integration
+# Doer Taiga integration
 
-Receive Zulip notifications for your Taiga projects!
+Receive Doer notifications for your Taiga projects!
 
 {start_tabs}
 
@@ -13,7 +13,7 @@ Receive Zulip notifications for your Taiga projects!
 
 1. Go to **Admin**, and select  **Integrations**. Click **Add a new webhook**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Set **URL** to the
+1. Set **Name** to a name of your choice, such as `Doer`. Set **URL** to the
    URL generated above, and set **Secret key** to the API key of the bot created
    above. Save the form.
 

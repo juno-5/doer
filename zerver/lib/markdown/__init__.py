@@ -1,4 +1,4 @@
-# Zulip's main Markdown implementation.  See docs/subsystems/markdown.md for
+# Doer's main Markdown implementation.  See docs/subsystems/markdown.md for
 # detailed documentation on our Markdown syntax.
 import logging
 import re
@@ -302,7 +302,7 @@ def rewrite_local_links_to_relative(db_data: DbData | None, link: str) -> str:
     return link
 
 
-def maybe_add_attachment_path_id(url: str, zmd: "ZulipMarkdown") -> None:
+def maybe_add_attachment_path_id(url: str, zmd: "DoerMarkdown") -> None:
     # Due to rewrite_local_links_to_relative, we need to
     # handle both relative URLs beginning with
     # `/user_uploads` and beginning with `user_uploads`.
@@ -311,14 +311,14 @@ def maybe_add_attachment_path_id(url: str, zmd: "ZulipMarkdown") -> None:
     parsed_url = urlsplit(urljoin("/", url))
     host = parsed_url.netloc
 
-    if host != "" and (zmd.zulip_realm is None or host != zmd.zulip_realm.host):
+    if host != "" and (zmd.doer_realm is None or host != zmd.doer_realm.host):
         return
 
     if not parsed_url.path.startswith("/user_uploads/"):
         return
 
     path_id = parsed_url.path.removeprefix("/user_uploads/")
-    zmd.zulip_rendering_result.potential_attachment_path_ids.append(path_id)
+    zmd.doer_rendering_result.potential_attachment_path_ids.append(path_id)
 
 
 def url_embed_preview_enabled(
@@ -525,7 +525,7 @@ class InlineImageProcessor(markdown.treeprocessors.Treeprocessor):
     view.
     """
 
-    def __init__(self, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, zmd: "DoerMarkdown") -> None:
         super().__init__(zmd)
         self.zmd = zmd
 
@@ -536,7 +536,7 @@ class InlineImageProcessor(markdown.treeprocessors.Treeprocessor):
         for img in found_imgs:
             url = img.get("src")
             assert url is not None
-            if is_static_or_current_realm_url(url, self.zmd.zulip_realm):
+            if is_static_or_current_realm_url(url, self.zmd.doer_realm):
                 # Don't rewrite images on our own site (e.g. emoji, user uploads).
                 continue
             img.set("src", get_camo_url(url))
@@ -555,7 +555,7 @@ class InlineVideoProcessor(markdown.treeprocessors.Treeprocessor):
     view.
     """
 
-    def __init__(self, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, zmd: "DoerMarkdown") -> None:
         super().__init__(zmd)
         self.zmd = zmd
 
@@ -566,7 +566,7 @@ class InlineVideoProcessor(markdown.treeprocessors.Treeprocessor):
         for video in found_videos:
             url = video.get("src")
             assert url is not None
-            if is_static_or_current_realm_url(url, self.zmd.zulip_realm):
+            if is_static_or_current_realm_url(url, self.zmd.doer_realm):
                 # Don't rewrite videos on our own site (e.g. user uploads).
                 continue
             # The href= is still set to the non-Camo'd version, which
@@ -610,7 +610,7 @@ class DropboxMediaInfo(TypedDict):
 class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
     INLINE_PREVIEW_LIMIT_PER_MESSAGE = 24
 
-    def __init__(self, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, zmd: "DoerMarkdown") -> None:
         super().__init__(zmd)
         self.zmd = zmd
 
@@ -629,8 +629,8 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
         desc = desc if desc is not None else ""
 
         # Update message.has_image attribute.
-        if "message_inline_image" in class_attr and self.zmd.zulip_message:
-            self.zmd.zulip_message.has_image = True
+        if "message_inline_image" in class_attr and self.zmd.doer_message:
+            self.zmd.doer_message.has_image = True
 
         if insertion_index is not None:
             div = Element("div")
@@ -646,14 +646,14 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
         if data_id is not None:
             a.set("data-id", data_id)
         img = SubElement(a, "img")
-        if image_url.startswith("/user_uploads/") and self.zmd.zulip_db_data:
+        if image_url.startswith("/user_uploads/") and self.zmd.doer_db_data:
             path_id = image_url.removeprefix("/user_uploads/")
 
             # We should have pulled the preview data for this image
             # (even if that's "no preview yet") from the database
             # before rendering; is_image should have enforced that.
-            assert path_id in self.zmd.zulip_db_data.user_upload_previews.image_metadata
-            metadata = self.zmd.zulip_db_data.user_upload_previews.image_metadata[path_id]
+            assert path_id in self.zmd.doer_db_data.user_upload_previews.image_metadata
+            metadata = self.zmd.doer_db_data.user_upload_previews.image_metadata[path_id]
 
             # Insert a placeholder image spinner.  We post-process
             # this content (see rewrite_thumbnailed_images in
@@ -739,11 +739,11 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
 
     def get_actual_image_url(self, url: str) -> str:
         # Add specific per-site cases to convert image-preview URLs to image URLs.
-        # See https://github.com/zulip/zulip/issues/4658 for more information
+        # See https://github.com/doer/doer/issues/4658 for more information
         parsed_url = urlsplit(url)
         if parsed_url.netloc == "github.com" or parsed_url.netloc.endswith(".github.com"):
-            # https://github.com/zulip/zulip/blob/main/static/images/logo/zulip-icon-128x128.png ->
-            # https://raw.githubusercontent.com/zulip/zulip/main/static/images/logo/zulip-icon-128x128.png
+            # https://github.com/doer/doer/blob/main/static/images/logo/doer-icon-128x128.png ->
+            # https://raw.githubusercontent.com/doer/doer/main/static/images/logo/doer-icon-128x128.png
             split_path = parsed_url.path.split("/")
             if len(split_path) > 3 and split_path[3] == "blob":
                 return urljoin(
@@ -763,9 +763,9 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
         # Check against the previews we generated -- if we didn't have
         # a row for the ImageAttachment, then its header didn't parse
         # as a valid image type which libvips handles.
-        if url.startswith("/user_uploads/") and self.zmd.zulip_db_data:
+        if url.startswith("/user_uploads/") and self.zmd.doer_db_data:
             path_id = url.removeprefix("/user_uploads/")
-            return path_id in self.zmd.zulip_db_data.user_upload_previews.image_metadata
+            return path_id in self.zmd.doer_db_data.user_upload_previews.image_metadata
 
         return any(parsed_url.path.lower().endswith(ext) for ext in IMAGE_EXTENSIONS)
 
@@ -1088,9 +1088,9 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
         }
 
         # Set has_link and similar flags whenever a message is processed by Markdown
-        if self.zmd.zulip_message:
-            self.zmd.zulip_message.has_link = len(found_urls) > 0
-            self.zmd.zulip_message.has_image = False  # This is updated in self.add_a
+        if self.zmd.doer_message:
+            self.zmd.doer_message.has_link = len(found_urls) > 0
+            self.zmd.doer_message.has_image = False  # This is updated in self.add_a
 
             for url in unique_urls:
                 maybe_add_attachment_path_id(url, self.zmd)
@@ -1161,7 +1161,7 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
 
             netloc = urlsplit(url).netloc
             if netloc == "" or (
-                self.zmd.zulip_realm is not None and netloc == self.zmd.zulip_realm.host
+                self.zmd.doer_realm is not None and netloc == self.zmd.doer_realm.host
             ):
                 # We don't have a strong use case for doing URL preview for relative links.
                 continue
@@ -1175,7 +1175,7 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
                 # is enabled, but URL previews are a beta feature and YouTube
                 # previews are pretty stable.
 
-            db_data: DbData | None = self.zmd.zulip_db_data
+            db_data: DbData | None = self.zmd.doer_db_data
             if db_data and db_data.sent_by_bot:
                 continue
 
@@ -1183,7 +1183,7 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
                 continue
 
             if self.zmd.url_embed_data is None or url not in self.zmd.url_embed_data:
-                self.zmd.zulip_rendering_result.links_for_preview.add(url)
+                self.zmd.doer_rendering_result.links_for_preview.add(url)
                 continue
 
             # Existing but being None means that we did process the
@@ -1212,7 +1212,7 @@ class InlineInterestingLinkProcessor(markdown.treeprocessors.Treeprocessor):
 
 class CompiledInlineProcessor(markdown.inlinepatterns.InlineProcessor):
     def __init__(
-        self, compiled_re: "Pattern[str] | re2._Regexp[str]", zmd: "ZulipMarkdown"
+        self, compiled_re: "Pattern[str] | re2._Regexp[str]", zmd: "DoerMarkdown"
     ) -> None:
         # This is similar to the superclass's small __init__ function,
         # but we skip the compilation step and let the caller give us
@@ -1302,13 +1302,13 @@ def make_realm_emoji(src: str, display_string: str) -> Element:
 class EmoticonTranslation(markdown.inlinepatterns.Pattern):
     """Translates emoticons like `:)` into emoji like `:smile:`."""
 
-    def __init__(self, pattern: str, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, pattern: str, zmd: "DoerMarkdown") -> None:
         super().__init__(pattern, zmd)
         self.zmd = zmd
 
     @override
     def handleMatch(self, match: Match[str]) -> Element | None:
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is None or not db_data.translate_emoticons:
             return None
 
@@ -1344,7 +1344,7 @@ class UnicodeEmoji(CompiledInlineProcessor):
 
 
 class Emoji(markdown.inlinepatterns.Pattern):
-    def __init__(self, pattern: str, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, pattern: str, zmd: "DoerMarkdown") -> None:
         super().__init__(pattern, zmd)
         self.zmd = zmd
 
@@ -1354,17 +1354,17 @@ class Emoji(markdown.inlinepatterns.Pattern):
         name = orig_syntax[1:-1]
 
         active_realm_emoji: dict[str, EmojiInfo] = {}
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is not None:
             active_realm_emoji = db_data.active_realm_emoji
 
         if name in active_realm_emoji:
             return make_realm_emoji(active_realm_emoji[name]["source_url"], orig_syntax)
-        elif name == "zulip":
+        elif name == "doer":
             # We explicitly do not use staticfiles to generate the URL
             # for this, so that it is portable if exported.
             return make_realm_emoji(
-                "/static/generated/emoji/images/emoji/unicode/zulip.png", orig_syntax
+                "/static/generated/emoji/images/emoji/unicode/doer.png", orig_syntax
             )
         elif name in name_to_codepoint:
             return make_emoji(name_to_codepoint[name], orig_syntax)
@@ -1412,7 +1412,7 @@ def sanitize_url(url: str) -> str | None:
         # Allow fragment links
         return urlunsplit(("", "", "", "", fragment))
 
-    # Zulip modification: If scheme is not specified, assume http://
+    # Doer modification: If scheme is not specified, assume http://
     # We re-enter sanitize_url because netloc etc. need to be re-parsed.
     if not scheme:
         return sanitize_url("http://" + url)
@@ -1456,7 +1456,7 @@ def url_to_a(db_data: DbData | None, url: str, text: str | None = None) -> Eleme
 
 
 class CompiledPattern(markdown.inlinepatterns.Pattern):
-    def __init__(self, compiled_re: Pattern[str], zmd: "ZulipMarkdown") -> None:
+    def __init__(self, compiled_re: Pattern[str], zmd: "DoerMarkdown") -> None:
         # This is similar to the superclass's small __init__ function,
         # but we skip the compilation step and let the caller give us
         # a compiled regex.
@@ -1469,7 +1469,7 @@ class AutoLink(CompiledPattern):
     @override
     def handleMatch(self, match: Match[str]) -> ElementStringNone:
         url = match.group("url")
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         return url_to_a(db_data, url)
 
 
@@ -1536,7 +1536,7 @@ class BlockQuoteProcessor(markdown.blockprocessors.BlockQuoteProcessor):
             # Remove ``> `` from beginning of each line.
             block = "\n".join([self.clean(line) for line in block[m.start() :].split("\n")])
 
-        # Zulip modification: The next line is patched to match
+        # Doer modification: The next line is patched to match
         # CommonMark rather than original Markdown.  In original
         # Markdown, blockquotes with a blank line between them were
         # merged, which makes it impossible to break a blockquote with
@@ -1670,7 +1670,7 @@ class LinkifierPattern(CompiledInlineProcessor):
         self,
         source_pattern: str,
         url_template: str,
-        zmd: "ZulipMarkdown",
+        zmd: "DoerMarkdown",
     ) -> None:
         compiled_re2 = get_compiled_linkifier_regex(source_pattern)
         self.prepared_url_template = uri_template.URITemplate(url_template)
@@ -1680,7 +1680,7 @@ class LinkifierPattern(CompiledInlineProcessor):
     def handleMatch(  # type: ignore[override] # https://github.com/python/mypy/issues/10197
         self, m: Match[str], data: str
     ) -> tuple[Element | str | None, int | None, int | None]:
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         url = url_to_a(
             db_data,
             self.prepared_url_template.expand(**m.groupdict()),
@@ -1703,7 +1703,7 @@ class UserMentionPattern(CompiledInlineProcessor):
     ) -> tuple[Element | str | None, int | None, int | None]:
         name = m.group("match")
         silent = m.group("silent") == "_"
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is not None:
             topic_wildcard = mention.user_mention_matches_topic_wildcard(name)
             stream_wildcard = mention.user_mention_matches_stream_wildcard(name)
@@ -1728,18 +1728,18 @@ class UserMentionPattern(CompiledInlineProcessor):
             user_id = None
             if stream_wildcard:
                 if not silent:
-                    self.zmd.zulip_rendering_result.mentions_stream_wildcard = True
+                    self.zmd.doer_rendering_result.mentions_stream_wildcard = True
                 user_id = "*"
             elif topic_wildcard:
                 if not silent:
-                    self.zmd.zulip_rendering_result.mentions_topic_wildcard = True
+                    self.zmd.doer_rendering_result.mentions_topic_wildcard = True
             elif user is not None:
                 assert isinstance(user, FullNameInfo)
                 if not user.is_active:
                     silent = True
 
                 if not silent:
-                    self.zmd.zulip_rendering_result.mentions_user_ids.add(user.id)
+                    self.zmd.doer_rendering_result.mentions_user_ids.add(user.id)
                 name = user.full_name
                 user_id = str(user.id)
             else:
@@ -1771,7 +1771,7 @@ class UserGroupMentionPattern(CompiledInlineProcessor):
     ) -> tuple[Element | str | None, int | None, int | None]:
         name = m.group("match")
         silent = m.group("silent") == "_"
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
 
         if db_data is not None:
             user_group = db_data.mention_data.get_user_group(name)
@@ -1780,7 +1780,7 @@ class UserGroupMentionPattern(CompiledInlineProcessor):
                     silent = True
 
                 if not silent:
-                    self.zmd.zulip_rendering_result.mentions_user_group_ids.add(user_group.id)
+                    self.zmd.doer_rendering_result.mentions_user_group_ids.add(user_group.id)
                 name = get_user_group_mention_display_name(user_group)
                 user_group_id = str(user_group.id)
             else:
@@ -1803,7 +1803,7 @@ class UserGroupMentionPattern(CompiledInlineProcessor):
 
 class StreamTopicMessageProcessor(CompiledInlineProcessor):
     def find_stream_id(self, name: str) -> int | None:
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is None:
             return None
         stream_id = db_data.stream_names.get(name)
@@ -1837,7 +1837,7 @@ class StreamPattern(StreamTopicMessageProcessor):
 
 class StreamTopicPattern(StreamTopicMessageProcessor):
     def get_with_operand(self, channel_topic: ChannelTopicInfo) -> int | None:
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is None:
             return None
         with_operand = db_data.topic_info.get(channel_topic)
@@ -1959,7 +1959,7 @@ class AlertWordNotificationProcessor(markdown.preprocessors.Preprocessor):
         "`",
     }
 
-    def __init__(self, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, zmd: "DoerMarkdown") -> None:
         super().__init__(zmd)
         self.zmd = zmd
 
@@ -1975,14 +1975,14 @@ class AlertWordNotificationProcessor(markdown.preprocessors.Preprocessor):
 
     @override
     def run(self, lines: list[str]) -> list[str]:
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         if db_data is not None:
             # We check for alert words here, the set of which are
             # dependent on which users may see this message.
             #
             # Our caller passes in the list of possible_words.  We
             # don't do any special rendering; we just append the alert words
-            # we find to the set self.zmd.zulip_rendering_result.user_ids_with_alert_words.
+            # we find to the set self.zmd.doer_rendering_result.user_ids_with_alert_words.
 
             realm_alert_words_automaton = db_data.realm_alert_words_automaton
 
@@ -1994,16 +1994,16 @@ class AlertWordNotificationProcessor(markdown.preprocessors.Preprocessor):
                     if self.check_valid_start_position(
                         content, end_index - len(original_value)
                     ) and self.check_valid_end_position(content, end_index + 1):
-                        self.zmd.zulip_rendering_result.user_ids_with_alert_words.update(user_ids)
+                        self.zmd.doer_rendering_result.user_ids_with_alert_words.update(user_ids)
         return lines
 
 
 class LinkInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
-    def __init__(self, pattern: str, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, pattern: str, zmd: "DoerMarkdown") -> None:
         super().__init__(pattern, zmd)
         self.zmd = zmd
 
-    def zulip_specific_link_changes(self, el: Element) -> None | Element:
+    def doer_specific_link_changes(self, el: Element) -> None | Element:
         href = el.get("href")
         assert href is not None
 
@@ -2013,7 +2013,7 @@ class LinkInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
             return None  # no-op; the link is not processed.
 
         # Rewrite local links to be relative
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         href = rewrite_local_links_to_relative(db_data, href)
 
         # Make changes to <a> tag attributes
@@ -2037,14 +2037,14 @@ class LinkInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
         if ret[0] is not None:
             el, match_start, index = ret
             assert isinstance(el, Element)
-            el = self.zulip_specific_link_changes(el)
+            el = self.doer_specific_link_changes(el)
             if el is not None:
                 return el, match_start, index
         return None, None, None
 
 
 class AudioInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
-    def __init__(self, pattern: str, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, pattern: str, zmd: "DoerMarkdown") -> None:
         super().__init__(pattern, zmd)
         self.zmd = zmd
 
@@ -2059,9 +2059,9 @@ class AudioInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
         if title:
             el.set("title", title)
 
-        return self.zulip_specific_src_changes(el)
+        return self.doer_specific_src_changes(el)
 
-    def zulip_specific_src_changes(self, el: Element) -> None | Element:
+    def doer_specific_src_changes(self, el: Element) -> None | Element:
         src = el.get("src")
         assert src is not None
 
@@ -2071,7 +2071,7 @@ class AudioInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
             return None  # no-op; the link is not processed.
 
         # Rewrite local links to be relative
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         src = rewrite_local_links_to_relative(db_data, src)
         maybe_add_attachment_path_id(src, self.zmd)
 
@@ -2088,7 +2088,7 @@ class AudioInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
             return None
 
         # Make changes to <audio> tag attributes
-        if is_static_or_current_realm_url(src, self.zmd.zulip_realm):
+        if is_static_or_current_realm_url(src, self.zmd.doer_realm):
             # Don't rewrite audios on our own site (e.g. user uploads).
             el.set("src", src)
         else:
@@ -2123,12 +2123,12 @@ class AudioInlineProcessor(markdown.inlinepatterns.LinkInlineProcessor):
 
 
 class ImageInlineProcessor(markdown.inlinepatterns.ImageInlineProcessor):
-    def __init__(self, pattern: str, zmd: "ZulipMarkdown") -> None:
+    def __init__(self, pattern: str, zmd: "DoerMarkdown") -> None:
         super().__init__(pattern, zmd)
         self.zmd = zmd
 
-    def zulip_specific_src_changes(self, img: Element) -> None | Element:
-        # function partially copied from LinkInlineProcessor.zulip_specific_link_changes
+    def doer_specific_src_changes(self, img: Element) -> None | Element:
+        # function partially copied from LinkInlineProcessor.doer_specific_link_changes
         src = img.get("src")
         assert src is not None
 
@@ -2138,7 +2138,7 @@ class ImageInlineProcessor(markdown.inlinepatterns.ImageInlineProcessor):
             return None  # no-op; the image is not processed.
 
         # Rewrite local links to be relative
-        db_data: DbData | None = self.zmd.zulip_db_data
+        db_data: DbData | None = self.zmd.doer_db_data
         src = rewrite_local_links_to_relative(db_data, src)
         maybe_add_attachment_path_id(src, self.zmd)
         img.set("data-original-src", src)
@@ -2187,7 +2187,7 @@ class ImageInlineProcessor(markdown.inlinepatterns.ImageInlineProcessor):
         if ret[0] is not None:
             img, match_start, index = ret
             assert isinstance(img, Element)
-            img = self.zulip_specific_src_changes(img)
+            img = self.doer_specific_src_changes(img)
             if img is not None:
                 return img, match_start, index
         return None, None, None
@@ -2208,11 +2208,11 @@ def get_sub_registry(r: markdown.util.Registry[T], keys: list[str]) -> markdown.
 DEFAULT_MARKDOWN_KEY = -1
 
 
-class ZulipMarkdown(markdown.Markdown):
-    zulip_message: Message | None
-    zulip_realm: Realm | None
-    zulip_db_data: DbData | None
-    zulip_rendering_result: MessageRenderingResult
+class DoerMarkdown(markdown.Markdown):
+    doer_message: Message | None
+    doer_realm: Realm | None
+    doer_db_data: DbData | None
+    doer_rendering_result: MessageRenderingResult
     image_preview_enabled: bool
     url_embed_preview_enabled: bool
     url_embed_data: dict[str, UrlEmbedData | None] | None
@@ -2419,8 +2419,8 @@ class ZulipMarkdown(markdown.Markdown):
         return postprocessors
 
 
-def make_md_engine(linkifiers_key: int, email_gateway: bool) -> ZulipMarkdown:
-    return ZulipMarkdown(
+def make_md_engine(linkifiers_key: int, email_gateway: bool) -> DoerMarkdown:
+    return DoerMarkdown(
         linkifiers=linkifiers_for_realm(linkifiers_key),
         linkifiers_key=linkifiers_key,
         email_gateway=email_gateway,
@@ -2591,7 +2591,7 @@ def do_convert(
     no_previews: bool = False,
     acting_user: UserProfile | None = None,
 ) -> MessageRenderingResult:
-    """Convert Markdown to HTML, with Zulip-specific settings and hacks."""
+    """Convert Markdown to HTML, with Doer-specific settings and hacks."""
     # This logic is a bit convoluted, but the overall goal is to support a range of use cases:
     # * Nothing is passed in other than content -> just run default options (e.g. for docs)
     # * message is passed, but no realm is -> look up realm from message
@@ -2624,10 +2624,10 @@ def do_convert(
         thumbnail_spinners=set(),
     )
 
-    md_engine.zulip_message = message
-    md_engine.zulip_rendering_result = rendering_result
-    md_engine.zulip_realm = message_realm
-    md_engine.zulip_db_data = None  # for now
+    md_engine.doer_message = message
+    md_engine.doer_rendering_result = rendering_result
+    md_engine.doer_realm = message_realm
+    md_engine.doer_db_data = None  # for now
     md_engine.image_preview_enabled = image_preview_enabled(message, message_realm, no_previews)
     md_engine.url_embed_preview_enabled = url_embed_preview_enabled(
         message, message_realm, no_previews
@@ -2668,7 +2668,7 @@ def do_convert(
             active_realm_emoji = {}
 
         user_upload_previews = manifest_and_get_user_upload_previews(message_realm.id, content)
-        md_engine.zulip_db_data = DbData(
+        md_engine.doer_db_data = DbData(
             realm_alert_words_automaton=realm_alert_words_automaton,
             mention_data=mention_data,
             active_realm_emoji=active_realm_emoji,

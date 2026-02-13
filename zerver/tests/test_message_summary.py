@@ -10,7 +10,7 @@ from typing_extensions import override
 
 from analytics.models import UserCount
 from zerver.actions.realm_settings import do_change_realm_permission_group_setting
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import NamedUserGroup
 from zerver.models.groups import SystemGroups
 from zerver.models.realms import get_realm
@@ -26,17 +26,17 @@ import litellm
 LLM_FIXTURES_FILE = "zerver/tests/fixtures/litellm/summary.json"
 
 
-class MessagesSummaryTestCase(ZulipTestCase):
+class MessagesSummaryTestCase(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
         self.user = self.example_user("iago")
         self.topic_name = "New feature launch"
-        self.channel_name = "Zulip features"
+        self.channel_name = "Doer features"
 
         self.login_user(self.user)
         self.subscribe(self.user, self.channel_name)
-        content = "Zulip just launched a feature to generate summary of messages."
+        content = "Doer just launched a feature to generate summary of messages."
         self.send_stream_message(
             self.user, self.channel_name, content=content, topic_name=self.topic_name
         )
@@ -136,7 +136,7 @@ class MessagesSummaryTestCase(ZulipTestCase):
     def test_permission_to_summarize_message_in_topics(self) -> None:
         narrow = orjson.dumps([["channel", self.channel_name], ["topic", self.topic_name]]).decode()
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         moderators_group = NamedUserGroup.objects.get(
             name=SystemGroups.MODERATORS, realm_for_sharding=realm, is_system_group=True
         )

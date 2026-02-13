@@ -1,4 +1,4 @@
-| Zulip Server version | Supported versions of PostgreSQL |
+| Doer Server version | Supported versions of PostgreSQL |
 | -------------------- | -------------------------------- |
 | 7.x                  | 12, 13, 14, 15                   |
 | 8.x                  | 12, 13, 14, 15, 16               |

@@ -4,10 +4,10 @@ import orjson
 from django.core.management.base import CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
     Compare rendered messages from files.
     Usage: ./manage.py compare_messages <dump1> <dump2>

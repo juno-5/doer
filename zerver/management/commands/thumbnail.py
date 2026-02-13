@@ -7,14 +7,14 @@ from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
 from zerver.actions.message_edit import re_thumbnail
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.queue import queue_event_on_commit
 from zerver.lib.thumbnail import StoredThumbnailFormat, get_image_thumbnail_path
 from zerver.lib.upload import all_message_attachments
 from zerver.models import ArchivedMessage, Attachment, ImageAttachment, Message
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Manages thumbnailing in messages."""
 
     @override

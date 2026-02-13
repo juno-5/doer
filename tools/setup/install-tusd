@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-# This should be kept in sync with puppet/zulip/manifests/common.pp
+# This should be kept in sync with puppet/doer/manifests/common.pp
 version=2.8.0
 arch="$(uname -m)"
 

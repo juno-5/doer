@@ -4,13 +4,13 @@ from typing import Any
 from django.core.management.base import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.rate_limiter import RateLimitedUser
 from zerver.models import UserProfile
 from zerver.models.users import get_user_profile_by_api_key
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Manually block or unblock a user from accessing the API"""
 
     @override

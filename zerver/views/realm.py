@@ -25,7 +25,7 @@ from zerver.actions.realm_settings import (
     do_set_realm_property,
     do_set_realm_signup_announcements_stream,
     do_set_realm_user_default_setting,
-    do_set_realm_zulip_update_announcements_stream,
+    do_set_realm_doer_update_announcements_stream,
     parse_and_set_setting_value_if_required,
     validate_authentication_methods_dict_from_api,
 )
@@ -208,7 +208,7 @@ def update_realm(
     video_chat_provider: Json[int] | None = None,
     waiting_period_threshold: Json[NonNegativeInt] | None = None,
     want_advertise_in_communities_directory: Json[bool] | None = None,
-    zulip_update_announcements_stream_id: Json[int] | None = None,
+    doer_update_announcements_stream_id: Json[int] | None = None,
     # Note: push_notifications_enabled and push_notifications_enabled_end_timestamp
     # are not offered here as it is maintained by the server, not via the API.
     welcome_message_custom_text: Annotated[
@@ -510,24 +510,24 @@ def update_realm(
         )
         data["signup_announcements_stream_id"] = signup_announcements_stream_id
 
-    if zulip_update_announcements_stream_id is not None and (
-        realm.zulip_update_announcements_stream is None
-        or realm.zulip_update_announcements_stream.id != zulip_update_announcements_stream_id
+    if doer_update_announcements_stream_id is not None and (
+        realm.doer_update_announcements_stream is None
+        or realm.doer_update_announcements_stream.id != doer_update_announcements_stream_id
     ):
-        new_zulip_update_announcements_stream = None
-        if zulip_update_announcements_stream_id >= 0:
-            (new_zulip_update_announcements_stream, sub) = access_stream_by_id(
+        new_doer_update_announcements_stream = None
+        if doer_update_announcements_stream_id >= 0:
+            (new_doer_update_announcements_stream, sub) = access_stream_by_id(
                 user_profile,
-                zulip_update_announcements_stream_id,
+                doer_update_announcements_stream_id,
                 require_content_access=False,
             )
-        do_set_realm_zulip_update_announcements_stream(
+        do_set_realm_doer_update_announcements_stream(
             realm,
-            new_zulip_update_announcements_stream,
-            zulip_update_announcements_stream_id,
+            new_doer_update_announcements_stream,
+            doer_update_announcements_stream_id,
             acting_user=user_profile,
         )
-        data["zulip_update_announcements_stream_id"] = zulip_update_announcements_stream_id
+        data["doer_update_announcements_stream_id"] = doer_update_announcements_stream_id
 
     if string_id is not None:
         if not user_profile.is_realm_owner:

@@ -4,13 +4,13 @@ import orjson
 from django.core.exceptions import ValidationError
 from typing_extensions import override
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import RealmAuditLog, RealmFilter
 from zerver.models.linkifiers import url_template_validator
 from zerver.models.realm_audit_logs import AuditLogEventType
 
 
-class RealmFilterTest(ZulipTestCase):
+class RealmFilterTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -139,7 +139,7 @@ class RealmFilterTest(ZulipTestCase):
         data["url_template"] = "https://github.com/{org}/{repo}/issue/{id}"
         result = self.client_post("/json/realm/filters", info=data)
         self.assert_json_success(result)
-        self.assertIsNotNone(re.match(data["pattern"], "zulip/zulip#123"))
+        self.assertIsNotNone(re.match(data["pattern"], "doer/doer#123"))
 
         data["pattern"] = (
             r"FOO_(?P<id>[a-f]{5});(?P<zone>[a-f]);(?P<domain>[a-z]+);(?P<location>[a-z]+);(?P<name>[a-z]{2,8});(?P<chapter>[0-9]{2,3});(?P<fragment>[a-z]{2,8})"

@@ -55,7 +55,7 @@ def read_stop_words() -> list[str]:
     global stop_words_list
     if stop_words_list is None:
         file_path = os.path.join(
-            settings.DEPLOY_ROOT, "puppet/zulip/files/postgresql/zulip_english.stop"
+            settings.DEPLOY_ROOT, "puppet/doer/files/postgresql/doer_english.stop"
         )
         with open(file_path) as f:
             stop_words_list = f.read().splitlines()

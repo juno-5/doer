@@ -4,10 +4,10 @@ from typing import Any
 from typing_extensions import override
 
 from zerver.lib.initial_password import initial_password
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = "Print the initial password and API key for accounts as created by populate_db"
 
     fmt = "%-30s %-16s  %-32s"

@@ -1,9 +1,9 @@
 {
-  "project": "zulip",
-  "project_name": "zulip",
+  "project": "doer",
+  "project_name": "doer",
   "culprit": "raven.scripts.runner in main",
   "level": "error",
-  "url": "https://sentry.io/zulip/zulip/issues/156699934/",
+  "url": "https://sentry.io/doer/doer/issues/156699934/",
   "logger": null,
   "message": "This is an example python exception",
   "id": "156699934",

@@ -1,4 +1,4 @@
-# Zulip AppFollow integration
+# Doer AppFollow integration
 
 Receive user reviews from your tracked apps on AppFollow!
 

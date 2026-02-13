@@ -150,7 +150,7 @@ def create_confirmation_object(
 
     # Some confirmation objects, like those for realm creation or those used
     # for the self-hosted management flows, are not associated with a realm
-    # hosted by this Zulip server.
+    # hosted by this Doer server.
     if no_associated_realm_object:
         realm = None
     else:
@@ -295,7 +295,7 @@ if settings.ZILENCER_ENABLED:
 def one_click_unsubscribe_link(user_profile: UserProfile, email_type: str) -> str:
     """
     Generate a unique link that a logged-out user can visit to unsubscribe from
-    Zulip e-mails without having to first log in.
+    Doer e-mails without having to first log in.
     """
     return create_confirmation_link(
         user_profile, Confirmation.UNSUBSCRIBE, url_args={"email_type": email_type}

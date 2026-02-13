@@ -171,7 +171,7 @@ export let set_user_topic_visibility_policy = (
             }
 
             // The following feedback_widget notice helps avoid
-            // confusion when a user who is not familiar with Zulip's
+            // confusion when a user who is not familiar with Doer's
             // keyboard UI hits "M" in the wrong context and has a
             // bunch of messages suddenly disappear. This notice is
             // only useful when muting from the keyboard, since you

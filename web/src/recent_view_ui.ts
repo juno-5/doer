@@ -4,7 +4,7 @@ import assert from "minimalistic-assert";
 import type * as tippy from "tippy.js";
 import * as z from "zod/mini";
 
-import render_introduce_zulip_view_modal from "../templates/introduce_zulip_view_modal.hbs";
+import render_introduce_doer_view_modal from "../templates/introduce_doer_view_modal.hbs";
 import render_recent_view_filters from "../templates/recent_view_filters.hbs";
 import render_recent_view_row from "../templates/recent_view_row.hbs";
 import render_recent_view_body from "../templates/recent_view_table.hbs";
@@ -1440,8 +1440,8 @@ export function show(): void {
     }
 
     if (onboarding_steps.ONE_TIME_NOTICES_TO_DISPLAY.has("intro_recent_view_modal")) {
-        const modal_content_html = render_introduce_zulip_view_modal({
-            zulip_view: "recent_conversations",
+        const modal_content_html = render_introduce_doer_view_modal({
+            doer_view: "recent_conversations",
             current_home_view_and_escape_navigation_enabled:
                 user_settings.web_home_view === "recent" &&
                 user_settings.web_escape_navigates_to_home_view,
@@ -1990,7 +1990,7 @@ export function initialize({
         maybe_load_older_messages(unread.first_unread_unmuted_message_id);
     });
 
-    $(document).on("compose_canceled.zulip", () => {
+    $(document).on("compose_canceled.doer", () => {
         if (recent_view_util.is_visible()) {
             revive_current_focus();
         }

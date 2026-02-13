@@ -10,8 +10,8 @@ set -o pipefail
 # Set the Ubuntu mirror
 [ ! "$UBUNTU_MIRROR" ] || sudo sed -i 's|http://\(\w*\.\)*archive\.ubuntu\.com/ubuntu/\? |'"$UBUNTU_MIRROR"' |' /etc/apt/sources.list
 
-# Set the MOTD on the system to have Zulip instructions
-sudo ln -nsf /srv/zulip/tools/setup/dev-motd /etc/update-motd.d/99-zulip-dev
+# Set the MOTD on the system to have Doer instructions
+sudo ln -nsf /srv/zulip/tools/setup/dev-motd /etc/update-motd.d/99-doer-dev
 sudo rm -f /etc/update-motd.d/10-help-text /etc/update-motd.d/99-bento
 sudo dpkg --purge landscape-common
 sudo dpkg-divert --add --rename /etc/default/motd-news
@@ -30,22 +30,22 @@ export SKIP_VENV_SHELL_WARNING=1
 # message after a successful run.
 set +x
 
-# Check if the zulip directory is writable
+# Check if the doer directory is writable
 if [ ! -w /srv/zulip ]; then
-    echo "The vagrant user is unable to write to the zulip directory."
+    echo "The vagrant user is unable to write to the doer directory."
     echo "To fix this, run the following commands on the host machine:"
     # sudo is required since our uid is not 1000
     echo '    vagrant halt -f'
-    echo '    rm -rf /PATH/TO/ZULIP/CLONE/.vagrant'
+    echo '    rm -rf /PATH/TO/DOER/CLONE/.vagrant'
     # shellcheck disable=SC2016
-    echo '    sudo chown -R 1000:$(id -g) /PATH/TO/ZULIP/CLONE'
-    echo "Replace /PATH/TO/ZULIP/CLONE with the path to where zulip code is cloned."
+    echo '    sudo chown -R 1000:$(id -g) /PATH/TO/DOER/CLONE'
+    echo "Replace /PATH/TO/DOER/CLONE with the path to where doer code is cloned."
     echo "You can resume setting up your vagrant environment by running:"
     echo "    vagrant up"
     exit 1
 fi
 # Provision the development environment
-ln -nsf /srv/zulip ~/zulip
+ln -nsf /srv/zulip ~/doer
 /srv/zulip/tools/provision
 
 # Run any custom provision hooks the user has configured

@@ -4,11 +4,11 @@ from django.conf import settings
 from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.transfer import transfer_uploads_to_s3
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Transfer uploads to S3 """
 
     @override

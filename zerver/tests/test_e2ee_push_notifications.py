@@ -727,7 +727,7 @@ class SendPushNotificationTest(E2EEPushNotificationTestCase):
     def test_payload_data_to_encrypt_channel_message(self) -> None:
         hamlet = self.example_user("hamlet")
         aaron = self.example_user("aaron")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user_group = check_add_user_group(realm, "test_user_group", [hamlet], acting_user=hamlet)
 
         time_now = now()
@@ -772,7 +772,7 @@ class SendPushNotificationTest(E2EEPushNotificationTestCase):
     def test_payload_data_to_encrypt_direct_message(self) -> None:
         hamlet = self.example_user("hamlet")
         aaron = self.example_user("aaron")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         time_now = now()
         self.register_push_devices_for_notification()
@@ -808,7 +808,7 @@ class SendPushNotificationTest(E2EEPushNotificationTestCase):
         aaron = self.example_user("aaron")
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         time_now = now()
         self.register_push_devices_for_notification()
@@ -926,7 +926,7 @@ class RemovePushNotificationTest(E2EEPushNotificationTestCase):
     def test_remove_payload_data_to_encrypt(self) -> None:
         hamlet = self.example_user("hamlet")
         aaron = self.example_user("aaron")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         self.register_push_devices_for_notification()
         message_id_one = self.send_personal_message(
@@ -1085,7 +1085,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
 
             # Send test notification to all of the registered mobile devices.
             result = self.api_post(
-                hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="zulip"
+                hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="doer"
             )
             self.assert_json_success(result)
 
@@ -1108,7 +1108,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
                 hamlet,
                 "/api/v1/mobile_push/e2ee/test_notification",
                 {"push_account_id": registered_device_android.push_account_id},
-                subdomain="zulip",
+                subdomain="doer",
             )
             self.assert_json_success(result)
 
@@ -1147,7 +1147,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
 
             # Send test notification to all of the registered mobile devices.
             result = self.api_post(
-                hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="zulip"
+                hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="doer"
             )
             self.assert_json_success(result)
 
@@ -1173,7 +1173,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
 
         # No registered device to send to.
         result = self.api_post(
-            hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="zulip"
+            hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="doer"
         )
         self.assert_json_error(result, "No active registered push device", 400)
 
@@ -1185,7 +1185,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
         def assert_error_response(msg: str, http_status_code: int) -> None:
             with self.assertLogs("zerver.lib.push_notifications", level="INFO") as zerver_logger:
                 result = self.api_post(
-                    hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="zulip"
+                    hamlet, "/api/v1/mobile_push/e2ee/test_notification", subdomain="doer"
                 )
                 self.assert_json_error(result, msg, http_status_code)
 
@@ -1203,7 +1203,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
             self.assertLogs(level="ERROR") as error_logs,
         ):
             assert_error_response(
-                "Network error while connecting to Zulip push notification service.", 502
+                "Network error while connecting to Doer push notification service.", 502
             )
             self.assertEqual(
                 "ERROR:django.request:Bad Gateway: /api/v1/mobile_push/e2ee/test_notification",
@@ -1218,7 +1218,7 @@ class SendTestPushNotificationTest(E2EEPushNotificationTestCase):
             self.assertLogs(level="ERROR") as error_logs,
         ):
             assert_error_response(
-                "Internal server error on Zulip push notification service, retry later.", 502
+                "Internal server error on Doer push notification service, retry later.", 502
             )
             self.assertEqual(
                 "ERROR:django.request:Bad Gateway: /api/v1/mobile_push/e2ee/test_notification",

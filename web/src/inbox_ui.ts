@@ -9,7 +9,7 @@ import render_inbox_folder_with_channels from "../templates/inbox_view/inbox_fol
 import render_inbox_row from "../templates/inbox_view/inbox_row.hbs";
 import render_inbox_stream_container from "../templates/inbox_view/inbox_stream_container.hbs";
 import render_inbox_view from "../templates/inbox_view/inbox_view.hbs";
-import render_introduce_zulip_view_modal from "../templates/introduce_zulip_view_modal.hbs";
+import render_introduce_doer_view_modal from "../templates/introduce_doer_view_modal.hbs";
 import render_users_with_status_icons from "../templates/users_with_status_icons.hbs";
 
 import * as animate from "./animate.ts";
@@ -376,8 +376,8 @@ export function show(filter?: Filter): void {
     });
 
     if (onboarding_steps.ONE_TIME_NOTICES_TO_DISPLAY.has("intro_inbox_view_modal")) {
-        const modal_content_html = render_introduce_zulip_view_modal({
-            zulip_view: "inbox",
+        const modal_content_html = render_introduce_doer_view_modal({
+            doer_view: "inbox",
             current_home_view_and_escape_navigation_enabled:
                 user_settings.web_home_view === "inbox" &&
                 user_settings.web_escape_navigates_to_home_view,
@@ -2511,7 +2511,7 @@ export function initialize({hide_other_views}: {hide_other_views: () => void}): 
         complete_rerender();
     });
 
-    $(document).on("compose_canceled.zulip", () => {
+    $(document).on("compose_canceled.doer", () => {
         if (inbox_util.is_visible()) {
             revive_current_focus();
         }

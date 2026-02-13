@@ -5,12 +5,12 @@ from typing import Any
 from django.db import DEFAULT_DB_ALIAS
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import get_dev_uuid_var_path
-from zerver.lib.management import ZulipBaseCommand
+from scripts.lib.doer_tools import get_dev_uuid_var_path
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.migration_status import get_migration_status
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = "Get status of migrations."
 
     @override

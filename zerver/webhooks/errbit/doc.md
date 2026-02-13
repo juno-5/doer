@@ -1,6 +1,6 @@
-# Zulip Errbit integration
+# Doer Errbit integration
 
-Get Zulip notifications for the Errbit error tracker!
+Get Doer notifications for the Errbit error tracker!
 
 {start_tabs}
 

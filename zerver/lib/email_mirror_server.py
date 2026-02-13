@@ -21,10 +21,10 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives as DjangoEmailMultiAlternatives
 from typing_extensions import override
 
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.lib.email_mirror import decode_stream_email_address, validate_to_address
 from zerver.lib.email_mirror_helpers import (
-    ZulipEmailForwardError,
+    DoerEmailForwardError,
     get_email_gateway_message_string_from_address,
 )
 from zerver.lib.exceptions import JsonableError, RateLimitedError
@@ -47,11 +47,11 @@ def send_to_postmaster(msg: email.message.Message) -> None:
     #   mail service, as well as the special case of "RCPT TO:<Postmaster>"
     #   (with no domain specification), MUST be supported.
     #
-    # We forward such mail to the ZULIP_ADMINISTRATOR.
+    # We forward such mail to the DOER_ADMINISTRATOR.
     mail = DjangoEmailMultiAlternatives(
         subject=f"Mail to postmaster: {msg['Subject']}",
         from_email=settings.NOREPLY_EMAIL_ADDRESS,
-        to=[settings.ZULIP_ADMINISTRATOR],
+        to=[settings.DOER_ADMINISTRATOR],
     )
     mail.attach(None, msg, "message/rfc822")
     try:
@@ -68,7 +68,7 @@ def send_to_postmaster(msg: email.message.Message) -> None:
         logger.exception("Error sending bounce email to %s: %s", mail.to, str(e), stack_info=True)
 
 
-class ZulipMessageHandler(MessageHandler):
+class DoerMessageHandler(MessageHandler):
     def __init__(self) -> None:
         super().__init__(email.message.Message)
 
@@ -85,7 +85,7 @@ class ZulipMessageHandler(MessageHandler):
             envelope.rcpt_tos.append("postmaster")
             return "250 Continue"
 
-        with suppress(ZulipEmailForwardError):
+        with suppress(DoerEmailForwardError):
             if get_email_gateway_message_string_from_address(address).lower() == "postmaster":
                 envelope.rcpt_tos.append("postmaster")
                 return "250 Continue"
@@ -108,7 +108,7 @@ class ZulipMessageHandler(MessageHandler):
             )
             return "550 4.7.0 Rate-limited due to too many emails on this realm."
 
-        except ZulipEmailForwardError as e:
+        except DoerEmailForwardError as e:
             return f"550 5.1.1 Bad destination mailbox address: {e}"
 
         except JsonableError as e:
@@ -182,7 +182,7 @@ class PermissionDroppingUnthreadedController(UnthreadedController):  # nocoverag
             assert self.user_id is not None
             assert self.group_id is not None
             # We may have a logfile owned by root, from before we
-            # fixed it to be owned by zulip; chown it if it exists, so
+            # fixed it to be owned by doer; chown it if it exists, so
             # we don't fail below.
             if os.path.exists(settings.EMAIL_MIRROR_LOG_PATH):
                 os.chown(settings.EMAIL_MIRROR_LOG_PATH, self.user_id, self.group_id)
@@ -211,9 +211,9 @@ def run_smtp_server(
         group=group,
         hostname=host,
         port=port,
-        handler=ZulipMessageHandler(),
+        handler=DoerMessageHandler(),
         tls_context=tls_context,
-        ident=f"Zulip Server {ZULIP_VERSION}",
+        ident=f"Doer Server {DOER_VERSION}",
     )
 
     server.loop.add_signal_handler(signal.SIGINT, server.loop.stop)

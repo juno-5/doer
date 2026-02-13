@@ -6,14 +6,14 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ChannelsIntro from "../include/_ChannelsIntro.mdx";
 import MobileChannels from "../include/_MobileChannels.mdx";
 
 import BarChartIcon from "~icons/fa/bar-chart";
 import SortAlphaAscIcon from "~icons/fa/sort-alpha-asc";
 import UserOIcon from "~icons/fa/user-o";
-import SubscriberPlusIcon from "~icons/zulip-icon/subscriber-plus";
+import SubscriberPlusIcon from "~icons/doer-icon/subscriber-plus";
 
 <ChannelsIntro />
 
@@ -33,16 +33,16 @@ subscribe to [private](/help/channel-permissions#private-channels) channels.
       1. Scroll through the list of channels. You can use the **search box** near the
          top of the menu to filter the list by channel name or description.
       1. Click the **subscribe to channel**
-         (<SubscriberPlusIcon class="zulip-unplugin-icon subscriber-plus-icon" />)
+         (<SubscriberPlusIcon class="doer-unplugin-icon subscriber-plus-icon" />)
          icon to the left of a channel to subscribe to it.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can click on the icons in the upper right to sort the list of channels
       **by name** (<SortAlphaAscIcon />),
       **by number of subscribers** (<UserOIcon />), or
       **by estimated weekly traffic** (<BarChartIcon />).
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">

@@ -23,6 +23,6 @@ Some translations can be tricky, so please don't hesitate to ask the community o
 ## Terms
 
 Please refer to the [Weblate
-glossary](https://hosted.weblate.org/projects/zulip/glossary/fr/) for
+glossary](https://hosted.weblate.org/projects/doer/glossary/fr/) for
 recommended translations. If some important word is missing from the
 glossary, please ask in [#translation/fr][].

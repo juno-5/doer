@@ -3,7 +3,7 @@
     <td>
         <span class="emoji_name">{{display_name}}</span>
         {{#if is_overriding_default}}
-            <i class="zulip-icon zulip-icon-exclamation-circle tippy-zulip-tooltip emoji-override-warning" data-tippy-content="{{t 'This custom emoji overrides a default emoji with the same name.' }}"></i>
+            <i class="doer-icon doer-icon-exclamation-circle tippy-doer-tooltip emoji-override-warning" data-tippy-content="{{t 'This custom emoji overrides a default emoji with the same name.' }}"></i>
         {{/if}}
     </td>
     <td>
@@ -26,7 +26,7 @@
         {{> ../components/icon_button
           icon="trash"
           intent="danger"
-          custom_classes="tippy-zulip-delayed-tooltip delete"
+          custom_classes="tippy-doer-delayed-tooltip delete"
           disabled=(not can_delete_emoji)
           data-tippy-content=(t "Deactivate")
           }}

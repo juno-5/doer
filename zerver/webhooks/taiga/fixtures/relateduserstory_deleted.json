@@ -59,9 +59,9 @@
                 "color":"#999999"
             },
             "project":{
-                "permalink":"https://tree.taiga.io/project/eeshangarg-zulip",
+                "permalink":"https://tree.taiga.io/project/eeshangarg-doer",
                 "id":229096,
-                "name":"Zulip",
+                "name":"Doer",
                 "logo_big_url":null
             },
             "team_requirement":false,
@@ -93,9 +93,9 @@
             },
             "color":"#888a85",
             "project":{
-                "permalink":"https://tree.taiga.io/project/eeshangarg-zulip",
+                "permalink":"https://tree.taiga.io/project/eeshangarg-doer",
                 "id":229096,
-                "name":"Zulip",
+                "name":"Doer",
                 "logo_big_url":null
             },
             "team_requirement":false,

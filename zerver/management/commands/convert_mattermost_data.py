@@ -19,11 +19,11 @@ Test out the realm:
 from django.core.management.base import CommandError, CommandParser
 
 from zerver.data_import.mattermost import do_convert_data
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
-    help = """Convert the mattermost data into Zulip data format."""
+class Command(DoerBaseCommand):
+    help = """Convert the mattermost data into Doer data format."""
 
     @override
     def add_arguments(self, parser: CommandParser) -> None:

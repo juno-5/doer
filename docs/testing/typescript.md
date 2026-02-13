@@ -1,6 +1,6 @@
 # TypeScript static types
 
-Zulip is early in the process of migrating our codebase to use
+Doer is early in the process of migrating our codebase to use
 [TypeScript](https://www.typescriptlang.org/), the leading static type
 system for JavaScript. It works as an extension of the ES6 JavaScript
 standard, and provides similar benefits to our use of
@@ -75,7 +75,7 @@ those that:
   then we have types on the data being interacted with by other
   modules when we migrate those.
 - Don't have large open pull requests (to avoid merge conflicts); one
-  can scan for these using [TinglingGit](https://github.com/zulip/TinglingGit).
+  can scan for these using [TinglingGit](https://github.com/doer/TinglingGit).
 - Have good unit test coverage, which limits the risk of breaking
   correctness through refactoring. Use
   `tools/test-js-with-node --coverage` to get a coverage report.

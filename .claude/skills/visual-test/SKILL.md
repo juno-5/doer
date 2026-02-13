@@ -12,7 +12,7 @@ screenshots.
 
 When you need to visually verify that a UI change looks correct —
 layout, colors, popover positioning, text content, etc. This runs a
-real browser against the Zulip test server and takes screenshots that
+real browser against the Doer test server and takes screenshots that
 you can read as images.
 
 ## Steps
@@ -60,7 +60,7 @@ multimodal vision will show the rendered page.
 Describe what you see — layout, colors, text content, positioning,
 any issues. Compare against what was expected.
 
-Zulip displays any JS exceptions encountered as a pop-up, but you should
+Doer displays any JS exceptions encountered as a pop-up, but you should
 also be able to get them from the puppeteer output.
 
 ### 5. Iterate if needed
@@ -84,8 +84,8 @@ that you can use it when rebasing or iterating on the pull request.
 - **Window size:** 1400 x 1024
 - **Test data:** The test database includes a non-system user group
   `hamletcharacters` (members: Cordelia, Hamlet).
-- **`zulip_test` global:** Only a limited set of internal functions
-  are exposed — see `web/src/zulip_test.ts`. Functions like
+- **`doer_test` global:** Only a limited set of internal functions
+  are exposed — see `web/src/doer_test.ts`. Functions like
   `get_stream_id` and `get_user_id_from_name` are available, but
   `user_groups` is not. Navigate to groups via URL hash routes
   or by clicking list items instead.

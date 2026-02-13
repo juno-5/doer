@@ -1,24 +1,24 @@
 # Writing an incoming webhook
 
 This guide goes through the process of creating a simple incoming webhook
-integration, using the [Zulip Hello World](https://zulip.com/integrations/helloworld)
+integration, using the [Doer Hello World](https://zulip.com/integrations/helloworld)
 integration as an example.
 
 The example integration receives an HTTP POST request with JSON data
 about Wikipedia's featured article of the day from a fictional
 third-party service, formats that data into a "hello" message, and sends
-that message to the specified conversation in Zulip.
+that message to the specified conversation in Doer.
 
-Before you get started, you'll want to set up the [Zulip development
+Before you get started, you'll want to set up the [Doer development
 environment](../development/overview.md).
 
 ## Step 0: Create fixtures
 
 The first step in creating an incoming webhook integration is to examine
 the data that the third-party service you're working with will send to
-Zulip.
+Doer.
 
-Use [Zulip's JSON integration](https://zulip.com/integrations/json),
+Use [Doer's JSON integration](https://zulip.com/integrations/json),
 <https://webhook.site/>, or a similar tool to capture outgoing webhook
 payload(s) from the service. Examining this data allows you to:
 
@@ -37,7 +37,7 @@ some other kind of data. [Step 5: Create automated tests](#step-5-create-automat
 and [our testing documentation](../testing/testing.md) have further
 details about writing tests and using test fixtures.
 
-Because the Zulip Hello World is very simple and does only one thing,
+Because the Doer Hello World is very simple and does only one thing,
 it requires only one fixture,
 `zerver/webhooks/helloworld/fixtures/hello.json`.
 
@@ -56,12 +56,12 @@ they put key details like the event type in a separate HTTP header.
 Generally, this is clear in the third-party's API documentation that
 you will be referencing when creating fixtures.
 
-In order to test Zulip's handling of this data, you will need to record
+In order to test Doer's handling of this data, you will need to record
 which HTTP headers are used with each fixture you capture. Since this is
-integration-dependent, Zulip offers a simple API for doing this, which is
+integration-dependent, Doer offers a simple API for doing this, which is
 probably best explained by looking at `default_fixture_to_headers` and
 `get_event_header` from `zerver/lib/webhooks/common.py`, and then seeing
-how they are used in Zulip's GitHub integration code:
+how they are used in Doer's GitHub integration code:
 `zerver/webhooks/github/view.py`.
 
 ## Step 1: Initialize the python package
@@ -75,7 +75,7 @@ example, `touch zerver/webhooks/helloworld/__init__.py`.
 ## Step 2: Write the main webhook code
 
 The majority of the code for your new integration will be in a single
-python file named `view.py`. The Zulip Hello World integration code is
+python file named `view.py`. The Doer Hello World integration code is
 found in `zerver/webhooks/helloworld/view.py`:
 
 ```python
@@ -129,7 +129,7 @@ variables with `JsonBodyPayload[WildValue]`. You can find more about
 views](../tutorials/writing-views.md#request-variables).
 
 You must pass the name of the integration to the `webhook_view` decorator.
-That name will be used to describe the integration in Zulip's analytics
+That name will be used to describe the integration in Doer's analytics
 pages. In the example, the integration's name is `HelloWorld`. To be
 consistent with other incoming webhook integrations, you should use the
 name of the third-party service in camel case, spelled as the service
@@ -149,13 +149,13 @@ integration, in lower case.
 
 At minimum, the webhook function must accept `request` (Django
 [HttpRequest](https://docs.djangoproject.com/en/5.0/ref/request-response/#django.http.HttpRequest)
-object), and `user_profile` (Zulip's user object). You can also define
+object), and `user_profile` (Doer's user object). You can also define
 additional parameters using the `typed_endpoint` decorator.
 
-In the Zulip Hello World example above, there is also a `payload`
+In the Doer Hello World example above, there is also a `payload`
 parameter, which is populated from the body of the HTTP POST request.
 
-The main function defines the body of the message using [Zulip's message
+The main function defines the body of the message using [Doer's message
 formatting](https://zulip.com/api/message-formatting). For example,
 `:smile:` in the initial sentence of the message body indicates an emoji.
 The data from the JSON payload is used for the link to the Wikipedia
@@ -163,7 +163,7 @@ featured article of the day.
 
 Sometimes, it may occur that a JSON payload does not contain all the
 required keys that an integration checks for. In such a case, any
-`KeyError` that is thrown is handled by the Zulip server's backend, which
+`KeyError` that is thrown is handled by the Doer server's backend, which
 will create an appropriate response.
 
 A default topic name should be defined for cases when the [webhook
@@ -201,11 +201,11 @@ In that list, find the entry for the example Hello World integration:
     ),
 ```
 
-This tells the Zulip API to call the `api_helloworld_webhook` function in
+This tells the Doer API to call the `api_helloworld_webhook` function in
 `zerver/webhooks/helloworld/view.py` when it receives a request at
 `/api/v1/external/helloworld`.
 
-This entry also adds the example Hello World integration to Zulip's main
+This entry also adds the example Hello World integration to Doer's main
 [integrations documentation](https://zulip.com/integrations/). The second
 argument defines the categories that include the integration in said
 documentation. The third argument defines the configuration for
@@ -261,7 +261,7 @@ In rare cases, it may be necessary for an incoming webhook to require
 additional user configuration beyond what is specified in the POST URL.
 A typical use case for this would be APIs that require clients to do a
 callback to get details beyond an opaque object ID that one would want to
-include in a Zulip notification message. The `config_options` field in
+include in a Doer notification message. The `config_options` field in
 the `IncomingWebhookIntegration` class is reserved for this use case.
 
 ### WebhookUrlOption presets
@@ -296,7 +296,7 @@ The currently configured preset URL options are:
 - **`BRANCHES`**: This preset is intended to be used for [version control
   integrations](https://zulip.com/integrations/category/version-control),
   and adds UI for the user to configure which branches of a project's
-  repository will trigger Zulip notification messages. When the user
+  repository will trigger Doer notification messages. When the user
   specifies which branches to receive notifications from, the `branches`
   parameter will be added to the [generated integration
   URL](https://zulip.com/help/generate-integration-url). For example, if
@@ -306,15 +306,15 @@ The currently configured preset URL options are:
 - **`IGNORE_PRIVATE_REPOSITORIES`**: This preset is intended to be used for
   [version control integrations](https://zulip.com/integrations/category/version-control),
   and adds UI for the user to exclude private repositories from triggering
-  Zulip notification messages. When the user selects this option, the
+  Doer notification messages. When the user selects this option, the
   `ignore_private_repositories` boolean parameter will be added to the
   [generated integration URL](https://zulip.com/help/generate-integration-url).
 
 - **`CHANNEL_MAPPING`**: This preset is intended to be used for [chat-app
   integrations](https://zulip.com/integrations/category/communication)
-  (like Slack), and adds a special option, **Matching Zulip channel**, to
-  the web app UI for where to send Zulip notification messages. This
-  special option maps the notification messages to Zulip channels that
+  (like Slack), and adds a special option, **Matching Doer channel**, to
+  the web app UI for where to send Doer notification messages. This
+  special option maps the notification messages to Doer channels that
   match the messages' original channel name in the third-party service.
   When selected, this requires setting a single topic for notification
   messages, and adds `&mapping=channels` to the [generated integration
@@ -322,20 +322,20 @@ The currently configured preset URL options are:
 
 ## Step 4: Manually test the webhook
 
-You'll want to manually test your webhook implementation in the Zulip
+You'll want to manually test your webhook implementation in the Doer
 development environment. There are two command line tools you can use,
 as well as a GUI tool.
 
 For either one of the command line tools, you'll need to [get an API
 key](https://zulip.com/api/api-keys) for an [incoming webhook
-bot](https://zulip.com/help/add-a-bot-or-integration) in your Zulip
+bot](https://zulip.com/help/add-a-bot-or-integration) in your Doer
 development environment. Replace `<api_key>` with the bot's API key in
 the examples below. This is how the server knows that the request was
 made by an authorized user.
 
 ### curl
 
-Using curl, with the Zulip development server running in a separate
+Using curl, with the Doer development server running in a separate
 console window:
 
 ```bash
@@ -353,10 +353,10 @@ direct message from the bot.
 
 ### `send_webhook_fixture_message` management command
 
-Using `manage.py` from within the Zulip development environment:
+Using `manage.py` from within the Doer development environment:
 
 ```console
-(zulip-server) vagrant@vagrant:/srv/zulip$
+(doer-server) vagrant@vagrant:/srv/zulip$
 ./manage.py send_webhook_fixture_message \
     --fixture=zerver/webhooks/helloworld/fixtures/hello.json \
     '--url=http://localhost:9991/api/v1/external/helloworld?api_key=<api_key>'
@@ -365,7 +365,7 @@ Using `manage.py` from within the Zulip development environment:
 After running the above command, you should see something similar to:
 
 ```
-2016-07-07 15:06:59,187 INFO     127.0.0.1       POST    200 143ms (mem: 6ms/13) (md: 43ms/1) (db: 20ms/9q) (+start: 147ms) /api/v1/external/helloworld (helloworld-bot@zulip.com via ZulipHelloWorldWebhook)
+2016-07-07 15:06:59,187 INFO     127.0.0.1       POST    200 143ms (mem: 6ms/13) (md: 43ms/1) (db: 20ms/9q) (+start: 147ms) /api/v1/external/helloworld (helloworld-bot@zulip.com via DoerHelloWorldWebhook)
 ```
 
 Some webhooks require custom HTTP headers, which can be passed using
@@ -378,22 +378,22 @@ The format is a JSON dictionary, so make sure that the header names do
 not contain any spaces in them and that you use the precise quoting
 approach shown above.
 
-For more information about `manage.py` command-line tools in Zulip, see
+For more information about `manage.py` command-line tools in Doer, see
 the [management commands](../production/management-commands.md)
 documentation.
 
 ### Integrations dev panel
 
-This is a GUI tool that you can use to test your webhook in the Zulip
+This is a GUI tool that you can use to test your webhook in the Doer
 development environment.
 
 1. Run `./tools/run-dev`, and use a web browser to go to
    `http://localhost:9991/devtools/integrations/`.
 1. Select a bot, an integration and a fixture from the dropdown menus.
 1. Click **Send**. The webhook notification message will be sent to the
-   default Zulip organization in your development environment.
+   default Doer organization in your development environment.
 
-By having Zulip open in one browsre tab and this tool in another, you can
+By having Doer open in one browsre tab and this tool in another, you can
 quickly tweak your webhook code and send sample messages for different
 test fixtures.
 
@@ -407,7 +407,7 @@ file. The Hello World integration's tests are in
 `zerver/webhooks/helloworld/tests.py`.
 
 The test class should be named `<WebhookName>HookTests`, and it should
-inherit the `WebhookTestCase` base class. For Zulip's Hello World
+inherit the `WebhookTestCase` base class. For Doer's Hello World
 integration, the test class is `HelloWorldHookTests`.
 
 ```python
@@ -477,7 +477,7 @@ where the data from the test fixture should result in an error. For
 details, see [negative tests](#negative-tests) below.
 
 Once you have written some tests, you can run just these new tests from
-within the Zulip development environment with this command:
+within the Doer development environment with this command:
 
 ```console
 ./tools/test-backend zerver/webhooks/helloworld
@@ -496,7 +496,7 @@ DONE!
 
 In order for an incoming webhook integration to be used, there needs to
 be documentation for end-users. All incoming webhooks are included in
-Zulip's main [integrations documentation](https://zulip.com/integrations).
+Doer's main [integrations documentation](https://zulip.com/integrations).
 
 There are two parts to the user-facing integrations documentation.
 
@@ -505,8 +505,8 @@ integration logo and name, and is a link to the detailed documentation
 for each integration.
 
 Each integration needs a square, svg logo of the third-party service that
-has been integrated with Zulip, which is saved in the
-`static/images/integrations/logos` directory. The Zulip Hello World logo
+has been integrated with Doer, which is saved in the
+`static/images/integrations/logos` directory. The Doer Hello World logo
 can be found at `static/images/integrations/logos/helloworld.svg`.
 
 The lozenge is generated automatically once the integration is added to
@@ -515,11 +515,11 @@ supports some customization via options to the `IncomingWebhookIntegration`
 class.
 
 Second, is the detailed documentation content for the integration, which
-is in a file named `doc.md` in the integration's directory. The Zulip
+is in a file named `doc.md` in the integration's directory. The Doer
 Hello World documentation can be found at `zerver/webhooks/helloworld/doc.md`.
 
-Zulip has a macro-based Markdown/Jinja2 framework that includes macros for
-common instructions in Zulip's webhooks/integrations documentation (e.g.,
+Doer has a macro-based Markdown/Jinja2 framework that includes macros for
+common instructions in Doer's webhooks/integrations documentation (e.g.,
 `{!create-an-incoming-webhook.md!}` and `{!congrats.md!}`).
 
 See [the guide on documenting an integration](../documentation/integrations.md)
@@ -529,14 +529,14 @@ screenshot for the documentation page.
 ## Step 7: Prepare a pull request
 
 When you have finished your incoming webhook integration, follow these
-guidelines before pushing the code to your Zulip fork and submitting a
-pull request to [zulip/zulip](https://github.com/zulip/zulip):
+guidelines before pushing the code to your Doer fork and submitting a
+pull request to [doer/doer](https://github.com/doer/doer):
 
 - Run tests, including linters, to ensure you have addressed any issues
   they report. See [testing](../testing/testing.md) and
   [linters](../testing/linters.md) for details.
 - Read through [code styles and conventions](../contributing/code-style.md)
-  and review your code to double-check that you've followed Zulip's
+  and review your code to double-check that you've followed Doer's
   guidelines.
 - Take a look at your Git history to ensure your commits have been clear
   and logical (see [commit discipline](../contributing/commit-discipline.md)
@@ -545,10 +545,10 @@ pull request to [zulip/zulip](https://github.com/zulip/zulip):
   request with a single commit that has a good, clear commit message.
 
 If you would like feedback on your integration as you go, feel free to
-post a message in the [Zulip development community][czo-integrations-channel]
+post a message in the [Doer development community][czo-integrations-channel]
 You can also create a [draft pull request][github-draft-pull-requests]
 while you are still working on your integration. See the [git
-guide](../git/pull-requests.md#create-a-pull-request) for more on Zulip's
+guide](../git/pull-requests.md#create-a-pull-request) for more on Doer's
 pull request process.
 
 [czo-integrations-channel]: https://chat.zulip.org/#narrow/channel/integrations
@@ -624,7 +624,7 @@ def api_querytest_webhook(request: HttpRequest, user_profile: UserProfile,
 ```
 
 In actual use, you might configure the third-party service to call your
-Zulip incoming webhook integration with a URL like this:
+Doer incoming webhook integration with a URL like this:
 
 ```
 http://myhost/api/v1/external/querytest?api_key=abcdefgh&stream=alerts&topic=queries

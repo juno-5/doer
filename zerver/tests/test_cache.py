@@ -20,13 +20,13 @@ from zerver.lib.cache import (
     user_profile_by_id_cache_key,
     validate_cache_key,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import UserProfile
 from zerver.models.realms import get_realm
 from zerver.models.users import get_system_bot, get_user, get_user_profile_by_id
 
 
-class AppsTest(ZulipTestCase):
+class AppsTest(DoerTestCase):
     def test_cache_gets_flushed(self) -> None:
         with self.assertLogs(level="INFO") as m:
             with patch("zerver.apps.cache.clear") as mock:
@@ -37,7 +37,7 @@ class AppsTest(ZulipTestCase):
             self.assert_length(m.output, 1)
 
 
-class CacheKeyValidationTest(ZulipTestCase):
+class CacheKeyValidationTest(DoerTestCase):
     def test_validate_cache_key(self) -> None:
         validate_cache_key("nice_Ascii:string!~")
         with self.assertRaises(InvalidCacheKeyError):
@@ -76,7 +76,7 @@ class CacheKeyValidationTest(ZulipTestCase):
             cache_delete_many([good_key, invalid_key])
 
 
-class CacheWithKeyDecoratorTest(ZulipTestCase):
+class CacheWithKeyDecoratorTest(DoerTestCase):
     def test_cache_with_key_invalid_character(self) -> None:
         def invalid_characters_cache_key_function(user_id: int) -> str:
             return f"CacheWithKeyDecoratorTest:invalid_character:ą:{user_id}"
@@ -159,7 +159,7 @@ class CacheWithKeyDecoratorTest(ZulipTestCase):
         self.assertEqual(result_two, None)
 
 
-class SetCacheExceptionTest(ZulipTestCase):
+class SetCacheExceptionTest(DoerTestCase):
     def test_set_cache_exception(self) -> None:
         with (
             patch("zerver.lib.cache.get_cache_backend") as mock_backend,
@@ -189,7 +189,7 @@ class SetCacheExceptionTest(ZulipTestCase):
             self.assertIn("Out of memory during read", logs.output[0])
 
 
-class SafeCacheFunctionsTest(ZulipTestCase):
+class SafeCacheFunctionsTest(DoerTestCase):
     def test_safe_cache_functions_with_all_good_keys(self) -> None:
         items = {
             "SafeFunctionsTest:key1": 1,
@@ -244,7 +244,7 @@ class SafeCacheFunctionsTest(ZulipTestCase):
             self.assert_length(m.output, 1)
 
 
-class BotCacheKeyTest(ZulipTestCase):
+class BotCacheKeyTest(DoerTestCase):
     def test_bot_profile_key_deleted_on_save(self) -> None:
         realm = get_realm(settings.SYSTEM_BOT_REALM)
         # Get the profile cached on both cache keys:
@@ -274,7 +274,7 @@ def get_user_email(user: UserProfile) -> str:
     return user.email  # nocoverage
 
 
-class GenericBulkCachedFetchTest(ZulipTestCase):
+class GenericBulkCachedFetchTest(DoerTestCase):
     def test_query_function_called_only_if_needed(self) -> None:
         hamlet = self.example_user("hamlet")
         # Get the user cached:

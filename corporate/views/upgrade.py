@@ -13,7 +13,7 @@ from corporate.lib.decorator import (
     authenticated_remote_server_management_endpoint,
 )
 from corporate.models.plans import CustomerPlan
-from zerver.decorator import require_organization_member, zulip_login_required
+from zerver.decorator import require_organization_member, doer_login_required
 from zerver.lib.response import json_success
 from zerver.lib.typed_endpoint import typed_endpoint
 from zerver.models import UserProfile
@@ -71,7 +71,7 @@ def upgrade(
         raise e
     except Exception:
         billing_logger.exception("Uncaught exception in billing:", stack_info=True)
-        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.ZULIP_ADMINISTRATOR)
+        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.DOER_ADMINISTRATOR)
         error_description = "uncaught exception during upgrade"
         raise BillingError(error_description, error_message)
 
@@ -121,7 +121,7 @@ def remote_realm_upgrade(
         raise e
     except Exception:  # nocoverage
         billing_logger.exception("Uncaught exception in billing:", stack_info=True)
-        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.ZULIP_ADMINISTRATOR)
+        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.DOER_ADMINISTRATOR)
         error_description = "uncaught exception during upgrade"
         raise BillingError(error_description, error_message)
 
@@ -171,12 +171,12 @@ def remote_server_upgrade(
         raise e
     except Exception:  # nocoverage
         billing_logger.exception("Uncaught exception in billing:", stack_info=True)
-        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.ZULIP_ADMINISTRATOR)
+        error_message = BillingError.CONTACT_SUPPORT.format(email=settings.DOER_ADMINISTRATOR)
         error_description = "uncaught exception during upgrade"
         raise BillingError(error_description, error_message)
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def upgrade_page(
     request: HttpRequest,

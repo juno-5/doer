@@ -1,6 +1,6 @@
-# Zulip Mention integration
+# Doer Mention integration
 
-Get Mention notifications within Zulip via Zapier!
+Get Mention notifications within Doer via Zapier!
 
 {start_tabs}
 

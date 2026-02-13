@@ -23,7 +23,7 @@
 # ARCHIVED_DATA_VACUUMING_DELAY_DAYS after they were created.
 #
 # Because of the nice properties of this deletion system, we use the
-# same system for routine deletions via the Zulip UI (deleting a
+# same system for routine deletions via the Doer UI (deleting a
 # message or group of messages) as we use for message retention policy
 # deletions.
 import copy
@@ -65,7 +65,7 @@ from zerver.models import (
 )
 from zerver.tornado.django_api import send_event_on_commit
 
-logger = logging.getLogger("zulip.retention")
+logger = logging.getLogger("doer.retention")
 log_to_file(logger, settings.RETENTION_LOG_PATH)
 
 MESSAGE_BATCH_SIZE = 1000

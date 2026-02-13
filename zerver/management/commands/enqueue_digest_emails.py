@@ -8,14 +8,14 @@ from typing_extensions import override
 
 from zerver.lib.digest import DIGEST_CUTOFF, enqueue_emails
 from zerver.lib.logging_util import log_to_file
-from zerver.lib.management import ZulipBaseCommand, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_unless_locked
 
 ## Logging setup ##
 logger = logging.getLogger(__name__)
 log_to_file(logger, settings.DIGEST_LOG_PATH)
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Enqueue digest emails for users that haven't checked the app
 in a while.
 """

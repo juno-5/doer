@@ -22,12 +22,12 @@ from psycopg2.extras import execute_values
 from psycopg2.sql import SQL, Identifier
 
 from analytics.models import RealmCount, StreamCount, UserCount
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.actions.create_realm import set_default_for_realm_permission_group_settings
 from zerver.actions.realm_settings import (
     do_change_realm_plan_type,
     do_set_realm_new_stream_announcements_stream,
-    do_set_realm_zulip_update_announcements_stream,
+    do_set_realm_doer_update_announcements_stream,
 )
 from zerver.actions.user_settings import do_change_avatar_fields
 from zerver.lib.avatar_hash import user_avatar_base_path_from_ids
@@ -66,7 +66,7 @@ from zerver.lib.user_counts import realm_user_count_by_role
 from zerver.lib.user_groups import create_system_user_groups_for_realm
 from zerver.lib.user_message import UserMessageLite, bulk_insert_ums
 from zerver.lib.utils import generate_api_key, process_list_in_batches
-from zerver.lib.zulip_update_announcements import send_zulip_update_announcements_to_realm
+from zerver.lib.doer_update_announcements import send_doer_update_announcements_to_realm
 from zerver.models import (
     AlertWord,
     Attachment,
@@ -281,7 +281,7 @@ def fix_stream_permission_group_settings(
         for setting_name in Stream.stream_permission_group_settings:
             if setting_name == "can_send_message_group" and "stream_post_policy" in stream:
                 # This block is needed when importing data for Rocket.Chat.
-                # While converting the data into Zulip supported format,
+                # While converting the data into Doer supported format,
                 # stream_post_policy for read-only Rocket.Chat channel is
                 # set to STREAM_POST_POLICY_MODERATORS and so we need to
                 # set the can_send_message_group setting accordingly.
@@ -424,7 +424,7 @@ def fix_message_rendered_content(
             continue
 
         if message[rendered_content_key] is not None:
-            # For Zulip->Zulip imports, we use the original rendered
+            # For Doer->Doer imports, we use the original rendered
             # Markdown; this avoids issues where e.g. a mention can no
             # longer render properly because a user has changed their
             # name.
@@ -985,7 +985,7 @@ def process_emojis(
         # We only update the is_animated field if the emoji is not deactivated.
         # That's because among deactivated emojis (name, realm_id) may not be
         # unique, making the implementation here a bit hairier.
-        # Anyway, for Zulip exports, is_animated should be set correctly from the start,
+        # Anyway, for Doer exports, is_animated should be set correctly from the start,
         # while 3rd party exports don't use the deactivated field, so this shouldn't
         # particularly matter.
         RealmEmoji.objects.filter(
@@ -1114,7 +1114,7 @@ def import_uploads(
                 metadata["orig_last_modified"] = str(record["last_modified"])
             metadata["realm_id"] = str(record["realm_id"])
 
-            # Zulip exports will always have a content-type, but third-party exports might not.
+            # Doer exports will always have a content-type, but third-party exports might not.
             content_type = record.get("content_type")
             if content_type is None:
                 content_type = guess_type(record["s3_path"])[0]
@@ -1220,7 +1220,7 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
     migration_status_filename = os.path.join(import_dir, "migration_status.json")
     if not os.path.exists(migration_status_filename):
         raise Exception(
-            "Missing migration_status.json file! Make sure you're using the same Zulip version as the exported realm."
+            "Missing migration_status.json file! Make sure you're using the same Doer version as the exported realm."
         )
     logging.info("Checking migration status of exported realm")
     with open(migration_status_filename) as f:
@@ -1296,7 +1296,7 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
     )
     re_map_foreign_keys(data, "zerver_realm", "signup_announcements_stream", related_table="stream")
     re_map_foreign_keys(
-        data, "zerver_realm", "zulip_update_announcements_stream", related_table="stream"
+        data, "zerver_realm", "doer_update_announcements_stream", related_table="stream"
     )
     if "zerver_usergroup" in data:
         for setting_name in Realm.REALM_PERMISSION_GROUP_SETTINGS:
@@ -1360,7 +1360,7 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
                     )
                 bulk_import_named_user_groups(data)
 
-        # We expect Zulip server exports to contain these system groups,
+        # We expect Doer server exports to contain these system groups,
         # this logic here is needed to handle the imports from other services.
         system_groups_name_dict: dict[str, NamedUserGroup] | None = None
         if "zerver_usergroup" not in data:
@@ -1436,10 +1436,10 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
     for user_profile_dict in data["zerver_userprofile"]:
         user_profile_dict["password"] = None
         user_profile_dict["api_key"] = generate_api_key()
-        # Since Zulip doesn't use these permissions, drop them
+        # Since Doer doesn't use these permissions, drop them
         del user_profile_dict["user_permissions"]
         del user_profile_dict["groups"]
-        # The short_name field is obsolete in Zulip, but it's
+        # The short_name field is obsolete in Doer, but it's
         # convenient for third party exports to populate it.
         if "short_name" in user_profile_dict:
             del user_profile_dict["short_name"]
@@ -1680,7 +1680,7 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
         update_model_ids(GroupGroupMembership, data, "groupgroupmembership")
         bulk_import_model(data, GroupGroupMembership)
 
-    # We expect Zulip server exports to contain UserGroupMembership objects
+    # We expect Doer server exports to contain UserGroupMembership objects
     # for system groups, this logic here is needed to handle the imports from
     # other services.
     if system_groups_name_dict is not None:
@@ -1930,9 +1930,9 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
     # Realm object is reactivated.
     maybe_enqueue_audit_log_upload(realm)
 
-    is_realm_imported_from_other_zulip_server = import_source == "zulip"
-    if not is_realm_imported_from_other_zulip_server:
-        if None in [realm.new_stream_announcements_stream, realm.zulip_update_announcements_stream]:
+    is_realm_imported_from_other_doer_server = import_source == "doer"
+    if not is_realm_imported_from_other_doer_server:
+        if None in [realm.new_stream_announcements_stream, realm.doer_update_announcements_stream]:
             fallback_default_announcements_channel = (
                 Stream.objects.filter(realm=realm, deactivated=False)
                 .annotate(
@@ -1955,38 +1955,38 @@ def do_import_realm(import_dir: Path, subdomain: str, processes: int = 1) -> Rea
                 )
             if (
                 fallback_default_announcements_channel is not None
-                and realm.zulip_update_announcements_stream is None
+                and realm.doer_update_announcements_stream is None
             ):
-                do_set_realm_zulip_update_announcements_stream(
+                do_set_realm_doer_update_announcements_stream(
                     realm,
                     fallback_default_announcements_channel,
                     fallback_default_announcements_channel.id,
                     acting_user=None,
                 )
 
-        # If the export was NOT generated by another zulip server, the
-        # 'zulip_update_announcements_level' is set to None by default.
+        # If the export was NOT generated by another doer server, the
+        # 'doer_update_announcements_level' is set to None by default.
         # Set it to the latest level to avoid receiving older update messages.
-        send_zulip_update_announcements_to_realm(realm, skip_delay=False)
+        send_doer_update_announcements_to_realm(realm, skip_delay=False)
         # Exports from others tools naturally don't have the initial Welcome Bot
         # messages for users, so we need to create them.
         #
         # Such exports use the default general-type channel such as "general" for
         # announcements - which happens to be also the channel we want for the initial messages.
-        send_zulip_initial_messages_after_import(
-            realm, target_channel=realm.zulip_update_announcements_stream
+        send_doer_initial_messages_after_import(
+            realm, target_channel=realm.doer_update_announcements_stream
         )
 
     return realm
 
 
-def send_zulip_initial_messages_after_import(realm: Realm, target_channel: Stream | None) -> None:
+def send_doer_initial_messages_after_import(realm: Realm, target_channel: Stream | None) -> None:
     if target_channel is not None:
         send_initial_realm_messages(
             realm,
             override_channel_name_map={
                 OnboardingMessageTypeEnum.moving_messages: target_channel.name,
-                OnboardingMessageTypeEnum.welcome_to_zulip: target_channel.name,
+                OnboardingMessageTypeEnum.welcome_to_doer: target_channel.name,
                 OnboardingMessageTypeEnum.experiments: target_channel.name,
                 OnboardingMessageTypeEnum.greetings: target_channel.name,
                 # We shouldn't encourage people to start random threads in their organization's #general-type channel,
@@ -2065,7 +2065,7 @@ def get_incoming_message_ids(import_dir: Path, sort_by_date: bool) -> list[int]:
         for row in data["zerver_message"]:
             # We truncate date_sent to int to theoretically
             # save memory and speed up the sort.  For
-            # Zulip-to-Zulip imports, the
+            # Doer-to-Doer imports, the
             # message_id will generally be a good tiebreaker.
             # If we occasionally misorder the ids for two
             # messages from the same second, it's not the
@@ -2277,7 +2277,7 @@ def fix_attachments_data(attachment_data: ImportedTableData) -> None:
         attachment["path_id"] = path_maps["old_attachment_path_to_new_path"][attachment["path_id"]]
 
         # In the case of images, content_type needs to be set for thumbnailing.
-        # Zulip exports set this, but third-party exports may not.
+        # Doer exports set this, but third-party exports may not.
         if attachment.get("content_type") is None:
             guessed_content_type = guess_type(attachment["path_id"])[0]
             if guessed_content_type in THUMBNAIL_ACCEPT_IMAGE_TYPES:
@@ -2373,7 +2373,7 @@ def add_users_to_system_user_groups(
     )
 
 
-ZULIP_CLOUD_ONLY_APP_NAMES = ["zilencer", "corporate"]
+DOER_CLOUD_ONLY_APP_NAMES = ["zilencer", "corporate"]
 
 
 def check_migration_status(exported_migration_status: MigrationStatusJson) -> None:
@@ -2388,7 +2388,7 @@ def check_migration_status(exported_migration_status: MigrationStatusJson) -> No
     """
     mismatched_migrations_log: dict[str, str] = {}
     local_migration_status = MigrationStatusJson(
-        migrations_by_app=parse_migration_status(), zulip_version=ZULIP_VERSION
+        migrations_by_app=parse_migration_status(), doer_version=DOER_VERSION
     )
 
     # Different major versions are the most common form of mismatch
@@ -2398,13 +2398,13 @@ def check_migration_status(exported_migration_status: MigrationStatusJson) -> No
     # We could split on `-`, to get the maintenance release version,
     # but unless migrations are different, it should generally be safe
     # to import across minor release differences.
-    exported_primary_version = exported_migration_status["zulip_version"].split(".")[0]
-    local_primary_version = local_migration_status["zulip_version"].split(".")[0]
+    exported_primary_version = exported_migration_status["doer_version"].split(".")[0]
+    local_primary_version = local_migration_status["doer_version"].split(".")[0]
     if exported_primary_version != local_primary_version:
         raise CommandError(
-            "Error: Export was generated on a different Zulip major version.\n"
-            f"Export version: {exported_migration_status['zulip_version']}\n"
-            f"Server version: {local_migration_status['zulip_version']}"
+            "Error: Export was generated on a different Doer major version.\n"
+            f"Export version: {exported_migration_status['doer_version']}\n"
+            f"Server version: {local_migration_status['doer_version']}"
         )
     exported_migrations_by_app = exported_migration_status["migrations_by_app"]
     local_migrations_by_app = local_migration_status["migrations_by_app"]
@@ -2414,11 +2414,11 @@ def check_migration_status(exported_migration_status: MigrationStatusJson) -> No
         exported_app_migrations = exported_migrations_by_app.get(app)
         local_app_migrations = local_migrations_by_app.get(app)
 
-        if app in ZULIP_CLOUD_ONLY_APP_NAMES and (
+        if app in DOER_CLOUD_ONLY_APP_NAMES and (
             local_app_migrations is None or exported_app_migrations is None
         ):
             # This applications are expected to be present only on
-            # Zulip Cloud, so don't warn about them.
+            # Doer Cloud, so don't warn about them.
             continue
 
         if not exported_app_migrations:
@@ -2428,7 +2428,7 @@ def check_migration_status(exported_migration_status: MigrationStatusJson) -> No
         elif set(local_app_migrations) != set(exported_app_migrations):
             # We sort the list of migrations to ensure the same sets of
             # migrations don't somehow ordered differently. This has been
-            # reported to happen when importing Zulip Cloud to self-host.
+            # reported to happen when importing Doer Cloud to self-host.
             #
             # The order of migrations listed in `migration_status.json`
             # don't actually matter, migrations specify which other
@@ -2448,9 +2448,9 @@ def check_migration_status(exported_migration_status: MigrationStatusJson) -> No
         ]
 
         error_message = (
-            "Error: Export was generated on a different Zulip version.\n"
-            f"Export version: {exported_migration_status['zulip_version']}\n"
-            f"Server version: {local_migration_status['zulip_version']}\n"
+            "Error: Export was generated on a different Doer version.\n"
+            f"Export version: {exported_migration_status['doer_version']}\n"
+            f"Server version: {local_migration_status['doer_version']}\n"
             "\n"
             "Database formats differ between the exported realm and this server.\n"
             "Printing migrations that differ between the versions:\n"

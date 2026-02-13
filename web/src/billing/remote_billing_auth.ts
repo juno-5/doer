@@ -1,23 +1,23 @@
 import $ from "jquery";
 
 function handle_submit_for_server_login_form(form: HTMLFormElement): void {
-    // Get value of zulip_org_id.
-    const zulip_org_id = $<HTMLInputElement>("input#zulip-org-id").val();
-    const $error_field = $(".zulip_org_id-error");
-    if (zulip_org_id === undefined) {
+    // Get value of doer_org_id.
+    const doer_org_id = $<HTMLInputElement>("input#doer-org-id").val();
+    const $error_field = $(".doer_org_id-error");
+    if (doer_org_id === undefined) {
         // Already handled by `validate` plugin.
         return;
     }
 
-    // Check if zulip_org_id is in UUID4 format.
+    // Check if doer_org_id is in UUID4 format.
     // https://melvingeorge.me/blog/check-if-string-valid-uuid-regex-javascript
     // Regex was modified by linter after copying from above link according to this rule:
     // https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/better-regex.md
     const is_valid_uuid = /^[\da-f]{8}(?:\b-[\da-f]{4}){3}\b-[\da-f]{12}$/gi;
-    // Check if zulip_org_id is in UUID4 format.
-    if (!is_valid_uuid.test(zulip_org_id)) {
+    // Check if doer_org_id is in UUID4 format.
+    if (!is_valid_uuid.test(doer_org_id)) {
         $error_field.text(
-            "Wrong zulip_org_id format. Check to make sure zulip_org_id and zulip_org_key are not swapped.",
+            "Wrong doer_org_id format. Check to make sure doer_org_id and doer_org_key are not swapped.",
         );
         $error_field.show();
         return;

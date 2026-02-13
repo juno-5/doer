@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 #
-# Validates that 3 data sources agree about the structure of Zulip's events API:
+# Validates that 3 data sources agree about the structure of Doer's events API:
 #
 # * Node fixtures for the server_events_dispatch.js tests.
-# * OpenAPI definitions in zerver/openapi/zulip.yaml
+# * OpenAPI definitions in zerver/openapi/doer.yaml
 # * The schemas defined in zerver/lib/events_schema.py used for the
-#   Zulip server's test suite.
+#   Doer server's test suite.
 #
 # We compare the Python and OpenAPI schemas by converting the OpenAPI data
 # into the event_schema style of types and the diffing the schemas.

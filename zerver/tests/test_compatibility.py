@@ -6,10 +6,10 @@ from zerver.lib.compatibility import (
     is_pronouns_field_type_supported,
     version_lt,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class VersionTest(ZulipTestCase):
+class VersionTest(DoerTestCase):
     data = [
         case.split()
         for case in """
@@ -56,10 +56,10 @@ class VersionTest(ZulipTestCase):
     mobile_os_data = [
         case.split(None, 1)
         for case in """
-      android ZulipMobile/1.2.3 (Android 4.5)
-      ios     ZulipMobile/1.2.3 (iPhone OS 2.1)
-      ios     ZulipMobile/1.2.3 (iOS 6)
-      None    ZulipMobile/1.2.3 (Windows 8)
+      android DoerMobile/1.2.3 (Android 4.5)
+      ios     DoerMobile/1.2.3 (iPhone OS 2.1)
+      ios     DoerMobile/1.2.3 (iOS 6)
+      None    DoerMobile/1.2.3 (Windows 8)
     """.strip().split("\n")
     ]
 
@@ -69,27 +69,27 @@ class VersionTest(ZulipTestCase):
             self.assertEqual(find_mobile_os(user_agent), expected, msg=user_agent)
 
 
-class CompatibilityTest(ZulipTestCase):
+class CompatibilityTest(DoerTestCase):
     data = [
         case.split(None, 1)
         for case in """
-      old ZulipInvalid/5.0
-      ok  ZulipMobile/5.0
-      ok  ZulipMobile/5.0 (iOS 11)
-      ok  ZulipMobile/5.0 (Androidish 9)
-      old ZulipMobile/5.0 (Android 9)
-      old ZulipMobile/15.1.95 (Android 9)
-      old ZulipMobile/16.1.94 (Android 9)
-      ok  ZulipMobile/16.2.96 (Android 9)
-      ok  ZulipMobile/20.0.103 (Android 9)
+      old DoerInvalid/5.0
+      ok  DoerMobile/5.0
+      ok  DoerMobile/5.0 (iOS 11)
+      ok  DoerMobile/5.0 (Androidish 9)
+      old DoerMobile/5.0 (Android 9)
+      old DoerMobile/15.1.95 (Android 9)
+      old DoerMobile/16.1.94 (Android 9)
+      ok  DoerMobile/16.2.96 (Android 9)
+      ok  DoerMobile/20.0.103 (Android 9)
 
-      ok  ZulipMobile/0.7.1.1 (iOS 11.4)
-      old ZulipMobile/1.0.13 (Android 9)
-      ok  ZulipMobile/17.1.98 (iOS 12.0)
-      ok  ZulipMobile/19.2.102 (Android 6.0)
-      ok  ZulipMobile/1 CFNetwork/974.2.1 Darwin/18.0.0
-      ok  ZulipMobile/20.0.103 (Android 6.0.1)
-      ok  ZulipMobile/20.0.103 (iOS 12.1)
+      ok  DoerMobile/0.7.1.1 (iOS 11.4)
+      old DoerMobile/1.0.13 (Android 9)
+      ok  DoerMobile/17.1.98 (iOS 12.0)
+      ok  DoerMobile/19.2.102 (Android 6.0)
+      ok  DoerMobile/1 CFNetwork/974.2.1 Darwin/18.0.0
+      ok  DoerMobile/20.0.103 (Android 6.0.1)
+      ok  DoerMobile/20.0.103 (iOS 12.1)
     """.strip().split("\n")
         if case
     ]
@@ -111,23 +111,23 @@ class CompatibilityTest(ZulipTestCase):
     @mock.patch("zerver.lib.compatibility.DESKTOP_MINIMUM_VERSION", "5.0.0")
     @mock.patch("zerver.lib.compatibility.DESKTOP_WARNING_VERSION", "5.2.0")
     def test_insecure_desktop_app(self) -> None:
-        self.assertEqual(is_outdated_desktop_app("ZulipDesktop/0.5.2 (Mac)"), (True, True, True))
+        self.assertEqual(is_outdated_desktop_app("DoerDesktop/0.5.2 (Mac)"), (True, True, True))
         self.assertEqual(
             is_outdated_desktop_app(
-                "ZulipElectron/2.3.82 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/2.3.82 Chrome/61.0.3163.100 Electron/2.0.9 Safari/537.36"
+                "DoerElectron/2.3.82 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/2.3.82 Chrome/61.0.3163.100 Electron/2.0.9 Safari/537.36"
             ),
             (True, True, True),
         )
         self.assertEqual(
             is_outdated_desktop_app(
-                "ZulipElectron/4.0.0 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
+                "DoerElectron/4.0.0 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
             ),
             (True, True, False),
         )
 
         self.assertEqual(
             is_outdated_desktop_app(
-                "ZulipElectron/4.0.3 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
+                "DoerElectron/4.0.3 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
             ),
             (True, True, False),
         )
@@ -136,14 +136,14 @@ class CompatibilityTest(ZulipTestCase):
         with mock.patch("zerver.lib.compatibility.DESKTOP_MINIMUM_VERSION", "4.0.3"):
             self.assertEqual(
                 is_outdated_desktop_app(
-                    "ZulipElectron/4.0.3 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
+                    "DoerElectron/4.0.3 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
                 ),
                 (True, False, False),
             )
 
         self.assertEqual(
             is_outdated_desktop_app(
-                "ZulipElectron/5.2.0 Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/5.2.0 Chrome/80.0.3987.165 Electron/8.2.5 Safari/537.36"
+                "DoerElectron/5.2.0 Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/5.2.0 Chrome/80.0.3987.165 Electron/8.2.5 Safari/537.36"
             ),
             (False, False, False),
         )
@@ -159,23 +159,23 @@ class CompatibilityTest(ZulipTestCase):
 
     def test_is_pronouns_field_type_supported(self) -> None:
         self.assertEqual(
-            is_pronouns_field_type_supported("ZulipMobile/20.0.103 (Android 6.0.1)"), False
+            is_pronouns_field_type_supported("DoerMobile/20.0.103 (Android 6.0.1)"), False
         )
-        self.assertEqual(is_pronouns_field_type_supported("ZulipMobile/20.0.103 (iOS 12.0)"), False)
+        self.assertEqual(is_pronouns_field_type_supported("DoerMobile/20.0.103 (iOS 12.0)"), False)
 
         self.assertEqual(
-            is_pronouns_field_type_supported("ZulipMobile/27.191 (Android 6.0.1)"), False
+            is_pronouns_field_type_supported("DoerMobile/27.191 (Android 6.0.1)"), False
         )
-        self.assertEqual(is_pronouns_field_type_supported("ZulipMobile/27.191 (iOS 12.0)"), False)
+        self.assertEqual(is_pronouns_field_type_supported("DoerMobile/27.191 (iOS 12.0)"), False)
 
         self.assertEqual(
-            is_pronouns_field_type_supported("ZulipMobile/27.192 (Android 6.0.1)"), True
+            is_pronouns_field_type_supported("DoerMobile/27.192 (Android 6.0.1)"), True
         )
-        self.assertEqual(is_pronouns_field_type_supported("ZulipMobile/27.192 (iOS 12.0)"), True)
+        self.assertEqual(is_pronouns_field_type_supported("DoerMobile/27.192 (iOS 12.0)"), True)
 
         self.assertEqual(
             is_pronouns_field_type_supported(
-                "ZulipElectron/5.2.0 Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/5.2.0 Chrome/80.0.3987.165 Electron/8.2.5 Safari/537.36"
+                "DoerElectron/5.2.0 Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Doer/5.2.0 Chrome/80.0.3987.165 Electron/8.2.5 Safari/537.36"
             ),
             True,
         )

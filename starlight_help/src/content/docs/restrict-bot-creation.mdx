@@ -4,15 +4,15 @@ title: Configure who can add bots
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 
 <AdminOnly />
 
-Zulip lets you create three types of [bots](/help/bots-overview):
+Doer lets you create three types of [bots](/help/bots-overview):
 
-* **Incoming webhook bots**, which are limited to only sending messages into Zulip.
+* **Incoming webhook bots**, which are limited to only sending messages into Doer.
 * **Generic bots**, which act like a normal user account.
 * **Outgoing webhook bots**, which are generic bots that also receive
   new messages via HTTPS POST requests.
@@ -22,17 +22,17 @@ in what they can do), and who can create any bot. Both permissions can be
 assigned to any combination of [roles](/help/user-roles), [groups](/help/user-groups), and
 individual [users](/help/introduction-to-users).
 
-<ZulipNote>
+<DoerNote>
   These settings only affect new bots. Existing bots will not be
   deactivated.
-</ZulipNote>
+</DoerNote>
 
 ## Configure who can create bots that can only send messages (incoming webhook bots)
 
 <FlattenedSteps>
   <NavigationSteps target="settings/organization-permissions" />
 
-  1. Under **Other permissions**, configure **Who can create bots that send messages into Zulip**.
+  1. Under **Other permissions**, configure **Who can create bots that send messages into Doer**.
 
   <SaveChanges />
 </FlattenedSteps>

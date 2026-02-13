@@ -6,7 +6,7 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ChannelSettingsNavbarTip from "../include/_ChannelSettingsNavbarTip.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 import SelectChannelViewPermissions from "../include/_SelectChannelViewPermissions.mdx";
@@ -23,14 +23,14 @@ This permission grants access to channel content: users who are allowed to
 subscribe to a channel will also be able to read messages in it without
 subscribing.
 
-<ZulipTip>
+<DoerTip>
   For example, you can give your team's [user group](/help/user-groups) permission
   to subscribe to each of your team's channels. A designer on the team could then
   follow a [link to a
-  conversation](/help/link-to-a-message-or-conversation#link-to-a-topic-within-zulip)
+  conversation](/help/link-to-a-message-or-conversation#link-to-a-topic-within-doer)
   in the private engineering channel, and read it without subscribing. They could
   subscribe if they need to send a message there, without asking for help.
-</ZulipTip>
+</DoerTip>
 
 If you have permission to administer a public channel, you can configure who can
 subscribe to it. For [private

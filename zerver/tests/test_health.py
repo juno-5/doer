@@ -1,10 +1,10 @@
 from unittest import mock
 
 from zerver.lib.exceptions import ServerNotReadyError
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class HealthTest(ZulipTestCase):
+class HealthTest(DoerTestCase):
     def test_healthy(self) -> None:
         # We do not actually use rabbitmq in tests, so this fails
         # unless it's mocked out.

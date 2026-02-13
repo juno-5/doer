@@ -11,7 +11,7 @@ from zerver.lib.streams import (
     ensure_stream,
     user_has_content_access,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.types import UserGroupMembersData
 from zerver.lib.user_groups import UserGroupMembershipDetails
 from zerver.models import NamedUserGroup, Stream, UserProfile
@@ -20,7 +20,7 @@ from zerver.models.streams import get_stream
 from zerver.models.users import active_non_guest_user_ids
 
 
-class AccessStreamTest(ZulipTestCase):
+class AccessStreamTest(DoerTestCase):
     def test_access_stream(self) -> None:
         """
         A comprehensive security test for the access_stream_by_* API functions.

@@ -42,7 +42,7 @@ export let frequently_used_emojis: EmojiItem[] = [...get_popular_emojis()];
 export type Emoji =
     | {
           emoji_name: string;
-          reaction_type: "realm_emoji" | "zulip_extra_emoji";
+          reaction_type: "realm_emoji" | "doer_extra_emoji";
           is_realm_emoji: true;
           emoji_url?: string | undefined;
           emoji_code?: undefined;

@@ -138,7 +138,7 @@
                 "ip_address": "223.230.114.198"
             },
             "version": "7",
-            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/355c3b2a142046629dd410db2fdda003/",
+            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/355c3b2a142046629dd410db2fdda003/",
             "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1731239773/events/355c3b2a142046629dd410db2fdda003/",
             "issue_url": "https://sentry.io/api/0/issues/1731239773/"
         },

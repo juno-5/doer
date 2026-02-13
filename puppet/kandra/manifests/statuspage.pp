@@ -13,7 +13,7 @@ class kandra::statuspage {
     source => 'puppet:///modules/kandra/statuspage-pusher',
   }
 
-  file { "${zulip::common::supervisor_conf_dir}/statuspage-pusher.conf":
+  file { "${doer::common::supervisor_conf_dir}/statuspage-pusher.conf":
     ensure  => file,
     require => [
       Package[supervisor],

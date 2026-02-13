@@ -69,7 +69,7 @@ def stripe_event_handler_decorator(
             event.status = Event.EVENT_HANDLER_FAILED
             event.handler_error = {
                 "description": f"uncaught exception in {event.type} event handler",
-                "message": BillingError.CONTACT_SUPPORT.format(email=settings.ZULIP_ADMINISTRATOR),
+                "message": BillingError.CONTACT_SUPPORT.format(email=settings.DOER_ADMINISTRATOR),
             }
             event.save(update_fields=["status", "handler_error"])
         else:

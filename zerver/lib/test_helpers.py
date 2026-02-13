@@ -48,14 +48,14 @@ from zerver.models.realms import get_realm
 from zerver.models.streams import get_stream
 from zerver.tornado.handlers import AsyncDjangoHandler, allocate_handler_id
 from zerver.views.auth import log_into_subdomain
-from zilencer.models import RemoteZulipServer
+from zilencer.models import RemoteDoerServer
 from zproject.backends import ExternalAuthDataDict, ExternalAuthResult
 
 if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
     # Avoid an import cycle; we only need these for type annotations.
-    from zerver.lib.test_classes import MigrationsTestCase, ZulipTestCase
+    from zerver.lib.test_classes import MigrationsTestCase, DoerTestCase
 
 
 class MockLDAP(fakeldap.MockLDAP):
@@ -96,14 +96,14 @@ class activate_push_notification_service(override_settings):  # noqa: N801
     """
 
     def __init__(
-        self, zulip_services_url: str | None = None, submit_usage_statistics: bool = False
+        self, doer_services_url: str | None = None, submit_usage_statistics: bool = False
     ) -> None:
-        if zulip_services_url is None:
-            zulip_services_url = settings.ZULIP_SERVICES_URL
-        assert zulip_services_url is not None
+        if doer_services_url is None:
+            doer_services_url = settings.DOER_SERVICES_URL
+        assert doer_services_url is not None
 
         # Ordinarily the ANALYTICS_DATA_UPLOAD_LEVEL setting is computed based on these
-        # ZULIP_SERVICE_* configured settings; but because these settings here won't get
+        # DOER_SERVICE_* configured settings; but because these settings here won't get
         # processed through computed_settings, we need to set ANALYTICS_DATA_UPLOAD_LEVEL
         # manually.
         # The logic here is:
@@ -123,10 +123,10 @@ class activate_push_notification_service(override_settings):  # noqa: N801
             analytics_data_upload_level = AnalyticsDataUploadLevel.ALL
 
         super().__init__(
-            ZULIP_SERVICES_URL=zulip_services_url,
+            DOER_SERVICES_URL=doer_services_url,
             ANALYTICS_DATA_UPLOAD_LEVEL=analytics_data_upload_level,
-            ZULIP_SERVICE_PUSH_NOTIFICATIONS=True,
-            ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS=submit_usage_statistics,
+            DOER_SERVICE_PUSH_NOTIFICATIONS=True,
+            DOER_SERVICE_SUBMIT_USAGE_STATISTICS=submit_usage_statistics,
         )
 
 
@@ -240,15 +240,15 @@ def stdout_suppressed() -> Iterator[IO[str]]:
             sys.stdout = stdout
 
 
-def reset_email_visibility_to_everyone_in_zulip_realm() -> None:
+def reset_email_visibility_to_everyone_in_doer_realm() -> None:
     """
     This function is used to reset email visibility for all users and
-    RealmUserDefault object in the zulip realm in development environment
+    RealmUserDefault object in the doer realm in development environment
     to "EMAIL_ADDRESS_VISIBILITY_EVERYONE" since the default value is
     "EMAIL_ADDRESS_VISIBILITY_ADMINS". This function is needed in
     tests that want "email" field of users to be set to their real email.
     """
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     realm_user_default = RealmUserDefault.objects.get(realm=realm)
     do_set_realm_user_default_setting(
         realm_user_default,
@@ -365,7 +365,7 @@ dummy_handler = DummyHandler()
 
 class HostRequestMock(HttpRequest):
     """A mock request object where get_host() works.  Useful for testing
-    routes that use Zulip's subdomains feature"""
+    routes that use Doer's subdomains feature"""
 
     # The base class HttpRequest declares GET and POST as immutable
     # QueryDict objects. The implementation of HostRequestMock
@@ -379,7 +379,7 @@ class HostRequestMock(HttpRequest):
         self,
         post_data: Mapping[str, Any] = {},
         user_profile: UserProfile | None = None,
-        remote_server: RemoteZulipServer | None = None,
+        remote_server: RemoteDoerServer | None = None,
         host: str = settings.EXTERNAL_HOST,
         client_name: str | None = None,
         meta_data: dict[str, Any] | None = None,
@@ -448,7 +448,7 @@ def instrument_url(f: UrlFuncT) -> UrlFuncT:
     else:
 
         def wrapper(
-            self: "ZulipTestCase", url: str, info: object = {}, **kwargs: bool | str
+            self: "DoerTestCase", url: str, info: object = {}, **kwargs: bool | str
         ) -> HttpResponseBase:
             start = time.time()
             result = f(self, url, info, **kwargs)
@@ -510,7 +510,7 @@ def write_instrumentation_reports(full_suite: bool, include_webhooks: bool) -> N
         def cleanup_url(url: str) -> str:
             url = url.removeprefix("/")
             url = url.removeprefix("http://testserver/")
-            url = url.removeprefix("http://zulip.testserver/")
+            url = url.removeprefix("http://doer.testserver/")
             url = url.removeprefix("http://testserver:9080/")
             return url
 
@@ -764,15 +764,15 @@ def use_db_models(
 def create_dummy_file(filename: str) -> str:
     filepath = os.path.join(settings.TEST_WORKER_DIR, filename)
     with open(filepath, "w") as f:
-        f.write("zulip!")
+        f.write("doer!")
     return filepath
 
 
-def zulip_reaction_info() -> dict[str, str]:
+def doer_reaction_info() -> dict[str, str]:
     return dict(
-        emoji_name="zulip",
-        emoji_code="zulip",
-        reaction_type="zulip_extra_emoji",
+        emoji_name="doer",
+        emoji_code="doer",
+        reaction_type="doer_extra_emoji",
     )
 
 

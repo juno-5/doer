@@ -3,7 +3,7 @@
   "currency": "usd",
   "customer": "cus_NORMALIZED",
   "date": 1000000000,
-  "description": "Zulip Basic - renewal",
+  "description": "Doer Basic - renewal",
   "discountable": false,
   "discounts": [],
   "id": "upgrade_server_to_fixed_price_monthly_basic_plan--InvoiceItem.create.2.json",

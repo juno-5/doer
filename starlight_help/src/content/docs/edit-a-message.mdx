@@ -5,21 +5,21 @@ title: Edit a message
 import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import MessageActions from "../include/_MessageActions.mdx";
 import MessageLongPressMenu from "../include/_MessageLongPressMenu.mdx";
 
-import EditIcon from "~icons/zulip-icon/edit";
+import EditIcon from "~icons/doer-icon/edit";
 
-Zulip makes it possible to edit the content of your messages, letting you fix
+Doer makes it possible to edit the content of your messages, letting you fix
 typos, clarify your thoughts, etc. Organization administrators can
 [configure](/help/restrict-message-editing-and-deletion) who can edit messages,
 and set time limits for this action. However, even organization owners cannot
 edit the content of a message sent by another user.
 
-<ZulipTip>
+<DoerTip>
   You can also [edit message topics](/help/rename-a-topic).
-</ZulipTip>
+</DoerTip>
 
 ## Edit a message
 
@@ -48,12 +48,12 @@ edit the content of a message sent by another user.
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   When you edit a message, everyone will see it labeled as **edited**. You
   can [view a message's edit history](/help/view-a-messages-edit-history)
   if it is [allowed](/help/restrict-message-edit-history-access) in your
   organization.
-</ZulipTip>
+</DoerTip>
 
 ## Message notifications
 

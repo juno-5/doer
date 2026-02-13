@@ -10,7 +10,7 @@
     "id": 3779542785,
     "node_id": "I_kwDOQwktts7hRz8B",
     "number": 6,
-    "title": "This is a very long issue title used to exceed Zulip's maximum topic length so that truncation logic is exercised when the issue title is edited via the GitHub webhook",
+    "title": "This is a very long issue title used to exceed Doer's maximum topic length so that truncation logic is exercised when the issue title is edited via the GitHub webhook",
     "user": {
       "login": "Pritesh-30",
       "id": 190011583,

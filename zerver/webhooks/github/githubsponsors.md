@@ -1,6 +1,6 @@
-# Zulip GitHub Sponsors integration
+# Doer GitHub Sponsors integration
 
-Get GitHub Sponsors notifications in Zulip!
+Get GitHub Sponsors notifications in Doer!
 
 {start_tabs}
 
@@ -27,7 +27,7 @@ Get GitHub Sponsors notifications in Zulip!
 
 - [GitHub's webhook events documentation][github-webhook-events]
 
-- [Zulip GitHub integration](/integrations/github).
+- [Doer GitHub integration](/integrations/github).
 
 {!webhooks-url-specification.md!}
 

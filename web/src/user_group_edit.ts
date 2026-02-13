@@ -139,10 +139,10 @@ export function update_group_creation_ui(): void {
         $right_panel_permission_text.show();
     }
 
-    $left_panel_icon_button.prop("disabled", !realm.zulip_plan_is_not_limited);
+    $left_panel_icon_button.prop("disabled", !realm.doer_plan_is_not_limited);
     $("#groups_overlay .right .create_user_group_button").prop(
         "disabled",
-        !realm.zulip_plan_is_not_limited || !settings_data.user_can_create_user_groups(),
+        !realm.doer_plan_is_not_limited || !settings_data.user_can_create_user_groups(),
     );
 }
 
@@ -1738,7 +1738,7 @@ export function update_empty_left_panel_message(): void {
     const args = {
         empty_user_group_list_message,
         can_create_user_groups:
-            settings_data.user_can_create_user_groups() && realm.zulip_plan_is_not_limited,
+            settings_data.user_can_create_user_groups() && realm.doer_plan_is_not_limited,
         all_groups_tab: !is_your_groups_tab_active,
     };
 
@@ -1874,7 +1874,7 @@ export function setup_page(callback: () => void): void {
 
     function populate_and_fill(): void {
         const template_data = {
-            zulip_plan_is_not_limited: realm.zulip_plan_is_not_limited,
+            doer_plan_is_not_limited: realm.doer_plan_is_not_limited,
             upgrade_text_for_wide_organization_logo: realm.upgrade_text_for_wide_organization_logo,
             is_business_type_org:
                 realm.realm_org_type === settings_config.all_org_type_values.business.code,

@@ -619,7 +619,7 @@ i18n_urls = [
     # desktop app build for everyone in that case
     path("desktop_home/", desktop_home),
     # Backwards-compatibility (legacy) Google auth URL for the mobile
-    # apps; see https://github.com/zulip/zulip/issues/13081 for
+    # apps; see https://github.com/doer/doer/issues/13081 for
     # background.  We can remove this once older versions of the
     # mobile app are no longer present in the wild.
     path("accounts/login/google/", start_social_login, {"backend": "google"}),
@@ -978,7 +978,7 @@ urls += [
 
 urls += [
     path(
-        "api/v1/zulip-services/verify/<str:access_token>/",
+        "api/v1/doer-services/verify/<str:access_token>/",
         self_hosting_registration_transfer_challenge_verify,
     ),
 ]

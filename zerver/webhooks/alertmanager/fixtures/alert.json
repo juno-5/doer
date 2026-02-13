@@ -1,5 +1,5 @@
 {
-    "receiver": "ops-zulip",
+    "receiver": "ops-doer",
     "status": "firing",
     "groupLabels": {},
     "commonLabels": {

@@ -189,13 +189,13 @@
     }
 }
 
-.typeahead-image.zulip-icon {
+.typeahead-image.doer-icon {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* For FontAwesome icons and zulip icons used in place of images for some users. */
+/* For FontAwesome icons and doer icons used in place of images for some users. */
 .typeahead-image {
     flex: 0 0 auto;
     position: relative;
@@ -240,12 +240,12 @@
 }
 
 .typeahead-text-container {
-    i.zulip-icon-bot {
+    i.doer-icon-bot {
         align-self: center;
     }
 
     /*
-    Negates the extra 3px left margin from `.status-emoji` in zulip.css, which,
+    Negates the extra 3px left margin from `.status-emoji` in doer.css, which,
     combined with .typeahead-text-container's `gap`, created unintended spacing.
     The typeahead's spacing is now managed only by `gap` in
     .typeahead-text-container.

@@ -56,7 +56,7 @@ can be seen on a still screenshot. See
 For updates or changes to CSS class rules, it's a good practice
 to include the results of a [git-grep][git-grep] search for
 the class name(s) to confirm that you've tested and captured screenshots
-of all the impacted areas of the UI or Zulip documentation.
+of all the impacted areas of the UI or Doer documentation.
 
 ```console
 $ git grep '.example-class-name' web/templates/ templates/
@@ -111,7 +111,7 @@ screenshots.
 
 Sometimes you may be asked to present alternative looks to your PR in tandem
 with a discussion [#design](https://chat.zulip.org/#topics/channel/101-design)
-channel in the Zulip development community, in which case you'll need to walk
+channel in the Doer development community, in which case you'll need to walk
 through different commits on your branch—or make judicious use of `git stash`
 and `git stash pop`.
 
@@ -200,13 +200,13 @@ Now see if you can catch the change between the Before and After images in this 
 
 ![Comparing fixed screenshots](/images/fixed-capture-compare.gif)
 
-Those screenshots make it obvious that the space between the Zulip logo and the top
+Those screenshots make it obvious that the space between the Doer logo and the top
 of the message area has been reduced. Without precise screenshots, that change
 would've been nearly impossible to detect.
 
 ### Providing sufficient UI context
 
-The images above might have been intended to show close details of the Zulip logo
+The images above might have been intended to show close details of the Doer logo
 and message area. But the contributor could have also just used their browser
 (Firefox, in this case) to capture more of the viewport:
 
@@ -236,12 +236,12 @@ than post the video—whose format may not be suitable for the web or accessible
 reviewers—use a video-to-GIF service like [ezgif.com](https://ezgif.com/video-to-gif)
 to create a looping animation showing off the interaction.
 
-Here, for an example, is a short looping animation from [an actual PR](https://github.com/zulip/zulip/pull/35969)
+Here, for an example, is a short looping animation from [an actual PR](https://github.com/doer/doer/pull/35969)
 that modified some interactions on the compose box:
 
 ![Animation showing compose box](/images/general-chat-after.gif)
 
-It's worth noting here that [the full PR](https://github.com/zulip/zulip/pull/35969)
+It's worth noting here that [the full PR](https://github.com/doer/doer/pull/35969)
 included plenty of static screenshots in addition to the GIFs showing off interactivity.
 
 Finally, make sure a person watching your video can see where on the screen you're
@@ -310,7 +310,7 @@ documentation while reviewing your changes.
 
 [git-grep]: https://git-scm.com/docs/git-grep
 [screenshots-gifs]: ../contributing/presenting-visual-changes.md#screenshot-and-gif-software
-[zulip-dev-community]: https://chat.zulip.org
+[doer-dev-community]: https://chat.zulip.org
 [link-to-message]: https://zulip.com/help/link-to-a-message-or-conversation#get-a-link-to-a-specific-message
 [dev-community-linkifiers]: https://zulip.com/development-community/#linking-to-github-issues-and-pull-requests
 

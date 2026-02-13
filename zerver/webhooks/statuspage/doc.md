@@ -1,6 +1,6 @@
-# Zulip Statuspage integration
+# Doer Statuspage integration
 
-Get Zulip notifications for your Statuspage.io subscriptions!
+Get Doer notifications for your Statuspage.io subscriptions!
 
 {start_tabs}
 

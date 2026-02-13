@@ -31,14 +31,14 @@ git checkout -b "$local_branch" "upstream/$branch"
 # doesn't remove the directory.
 rm locale/*/LC_MESSAGES/*.mo || true
 
-wlc lock "zulip/frontend$suffix"
-wlc lock "zulip/django$suffix"
-trap 'wlc unlock "zulip/frontend$suffix" && wlc unlock "zulip/django$suffix"' EXIT
+wlc lock "doer/frontend$suffix"
+wlc lock "doer/django$suffix"
+trap 'wlc unlock "doer/frontend$suffix" && wlc unlock "doer/django$suffix"' EXIT
 
-wlc commit "zulip/frontend$suffix"
-wlc commit "zulip/django$suffix"
+wlc commit "doer/frontend$suffix"
+wlc commit "doer/django$suffix"
 
-git fetch "https://hosted.weblate.org/git/zulip/django$suffix/"
+git fetch "https://hosted.weblate.org/git/doer/django$suffix/"
 if [ "$(git rev-list FETCH_HEAD "^upstream/$branch")" == "" ]; then
     echo "No changes from Weblate to commit!"
 else

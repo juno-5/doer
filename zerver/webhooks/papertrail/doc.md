@@ -1,6 +1,6 @@
-# Zulip Papertrail integration
+# Doer Papertrail integration
 
-Get Zulip notifications for your Papertrail logs!
+Get Doer notifications for your Papertrail logs!
 
 {start_tabs}
 

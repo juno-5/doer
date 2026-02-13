@@ -16,7 +16,7 @@ from zerver.actions.scheduled_messages import (
 )
 from zerver.actions.users import change_user_is_active
 from zerver.lib.message import is_message_to_self
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message
 from zerver.lib.timestamp import timestamp_to_datetime
 from zerver.models import Attachment, Message, Recipient, ScheduledMessage, UserMessage
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class ScheduledMessageTest(ZulipTestCase):
+class ScheduledMessageTest(DoerTestCase):
     def last_scheduled_message(self) -> ScheduledMessage:
         return ScheduledMessage.objects.all().order_by("-id")[0]
 
@@ -703,19 +703,19 @@ class ScheduledMessageTest(ZulipTestCase):
         hamlet = self.example_user("hamlet")
         verona_stream_id = self.get_stream_id("Verona")
 
-        attachment_file1 = StringIO("zulip!")
+        attachment_file1 = StringIO("doer!")
         attachment_file1.name = "dummy_1.txt"
         result = self.client_post("/json/user_uploads", {"file": attachment_file1})
         path_id1 = re.sub(r"/user_uploads/", "", result.json()["url"])
         attachment_object1 = Attachment.objects.get(path_id=path_id1)
 
-        attachment_file2 = StringIO("zulip!")
+        attachment_file2 = StringIO("doer!")
         attachment_file2.name = "dummy_1.txt"
         result = self.client_post("/json/user_uploads", {"file": attachment_file2})
         path_id2 = re.sub(r"/user_uploads/", "", result.json()["url"])
         attachment_object2 = Attachment.objects.get(path_id=path_id2)
 
-        content = f"Test [zulip.txt](http://{hamlet.realm.host}/user_uploads/{path_id1})"
+        content = f"Test [doer.txt](http://{hamlet.realm.host}/user_uploads/{path_id1})"
         scheduled_delivery_timestamp = int(time.time() + 86400)
 
         # Test sending with attachment
@@ -728,7 +728,7 @@ class ScheduledMessageTest(ZulipTestCase):
         self.assertEqual(scheduled_message.has_attachment, True)
 
         # Test editing to change attachmment
-        edited_content = f"Test [zulip.txt](http://{hamlet.realm.host}/user_uploads/{path_id2})"
+        edited_content = f"Test [doer.txt](http://{hamlet.realm.host}/user_uploads/{path_id2})"
         payload = {
             "content": edited_content,
         }
@@ -762,7 +762,7 @@ class ScheduledMessageTest(ZulipTestCase):
 
         # Test editing to now have an attachment again
         edited_content = (
-            f"Attachment is back! [zulip.txt](http://{hamlet.realm.host}/user_uploads/{path_id2})"
+            f"Attachment is back! [doer.txt](http://{hamlet.realm.host}/user_uploads/{path_id2})"
         )
         payload = {
             "content": edited_content,

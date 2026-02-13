@@ -1,6 +1,6 @@
-# Zulip GitHub Actions integration
+# Doer GitHub Actions integration
 
-Get Zulip notifications from GitHub Actions workflow runs!
+Get Doer notifications from GitHub Actions workflow runs!
 
 {start_tabs}
 
@@ -18,7 +18,7 @@ Get Zulip notifications from GitHub Actions workflow runs!
       uses: zulip/github-actions-zulip/send-message@v1
       with:
          # Your bot's API key and email
-         api-key: ${{ secrets.ZULIP_API_KEY }}
+         api-key: ${{ secrets.DOER_API_KEY }}
          email: "github-actions-generic-bot@example.com"
          organization-url: "https://your-org.zulipchat.com"
          type: "stream"
@@ -46,7 +46,7 @@ Get Zulip notifications from GitHub Actions workflow runs!
       uses: zulip/github-actions-zulip/send-message@v1
       with:
          # Your bot's API key and email
-         api-key: ${{ secrets.ZULIP_API_KEY }}
+         api-key: ${{ secrets.DOER_API_KEY }}
          email: "github-actions-generic-bot@example.com"
          organization-url: "https://your-org.zulipchat.com"
          type: "private"
@@ -66,7 +66,7 @@ Get Zulip notifications from GitHub Actions workflow runs!
 
 * [Configuring the Send Message Action][README]
 
-* [Zulip GitHub Actions repository][repo]
+* [Doer GitHub Actions repository][repo]
 
 * [GitHub integration](/integrations/github)
 

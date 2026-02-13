@@ -5,10 +5,10 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_set_realm_authentication_methods
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Enable or disable an authentication backend for a realm"""
 
     @override

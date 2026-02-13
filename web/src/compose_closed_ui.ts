@@ -272,7 +272,7 @@ function can_user_reply_to_message(message_id: number): boolean {
 
 export function initialize(): void {
     // When the message selection changes, change the label on the Reply button.
-    $(document).on("message_selected.zulip", () => {
+    $(document).on("message_selected.doer", () => {
         if (narrow_state.is_message_feed_visible()) {
             // message_selected events can occur with Recent Conversations
             // open due to the combined feed view loading in the background,

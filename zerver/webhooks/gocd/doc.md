@@ -1,6 +1,6 @@
-# Zulip GoCD integration
+# Doer GoCD integration
 
-Get GoCD notifications in Zulip!
+Get GoCD notifications in Doer!
 
 {start_tabs}
 

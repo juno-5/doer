@@ -18,7 +18,7 @@ from tornado.httpserver import HTTPServer
 from typing_extensions import override
 
 from zerver.lib.cache import user_profile_narrow_by_id_cache_key
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import cache_tries_captured, queries_captured
 from zerver.models import UserProfile
 from zerver.tornado import event_queue
@@ -28,7 +28,7 @@ from zerver.tornado.event_queue import process_event
 T = TypeVar("T")
 
 
-class TornadoWebTestCase(ZulipTestCase):
+class TornadoWebTestCase(DoerTestCase):
     @asynccontextmanager
     async def with_tornado(self) -> AsyncIterator[None]:
         super().setUp()
@@ -81,7 +81,7 @@ class TornadoWebTestCase(ZulipTestCase):
         kwargs["headers"] = headers
 
     async def create_queue(self, **kwargs: Any) -> str:
-        response = await self.fetch_async("GET", "/json/events?dont_block=true", subdomain="zulip")
+        response = await self.fetch_async("GET", "/json/events?dont_block=true", subdomain="doer")
         self.assertEqual(response.code, 200)
         body = orjson.loads(response.body)
         self.assertEqual(body["events"], [])

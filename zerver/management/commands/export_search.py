@@ -17,7 +17,7 @@ from django.db.models import Q
 from typing_extensions import override
 
 from zerver.lib.export import orjson_stream
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.soft_deactivation import reactivate_user_if_soft_deactivated
 from zerver.lib.upload import save_attachment_contents
 from zerver.models import AbstractUserMessage, Message, Recipient, Stream, UserProfile
@@ -55,7 +55,7 @@ def download_worker(base_path: str) -> NoReturn:
         download_queue.task_done()
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Exports the messages matching certain search terms, or from
 senders/recipients.
 

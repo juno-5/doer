@@ -4,10 +4,10 @@ from typing import Any
 from typing_extensions import override
 
 from zerver.lib.cache_helpers import cache_fillers, fill_remote_cache
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(

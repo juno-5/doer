@@ -1,6 +1,6 @@
-# Zulip Intercom integration
+# Doer Intercom integration
 
-Get Intercom notifications in Zulip!
+Get Intercom notifications in Doer!
 
 {start_tabs}
 
@@ -12,7 +12,7 @@ Get Intercom notifications in Zulip!
    **Integrations** in the left sidebar. Click on **Developer Hub**,
    and click **New app**.
 
-1. Set **App name** to a name of your choice, such as `Zulip`. Set
+1. Set **App name** to a name of your choice, such as `Doer`. Set
    **Workspace** to the Intercom workspace of your choice, and click
    **Create app**.
 

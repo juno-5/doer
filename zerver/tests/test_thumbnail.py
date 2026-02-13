@@ -9,7 +9,7 @@ from django.conf import settings
 from django.http import HttpRequest
 from django.test import override_settings
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     consume_response,
     get_test_image_file,
@@ -39,13 +39,13 @@ from zerver.views.upload import closest_thumbnail_format
 from zerver.worker.thumbnail import ensure_thumbnails
 
 
-class ThumbnailRedirectEndpointTest(ZulipTestCase):
+class ThumbnailRedirectEndpointTest(DoerTestCase):
     """Tests for the legacy /thumbnail endpoint."""
 
     def test_thumbnail_upload_redirect(self) -> None:
         self.login("hamlet")
-        fp = StringIO("zulip!")
-        fp.name = "zulip.jpeg"
+        fp = StringIO("doer!")
+        fp.name = "doer.jpeg"
 
         result = self.client_post("/json/user_uploads", {"file": fp})
         self.assert_json_success(result)
@@ -59,7 +59,7 @@ class ThumbnailRedirectEndpointTest(ZulipTestCase):
 
         result = self.client_get("/thumbnail", {"url": url.removeprefix("/"), "size": "full"})
         self.assertEqual(result.status_code, 200)
-        self.assertEqual(result.getvalue(), b"zulip!")
+        self.assertEqual(result.getvalue(), b"doer!")
 
         self.login("iago")
         result = self.client_get("/thumbnail", {"url": url.removeprefix("/"), "size": "full"})
@@ -82,8 +82,8 @@ class ThumbnailRedirectEndpointTest(ZulipTestCase):
     @override_settings(RATE_LIMITING=True)
     def test_thumbnail_redirect_for_spectator(self) -> None:
         self.login("hamlet")
-        fp = StringIO("zulip!")
-        fp.name = "zulip.jpeg"
+        fp = StringIO("doer!")
+        fp.name = "doer.jpeg"
 
         result = self.client_post("/json/user_uploads", {"file": fp})
         self.assert_json_success(result)
@@ -95,7 +95,7 @@ class ThumbnailRedirectEndpointTest(ZulipTestCase):
             # Deny file access for non-web-public stream
             self.subscribe(self.example_user("hamlet"), "Denmark")
             host = self.example_user("hamlet").realm.host
-            body = f"First message ...[zulip.txt](http://{host}" + url + ")"
+            body = f"First message ...[doer.txt](http://{host}" + url + ")"
             self.send_stream_message(self.example_user("hamlet"), "Denmark", body, "test")
 
             self.logout()
@@ -107,7 +107,7 @@ class ThumbnailRedirectEndpointTest(ZulipTestCase):
             self.login("hamlet")
             self.make_stream("web-public-stream", is_web_public=True)
             self.subscribe(self.example_user("hamlet"), "web-public-stream")
-            body = f"First message ...[zulip.txt](http://{host}" + url + ")"
+            body = f"First message ...[doer.txt](http://{host}" + url + ")"
             self.send_stream_message(self.example_user("hamlet"), "web-public-stream", body, "test")
 
             self.logout()
@@ -125,14 +125,14 @@ class ThumbnailRedirectEndpointTest(ZulipTestCase):
         response = self.client_get(
             "/thumbnail",
             {
-                "url": "user_uploads/2/71/QYB7LA-ULMYEad-QfLMxmI2e/zulip-non-existent.txt",
+                "url": "user_uploads/2/71/QYB7LA-ULMYEad-QfLMxmI2e/doer-non-existent.txt",
                 "size": "full",
             },
         )
         self.assertEqual(response.status_code, 404)
 
 
-class ThumbnailEmojiTest(ZulipTestCase):
+class ThumbnailEmojiTest(DoerTestCase):
     def animated_test(self, filename: str) -> None:
         animated_unequal_img_data = read_test_image_file(filename)
         original_image = pyvips.Image.new_from_buffer(animated_unequal_img_data, "n=-1")
@@ -212,7 +212,7 @@ class ThumbnailEmojiTest(ZulipTestCase):
             resize_emoji(non_img_data, "text.png", size=50)
 
 
-class ThumbnailClassesTest(ZulipTestCase):
+class ThumbnailClassesTest(DoerTestCase):
     def test_class_equivalence(self) -> None:
         self.assertNotEqual(
             ThumbnailFormat("webp", 150, 100, animated=True, opts="Q=90"),
@@ -305,7 +305,7 @@ class ThumbnailClassesTest(ZulipTestCase):
         self.assertIsNone(BaseThumbnailFormat.from_string("bad.webp"))
 
 
-class TestStoreThumbnail(ZulipTestCase):
+class TestStoreThumbnail(DoerTestCase):
     def test_upload_image(self) -> None:
         assert settings.LOCAL_FILES_DIR
         self.login_user(self.example_user("hamlet"))
@@ -751,7 +751,7 @@ class TestStoreThumbnail(ZulipTestCase):
         self.assertTrue(ImageAttachment.objects.filter(path_id=path_id).exists())
 
 
-class TestThumbnailRetrieval(ZulipTestCase):
+class TestThumbnailRetrieval(DoerTestCase):
     def test_get_thumbnail(self) -> None:
         assert settings.LOCAL_FILES_DIR
         hamlet = self.example_user("hamlet")

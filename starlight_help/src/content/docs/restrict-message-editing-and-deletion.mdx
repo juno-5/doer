@@ -6,7 +6,7 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import ChannelSettingsNavbarTip from "../include/_ChannelSettingsNavbarTip.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
@@ -14,7 +14,7 @@ import SelectChannelViewPermissions from "../include/_SelectChannelViewPermissio
 
 <AdminOnly />
 
-Zulip lets you separately configure permissions for editing and deleting
+Doer lets you separately configure permissions for editing and deleting
 messages, and you can set time limits for both actions. Regardless of the
 configuration you select, message content can only ever be modified by the
 original author.
@@ -24,13 +24,13 @@ all the message content. This is different from proper message deletion in two
 ways: the original content will still show up in [message edit
 history](/help/view-a-messages-edit-history), and will be included in
 [data exports](/help/export-your-organization). Deletion permanently (and
-irretrievably) removes the message from Zulip.
+irretrievably) removes the message from Doer.
 
 ## Configure message editing permissions
 
-<ZulipTip>
+<DoerTip>
   Users can only edit their own messages.
-</ZulipTip>
+</DoerTip>
 
 <FlattenedSteps>
   <NavigationSteps target="settings/organization-permissions" />
@@ -62,10 +62,10 @@ These permissions can be granted to any combination of
   <SaveChanges />
 </FlattenedSteps>
 
-<ZulipTip>
+<DoerTip>
   A user can delete messages sent by [bots that they
   own](/help/view-your-bots) just like messages they sent themself.
-</ZulipTip>
+</DoerTip>
 
 ## Configure who can delete messages in a specific channel
 

@@ -16,7 +16,7 @@ from corporate.lib.decorator import (
 from corporate.models.customers import get_customer_by_realm
 from corporate.models.plans import CustomerPlan, get_current_plan_by_customer
 from zerver.context_processors import get_realm_from_request, latest_info_context
-from zerver.decorator import add_google_analytics, zulip_login_required
+from zerver.decorator import add_google_analytics, doer_login_required
 from zerver.lib.github import (
     InvalidPlatformError,
     get_latest_github_release_download_link_for_platform,
@@ -125,7 +125,7 @@ def plans_view(request: HttpRequest) -> HttpResponse:
                 context.on_free_tier = not context.is_sponsored
             else:
                 context.on_free_trial = is_customer_on_free_trial(context.customer_plan)
-                # TODO implement a complimentary access plan/tier for Zulip Cloud.
+                # TODO implement a complimentary access plan/tier for Doer Cloud.
 
     context.is_new_customer = (
         not context.on_free_tier and context.customer_plan is None and not context.is_sponsored
@@ -396,7 +396,7 @@ def communities_view(request: HttpRequest) -> HttpResponse:
     )
 
 
-@zulip_login_required
+@doer_login_required
 def invoices_page(request: HttpRequest) -> HttpResponseRedirect:
     from corporate.lib.stripe import RealmBillingSession
 
@@ -427,7 +427,7 @@ def remote_server_invoices_page(
     return HttpResponseRedirect(list_invoices_session_url)
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def customer_portal(
     request: HttpRequest,

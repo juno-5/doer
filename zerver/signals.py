@@ -21,8 +21,8 @@ JUST_CREATED_THRESHOLD = 60
 
 def get_device_browser(user_agent: str) -> str | None:
     user_agent = user_agent.lower()
-    if "zulip" in user_agent:
-        return "Zulip"
+    if "doer" in user_agent:
+        return "Doer"
     elif "edge" in user_agent:
         return "Edge"
     elif "opera" in user_agent or "opr/" in user_agent:

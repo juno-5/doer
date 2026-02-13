@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from dateutil import parser
 from django.utils.translation import override as override_language
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timestamp import (
     TimeZoneMissingError,
     TimeZoneNotUTCError,
@@ -19,7 +19,7 @@ from zerver.lib.timestamp import (
 )
 
 
-class TestTimestamp(ZulipTestCase):
+class TestTimestamp(DoerTestCase):
     def test_datetime_and_timestamp_conversions(self) -> None:
         timestamp = 1483228800
         for dt in [

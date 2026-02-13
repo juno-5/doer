@@ -57,7 +57,7 @@ function adjust_mac_kbd_tags(): void {
             element.after(" + ");
         }
 
-        // In web/src/common.ts, we use zulip icon for ⌘ due to centering
+        // In web/src/common.ts, we use doer icon for ⌘ due to centering
         // problems, we don't have that problem in the new help center and
         // thus don't do that transformation here.
     }

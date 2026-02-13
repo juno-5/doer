@@ -350,13 +350,13 @@ function set_create_web_public_stream_dropdown_visibility(): void {
     settings_components.change_element_block_display_property(
         "id_realm_can_create_web_public_channel_group",
         realm.server_web_public_streams_enabled &&
-            realm.zulip_plan_is_not_limited &&
+            realm.doer_plan_is_not_limited &&
             realm.realm_enable_spectator_access,
     );
 }
 
 function disable_create_user_groups_if_on_limited_plan(): void {
-    if (!realm.zulip_plan_is_not_limited) {
+    if (!realm.doer_plan_is_not_limited) {
         settings_components.disable_group_permission_setting(
             $("#id_realm_can_create_groups").closest(".input-group"),
         );
@@ -606,7 +606,7 @@ export function discard_realm_property_element_changes(elem: HTMLElement): void 
         case "realm_moderation_request_channel_id":
         case "realm_new_stream_announcements_stream_id":
         case "realm_signup_announcements_stream_id":
-        case "realm_zulip_update_announcements_stream_id":
+        case "realm_doer_update_announcements_stream_id":
         case "realm_default_code_block_language":
         case "realm_default_language":
         case "realm_can_access_all_users_group":
@@ -1338,7 +1338,7 @@ export let init_dropdown_widgets = (): void => {
         "channel",
     );
     set_up_dropdown_widget(
-        "realm_zulip_update_announcements_stream_id",
+        "realm_doer_update_announcements_stream_id",
         notification_stream_options,
         "channel",
     );
@@ -1749,7 +1749,7 @@ export function build_page(): void {
     }
 
     realm_icon.build_realm_icon_widget(upload_realm_logo_or_icon);
-    if (realm.zulip_plan_is_not_limited) {
+    if (realm.doer_plan_is_not_limited) {
         realm_logo.build_realm_logo_widget(upload_realm_logo_or_icon, false);
         realm_logo.build_realm_logo_widget(upload_realm_logo_or_icon, true);
     }

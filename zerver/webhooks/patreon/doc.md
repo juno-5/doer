@@ -1,6 +1,6 @@
-# Zulip Patreon integration
+# Doer Patreon integration
 
-Get Patreon notifications in Zulip!
+Get Patreon notifications in Doer!
 
 {start_tabs}
 

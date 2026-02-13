@@ -11,11 +11,11 @@ from django.db import connection
 
 from zerver.lib.parallel import _disconnect, run_parallel, run_parallel_queue
 from zerver.lib.partial import partial
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Realm
 
 
-class RunNotParallelTest(ZulipTestCase):
+class RunNotParallelTest(DoerTestCase):
     def test_disconnect(self) -> None:
         self.assertTrue(connection.is_usable())
         self.assertEqual(Realm.objects.count(), 4)
@@ -181,7 +181,7 @@ def db_query(output_dir: str, barrier: Barrier, item: int) -> None:  # nocoverag
         barrier.wait(60)
 
 
-class RunParallelTest(ZulipTestCase):
+class RunParallelTest(DoerTestCase):
     def skip_in_parallel_harness(self) -> None:
         if current_process().daemon:
             self.skipTest("Testing of parallel pool is skipped under the parallel test harness")

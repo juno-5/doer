@@ -1,4 +1,4 @@
-# Zulip in production
+# Doer in production
 
 ```{toctree}
 ---
@@ -14,7 +14,7 @@ system-configuration
 mobile-push-notifications
 upgrade
 modify
-securing-your-zulip-server
+securing-your-doer-server
 authentication-methods
 export-and-import
 postgresql

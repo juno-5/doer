@@ -19,7 +19,7 @@ from zerver.lib.email_mirror_helpers import encode_email_address, get_channel_em
 from zerver.lib.queue import MAX_REQUEST_RETRIES
 from zerver.lib.remote_server import PushNotificationBouncerRetryLaterError
 from zerver.lib.send_email import EmailNotDeliveredError, FromAddress
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import mock_queue_publish
 from zerver.models import ScheduledMessageNotificationEmail, UserActivity, UserProfile
 from zerver.models.clients import get_client
@@ -70,7 +70,7 @@ def simulated_queue_client(client: FakeClient) -> Iterator[None]:
         yield
 
 
-class WorkerTest(ZulipTestCase):
+class WorkerTest(DoerTestCase):
     def test_useractivity_worker(self) -> None:
         fake_client = FakeClient()
 
@@ -265,7 +265,7 @@ class WorkerTest(ZulipTestCase):
         )
 
         send_mock = patch(
-            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_zulip",
+            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_doer",
         )
 
         bonus_event_hamlet = dict(
@@ -598,7 +598,7 @@ class WorkerTest(ZulipTestCase):
     @patch("zerver.worker.email_mirror.mirror_email")
     def test_mirror_worker(self, mock_mirror_email: MagicMock) -> None:
         fake_client = FakeClient()
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
         hamlet = self.example_user("hamlet")
         email_token = get_channel_email_token(stream, creator=hamlet, sender=hamlet)
         stream_to_address = encode_email_address(stream.name, email_token)
@@ -627,7 +627,7 @@ class WorkerTest(ZulipTestCase):
         data = {
             "template_prefix": "zerver/emails/confirm_new_email",
             "to_emails": [self.example_email("hamlet")],
-            "from_name": "Zulip Account Security",
+            "from_name": "Doer Account Security",
             "from_address": FromAddress.NOREPLY,
             "context": {},
         }

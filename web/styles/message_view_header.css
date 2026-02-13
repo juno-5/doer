@@ -34,13 +34,13 @@
            the same invisible line. */
         align-items: baseline;
 
-        .zulip-icon {
+        .doer-icon {
             /* Pull the icon out of baseline alignment,
                and center with stream name. */
             align-self: center;
         }
 
-        .zulip-icon-inbox {
+        .doer-icon-inbox {
             /* 16px at 16px em, inherited from .navbar_title */
             font-size: 1em;
         }

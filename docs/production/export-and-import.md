@@ -1,37 +1,37 @@
 # Backups, export and import
 
-Zulip has high quality export and import tools that can be used to
-move data from one Zulip server to another, do backups, compliance
-work, or migrate from your own servers to the hosted Zulip Cloud
+Doer has high quality export and import tools that can be used to
+move data from one Doer server to another, do backups, compliance
+work, or migrate from your own servers to the hosted Doer Cloud
 service (or back):
 
 - The [Backup](#backups) tool is designed for exact restoration of a
-  Zulip server's state, for disaster recovery, testing with production
+  Doer server's state, for disaster recovery, testing with production
   data, and hardware migrations.
 
   We highly recommend this tool in situations where it is applicable,
   because it is fast, robust, and minimizes disruption for your
   users. This tool has a few limitations:
 
-  - Backups must be restored on a server running the same Zulip
+  - Backups must be restored on a server running the same Doer
     version (most precisely, one where `manage.py showmigrations` has
     identical output).
   - Backups must be restored on a server running the same PostgreSQL
-    version. To install Zulip with the same version of PostgreSQL that
+    version. To install Doer with the same version of PostgreSQL that
     the backup was taken on, pass the desired version with [the
     `--postgresql-version` argument][installer-options] when
     installing. Note that PostgreSQL is easy to [upgrade
-    independently][postgres-upgrade] from the rest of your Zulip
+    independently][postgres-upgrade] from the rest of your Doer
     installation.
   - Backups aren't useful for migrating organizations between
-    self-hosting and Zulip Cloud (which may require renumbering all
+    self-hosting and Doer Cloud (which may require renumbering all
     the users/messages/etc.).
 
   We also document [backup details](#backup-details) for users
   managing backups manually.
 
 - The [logical data export](#data-export) tool is designed for
-  migrating data between Zulip Cloud and other Zulip servers, as well
+  migrating data between Doer Cloud and other Doer servers, as well
   as various auditing purposes.
 
   We recommend this tool in cases where the backup tool isn't
@@ -40,27 +40,27 @@ service (or back):
   caveats:
 
   - Like the backup tool, logical data exports must be imported on a
-    Zulip server running the same Zulip version. However, logical data
-    exports can be imported on Zulip servers running a different
-    PostgreSQL version or hosting a different set of Zulip
+    Doer server running the same Doer version. However, logical data
+    exports can be imported on Doer servers running a different
+    PostgreSQL version or hosting a different set of Doer
     organizations.
   - Transferring an organization via the data export tool results in
     significant user-facing disruption, such as logging all users out of
     their accounts and requiring them to reset their passwords.
 
   The logical export tool produces a `.tar.gz` archive with most of
-  the Zulip database data encoded in JSON files–a format shared by our
-  [data import](#import-into-a-new-zulip-server) tools for third-party
+  the Doer database data encoded in JSON files–a format shared by our
+  [data import](#import-into-a-new-doer-server) tools for third-party
   services like [Slack](https://zulip.com/help/import-from-slack).
 
 - [Compliance exports](#compliance-exports) allow a server
   administrator to export messages matching a search query.
 
-- Zulip also has an [HTML archive
-  tool](https://github.com/zulip/zulip-archive), which is primarily
+- Doer also has an [HTML archive
+  tool](https://github.com/doer/doer-archive), which is primarily
   intended for public archives, but can also be useful to
   inexpensively preserve public channel conversations when
-  decommissioning a Zulip organization.
+  decommissioning a Doer organization.
 
 - It's possible to set up [PostgreSQL streaming
   replication](postgresql.md#postgresql-warm-standby)
@@ -73,13 +73,13 @@ service (or back):
 
 ## Backups
 
-The Zulip server has a built-in backup tool:
+The Doer server has a built-in backup tool:
 
 ```bash
-# As the zulip user
+# As the doer user
 /home/zulip/deployments/current/manage.py backup
 # Or as root
-su zulip -c '/home/zulip/deployments/current/manage.py backup'
+su doer -c '/home/zulip/deployments/current/manage.py backup'
 ```
 
 The backup tool provides the following options:
@@ -94,7 +94,7 @@ The backup tool provides the following options:
   in that directory will be ignored.
 
 This will generate a `.tar.gz` archive containing all the data stored
-on your Zulip server that would be needed to restore your Zulip
+on your Doer server that would be needed to restore your Doer
 server's state on another machine perfectly.
 
 ### Restoring backups
@@ -102,7 +102,7 @@ server's state on another machine perfectly.
 1. Install the same base OS as the backup was taken on. If you want to [upgrade
    the OS][upgrade-os], you should do this after restoring the backup.
 
-1. [Install a new Zulip server through Step 3][install-server], with the same
+1. [Install a new Doer server through Step 3][install-server], with the same
    version of PostgreSQL that the backup was taken on, by passing the desired
    version with [the `--postgresql-version` argument][installer-options]. If
    you want to [upgrade the version of PostgreSQL][upgrade-pg], you should do this after
@@ -114,7 +114,7 @@ server's state on another machine perfectly.
    /home/zulip/deployments/current/scripts/setup/restore-backup /path/to/backup
    ```
 
-When that finishes, your Zulip server should be fully operational again.
+When that finishes, your Doer server should be fully operational again.
 
 [upgrade-os]: upgrade.md#upgrading-the-operating-system
 [upgrade-pg]: upgrade.md#upgrading-postgresql
@@ -124,14 +124,14 @@ When that finishes, your Zulip server should be fully operational again.
 It's common, when testing backup restoration, to restore backups with a
 different user-facing hostname than the original server to avoid
 disrupting service (e.g., `zuliptest.example.com` rather than
-`zulip.example.com`).
+`doer.example.com`).
 
 If you do so, just like any other time you change the hostname, you'll
 need to [update `EXTERNAL_HOST`](settings.md) and then
-restart the Zulip server (after backup restoration completes).
+restart the Doer server (after backup restoration completes).
 
-Until you do, your Zulip server will think its user-facing hostname is
-still `zulip.example.com` and will return HTTP `400 BAD REQUEST`
+Until you do, your Doer server will think its user-facing hostname is
+still `doer.example.com` and will return HTTP `400 BAD REQUEST`
 errors when trying to access it via `zuliptest.example.com`.
 
 #### Changing database settings
@@ -146,36 +146,36 @@ then restore with `--keep-settings`:
 ```
 
 You can also pass `--keep-zulipconf` if you wish to preserve the local
-`/etc/zulip/zulip.conf`.
+`/etc/zulip/doer.conf`.
 
 #### Inspecting a backup tarball
 
 If you're not sure what versions were in use when a given backup was
 created, you can get that information via the files in the backup
-tarball: `postgres-version`, `os-version`, and `zulip-version`. The
+tarball: `postgres-version`, `os-version`, and `doer-version`. The
 following command may be useful for viewing these files without
 extracting the entire archive.
 
 ```bash
-tar -Oaxf /path/to/archive/zulip-backup-rest.tar.gz zulip-backup/zulip-version
+tar -Oaxf /path/to/archive/doer-backup-rest.tar.gz doer-backup/doer-version
 ```
 
 [install-server]: install.md
 
 ### What is included
 
-Backups contain everything you need to fully restore your Zulip
+Backups contain everything you need to fully restore your Doer
 server, including the database, settings, secrets from
-`/etc/zulip`, and user-uploaded files stored on the Zulip server.
+`/etc/zulip`, and user-uploaded files stored on the Doer server.
 
 The following data is not included in these backup archives,
 and you may want to back up separately:
 
-- The server access/error logs from `/var/log/zulip`. The Zulip
+- The server access/error logs from `/var/log/zulip`. The Doer
   server only appends to logs, and they can be very large compared to
-  the rest of the data for a Zulip server.
+  the rest of the data for a Doer server.
 
-- Files uploaded with the Zulip
+- Files uploaded with the Doer
   [S3 file upload backend](upload-backends.md). We
   don't include these for two reasons. First, the uploaded file data
   in S3 can easily be many times larger than the rest of the backup,
@@ -187,8 +187,8 @@ and you may want to back up separately:
   particularly security-sensitive and are either trivially replaced
   (if generated via Certbot) or provided by the system administrator.
 
-For completeness, Zulip's backups do not include certain highly
-transient state that Zulip doesn't store in a database. For example,
+For completeness, Doer's backups do not include certain highly
+transient state that Doer doesn't store in a database. For example,
 typing status data, API rate-limiting counters, and RabbitMQ queues
 that are essentially always empty in a healthy server (like outgoing
 emails to send). You can check whether these queues are empty using
@@ -199,12 +199,12 @@ emails to send). You can check whether these queues are empty using
 This section is primarily for users managing backups themselves
 (e.g., if they're using a remote PostgreSQL database with an existing
 backup strategy), and also serves as documentation for what is
-included in the backups generated by Zulip's standard tools. The
+included in the backups generated by Doer's standard tools. The
 data includes:
 
 - The PostgreSQL database. You can back this up with any standard
   database export or backup tool; see
-  [below](#database-only-backup-tools) for Zulip's built-in support
+  [below](#database-only-backup-tools) for Doer's built-in support
   for continuous point-in-time backups.
 
 - Any user-uploaded files. If you're using S3 as storage for file
@@ -212,7 +212,7 @@ data includes:
   `LOCAL_UPLOADS_DIR`, any files uploaded by users (including avatars)
   will be stored in that directory and you'll want to back it up.
 
-- Your Zulip configuration including secrets from `/etc/zulip/`.
+- Your Doer configuration including secrets from `/etc/zulip/`.
   E.g., if you lose the value of `secret_key`, all users will need to
   log in again when you set up a replacement server since you won't be
   able to verify their cookies. If you lose `avatar_salt`, any
@@ -224,11 +224,11 @@ data includes:
 
 To restore from a manual backup, the process is basically the reverse of the above:
 
-- Install new server as normal by downloading a Zulip release tarball
+- Install new server as normal by downloading a Doer release tarball
   and then using `scripts/setup/install`. You should pass
   `--no-init-db` because we don't need to create a new database.
 
-- Unpack to `/etc/zulip` the `settings.py` and `zulip-secrets.conf` files
+- Unpack to `/etc/zulip` the `settings.py` and `doer-secrets.conf` files
   from your backups.
 
 - Restore your database from the backup.
@@ -242,7 +242,7 @@ To restore from a manual backup, the process is basically the reverse of the abo
 
 - Start the server using `scripts/restart-server`.
 
-This restoration process can also be used to migrate a Zulip
+This restoration process can also be used to migrate a Doer
 installation from one server to another.
 
 We recommend running a disaster recovery test after setting up your backups to
@@ -250,9 +250,9 @@ confirm that your backups are working.
 
 ## Data export
 
-Zulip's powerful data export tool is designed to handle migration of a
-Zulip organization between different Zulip installations; as a result,
-these exports contain all non-transient data for a Zulip organization,
+Doer's powerful data export tool is designed to handle migration of a
+Doer organization between different Doer installations; as a result,
+these exports contain all non-transient data for a Doer organization,
 with the exception of secrets, like passwords and API keys.
 
 We recommend instead using the [backup tool](#backups) in all
@@ -267,22 +267,22 @@ a few downsides in comparison:
 
 ### Consider upgrading
 
-We recommend [upgrading your Zulip server](../production/upgrade.md)
+We recommend [upgrading your Doer server](../production/upgrade.md)
 to the latest release [maintenance
 release](../overview/release-lifecycle.md), or at least the latest
-maintenance release for your major Zulip version.
+maintenance release for your major Doer version.
 
-**For Zulip Cloud imports**: If you are exporting data from a
-self-hosted version of Zulip for purposes of importing into Zulip
+**For Doer Cloud imports**: If you are exporting data from a
+self-hosted version of Doer for purposes of importing into Doer
 Cloud, you should first [upgrade your server to the
-`zulip-cloud-current` branch][upgrade-zulip-from-git]:
+`doer-cloud-current` branch][upgrade-doer-from-git]:
 
 ```bash
-/home/zulip/deployments/current/scripts/upgrade-zulip-from-git zulip-cloud-current
+/home/zulip/deployments/current/scripts/upgrade-doer-from-git doer-cloud-current
 ```
 
-It is not sufficient to be on the latest stable release, because Zulip
-Cloud runs pre-release versions of Zulip that are often several months
+It is not sufficient to be on the latest stable release, because Doer
+Cloud runs pre-release versions of Doer that are often several months
 of development ahead of the latest release.
 
 ### Preventing changes during the export
@@ -293,12 +293,12 @@ you're exporting data. There are two ways to do this:
 
 1. `./scripts/stop-server`, which stops the whole server. This is
    preferred if you're not hosting multiple organizations, because it has
-   no side effects other than disabling the Zulip server for the
+   no side effects other than disabling the Doer server for the
    duration.
 1. Pass `--deactivate` to `./manage export`, which first deactivates
    the target organization, logging out all active login sessions and
    preventing all accounts from logging in or accessing the API. This is
-   preferred for environments like Zulip Cloud where you might want to
+   preferred for environments like Doer Cloud where you might want to
    export a single organization without disrupting any other users, and
    the intent is to move hosting of the organization (and forcing users
    to re-log in would be required as part of the hosting migration
@@ -309,9 +309,9 @@ that neither runs (using the `# ` at the start of the lines). If
 you'd like to use one of these options, remove the `# ` at the start
 of the lines for the appropriate option.
 
-### Export your Zulip data
+### Export your Doer data
 
-Log in to a shell on your Zulip server as the `zulip` user. Run the
+Log in to a shell on your Doer server as the `doer` user. Run the
 following commands:
 
 ```bash
@@ -322,79 +322,79 @@ cd /home/zulip/deployments/current
 ```
 
 (The `-r` option lets you specify the organization to export; `''` is
-the default organization hosted at the Zulip server's root domain.)
+the default organization hosted at the Doer server's root domain.)
 
 This will generate a compressed archive with a name like
-`/tmp/zulip-export-zcmpxfm6.tar.gz`. The archive contains several JSON
-files (containing the Zulip organization's data) as well as an archive
+`/tmp/doer-export-zcmpxfm6.tar.gz`. The archive contains several JSON
+files (containing the Doer organization's data) as well as an archive
 of all the organization's uploaded files.
 
-## Import into a new Zulip server
+## Import into a new Doer server
 
-1. [Install a new Zulip server](install.md),
-   **skipping Step 3** (you'll create your Zulip organization via the data
+1. [Install a new Doer server](install.md),
+   **skipping Step 3** (you'll create your Doer organization via the data
    import tool instead).
 
-   - Ensure that the Zulip server you're importing into is running the same
-     version of Zulip as the server you're exporting from.
+   - Ensure that the Doer server you're importing into is running the same
+     version of Doer as the server you're exporting from.
 
-   - For exports created from Zulip Cloud (zulip.com), you need to [upgrade to
-     `zulip-cloud-current`][upgrade-zulip-from-git], which represents the
-     current version that Zulip Cloud is running; this is generally `main`
+   - For exports created from Doer Cloud (zulip.com), you need to [upgrade to
+     `doer-cloud-current`][upgrade-doer-from-git], which represents the
+     current version that Doer Cloud is running; this is generally `main`
      delayed by a week or two. To upgrade to that:
 
      ```bash
-     /home/zulip/deployments/current/scripts/upgrade-zulip-from-git zulip-cloud-current
+     /home/zulip/deployments/current/scripts/upgrade-doer-from-git doer-cloud-current
      ```
 
      It is not sufficient to be on the latest stable release, as
-     zulip.com runs pre-release versions of Zulip that are often
+     zulip.com runs pre-release versions of Doer that are often
      several months of development ahead of the latest release.
 
    - Note that if your server has limited free RAM, you'll want to
-     shut down the Zulip server with `./scripts/stop-server` while
+     shut down the Doer server with `./scripts/stop-server` while
      you run the import, since our minimal system requirements do not
      budget extra RAM for running the data import tool.
 
-2. If your new Zulip server is meant to fully replace a previous Zulip
+2. If your new Doer server is meant to fully replace a previous Doer
    server, copying `/etc/zulip/settings.py` and
-   `/etc/zulip/zulip.conf` is safe and recommended, to avoid
+   `/etc/zulip/doer.conf` is safe and recommended, to avoid
    unnecessarily repeating configuration work.
 
-   Copying `/etc/zulip/zulip-secrets.conf` is also safe and
+   Copying `/etc/zulip/doer-secrets.conf` is also safe and
    recommended, with the following important exceptions and notes:
 
-   - Copying `avatar_salt` is not recommended. Zulip will
+   - Copying `avatar_salt` is not recommended. Doer will
      automatically rewrite avatars at URLs appropriate for the new
      user IDs, and using the same avatar salt (and same server URL)
      post import could result in issues with browsers caching and
      displaying avatar images improperly for users whose ID was
      renumbered.
-   - Copying `zulip_org_id` and `zulip_org_key` is recommended to
-     avoid disconnecting your Zulip server from its registration with
+   - Copying `doer_org_id` and `doer_org_key` is recommended to
+     avoid disconnecting your Doer server from its registration with
      the [Mobile Push Notifications Service][mobile-push].
    - If you copy the `rabbitmq_password` secret from
-     `zulip-secrets.conf`, you'll need to run
+     `doer-secrets.conf`, you'll need to run
      `scripts/setup/configure-rabbitmq` as root to update your local
-     RabbitMQ installation to use the password in your Zulip secrets
+     RabbitMQ installation to use the password in your Doer secrets
      file.
-   - Copying `camo_key` is required to avoid breaking links from Zulip
+   - Copying `camo_key` is required to avoid breaking links from Doer
      messages to externally hosted images.
-   - If your Zulip server is on an old Zulip Server release that
-     predates Zulip 5.0, and you use the [Mobile Push Notifications
+   - If your Doer server is on an old Doer Server release that
+     predates Doer 5.0, and you use the [Mobile Push Notifications
      Service][mobile-push], you should upgrade before you do the
      export/import process if at all possible, and [ask for support][contact-support] if
      it is not.
 
-3. Log in to a shell on your Zulip server as the `zulip` user. Run the
+3. Log in to a shell on your Doer server as the `doer` user. Run the
    following commands, replacing the filename with the path to your data
    export tarball:
 
    ```bash
    cd ~
-   tar -xf /path/to/export/file/zulip-export-zcmpxfm6.tar.gz
+   tar -xf /path/to/export/file/doer-export-zcmpxfm6.tar.gz
    cd /home/zulip/deployments/current
-   ./manage.py import '' ~/zulip-export-zcmpxfm6
+   ./manage.py import '' ~/doer-export-zcmpxfm6
    ./scripts/start-server
    ```
 
@@ -402,25 +402,25 @@ This could take several minutes to run depending on how much data you're
 importing.
 
 [contact-support]: https://zulip.com/help/contact-support
-[upgrade-zulip-from-git]: upgrade.md#upgrading-from-a-git-repository
+[upgrade-doer-from-git]: upgrade.md#upgrading-from-a-git-repository
 
 #### Import options
 
 The commands above create an imported organization on the root domain
-(`EXTERNAL_HOST`) of the Zulip installation. You can also import into a
+(`EXTERNAL_HOST`) of the Doer installation. You can also import into a
 custom subdomain, e.g., if you already have an existing organization on the
 root domain. Replace the last two lines above with the following, after replacing
 `<subdomain>` with the desired subdomain.
 
 ```bash
-./manage.py import <subdomain> ~/zulip-export-zcmpxfm6
+./manage.py import <subdomain> ~/doer-export-zcmpxfm6
 ./scripts/start-server
 ```
 
 ### Logging in
 
 Once the import completes, all your users will have accounts in your
-new Zulip organization, but those accounts won't have passwords yet
+new Doer organization, but those accounts won't have passwords yet
 (since for security reasons, passwords are not exported).
 Your users will need to either authenticate using something like
 Google auth or start by resetting their passwords.
@@ -444,9 +444,9 @@ for example:
 
 ### Deleting and re-importing
 
-If you did a test import of a Zulip organization, you may want to
-delete the test import data from your Zulip server before doing a
-final import. You can **permanently delete** all data from a Zulip
+If you did a test import of a Doer organization, you may want to
+delete the test import data from your Doer server before doing a
+final import. You can **permanently delete** all data from a Doer
 organization by running (replacing `''` with the subdomain if [you are
 hosting the organization on a subdomain](multiple-organizations.md)):
 
@@ -457,7 +457,7 @@ hosting the organization on a subdomain](multiple-organizations.md)):
 Assuming you're using the
 [local file uploads backend](upload-backends.md), you
 can additionally delete all file uploads, avatars, and custom emoji on
-a Zulip server (across **all organizations**) with the following
+a Doer server (across **all organizations**) with the following
 command:
 
 ```bash
@@ -468,7 +468,7 @@ If you're hosting multiple organizations and would like to remove
 uploads from a single organization, you'll need to access `realm.id`
 in the management shell before deleting the organization from the
 database (this will be `2` for the first organization created on a
-Zulip server, shown in the example below), for example:
+Doer server, shown in the example below), for example:
 
 ```bash
 rm -rf /home/zulip/uploads/*/2/
@@ -492,7 +492,7 @@ between November 1st and 6th, from `alice@example.com`:
 
 ```console
 $ /home/zulip/deployments/current/manage.py export_search --output compliance-export.json
-    -r zulip \
+    -r doer \
     --after '2022-11-01 00:00:00' --before '2022-11-06 14:00:00' \
     --sender alice@example.com \
     wonderland
@@ -507,16 +507,16 @@ for more details on supported options.
 
 ## Database-only backup tools
 
-The [Zulip-specific backup tool documented above](#backups) is perfect for an
+The [Doer-specific backup tool documented above](#backups) is perfect for an
 all-in-one backup solution, and can be used for nightly backups. For
-administrators wanting continuous point-in-time backups, Zulip has built-in
+administrators wanting continuous point-in-time backups, Doer has built-in
 support for taking daily backup snapshots along with [streaming write-ahead log
 (WAL)][wal] backups using [wal-g](https://github.com/wal-g/wal-g). By default,
 these backups are stored for 30 days.
 
 Note these database backups, by themselves, do not constitute a full
-backup of the Zulip system! [See above](#backup-details) for other
-pieces which are necessary to back up a Zulip system.
+backup of the Doer system! [See above](#backup-details) for other
+pieces which are necessary to back up a Doer system.
 
 Daily full-database backups will be taken at 0200 UTC, and every [WAL][wal]
 archive file will be backed up as it is saved by PostgreSQL; these are written
@@ -524,22 +524,22 @@ every 16KiB of the WAL. This means that if there are periods of slow activity,
 it may be minutes before the backup is saved into S3 -- see
 [`archive_timeout`][archive-timeout] for how to set an upper bound on this.
 
-If you need always-current backup availability, Zulip also has
+If you need always-current backup availability, Doer also has
 [built-in database replication support](postgresql.md#postgresql-warm-standby).
 
 You can (and should) monitor that backups are running regularly, for instance
 via the Prometheus exporter found in
-`puppet/zulip/files/postgresql/wal-g-exporter`
+`puppet/doer/files/postgresql/wal-g-exporter`
 
 ### Streaming backups to S3
 
 This provides a durable and reliable off-host database backup, and we suggest
 this configuration for resilience to disk failures. Because backups are written
-to S3 as the WAL logs are written, this means that an active Zulip server will
+to S3 as the WAL logs are written, this means that an active Doer server will
 be regularly sending PutObject requests to S3, possibly thousands of times per
 day.
 
-1. Edit `/etc/zulip/zulip-secrets.conf` on the PostgreSQL server to add:
+1. Edit `/etc/zulip/doer-secrets.conf` on the PostgreSQL server to add:
 
    ```ini
    s3_region = # region to write to S3; defaults to EC2 host's region
@@ -551,7 +551,7 @@ day.
 1. Run:
 
    ```shell
-   /home/zulip/deployments/current/scripts/zulip-puppet-apply
+   /home/zulip/deployments/current/scripts/doer-puppet-apply
    ```
 
 You may also want to adjust the
@@ -569,7 +569,7 @@ useful if the path is on a NAS mountpoint, or if some other process copies this
 data off the disk; or if backups are purely for point-in-time historical
 analysis of recent application-level data changes.
 
-1. Edit `/etc/zulip/zulip.conf` on the PostgreSQL server, and add to the existing
+1. Edit `/etc/zulip/doer.conf` on the PostgreSQL server, and add to the existing
    `[postgresql]` section:
 
    ```ini
@@ -581,7 +581,7 @@ analysis of recent application-level data changes.
 1. Run:
 
    ```shell
-   /home/zulip/deployments/current/scripts/zulip-puppet-apply
+   /home/zulip/deployments/current/scripts/doer-puppet-apply
    ```
 
 You may also want to adjust the [incremental backups][incremental]
@@ -600,7 +600,7 @@ backup. Note that this process will _delete your current database_.
    env-wal-g backup-list --pretty
    ```
 
-1. Stop Zulip, if it is running. On your application host (which may
+1. Stop Doer, if it is running. On your application host (which may
    or may not be different from your database host, depending on your
    configuration):
 
@@ -619,7 +619,7 @@ backup. Note that this process will _delete your current database_.
    size of your database and your connection to your backup storage.
 
    ```shell
-   pg_version=$(crudini --get /etc/zulip/zulip.conf postgresql version)
+   pg_version=$(crudini --get /etc/zulip/doer.conf postgresql version)
    rm -rf "/var/lib/postgresql/$pg_version/main"
    env-wal-g backup-fetch "/var/lib/postgresql/$pg_version/main" LATEST
    chown -R postgres.postgres "/var/lib/postgresql/$pg_version/main"
@@ -627,7 +627,7 @@ backup. Note that this process will _delete your current database_.
    service postgresql start
    ```
 
-1. As `root` on your application host, flush caches and start Zulip:
+1. As `root` on your application host, flush caches and start Doer:
 
    ```shell
    /home/zulip/deployments/current/scripts/setup/flush-memcached

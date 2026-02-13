@@ -2,7 +2,7 @@
 #
 # This script serves only to verify that the OS is a supported
 # version, before we attempt to rely on that version in
-# upgrade-zulip-stage-3
+# upgrade-doer-stage-3
 
 if [ -f /etc/os-release ]; then
     os_info="$(

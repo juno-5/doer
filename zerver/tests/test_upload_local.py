@@ -8,7 +8,7 @@ from django.conf import settings
 
 import zerver.lib.upload
 from zerver.lib.avatar_hash import user_avatar_path
-from zerver.lib.test_classes import UploadSerializeMixin, ZulipTestCase
+from zerver.lib.test_classes import UploadSerializeMixin, DoerTestCase
 from zerver.lib.test_helpers import get_test_image_file, read_test_image_file
 from zerver.lib.thumbnail import (
     DEFAULT_EMOJI_SIZE,
@@ -34,10 +34,10 @@ from zerver.models.realms import get_realm
 from zerver.models.users import get_system_bot
 
 
-class LocalStorageTest(UploadSerializeMixin, ZulipTestCase):
+class LocalStorageTest(UploadSerializeMixin, DoerTestCase):
     def test_upload_message_attachment(self) -> None:
         user_profile = self.example_user("hamlet")
-        url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+        url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
 
         base = "/user_uploads/"
         self.assertEqual(base, url[: len(base)])
@@ -48,16 +48,16 @@ class LocalStorageTest(UploadSerializeMixin, ZulipTestCase):
         self.assertTrue(os.path.isfile(file_path))
 
         uploaded_file = Attachment.objects.get(owner=user_profile, path_id=path_id)
-        self.assert_length(b"zulip!", uploaded_file.size)
+        self.assert_length(b"doer!", uploaded_file.size)
 
     def test_save_attachment_contents(self) -> None:
         user_profile = self.example_user("hamlet")
-        url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+        url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
 
         path_id = re.sub(r"/user_uploads/", "", url)
         output = BytesIO()
         save_attachment_contents(path_id, output)
-        self.assertEqual(output.getvalue(), b"zulip!")
+        self.assertEqual(output.getvalue(), b"doer!")
 
     def test_attachment_source(self) -> None:
         user_profile = self.example_user("hamlet")
@@ -80,15 +80,15 @@ class LocalStorageTest(UploadSerializeMixin, ZulipTestCase):
         """
 
         internal_realm = get_realm(settings.SYSTEM_BOT_REALM)
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         user_profile = get_system_bot(settings.EMAIL_GATEWAY_BOT, internal_realm.id)
         self.assertEqual(user_profile.realm, internal_realm)
 
         url = upload_message_attachment(
-            "dummy.txt", "text/plain", b"zulip!", user_profile, zulip_realm
+            "dummy.txt", "text/plain", b"doer!", user_profile, doer_realm
         )[0]
         # Ensure the correct realm id of the target realm is used instead of the bot's realm.
-        self.assertTrue(url.startswith(f"/user_uploads/{zulip_realm.id}/"))
+        self.assertTrue(url.startswith(f"/user_uploads/{doer_realm.id}/"))
 
     def test_delete_message_attachment(self) -> None:
         self.login("hamlet")
@@ -130,7 +130,7 @@ class LocalStorageTest(UploadSerializeMixin, ZulipTestCase):
         user_profile = self.example_user("hamlet")
         path_ids = []
         for n in range(1, 1005):
-            url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+            url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
             base = "/user_uploads/"
             self.assertEqual(base, url[: len(base)])
             path_id = re.sub(r"/user_uploads/", "", url)
@@ -300,7 +300,7 @@ class LocalStorageTest(UploadSerializeMixin, ZulipTestCase):
         result = re.search(re.compile(r"([A-Za-z0-9\-_]{24})"), url)
         if result is not None:
             random_name = result.group(1)
-        expected_url = f"http://zulip.testserver/user_avatars/exports/{user_profile.realm_id}/{random_name}/tarball.tar.gz"
+        expected_url = f"http://doer.testserver/user_avatars/exports/{user_profile.realm_id}/{random_name}/tarball.tar.gz"
         self.assertEqual(expected_url, url)
 
         # Delete the tarball.

@@ -1,4 +1,4 @@
-# See the Zulip URL spec at https://zulip.com/api/zulip-urls
+# See the Doer URL spec at https://zulip.com/api/doer-urls
 #
 # Keep this synchronized with web/src/topic_link_util.ts
 
@@ -40,7 +40,7 @@ def get_fallback_markdown_link(
     Helper that should only be called by other methods in this file.
 
     Generates the vanilla markdown link syntax for a stream/topic/message link, as
-    a fallback for cases where the nicer Zulip link syntax would not
+    a fallback for cases where the nicer Doer link syntax would not
     render properly due to special characters in the channel or topic name.
     """
     escape = escape_invalid_stream_topic_characters

@@ -20,7 +20,7 @@ const matched_message_schema = z.object({
 
 export type MatchedMessage = z.infer<typeof matched_message_schema>;
 
-const message_reaction_type_schema = z.enum(["unicode_emoji", "realm_emoji", "zulip_extra_emoji"]);
+const message_reaction_type_schema = z.enum(["unicode_emoji", "realm_emoji", "doer_extra_emoji"]);
 
 export type MessageReactionType = z.infer<typeof message_reaction_type_schema>;
 
@@ -155,7 +155,7 @@ export type MessageCleanReaction = {
     is_realm_emoji: boolean;
     label: string;
     local_id: string;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
     user_ids: number[];
     vote_text: string;
 };

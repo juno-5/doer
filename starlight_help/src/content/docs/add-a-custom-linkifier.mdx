@@ -4,26 +4,26 @@ title: Add a custom linkifier
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 
-import EditIcon from "~icons/zulip-icon/edit";
-import ExternalLinkIcon from "~icons/zulip-icon/external-link";
-import TrashIcon from "~icons/zulip-icon/trash";
+import EditIcon from "~icons/doer-icon/edit";
+import ExternalLinkIcon from "~icons/doer-icon/external-link";
+import TrashIcon from "~icons/doer-icon/trash";
 
 <AdminOnly />
 
 Linkifiers make it easy to refer to issues or tickets in third
 party issue trackers, like GitHub, Salesforce, Zendesk, and others.
 For instance, you can add a linkifier that automatically turns `#2468`
-into a link to `https://github.com/zulip/zulip/issues/2468`.
+into a link to `https://github.com/doer/doer/issues/2468`.
 
-If the pattern appears in a topic, Zulip adds an
+If the pattern appears in a topic, Doer adds an
 **Open** (<ExternalLinkIcon />) button
 to the right of the topic in the message recipient bar that links to
 the appropriate URL.
 
-If you have any trouble creating the linkifiers you want, please [contact Zulip
+If you have any trouble creating the linkifiers you want, please [contact Doer
 support](/help/contact-support) with details on what you're trying to do.
 
 ## Add a custom linkifier
@@ -81,23 +81,23 @@ used to link to issues or tickets in third party issue trackers, like GitHub,
 Salesforce, Zendesk, and others.
 
 * Pattern: `#(?P<id>[0-9]+)`
-* URL template: `https://github.com/zulip/zulip/issues/{id}`
+* URL template: `https://github.com/doer/doer/issues/{id}`
 * Original text: `#2468`
-* Automatically links to: `https://github.com/zulip/zulip/issues/2468`
+* Automatically links to: `https://github.com/doer/doer/issues/2468`
 
 ### Link to issues or tickets in multiple projects or apps
 
 To set up linkifiers for issues or tickets in multiple projects,
 consider extending the `#2468` format with project-specific
-variants. For example, the Zulip development community
+variants. For example, the Doer development community
 [uses](https://zulip.com/development-community/#linking-to-github-issues-and-pull-requests)
-`#M2468` for an issue in the repository for the Zulip mobile app,
+`#M2468` for an issue in the repository for the Doer mobile app,
 `#D2468` and issue in the desktop app repository, etc.
 
 * Pattern: `#F(?P<id>[0-9]+)`
-* URL template: `https://github.com/zulip/zulip-flutter/issues/{id}`
+* URL template: `https://github.com/doer/doer-flutter/issues/{id}`
 * Original text: `#F245`
-* Automatically links to: `https://github.com/zulip/zulip-flutter/issues/245`
+* Automatically links to: `https://github.com/doer/doer-flutter/issues/245`
 
 ### Link to issues or tickets in multiple repositories
 
@@ -106,8 +106,8 @@ linkfier pattern turns `org/repo#ID` into an issue or pull request link.
 
 * Pattern: `(?P<org>[a-zA-Z0-9_-]+)/(?P<repo>[a-zA-Z0-9_-]+)#(?P<id>[0-9]+)`
 * URL template: `https://github.com/{org}/{repo}/issues/{id}`
-* Original text: `zulip/zulip#2468`
-* Automatically links to: `https://github.com/zulip/zulip/issues/2468`
+* Original text: `doer/doer#2468`
+* Automatically links to: `https://github.com/doer/doer/issues/2468`
 
 ### Link to a hexadecimal issue or ticket number
 
@@ -115,9 +115,9 @@ The following pattern linkfies a string of hexadecimal digits between 7 and 40
 characters long, such as a Git commit ID.
 
 * Pattern: `(?P<id>[0-9a-f]{7,40})`
-* URL template: `https://github.com/zulip/zulip/commit/{id}`
+* URL template: `https://github.com/doer/doer/commit/{id}`
 * Original text: `abdc123`
-* Automatically links to: `https://github.com/zulip/zulip/commit/abcd123`
+* Automatically links to: `https://github.com/doer/doer/commit/abcd123`
 
 ## Advanced linkifier patterns
 
@@ -145,7 +145,7 @@ the precise behavior of URL templates.
 
 ### Linking to documentation pages
 
-This example pattern is a shorthand for linking to pages on Zulip's ReadTheDocs
+This example pattern is a shorthand for linking to pages on Doer's ReadTheDocs
 site.
 
 * Pattern: `RTD/(?P<article>[a-zA-Z0-9_/.#-]+)`
@@ -153,11 +153,11 @@ site.
 * Original text: `RTD/overview/changelog.html`
 * Automatically links to: `https://zulip.readthedocs.io/en/latest/overview/changelog.html`
 
-<ZulipTip>
+<DoerTip>
   This pattern uses the `{+var}` expression type. With the
   default expression type (`{article}`), the `/` between `overview` and
   `changelog` would incorrectly be URL-encoded.
-</ZulipTip>
+</DoerTip>
 
 ### Linking to Google search results
 
@@ -168,17 +168,17 @@ This example pattern allows linking to Google searches.
 * Original text: `google:foo` or `google:`
 * Automatically links to: `https://google.com/search?q=foo` or `https://google.com/search`
 
-<ZulipTip>
+<DoerTip>
   This pattern uses the `{?var}` expression type. With the default expression
   type (`{q}`), there would be no way to only include the `?` in the URL
   if the optional `q` is present.
-</ZulipTip>
+</DoerTip>
 
 ### Overlapping patterns
 
 In this example, a general linkifier is configured to make GitHub
-repository references like `zulip-desktop#123` link to issues in that
-repository within the `zulip` GitHub organization. A more specific
+repository references like `doer-desktop#123` link to issues in that
+repository within the `doer` GitHub organization. A more specific
 linkifier overrides that linkifier for a specific repository of
 interest (`django/django`) that is in a different organization.
 
@@ -187,19 +187,19 @@ interest (`django/django`) that is in a different organization.
   * URL template: `https://github.com/django/django/pull/{id}`
 * General linkifier
   * Pattern: `(?P<repo>[a-zA-Z0-9_-]+)#(?P<id>[0-9]+)`
-  * URL template: `https://github.com/zulip/{repo}/pull/{id}`
+  * URL template: `https://github.com/doer/{repo}/pull/{id}`
 * Example matching both linkifiers; specific linkifier takes precedence:
   * Original text: `django#123`
   * Automatically links to: `https://github.com/django/django/pull/123`
 * Example matching only the general linkifier:
-  * Original text: `zulip-desktop#123`
-  * Automatically links to: `https://github.com/zulip/zulip-desktop/pull/123`
+  * Original text: `doer-desktop#123`
+  * Automatically links to: `https://github.com/doer/doer-desktop/pull/123`
 
-<ZulipTip>
+<DoerTip>
   This set of patterns has overlapping regular expressions. Note that
   the general linkifier pattern would match `lorem#123` too. The specific
   linkifier will only get prioritized over the general linkifier if it is
   ordered before the more general pattern. This can be customized by
   dragging and dropping existing linkifiers into the desired order. New
   linkifiers will automatically be ordered last.
-</ZulipTip>
+</DoerTip>

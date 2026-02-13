@@ -18,7 +18,7 @@ class Client(models.Model):
         return self.name
 
     def default_read_by_sender(self) -> bool:
-        """Used to determine whether a message was sent by a full Zulip UI
+        """Used to determine whether a message was sent by a full Doer UI
         style client (and thus whether the message should be treated
         as sent by a human and automatically marked as read for the
         sender).  The purpose of this distinction is to ensure that
@@ -43,7 +43,7 @@ class Client(models.Model):
                 "android",
             )
             # Since the vast majority of messages are sent by humans
-            # in Zulip, treat test suite messages as such.
+            # in Doer, treat test suite messages as such.
             or (sending_client == "test suite" and settings.TEST_SUITE)
         )
 

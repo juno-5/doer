@@ -566,7 +566,7 @@ run_test("audio", ({mock_template}) => {
             '    <audio controls="" preload="metadata" src="http://zulip.zulipdev.com/user_uploads/w/ha/tever/inline.mp3" title="inline.mp3" class="media-audio-element"></audio>\n' +
             '    <a class="media-audio-download icon-button icon-button-square icon-button-neutral"\n' +
             '      aria-label="translated: Download" href="http://zulip.zulipdev.com/user_uploads/w/ha/tever/inline.mp3" download>\n' +
-            '        <i class="media-download-icon zulip-icon zulip-icon-download"></i>\n' +
+            '        <i class="media-download-icon doer-icon doer-icon-download"></i>\n' +
             "    </a>\n" +
             "</span>",
     );
@@ -596,7 +596,7 @@ run_test("timestamp", ({mock_template}) => {
     // Final asserts
     assert.equal(
         $timestamp.html(),
-        '<span class="timestamp-content-wrapper">\n    <i class="zulip-icon zulip-icon-clock markdown-timestamp-icon"></i>Thu, Jan 1, 1970, 12:00 AM</span>',
+        '<span class="timestamp-content-wrapper">\n    <i class="doer-icon doer-icon-clock markdown-timestamp-icon"></i>Thu, Jan 1, 1970, 12:00 AM</span>',
     );
     assert.equal($timestamp_invalid.text(), "never-been-set");
 });
@@ -618,14 +618,14 @@ run_test("timestamp-twenty-four-hour-time", ({mock_template, override}) => {
     rm.update_elements($content);
     assert.equal(
         $timestamp.html(),
-        '<span class="timestamp-content-wrapper">\n    <i class="zulip-icon zulip-icon-clock markdown-timestamp-icon"></i>Wed, Jul 15, 2020, 20:40</span>',
+        '<span class="timestamp-content-wrapper">\n    <i class="doer-icon doer-icon-clock markdown-timestamp-icon"></i>Wed, Jul 15, 2020, 20:40</span>',
     );
 
     override(user_settings, "twenty_four_hour_time", false);
     rm.update_elements($content);
     assert.equal(
         $timestamp.html(),
-        '<span class="timestamp-content-wrapper">\n    <i class="zulip-icon zulip-icon-clock markdown-timestamp-icon"></i>Wed, Jul 15, 2020, 8:40 PM</span>',
+        '<span class="timestamp-content-wrapper">\n    <i class="doer-icon doer-icon-clock markdown-timestamp-icon"></i>Wed, Jul 15, 2020, 8:40 PM</span>',
     );
 });
 

@@ -1,6 +1,6 @@
-# Zulip Azure DevOps integration
+# Doer Azure DevOps integration
 
-Get Azure DevOps notifications in Zulip!
+Get Azure DevOps notifications in Doer!
 
 {start_tabs}
 

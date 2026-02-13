@@ -1,4 +1,4 @@
-# Contributing to Zulip
+# Contributing to Doer
 
 ```{toctree}
 ---

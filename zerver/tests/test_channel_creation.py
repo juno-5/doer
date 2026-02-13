@@ -17,8 +17,8 @@ from zerver.lib.streams import (
     ensure_stream,
     list_to_streams,
 )
-from zerver.lib.test_classes import ZulipTestCase, get_topic_messages
-from zerver.lib.test_helpers import reset_email_visibility_to_everyone_in_zulip_realm
+from zerver.lib.test_classes import DoerTestCase, get_topic_messages
+from zerver.lib.test_helpers import reset_email_visibility_to_everyone_in_doer_realm
 from zerver.lib.types import UserGroupMembersData, UserGroupMembersDict
 from zerver.models import (
     Message,
@@ -36,11 +36,11 @@ from zerver.models.streams import StreamTopicsPolicyEnum, get_stream
 from zerver.models.users import active_non_guest_user_ids
 
 
-class TestCreateStreams(ZulipTestCase):
+class TestCreateStreams(DoerTestCase):
     def test_creating_streams(self) -> None:
         stream_names = ["new1", "new2", "new3"]
         stream_descriptions = ["des1", "des2", "des3"]
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
 
         # Test stream creation events.
@@ -148,7 +148,7 @@ class TestCreateStreams(ZulipTestCase):
         realm = user.realm
         self.login_user(user)
         subscriptions = [{"name": "new_stream", "description": "multi\nline\ndescription"}]
-        result = self.subscribe_via_post(user, subscriptions, subdomain="zulip")
+        result = self.subscribe_via_post(user, subscriptions, subdomain="doer")
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
         self.assertEqual(stream.description, "multi line description")
@@ -166,7 +166,7 @@ class TestCreateStreams(ZulipTestCase):
         # Test permalink not generated for description since user has no access to
         # the channel.
         subscriptions = [{"name": "stream1", "description": "#**core>testing**"}]
-        result = self.subscribe_via_post(user, subscriptions, subdomain="zulip")
+        result = self.subscribe_via_post(user, subscriptions, subdomain="doer")
         self.assert_json_success(result)
         stream = get_stream("stream1", realm)
 
@@ -177,7 +177,7 @@ class TestCreateStreams(ZulipTestCase):
         # Test permalink generated for the description since user now has access
         # to the channel.
         subscriptions = [{"name": "stream2", "description": "#**core>testing**"}]
-        result = self.subscribe_via_post(user, subscriptions, subdomain="zulip")
+        result = self.subscribe_via_post(user, subscriptions, subdomain="doer")
         self.assert_json_success(result)
         stream = get_stream("stream2", realm)
 
@@ -187,7 +187,7 @@ class TestCreateStreams(ZulipTestCase):
         )
 
     def test_history_public_to_subscribers_on_stream_creation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream_dicts: list[StreamDict] = [
             {
                 "name": "publicstream",
@@ -242,13 +242,13 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             {"is_default_stream": "true"},
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(result, "Insufficient permission")
 
         self.set_user_role(user_profile, UserProfile.ROLE_REALM_ADMINISTRATOR)
         result = self.subscribe_via_post(
-            user_profile, subscriptions, {"is_default_stream": "true"}, subdomain="zulip"
+            user_profile, subscriptions, {"is_default_stream": "true"}, subdomain="doer"
         )
         self.assert_json_success(result)
         default_stream = get_stream("default_stream", realm)
@@ -266,7 +266,7 @@ class TestCreateStreams(ZulipTestCase):
             {"is_default_stream": "true"},
             invite_only=True,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(result, "A default channel cannot be private.")
 
@@ -594,9 +594,9 @@ class TestCreateStreams(ZulipTestCase):
     def test_auto_mark_stream_created_message_as_read_for_stream_creator(self) -> None:
         # This test relies on email == delivery_email for
         # convenience.
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
-        realm = Realm.objects.get(name="Zulip Dev")
+        realm = Realm.objects.get(name="Doer Dev")
         iago = self.example_user("iago")
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
@@ -726,7 +726,7 @@ class TestCreateStreams(ZulipTestCase):
                 subscriptions,
                 extra_post_data,
                 invite_only=True,
-                subdomain="zulip",
+                subdomain="doer",
                 allow_fail=expect_fail,
             )
 
@@ -801,7 +801,7 @@ class TestCreateStreams(ZulipTestCase):
             user,
             subscriptions,
             extra_post_data,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -811,7 +811,7 @@ class TestCreateStreams(ZulipTestCase):
         stream.delete()
 
         subscriptions = [{"name": "new_stream", "description": "New stream"}]
-        result = self.subscribe_via_post(user, subscriptions, subdomain="zulip")
+        result = self.subscribe_via_post(user, subscriptions, subdomain="doer")
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
         if permission_config.default_group_name == "channel_creator":
@@ -841,7 +841,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -859,7 +859,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -885,7 +885,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -904,7 +904,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -920,7 +920,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_success(result)
         stream = get_stream("new_stream", realm)
@@ -939,7 +939,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         if permission_config.allow_everyone_group:
             self.assert_json_success(result)
@@ -964,7 +964,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(
             result,
@@ -972,7 +972,7 @@ class TestCreateStreams(ZulipTestCase):
         )
 
     def test_permission_settings_on_stream_creation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         members_system_group = NamedUserGroup.objects.get(
             name=SystemGroups.MEMBERS, realm_for_sharding=realm, is_system_group=True
         )
@@ -1078,7 +1078,7 @@ class TestCreateStreams(ZulipTestCase):
         }
         for policy_key, policy_dict in Stream.PERMISSION_POLICIES.items():
             channel_creator = self.example_user("desdemona")
-            subdomain = "zulip"
+            subdomain = "doer"
 
             new_channel_name = f"New {policy_key} channel"
             result = self.api_post(
@@ -1104,7 +1104,7 @@ class TestCreateStreams(ZulipTestCase):
             self.assertIn(policy_key_map[policy_key], channel_events_messages[0].content)
 
     def test_adding_channels_to_folder_during_creation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
         hamlet = self.example_user("hamlet")
         channel_folder = check_add_channel_folder(realm, "Backend", "", acting_user=iago)
@@ -1121,7 +1121,7 @@ class TestCreateStreams(ZulipTestCase):
             subscriptions,
             extra_post_data,
             allow_fail=True,
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(result, "Invalid channel folder ID")
 
@@ -1130,7 +1130,7 @@ class TestCreateStreams(ZulipTestCase):
             hamlet,
             subscriptions,
             extra_post_data,
-            subdomain="zulip",
+            subdomain="doer",
         )
         stream = get_stream("new_stream", realm)
         self.assertEqual(stream.folder, channel_folder)
@@ -1146,7 +1146,7 @@ class TestCreateStreams(ZulipTestCase):
             hamlet,
             subscriptions,
             extra_post_data,
-            subdomain="zulip",
+            subdomain="doer",
         )
         stream = get_stream("new_stream_3", realm)
         self.assertIsNone(stream.folder)
@@ -1223,7 +1223,7 @@ class TestCreateStreams(ZulipTestCase):
 
         do_change_realm_plan_type(realm, Realm.PLAN_TYPE_LIMITED, acting_user=admin)
         with self.assertRaisesRegex(
-            JsonableError, "Available on Zulip Cloud Standard. Upgrade to access."
+            JsonableError, "Available on Doer Cloud Standard. Upgrade to access."
         ):
             list_to_streams(
                 streams_raw, owner, autocreate=True, request_settings_dict=request_settings_dict
@@ -1247,7 +1247,7 @@ class TestCreateStreams(ZulipTestCase):
         Check that different anonymous group is used for each setting when creating
         multiple streams in a single request.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
 

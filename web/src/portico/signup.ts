@@ -293,7 +293,7 @@ $(() => {
             case settings_config.email_address_visibility_values.admins_only.code: {
                 selected_option_text = $t({
                     defaultMessage:
-                        "Administrators of this Zulip organization will be able to see this email address.",
+                        "Administrators of this Doer organization will be able to see this email address.",
                 });
 
                 break;
@@ -301,7 +301,7 @@ $(() => {
             case settings_config.email_address_visibility_values.moderators.code: {
                 selected_option_text = $t({
                     defaultMessage:
-                        "Administrators and moderators this Zulip organization will be able to see this email address.",
+                        "Administrators and moderators this Doer organization will be able to see this email address.",
                 });
 
                 break;
@@ -309,7 +309,7 @@ $(() => {
             case settings_config.email_address_visibility_values.nobody.code: {
                 selected_option_text = $t({
                     defaultMessage:
-                        "Nobody in this Zulip organization will be able to see this email address.",
+                        "Nobody in this Doer organization will be able to see this email address.",
                 });
 
                 break;
@@ -317,7 +317,7 @@ $(() => {
             default: {
                 selected_option_text = $t({
                     defaultMessage:
-                        "Other users in this Zulip organization will be able to see this email address.",
+                        "Other users in this Doer organization will be able to see this email address.",
                 });
             }
         }
@@ -346,13 +346,13 @@ $(() => {
         }
     });
 
-    $<HTMLSelectElement>("#how-realm-creator-found-zulip select").on("change", function () {
+    $<HTMLSelectElement>("#how-realm-creator-found-doer select").on("change", function () {
         const elements = new Map([
-            ["other", "how-realm-creator-found-zulip-other"],
-            ["ad", "how-realm-creator-found-zulip-where-ad"],
-            ["existing_user", "how-realm-creator-found-zulip-which-organization"],
-            ["review_site", "how-realm-creator-found-zulip-review-site"],
-            ["ai_chatbot", "how-realm-creator-found-zulip-which-ai-chatbot"],
+            ["other", "how-realm-creator-found-doer-other"],
+            ["ad", "how-realm-creator-found-doer-where-ad"],
+            ["existing_user", "how-realm-creator-found-doer-which-organization"],
+            ["review_site", "how-realm-creator-found-doer-review-site"],
+            ["ai_chatbot", "how-realm-creator-found-doer-which-ai-chatbot"],
         ]);
 
         const hideElement = (element: string): void => {

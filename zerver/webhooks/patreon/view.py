@@ -154,7 +154,7 @@ def api_patreon_webhook(
 ) -> HttpResponse:
     header_event = get_event_header(request, "X-Patreon-Event", "Patreon")
 
-    event_name = get_zulip_event_name(header_event, payload)
+    event_name = get_doer_event_name(header_event, payload)
     if event_name is None:
         # See IGNORED_EVENTS.
         return json_success(request)
@@ -172,7 +172,7 @@ def api_patreon_webhook(
     return json_success(request)
 
 
-def get_zulip_event_name(
+def get_doer_event_name(
     header_event: str,
     payload: WildValue,
 ) -> str | None:

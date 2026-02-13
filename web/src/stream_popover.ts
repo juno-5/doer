@@ -491,7 +491,7 @@ export async function build_move_topic_to_stream_popover(
         const new_topic_name = params.new_topic_name?.trim();
         const old_topic_name = params.old_topic_name.trim();
 
-        // Unlike most topic comparisons in Zulip, we intentionally do
+        // Unlike most topic comparisons in Doer, we intentionally do
         // a case-sensitive comparison, since adjusting the
         // capitalization of a topic is a valid operation.
         // new_topic_name can be undefined when the new topic input is

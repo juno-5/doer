@@ -1,12 +1,12 @@
 import orjson
 
 from zerver.lib.subscription_info import gather_subscriptions, gather_subscriptions_helper
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_subscription
 from zerver.models import Recipient, Subscription
 
 
-class SubscriptionPropertiesTest(ZulipTestCase):
+class SubscriptionPropertiesTest(DoerTestCase):
     def test_set_stream_color(self) -> None:
         """
         A POST request to /api/v1/users/me/subscriptions/properties with stream_id and

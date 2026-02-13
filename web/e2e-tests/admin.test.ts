@@ -71,8 +71,8 @@ async function test_change_signup_announcements_stream(page: Page): Promise<void
     await submit_announcements_stream_settings(page);
 }
 
-async function test_change_zulip_update_announcements_stream(page: Page): Promise<void> {
-    await page.click("#realm_zulip_update_announcements_stream_id_widget.dropdown-widget-button");
+async function test_change_doer_update_announcements_stream(page: Page): Promise<void> {
+    await page.click("#realm_doer_update_announcements_stream_id_widget.dropdown-widget-button");
     await page.waitForSelector(".dropdown-list-container", {
         visible: true,
     });
@@ -142,28 +142,28 @@ async function test_add_emoji(page: Page): Promise<void> {
 
     const emoji_upload_handle = await page.$("input#emoji_file_input");
     assert.ok(emoji_upload_handle);
-    await emoji_upload_handle.uploadFile("static/images/logo/zulip-icon-128x128.png");
+    await emoji_upload_handle.uploadFile("static/images/logo/doer-icon-128x128.png");
     await page.click("#add-custom-emoji-modal .dialog_submit_button");
     await common.wait_for_micromodal_to_close(page);
 
-    await page.waitForSelector("tr#emoji_zulip_logo", {visible: true});
+    await page.waitForSelector("tr#emoji_doer_logo", {visible: true});
     assert.strictEqual(
-        await common.get_text_from_selector(page, "tr#emoji_zulip_logo .emoji_name"),
+        await common.get_text_from_selector(page, "tr#emoji_doer_logo .emoji_name"),
         "zulip logo",
         "Emoji name incorrectly saved.",
     );
-    await page.waitForSelector("tr#emoji_zulip_logo img", {visible: true});
+    await page.waitForSelector("tr#emoji_doer_logo img", {visible: true});
 }
 
 async function test_delete_emoji(page: Page): Promise<void> {
-    await page.click("tr#emoji_zulip_logo button.delete");
+    await page.click("tr#emoji_doer_logo button.delete");
 
     await common.wait_for_micromodal_to_open(page);
     await page.click("#confirm_deactivate_custom_emoji_modal .dialog_submit_button");
     await common.wait_for_micromodal_to_close(page);
 
     // assert the emoji is deleted.
-    await page.waitForSelector("tr#emoji_zulip_logo", {hidden: true});
+    await page.waitForSelector("tr#emoji_doer_logo", {hidden: true});
 }
 
 async function test_custom_realm_emoji(page: Page): Promise<void> {
@@ -178,7 +178,7 @@ async function test_custom_realm_emoji(page: Page): Promise<void> {
 async function test_upload_realm_icon_image(page: Page): Promise<void> {
     const upload_handle = await page.$("#realm-icon-upload-widget input.image_file_input");
     assert.ok(upload_handle);
-    await upload_handle.uploadFile("static/images/logo/zulip-icon-128x128.png");
+    await upload_handle.uploadFile("static/images/logo/doer-icon-128x128.png");
 
     await common.wait_for_micromodal_to_open(page);
     await page.click("#uppy-editor .dialog_submit_button");
@@ -244,7 +244,7 @@ async function admin_test(page: Page): Promise<void> {
     await common.manage_organization(page);
     await test_change_new_stream_announcements_stream(page);
     await test_change_signup_announcements_stream(page);
-    await test_change_zulip_update_announcements_stream(page);
+    await test_change_doer_update_announcements_stream(page);
 
     await test_organization_permissions(page);
     // Currently, Firefox (with puppeteer) does not support file upload:

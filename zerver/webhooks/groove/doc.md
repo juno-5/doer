@@ -1,6 +1,6 @@
-# Zulip Groove integration
+# Doer Groove integration
 
-Get Zulip notifications for your Groove events!
+Get Doer notifications for your Groove events!
 
 {start_tabs}
 

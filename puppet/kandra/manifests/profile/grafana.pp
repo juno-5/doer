@@ -2,16 +2,16 @@
 #
 class kandra::profile::grafana inherits kandra::profile::base {
 
-  include zulip::supervisor
+  include doer::supervisor
 
-  $version = $zulip::common::versions['grafana']['version']
+  $version = $doer::common::versions['grafana']['version']
   $dir = "/srv/zulip-grafana-${version}"
   $bin = "${dir}/bin/grafana-server"
   $data_dir = '/var/lib/grafana'
 
-  zulip::external_dep { 'grafana':
+  doer::external_dep { 'grafana':
     version        => $version,
-    url            => "https://dl.grafana.com/oss/release/grafana-${version}.linux-${zulip::common::goarch}.tar.gz",
+    url            => "https://dl.grafana.com/oss/release/grafana-${version}.linux-${doer::common::goarch}.tar.gz",
     tarball_prefix => "grafana-v${version}",
     bin            => [$bin],
     cleanup_after  => [Service[supervisor]],
@@ -43,7 +43,7 @@ class kandra::profile::grafana inherits kandra::profile::base {
 
   kandra::teleport::application { 'monitoring': port => '3000' }
   kandra::firewall_allow { 'grafana': port => '3000' }
-  file { "${zulip::common::supervisor_conf_dir}/grafana.conf":
+  file { "${doer::common::supervisor_conf_dir}/grafana.conf":
     ensure  => file,
     require => [
       Package[supervisor],

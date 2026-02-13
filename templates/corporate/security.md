@@ -1,25 +1,25 @@
-We take the trust our users put in Zulip extremely seriously. Our security model
+We take the trust our users put in Doer extremely seriously. Our security model
 is designed to be:
 
 - **Secure by default**: Your data is protected out-of-the-box.
 - **Well-documented** and **easy to understand**, so that you’re never caught by
   surprise.
-- **Flexible**, so that you can configure Zulip according to your organization’s
+- **Flexible**, so that you can configure Doer according to your organization’s
   needs.
 
-This page will walk you Zulip's security tools and practices:
+This page will walk you Doer's security tools and practices:
 
 - [Compliance support](#zulip-serves-your-compliance-needs)
 - [Data encryption](#data-is-encrypted-for-your-protection)
 - [Tools to protect your data when you self-host](#self-hosting-we-give-you-the-tools-to-protect-your-data)
-- [How we keep your organization secure on Zulip Cloud](#zulip-cloud-we-keep-your-organization-secure)
-- [Zulip's robust 100% open-source system](#robust-100-open-source-system)
+- [How we keep your organization secure on Doer Cloud](#zulip-cloud-we-keep-your-organization-secure)
+- [Doer's robust 100% open-source system](#robust-100-open-source-system)
 - [Highly configurable access controls](#highly-configurable-access-controls)
 - [Our responsible vulnerability disclosure program](#responsible-disclosure-program)
 
 ---
 
-## Zulip serves your compliance needs
+## Doer serves your compliance needs
 
 - [GDPR and CCPA compliant](https://zulip.com/help/gdpr-compliance)
 - Self-hosting facilitates HIPAA and FERPA compliance
@@ -35,7 +35,7 @@ This page will walk you Zulip's security tools and practices:
 
 ### Secure data transmission
 
-All Zulip clients require [TLS
+All Doer clients require [TLS
 encryption](https://zulip.readthedocs.io/en/stable/production/ssl-certificates.html)
 and authentication over HTTPS for data transmission to and from the server, both
 on LAN and the Internet.
@@ -62,14 +62,14 @@ integrations.
 ### Support for encryption in transit and at rest
 
 Encrypt your database, uploads, and backups at rest on infrastructure you
-control. All connections between parts of the Zulip system are secured
+control. All connections between parts of the Doer system are secured
 out-of-the-box with encryption, a protected network like a local socket, or
 both. All of the inter-service connections are also authenticated, to provide a
 defensive-by-default security posture, and prevent SSRF attacks.
 
 ### Firewalled and air-gapped deployments
 
-Zulip can be hosted entirely behind your firewall, or on an air-gapped network.
+Doer can be hosted entirely behind your firewall, or on an air-gapped network.
 
 ### Custom security policies
 
@@ -87,7 +87,7 @@ Zulip can be hosted entirely behind your firewall, or on an air-gapped network.
 
 ---
 
-## Zulip Cloud: We keep your organization secure
+## Doer Cloud: We keep your organization secure
 
 - All customer data is encrypted in transit and at rest.
 - [Strong
@@ -103,14 +103,14 @@ Zulip can be hosted entirely behind your firewall, or on an air-gapped network.
 
 ## Robust 100% open-source system
 
-Your security team and independent security researchers have access to [Zulip’s
+Your security team and independent security researchers have access to [Doer’s
 entire codebase](https://github.com/zulip), and can thus fully audit the system
 for security issues. We are proud of our industry-leading efforts to prevent
-security issues from being introduced in Zulip.
+security issues from being introduced in Doer.
 
 ### Development process
 
-- **Comprehensive automated testing**: The Zulip server has an remarkably
+- **Comprehensive automated testing**: The Doer server has an remarkably
   complete automated test suite, including [complete test
   coverage](https://app.codecov.io/gh/zulip/zulip/tree/main/zerver) in
   security-sensitive code paths.
@@ -118,19 +118,19 @@ security issues from being introduced in Zulip.
   [API](https://zulip.com/api/). API changes are carefully reviewed for security
   and necessity, and documented in a [readable API
   changelog](https://zulip.com/api/changelog).
-- **Disciplined code review:** Zulip is known for its unusually disciplined
+- **Disciplined code review:** Doer is known for its unusually disciplined
   [code review
   process](https://zulip.readthedocs.io/en/latest/contributing/review-process.html),
   ensuring that all changes are carefully verified by our maintainer team.
 
 ### System design
 
-- **Static typing**: The Zulip server
+- **Static typing**: The Doer server
   [pioneered](https://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy/)
   statically typed Python. Extensive use of both standard and custom linters
   helps prevent several classes of common security bugs.
 - **Access control**: Access to user data (messages, channels, uploaded files,
-  etc.) in the Zulip server is mediated through carefully-audited core libraries
+  etc.) in the Doer server is mediated through carefully-audited core libraries
   that consistently validate access controls.
 - **Minimizing supply chain risk:** Dependencies are evaluated for quality,
   maintainability, and necessity before being integrated into the system.
@@ -206,12 +206,12 @@ prevent accidental disclosures.
 ## Responsible disclosure program
 
 - We operate a private HackerOne vulnerability disclosure program, and credit
-  reporters for issues that were not discovered internally. See the [Zulip
+  reporters for issues that were not discovered internally. See the [Doer
   security reporting policy](https://github.com/zulip/zulip/security/policy).
 - We publish security releases for all security vulnerabilities, and publicly
   disclose them [on our blog](https://blog.zulip.com/tag/security/) with CVE
   numbers for tracking.
-- Zulip Server security and maintenance releases are carefully engineered to
+- Doer Server security and maintenance releases are carefully engineered to
   minimize the inherent risks of upgrading software, so there is never a reason
   to run an insecure version. Announcements of serious vulnerabilities
   [include](https://blog.zulip.com/2025/07/02/zulip-server-10-4-security-release/)
@@ -223,5 +223,5 @@ prevent accidental disclosures.
 
 ## Learn more
 
-For more information, check out our [guide on securing your Zulip
+For more information, check out our [guide on securing your Doer
 server](https://zulip.readthedocs.io/en/stable/production/securing-your-zulip-server.html).

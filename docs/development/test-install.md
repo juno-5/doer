@@ -1,12 +1,12 @@
 # Testing the installer
 
-Zulip's install process is tested as part of [its continuous
+Doer's install process is tested as part of [its continuous
 integrations suite][ci], but that only tests the most common
 configurations; when making changes to more complicated [installation
-options][installer-docs], Zulip provides tooling to repeatedly test
+options][installer-docs], Doer provides tooling to repeatedly test
 the installation process in a clean environment each time.
 
-[ci]: https://github.com/zulip/zulip/actions/workflows/production-suite.yml?query=branch%3Amain
+[ci]: https://github.com/doer/doer/actions/workflows/production-suite.yml?query=branch%3Amain
 [installer-docs]: ../production/install.md
 
 ## Configuring
@@ -40,22 +40,22 @@ checkout, so we build a tarball of one of those first:
 
 This will produce a file in /tmp, which it will print out the path to
 as the last step; for example,
-`/tmp/tmp.fepqqNBWxp/zulip-server-test-installer.tar.gz`
+`/tmp/tmp.fepqqNBWxp/doer-server-test-installer.tar.gz`
 
 Next, unpack that file into a local directory; we will make any
 changes we want in our source checkout and copy them into this
 directory. The test installer needs the release directory to be named
-`zulip-server`, so we rename it and move it appropriately. In the
+`doer-server`, so we rename it and move it appropriately. In the
 first line, you'll need to substitute the actual path that you got for
 the tarball, above:
 
 ```bash
-tar xzf /tmp/tmp.fepqqNBWxp/zulip-server-test-installer.tar.gz
-mkdir zulip-test-installer
-mv zulip-server-test-installer zulip-test-installer/zulip-server
+tar xzf /tmp/tmp.fepqqNBWxp/doer-server-test-installer.tar.gz
+mkdir doer-test-installer
+mv doer-server-test-installer doer-test-installer/doer-server
 ```
 
-You should delete and re-create this `zulip-test-installer` directory
+You should delete and re-create this `doer-test-installer` directory
 (using these steps) if you are working on a different installer
 branch, or a significant time has passed since you last used it.
 
@@ -72,8 +72,8 @@ call:
 ```bash
 sudo ./tools/test-install/install \
   -r jammy \
-  ./zulip-test-installer/ \
-  --hostname=zulip.example.net \
+  ./doer-test-installer/ \
+  --hostname=doer.example.net \
   --email=username@example.net
 ```
 
@@ -97,7 +97,7 @@ After using `lxc-ls` to list containers, you can choose one of them
 and connect to its terminal:
 
 ```bash
-sudo lxc-attach --clear-env -n zulip-install-jammy-PUvff
+sudo lxc-attach --clear-env -n doer-install-jammy-PUvff
 ```
 
 ### Stopping and destroying containers
@@ -112,7 +112,7 @@ sudo ./tools/test-install/destroy-all -f
 To destroy just one container:
 
 ```bash
-sudo lxc-destroy -f -n zulip-install-jammy-PUvff
+sudo lxc-destroy -f -n doer-install-jammy-PUvff
 ```
 
 ### Iterating on the installer
@@ -123,11 +123,11 @@ which will start up a new container. Here, we update just the
 `scripts` and `puppet` directories of the release directory:
 
 ```bash
-rsync -az scripts puppet zulip-test-installer/zulip-server/
+rsync -az scripts puppet doer-test-installer/doer-server/
 
 sudo ./tools/test-install/install \
  -r jammy \
- ./zulip-test-installer/ \
- --hostname=zulip.example.net \
+ ./doer-test-installer/ \
+ --hostname=doer.example.net \
  --email=username@example.net
 ```

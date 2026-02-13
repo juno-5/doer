@@ -29,11 +29,11 @@ if settings.ZILENCER_ENABLED:
         RemoteInstallationCount,
         RemoteRealm,
         RemoteRealmCount,
-        RemoteZulipServer,
+        RemoteDoerServer,
     )
 
 
-logger = logging.getLogger("zulip.analytics")
+logger = logging.getLogger("doer.analytics")
 
 
 # You can't subtract timedelta.max from a datetime, so use this instead
@@ -324,7 +324,7 @@ def do_aggregate_to_summary_table(
 
 # called from zerver.actions; should not throw any errors
 def do_increment_logging_stat(
-    model_object_for_bucket: Union[Realm, UserProfile, Stream, "RemoteRealm", "RemoteZulipServer"],
+    model_object_for_bucket: Union[Realm, UserProfile, Stream, "RemoteRealm", "RemoteDoerServer"],
     stat: CountStat,
     subgroup: str | int | bool | None,
     event_time: datetime,
@@ -355,7 +355,7 @@ def do_increment_logging_stat(
         }
         conflict_args = ["stream_id"]
     elif table == RemoteInstallationCount:
-        assert isinstance(model_object_for_bucket, RemoteZulipServer)
+        assert isinstance(model_object_for_bucket, RemoteDoerServer)
         id_args = {"server_id": model_object_for_bucket.id, "remote_id": None}
         conflict_args = ["server_id"]
     elif table == RemoteRealmCount:

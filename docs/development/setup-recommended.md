@@ -1,18 +1,18 @@
 ## Recommended environment setup tutorial
 
 This section guides first-time contributors through installing the
-Zulip development environment on Windows, macOS, and Linux.
+Doer development environment on Windows, macOS, and Linux.
 
-The recommended method for installing the Zulip development environment is
+The recommended method for installing the Doer development environment is
 to use WSL 2 on Windows, and Vagrant with Docker on macOS and Linux.
 
 All of these recommended methods work by creating a container or VM
-for the Zulip server and related services, with the Git repository
+for the Doer server and related services, with the Git repository
 containing your source code mounted inside it. This strategy allows
 the environment to be as reliable and portable as possible. The
 specific technologies (Vagrant/Docker and WSL 2) were chosen based on
 what technologies have been most reliable through our experience
-supporting the thousands of people who've set up the Zulip development
+supporting the thousands of people who've set up the Doer development
 environment.
 
 Contents:
@@ -20,7 +20,7 @@ Contents:
 - [Requirements](#requirements)
 - [Step 0: Set up Git & GitHub](#step-0-set-up-git--github)
 - [Step 1: Install prerequisites](#step-1-install-prerequisites)
-- [Step 2: Get Zulip code](#step-2-get-zulip-code)
+- [Step 2: Get Doer code](#step-2-get-doer-code)
 - [Step 3: Start the development environment](#step-3-start-the-development-environment)
 - [Step 4: Developing](#step-4-developing)
 - [Troubleshooting and common errors](#troubleshooting-and-common-errors)
@@ -30,7 +30,7 @@ Contents:
 
 ### Requirements
 
-Installing the Zulip development environment requires downloading several
+Installing the Doer development environment requires downloading several
 hundred megabytes of dependencies. You will need an active internet
 connection throughout the entire installation processes. (See
 [Specifying a proxy](#specifying-a-proxy) if you need a proxy to access
@@ -99,7 +99,7 @@ GitHub account using
 :::{tab-item} Windows
 :sync: os-windows
 
-Zulip's development environment is most easily set up on Windows using
+Doer's development environment is most easily set up on Windows using
 the Windows Subsystem for Linux ([WSL
 2](https://learn.microsoft.com/en-us/windows/wsl/compare-versions))
 installation method described here. We require version 0.67.6+ of WSL 2.
@@ -112,12 +112,12 @@ installation method described here. We require version 0.67.6+ of WSL 2.
    2](https://docs.microsoft.com/en-us/windows/wsl/setup/environment),
    which includes installing an Ubuntu WSL distribution.
 
-1. **Create a new WSL instance for Zulip development**.
+1. **Create a new WSL instance for Doer development**.
    You can refer [this article](https://cloudbytes.dev/snippets/how-to-install-multiple-instances-of-ubuntu-in-wsl2)
    for instructions on how to do so. Using an existing instance will
    probably work, but a fresh distribution is recommended if you
    previously installed other software like `node` in your WSL environment that
-   might conflict with the Zulip environment.
+   might conflict with the Doer environment.
 
 1. It is required to enable `systemd` for WSL 2 to manage the database, cache and other services.
    To configure it, please follow [these instructions](https://learn.microsoft.com/en-us/windows/wsl/wsl-config#systemd-support).
@@ -154,7 +154,7 @@ installation method described here. We require version 0.67.6+ of WSL 2.
 
 1. Run the command below to make sure you are inside the WSL disk and not
    in a Windows mounted disk. You will run into permission issues if you
-   run `./tools/provision` from `zulip` in a Windows mounted disk.
+   run `./tools/provision` from `doer` in a Windows mounted disk.
 
    ```console
    $ cd ~  # or cd /home/USERNAME
@@ -229,31 +229,31 @@ docker distribution, you can follow
 
 ::::
 
-### Step 2: Get Zulip code
+### Step 2: Get Doer code
 
-1. In your browser, visit <https://github.com/zulip/zulip>
+1. In your browser, visit <https://github.com/doer/doer>
    and click the **Fork** button. You will need to be logged in to GitHub to
    do this.
 2. Open Terminal (macOS/Linux) or Git BASH (Windows; must
    **run as an Administrator**).
 3. In Terminal/Git BASH,
-   [clone your fork of the Zulip repository](../git/cloning.md#step-1b-clone-to-your-machine) and
-   [connect the Zulip upstream repository](../git/cloning.md#step-1c-connect-your-fork-to-zulip-upstream):
+   [clone your fork of the Doer repository](../git/cloning.md#step-1b-clone-to-your-machine) and
+   [connect the Doer upstream repository](../git/cloning.md#step-1c-connect-your-fork-to-doer-upstream):
 
 ```console
-$ git clone --config pull.rebase git@github.com:YOURUSERNAME/zulip.git
-$ cd zulip
-$ git remote add -f upstream https://github.com/zulip/zulip.git
+$ git clone --config pull.rebase git@github.com:YOURUSERNAME/doer.git
+$ cd doer
+$ git remote add -f upstream https://github.com/doer/doer.git
 ```
 
-This will create a `zulip` directory and download the Zulip code into it.
+This will create a `doer` directory and download the Doer code into it.
 
 Don't forget to replace `YOURUSERNAME` with your Git username. You will see
 something like:
 
 ```console
-$ git clone --config pull.rebase git@github.com:YOURUSERNAME/zulip.git
-Cloning into 'zulip'...
+$ git clone --config pull.rebase git@github.com:YOURUSERNAME/doer.git
+Cloning into 'doer'...
 remote: Counting objects: 73571, done.
 remote: Compressing objects: 100% (2/2), done.
 remote: Total 73571 (delta 1), reused 0 (delta 0), pack-reused 73569
@@ -270,14 +270,14 @@ Checking out files: 100% (1912/1912), done.
 :::{tab-item} Windows (WSL)
 :sync: os-windows
 
-Run the following to install the Zulip development environment and
+Run the following to install the Doer development environment and
 start it. (If Windows Firewall creates popups to block services,
 simply click **Allow access**.)
 
 ```console
-$ # Install/update the Zulip development environment
+$ # Install/update the Doer development environment
 $ ./tools/provision
-$ # Enter the Zulip Python environment
+$ # Enter the Doer Python environment
 $ source .venv/bin/activate
 $ # Start the development server
 $ ./tools/run-dev
@@ -290,11 +290,11 @@ you can try running `./tools/provision` again.
 :::{tab-item} Windows (VM)
 :sync: os-windows-vm
 
-Change into the zulip directory and tell Vagrant to start the Zulip
+Change into the doer directory and tell Vagrant to start the Doer
 development environment with `vagrant up`:
 
 ```console
-$ cd zulip
+$ cd doer
 $ vagrant plugin install vagrant-vbguest
 $ vagrant up --provider=virtualbox
 ```
@@ -316,11 +316,11 @@ normal and is not a problem.
 :::{tab-item} macOS
 :sync: os-mac
 
-Change into the zulip directory and tell Vagrant to start the Zulip
+Change into the doer directory and tell Vagrant to start the Doer
 development environment with `vagrant up`:
 
 ```console
-$ cd zulip
+$ cd doer
 $ vagrant up --provider=docker
 ```
 
@@ -348,11 +348,11 @@ whenever you need to re-provision.
 :::{tab-item} Ubuntu/Debian
 :sync: os-ubuntu
 
-Change into the zulip directory and tell Vagrant to start the Zulip
+Change into the doer directory and tell Vagrant to start the Doer
 development environment with `vagrant up`:
 
 ```console
-$ cd zulip
+$ cd doer
 $ vagrant up --provider=docker
 ```
 
@@ -369,11 +369,11 @@ $ vagrant up --provider=docker
 :::{tab-item} Fedora
 :sync: os-fedora
 
-Change into the zulip directory and tell Vagrant to start the Zulip
+Change into the doer directory and tell Vagrant to start the Doer
 development environment with `vagrant up`:
 
 ```console
-$ cd zulip
+$ cd doer
 $ vagrant up --provider=docker
 ```
 
@@ -394,18 +394,18 @@ $ vagrant up --provider=docker
 #### Where to edit files
 
 You'll work by editing files on your host machine, in the directory where you
-cloned Zulip. Use your favorite editor (Sublime, Atom, Vim, Emacs, Notepad++,
+cloned Doer. Use your favorite editor (Sublime, Atom, Vim, Emacs, Notepad++,
 etc.).
 
-When you save changes they will be synced automatically to the Zulip
+When you save changes they will be synced automatically to the Doer
 development environment on the virtual machine/container.
 
-Each component of the Zulip development server will automatically
+Each component of the Doer development server will automatically
 restart itself or reload data appropriately when you make changes. So,
 to see your changes, all you usually have to do is reload your
 browser. More details on how this works are available below.
 
-Zulip's whitespace rules are all enforced by linters, so be sure to
+Doer's whitespace rules are all enforced by linters, so be sure to
 run `tools/lint` often to make sure you're following our coding style
 (or use `tools/setup-git-repo` to run it on just the changed files
 automatically whenever you commit).
@@ -480,7 +480,7 @@ output.
 
 When you're ready to commit or push changes via Git, you will do this by
 running Git commands in Terminal (macOS/Linux) or Git BASH (Windows) in the
-directory where you cloned Zulip on your main machine.
+directory where you cloned Doer on your main machine.
 
 If you're new to working with Git/GitHub, check out our [Git & GitHub
 guide][rtd-git-guide].
@@ -492,21 +492,21 @@ guide][rtd-git-guide].
 :::{tab-item} Windows (WSL)
 :sync: os-windows
 
-If after rebasing onto a new version of the Zulip server, you receive
-new errors while starting the Zulip server or running tests, this is
-probably not because Zulip's `main` branch is broken. Instead, this
+If after rebasing onto a new version of the Doer server, you receive
+new errors while starting the Doer server or running tests, this is
+probably not because Doer's `main` branch is broken. Instead, this
 is likely because we've recently merged changes to the development
 environment provisioning process that you need to apply to your
 development environment. To update your environment, you'll need to
-re-provision using `tools/provision` from your Zulip checkout; this
+re-provision using `tools/provision` from your Doer checkout; this
 should complete in about a minute.
 
 After provisioning, you'll want to
-[(re)start the Zulip development server](/development/setup-recommended.md#step-3-start-the-development-environment).
+[(re)start the Doer development server](/development/setup-recommended.md#step-3-start-the-development-environment).
 
 If you run into any trouble, [#provision
 help](https://chat.zulip.org/#narrow/channel/21-provision-help) in the
-[Zulip development community
+[Doer development community
 server](https://zulip.com/development-community/) is a great place to ask for
 help.
 
@@ -665,9 +665,9 @@ Alternatively, you can use a command to terminate/shutdown your WSL2 environment
 :sync: os-windows
 
 On Windows with WSL 2, to resume developing you just need to open a new Git
-BASH window. Then change into your `zulip` folder and verify the Python
-environment was properly activated (you should see `(zulip-server)`). If the
-`(zulip-server)` part is missing, run:
+BASH window. Then change into your `doer` folder and verify the Python
+environment was properly activated (you should see `(doer-server)`). If the
+`(doer-server)` part is missing, run:
 
 ```console
 $ source .venv/bin/activate
@@ -715,7 +715,7 @@ $ source .venv/bin/activate
 
 ### Next steps
 
-Next, read the following to learn more about developing for Zulip:
+Next, read the following to learn more about developing for Doer:
 
 - [Git & GitHub guide][rtd-git-guide]
 - [Using the development environment][rtd-using-dev-env]
@@ -729,23 +729,23 @@ Below you'll find a list of common errors and their solutions. Most
 issues are resolved by just provisioning again by running
 `./tools/provision` (from `/srv/zulip`) inside the Vagrant guest (or
 equivalently `vagrant provision` from outside) or by running
-`./tools/provision` in `~/zulip` inside the WSL instance.
+`./tools/provision` in `~/doer` inside the WSL instance.
 
 If these solutions aren't working for you or you encounter an issue not
 documented below, there are a few ways to get further help:
 
 - Ask in [#provision help](https://chat.zulip.org/#narrow/channel/21-provision-help)
-  in the [Zulip development community server](https://zulip.com/development-community/).
-- [File an issue](https://github.com/zulip/zulip/issues).
+  in the [Doer development community server](https://zulip.com/development-community/).
+- [File an issue](https://github.com/doer/doer/issues).
 
 When reporting your issue, please include the following information:
 
 - The host operating system
 - The installation method (e.g., Vagrant or WSL)
 - Whether or not you are using a proxy
-- A copy of Zulip's `vagrant` provisioning logs, available in
+- A copy of Doer's `vagrant` provisioning logs, available in
   `/var/log/provision.log` on your virtual machine or
-  `~/zulip/var/log/provision.log` on your WSL instance. If you
+  `~/doer/var/log/provision.log` on your WSL instance. If you
   choose to post just the error output, please include the
   **beginning of the error output**, not just the last few lines.
 
@@ -823,7 +823,7 @@ downloading many packages from the Ubuntu archive. The Ubuntu cloud
 images use the global mirror `http://archive.ubuntu.com/ubuntu/` by
 default, but you may find that you can speed up the download by using
 a local mirror closer to your location. To do this, create
-`~/.zulip-vagrant-config` and add a line like this, replacing the URL
+`~/.doer-vagrant-config` and add a line like this, replacing the URL
 as appropriate:
 
 ```text
@@ -840,7 +840,7 @@ First, install the Vagrant plugin `vagrant-proxyconf`:
 $ vagrant plugin install vagrant-proxyconf
 ```
 
-Then create `~/.zulip-vagrant-config` and add the following lines to
+Then create `~/.doer-vagrant-config` and add the following lines to
 it (with the appropriate values in it for your proxy):
 
 ```text
@@ -869,13 +869,13 @@ server. If you ran `vagrant up` before and failed, you'll need to run
 `vagrant destroy` first to clean up the failed installation.
 
 If you no longer want to use proxy with Vagrant, you can remove the
-`HTTP_PROXY` and `HTTPS_PROXY` lines in `~/.zulip-vagrant-config` and
+`HTTP_PROXY` and `HTTPS_PROXY` lines in `~/.doer-vagrant-config` and
 then do a `vagrant reload`.
 
 ### Using a different port for Vagrant
 
 You can also change the port on the host machine that Vagrant uses by
-adding to your `~/.zulip-vagrant-config` file. E.g., if you set:
+adding to your `~/.doer-vagrant-config` file. E.g., if you set:
 
 ```text
 HOST_PORT 9971
@@ -886,7 +886,7 @@ http://localhost:9971/ to connect to your development server.
 
 If you'd like to be able to connect to your development environment from other
 machines than the VM host, you can manually set the host IP address in the
-`~/.zulip-vagrant-config` file as well. For example, if you set:
+`~/.doer-vagrant-config` file as well. For example, if you set:
 
 ```text
 HOST_IP_ADDR 0.0.0.0
@@ -908,10 +908,10 @@ Our default Vagrant settings allocate 2 CPUs with 2 GiB of memory for
 the guest, which is sufficient to run everything in the development
 environment. If your host system has more CPUs, or you have enough
 RAM that you'd like to allocate more than 2 GiB to the guest, you can
-improve performance of the Zulip development environment by allocating
+improve performance of the Doer development environment by allocating
 more resources.
 
-To do so, create a `~/.zulip-vagrant-config` file containing the
+To do so, create a `~/.doer-vagrant-config` file containing the
 following lines:
 
 ```text
@@ -934,7 +934,7 @@ guest VM with your new configuration.
 
 If at any time you wish to revert back to the default settings, simply
 remove the `GUEST_CPUS` and `GUEST_MEMORY_MB` lines from
-`~/.zulip-vagrant-config`.
+`~/.doer-vagrant-config`.
 
 [vagrant-dl]: https://www.vagrantup.com/downloads.html
 [install-advanced]: setup-advanced.md

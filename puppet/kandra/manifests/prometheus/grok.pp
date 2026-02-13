@@ -2,16 +2,16 @@
 #
 class kandra::prometheus::grok {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
-  $version = $zulip::common::versions['grok_exporter']['version']
+  $version = $doer::common::versions['grok_exporter']['version']
   $dir = "/srv/zulip-grok_exporter-${version}"
   $bin = "${dir}/grok_exporter"
 
-  zulip::external_dep { 'grok_exporter':
+  doer::external_dep { 'grok_exporter':
     version        => $version,
-    url            => "https://github.com/fstab/grok_exporter/releases/download/v${version}/grok_exporter-${version}.linux-${zulip::common::goarch}.zip",
-    tarball_prefix => "grok_exporter-${version}.linux-${zulip::common::goarch}",
+    url            => "https://github.com/fstab/grok_exporter/releases/download/v${version}/grok_exporter-${version}.linux-${doer::common::goarch}.zip",
+    tarball_prefix => "grok_exporter-${version}.linux-${doer::common::goarch}",
     bin            => [$bin],
     cleanup_after  => [Service[supervisor]],
   }
@@ -20,18 +20,18 @@ class kandra::prometheus::grok {
   $include_dir = "${dir}/patterns"
   file { '/etc/grok_exporter.yaml':
     ensure  => file,
-    owner   => zulip,
-    group   => zulip,
+    owner   => doer,
+    group   => doer,
     mode    => '0644',
     content => template('kandra/prometheus/grok_exporter.yaml.template.erb'),
     notify  => Service[supervisor],
   }
 
   kandra::firewall_allow { 'grok_exporter': port => '9144' }
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_grok_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_grok_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
       File['/etc/grok_exporter.yaml'],

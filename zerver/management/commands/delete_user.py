@@ -5,11 +5,11 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.users import do_delete_user
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.users import get_active_bots_owned_by_user
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 
 Delete a user or users, including all messages sent by them and

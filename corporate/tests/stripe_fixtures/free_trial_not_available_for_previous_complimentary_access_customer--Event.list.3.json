@@ -101,7 +101,7 @@
               {
                 "amount": 6300,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -179,7 +179,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "paid",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -309,7 +309,7 @@
               {
                 "amount": 6300,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -387,7 +387,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "paid",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -517,7 +517,7 @@
               {
                 "amount": 6300,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -595,7 +595,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "paid",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -693,7 +693,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -736,7 +736,7 @@
             "phone": null,
             "tax_id": null
           },
-          "calculated_statement_descriptor": "ZULIP BASIC",
+          "calculated_statement_descriptor": "DOER BASIC",
           "captured": true,
           "created": 1000000000,
           "currency": "usd",
@@ -820,7 +820,7 @@
           "shipping": null,
           "source": null,
           "source_transfer": null,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,

@@ -7,21 +7,21 @@ from tools.lib.capitalization import check_capitalization, get_safe_text, is_cap
 
 class GetSafeTextTestCase(TestCase):
     def test_get_safe_text(self) -> None:
-        string = "Zulip Zulip. Zulip some text!"
+        string = "Doer Doer. Doer some text!"
         safe_text = get_safe_text(string)
-        self.assertEqual(safe_text, "Zulip zulip. Zulip some text!")
+        self.assertEqual(safe_text, "Doer doer. Doer some text!")
 
-        string = "Zulip Zulip? Zulip some text!"
+        string = "Doer Doer? Doer some text!"
         safe_text = get_safe_text(string)
-        self.assertEqual(safe_text, "Zulip zulip? Zulip some text!")
+        self.assertEqual(safe_text, "Doer doer? Doer some text!")
 
-        string = "Zulip Zulip! Zulip some text!"
+        string = "Doer Doer! Doer some text!"
         safe_text = get_safe_text(string)
-        self.assertEqual(safe_text, "Zulip zulip! Zulip some text!")
+        self.assertEqual(safe_text, "Doer doer! Doer some text!")
 
-        string = "Zulip Zulip, Zulip some text!"
+        string = "Doer Doer, Doer some text!"
         safe_text = get_safe_text(string)
-        self.assertEqual(safe_text, "Zulip zulip, zulip some text!")
+        self.assertEqual(safe_text, "Doer doer, doer some text!")
 
         string = "Not Ignored Phrase"
         safe_text = get_safe_text(string)
@@ -51,19 +51,19 @@ class GetSafeTextTestCase(TestCase):
 
 class IsCapitalizedTestCase(TestCase):
     def test_process_text(self) -> None:
-        string = "Zulip zulip. Zulip some text!"
+        string = "Doer doer. Doer some text!"
         capitalized = is_capitalized(string)
         self.assertTrue(capitalized)
 
-        string = "Zulip zulip? Zulip some text!"
+        string = "Doer doer? Doer some text!"
         capitalized = is_capitalized(string)
         self.assertTrue(capitalized)
 
-        string = "Zulip zulip! Zulip some text!"
+        string = "Doer doer! Doer some text!"
         capitalized = is_capitalized(string)
         self.assertTrue(capitalized)
 
-        string = "Zulip zulip, Zulip some text!"
+        string = "Doer doer, Doer some text!"
         capitalized = is_capitalized(string)
         self.assertTrue(capitalized)
 
@@ -103,10 +103,10 @@ class IsCapitalizedTestCase(TestCase):
 class CheckCapitalizationTestCase(TestCase):
     def test_check_capitalization(self) -> None:
         strings = [
-            "Zulip Zulip. Zulip some text!",
-            "Zulip Zulip? Zulip some text!",
-            "Zulip Zulip! Zulip some text!",
-            "Zulip Zulip, Zulip some text!",
+            "Doer Doer. Doer some text!",
+            "Doer Doer? Doer some text!",
+            "Doer Doer! Doer some text!",
+            "Doer Doer, Doer some text!",
             "Not Ignored Phrase",
             "Not ignored phrase",
             "Some text with realm in it",
@@ -118,10 +118,10 @@ class CheckCapitalizationTestCase(TestCase):
             ignored,
             sorted(
                 [
-                    "Zulip Zulip. Zulip some text!",
-                    "Zulip Zulip? Zulip some text!",
-                    "Zulip Zulip! Zulip some text!",
-                    "Zulip Zulip, Zulip some text!",
+                    "Doer Doer. Doer some text!",
+                    "Doer Doer? Doer some text!",
+                    "Doer Doer! Doer some text!",
+                    "Doer Doer, Doer some text!",
                 ]
             ),
         )

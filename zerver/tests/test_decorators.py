@@ -31,8 +31,8 @@ from zerver.decorator import (
     validate_api_key,
     web_public_view,
     webhook_view,
-    zulip_login_required,
-    zulip_otp_required_if_logged_in,
+    doer_login_required,
+    doer_otp_required_if_logged_in,
 )
 from zerver.forms import OurAuthenticationForm
 from zerver.lib.cache import dict_to_items_tuple, ignore_unhashable_lru_cache, items_tuple_to_dict
@@ -47,7 +47,7 @@ from zerver.lib.initial_password import initial_password
 from zerver.lib.rate_limiter import is_local_addr
 from zerver.lib.request import RequestNotes, RequestVariableMissingError
 from zerver.lib.response import json_response, json_success
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock, dummy_handler, queries_captured
 from zerver.lib.user_agent import parse_user_agent
 from zerver.lib.utils import generate_api_key, has_api_key_format
@@ -57,34 +57,34 @@ from zerver.models.realms import get_realm
 from zerver.models.users import get_user
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RemoteZulipServer
+    from zilencer.models import RemoteDoerServer
 
 if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class DecoratorTestCase(ZulipTestCase):
+class DecoratorTestCase(DoerTestCase):
     def test_parse_client(self) -> None:
         req = HostRequestMock()
         self.assertEqual(parse_client(req), ("Unspecified", None))
 
         req = HostRequestMock()
         req.META["HTTP_USER_AGENT"] = (
-            "ZulipElectron/4.0.3 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Zulip/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
+            "DoerElectron/4.0.3 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Doer/4.0.3 Chrome/66.0.3359.181 Electron/3.1.10 Safari/537.36"
         )
-        self.assertEqual(parse_client(req), ("ZulipElectron", "4.0.3"))
+        self.assertEqual(parse_client(req), ("DoerElectron", "4.0.3"))
 
         req = HostRequestMock()
-        req.META["HTTP_USER_AGENT"] = "ZulipDesktop/0.4.4 (Mac)"
-        self.assertEqual(parse_client(req), ("ZulipDesktop", "0.4.4"))
+        req.META["HTTP_USER_AGENT"] = "DoerDesktop/0.4.4 (Mac)"
+        self.assertEqual(parse_client(req), ("DoerDesktop", "0.4.4"))
 
         req = HostRequestMock()
-        req.META["HTTP_USER_AGENT"] = "ZulipMobile/26.22.145 (Android 10)"
-        self.assertEqual(parse_client(req), ("ZulipMobile", "26.22.145"))
+        req.META["HTTP_USER_AGENT"] = "DoerMobile/26.22.145 (Android 10)"
+        self.assertEqual(parse_client(req), ("DoerMobile", "26.22.145"))
 
         req = HostRequestMock()
-        req.META["HTTP_USER_AGENT"] = "ZulipMobile/26.22.145 (iOS 13.3.1)"
-        self.assertEqual(parse_client(req), ("ZulipMobile", "26.22.145"))
+        req.META["HTTP_USER_AGENT"] = "DoerMobile/26.22.145 (iOS 13.3.1)"
+        self.assertEqual(parse_client(req), ("DoerMobile", "26.22.145"))
 
         # TODO: This should ideally be Firefox.
         req = HostRequestMock()
@@ -109,12 +109,12 @@ class DecoratorTestCase(ZulipTestCase):
 
         post_req_with_client = HostRequestMock()
         post_req_with_client.POST["client"] = "test_client_1"
-        post_req_with_client.META["HTTP_USER_AGENT"] = "ZulipMobile/26.22.145 (iOS 13.3.1)"
+        post_req_with_client.META["HTTP_USER_AGENT"] = "DoerMobile/26.22.145 (iOS 13.3.1)"
         self.assertEqual(parse_client(post_req_with_client), ("test_client_1", None))
 
         get_req_with_client = HostRequestMock()
         get_req_with_client.GET["client"] = "test_client_2"
-        get_req_with_client.META["HTTP_USER_AGENT"] = "ZulipMobile/26.22.145 (iOS 13.3.1)"
+        get_req_with_client.META["HTTP_USER_AGENT"] = "DoerMobile/26.22.145 (iOS 13.3.1)"
         self.assertEqual(parse_client(get_req_with_client), ("test_client_2", None))
 
     def test_unparsable_user_agent(self) -> None:
@@ -131,7 +131,7 @@ class DecoratorTestCase(ZulipTestCase):
         m.assert_called_once()
 
     def logger_output(self, output_string: str, type: str, logger: str) -> str:
-        return f"{type.upper()}:zulip.zerver.{logger}:{output_string}"
+        return f"{type.upper()}:doer.zerver.{logger}:{output_string}"
 
     def test_webhook_view(self) -> None:
         @webhook_view("ClientName")
@@ -151,7 +151,7 @@ class DecoratorTestCase(ZulipTestCase):
             raise UnsupportedWebhookEventTypeError("test_event")
 
         webhook_bot_email = "webhook-bot@zulip.com"
-        webhook_bot_realm = get_realm("zulip")
+        webhook_bot_realm = get_realm("doer")
         webhook_bot = get_user(webhook_bot_email, webhook_bot_realm)
         webhook_bot_api_key = webhook_bot.api_key
 
@@ -173,7 +173,7 @@ class DecoratorTestCase(ZulipTestCase):
             m.output,
             [
                 "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                    webhook_bot_email, "zulip", ""
+                    webhook_bot_email, "doer", ""
                 )
             ],
         )
@@ -190,7 +190,7 @@ class DecoratorTestCase(ZulipTestCase):
             m.output,
             [
                 "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                    webhook_bot_email, "zulip", "acme"
+                    webhook_bot_email, "doer", "acme"
                 )
             ],
         )
@@ -200,10 +200,10 @@ class DecoratorTestCase(ZulipTestCase):
         # should be re-raised
 
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with (
-            self.assertLogs("zulip.zerver.webhooks", level="INFO") as log,
+            self.assertLogs("doer.zerver.webhooks", level="INFO") as log,
             self.assertRaisesRegex(Exception, "raised by webhook function"),
         ):
             request._body = b"{}"
@@ -214,10 +214,10 @@ class DecoratorTestCase(ZulipTestCase):
         # in the webhook function should be re-raised
 
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with (
-            self.assertLogs("zulip.zerver.webhooks", level="INFO") as log,
+            self.assertLogs("doer.zerver.webhooks", level="INFO") as log,
             self.assertRaisesRegex(Exception, "raised by webhook function"),
         ):
             request._body = b"notjson"
@@ -228,10 +228,10 @@ class DecoratorTestCase(ZulipTestCase):
         # is not valid JSON; invalid JSON should be logged and the
         # exception raised in the webhook function should be re-raised
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with (
-            self.assertLogs("zulip.zerver.webhooks", level="ERROR") as log,
+            self.assertLogs("doer.zerver.webhooks", level="ERROR") as log,
             self.assertRaisesRegex(Exception, "raised by webhook function"),
         ):
             request._body = b"invalidjson"
@@ -245,13 +245,13 @@ class DecoratorTestCase(ZulipTestCase):
 
         # Test when an unsupported webhook event occurs
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         exception_msg = (
             "The 'test_event' event isn't currently supported by the ClientName webhook; ignoring"
         )
         with (
-            self.assertLogs("zulip.zerver.webhooks.unsupported", level="ERROR") as log,
+            self.assertLogs("doer.zerver.webhooks.unsupported", level="ERROR") as log,
             self.assertRaisesRegex(UnsupportedWebhookEventTypeError, exception_msg),
         ):
             request._body = b"invalidjson"
@@ -264,7 +264,7 @@ class DecoratorTestCase(ZulipTestCase):
         )
 
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with (
             self.settings(RATE_LIMITING=True),
@@ -283,7 +283,7 @@ class DecoratorTestCase(ZulipTestCase):
         # Now deactivate the user
         change_user_is_active(webhook_bot, False)
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with self.assertRaisesRegex(JsonableError, "Account is deactivated"):
             my_webhook(request)
@@ -293,13 +293,13 @@ class DecoratorTestCase(ZulipTestCase):
         webhook_bot.realm.deactivated = True
         webhook_bot.realm.save()
         request = HostRequestMock()
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         request.POST["api_key"] = webhook_bot_api_key
         with self.assertRaisesRegex(JsonableError, "This organization has been deactivated"):
             my_webhook(request)
 
 
-class SkipRateLimitingTest(ZulipTestCase):
+class SkipRateLimitingTest(DoerTestCase):
     def test_authenticated_rest_api_view(self) -> None:
         @authenticated_rest_api_view(skip_rate_limiting=False)
         def my_rate_limited_view(request: HttpRequest, user_profile: UserProfile) -> HttpResponse:
@@ -309,7 +309,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         def my_unlimited_view(request: HttpRequest, user_profile: UserProfile) -> HttpResponse:
             return json_success(request)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.META["HTTP_AUTHORIZATION"] = self.encode_email(self.example_email("hamlet"))
         request.method = "POST"
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -318,7 +318,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         self.assert_json_success(result)
         self.assertFalse(rate_limit_mock.called)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.META["HTTP_AUTHORIZATION"] = self.encode_email(self.example_email("hamlet"))
         request.method = "POST"
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -336,7 +336,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         def my_unlimited_view(request: HttpRequest, user_profile: UserProfile) -> HttpResponse:
             return json_success(request)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.method = "POST"
         request.POST["api_key"] = self.example_user("hamlet").api_key
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -345,7 +345,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         self.assert_json_success(result)
         self.assertFalse(rate_limit_mock.called)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.method = "POST"
         request.POST["api_key"] = self.example_user("hamlet").api_key
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -361,7 +361,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         my_rate_limited_view = authenticated_json_view(my_view, skip_rate_limiting=False)
         my_unlimited_view = authenticated_json_view(my_view, skip_rate_limiting=True)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.method = "POST"
         request.user = self.example_user("hamlet")
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -370,7 +370,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         self.assert_json_success(result)
         self.assertFalse(rate_limit_mock.called)
 
-        request = HostRequestMock(host="zulip.testserver")
+        request = HostRequestMock(host="doer.testserver")
         request.method = "POST"
         request.user = self.example_user("hamlet")
         with mock.patch("zerver.decorator.rate_limit_user") as rate_limit_mock:
@@ -380,7 +380,7 @@ class SkipRateLimitingTest(ZulipTestCase):
         self.assertTrue(rate_limit_mock.called)
 
 
-class DecoratorLoggingTestCase(ZulipTestCase):
+class DecoratorLoggingTestCase(DoerTestCase):
     def test_authenticated_rest_api_view_logging(self) -> None:
         @authenticated_rest_api_view(webhook_client_name="ClientName")
         def my_webhook_raises_exception(
@@ -393,13 +393,13 @@ class DecoratorLoggingTestCase(ZulipTestCase):
         request = HostRequestMock()
         request.META["HTTP_AUTHORIZATION"] = self.encode_email(webhook_bot_email)
         request.method = "POST"
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
 
         request._body = b"{}"
         request.content_type = "text/plain"
 
         with (
-            self.assertLogs("zulip.zerver.webhooks") as logger,
+            self.assertLogs("doer.zerver.webhooks") as logger,
             self.assertRaisesRegex(Exception, "raised by webhook function"),
         ):
             my_webhook_raises_exception(request)
@@ -418,7 +418,7 @@ class DecoratorLoggingTestCase(ZulipTestCase):
         request = HostRequestMock()
         request.META["HTTP_AUTHORIZATION"] = self.encode_email(webhook_bot_email)
         request.method = "POST"
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
 
         request._body = b"{}"
         request.content_type = "text/plain"
@@ -446,7 +446,7 @@ class DecoratorLoggingTestCase(ZulipTestCase):
         request = HostRequestMock()
         request.META["HTTP_AUTHORIZATION"] = self.encode_email("aaron@zulip.com")
         request.method = "POST"
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
 
         request._body = b"{}"
         request.content_type = "application/json"
@@ -479,7 +479,7 @@ class DecoratorLoggingTestCase(ZulipTestCase):
         )
 
 
-class RateLimitTestCase(ZulipTestCase):
+class RateLimitTestCase(DoerTestCase):
     @staticmethod
     @public_json_view
     def ratelimited_json_view(
@@ -501,7 +501,7 @@ class RateLimitTestCase(ZulipTestCase):
     ) -> None:
         META = {"REMOTE_ADDR": remote_addr, "PATH_INFO": "test", "HTTP_USER_AGENT": client_name}
 
-        request = HostRequestMock(host="zulip.testserver", client_name=client_name, meta_data=META)
+        request = HostRequestMock(host="doer.testserver", client_name=client_name, meta_data=META)
         view_func = self.ratelimited_web_view if check_web_view else self.ratelimited_json_view
 
         with (
@@ -517,7 +517,7 @@ class RateLimitTestCase(ZulipTestCase):
         # should_rate_limit checks the client to determine if rate limiting should be skipped.
         user = self.example_user("hamlet")
         request = HostRequestMock(
-            user_profile=user, host="zulip.testserver", client_name=client_name, meta_data=META
+            user_profile=user, host="doer.testserver", client_name=client_name, meta_data=META
         )
         with (
             mock.patch("zerver.lib.rate_limiter.RateLimitedUser") as rate_limit_user_mock,
@@ -566,7 +566,7 @@ class RateLimitTestCase(ZulipTestCase):
     def test_rate_limiting_happens_if_remote_server(self) -> None:
         user = self.example_user("hamlet")
         server_uuid = str(uuid.uuid4())
-        server = RemoteZulipServer(
+        server = RemoteDoerServer(
             uuid=server_uuid,
             api_key="magic_secret_api_key",
             hostname="demo.example.com",
@@ -589,15 +589,15 @@ class RateLimitTestCase(ZulipTestCase):
         self.assertTrue(rate_limit_mock.called)
 
 
-class DeactivatedRealmTest(ZulipTestCase):
+class DeactivatedRealmTest(DoerTestCase):
     def test_send_deactivated_realm(self) -> None:
         """
         rest_dispatch rejects requests in a deactivated realm, both /json and api
 
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         do_deactivate_realm(
-            get_realm("zulip"),
+            get_realm("doer"),
             acting_user=None,
             deactivation_reason="owner_request",
             email_owners=False,
@@ -650,7 +650,7 @@ class DeactivatedRealmTest(ZulipTestCase):
         authenticated_json_view views fail in a deactivated realm
 
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user_profile = self.example_user("hamlet")
         test_password = "abcd1234"
         user_profile.set_password(test_password)
@@ -669,7 +669,7 @@ class DeactivatedRealmTest(ZulipTestCase):
 
         """
         do_deactivate_realm(
-            get_realm("zulip"),
+            get_realm("doer"),
             acting_user=None,
             deactivation_reason="owner_request",
             email_owners=False,
@@ -684,10 +684,10 @@ class DeactivatedRealmTest(ZulipTestCase):
         )
 
 
-class LoginRequiredTest(ZulipTestCase):
+class LoginRequiredTest(DoerTestCase):
     def test_login_required(self) -> None:
         """
-        Verifies the zulip_login_required decorator blocks deactivated users.
+        Verifies the doer_login_required decorator blocks deactivated users.
         """
         user_profile = self.example_user("hamlet")
 
@@ -718,7 +718,7 @@ class LoginRequiredTest(ZulipTestCase):
         self.assertEqual(result.status_code, 302)
 
 
-class FetchAPIKeyTest(ZulipTestCase):
+class FetchAPIKeyTest(DoerTestCase):
     def test_fetch_api_key_success(self) -> None:
         user = self.example_user("cordelia")
         self.login_user(user)
@@ -748,7 +748,7 @@ class FetchAPIKeyTest(ZulipTestCase):
         self.assert_json_error_contains(result, "Password is incorrect")
 
 
-class InactiveUserTest(ZulipTestCase):
+class InactiveUserTest(DoerTestCase):
     def test_send_deactivated_user(self) -> None:
         """
         rest_dispatch rejects requests from deactivated users, both /json and api
@@ -836,7 +836,7 @@ class InactiveUserTest(ZulipTestCase):
 
         password = initial_password(user_profile.delivery_email)
         request = mock.MagicMock()
-        request.get_host.return_value = "zulip.testserver"
+        request.get_host.return_value = "doer.testserver"
 
         payload = dict(
             username=user_profile.delivery_email,
@@ -884,7 +884,7 @@ class InactiveUserTest(ZulipTestCase):
         self.assert_json_error_contains(result, "Account is deactivated", status_code=401)
 
 
-class TestIncomingWebhookBot(ZulipTestCase):
+class TestIncomingWebhookBot(DoerTestCase):
     def test_webhook_bot_permissions(self) -> None:
         webhook_bot = self.example_user("webhook_bot")
         othello = self.example_user("othello")
@@ -903,13 +903,13 @@ class TestIncomingWebhookBot(ZulipTestCase):
         )
 
 
-class TestValidateApiKey(ZulipTestCase):
+class TestValidateApiKey(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        zulip_realm = get_realm("zulip")
-        self.webhook_bot = get_user("webhook-bot@zulip.com", zulip_realm)
-        self.default_bot = get_user("default-bot@zulip.com", zulip_realm)
+        doer_realm = get_realm("doer")
+        self.webhook_bot = get_user("webhook-bot@zulip.com", doer_realm)
+        self.default_bot = get_user("default-bot@zulip.com", doer_realm)
 
     def test_has_api_key_format(self) -> None:
         self.assertFalse(has_api_key_format("TooShort"))
@@ -953,14 +953,14 @@ class TestValidateApiKey(ZulipTestCase):
         self.assertEqual(
             root_warn_log.output,
             [
-                "WARNING:root:User webhook-bot@zulip.com (zulip) attempted to access API on wrong subdomain ()"
+                "WARNING:root:User webhook-bot@zulip.com (doer) attempted to access API on wrong subdomain ()"
             ],
         )
 
     def test_validate_api_key_if_profile_is_incoming_webhook_and_is_webhook_is_set(self) -> None:
         api_key = self.webhook_bot.api_key
         profile = validate_api_key(
-            HostRequestMock(host="zulip.testserver"),
+            HostRequestMock(host="doer.testserver"),
             self.webhook_bot.email,
             api_key,
             allow_webhook_access=True,
@@ -970,7 +970,7 @@ class TestValidateApiKey(ZulipTestCase):
     def test_validate_api_key_if_email_is_case_insensitive(self) -> None:
         api_key = self.default_bot.api_key
         profile = validate_api_key(
-            HostRequestMock(host="zulip.testserver"), self.default_bot.email.upper(), api_key
+            HostRequestMock(host="doer.testserver"), self.default_bot.email.upper(), api_key
         )
         self.assertEqual(profile.id, self.default_bot.id)
 
@@ -992,7 +992,7 @@ class TestValidateApiKey(ZulipTestCase):
                 m.output,
                 [
                     "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                        self.default_bot.email, "zulip", ""
+                        self.default_bot.email, "doer", ""
                     )
                 ],
             )
@@ -1012,13 +1012,13 @@ class TestValidateApiKey(ZulipTestCase):
                 m.output,
                 [
                     "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                        self.default_bot.email, "zulip", "acme"
+                        self.default_bot.email, "doer", "acme"
                     )
                 ],
             )
 
 
-class TestInternalNotifyView(ZulipTestCase):
+class TestInternalNotifyView(DoerTestCase):
     BORING_RESULT = "boring"
 
     def internal_notify(self, is_tornado: bool, req: HttpRequest) -> HttpResponse:
@@ -1106,7 +1106,7 @@ class TestInternalNotifyView(ZulipTestCase):
         self.assertFalse(is_local_addr("42.43.44.45"))
 
 
-class TestHumanUsersOnlyDecorator(ZulipTestCase):
+class TestHumanUsersOnlyDecorator(DoerTestCase):
     def test_human_only_endpoints(self) -> None:
         default_bot = self.example_user("default_bot")
 
@@ -1139,7 +1139,7 @@ class TestHumanUsersOnlyDecorator(ZulipTestCase):
             self.assert_json_error(result, "This endpoint does not accept bot requests.")
 
 
-class TestAuthenticatedRequirePostDecorator(ZulipTestCase):
+class TestAuthenticatedRequirePostDecorator(DoerTestCase):
     def test_authenticated_html_post_view_with_get_request(self) -> None:
         self.login("hamlet")
         with self.assertLogs(level="WARNING") as mock_warning:
@@ -1167,7 +1167,7 @@ class TestAuthenticatedRequirePostDecorator(ZulipTestCase):
             )
 
 
-class TestAuthenticatedJsonViewDecorator(ZulipTestCase):
+class TestAuthenticatedJsonViewDecorator(DoerTestCase):
     def test_authenticated_json_view_if_user_not_logged_in(self) -> None:
         user = self.example_user("hamlet")
         self.assert_json_error_contains(
@@ -1192,7 +1192,7 @@ class TestAuthenticatedJsonViewDecorator(ZulipTestCase):
             m.output,
             [
                 "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                    email, "zulip", ""
+                    email, "doer", ""
                 )
             ],
         )
@@ -1208,7 +1208,7 @@ class TestAuthenticatedJsonViewDecorator(ZulipTestCase):
             m.output,
             [
                 "WARNING:root:User {} ({}) attempted to access API on wrong subdomain ({})".format(
-                    email, "zulip", "acme"
+                    email, "doer", "acme"
                 )
             ],
         )
@@ -1248,7 +1248,7 @@ class TestAuthenticatedJsonViewDecorator(ZulipTestCase):
         return self.client_post(r"/json/users/me/status", data)
 
 
-class TestPublicJsonViewDecorator(ZulipTestCase):
+class TestPublicJsonViewDecorator(DoerTestCase):
     def test_access_public_json_view_when_logged_in(self) -> None:
         hamlet = self.example_user("hamlet")
 
@@ -1259,15 +1259,15 @@ class TestPublicJsonViewDecorator(ZulipTestCase):
             self.assertEqual(maybe_user_profile, hamlet)
             return json_success(request)
 
-        result = public_view(HostRequestMock(host="zulip.testserver", user_profile=hamlet))
+        result = public_view(HostRequestMock(host="doer.testserver", user_profile=hamlet))
         self.assert_json_success(result)
 
 
-class TestZulipLoginRequiredDecorator(ZulipTestCase):
-    def test_zulip_login_required_if_subdomain_is_invalid(self) -> None:
+class TestDoerLoginRequiredDecorator(DoerTestCase):
+    def test_doer_login_required_if_subdomain_is_invalid(self) -> None:
         self.login("hamlet")
 
-        with mock.patch("zerver.decorator.get_subdomain", return_value="zulip"):
+        with mock.patch("zerver.decorator.get_subdomain", return_value="doer"):
             result = self.client_get("/accounts/accept_terms/")
             self.assertEqual(result.status_code, 200)
 
@@ -1280,7 +1280,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
             self.assertEqual(result.status_code, 302)
 
     def test_2fa_failure(self) -> None:
-        @zulip_login_required
+        @doer_login_required
         def test_view(request: HttpRequest) -> HttpResponse:
             return HttpResponse("Success")
 
@@ -1292,7 +1292,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
         user = hamlet = self.example_user("hamlet")
         self.login_user(hamlet)
         request = HostRequestMock(
-            client_name="", user_profile=user, meta_data=meta_data, host="zulip.testserver"
+            client_name="", user_profile=user, meta_data=meta_data, host="doer.testserver"
         )
         request.session = self.client.session
 
@@ -1304,7 +1304,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
             user = hamlet = self.example_user("hamlet")
             self.login_user(hamlet)
             request = HostRequestMock(
-                client_name="", user_profile=user, meta_data=meta_data, host="zulip.testserver"
+                client_name="", user_profile=user, meta_data=meta_data, host="doer.testserver"
             )
             request.session = self.client.session
             assert type(request.user) is UserProfile
@@ -1319,7 +1319,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
             self.assertEqual(response_url, settings.HOME_NOT_LOGGED_IN)
 
     def test_2fa_success(self) -> None:
-        @zulip_login_required
+        @doer_login_required
         def test_view(request: HttpRequest) -> HttpResponse:
             return HttpResponse("Success")
 
@@ -1332,7 +1332,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
             user = hamlet = self.example_user("hamlet")
             self.login_user(hamlet)
             request = HostRequestMock(
-                client_name="", user_profile=user, meta_data=meta_data, host="zulip.testserver"
+                client_name="", user_profile=user, meta_data=meta_data, host="doer.testserver"
             )
             request.session = self.client.session
             assert type(request.user) is UserProfile
@@ -1343,7 +1343,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
                 self.assertEqual(response.content.decode(), "Success")
 
     def test_otp_not_authenticated(self) -> None:
-        @zulip_otp_required_if_logged_in()
+        @doer_otp_required_if_logged_in()
         def test_view(request: HttpRequest) -> HttpResponse:
             return HttpResponse("Success")
 
@@ -1353,7 +1353,7 @@ class TestZulipLoginRequiredDecorator(ZulipTestCase):
             self.assertEqual(response.content.decode(), "Success")
 
 
-class TestRequireDecorators(ZulipTestCase):
+class TestRequireDecorators(DoerTestCase):
     def test_require_server_admin_decorator(self) -> None:
         realm_owner = self.example_user("desdemona")
         self.login_user(realm_owner)
@@ -1384,7 +1384,7 @@ class TestRequireDecorators(ZulipTestCase):
         self.assert_json_error(result, "Not allowed for guest users")
 
 
-class ReturnSuccessOnHeadRequestDecorator(ZulipTestCase):
+class ReturnSuccessOnHeadRequestDecorator(DoerTestCase):
     def test_returns_200_if_request_method_is_head(self) -> None:
         class HeadRequest(HostRequestMock):
             def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -1417,7 +1417,7 @@ class ReturnSuccessOnHeadRequestDecorator(ZulipTestCase):
         self.assertEqual(orjson.loads(response.content).get("msg"), "from_test_function")
 
 
-class RestAPITest(ZulipTestCase):
+class RestAPITest(DoerTestCase):
     def test_method_not_allowed(self) -> None:
         self.login("hamlet")
         result = self.client_patch("/json/users")
@@ -1445,7 +1445,7 @@ class RestAPITest(ZulipTestCase):
         self.assertTrue(result["Location"].endswith("/login/?next=%2Fjson%2Fattachments"))
 
 
-class TestUserAgentParsing(ZulipTestCase):
+class TestUserAgentParsing(DoerTestCase):
     def test_user_agent_parsing(self) -> None:
         """Test for our user agent parsing logic, using a large data set."""
         user_agents_parsed: dict[str, int] = defaultdict(int)
@@ -1464,7 +1464,7 @@ class TestUserAgentParsing(ZulipTestCase):
                 user_agents_parsed[ret["name"]] += int(count)
 
 
-class TestIgnoreUnhashableLRUCache(ZulipTestCase):
+class TestIgnoreUnhashableLRUCache(DoerTestCase):
     def test_cache_hit(self) -> None:
         @ignore_unhashable_lru_cache()
         def f(arg: Any) -> Any:
@@ -1555,7 +1555,7 @@ class TestIgnoreUnhashableLRUCache(ZulipTestCase):
         self.assertEqual(info.currsize, 0)
 
 
-class TestRequestNotes(ZulipTestCase):
+class TestRequestNotes(DoerTestCase):
     def test_request_notes_realm(self) -> None:
         """
         This test verifies that .realm gets set correctly on the request notes
@@ -1569,16 +1569,16 @@ class TestRequestNotes(ZulipTestCase):
 
             return inner
 
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
 
-        # We don't need to test if user is logged in here, so we patch zulip_login_required.
-        with mock.patch("zerver.views.home.zulip_login_required", lambda f: mock_home(zulip_realm)):
-            result = self.client_get("/", subdomain="zulip")
+        # We don't need to test if user is logged in here, so we patch doer_login_required.
+        with mock.patch("zerver.views.home.doer_login_required", lambda f: mock_home(doer_realm)):
+            result = self.client_get("/", subdomain="doer")
             self.assertEqual(result.status_code, 200)
 
         # When a request is made to the root subdomain and there is no realm on it,
         # no realm can be set on the request notes.
-        with mock.patch("zerver.views.home.zulip_login_required", lambda f: mock_home(None)):
+        with mock.patch("zerver.views.home.doer_login_required", lambda f: mock_home(None)):
             result = self.client_get("/", subdomain="")
             self.assertEqual(result.status_code, 404)
 
@@ -1586,7 +1586,7 @@ class TestRequestNotes(ZulipTestCase):
         # Now test that that realm does get set, if it exists, for requests
         # to the root subdomain.
         with mock.patch(
-            "zerver.views.home.zulip_login_required", lambda f: mock_home(root_subdomain_realm)
+            "zerver.views.home.doer_login_required", lambda f: mock_home(root_subdomain_realm)
         ):
             result = self.client_get("/", subdomain="")
             self.assertEqual(result.status_code, 200)
@@ -1594,14 +1594,14 @@ class TestRequestNotes(ZulipTestCase):
         # Only the root subdomain allows requests to it without having a realm.
         # Requests to non-root subdomains get stopped by the middleware and
         # an error page is returned before the request hits the view.
-        with mock.patch("zerver.views.home.zulip_login_required") as mock_home_real:
+        with mock.patch("zerver.views.home.doer_login_required") as mock_home_real:
             result = self.client_get("/", subdomain="invalid")
             self.assertEqual(result.status_code, 404)
-            self.assert_in_response("There is no Zulip organization at", result)
+            self.assert_in_response("There is no Doer organization at", result)
             mock_home_real.assert_not_called()
 
 
-class ClientTestCase(ZulipTestCase):
+class ClientTestCase(DoerTestCase):
     def test_process_client(self) -> None:
         def request_user_agent(user_agent: str) -> tuple[Client, str]:
             request = HttpRequest()
@@ -1613,39 +1613,39 @@ class ClientTestCase(ZulipTestCase):
             assert notes.client_name is not None
             return notes.client, notes.client_name
 
-        self.assertEqual(Client.objects.filter(name="ZulipThingy").count(), 0)
+        self.assertEqual(Client.objects.filter(name="DoerThingy").count(), 0)
         with queries_captured(keep_cache_warm=True) as queries:
-            client, client_name = request_user_agent("ZulipThingy/1.0.0")
-        self.assertEqual(client.name, "ZulipThingy")
-        self.assertEqual(client_name, "ZulipThingy")
-        self.assertEqual(Client.objects.filter(name="ZulipThingy").count(), 1)
+            client, client_name = request_user_agent("DoerThingy/1.0.0")
+        self.assertEqual(client.name, "DoerThingy")
+        self.assertEqual(client_name, "DoerThingy")
+        self.assertEqual(Client.objects.filter(name="DoerThingy").count(), 1)
         self.assert_length(queries, 2)
 
         # Ensure our in-memory cache prevents another database hit
         with queries_captured(keep_cache_warm=True) as queries:
             client, client_name = request_user_agent(
-                "ZulipThingy/1.0.0",
+                "DoerThingy/1.0.0",
             )
-        self.assertEqual(client.name, "ZulipThingy")
-        self.assertEqual(client_name, "ZulipThingy")
+        self.assertEqual(client.name, "DoerThingy")
+        self.assertEqual(client_name, "DoerThingy")
         self.assert_length(queries, 0)
 
-        # This operates on the extracted value, so different ZulipThingy versions don't cause another DB query
+        # This operates on the extracted value, so different DoerThingy versions don't cause another DB query
         with queries_captured(keep_cache_warm=True) as queries:
             client, client_name = request_user_agent(
-                "ZulipThingy/2.0.0",
+                "DoerThingy/2.0.0",
             )
-        self.assertEqual(client.name, "ZulipThingy")
-        self.assertEqual(client_name, "ZulipThingy")
+        self.assertEqual(client.name, "DoerThingy")
+        self.assertEqual(client_name, "DoerThingy")
         self.assert_length(queries, 0)
 
         # If we clear the memory cache we see a database query but get
         # the same client-id back.
         with queries_captured(keep_cache_warm=False) as queries:
             fresh_client, client_name = request_user_agent(
-                "ZulipThingy/2.0.0",
+                "DoerThingy/2.0.0",
             )
-        self.assertEqual(fresh_client.name, "ZulipThingy")
+        self.assertEqual(fresh_client.name, "DoerThingy")
         self.assertEqual(client, fresh_client)
         self.assert_length(queries, 1)
 

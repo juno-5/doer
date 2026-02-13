@@ -7,10 +7,10 @@ from typing_extensions import override
 
 from zerver.actions.create_realm import do_change_realm_subdomain
 from zerver.forms import check_subdomain_available
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Change realm's subdomain."""
 
     @override

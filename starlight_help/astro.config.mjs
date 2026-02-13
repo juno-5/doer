@@ -93,25 +93,25 @@ export default defineConfig({
                     // versatile. But it only supports one directory path for
                     // a single set of icons. We should start using that loader
                     // if they add support for multiple paths in the future.
-                    async "zulip-icon"(iconName) {
+                    async "doer-icon"(iconName) {
                         const iconsPath = `../web/icons/${iconName}.svg`;
 
                         if (fs.existsSync(iconsPath)) {
                             return await fs.promises.readFile(iconsPath, "utf8");
                         }
-                        throw new Error("Zulip icon not found.");
+                        throw new Error("Doer icon not found.");
                     },
                 },
                 iconCustomizer(collection, icon, props) {
-                    if (collection === "zulip-icon" || collection === "fa") {
+                    if (collection === "doer-icon" || collection === "fa") {
                         // We need to override some default starlight behaviour to make
                         // icons look nice, see the css for this class to see the reasoning
                         // for each individual override of the default css.
-                        props.class = "zulip-unplugin-icon";
+                        props.class = "doer-unplugin-icon";
 
-                        if (collection === "zulip-icon" && icon.startsWith("user-circle-")) {
+                        if (collection === "doer-icon" && icon.startsWith("user-circle-")) {
                             const iconSuffix = icon.replace("user-circle-", "");
-                            props.class = `zulip-unplugin-icon user-circle user-circle-${iconSuffix}`;
+                            props.class = `doer-unplugin-icon user-circle user-circle-${iconSuffix}`;
                         }
                     }
                 },
@@ -140,7 +140,7 @@ export default defineConfig({
                 context: "client",
                 access: "public",
                 optional: true,
-                default: "zulip-admin@example.com",
+                default: "doer-admin@example.com",
             }),
         },
     },
@@ -151,7 +151,7 @@ export default defineConfig({
             zstd: false,
         }),
         starlight({
-            title: "Zulip help center",
+            title: "Doer help center",
             favicon: "../static/images/favicon.svg",
             components: {
                 Footer: "./src/components/Footer.astro",
@@ -163,7 +163,7 @@ export default defineConfig({
             customCss: ["./src/styles/main.css"],
             sidebar: [
                 {
-                    label: "Zulip homepage",
+                    label: "Doer homepage",
                     link: "https://zulip.com",
                     attrs: {
                         class: "external-icon-sidebar",
@@ -180,7 +180,7 @@ export default defineConfig({
                     items: [
                         {
                             label: "Getting started",
-                            link: "/getting-started-with-zulip",
+                            link: "/getting-started-with-doer",
                         },
                         {
                             label: "Choosing a team chat app",
@@ -192,29 +192,29 @@ export default defineConfig({
                             },
                         },
                         {
-                            label: "Why Zulip",
-                            link: "https://zulip.com/why-zulip/",
+                            label: "Why Doer",
+                            link: "https://zulip.com/why-doer/",
                             attrs: {
                                 class: "external-icon-sidebar",
                                 target: "_blank",
                                 rel: "noopener noreferrer",
                             },
                         },
-                        "trying-out-zulip",
+                        "trying-out-doer",
                         {
-                            label: "Zulip Cloud or self-hosting?",
-                            link: "/zulip-cloud-or-self-hosting",
+                            label: "Doer Cloud or self-hosting?",
+                            link: "/doer-cloud-or-self-hosting",
                         },
                         "moderating-open-organizations",
-                        "setting-up-zulip-for-a-class",
-                        "using-zulip-for-a-class",
+                        "setting-up-doer-for-a-class",
+                        "using-doer-for-a-class",
                     ],
                 },
                 {
                     label: "Guides for moving from another app",
                     items: [
                         "migrating-from-other-chat-tools",
-                        "moving-to-zulip",
+                        "moving-to-doer",
                         "moving-from-slack",
                         "moving-from-teams",
                         "moving-from-discord",
@@ -225,7 +225,7 @@ export default defineConfig({
                     items: [
                         "create-an-organization",
                         "demo-organizations",
-                        "join-a-zulip-organization",
+                        "join-a-doer-organization",
                         "set-up-your-account",
                         "introduction-to-topics",
                         {
@@ -290,7 +290,7 @@ export default defineConfig({
                     ],
                 },
                 {
-                    label: "Guides for mastering Zulip",
+                    label: "Guides for mastering Doer",
                     items: [
                         "keyboard-shortcuts",
                         "reading-strategies",
@@ -300,7 +300,7 @@ export default defineConfig({
                             label: "Search filters",
                             link: "/search-for-messages/#search-filters",
                         },
-                        "using-zulip-via-email",
+                        "using-doer-via-email",
                     ],
                 },
                 {
@@ -495,7 +495,7 @@ export default defineConfig({
                     ],
                 },
                 {
-                    label: "Zulip administration",
+                    label: "Doer administration",
                     link: "#",
                     attrs: {
                         class: "non-clickable-sidebar-heading",
@@ -509,7 +509,7 @@ export default defineConfig({
                             label: "Communities directory",
                             link: "/communities-directory",
                         },
-                        "linking-to-zulip",
+                        "linking-to-doer",
                         "change-organization-url",
                         "deactivate-your-organization",
                     ],
@@ -523,11 +523,11 @@ export default defineConfig({
                         "import-from-rocketchat",
                         "export-your-organization",
                         {
-                            label: "Zulip Cloud to self-hosting",
+                            label: "Doer Cloud to self-hosting",
                             link: "/cloud-to-self-hosting",
                         },
                         {
-                            label: "Self-hosting to Zulip Cloud",
+                            label: "Self-hosting to Doer Cloud",
                             link: "/self-hosting-to-cloud",
                         },
                     ],
@@ -681,24 +681,24 @@ export default defineConfig({
                 {
                     label: "Support",
                     items: [
-                        "view-zulip-version",
-                        "zulip-cloud-billing",
+                        "view-doer-version",
+                        "doer-cloud-billing",
                         {
                             label: "Self-hosted billing",
                             link: "/self-hosted-billing",
                         },
                         "gdpr-compliance",
                         {
-                            label: "Move to Zulip Cloud",
-                            link: "/move-to-zulip-cloud",
+                            label: "Move to Doer Cloud",
+                            link: "/move-to-doer-cloud",
                         },
-                        "support-zulip-project",
-                        "linking-to-zulip-website",
+                        "support-doer-project",
+                        "linking-to-doer-website",
                         "contact-support",
                     ],
                 },
                 {
-                    label: "◀ Back to Zulip",
+                    label: "◀ Back to Doer",
                     link: "../",
                 },
             ],
@@ -781,7 +781,7 @@ export default defineConfig({
         "browse-and-subscribe-to-channels":
             "/help/introduction-to-channels#browse-and-subscribe-to-channels",
         "allow-image-link-previews": "/help/image-video-and-website-previews",
-        "getting-your-organization-started-with-zulip": "/help/moving-to-zulip",
+        "getting-your-organization-started-with-doer": "/help/moving-to-doer",
         "quote-and-reply": "/help/quote-or-forward-a-message",
         "change-a-users-role": "/help/user-roles",
         "roles-and-permissions": "/help/user-roles",

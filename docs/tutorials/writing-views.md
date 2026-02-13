@@ -1,8 +1,8 @@
-# Writing views in Zulip
+# Writing views in Doer
 
 ## What this covers
 
-This page documents how views work in Zulip. You may want to read the
+This page documents how views work in Doer. You may want to read the
 [new feature tutorial](new-feature-tutorial.md)
 and treat this as a reference.
 
@@ -16,30 +16,30 @@ documentation.
 
 ## What is a view?
 
-A view in Zulip is everything that helps implement a server endpoint.
-Every path that the Zulip server supports (doesn't show a 404 page
+A view in Doer is everything that helps implement a server endpoint.
+Every path that the Doer server supports (doesn't show a 404 page
 for) is a view. The obvious ones are those you can visit in your
 browser, for example
 [/integrations](https://zulip.com/integrations/), which shows the
 integration documentation. These paths show up in the address bar of
 the browser. There are other views that are only seen by software,
 namely the API views. They are used to build the various clients that
-Zulip has, namely the web client (which is also used by the desktop
+Doer has, namely the web client (which is also used by the desktop
 client) and the mobile clients.
 
 ## Modifying urls.py
 
 A view is anything with an entry in the appropriate urls.py, usually
-`zproject/urls.py`. Zulip views either serve HTML (pages for browsers)
-or JSON (data for Zulip clients on all platforms, custom bots, and
+`zproject/urls.py`. Doer views either serve HTML (pages for browsers)
+or JSON (data for Doer clients on all platforms, custom bots, and
 integrations).
 
 The format of the URL patterns in Django is [documented
 here](https://docs.djangoproject.com/en/5.0/topics/http/urls/), and
-the Zulip specific details for these are discussed in detail in the
+the Doer specific details for these are discussed in detail in the
 [life of a request doc](life-of-a-request.md#options).
 
-We have two Zulip-specific conventions we use for internationalization and for
+We have two Doer-specific conventions we use for internationalization and for
 our REST API, respectively.
 
 ## Writing human-readable views
@@ -77,7 +77,7 @@ post, and inside the function, we'll check the form data. If you
 request this page with GET, you'll get an HTTP 405 METHOD NOT ALLOWED
 error.
 
-`zulip_login_required`:
+`doer_login_required`:
 
 This decorator verifies that the browser is logged in (i.e. has a
 valid session cookie) before providing the view for this route, or
@@ -86,10 +86,10 @@ redirects the browser to a login page. This is used in the root path
 browser without a valid session cookie, they are redirected to a login
 page. It is a small fork of Django's
 [login_required][login-required-link], adding a few extra checks
-specific to Zulip.
+specific to Doer.
 
 ```py
-@zulip_login_required
+@doer_login_required
 def home(request: HttpRequest) -> HttpResponse:
 ```
 
@@ -98,17 +98,17 @@ def home(request: HttpRequest) -> HttpResponse:
 ### Writing a template
 
 Templates for the main website are found in
-[templates/zerver/app](https://github.com/zulip/zulip/tree/main/templates/zerver/app).
+[templates/zerver/app](https://github.com/doer/doer/tree/main/templates/zerver/app).
 
 ## Writing API REST endpoints
 
 These are code-parsable views that take x-www-form-urlencoded or JSON
-request bodies, and return JSON-string responses. Almost all Zulip
+request bodies, and return JSON-string responses. Almost all Doer
 view code is in the implementations of API REST endpoints.
 
 The REST API does authentication of the user through `rest_dispatch`,
 which is documented in detail at
-[zerver/lib/rest.py](https://github.com/zulip/zulip/blob/main/zerver/lib/rest.py).
+[zerver/lib/rest.py](https://github.com/doer/doer/blob/main/zerver/lib/rest.py).
 This method will authenticate the user either through a session token
 from a cookie on the browser, or from a base64 encoded `email:api-key`
 string given via HTTP basic auth for API clients.
@@ -135,7 +135,7 @@ one of several bad outcomes:
 - Every view function comes with another function that does the
   validation that has the problems from the last bullet point.
 
-In Zulip, we solve this problem with a special decorator called
+In Doer, we solve this problem with a special decorator called
 `typed_endpoint` which allows a developer to declare the
 arguments a view function takes and validate their types all within
 the `def` line of the function. This framework uses
@@ -181,7 +181,7 @@ the inner decorator.
 
 The implementation of `typed_endpoint` is documented in detail
 in
-[zerver/lib/typed_endpoint.py](https://github.com/zulip/zulip/blob/main/zerver/lib/typed_endpoint.py)
+[zerver/lib/typed_endpoint.py](https://github.com/doer/doer/blob/main/zerver/lib/typed_endpoint.py)
 
 Pydantic also helps us with request variable validation. For example:
 
@@ -254,7 +254,7 @@ class AddSubscriptionData(BaseModel):
 - `@model_validator` can be used to specify additional validation logic for the model.
 
 See
-[zerver/lib/typed_endpoint_validators.py](https://github.com/zulip/zulip/blob/main/zerver/lib/typed_endpoint_validators.py)
+[zerver/lib/typed_endpoint_validators.py](https://github.com/doer/doer/blob/main/zerver/lib/typed_endpoint_validators.py)
 for more validators and their documentation.
 
 ### Deciding which HTTP verb to use
@@ -268,7 +268,7 @@ be read with GET, without the expense of the full GET. OPTIONS is also
 read-only, and used by clients to determine which HTTP verbs are
 available for a given path. This isn't something you need to write, as
 it happens automatically in the implementation of `rest_dispatch`--see
-[zerver/lib/rest.py](https://github.com/zulip/zulip/blob/main/zerver/lib/rest.py)
+[zerver/lib/rest.py](https://github.com/doer/doer/blob/main/zerver/lib/rest.py)
 for more.
 
 If you're creating new data, try to figure out if the thing you are
@@ -291,7 +291,7 @@ the state of the server. This is _idempotency_.
 
 You will often want to return an error if a request to change
 something would do nothing because the state is already as desired, to
-make debugging Zulip clients easier. This means that the response for
+make debugging Doer clients easier. This means that the response for
 repeated requests may not be the same, but the repeated requests won't
 change the server more than once or cause unwanted side effects.
 
@@ -313,7 +313,7 @@ database) and lead to a 500 error. If an actions function is
 responsible for validation as well, it should have a name starting
 with `check_`.
 
-For example, in [zerver/views/realm.py](https://github.com/zulip/zulip/blob/main/zerver/views/realm.py):
+For example, in [zerver/views/realm.py](https://github.com/doer/doer/blob/main/zerver/views/realm.py):
 
 ```py
 @require_realm_admin
@@ -334,13 +334,13 @@ def update_realm(
 `realm.save()` actually saves the changes to the realm to the
 database, and `send_event_on_commit` sends the event to active clients
 belonging to the provided list of users (in this case, all active
-users in the Zulip realm), once the current transaction completes.
+users in the Doer realm), once the current transaction completes.
 
 ### Calling from the web application
 
 You should always use `channel.<method>` to make an `HTTP <method>` call
-to the Zulip JSON API. As an example, in
-[web/src/admin.ts](https://github.com/zulip/zulip/blob/main/web/src/admin.ts)
+to the Doer JSON API. As an example, in
+[web/src/admin.ts](https://github.com/doer/doer/blob/main/web/src/admin.ts)
 
 ```js
 var url = "/json/realm";
@@ -373,7 +373,7 @@ r = requests.patch(SERVER_URL + 'api/v1/realm',
                   )
 ```
 
-This is simply an illustration; we recommend making use of the [Zulip
+This is simply an illustration; we recommend making use of the [Doer
 Python API bindings](https://zulip.com/api/) since they provide
 a nice interface for accessing the API.
 
@@ -410,6 +410,6 @@ def api_pagerduty_webhook(
     payload: JsonBodyPayload[WildValue],
 ```
 
-`request.client` will be the result of `get_client("ZulipPagerDutyWebhook")`
+`request.client` will be the result of `get_client("DoerPagerDutyWebhook")`
 in this example and it will be passed to `check_send_stream_message`. For
-more information, see [Clients in Zulip](../subsystems/client.md).
+more information, see [Clients in Doer](../subsystems/client.md).

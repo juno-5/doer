@@ -59,7 +59,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -102,7 +102,7 @@
             "phone": null,
             "tax_id": null
           },
-          "calculated_statement_descriptor": "ZULIP CLOUD STANDARD",
+          "calculated_statement_descriptor": "DOER CLOUD STANDARD",
           "captured": true,
           "created": 1000000000,
           "currency": "usd",
@@ -186,7 +186,7 @@
           "shipping": null,
           "source": null,
           "source_transfer": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -299,7 +299,7 @@
               {
                 "amount": 48000,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -378,7 +378,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -468,7 +468,7 @@
               {
                 "amount": 48000,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -547,7 +547,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -647,7 +647,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -725,7 +725,7 @@
               {
                 "amount": 48000,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -804,7 +804,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -854,7 +854,7 @@
           "currency": "usd",
           "customer": "upgrade_by_card_with_outdated_seat_count--Customer.create.1.json",
           "date": 1000000000,
-          "description": "Zulip Cloud Standard",
+          "description": "Doer Cloud Standard",
           "discountable": false,
           "discounts": [],
           "id": "upgrade_by_card_with_outdated_seat_count--Event.list.2.json",
@@ -991,7 +991,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -1031,7 +1031,7 @@
           "currency": "usd",
           "default_source": null,
           "delinquent": false,
-          "description": "zulip (Zulip Dev)",
+          "description": "doer (Doer Dev)",
           "discount": null,
           "email": "hamlet@zulip.com",
           "id": "upgrade_by_card_with_outdated_seat_count--Customer.create.1.json",
@@ -1045,7 +1045,7 @@
           "livemode": false,
           "metadata": {
             "realm_id": "1",
-            "realm_str": "zulip"
+            "realm_str": "doer"
           },
           "name": null,
           "next_invoice_sequence": 1,

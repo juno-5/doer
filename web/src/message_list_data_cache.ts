@@ -23,7 +23,7 @@ function move_to_end(key: number, cached_data: MessageListData): void {
     // In theory, a cache like this might need to consider integer
     // overflow on latest_key, but that's not a realistic possibility
     // with how these data structures are used given the lifetime on a
-    // Zulip web app window.
+    // Doer web app window.
 }
 
 export function get(filter: Filter): MessageListData | undefined {

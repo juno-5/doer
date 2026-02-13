@@ -10,7 +10,7 @@ from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
 from zerver.lib.logging_util import log_to_file
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import RealmAuditLog, Stream, Subscription
 from zerver.models.realm_audit_logs import AuditLogEventType
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 log_to_file(logger, settings.DIGEST_LOG_PATH)
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Update the `Stream.subscriber_count` field based on current subscribers.
 
 There may be race conditions with keeping the cached subscriber count

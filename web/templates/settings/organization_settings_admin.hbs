@@ -33,8 +33,8 @@
                   custom_classes="decorated-stream-name-dropdown-widget"}}
 
                 {{> ../dropdown_widget_with_label
-                  widget_name="realm_zulip_update_announcements_stream_id"
-                  label=admin_settings_label.realm_zulip_update_announcements_stream
+                  widget_name="realm_doer_update_announcements_stream_id"
+                  label=admin_settings_label.realm_doer_update_announcements_stream
                   value_type="number"
                   custom_classes="decorated-stream-name-dropdown-widget"}}
 
@@ -276,7 +276,7 @@
                     <select name="realm_message_retention_days"
                       id="id_realm_message_retention_days" class="prop-element settings_select bootstrap-focus-style"
                       data-setting-widget-type="message-retention-setting"
-                      {{#unless zulip_plan_is_not_limited}}disabled{{/unless}}>
+                      {{#unless doer_plan_is_not_limited}}disabled{{/unless}}>
                         <option value="unlimited">{{t 'Retain forever' }}</option>
                         <option value="custom_period">{{t 'Custom' }}</option>
                     </select>
@@ -289,7 +289,7 @@
                           name="realm_message_retention_custom_input"
                           class="admin-realm-message-retention-days message-retention-setting-custom-input time-limit-custom-input"
                           data-setting-widget-type="number"
-                          {{#unless zulip_plan_is_not_limited}}disabled{{/unless}}/>
+                          {{#unless doer_plan_is_not_limited}}disabled{{/unless}}/>
                     </div>
                 </div>
             </div>

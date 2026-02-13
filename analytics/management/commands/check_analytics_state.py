@@ -7,8 +7,8 @@ from typing_extensions import override
 
 from analytics.lib.counts import ALL_COUNT_STATS, CountStat
 from analytics.models import installation_epoch
-from scripts.lib.zulip_tools import atomic_nagios_write
-from zerver.lib.management import ZulipBaseCommand
+from scripts.lib.doer_tools import atomic_nagios_write
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.timestamp import TimeZoneNotUTCError, floor_to_day, floor_to_hour, verify_UTC
 from zerver.models import Realm
 
@@ -26,7 +26,7 @@ class NagiosResult:
     message: str
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Checks FillState table.
 
     Run as a cron job that runs every hour."""

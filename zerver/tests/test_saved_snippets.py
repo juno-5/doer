@@ -1,9 +1,9 @@
 from zerver.actions.saved_snippets import do_create_saved_snippet
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import SavedSnippet, UserProfile
 
 
-class SavedSnippetTests(ZulipTestCase):
+class SavedSnippetTests(DoerTestCase):
     def create_example_saved_snippet(self, user: UserProfile) -> int:
         saved_snippet = do_create_saved_snippet(
             "Welcome message", "**Welcome** to the organization.", user

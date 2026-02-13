@@ -514,7 +514,7 @@ const dropdown_widget_map = new Map<string, DropdownWidget | null>([
     ["realm_moderation_request_channel_id", null],
     ["realm_new_stream_announcements_stream_id", null],
     ["realm_signup_announcements_stream_id", null],
-    ["realm_zulip_update_announcements_stream_id", null],
+    ["realm_doer_update_announcements_stream_id", null],
     ["realm_default_code_block_language", null],
     ["realm_default_language", null],
     ["realm_can_access_all_users_group", null],
@@ -862,7 +862,7 @@ export function check_realm_settings_property_changed(elem: HTMLElement): boolea
         case "realm_moderation_request_channel_id":
         case "realm_new_stream_announcements_stream_id":
         case "realm_signup_announcements_stream_id":
-        case "realm_zulip_update_announcements_stream_id":
+        case "realm_doer_update_announcements_stream_id":
         case "realm_default_code_block_language":
         case "realm_default_language":
         case "realm_can_access_all_users_group":

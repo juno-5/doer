@@ -16,7 +16,7 @@ class GithubSession(OutgoingSession):
 
 
 def get_latest_github_release_version_for_repo(repo: str) -> str:
-    api_url = f"https://api.github.com/repos/zulip/{repo}/releases/latest"
+    api_url = f"https://api.github.com/repos/doer/{repo}/releases/latest"
     try:
         return GithubSession().get(api_url).json()["tag_name"]
     except (requests.RequestException, json.JSONDecodeError, KeyError):
@@ -36,11 +36,11 @@ def verify_release_download_link(link: str) -> bool:
 
 
 PLATFORM_TO_SETUP_FILE = {
-    "linux": "Zulip-{version}-x86_64.AppImage",
-    "mac": "Zulip-{version}-arm64.dmg",
-    "mac-intel": "Zulip-{version}-x64.dmg",
-    "mac-arm64": "Zulip-{version}-arm64.dmg",
-    "windows": "Zulip-Web-Setup-{version}.exe",
+    "linux": "Doer-{version}-x86_64.AppImage",
+    "mac": "Doer-{version}-arm64.dmg",
+    "mac-intel": "Doer-{version}-x64.dmg",
+    "mac-arm64": "Doer-{version}-arm64.dmg",
+    "windows": "Doer-Web-Setup-{version}.exe",
 }
 
 
@@ -53,11 +53,11 @@ def get_latest_github_release_download_link_for_platform(platform: str) -> str:
     if platform not in PLATFORM_TO_SETUP_FILE:
         raise InvalidPlatformError
 
-    latest_version = get_latest_github_release_version_for_repo("zulip-desktop")
+    latest_version = get_latest_github_release_version_for_repo("doer-desktop")
     if latest_version:
         latest_version = latest_version.removeprefix("v")
         setup_file = PLATFORM_TO_SETUP_FILE[platform].format(version=latest_version)
         link = f"https://desktop-download.zulip.com/v{latest_version}/{setup_file}"
         if verify_release_download_link(link):
             return link
-    return "https://github.com/zulip/zulip-desktop/releases/latest"
+    return "https://github.com/doer/doer-desktop/releases/latest"

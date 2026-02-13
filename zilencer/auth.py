@@ -31,8 +31,8 @@ from zerver.lib.rest import default_never_cache_responses, get_target_view_funct
 from zerver.lib.subdomains import get_subdomain
 from zerver.models import Realm
 from zilencer.models import (
-    RateLimitedRemoteZulipServer,
-    RemoteZulipServer,
+    RateLimitedRemoteDoerServer,
+    RemoteDoerServer,
     get_remote_server_by_uuid,
 )
 
@@ -67,8 +67,8 @@ def validate_registration_transfer_verification_secret(secret: str, hostname: st
         raise JsonableError(_("The verification secret is for a different hostname"))
 
 
-class InvalidZulipServerError(JsonableError):
-    code = ErrorCode.INVALID_ZULIP_SERVER
+class InvalidDoerServerError(JsonableError):
+    code = ErrorCode.INVALID_DOER_SERVER
     data_fields = ["role"]
 
     def __init__(self, role: str) -> None:
@@ -77,24 +77,24 @@ class InvalidZulipServerError(JsonableError):
     @staticmethod
     @override
     def msg_format() -> str:
-        return "Zulip server auth failure: {role} is not registered -- did you run `manage.py register_server`?"
+        return "Doer server auth failure: {role} is not registered -- did you run `manage.py register_server`?"
 
 
-class InvalidZulipServerKeyError(InvalidZulipServerError):
+class InvalidDoerServerKeyError(InvalidDoerServerError):
     @staticmethod
     @override
     def msg_format() -> str:
-        return "Zulip server auth failure: key does not match role {role}"
+        return "Doer server auth failure: key does not match role {role}"
 
 
 def rate_limit_remote_server(
-    request: HttpRequest, remote_server: RemoteZulipServer, domain: str
+    request: HttpRequest, remote_server: RemoteDoerServer, domain: str
 ) -> None:
     if not should_rate_limit(request):
         return
 
     try:
-        RateLimitedRemoteZulipServer(remote_server, domain=domain).rate_limit_request(request)
+        RateLimitedRemoteDoerServer(remote_server, domain=domain).rate_limit_request(request)
     except RateLimitedError as e:
         logger.warning("Remote server %s exceeded rate limits on domain %s", remote_server, domain)
         raise e
@@ -104,17 +104,17 @@ def validate_remote_server(
     request: HttpRequest,
     role: str,
     api_key: str,
-) -> RemoteZulipServer:
+) -> RemoteDoerServer:
     log_data = RequestNotes.get_notes(request).log_data
     assert log_data is not None
     try:
         remote_server = get_remote_server_by_uuid(role)
-    except RemoteZulipServer.DoesNotExist:
+    except RemoteDoerServer.DoesNotExist:
         log_data["extra"] = "[invalid-server]"
-        raise InvalidZulipServerError(role)
+        raise InvalidDoerServerError(role)
     if not constant_time_compare(api_key, remote_server.api_key):
         log_data["extra"] = "[invalid-server-key]"
-        raise InvalidZulipServerKeyError(role)
+        raise InvalidDoerServerKeyError(role)
 
     if remote_server.deactivated:
         log_data["extra"] = "[deactivated-server]"
@@ -133,7 +133,7 @@ def validate_remote_server(
 
 
 def authenticated_remote_server_view(
-    view_func: Callable[Concatenate[HttpRequest, RemoteZulipServer, ParamT], HttpResponse],
+    view_func: Callable[Concatenate[HttpRequest, RemoteDoerServer, ParamT], HttpResponse],
 ) -> Callable[Concatenate[HttpRequest, ParamT], HttpResponse]:
     @wraps(view_func)
     def _wrapped_view_func(
@@ -144,7 +144,7 @@ def authenticated_remote_server_view(
             log_data = RequestNotes.get_notes(request).log_data
             assert log_data is not None
             log_data["extra"] = "[non-server-key]"
-            raise JsonableError(_("Must validate with valid Zulip server API key"))
+            raise JsonableError(_("Must validate with valid Doer server API key"))
         try:
             remote_server = validate_remote_server(request, role, api_key)
         except JsonableError as e:
@@ -172,7 +172,7 @@ def remote_server_dispatch(request: HttpRequest, /, **kwargs: Any) -> HttpRespon
 
 def remote_server_path(
     route: str,
-    **handlers: Callable[Concatenate[HttpRequest, RemoteZulipServer, ParamT], HttpResponse]
-    | tuple[Callable[Concatenate[HttpRequest, RemoteZulipServer, ParamT], HttpResponse], set[str]],
+    **handlers: Callable[Concatenate[HttpRequest, RemoteDoerServer, ParamT], HttpResponse]
+    | tuple[Callable[Concatenate[HttpRequest, RemoteDoerServer, ParamT], HttpResponse], set[str]],
 ) -> URLPattern:
     return path(route, remote_server_dispatch, handlers)

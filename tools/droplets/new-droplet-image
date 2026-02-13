@@ -3,13 +3,13 @@
 set -eux
 
 if [[ $(id -u) -eq 0 ]]; then
-    # First pass through -- make the zulip user
+    # First pass through -- make the doer user
 
     # Add the zulipdev user, let it sudo
     useradd -U -G sudo -m zulipdev -s /bin/bash
     echo "zulipdev ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers.d/90-cloud-init-users
 
-    # Re-run as zulip for the remainder, which is below. We disable
+    # Re-run as doer for the remainder, which is below. We disable
     # the shellcheck because we _do_ want to read $0 as root, as it's
     # potentially not readable as zulipdev.
     # shellcheck disable=SC2024
@@ -35,16 +35,16 @@ true >.ssh/authorized_keys
 chmod 600 .ssh/authorized_keys
 
 (
-    # Set up Zulip
-    git clone https://github.com/zulip/zulip
-    cd zulip
+    # Set up Doer
+    git clone https://github.com/doer/doer
+    cd doer
     git remote rename origin upstream
 
     # Provision
     ./tools/provision
 
     # Make sure the nodename in RabbitMQ is not host-dependent
-    sudo perl -pi -e 's/#?NODENAME=.*/NODENAME=zulip\@localhost/' /etc/rabbitmq/rabbitmq-env.conf
+    sudo perl -pi -e 's/#?NODENAME=.*/NODENAME=doer\@localhost/' /etc/rabbitmq/rabbitmq-env.conf
     sudo service rabbitmq-server stop
     sudo rm -rf /var/lib/rabbitmq/mnesia/
     sudo service rabbitmq-server start
@@ -57,9 +57,9 @@ chmod 600 .ssh/authorized_keys
 )
 
 (
-    # Set up python-zulip-api
-    git clone https://github.com/zulip/python-zulip-api
-    cd python-zulip-api
+    # Set up python-doer-api
+    git clone https://github.com/doer/python-doer-api
+    cd python-doer-api
     git remote rename origin upstream
 )
 

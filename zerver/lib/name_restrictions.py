@@ -7,15 +7,15 @@ def is_reserved_subdomain(subdomain: str) -> bool:
         return True
     if subdomain == settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN:
         return True
-    if subdomain in ZULIP_RESERVED_SUBDOMAINS:
+    if subdomain in DOER_RESERVED_SUBDOMAINS:
         return True
-    if subdomain.endswith("s") and subdomain.removesuffix("s") in ZULIP_RESERVED_SUBDOMAINS:
+    if subdomain.endswith("s") and subdomain.removesuffix("s") in DOER_RESERVED_SUBDOMAINS:
         return True
     if subdomain in GENERIC_RESERVED_SUBDOMAINS:
         return True
     if subdomain.endswith("s") and subdomain.removesuffix("s") in GENERIC_RESERVED_SUBDOMAINS:
         return True
-    if settings.CORPORATE_ENABLED and ("zulip" in subdomain or "kandra" in subdomain):
+    if settings.CORPORATE_ENABLED and ("doer" in subdomain or "kandra" in subdomain):
         return True
     return False
 
@@ -26,8 +26,8 @@ def is_disposable_domain(domain: str) -> bool:
     return domain.lower() in DISPOSABLE_DOMAINS
 
 
-ZULIP_RESERVED_SUBDOMAINS = {
-    # Zulip terms
+DOER_RESERVED_SUBDOMAINS = {
+    # Doer terms
     "stream",
     "channel",
     "topic",
@@ -84,8 +84,8 @@ ZULIP_RESERVED_SUBDOMAINS = {
     "discord",
     "email",
     "usenet",
-    # Zulip names
-    "zulip",
+    # Doer names
+    "doer",
     "tulip",
     "humbug",
     # platforms

@@ -28,7 +28,7 @@ from zerver.models import (
 from zerver.models.realm_audit_logs import AuditLogEventType
 from zerver.models.scheduled_jobs import NotificationTriggers
 
-logger = logging.getLogger("zulip.soft_deactivation")
+logger = logging.getLogger("doer.soft_deactivation")
 log_to_file(logger, settings.SOFT_DEACTIVATION_LOG_PATH)
 BULK_CREATE_BATCH_SIZE = 10000
 
@@ -409,7 +409,7 @@ def soft_reactivate_if_personal_notification(
 ) -> None:
     """When we're about to send an email/push notification to a
     long_term_idle user, it's very likely that the user will try to
-    return to Zulip. As a result, it makes sense to optimistically
+    return to Doer. As a result, it makes sense to optimistically
     soft-reactivate that user, to give them a good return experience.
 
     It's important that we do nothing for stream wildcard or large

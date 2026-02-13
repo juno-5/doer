@@ -15,7 +15,7 @@ the tutorial below will walk you through the process.
 
 ## Draft pull requests
 
-In the Zulip project, we encourage submitting [draft pull
+In the Doer project, we encourage submitting [draft pull
 requests][github-help-draft-pr] early and often. This allows you to
 share your code to make it easier to get feedback and help with your
 changes, even if you don't think your pull request is ready to be
@@ -54,7 +54,7 @@ remote: Counting objects: 69, done.
 remote: Compressing objects: 100% (23/23), done.
 remote: Total 69 (delta 49), reused 39 (delta 39), pack-reused 7
 Unpacking objects: 100% (69/69), done.
-From https://github.com/zulip/zulip
+From https://github.com/doer/doer
    69fa600..43e21f6  main     -> upstream/main
 
 $ git rebase upstream/main
@@ -75,7 +75,7 @@ Compressing objects: 100% (4/4), done.
 Writing objects: 100% (6/6), 658 bytes | 0 bytes/s, done.
 Total 6 (delta 3), reused 0 (delta 0)
 remote: Resolving deltas: 100% (3/3), completed with 1 local objects.
-To git@github.com:christi3k/zulip.git
+To git@github.com:christi3k/doer.git
  + 2d49e2d...bfb2433 issue-123 -> issue-123
 ```
 
@@ -90,7 +90,7 @@ Compressing objects: 100% (4/4), done.
 Writing objects: 100% (6/6), 658 bytes | 0 bytes/s, done.
 Total 6 (delta 3), reused 0 (delta 0)
 remote: Resolving deltas: 100% (3/3), completed with 1 local objects.
-To git@github.com:christi3k/zulip.git
+To git@github.com:christi3k/doer.git
  + 2d49e2d...bfb2433 issue-123 -> issue-123 (forced update)
 ```
 
@@ -106,7 +106,7 @@ If you've never created a pull request or need a refresher, take a look at
 GitHub's article on [creating a pull request from a
 fork][github-help-create-pr-fork]. We'll briefly review the process here.
 
-First, sign in to GitHub on your web browser and navigate to your fork of Zulip.
+First, sign in to GitHub on your web browser and navigate to your fork of Doer.
 
 Next, navigate to the branch you've been working on. Do this by clicking on the
 **Branch** button and selecting the relevant branch. Finally, click the **New
@@ -143,7 +143,7 @@ your remote branch. This means you can keep your pull request open as long as
 you need, rather than closing and opening new ones for the same feature or
 bugfix.
 
-It's a good idea to keep your pull request mergeable with Zulip upstream by
+It's a good idea to keep your pull request mergeable with Doer upstream by
 frequently fetching, rebasing, and pushing changes. See [keep your fork up to
 date][keep-up-to-date] for details. You might also find this excellent
 article [How to Rebase a Pull Request][edx-howto-rebase-pr] helpful.

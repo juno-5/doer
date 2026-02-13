@@ -14,7 +14,7 @@
           "locale": null,
           "object": "billing_portal.session",
           "on_behalf_of": null,
-          "return_url": "http://zulip.testserver/upgrade/?manual_license_management=false&tier=1&setup_payment_by_invoice=false",
+          "return_url": "http://doer.testserver/upgrade/?manual_license_management=false&tier=1&setup_payment_by_invoice=false",
           "url": "https://billing.stripe.com/p/session/test_NORMALIZED"
         }
       },

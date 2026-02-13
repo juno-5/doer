@@ -6,16 +6,16 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ClearStatus from "../include/_ClearStatus.mdx";
 import MobileMenu from "../include/_MobileMenu.mdx";
 import PersonalMenu from "../include/_PersonalMenu.mdx";
 import SelfUserCard from "../include/_SelfUserCard.mdx";
 import SetStatus from "../include/_SetStatus.mdx";
 
-import UserCircleActiveIcon from "~icons/zulip-icon/user-circle-active";
-import UserCircleIdleIcon from "~icons/zulip-icon/user-circle-idle";
-import UserCircleOfflineIcon from "~icons/zulip-icon/user-circle-offline";
+import UserCircleActiveIcon from "~icons/doer-icon/user-circle-active";
+import UserCircleIdleIcon from "~icons/doer-icon/user-circle-idle";
+import UserCircleOfflineIcon from "~icons/doer-icon/user-circle-offline";
 
 Status and availability let everyone know roughly how quickly you'll be
 responding to messages.
@@ -25,7 +25,7 @@ status might be "📅 In a meeting" or "🏠 Working remotely". To make it easy 
 notice, the status emoji is shown next to your name in the sidebars, message
 feed, and compose box.
 
-Your **availability** is a colored dot (like <UserCircleActiveIcon />) that indicates if you're currently active on Zulip, idle,
+Your **availability** is a colored dot (like <UserCircleActiveIcon />) that indicates if you're currently active on Doer, idle,
 or offline. You can also [go invisible](#invisible-mode) to appear offline
 to other users.
 
@@ -112,11 +112,11 @@ in the web and desktop apps.
          set.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click on a user's profile picture or name on a message they
       sent to view their status in their **user card**, or configure status text
       to always be shown in the right sidebar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -141,10 +141,10 @@ With the compact option, only status emoji are shown.
          user list style.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can always hover over a user's name in the right sidebar to view their
       status message if they have one set.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -152,11 +152,11 @@ With the compact option, only status emoji are shown.
 
 There are three availability states:
 
-* **Active** (<UserCircleActiveIcon />): Zulip is open and in focus on web,
+* **Active** (<UserCircleActiveIcon />): Doer is open and in focus on web,
   desktop or mobile, or was in the last 140 seconds.
-* **Idle** (<UserCircleIdleIcon />): Zulip is open on your computer (either
+* **Idle** (<UserCircleIdleIcon />): Doer is open on your computer (either
   desktop or web), but you are not active.
-* **Offline** (<UserCircleOfflineIcon />): Zulip is not open on your computer,
+* **Offline** (<UserCircleOfflineIcon />): Doer is not open on your computer,
   or you have turned on invisible mode.
 
 ### View availability
@@ -170,10 +170,10 @@ There are three availability states:
          indicator, the user is offline.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can see when someone offline was last active by hovering over their
       name in the left or right sidebar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -186,20 +186,20 @@ There are three availability states:
 
 ### Invisible mode
 
-Zulip supports the privacy option of never updating the availability
+Doer supports the privacy option of never updating the availability
 information for your account. The result is that you will always
 appear to other users as **Offline**, regardless of your activity in
-Zulip.
+Doer.
 
 With this setting, your "Last active" time displayed to other users in
 the UI will be frozen as the approximate time you enabled this setting.
 Your activity will still be included in your organization's [statistics](/help/analytics).
 
-<ZulipTip>
+<DoerTip>
   Consider also [not
-  allowing](/help/read-receipts#configure-whether-zulip-lets-others-see-when-youve-read-messages)
+  allowing](/help/read-receipts#configure-whether-doer-lets-others-see-when-youve-read-messages)
   other users to see when you have read messages.
-</ZulipTip>
+</DoerTip>
 
 ### Toggle invisible mode
 
@@ -212,10 +212,10 @@ Your activity will still be included in your organization's [statistics](/help/a
       1. To disable, you'll select **Turn off invisible mode**.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also toggle this setting in the **Account & privacy**
       tab of your **Personal settings** menu.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">

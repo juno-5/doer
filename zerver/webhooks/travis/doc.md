@@ -1,6 +1,6 @@
-# Zulip Travis CI integration
+# Doer Travis CI integration
 
-See your Travis CI build notifications in Zulip!
+See your Travis CI build notifications in Doer!
 
 {start_tabs}
 

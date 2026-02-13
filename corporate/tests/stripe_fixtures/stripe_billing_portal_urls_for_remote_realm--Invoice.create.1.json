@@ -92,7 +92,7 @@
   "shipping_cost": null,
   "shipping_details": null,
   "starting_balance": 0,
-  "statement_descriptor": "Zulip Business",
+  "statement_descriptor": "Doer Business",
   "status": "draft",
   "status_transitions": {
     "finalized_at": null,

@@ -203,7 +203,7 @@ class SlackWebhookTests(WebhookTestCase):
 
     @mock_slack_api_calls
     def test_message_with_channel_mentions(self) -> None:
-        message_body = "**#zulip-mirror** **#general** message with channel mentions"
+        message_body = "**#doer-mirror** **#general** message with channel mentions"
         expected_message = EXPECTED_MESSAGE.format(user=USER, message=message_body)
         self.check_webhook(
             "message_with_channel_mentions",

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eu
 
-upstream_url="https://github.com/zulip/zulip.git"
+upstream_url="https://github.com/doer/doer.git"
 if ! git remote | grep -qx upstream; then
     git remote add upstream "$upstream_url"
 else

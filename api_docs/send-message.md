@@ -27,19 +27,19 @@ curl -X POST {{ api_url }}/v1/messages \
     --data-urlencode 'content=With mirth and laughter let old wrinkles come.'
 ```
 
-{tab|zulip-send}
+{tab|doer-send}
 
-You can use `zulip-send`
-(available after you `pip install zulip`) to easily send Zulips from
+You can use `doer-send`
+(available after you `pip install doer`) to easily send Zulips from
 the command-line, providing the message content via STDIN.
 
 ```bash
 # For channel messages
-zulip-send --stream Denmark --subject Castle \
+doer-send --stream Denmark --subject Castle \
     --user othello-bot@example.com --api-key a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5
 
 # For direct messages
-zulip-send hamlet@example.com \
+doer-send hamlet@example.com \
     --user othello-bot@example.com --api-key a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5
 ```
 
@@ -50,7 +50,7 @@ If you'd like, you can also provide the message on the command-line with the
 
 
 ```bash
-zulip-send --stream Denmark --subject Castle \
+doer-send --stream Denmark --subject Castle \
     --message 'I come not, friends, to steal away your hearts.' \
     --user othello-bot@example.com --api-key a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5
 ```
@@ -62,13 +62,13 @@ file.
 
 ## Parameters
 
-{generate_api_arguments_table|zulip.yaml|/messages:post}
+{generate_api_arguments_table|doer.yaml|/messages:post}
 
 {generate_parameter_description(/messages:post)}
 
 ## Response
 
-{generate_return_values_table|zulip.yaml|/messages:post}
+{generate_return_values_table|doer.yaml|/messages:post}
 
 {generate_response_description(/messages:post)}
 

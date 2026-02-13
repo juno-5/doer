@@ -5,7 +5,7 @@
   "currency": null,
   "default_source": null,
   "delinquent": false,
-  "description": "zulip (Zulip Dev)",
+  "description": "doer (Doer Dev)",
   "discount": null,
   "email": "iago@zulip.com",
   "id": "void_all_open_invoices--Customer.create.1.json",
@@ -19,7 +19,7 @@
   "livemode": false,
   "metadata": {
     "realm_id": "1",
-    "realm_str": "zulip"
+    "realm_str": "doer"
   },
   "name": null,
   "next_invoice_sequence": 1,

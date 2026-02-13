@@ -61,7 +61,7 @@
               {
                 "amount": 136000,
                 "currency": "usd",
-                "description": "Additional Zulip Cloud Standard license",
+                "description": "Additional Doer Cloud Standard license",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -132,7 +132,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -222,7 +222,7 @@
               {
                 "amount": 136000,
                 "currency": "usd",
-                "description": "Additional Zulip Cloud Standard license",
+                "description": "Additional Doer Cloud Standard license",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -293,7 +293,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -394,7 +394,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -472,7 +472,7 @@
               {
                 "amount": 136000,
                 "currency": "usd",
-                "description": "Additional Zulip Cloud Standard license",
+                "description": "Additional Doer Cloud Standard license",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -543,7 +543,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -593,7 +593,7 @@
           "currency": "usd",
           "customer": "cus_NORMALIZED",
           "date": 1000000000,
-          "description": "Additional Zulip Cloud Standard license",
+          "description": "Additional Doer Cloud Standard license",
           "discountable": false,
           "discounts": [],
           "id": "upgrade_by_card_with_outdated_seat_count--Event.list.4.json",
@@ -722,7 +722,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,

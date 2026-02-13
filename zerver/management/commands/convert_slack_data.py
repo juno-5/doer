@@ -8,11 +8,11 @@ from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
 from zerver.data_import.slack import do_convert_directory, do_convert_zipfile
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
-    help = """Convert the Slack data into Zulip data format."""
+class Command(DoerBaseCommand):
+    help = """Convert the Slack data into Doer data format."""
 
     @override
     def add_arguments(self, parser: CommandParser) -> None:
@@ -40,7 +40,7 @@ class Command(ZulipBaseCommand):
         parser.add_argument(
             "--no-convert-slack-threads",
             action="store_true",
-            help="If specified, do not convert Slack threads to separate Zulip topics",
+            help="If specified, do not convert Slack threads to separate Doer topics",
         )
 
         parser.formatter_class = argparse.RawTextHelpFormatter

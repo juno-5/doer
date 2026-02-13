@@ -1,8 +1,8 @@
 import os
 
-from scripts.lib.zulip_tools import os_families
+from scripts.lib.doer_tools import os_families
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 VENV_DEPENDENCIES = [
     "build-essential",

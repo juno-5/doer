@@ -1,0 +1,15 @@
+{% if organization_type == "business" %}
+{{ _("Doer guide for businesses") }}
+{% elif organization_type == "opensource" %}
+{{ _("Doer guide for open-source projects") }}
+{% elif organization_type == "education" %}
+{{ _("Doer guide for education") }}
+{% elif organization_type == "research" %}
+{{ _("Doer guide for research") }}
+{% elif organization_type == "event" %}
+{{ _("Doer guide for events and conferences") }}
+{% elif organization_type == "nonprofit" %}
+{{ _("Doer guide for non-profits") }}
+{% elif organization_type == "community" %}
+{{ _("Doer guide for communities") }}
+{% endif %}

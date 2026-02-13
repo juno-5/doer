@@ -60,7 +60,7 @@
                             {{> dropdown_widget_wrapper
                               widget_name="compose_select_recipient"}}
                             <div class="topic-marker-container">
-                                <a role="button" class="conversation-arrow zulip-icon zulip-icon-chevron-right"></a>
+                                <a role="button" class="conversation-arrow doer-icon doer-icon-chevron-right"></a>
                             </div>
                             <div id="compose-channel-recipient">
                                 <input type="text" name="stream_message_recipient_topic" id="stream_message_recipient_topic" maxlength="{{ max_topic_length }}" value="" placeholder="{{t 'Topic' }}" autocomplete="off" tabindex="0" aria-label="{{t 'Topic' }}" />
@@ -68,14 +68,14 @@
                                     {{> topic_not_mandatory_placeholder_text empty_string_topic_display_name=empty_string_topic_display_name}}
                                 </span>
                                 <button type="button" id="recipient_box_clear_topic_button" class="compose-new-recipient-button" tabindex="-1">
-                                    <i class="zulip-icon zulip-icon-square-plus"></i>
+                                    <i class="doer-icon doer-icon-square-plus"></i>
                                 </button>
                             </div>
                             <div id="compose-direct-recipient" data-before="{{t 'You and' }}">
                                 <div class="pill-container">
                                     <div class="input" contenteditable="true" id="private_message_recipient" data-no-recipients-text="{{t 'Add users' }}" ></div>
-                                    <button type="button" id="compose-new-direct-recipient-button" class="compose-new-recipient-button tippy-zulip-delayed-tooltip" data-tippy-content="{{t 'Add recipient' }}" tabindex="-1">
-                                        <i class="zulip-icon zulip-icon-square-plus"></i>
+                                    <button type="button" id="compose-new-direct-recipient-button" class="compose-new-recipient-button tippy-doer-delayed-tooltip" data-tippy-content="{{t 'Add recipient' }}" tabindex="-1">
+                                        <i class="doer-icon doer-icon-square-plus"></i>
                                     </button>
                                 </div>
                             </div>
@@ -91,9 +91,9 @@
                                 </div>
                             </div>
                             <div class="composebox-buttons">
-                                <button type="button" class="maximize-composebox-button zulip-icon zulip-icon-maximize-diagonal" aria-label="{{t 'Maximize compose box' }}" data-tippy-content="{{t 'Maximize compose box' }}"></button>
-                                <button type="button" class="expand-composebox-button zulip-icon zulip-icon-expand-diagonal" aria-label="{{t 'Expand compose box' }}" data-tippy-content="{{t 'Expand compose box' }}"></button>
-                                <button type="button" class="collapse-composebox-button zulip-icon zulip-icon-collapse-diagonal" aria-label="{{t 'Collapse compose box' }}" data-tippy-content="{{t 'Collapse compose box' }}"></button>
+                                <button type="button" class="maximize-composebox-button doer-icon doer-icon-maximize-diagonal" aria-label="{{t 'Maximize compose box' }}" data-tippy-content="{{t 'Maximize compose box' }}"></button>
+                                <button type="button" class="expand-composebox-button doer-icon doer-icon-expand-diagonal" aria-label="{{t 'Expand compose box' }}" data-tippy-content="{{t 'Expand compose box' }}"></button>
+                                <button type="button" class="collapse-composebox-button doer-icon doer-icon-collapse-diagonal" aria-label="{{t 'Collapse compose box' }}" data-tippy-content="{{t 'Collapse compose box' }}"></button>
                             </div>
                             <div class="drag"></div>
                         </div>
@@ -106,10 +106,10 @@
                             <div class="message-send-controls">
                                 <button type="submit" id="compose-send-button" class="send_message compose-submit-button compose-send-or-save-button" aria-label="{{t 'Send' }}">
                                     <img class="loader" alt="" src="" />
-                                    <i class="zulip-icon zulip-icon-send"></i>
+                                    <i class="doer-icon doer-icon-send"></i>
                                 </button>
                                 <button class="send-control-button send-related-action-button" id="send_later" tabindex=0 type="button" data-tippy-content="{{t 'Send options' }}">
-                                    <i class="zulip-icon zulip-icon-more-vertical"></i>
+                                    <i class="doer-icon doer-icon-more-vertical"></i>
                                 </button>
                             </div>
                         </div>
@@ -117,16 +117,16 @@
                         <div id="message-formatting-controls-container" class="compose-scrolling-buttons-container">
                             {{> compose_control_buttons . }}
                             <button type="button" class="formatting-control-scroller-button formatting-scroller-forward">
-                                <i class="scroller-forward-icon zulip-icon zulip-icon-compose-scroll-right"></i>
+                                <i class="scroller-forward-icon doer-icon doer-icon-compose-scroll-right"></i>
                             </button>
                             <button type="button" class="formatting-control-scroller-button formatting-scroller-backward">
-                                <i class="scroller-backward-icon zulip-icon zulip-icon-compose-scroll-left"></i>
+                                <i class="scroller-backward-icon doer-icon doer-icon-compose-scroll-left"></i>
                             </button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <button type="button" class="zulip-icon zulip-icon-close" id='compose_close' data-tooltip-template-id="compose_close_tooltip_template"></button>
+        <button type="button" class="doer-icon doer-icon-close" id='compose_close' data-tooltip-template-id="compose_close_tooltip_template"></button>
     </div>
 </div>

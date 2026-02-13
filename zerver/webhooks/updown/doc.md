@@ -1,6 +1,6 @@
-# Zulip Updown integration
+# Doer Updown integration
 
-See Updown reports in Zulip!
+See Updown reports in Doer!
 
 {start_tabs}
 

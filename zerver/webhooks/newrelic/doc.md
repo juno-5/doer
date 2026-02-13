@@ -1,6 +1,6 @@
-# Zulip New Relic integration
+# Doer New Relic integration
 
-Get Zulip notification for New Relic incidents.
+Get Doer notification for New Relic incidents.
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Zulip notification for New Relic incidents.
 1. In New Relic, go to the **Alerts** menu, and select **Destinations**.
    Choose **Webhook** in the **Add a destination** section.
 
-1. Set a **Webhook name**, such as `Zulip`. Set the **Endpoint URL** to
+1. Set a **Webhook name**, such as `Doer`. Set the **Endpoint URL** to
    the URL generated above. Click **Save destination**.
 
 1. In the **Alerts** menu, select **Workflows**. Click on
@@ -19,7 +19,7 @@ Get Zulip notification for New Relic incidents.
 
 1. Set your workflow name, and filter the trigger conditions. In the
    **Notify** section, choose **Webhook**. In the **Edit notification
-   message** menu, select the destination for Zulip created above.
+   message** menu, select the destination for Doer created above.
 
 1. In the **Payload** section, you can configure the payload for this
    workflow. The default payload template is sufficient to get the
@@ -57,9 +57,9 @@ Get Zulip notification for New Relic incidents.
 ### Configuration options
 
 * With New Relic's [custom payload feature][1], you can include custom
-  fields in your Zulip notifications by configuring a `zulipCustomFields`
+  fields in your Doer notifications by configuring a `zulipCustomFields`
   dictionary in your notification payload template. The keys of
-  `zulipCustomFields` will be displayed in the Zulip notification
+  `zulipCustomFields` will be displayed in the Doer notification
   message, so we recommend that they be human-readable and descriptive.
   The values of the dictionary can be strings, integers, booleans, or
   lists of the those same data types.

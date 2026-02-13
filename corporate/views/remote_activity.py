@@ -121,7 +121,7 @@ def get_remote_server_activity(request: HttpRequest) -> HttpResponse:
         "Realm name",
         "Realm host or server hostname",
         "Server contact email",
-        "Server Zulip version",
+        "Server Doer version",
         "Server last audit log update (UTC)",
         "Mobile users",
         "Mobile pushes",

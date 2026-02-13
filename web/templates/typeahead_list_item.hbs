@@ -10,18 +10,18 @@
         <div class="typeahead-image">
             <img class="typeahead-image-avatar" src="{{ img_src }}" />
             {{#if user_circle_class}}
-            <span class="zulip-icon zulip-icon-{{user_circle_class}} {{user_circle_class}} user-circle"></span>
+            <span class="doer-icon doer-icon-{{user_circle_class}} {{user_circle_class}} user-circle"></span>
             {{/if}}
         </div>
         {{else}}
-        <i class='typeahead-image zulip-icon zulip-icon-user-group' aria-hidden="true"></i>
+        <i class='typeahead-image doer-icon doer-icon-user-group' aria-hidden="true"></i>
         {{/if}}
     {{else if is_user_group}}
-        <i class="typeahead-image zulip-icon zulip-icon-user-group" aria-hidden="true"></i>
+        <i class="typeahead-image doer-icon doer-icon-user-group" aria-hidden="true"></i>
     {{/if}}
     {{#if is_stream_topic}}
     <div class="typeahead-text-container">
-        <span role="button" class="zulip-icon zulip-icon-corner-down-right stream-to-topic-arrow"></span>
+        <span role="button" class="doer-icon doer-icon-corner-down-right stream-to-topic-arrow"></span>
         <strong class="typeahead-strong-section{{#if is_empty_string_topic}} empty-topic-display{{/if}}">
             {{~ topic_display_name ~}}
         </strong>
@@ -37,7 +37,7 @@
             {{~/if~}}
         </strong>
         {{~#if is_bot}}
-            <i class="zulip-icon zulip-icon-bot" aria-label="{{t 'Bot' }}"></i>
+            <i class="doer-icon doer-icon-bot" aria-label="{{t 'Bot' }}"></i>
         {{/if}}
         {{~#if should_add_guest_user_indicator}}
             <i>({{t 'guest'}})</i>

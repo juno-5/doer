@@ -2,13 +2,13 @@ from collections import defaultdict
 from datetime import timedelta
 
 from zerver.lib.stream_subscription import get_active_subscriptions_for_stream_ids
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Stream
 from zerver.models.realms import get_realm
 from zilencer.management.commands.populate_db import choose_date_sent
 
 
-class TestChoosePubDate(ZulipTestCase):
+class TestChoosePubDate(DoerTestCase):
     def test_choose_date_sent_large_tot_messages(self) -> None:
         """
         Test for a bug that was present, where specifying a large amount of messages to generate
@@ -26,7 +26,7 @@ class TestChoosePubDate(ZulipTestCase):
             self.assertTrue(datetimes_list[i] - datetimes_list[i - 1] > timedelta(minutes=5))
 
 
-class TestUserTimeZones(ZulipTestCase):
+class TestUserTimeZones(DoerTestCase):
     def test_timezones_assigned_to_users(self) -> None:
         othello = self.example_user("othello")
         self.assertEqual(othello.timezone, "US/Pacific")
@@ -36,13 +36,13 @@ class TestUserTimeZones(ZulipTestCase):
         self.assertEqual(cordelia.timezone, "UTC")
 
 
-class TestSubscribeUsers(ZulipTestCase):
+class TestSubscribeUsers(DoerTestCase):
     def test_bulk_create_stream_subscriptions(self) -> None:
         """
         This insures bulk_create_stream_subscriptions() ran successfully when test data is loaded via populate_db.py
         """
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         streams = Stream.objects.filter(realm=realm)
         active_subscriptions = get_active_subscriptions_for_stream_ids(
             {stream.id for stream in streams}

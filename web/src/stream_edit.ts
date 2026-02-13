@@ -462,7 +462,7 @@ export function show_settings_for(node: HTMLElement): void {
         other_settings,
         stream_topics_policy_values: settings_config.get_stream_topics_policy_values(),
         check_default_stream: stream_data.is_default_stream_id(stream_id),
-        zulip_plan_is_not_limited: realm.zulip_plan_is_not_limited,
+        doer_plan_is_not_limited: realm.doer_plan_is_not_limited,
         upgrade_text_for_wide_organization_logo: realm.upgrade_text_for_wide_organization_logo,
         is_business_type_org:
             realm.realm_org_type === settings_config.all_org_type_values.business.code,
@@ -884,12 +884,12 @@ export function initialize(): void {
             stream_id === realm.realm_new_stream_announcements_stream_id;
         const is_signup_announcements_stream =
             stream_id === realm.realm_signup_announcements_stream_id;
-        const is_zulip_update_announcements_stream =
-            stream_id === realm.realm_zulip_update_announcements_stream_id;
+        const is_doer_update_announcements_stream =
+            stream_id === realm.realm_doer_update_announcements_stream_id;
         const is_announcement_stream =
             is_new_stream_announcements_stream ||
             is_signup_announcements_stream ||
-            is_zulip_update_announcements_stream ||
+            is_doer_update_announcements_stream ||
             is_moderation_request_channel;
 
         const modal_content_html = render_settings_deactivation_stream_modal({
@@ -897,7 +897,7 @@ export function initialize(): void {
             is_moderation_request_channel,
             is_new_stream_announcements_stream,
             is_signup_announcements_stream,
-            is_zulip_update_announcements_stream,
+            is_doer_update_announcements_stream,
             is_announcement_stream,
         });
 

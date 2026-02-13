@@ -574,7 +574,7 @@ export function initialize(): void {
     // doing something.  Be careful, though, if you try to capture
     // mousemove, then you will have to contend with the autoscroll
     // itself generating mousemove events.
-    $(document).on("message_selected.zulip wheel", () => {
+    $(document).on("message_selected.doer wheel", () => {
         stop_auto_scrolling();
     });
 }

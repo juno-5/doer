@@ -75,8 +75,8 @@
         .stream-privacy i {
             font-size: 1.0714em; /* 15px at 14px em */
 
-            &.zulip-icon-globe,
-            &.zulip-icon-hashtag {
+            &.doer-icon-globe,
+            &.doer-icon-hashtag {
                 position: relative;
                 top: -0.5px;
             }
@@ -163,7 +163,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
 
-            i.zulip-icon-bot {
+            i.doer-icon-bot {
                 vertical-align: middle;
                 position: relative;
                 top: -1px;
@@ -241,7 +241,7 @@
     font-weight: 600;
     overflow: hidden;
 
-    .zulip-icon.zulip-icon-globe {
+    .doer-icon.doer-icon-globe {
         position: relative;
         top: 1px;
     }

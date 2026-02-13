@@ -8,13 +8,13 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.lib.export import do_export_user
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
-    help = """Exports message data from a Zulip user
+class Command(DoerBaseCommand):
+    help = """Exports message data from a Doer user
 
-    This command exports the message history for a single Zulip user.
+    This command exports the message history for a single Doer user.
 
     Note that this only exports the user's message history and
     realm-public metadata needed to understand it; it does nothing
@@ -35,7 +35,7 @@ class Command(ZulipBaseCommand):
 
         output_dir = options["output_dir"]
         if output_dir is None:
-            output_dir = tempfile.mkdtemp(prefix="zulip-export-")
+            output_dir = tempfile.mkdtemp(prefix="doer-export-")
         else:
             output_dir = os.path.abspath(output_dir)
             if os.path.exists(output_dir) and os.listdir(output_dir):

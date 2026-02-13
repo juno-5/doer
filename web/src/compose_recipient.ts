@@ -216,7 +216,7 @@ export function update_compose_for_message_type(opts: ComposeTriggeredOptions): 
         // it here.
         const direct_message_label = $t({defaultMessage: "DM"});
         $("#compose_select_recipient_widget .dropdown_widget_value").html(
-            `<i class="zulip-icon zulip-icon-users channel-privacy-type-icon"></i>
+            `<i class="doer-icon doer-icon-users channel-privacy-type-icon"></i>
             <span class="decorated-dm-label">${direct_message_label}</span>`,
         );
     }

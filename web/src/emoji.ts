@@ -52,7 +52,7 @@ export type EmojiDict = {
 // Details needed by template to render an emoji.
 export type EmojiRenderingDetails = {
     emoji_name: string;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
     emoji_code: string;
     url?: string;
     still_url?: string | null;
@@ -65,10 +65,10 @@ let emoji_codes: ServerUnicodeEmojiData;
 // used by every widget in the web app for gathering data for displaying
 // emojis. Emoji picker uses this data to derive data for its own use.
 export let emojis_by_name = new Map<string, EmojiDict>();
-export const all_realm_emojis = new Map<number | string, RealmEmoji | typeof zulip_emoji>();
+export const all_realm_emojis = new Map<number | string, RealmEmoji | typeof doer_emoji>();
 export const active_realm_emojis = new Map<
     string,
-    Omit<RealmEmoji, "deactivated"> | typeof zulip_emoji
+    Omit<RealmEmoji, "deactivated"> | typeof doer_emoji
 >();
 
 let default_emoji_aliases = new Map<string, string[]>();
@@ -130,13 +130,13 @@ function build_emoticon_translations({
     return translations;
 }
 
-const zulip_emoji = {
-    id: "zulip",
-    emoji_name: "zulip",
+const doer_emoji = {
+    id: "doer",
+    emoji_name: "doer",
     // We don't use a webpack'd URL here, for consistency with the
     // server-side markdown, which doesn't want to render it into the
     // message content.
-    emoji_url: "/static/generated/emoji/images/emoji/unicode/zulip.png",
+    emoji_url: "/static/generated/emoji/images/emoji/unicode/doer.png",
     still_url: null,
     is_realm_emoji: true,
     deactivated: false,
@@ -258,16 +258,16 @@ export function update_emojis(realm_emojis: RealmEmojiMap): void {
         }
     }
 
-    // Add the special Zulip emoji as though it were a realm emoji.
+    // Add the special Doer emoji as though it were a realm emoji.
 
-    // The Zulip emoji is the only emoji that uses a string ("zulip")
+    // The Doer emoji is the only emoji that uses a string ("doer")
     // as its ID. All other emoji use numeric IDs. This special case
-    // is confusing; ideally we'd convert the Zulip emoji to be
+    // is confusing; ideally we'd convert the Doer emoji to be
     // implemented using the RealmEmoji infrastructure.
-    all_realm_emojis.set("zulip", zulip_emoji);
+    all_realm_emojis.set("doer", doer_emoji);
 
-    // here "zulip" is an emoji name, which is fine.
-    active_realm_emojis.set("zulip", zulip_emoji);
+    // here "doer" is an emoji name, which is fine.
+    active_realm_emojis.set("doer", doer_emoji);
 
     emojis_by_name = build_emojis_by_name({
         realm_emojis: active_realm_emojis,
@@ -292,7 +292,7 @@ export function get_emoji_details_by_name(emoji_name: string): EmojiRenderingDet
             emoji_code: emoji_code_info.id,
             url: emoji_code_info.emoji_url,
             still_url: emoji_code_info.still_url,
-            reaction_type: emoji_name === "zulip" ? "zulip_extra_emoji" : "realm_emoji",
+            reaction_type: emoji_name === "doer" ? "doer_extra_emoji" : "realm_emoji",
         };
     }
 
@@ -311,7 +311,7 @@ export function get_emoji_details_by_name(emoji_name: string): EmojiRenderingDet
 export function get_emoji_details_for_rendering(opts: {
     emoji_name: string;
     emoji_code: string;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
 }): EmojiRenderingDetails {
     if (opts.reaction_type !== "unicode_emoji") {
         const realm_emoji = all_realm_emojis.get(opts.emoji_code);

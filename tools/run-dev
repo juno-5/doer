@@ -25,7 +25,7 @@ import aiohttp.web_fileresponse
 from aiohttp import hdrs, web
 from aiohttp.http_exceptions import BadStatusLine
 
-from scripts.lib.zulip_tools import CYAN, ENDC
+from scripts.lib.doer_tools import CYAN, ENDC
 from tools.lib.test_script import add_provision_check_override_param, assert_provisioning_status_ok
 from zerver.lib.mime_types import EXTRA_MIME_TYPES
 from zerver.lib.partial import partial
@@ -73,12 +73,12 @@ parser.add_argument(
 parser.add_argument(
     "--help-center-dev-server",
     action="store_true",
-    help="Run dev server for help center alongside the Zulip app. Hot reload will work for this mode, but search will not work in the generated website.",
+    help="Run dev server for help center alongside the Doer app. Hot reload will work for this mode, but search will not work in the generated website.",
 )
 parser.add_argument(
     "--only-help-center",
     action="store_true",
-    help="Run help center dev server on port 9991 without running the Zulip web app and related services",
+    help="Run help center dev server on port 9991 without running the Doer web app and related services",
 )
 add_provision_check_override_param(parser)
 options = parser.parse_args()
@@ -200,7 +200,7 @@ def server_processes() -> list[list[str]]:
         [
             "env",
             "PGHOST=127.0.0.1",  # Force password authentication using .pgpass
-            "./puppet/zulip/files/postgresql/process_fts_updates",
+            "./puppet/doer/files/postgresql/process_fts_updates",
             "--quiet",
         ],
         ["./manage.py", "deliver_scheduled_messages", "--automated"],
@@ -307,7 +307,7 @@ def run_help_center_dev_server(
     allowed_hosts: str, port: int = help_center_port
 ) -> "subprocess.Popen[bytes]":
     env = os.environ.copy()
-    env["ZULIP_WEB_APP_PROXY_PORT"] = str(proxy_port)
+    env["DOER_WEB_APP_PROXY_PORT"] = str(proxy_port)
 
     return subprocess.Popen(
         [
@@ -407,7 +407,7 @@ def print_listeners(external_host_url: str) -> None:
         )
         return
 
-    print(f"\nStarting Zulip on:\n\n\t{CYAN}{external_host_url}/{ENDC}\n\nInternal ports:")
+    print(f"\nStarting Doer on:\n\n\t{CYAN}{external_host_url}/{ENDC}\n\nInternal ports:")
     ports = [
         (proxy_port, "Development server proxy (connect here)"),
         (django_port, "Django"),
@@ -460,10 +460,10 @@ async def serve() -> None:
     # EXTERNAL_HOST logic from dev_settings.py.
     IS_DEV_DROPLET = pwd.getpwuid(os.getuid()).pw_name == "zulipdev"
     if IS_DEV_DROPLET:
-        # Technically, the `zulip.` is a subdomain of the server, so
+        # Technically, the `doer.` is a subdomain of the server, so
         # this is kinda misleading, but 99% of development is done on
-        # the default/zulip subdomain.
-        default_hostname = "zulip." + os.uname()[1].lower()
+        # the default/doer subdomain.
+        default_hostname = "doer." + os.uname()[1].lower()
     else:
         default_hostname = "localhost"
 

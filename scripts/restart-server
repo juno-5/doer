@@ -15,7 +15,7 @@ from scripts.lib.setup_path import setup_path
 setup_path()
 
 from scripts.lib.supervisor import list_supervisor_processes
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     DEPLOYMENTS_DIR,
     ENDC,
     LOCK_DIR,
@@ -48,8 +48,8 @@ os.chdir(deploy_path)
 username = pwd.getpwuid(os.getuid()).pw_name
 if username == "root":
     su_to_zulip()
-elif username != "zulip":
-    logging.error("Must be run as user 'zulip'.")
+elif username != "doer":
+    logging.error("Must be run as user 'doer'.")
     sys.exit(1)
 
 if os.environ.get("RUNNING_UNDER_CRON") and os.path.exists(LOCK_DIR):
@@ -60,7 +60,7 @@ if args.tornado_reshard:
     tornado_reshard_files = ["/etc/zulip/sharding.json", "/etc/zulip/nginx_sharding_map.conf"]
     if not all(os.path.exists(f"{path}.tmp") for path in tornado_reshard_files):
         logging.info(
-            "No resharding changes to apply!  Edit zulip.conf and run refresh-sharding-and-restart"
+            "No resharding changes to apply!  Edit doer.conf and run refresh-sharding-and-restart"
         )
         sys.exit(1)
 
@@ -96,34 +96,34 @@ if has_application_server():
     # In those cases, using the glob form is faster -- but if we do need
     # to iterate, we need to expand the glob.
     if action == "start" or args.less_graceful:
-        workers.append("zulip-workers:*")
+        workers.append("doer-workers:*")
     else:
-        workers.extend(list_supervisor_processes(["zulip-workers:*"]))
+        workers.extend(list_supervisor_processes(["doer-workers:*"]))
 
     if has_application_server(once=True):
-        # These used to be included in "zulip-workers:*"; since we may
-        # be restarting an older version of Zulip, which has not
+        # These used to be included in "doer-workers:*"; since we may
+        # be restarting an older version of Doer, which has not
         # applied puppet to reload the new list of processes, only
         # stop them if they currently exist according to
         # `supervisorctl`.
         workers.extend(
             list_supervisor_processes(
                 [
-                    "zulip_deliver_scheduled_emails",
-                    "zulip_deliver_scheduled_messages",
+                    "doer_deliver_scheduled_emails",
+                    "doer_deliver_scheduled_messages",
                 ]
             )
         )
 
     # This is an optional service, so may or may not exist
-    workers.extend(list_supervisor_processes(["zulip-katex"]))
+    workers.extend(list_supervisor_processes(["doer-katex"]))
 
     # This does have some Python code, which reads from settings.py,
     # so we need to restart it on every deploy.  A short outage during
     # the restart is fine, as clients will transparently retry.
-    workers.append("zulip-tus")
+    workers.append("doer-tus")
 
-    workers.extend(list_supervisor_processes(["zulip-email-server"]))
+    workers.extend(list_supervisor_processes(["doer-email-server"]))
 
 if has_process_fts_updates():
     workers.append("process-fts-updates")
@@ -139,9 +139,9 @@ if aux_services:
 
 if args.only_django:
     workers = []
-    check_services = ["zulip-django"]
+    check_services = ["doer-django"]
 else:
-    check_services = [*workers, "zulip-django", "zulip-tornado:*"]
+    check_services = [*workers, "doer-django", "doer-tornado:*"]
 
 # If none of the workers nor the application servers are running, this
 # is actually a "start," not a restart, which means we will defer
@@ -157,7 +157,7 @@ elif action == "start":
         # version that we would have started.  We do this via
         # comparing our CWD to the CWD of the oldest uwsgi worker.
         oldest_pid = subprocess.check_output(
-            ["pgrep", "--oldest", "--full", "zulip-django uWSGI worker"], text=True
+            ["pgrep", "--oldest", "--full", "doer-django uWSGI worker"], text=True
         ).strip()
         running_cwd = os.readlink(f"/proc/{oldest_pid}/cwd")
         if deploy_path != running_cwd:
@@ -166,7 +166,7 @@ elif action == "start":
             logging.warning("We would have started:  %s", deploy_path)
             logging.warning("To restart, call %s/scripts/restart-server", deploy_path)
         else:
-            logging.info("Zulip is already started; nothing to do!")
+            logging.info("Doer is already started; nothing to do!")
         sys.exit(0)
 
 
@@ -244,7 +244,7 @@ if has_application_server():
         # Python processes restarting at the same time, resulting in each
         # receiving insufficient priority.  This is important, because
         # Tornado being unavailable for too long is the main source of
-        # user-visible downtime when we restart a Zulip server.  We do
+        # user-visible downtime when we restart a Doer server.  We do
         # this before restarting Django, in case there are new event types
         # which it will need to know how to deal with.
         if len(tornado_ports) > 1:
@@ -254,10 +254,10 @@ if has_application_server():
                 # supervisord group where if any individual process is slow to
                 # stop, the whole bundle stays stopped for an extended time.
                 logging.info("%s Tornado process on port %s", verbing, p)
-                restart_or_start(f"zulip-tornado:zulip-tornado-port-{p}")
+                restart_or_start(f"doer-tornado:doer-tornado-port-{p}")
         else:
             logging.info("%s Tornado process", verbing)
-            restart_or_start("zulip-tornado:*")
+            restart_or_start("doer-tornado:*")
 
     # Finally, restart the Django uWSGI processes.
     if (
@@ -268,7 +268,7 @@ if has_application_server():
     ):
         # See if it's currently running
         uwsgi_status = subprocess.run(
-            ["supervisorctl", "status", "zulip-django"],
+            ["supervisorctl", "status", "doer-django"],
             stdout=subprocess.DEVNULL,
             check=False,
         )
@@ -289,15 +289,15 @@ if has_application_server():
             logging.info("Chain reloading complete")
         else:
             logging.info("Starting django server")
-            subprocess.check_call(["supervisorctl", "start", "zulip-django"])
+            subprocess.check_call(["supervisorctl", "start", "doer-django"])
     else:
         logging.info("%s django server", verbing)
-        restart_or_start("zulip-django")
+        restart_or_start("doer-django")
 
     using_sso = subprocess.check_output(["./scripts/get-django-setting", "USING_APACHE_SSO"])
     if using_sso.strip() == b"True":
         logging.info("Restarting Apache WSGI process...")
-        subprocess.check_call(["pkill", "-x", "apache2", "-u", "zulip"])
+        subprocess.check_call(["pkill", "-x", "apache2", "-u", "doer"])
 
 # If we were doing this non-gracefully, or starting as opposed to
 # restarting, we need to turn the workers (back) on.  There's no
@@ -320,7 +320,7 @@ if (
     subprocess.check_call(["./scripts/reload-clients", "--background"])
 
 logging.info("Done!")
-print(OKGREEN + f"Zulip {action}ed successfully!" + ENDC)
+print(OKGREEN + f"Doer {action}ed successfully!" + ENDC)
 
 if change_symlink and "PWD" in os.environ:
     for symlink in [last_symlink, current_symlink]:

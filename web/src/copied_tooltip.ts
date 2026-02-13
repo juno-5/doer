@@ -28,12 +28,12 @@ function show_copied_tooltip(
 
 function show_check_icon(copy_button: Element): void {
     $(copy_button).addClass("copy-button-success");
-    $(copy_button).find(".zulip-icon").removeClass("zulip-icon-copy").addClass("zulip-icon-check");
+    $(copy_button).find(".doer-icon").removeClass("doer-icon-copy").addClass("doer-icon-check");
 }
 
 function remove_check_icon(copy_button: Element): void {
     $(copy_button).removeClass("copy-button-success");
-    $(copy_button).find(".zulip-icon").addClass("zulip-icon-copy").removeClass("zulip-icon-check");
+    $(copy_button).find(".doer-icon").addClass("doer-icon-copy").removeClass("doer-icon-check");
 }
 
 export function show_copied_confirmation(

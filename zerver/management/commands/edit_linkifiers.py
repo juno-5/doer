@@ -6,11 +6,11 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.realm_linkifiers import do_add_linkifier, do_remove_linkifier
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models.linkifiers import linkifiers_for_realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Create a link filter rule for the specified realm.
 
 NOTE: Regexes must be simple enough that they can be easily translated to JavaScript
@@ -19,10 +19,10 @@ NOTE: Regexes must be simple enough that they can be easily translated to JavaSc
       * Named groups will be converted to numbered groups automatically
       * Inline-regex flags will be stripped, and where possible translated to RegExp-wide flags
 
-Example: ./manage.py edit_linkifiers --realm=zulip --op=add '#(?P<id>[0-9]{2,8})' \
+Example: ./manage.py edit_linkifiers --realm=doer --op=add '#(?P<id>[0-9]{2,8})' \
     'https://support.example.com/ticket/{id}'
-Example: ./manage.py edit_linkifiers --realm=zulip --op=remove '#(?P<id>[0-9]{2,8})'
-Example: ./manage.py edit_linkifiers --realm=zulip --op=show
+Example: ./manage.py edit_linkifiers --realm=doer --op=remove '#(?P<id>[0-9]{2,8})'
+Example: ./manage.py edit_linkifiers --realm=doer --op=show
 """
 
     @override

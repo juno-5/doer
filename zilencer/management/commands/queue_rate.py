@@ -5,12 +5,12 @@ from typing import Any
 from django.core.management.base import CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.queue import SimpleQueueClient, queue_json_publish_rollback_unsafe
 from zerver.worker.test import BatchNoopWorker, NoopWorker
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Times the overhead of enqueuing and dequeuing messages from RabbitMQ."""
 
     @override

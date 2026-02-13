@@ -8,9 +8,9 @@
 <p>{% trans %}Dear former administrators of {{ realm_name }},{% endtrans %}</p>
 
 {% if is_demo_organization %}
-<p>{% trans realm_url=macros.link_tag(realm_url) %}One of your administrators requested reactivation of the previously deactivated Zulip demo organization hosted at {{ realm_url }}.{% endtrans %}</p>
+<p>{% trans realm_url=macros.link_tag(realm_url) %}One of your administrators requested reactivation of the previously deactivated Doer demo organization hosted at {{ realm_url }}.{% endtrans %}</p>
 {% else %}
-<p>{% trans realm_url=macros.link_tag(realm_url) %}One of your administrators requested reactivation of the previously deactivated Zulip organization hosted at {{ realm_url }}.{% endtrans %}</p>
+<p>{% trans realm_url=macros.link_tag(realm_url) %}One of your administrators requested reactivation of the previously deactivated Doer organization hosted at {{ realm_url }}.{% endtrans %}</p>
 {% endif %}
 
 <p>
@@ -22,7 +22,7 @@
 
 <p>
     {% if corporate_enabled %}
-        {{macros.contact_us_zulip_cloud(support_email)}}
+        {{macros.contact_us_doer_cloud(support_email)}}
     {% else %}
         {{macros.contact_us_self_hosted(support_email)}}
     {% endif %}

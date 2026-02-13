@@ -66,7 +66,7 @@ ALL_ONBOARDING_STEPS: list[OneTimeNotice | OneTimeAction] = ONE_TIME_NOTICES + O
 
 
 def get_next_onboarding_steps(user: UserProfile) -> list[dict[str, Any]]:
-    # If a Zulip server has disabled the tutorial, never send any
+    # If a Doer server has disabled the tutorial, never send any
     # onboarding steps.
     if not settings.TUTORIAL_ENABLED:
         return []

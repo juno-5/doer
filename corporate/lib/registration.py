@@ -32,24 +32,24 @@ def generate_licenses_low_warning_message_if_required(realm: Realm) -> str | Non
 
     if licenses_remaining <= 0:
         return _(
-            "Your organization has no Zulip licenses remaining and can no longer accept new users. "
+            "Your organization has no Doer licenses remaining and can no longer accept new users. "
             "Please [increase the number of licenses]({billing_page_link}) or "
             "[deactivate inactive users]({deactivate_user_help_page_link}) to allow new users to join."
         ).format(**format_kwargs)
 
     return {
         1: _(
-            "Your organization has only one Zulip license remaining. You can "
+            "Your organization has only one Doer license remaining. You can "
             "[increase the number of licenses]({billing_page_link}) or [deactivate inactive users]({deactivate_user_help_page_link}) "
             "to allow more than one user to join."
         ),
         2: _(
-            "Your organization has only two Zulip licenses remaining. You can "
+            "Your organization has only two Doer licenses remaining. You can "
             "[increase the number of licenses]({billing_page_link}) or [deactivate inactive users]({deactivate_user_help_page_link}) "
             "to allow more than two users to join."
         ),
         3: _(
-            "Your organization has only three Zulip licenses remaining. You can "
+            "Your organization has only three Doer licenses remaining. You can "
             "[increase the number of licenses]({billing_page_link}) or [deactivate inactive users]({deactivate_user_help_page_link}) "
             "to allow more than three users to join."
         ),
@@ -61,7 +61,7 @@ def send_user_unable_to_signup_group_direct_message_to_admins(
 ) -> None:
     message = _(
         "A new user ({email}) was unable to join because your organization does not have enough "
-        "Zulip licenses. To allow new users to join, make sure that the [number of licenses for "
+        "Doer licenses. To allow new users to join, make sure that the [number of licenses for "
         "the current and next billing period]({billing_page_link}) is greater than the current "
         "number of users."
     ).format(
@@ -116,7 +116,7 @@ def check_spare_licenses_available_for_inviting_new_users(
         check_spare_licenses_available(realm, plan, extra_non_guests_count, extra_guests_count)
     except LicenseLimitError:
         message = _(
-            "Your organization does not have enough Zulip licenses. Invitations were not sent."
+            "Your organization does not have enough Doer licenses. Invitations were not sent."
         )
         raise InvitationError(message, [], sent_invitations=False, license_limit_reached=True)
 
@@ -130,6 +130,6 @@ def check_spare_license_available_for_changing_guest_user_role(realm: Realm) -> 
         check_spare_licenses_available(realm, plan, extra_non_guests_count=1)
     except LicenseLimitError:
         error_message = _(
-            "Your organization does not have enough Zulip licenses to change a guest user's role."
+            "Your organization does not have enough Doer licenses to change a guest user's role."
         )
         raise JsonableError(error_message)

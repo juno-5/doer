@@ -8,12 +8,12 @@ from django.db.utils import IntegrityError
 from typing_extensions import override
 
 from zerver.lib.domains import validate_domain
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import RealmDomain
 from zerver.models.realms import get_realm_domains
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Manage domains for the specified realm"""
 
     @override

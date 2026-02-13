@@ -1,18 +1,18 @@
-# Subprocessors for Zulip Cloud
+# Subprocessors for Doer Cloud
 
-[Learn about GDPR compliance with Zulip.](/help/gdpr-compliance)
+[Learn about GDPR compliance with Doer.](/help/gdpr-compliance)
 
 To support delivery of our Services, Kandra Labs, Inc. may engage and
 use data processors with access to certain Customer Data (each, a
 "Subprocessor").  This section provides important information about
 the identity, location and role of each Subprocessor.  Terms used on
-this page but not defined have the meaning set forth in Zulip's Terms
+this page but not defined have the meaning set forth in Doer's Terms
 of Service or superseding written agreement between Customer and
 Kandra Labs (the "Agreement").
 
 ### Third parties
 
-Zulip currently uses third party Subprocessors to provide
+Doer currently uses third party Subprocessors to provide
 infrastructure services, and to help us provide customer support and
 email notifications. Prior to engaging any third party Subprocessor,
 we perform diligence to evaluate their privacy, security and
@@ -20,7 +20,7 @@ confidentiality practices.
 
 **Subprocessors**
 
-Zulip Cloud may use the following Subprocessors to host Customer Data
+Doer Cloud may use the following Subprocessors to host Customer Data
 or provide infrastructure that helps with delivery and operation of
 our Services:
 

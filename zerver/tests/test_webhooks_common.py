@@ -15,7 +15,7 @@ from zerver.decorator import webhook_view
 from zerver.lib.exceptions import InvalidJSONError, JsonableError
 from zerver.lib.request import RequestNotes
 from zerver.lib.send_email import FromAddress
-from zerver.lib.test_classes import WebhookTestCase, ZulipTestCase
+from zerver.lib.test_classes import WebhookTestCase, DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.lib.webhooks.common import (
     INVALID_JSON_MESSAGE,
@@ -24,7 +24,7 @@ from zerver.lib.webhooks.common import (
     call_fixture_to_headers,
     check_send_webhook_message,
     get_event_header,
-    guess_zulip_user_from_external_account,
+    guess_doer_user_from_external_account,
     standardize_headers,
     validate_webhook_signature,
 )
@@ -33,9 +33,9 @@ from zerver.models.realms import get_realm
 from zerver.models.users import get_user
 
 
-class WebhooksCommonTestCase(ZulipTestCase):
+class WebhooksCommonTestCase(DoerTestCase):
     def test_webhook_http_header_header_exists(self) -> None:
-        webhook_bot = get_user("webhook-bot@zulip.com", get_realm("zulip"))
+        webhook_bot = get_user("webhook-bot@zulip.com", get_realm("doer"))
         request = HostRequestMock()
         request.META["HTTP_X_CUSTOM_HEADER"] = "custom_value"
         request.user = webhook_bot
@@ -45,7 +45,7 @@ class WebhooksCommonTestCase(ZulipTestCase):
         self.assertEqual(header_value, "custom_value")
 
     def test_webhook_http_header_header_does_not_exist(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         webhook_bot = get_user("webhook-bot@zulip.com", realm)
         webhook_bot.last_reminder = None
         notification_bot = self.notification_bot(realm)
@@ -78,12 +78,12 @@ class WebhooksCommonTestCase(ZulipTestCase):
             raise InvalidJSONError("Malformed JSON")
 
         webhook_bot_email = "webhook-bot@zulip.com"
-        webhook_bot_realm = get_realm("zulip")
+        webhook_bot_realm = get_realm("doer")
         webhook_bot = get_user(webhook_bot_email, webhook_bot_realm)
         webhook_bot_api_key = webhook_bot.api_key
         request = HostRequestMock()
         request.POST["api_key"] = webhook_bot_api_key
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         expected_msg = INVALID_JSON_MESSAGE.format(webhook_name="ClientName")
 
         last_message_id = self.get_last_message().id
@@ -99,7 +99,7 @@ class WebhooksCommonTestCase(ZulipTestCase):
         # Then verify that with the setting, it does send such a message.
         request = HostRequestMock()
         request.POST["api_key"] = webhook_bot_api_key
-        request.host = "zulip.testserver"
+        request.host = "doer.testserver"
         with self.assertRaisesRegex(JsonableError, "Malformed JSON"):
             my_webhook_notify(request)
         msg = self.get_last_message()
@@ -179,7 +179,7 @@ class WebhooksCommonTestCase(ZulipTestCase):
             validate_webhook_signature(request, payload, signature)
 
     def test_check_send_webhook_message_returns_id(self) -> None:
-        webhook_bot = get_user("webhook-bot@zulip.com", get_realm("zulip"))
+        webhook_bot = get_user("webhook-bot@zulip.com", get_realm("doer"))
         stream = self.make_stream("test_stream")
         self.subscribe(webhook_bot, stream.name)
 
@@ -202,11 +202,11 @@ class WebhooksCommonTestCase(ZulipTestCase):
         self.assertEqual(msg.topic_name(), "Test topic")
 
 
-class TestGuessZulipUserFromExternalAccount(ZulipTestCase):
+class TestGuessDoerUserFromExternalAccount(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
         self.hamlet = self.example_user("hamlet")
         self.othello = self.example_user("othello")
         self.github_name = "GitHub username"
@@ -226,13 +226,13 @@ class TestGuessZulipUserFromExternalAccount(ZulipTestCase):
         github_field = self.get_github_field()
         self.set_user_external_account(self.hamlet, github_field, "octocat")
 
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm, "octocat", self.github_name, external_username_case_insensitive=True
         )
         self.assertEqual(result, self.hamlet)
 
         # Test case-sensitive account names
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm, "ocTOcat", self.github_name, external_username_case_insensitive=False
         )
         self.assertIsNone(result)
@@ -240,20 +240,20 @@ class TestGuessZulipUserFromExternalAccount(ZulipTestCase):
         # Test multiple matching field values found
         self.set_user_external_account(self.othello, github_field, "octocat")
 
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm, "octocat", self.github_name, external_username_case_insensitive=True
         )
         self.assertIsNone(result)
 
     def test_no_matches_found(self) -> None:
         # Test no matching field
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm, "someuser", "gitlab", external_username_case_insensitive=True
         )
         self.assertIsNone(result)
 
         # test no matching field value
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm, "nonexistentuser", self.github_name, external_username_case_insensitive=True
         )
         self.assertIsNone(result)
@@ -268,7 +268,7 @@ class TestGuessZulipUserFromExternalAccount(ZulipTestCase):
         )
         self.set_user_external_account(self.hamlet, external_account_field, "octocat")
 
-        result = guess_zulip_user_from_external_account(
+        result = guess_doer_user_from_external_account(
             self.realm,
             "octocat",
             external_account_field_name,
@@ -321,7 +321,7 @@ class MissingEventHeaderTestCase(WebhookTestCase):
     # instead of just making a mock
     def test_missing_event_header(self) -> None:
         self.subscribe(self.test_user, self.channel_name)
-        with self.assertNoLogs("zulip.zerver.webhooks.anomalous", level="INFO"):
+        with self.assertNoLogs("doer.zerver.webhooks.anomalous", level="INFO"):
             result = self.client_post(
                 self.url,
                 self.get_body("ticket_state_changed"),
@@ -329,7 +329,7 @@ class MissingEventHeaderTestCase(WebhookTestCase):
             )
         self.assert_json_error(result, "Missing the HTTP event header 'X-Groove-Event'")
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         webhook_bot = get_user("webhook-bot@zulip.com", realm)
         webhook_bot.last_reminder = None
         notification_bot = self.notification_bot(realm)

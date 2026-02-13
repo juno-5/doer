@@ -9,20 +9,20 @@
                         <a class="recipients_info {{#unless user_circle_class}}inbox-group-or-bot-dm{{/unless}}" href="{{dm_url}}" tabindex="-1">
                             <span class="user_block">
                                 {{#if is_bot}}
-                                <span class="zulip-icon zulip-icon-bot" aria-hidden="true"></span>
+                                <span class="doer-icon doer-icon-bot" aria-hidden="true"></span>
                                 {{else if is_group}}
-                                <span class="conversation-partners-icon zulip-icon zulip-icon-dm-groups-3" aria-hidden="true"></span>
+                                <span class="conversation-partners-icon doer-icon doer-icon-dm-groups-3" aria-hidden="true"></span>
                                 {{else}}
-                                <span class="zulip-icon zulip-icon-{{user_circle_class}} {{user_circle_class}} user-circle" data-presence-indicator-user-id="{{user_ids_string}}"></span>
+                                <span class="doer-icon doer-icon-{{user_circle_class}} {{user_circle_class}} user-circle" data-presence-indicator-user-id="{{user_ids_string}}"></span>
                                 {{/if}}
                                 <span class="recipients_name">{{{rendered_dm_with_html}}}</span>
                             </span>
                         </a>
-                        <span class="unread_mention_info tippy-zulip-tooltip
+                        <span class="unread_mention_info tippy-doer-tooltip
                           {{#unless has_unread_mention}}hidden{{/unless}}"
                           data-tippy-content="{{t 'You have unread mentions' }}">@</span>
                         <div class="unread-count-focus-outline" tabindex="0" data-col-index="{{ column_indexes.UNREAD_COUNT }}">
-                            <span class="unread_count tippy-zulip-tooltip on_hover_dm_read"
+                            <span class="unread_count tippy-doer-tooltip on_hover_dm_read"
                               data-user-ids-string="{{user_ids_string}}" data-tippy-content="{{t 'Mark as read' }}"
                               aria-label="{{t 'Mark as read' }}">{{unread_count}}</span>
                         </div>
@@ -30,12 +30,12 @@
                         <div class="inbox-topic-name">
                             <a tabindex="-1" href="{{topic_url}}" {{#if is_empty_string_topic}}class="empty-topic-display"{{/if}}>{{topic_display_name}}</a>
                         </div>
-                        <span class="unread_mention_info tippy-zulip-tooltip
+                        <span class="unread_mention_info tippy-doer-tooltip
                           {{#unless mention_in_unread}}hidden{{/unless}}"
                           data-tippy-content="{{t 'You have unread mentions'}}">@</span>
                         {{#unless (or (eq unread_count undefined) (eq unread_count 0))}}
                         <div class="unread-count-focus-outline" tabindex="0" data-col-index="{{ column_indexes.UNREAD_COUNT }}">
-                            <span class="unread_count tippy-zulip-tooltip on_hover_topic_read"
+                            <span class="unread_count tippy-doer-tooltip on_hover_topic_read"
                               data-stream-id="{{stream_id}}" data-topic-name="{{topic_name}}"
                               data-tippy-content="{{t 'Mark as read' }}" aria-label="{{t 'Mark as read' }}">
                                 {{unread_count}}
@@ -52,16 +52,16 @@
                         <span class="visibility-policy-indicator change_visibility_policy hidden-for-spectators{{#if (eq visibility_policy all_visibility_policies.INHERIT)}} inbox-row-visibility-policy-inherit{{/if}}"
                           data-stream-id="{{stream_id}}" data-topic-name="{{topic_name}}" tabindex="0" data-col-index="{{ column_indexes.TOPIC_VISIBILITY }}">
                             {{#if (eq visibility_policy all_visibility_policies.FOLLOWED)}}
-                                <i class="zulip-icon zulip-icon-follow recipient_bar_icon" data-tippy-content="{{t 'You follow this topic.'}}"
+                                <i class="doer-icon doer-icon-follow recipient_bar_icon" data-tippy-content="{{t 'You follow this topic.'}}"
                                   role="button" aria-haspopup="true" aria-label="{{t 'You follow this topic.' }}"></i>
                             {{else if (eq visibility_policy all_visibility_policies.UNMUTED)}}
-                                <i class="zulip-icon zulip-icon-unmute recipient_bar_icon" data-tippy-content="{{t 'You have unmuted this topic.'}}"
+                                <i class="doer-icon doer-icon-unmute recipient_bar_icon" data-tippy-content="{{t 'You have unmuted this topic.'}}"
                                   role="button" aria-haspopup="true" aria-label="{{t 'You have unmuted this topic.' }}"></i>
                             {{else if (eq visibility_policy all_visibility_policies.MUTED)}}
-                                <i class="zulip-icon zulip-icon-mute recipient_bar_icon" data-tippy-content="{{t 'You have muted this topic.'}}"
+                                <i class="doer-icon doer-icon-mute recipient_bar_icon" data-tippy-content="{{t 'You have muted this topic.'}}"
                                   role="button" aria-haspopup="true" aria-label="{{t 'You have muted this topic.' }}"></i>
                             {{else if (eq visibility_policy all_visibility_policies.INHERIT)}}
-                                <i class="zulip-icon zulip-icon-inherit recipient_bar_icon"
+                                <i class="doer-icon doer-icon-inherit recipient_bar_icon"
                                   role="button" aria-haspopup="true" aria-label="{{t 'Notifications are based on your configuration for this channel.' }}"></i>
                             {{/if}}
                         </span>
@@ -69,7 +69,7 @@
                     <div class="inbox-action-button inbox-topic-menu"
                       {{#if is_topic}}data-stream-id="{{stream_id}}" data-topic-name="{{topic_name}}"
                       data-topic-url="{{topic_url}}"{{/if}} tabindex="0" data-col-index="{{ column_indexes.ACTION_MENU }}">
-                        <i class="zulip-icon zulip-icon-more-vertical" aria-hidden="true"></i>
+                        <i class="doer-icon doer-icon-more-vertical" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>

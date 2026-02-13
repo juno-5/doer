@@ -4,7 +4,7 @@ import {narrow_term_schema, state_data_schema} from "./state_data.ts";
 
 const t1 = performance.now();
 
-// Sync this with zerver.context_processors.zulip_default_context.
+// Sync this with zerver.context_processors.doer_default_context.
 const default_params_schema = z.object({
     page_type: z.literal("default"),
     development_environment: z.boolean(),
@@ -48,9 +48,9 @@ const home_params_schema = z.object({
     narrow_topic: z.optional(z.string()),
     no_event_queue: z.boolean(),
     presence_history_limit_days_for_web_app: z.number(),
-    promote_sponsoring_zulip: z.boolean(),
+    promote_sponsoring_doer: z.boolean(),
     realm_rendered_description: z.string(),
-    show_try_zulip_modal: z.boolean(),
+    show_try_doer_modal: z.boolean(),
     state_data: z.nullable(state_data_schema),
     test_suite: z.boolean(),
     translation_data: z.record(z.string(), z.string()),

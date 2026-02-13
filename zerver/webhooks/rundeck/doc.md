@@ -1,6 +1,6 @@
-# Zulip Rundeck integration
+# Doer Rundeck integration
 
-Receive Rundeck job notifications in Zulip!
+Receive Rundeck job notifications in Doer!
 
 {start_tabs}
 

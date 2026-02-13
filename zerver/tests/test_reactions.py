@@ -15,8 +15,8 @@ from zerver.lib.cache import cache_get, to_dict_cache_key_id
 from zerver.lib.emoji import get_emoji_data
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.message_cache import extract_message_dict
-from zerver.lib.test_classes import ZulipTestCase
-from zerver.lib.test_helpers import zulip_reaction_info
+from zerver.lib.test_classes import DoerTestCase
+from zerver.lib.test_helpers import doer_reaction_info
 from zerver.models import Message, Reaction, RealmEmoji, UserMessage
 from zerver.models.realms import get_realm
 from zerver.models.streams import Subscription
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class ReactionEmojiTest(ZulipTestCase):
+class ReactionEmojiTest(DoerTestCase):
     def test_missing_emoji(self) -> None:
         """
         Sending reaction without emoji fails
@@ -126,14 +126,14 @@ class ReactionEmojiTest(ZulipTestCase):
         ]
         self.assertEqual(expected_reaction_data, message["reactions"])
 
-    def test_zulip_emoji(self) -> None:
+    def test_doer_emoji(self) -> None:
         """
-        Reacting with zulip emoji succeeds
+        Reacting with doer emoji succeeds
         """
         sender = self.example_user("hamlet")
         reaction_info = {
-            "emoji_name": "zulip",
-            "reaction_type": "zulip_extra_emoji",
+            "emoji_name": "doer",
+            "reaction_type": "doer_extra_emoji",
         }
         base_query = Reaction.objects.filter(
             user_profile=sender, emoji_name=reaction_info["emoji_name"]
@@ -195,7 +195,7 @@ class ReactionEmojiTest(ZulipTestCase):
         self.assert_json_success(result)
 
     def test_get_emoji_data(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         realm_emoji = RealmEmoji.objects.get(name="green_tick")
 
@@ -214,8 +214,8 @@ class ReactionEmojiTest(ZulipTestCase):
             get_emoji_data(realm.id, "green_tick")
         self.assertEqual(str(exc.exception), "Emoji 'green_tick' does not exist")
 
-        # Test ':zulip:' emoji.
-        verify("zulip", "zulip", "zulip_extra_emoji")
+        # Test ':doer:' emoji.
+        verify("doer", "doer", "doer_extra_emoji")
 
         # Test Unicode emoji.
         verify("astonished", "1f632", "unicode_emoji")
@@ -231,11 +231,11 @@ class ReactionEmojiTest(ZulipTestCase):
         overriding_emoji.save(update_fields=["deactivated"])
         verify("astonished", "1f632", "unicode_emoji")
 
-        # Test override `:zulip:` emoji.
+        # Test override `:doer:` emoji.
         overriding_emoji = RealmEmoji.objects.create(
-            name="zulip", realm=realm, file_name="zulip", author=hamlet
+            name="doer", realm=realm, file_name="doer", author=hamlet
         )
-        verify("zulip", str(overriding_emoji.id), "realm_emoji")
+        verify("doer", str(overriding_emoji.id), "realm_emoji")
 
         # Test non-existent emoji.
         with self.assertRaises(JsonableError) as exc:
@@ -243,7 +243,7 @@ class ReactionEmojiTest(ZulipTestCase):
         self.assertEqual(str(exc.exception), "Emoji 'invalid_emoji' does not exist")
 
 
-class ReactionMessageIDTest(ZulipTestCase):
+class ReactionMessageIDTest(DoerTestCase):
     def test_missing_message_id(self) -> None:
         """
         Reacting without a message_id fails
@@ -296,7 +296,7 @@ class ReactionMessageIDTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid message(s)")
 
 
-class ReactionTest(ZulipTestCase):
+class ReactionTest(DoerTestCase):
     def test_add_existing_reaction(self) -> None:
         """
         Creating the same reaction twice fails
@@ -462,7 +462,7 @@ class ReactionTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid message(s)")
 
 
-class ReactionEventTest(ZulipTestCase):
+class ReactionEventTest(DoerTestCase):
     def test_add_event(self) -> None:
         """
         Recipients of the message receive the reaction event
@@ -686,7 +686,7 @@ class ReactionEventTest(ZulipTestCase):
         self.assertEqual(event_user_ids, {iago.id, hamlet.id, polonius.id})
 
 
-class EmojiReactionBase(ZulipTestCase):
+class EmojiReactionBase(DoerTestCase):
     """Reusable testing functions for emoji reactions tests.  Be careful when
     changing this: It's used in test_retention.py as well."""
 
@@ -1008,45 +1008,45 @@ class DefaultEmojiReactionTests(EmojiReactionBase):
         self.assert_json_success(result)
 
 
-class ZulipExtraEmojiReactionTest(EmojiReactionBase):
-    def test_add_zulip_emoji_reaction(self) -> None:
-        result = self.post_reaction(zulip_reaction_info())
+class DoerExtraEmojiReactionTest(EmojiReactionBase):
+    def test_add_doer_emoji_reaction(self) -> None:
+        result = self.post_reaction(doer_reaction_info())
         self.assert_json_success(result)
 
-    def test_add_duplicate_zulip_reaction(self) -> None:
-        result = self.post_reaction(zulip_reaction_info())
+    def test_add_duplicate_doer_reaction(self) -> None:
+        result = self.post_reaction(doer_reaction_info())
         self.assert_json_success(result)
 
-        result = self.post_reaction(zulip_reaction_info())
+        result = self.post_reaction(doer_reaction_info())
         self.assert_json_error(result, "Reaction already exists.")
 
     def test_add_invalid_extra_emoji(self) -> None:
         reaction_info = {
             "emoji_name": "extra_emoji",
             "emoji_code": "extra_emoji",
-            "reaction_type": "zulip_extra_emoji",
+            "reaction_type": "doer_extra_emoji",
         }
         result = self.post_reaction(reaction_info)
         self.assert_json_error(result, "Invalid emoji code.")
 
     def test_add_invalid_emoji_name(self) -> None:
         reaction_info = {
-            "emoji_name": "zulip_invalid",
-            "emoji_code": "zulip",
-            "reaction_type": "zulip_extra_emoji",
+            "emoji_name": "doer_invalid",
+            "emoji_code": "doer",
+            "reaction_type": "doer_extra_emoji",
         }
         result = self.post_reaction(reaction_info)
         self.assert_json_error(result, "Invalid emoji name.")
 
-    def test_delete_zulip_emoji(self) -> None:
-        result = self.post_reaction(zulip_reaction_info())
+    def test_delete_doer_emoji(self) -> None:
+        result = self.post_reaction(doer_reaction_info())
         self.assert_json_success(result)
 
-        result = self.delete_reaction(zulip_reaction_info())
+        result = self.delete_reaction(doer_reaction_info())
         self.assert_json_success(result)
 
-    def test_delete_non_existent_zulip_reaction(self) -> None:
-        result = self.delete_reaction(zulip_reaction_info())
+    def test_delete_non_existent_doer_reaction(self) -> None:
+        result = self.delete_reaction(doer_reaction_info())
         self.assert_json_error(result, "Reaction doesn't exist.")
 
 
@@ -1137,8 +1137,8 @@ class RealmEmojiReactionTests(EmojiReactionBase):
 
     def test_invalid_reaction_type(self) -> None:
         reaction_info = {
-            "emoji_name": "zulip",
-            "emoji_code": "zulip",
+            "emoji_name": "doer",
+            "emoji_code": "doer",
             "reaction_type": "nonexistent_emoji_type",
         }
         sender = self.example_user("hamlet")

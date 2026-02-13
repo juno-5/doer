@@ -1,6 +1,6 @@
-# Zulip Basecamp integration
+# Doer Basecamp integration
 
-Receive notifications about Basecamp events in Zulip!
+Receive notifications about Basecamp events in Doer!
 
 {start_tabs}
 

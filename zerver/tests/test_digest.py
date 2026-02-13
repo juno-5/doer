@@ -27,14 +27,14 @@ from zerver.lib.digest import (
 from zerver.lib.email_notifications import get_channel_privacy_icon
 from zerver.lib.message import get_last_message_id
 from zerver.lib.streams import create_stream_if_needed
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, Realm, RealmAuditLog, Stream, UserActivityInterval, UserProfile
 from zerver.models.realm_audit_logs import AuditLogEventType
 from zerver.models.realms import get_realm
 from zerver.models.streams import get_stream
 
 
-class TestDigestEmailMessages(ZulipTestCase):
+class TestDigestEmailMessages(DoerTestCase):
     @mock.patch("zerver.lib.digest.enough_traffic")
     @mock.patch("zerver.lib.digest.send_future_email")
     def test_multiple_stream_senders(
@@ -110,7 +110,7 @@ class TestDigestEmailMessages(ZulipTestCase):
         A user id may be added to the queue before the user is deactivated. In such a case,
         the function responsible for sending the email should correctly skip them.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         user_ids = list(
             UserProfile.objects.filter(is_bot=False, realm=realm).values_list("id", flat=True)
@@ -367,7 +367,7 @@ class TestDigestEmailMessages(ZulipTestCase):
     def test_twelve_hour_exemption(self) -> None:
         RealmAuditLog.objects.all().delete()
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         cutoff = timezone_now() - timedelta(days=5)
 
@@ -404,7 +404,7 @@ class TestDigestEmailMessages(ZulipTestCase):
 
         num_queued_users = call_enqueue_emails(get_realm("zulipinternal"))
         self.assertEqual(num_queued_users, 0)
-        num_queued_users = call_enqueue_emails(get_realm("zulip"))
+        num_queued_users = call_enqueue_emails(get_realm("doer"))
         self.assertEqual(num_queued_users, 10)
 
     @override_settings(SEND_DIGEST_EMAILS=True)
@@ -415,7 +415,7 @@ class TestDigestEmailMessages(ZulipTestCase):
         Realm.objects.update(digest_emails_enabled=True)
         cutoff = timezone_now() - timedelta(days=5)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         users = self.active_human_users(realm)
 
         # Check that all users without a UserActivityInterval entry are considered
@@ -487,7 +487,7 @@ class TestDigestEmailMessages(ZulipTestCase):
 
         cutoff = timezone_now() - timedelta(days=5)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.digest_emails_enabled = True
         realm.save()
 
@@ -528,7 +528,7 @@ class TestDigestEmailMessages(ZulipTestCase):
             realm, recently_created_streams, can_access_public=True
         )
         self.assertEqual(stream_count, 1)
-        expected_html = f"<a href='http://zulip.testserver/#narrow/channel/{stream.id}-New-stream'>{get_channel_privacy_icon(stream)}New stream</a>"
+        expected_html = f"<a href='http://doer.testserver/#narrow/channel/{stream.id}-New-stream'>{get_channel_privacy_icon(stream)}New stream</a>"
         self.assertEqual(stream_info["html"][0], expected_html)
 
         # guests don't see our stream
@@ -580,7 +580,7 @@ class TestDigestEmailMessages(ZulipTestCase):
     ) -> None:
         Message.objects.all().delete()
         Stream.objects.all().delete()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         othello = self.example_user("othello")
         cutoff_date = timezone_now() - timedelta(days=5)
         cutoff = time.mktime(cutoff_date.timetuple())
@@ -719,14 +719,14 @@ class TestDigestEmailMessages(ZulipTestCase):
         self.assertIn("general chat", header_plain)
 
 
-class TestDigestContentInBrowser(ZulipTestCase):
+class TestDigestContentInBrowser(DoerTestCase):
     def test_get_digest_content_in_browser(self) -> None:
         self.login("hamlet")
         result = self.client_get("/digest/")
-        self.assert_in_success_response(["Log in to Zulip to catch up"], result)
+        self.assert_in_success_response(["Log in to Doer to catch up"], result)
 
 
-class TestDigestTopics(ZulipTestCase):
+class TestDigestTopics(DoerTestCase):
     def populate_topic(
         self,
         topic: DigestTopic,
@@ -753,7 +753,7 @@ class TestDigestTopics(ZulipTestCase):
                         break
 
     def test_get_hot_topics(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         denmark = get_stream("Denmark", realm)
         verona = get_stream("Verona", realm)
         diverse_topic_a = DigestTopic((denmark.id, "5 humans talking"))

@@ -5,7 +5,7 @@ class kandra::profile::postgresql inherits kandra::profile::base {
   # We key off of `listen_addresses` being set to know if we should be starting PostgreSQL.
   $listen_addresses = zulipconf('postgresql', 'listen_addresses', undef)
   $is_stage1 = ($listen_addresses == undef)
-  class { 'zulip::profile::postgresql':
+  class { 'doer::profile::postgresql':
     start => ! $is_stage1,
   }
 
@@ -13,11 +13,11 @@ class kandra::profile::postgresql inherits kandra::profile::base {
 
   kandra::firewall_allow{ 'postgresql': }
 
-  zulip::sysctl { 'postgresql-swappiness':
+  doer::sysctl { 'postgresql-swappiness':
     key   => 'vm.swappiness',
     value => '0',
   }
-  zulip::sysctl { 'postgresql-overcommit':
+  doer::sysctl { 'postgresql-overcommit':
     key   => 'vm.overcommit_memory',
     value => '2',
   }
@@ -35,7 +35,7 @@ class kandra::profile::postgresql inherits kandra::profile::base {
     # the xfs module gets installed for the running kernel, and we can
     # mount it.
     before  => Package['linux-image-virtual'],
-    require => Package["postgresql-${zulip::postgresql_common::version}", 'xfsprogs', 'nvme-cli'],
+    require => Package["postgresql-${doer::postgresql_common::version}", 'xfsprogs', 'nvme-cli'],
     unless  => 'test /var/lib/postgresql/ -ef /srv/data/postgresql/',
   }
 
@@ -54,17 +54,17 @@ class kandra::profile::postgresql inherits kandra::profile::base {
       exec { 'setup_data':
         command => '/root/setup_data.sh',
         require => [File['/usr/local/bin/env-wal-g'], Exec['setup_disks']],
-        unless  => "test -d /srv/data/postgresql/${zulip::postgresql_common::version}/main",
+        unless  => "test -d /srv/data/postgresql/${doer::postgresql_common::version}/main",
         timeout => 0,
-        before  => File["${zulip::postgresql_base::postgresql_datadir}/standby.signal"],
+        before  => File["${doer::postgresql_base::postgresql_datadir}/standby.signal"],
         notify  => Service['postgresql'],
       }
     }
   }
 
-  file { "${zulip::postgresql_base::postgresql_confdir}/pg_hba.conf":
+  file { "${doer::postgresql_base::postgresql_confdir}/pg_hba.conf":
     ensure  => file,
-    require => Package["postgresql-${zulip::postgresql_common::version}"],
+    require => Package["postgresql-${doer::postgresql_common::version}"],
     notify  => Service['postgresql'],
     owner   => 'postgres',
     group   => 'postgres',

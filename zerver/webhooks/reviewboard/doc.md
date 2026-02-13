@@ -1,6 +1,6 @@
-# Zulip Review Board integration
+# Doer Review Board integration
 
-Get Review Board notifications in Zulip!
+Get Review Board notifications in Doer!
 
 {start_tabs}
 

@@ -3,9 +3,9 @@ import argparse
 import os
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(ZULIP_PATH)
-from scripts.lib.zulip_tools import (
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(DOER_PATH)
+from scripts.lib.doer_tools import (
     get_environment,
     get_recent_deployments,
     parse_cache_script_args,
@@ -17,13 +17,13 @@ EMOJI_CACHE_PATH = "/srv/zulip-emoji-cache"
 
 
 def get_caches_in_use(threshold_days: int) -> set[str]:
-    setups_to_check = {ZULIP_PATH}
+    setups_to_check = {DOER_PATH}
     caches_in_use = set()
 
     if ENV == "prod":
         setups_to_check |= get_recent_deployments(threshold_days)
     if ENV == "dev":
-        CACHE_SYMLINK = os.path.join(ZULIP_PATH, "static", "generated", "emoji")
+        CACHE_SYMLINK = os.path.join(DOER_PATH, "static", "generated", "emoji")
         CURRENT_CACHE = os.path.dirname(os.path.realpath(CACHE_SYMLINK))
         caches_in_use.add(CURRENT_CACHE)
 
@@ -44,5 +44,5 @@ def main(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    args = parse_cache_script_args("This script cleans unused Zulip emoji caches.")
+    args = parse_cache_script_args("This script cleans unused Doer emoji caches.")
     main(args)

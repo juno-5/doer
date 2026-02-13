@@ -3,7 +3,7 @@
   "currency": "usd",
   "customer": "cus_NORMALIZED",
   "date": 1000000000,
-  "description": "Zulip Cloud Standard upgrade",
+  "description": "Doer Cloud Standard upgrade",
   "discountable": false,
   "discounts": [],
   "id": "void_all_open_invoices--InvoiceItem.create.1.json",

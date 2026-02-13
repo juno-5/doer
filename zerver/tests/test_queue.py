@@ -12,25 +12,25 @@ from zerver.lib.queue import (
     get_queue_client,
     queue_json_publish_rollback_unsafe,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class TestTornadoQueueClient(ZulipTestCase):
+class TestTornadoQueueClient(DoerTestCase):
     @mock.patch("zerver.lib.queue.ExceptionFreeTornadoConnection", autospec=True)
     def test_on_open_closed(self, mock_cxn: mock.MagicMock) -> None:
-        with self.assertLogs("zulip.queue", "WARNING") as m:
+        with self.assertLogs("doer.queue", "WARNING") as m:
             mock_cxn().channel.side_effect = ConnectionClosed(500, "test")
             connection = TornadoQueueClient()
             connection._on_open(mock.MagicMock())
             self.assertEqual(
                 m.output,
                 [
-                    "WARNING:zulip.queue:TornadoQueueClient couldn't open channel: connection already closed"
+                    "WARNING:doer.queue:TornadoQueueClient couldn't open channel: connection already closed"
                 ],
             )
 
 
-class TestQueueImplementation(ZulipTestCase):
+class TestQueueImplementation(DoerTestCase):
     @override_settings(USING_RABBITMQ=True)
     def test_register_consumer(self) -> None:
         output = []
@@ -95,12 +95,12 @@ class TestQueueImplementation(ZulipTestCase):
 
         with (
             mock.patch("zerver.lib.queue.SimpleQueueClient.publish", throw_connection_error_once),
-            self.assertLogs("zulip.queue", level="WARN") as warn_logs,
+            self.assertLogs("doer.queue", level="WARN") as warn_logs,
         ):
             queue_json_publish_rollback_unsafe("test_suite", {"event": "my_event"})
         self.assertEqual(
             warn_logs.output,
-            ["WARNING:zulip.queue:Failed to send to rabbitmq, trying to reconnect and send again"],
+            ["WARNING:doer.queue:Failed to send to rabbitmq, trying to reconnect and send again"],
         )
 
         assert queue_client.channel

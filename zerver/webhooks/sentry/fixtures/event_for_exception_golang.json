@@ -150,7 +150,7 @@
             "title": "*url.Error: Get \"bad_url\": unsupported protocol scheme \"\"",
             "type": "error",
             "version": "7",
-            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/80777a9cc30e4d0eb8904333d5c298b0/",
+            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/80777a9cc30e4d0eb8904333d5c298b0/",
             "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1637164584/events/80777a9cc30e4d0eb8904333d5c298b0/",
             "issue_url": "https://sentry.io/api/0/issues/1637164584/"
         },

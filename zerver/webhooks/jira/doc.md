@@ -1,6 +1,6 @@
-# Zulip Jira integration
+# Doer Jira integration
 
-Get Zulip notifications for your Jira projects!
+Get Doer notifications for your Jira projects!
 
 {start_tabs}
 
@@ -14,7 +14,7 @@ Get Zulip notifications for your Jira projects!
    scroll down, and under **Advanced**, click **WebHooks**. Click
    **+ Create a WebHook**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Set
+1. Set **Name** to a name of your choice, such as `Doer`. Set
    **Status** to **Enabled**, and set **URL** to the URL generated
    above. Select the [events](#filtering-incoming-events) you'd like
    to be notified about, and click **Create**.

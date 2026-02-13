@@ -27,7 +27,7 @@ type IconData = {
     is_spectator: boolean;
 } & (
     | {
-          zulip_icon: string;
+          doer_icon: string;
       }
     | {
           icon: string | undefined;
@@ -1347,14 +1347,14 @@ export class Filter {
         // We have special icons for the simple narrows available for the via sidebars.
         const term_types = this.sorted_term_types();
         let icon;
-        let zulip_icon;
+        let doer_icon;
 
         if (
             _.isEqual(term_types, ["sender", "has-reaction"]) &&
             this.terms_with_operator("sender")[0]!.operand === people.my_current_user_id()
         ) {
-            zulip_icon = "smile";
-            return {...context, zulip_icon};
+            doer_icon = "smile";
+            return {...context, doer_icon};
         }
 
         switch (term_types[0]) {
@@ -1371,47 +1371,47 @@ export class Filter {
                     break;
                 }
                 if (sub.is_archived) {
-                    zulip_icon = "archive";
+                    doer_icon = "archive";
                     break;
                 }
                 if (sub.invite_only) {
-                    zulip_icon = "lock";
+                    doer_icon = "lock";
                     break;
                 }
                 if (sub.is_web_public) {
-                    zulip_icon = "globe";
+                    doer_icon = "globe";
                     break;
                 }
-                zulip_icon = "hashtag";
+                doer_icon = "hashtag";
                 break;
             }
             case "is-dm":
-                zulip_icon = "user";
+                doer_icon = "user";
                 break;
             case "not-is-dm":
-                zulip_icon = "hashtag";
+                doer_icon = "hashtag";
                 break;
             case "is-starred":
-                zulip_icon = "star";
+                doer_icon = "star";
                 break;
             case "is-mentioned":
-                zulip_icon = "at-sign";
+                doer_icon = "at-sign";
                 break;
             case "dm":
-                zulip_icon = "user";
+                doer_icon = "user";
                 break;
             case "is-resolved":
                 icon = "check";
                 break;
             case "is-followed":
-                zulip_icon = "follow";
+                doer_icon = "follow";
                 break;
             default:
                 icon = undefined;
                 break;
         }
-        if (zulip_icon) {
-            return {...context, zulip_icon};
+        if (doer_icon) {
+            return {...context, doer_icon};
         }
         return {...context, icon};
     }

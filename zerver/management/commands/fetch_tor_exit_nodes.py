@@ -7,7 +7,7 @@ from django.conf import settings
 from typing_extensions import override
 from urllib3.util import Retry
 
-from zerver.lib.management import ZulipBaseCommand, abort_cron_during_deploy
+from zerver.lib.management import DoerBaseCommand, abort_cron_during_deploy
 from zerver.lib.outgoing_http import OutgoingSession
 
 
@@ -27,7 +27,7 @@ class TorDataSession(OutgoingSession):
         super().__init__(role="tor_data", timeout=3, max_retries=retry)
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Fetch the list of TOR exit nodes, and write the list of IP addresses
 to a file for access from Django for rate-limiting purposes.
 

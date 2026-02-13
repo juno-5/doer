@@ -1,4 +1,4 @@
-// For documentation on i18n in Zulip, see:
+// For documentation on i18n in Doer, see:
 // https://zulip.readthedocs.io/en/latest/translating/internationalization.html
 
 import type {MessageDescriptor} from "@formatjs/intl";

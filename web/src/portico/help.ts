@@ -4,7 +4,7 @@ import assert from "minimalistic-assert";
 import SimpleBar from "simplebar";
 import * as tippy from "tippy.js";
 
-import zulip_copy_icon from "../../templates/zulip_copy_icon.hbs";
+import doer_copy_icon from "../../templates/doer_copy_icon.hbs";
 import * as common from "../common.ts";
 import {show_copied_confirmation} from "../copied_tooltip.ts";
 import * as util from "../util.ts";
@@ -34,7 +34,7 @@ function register_tabbed_section($tabbed_section: JQuery): void {
 // within the API and help center docs using clipboard.js
 function add_copy_to_clipboard_element($codehilite: JQuery): void {
     const $copy_button = $("<span>").addClass("copy-button copy-codeblock");
-    $copy_button.html(zulip_copy_icon());
+    $copy_button.html(doer_copy_icon());
 
     $($codehilite).append($copy_button);
 

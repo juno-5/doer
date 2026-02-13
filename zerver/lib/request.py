@@ -14,12 +14,12 @@ from zerver.lib.notes import BaseNotes
 from zerver.models import Client, Realm
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RemoteZulipServer
+    from zilencer.models import RemoteDoerServer
 
 
 @dataclass
 class RequestNotes(BaseNotes[HttpRequest, "RequestNotes"]):
-    """This class contains extra metadata that Zulip associated with a
+    """This class contains extra metadata that Doer associated with a
     Django HttpRequest object. See the docstring for BaseNotes for
     details on how it works.
 
@@ -47,7 +47,7 @@ class RequestNotes(BaseNotes[HttpRequest, "RequestNotes"]):
     saved_response: HttpResponse | None = None
     tornado_handler_id: int | None = None
     processed_parameters: set[str] = field(default_factory=set)
-    remote_server: Optional["RemoteZulipServer"] = None
+    remote_server: Optional["RemoteDoerServer"] = None
     is_webhook_view: bool = False
 
     @classmethod

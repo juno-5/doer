@@ -7,7 +7,7 @@ from copy import deepcopy
 from typing import Any, Final, Literal
 from urllib.parse import urljoin
 
-from scripts.lib.zulip_tools import get_tornado_ports
+from scripts.lib.doer_tools import get_tornado_ports
 from zerver.lib.db import TimeTrackingConnection, TimeTrackingCursor
 from zerver.lib.types import AnalyticsDataUploadLevel
 
@@ -69,11 +69,11 @@ from .configured_settings import (
     TORNADO_PORTS,
     USING_CAPTCHA,
     USING_PGROONGA,
-    ZULIP_ADMINISTRATOR,
-    ZULIP_SERVICE_PUSH_NOTIFICATIONS,
-    ZULIP_SERVICE_SECURITY_ALERTS,
-    ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS,
-    ZULIP_SERVICES_URL,
+    DOER_ADMINISTRATOR,
+    DOER_SERVICE_PUSH_NOTIFICATIONS,
+    DOER_SERVICE_SECURITY_ALERTS,
+    DOER_SERVICE_SUBMIT_USAGE_STATISTICS,
+    DOER_SERVICES_URL,
 )
 
 ########################################################################
@@ -88,7 +88,7 @@ SHARED_SECRET = get_mandatory_secret("shared_secret")
 
 # We use this salt to hash a user's email into a filename for their user-uploaded
 # avatar.  If this salt is discovered, attackers will only be able to determine
-# that the owner of an email account has uploaded an avatar to Zulip, which isn't
+# that the owner of an email account has uploaded an avatar to Doer, which isn't
 # the end of the world.  Don't use the salt where there is more security exposure.
 AVATAR_SALT = get_mandatory_secret("avatar_salt")
 
@@ -96,9 +96,9 @@ AVATAR_SALT = get_mandatory_secret("avatar_salt")
 # restarted for triggering browser clients to reload.
 SERVER_GENERATION = int(time.time())
 
-# Key to authenticate this server to zulip.org for push notifications, etc.
-ZULIP_ORG_KEY = get_secret("zulip_org_key")
-ZULIP_ORG_ID = get_secret("zulip_org_id")
+# Key to authenticate this server to doer.org for push notifications, etc.
+DOER_ORG_KEY = get_secret("doer_org_key")
+DOER_ORG_ID = get_secret("doer_org_id")
 
 raw_keys: str | None = get_secret("push_registration_encryption_keys")
 PUSH_REGISTRATION_ENCRYPTION_KEYS: dict[str, str] = {}
@@ -122,44 +122,44 @@ def services_append(service_name: str) -> None:
     services.append(service_name)
 
 
-if ZULIP_SERVICE_PUSH_NOTIFICATIONS:
+if DOER_SERVICE_PUSH_NOTIFICATIONS:
     services_append("mobile_push")
-    if ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS is None:
+    if DOER_SERVICE_SUBMIT_USAGE_STATISTICS is None:
         # This setting has special behavior where we want to activate
         # it by default when push notifications are enabled - unless
         # explicitly set otherwise in the config.
-        ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = True
+        DOER_SERVICE_SUBMIT_USAGE_STATISTICS = True
 
-if ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS:
+if DOER_SERVICE_SUBMIT_USAGE_STATISTICS:
     services_append("submit_usage_statistics")
-if ZULIP_SERVICE_SECURITY_ALERTS:
+if DOER_SERVICE_SECURITY_ALERTS:
     services_append("security_alerts")
 
 if services is None and PUSH_NOTIFICATION_BOUNCER_URL is not None:
-    # ZULIP_SERVICE_* are the new settings that control the services
+    # DOER_SERVICE_* are the new settings that control the services
     # enabled by the server, which in turn dictate the level of data
-    # uploaded to ZULIP_SERVICES_URL.
-    # As some older servers, predating the transition to the ZULIP_SERVICE_*
+    # uploaded to DOER_SERVICES_URL.
+    # As some older servers, predating the transition to the DOER_SERVICE_*
     # settings, may have upgraded without redoing this part of their config,
     # we need this block to set this level correctly based on the
     # legacy settings.
 
     # This is a setting that some servers from before 9.0 may have configured
-    # instead of the new ZULIP_SERVICE_* settings.
+    # instead of the new DOER_SERVICE_* settings.
     # Translate it to a correct configuration.
-    ZULIP_SERVICE_PUSH_NOTIFICATIONS = True
+    DOER_SERVICE_PUSH_NOTIFICATIONS = True
     services_append("mobile_push")
-    ZULIP_SERVICES_URL = PUSH_NOTIFICATION_BOUNCER_URL
+    DOER_SERVICES_URL = PUSH_NOTIFICATION_BOUNCER_URL
     if SUBMIT_USAGE_STATISTICS:
-        ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = True
+        DOER_SERVICE_SUBMIT_USAGE_STATISTICS = True
         services_append("submit_usage_statistics")
 
 if services is not None and set(services).intersection(
     {"submit_usage_statistics", "security_alerts", "mobile_push"}
 ):
-    # None of these make sense enabled without ZULIP_SERVICES_URL.
-    assert ZULIP_SERVICES_URL is not None, (
-        "ZULIP_SERVICES_URL is required when any services are enabled."
+    # None of these make sense enabled without DOER_SERVICES_URL.
+    assert DOER_SERVICES_URL is not None, (
+        "DOER_SERVICES_URL is required when any services are enabled."
     )
 
 ANALYTICS_DATA_UPLOAD_LEVEL = max(
@@ -196,8 +196,8 @@ TEST_WORKER_DIR = ""
 # production deployments before starting the app.  It consists of a series
 # of pairs of (setting name, default value that it must be changed from)
 REQUIRED_SETTINGS = [
-    ("EXTERNAL_HOST", "zulip.example.com"),
-    ("ZULIP_ADMINISTRATOR", "zulip-admin@example.com"),
+    ("EXTERNAL_HOST", "doer.example.com"),
+    ("DOER_ADMINISTRATOR", "doer-admin@example.com"),
     # SECRET_KEY doesn't really need to be here, in
     # that we set it automatically, but just in
     # case, it seems worth having in this list
@@ -316,11 +316,11 @@ SILENCED_SYSTEM_CHECKS = [
 # DATABASE CONFIGURATION
 ########################################################################
 
-# Zulip's Django configuration supports 4 different ways to do
+# Doer's Django configuration supports 4 different ways to do
 # PostgreSQL authentication:
 #
 # * The development environment uses the `local_database_password`
-#   secret from `zulip-secrets.conf` to authenticate with a local
+#   secret from `doer-secrets.conf` to authenticate with a local
 #   database.  The password is automatically generated and managed by
 #   `generate_secrets.py` during or provision.
 #
@@ -328,10 +328,10 @@ SILENCED_SYSTEM_CHECKS = [
 #
 # * Using PostgreSQL's "peer" authentication to authenticate to a
 #   database on the local system using one's user ID (processes
-#   running as user `zulip` on the system are automatically
-#   authenticated as database user `zulip`).  This is the default in
+#   running as user `doer` on the system are automatically
+#   authenticated as database user `doer`).  This is the default in
 #   production.  We don't use this in the development environment,
-#   because it requires the developer's user to be called `zulip`.
+#   because it requires the developer's user to be called `doer`.
 #
 # * Using password authentication with a remote PostgreSQL server using
 #   the `REMOTE_POSTGRES_HOST` setting and the password from the
@@ -347,8 +347,8 @@ SILENCED_SYSTEM_CHECKS = [
 DATABASES: dict[str, dict[str, Any]] = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": get_config("postgresql", "database_name", "zulip"),
-        "USER": get_config("postgresql", "database_user", "zulip"),
+        "NAME": get_config("postgresql", "database_name", "doer"),
+        "USER": get_config("postgresql", "database_user", "doer"),
         # Password = '' => peer/certificate authentication (no password)
         "PASSWORD": "",
         # Host = '' => connect to localhost by default
@@ -385,7 +385,7 @@ elif REMOTE_POSTGRES_HOST != "":
         )
     DATABASES["default"]["OPTIONS"]["sslmode"] = REMOTE_POSTGRES_SSLMODE
 elif (
-    get_config("postgresql", "database_user", "zulip") != "zulip"
+    get_config("postgresql", "database_user", "doer") != "doer"
     and get_secret("postgres_password") is not None
 ):
     DATABASES["default"].update(
@@ -509,7 +509,7 @@ if DEVELOPMENT:
     INITIAL_PASSWORD_SALT = get_secret("initial_password_salt")
 else:
     # For production, use the best password hashing algorithm: Argon2
-    # Zulip was originally on PBKDF2 so we need it for compatibility
+    # Doer was originally on PBKDF2 so we need it for compatibility
     PASSWORD_HASHERS = [
         "django.contrib.auth.hashers.Argon2PasswordHasher",
         "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -535,7 +535,7 @@ BIG_BLUE_BUTTON_SECRET = get_secret("big_blue_button_secret")
 CONSTRUCTOR_GROUPS_ACCESS_KEY = get_secret("constructor_groups_access_key")
 CONSTRUCTOR_GROUPS_SECRET_KEY = get_secret("constructor_groups_secret_key")
 
-# These are the bots that Zulip sends automated messages as.
+# These are the bots that Doer sends automated messages as.
 INTERNAL_BOTS = [
     {
         "var_name": "NOTIFICATION_BOT",
@@ -612,16 +612,16 @@ if STATIC_URL is None:
 LOCAL_AVATARS_DIR = os.path.join(LOCAL_UPLOADS_DIR, "avatars") if LOCAL_UPLOADS_DIR else None
 LOCAL_FILES_DIR = os.path.join(LOCAL_UPLOADS_DIR, "files") if LOCAL_UPLOADS_DIR else None
 
-# ZulipStorage is a modified version of ManifestStaticFilesStorage,
+# DoerStorage is a modified version of ManifestStaticFilesStorage,
 # and, like that class, it inserts a file hash into filenames
 # to prevent the browser from using stale files from cache.
 #
 # Unlike PipelineStorage, it requires the files to exist in
 # STATIC_ROOT even for dev servers.  So we only use
-# ZulipStorage when not DEBUG.
+# DoerStorage when not DEBUG.
 
 if not DEBUG:
-    STORAGES = {"staticfiles": {"BACKEND": "zerver.lib.storage.ZulipStorage"}}
+    STORAGES = {"staticfiles": {"BACKEND": "zerver.lib.storage.DoerStorage"}}
     if PRODUCTION:
         STATIC_ROOT = "/home/zulip/prod-static"
     else:
@@ -634,7 +634,7 @@ LOCALE_PATHS = (os.path.join(DEPLOY_ROOT, "locale"),)
 # We want all temporary uploaded files to be stored on disk.
 FILE_UPLOAD_MAX_MEMORY_SIZE = 0
 
-if DEVELOPMENT or "ZULIP_COLLECTING_STATIC" in os.environ:
+if DEVELOPMENT or "DOER_COLLECTING_STATIC" in os.environ:
     STATICFILES_DIRS = [os.path.join(DEPLOY_ROOT, "static")]
 
 if DEBUG:
@@ -665,7 +665,7 @@ base_template_engine_settings: dict[str, Any] = {
             "jinja2.ext.i18n",
         ],
         "context_processors": [
-            "zerver.context_processors.zulip_default_context",
+            "zerver.context_processors.doer_default_context",
             "django.template.context_processors.i18n",
         ],
     },
@@ -673,7 +673,7 @@ base_template_engine_settings: dict[str, Any] = {
 
 if CORPORATE_ENABLED:
     base_template_engine_settings["OPTIONS"]["context_processors"].append(
-        "zerver.context_processors.zulip_default_corporate_context"
+        "zerver.context_processors.doer_default_corporate_context"
     )
 
 default_template_engine_settings = deepcopy(base_template_engine_settings)
@@ -684,11 +684,11 @@ default_template_engine_settings.update(
         os.path.join(DEPLOY_ROOT, "templates"),
         # The webhook integration templates
         os.path.join(DEPLOY_ROOT, "zerver", "webhooks"),
-        # The python-zulip-api:integrations package templates
-        # Keep above the zulip_bots templates to override bots with the same names
+        # The python-doer-api:integrations package templates
+        # Keep above the doer_bots templates to override bots with the same names
         # (e.g., the Jira plugin doc and the Jira bot both use "jira/doc.md").
         os.path.join("static" if DEBUG else STATIC_ROOT, "generated", "integrations"),
-        # The python-zulip-api:zulip_bots package templates
+        # The python-doer-api:doer_bots package templates
         os.path.join("static" if DEBUG else STATIC_ROOT, "generated", "bots"),
     ],
     APP_DIRS=True,
@@ -733,9 +733,9 @@ TEMPLATES = [
 ########################################################################
 
 
-def zulip_path(path: str) -> str:
+def doer_path(path: str) -> str:
     if DEVELOPMENT:
-        # if DEVELOPMENT, store these files in the Zulip checkout
+        # if DEVELOPMENT, store these files in the Doer checkout
         if path.startswith("/var/log"):
             path = os.path.join(DEVELOPMENT_LOG_DIRECTORY, os.path.basename(path))
         else:
@@ -743,33 +743,33 @@ def zulip_path(path: str) -> str:
     return path
 
 
-SERVER_LOG_PATH = zulip_path("/var/log/zulip/server.log")
-ERROR_FILE_LOG_PATH = zulip_path("/var/log/zulip/errors.log")
-MANAGEMENT_LOG_PATH = zulip_path("/var/log/zulip/manage.log")
-WORKER_LOG_PATH = zulip_path("/var/log/zulip/workers.log")
-SLOW_QUERIES_LOG_PATH = zulip_path("/var/log/zulip/slow_queries.log")
-JSON_PERSISTENT_QUEUE_FILENAME_PATTERN = zulip_path("/home/zulip/tornado/event_queues%s.json")
-EMAIL_LOG_PATH = zulip_path("/var/log/zulip/send_email.log")
-EMAIL_MIRROR_LOG_PATH = zulip_path("/var/log/zulip/email_mirror.log")
-EMAIL_DELIVERER_LOG_PATH = zulip_path("/var/log/zulip/email_deliverer.log")
-EMAIL_CONTENT_LOG_PATH = zulip_path("/var/log/zulip/email_content.log")
-LDAP_LOG_PATH = zulip_path("/var/log/zulip/ldap.log")
-LDAP_SYNC_LOG_PATH = zulip_path("/var/log/zulip/sync_ldap_user_data.log")
-QUEUE_ERROR_DIR = zulip_path("/var/log/zulip/queue_error")
-QUEUE_STATS_DIR = zulip_path("/var/log/zulip/queue_stats")
-DIGEST_LOG_PATH = zulip_path("/var/log/zulip/digest.log")
-ANALYTICS_LOG_PATH = zulip_path("/var/log/zulip/analytics.log")
-WEBHOOK_LOG_PATH = zulip_path("/var/log/zulip/webhooks_errors.log")
-WEBHOOK_ANOMALOUS_PAYLOADS_LOG_PATH = zulip_path("/var/log/zulip/webhooks_anomalous_payloads.log")
-WEBHOOK_UNSUPPORTED_EVENTS_LOG_PATH = zulip_path("/var/log/zulip/webhooks_unsupported_events.log")
-SOFT_DEACTIVATION_LOG_PATH = zulip_path("/var/log/zulip/soft_deactivation.log")
-TRACEMALLOC_DUMP_DIR = zulip_path("/var/log/zulip/tracemalloc")
-RETENTION_LOG_PATH = zulip_path("/var/log/zulip/message_retention.log")
-AUTH_LOG_PATH = zulip_path("/var/log/zulip/auth.log")
-SCIM_LOG_PATH = zulip_path("/var/log/zulip/scim.log")
-REGISTRATION_LOG_PATH = zulip_path("/var/log/zulip/registration.log")
+SERVER_LOG_PATH = doer_path("/var/log/zulip/server.log")
+ERROR_FILE_LOG_PATH = doer_path("/var/log/zulip/errors.log")
+MANAGEMENT_LOG_PATH = doer_path("/var/log/zulip/manage.log")
+WORKER_LOG_PATH = doer_path("/var/log/zulip/workers.log")
+SLOW_QUERIES_LOG_PATH = doer_path("/var/log/zulip/slow_queries.log")
+JSON_PERSISTENT_QUEUE_FILENAME_PATTERN = doer_path("/home/zulip/tornado/event_queues%s.json")
+EMAIL_LOG_PATH = doer_path("/var/log/zulip/send_email.log")
+EMAIL_MIRROR_LOG_PATH = doer_path("/var/log/zulip/email_mirror.log")
+EMAIL_DELIVERER_LOG_PATH = doer_path("/var/log/zulip/email_deliverer.log")
+EMAIL_CONTENT_LOG_PATH = doer_path("/var/log/zulip/email_content.log")
+LDAP_LOG_PATH = doer_path("/var/log/zulip/ldap.log")
+LDAP_SYNC_LOG_PATH = doer_path("/var/log/zulip/sync_ldap_user_data.log")
+QUEUE_ERROR_DIR = doer_path("/var/log/zulip/queue_error")
+QUEUE_STATS_DIR = doer_path("/var/log/zulip/queue_stats")
+DIGEST_LOG_PATH = doer_path("/var/log/zulip/digest.log")
+ANALYTICS_LOG_PATH = doer_path("/var/log/zulip/analytics.log")
+WEBHOOK_LOG_PATH = doer_path("/var/log/zulip/webhooks_errors.log")
+WEBHOOK_ANOMALOUS_PAYLOADS_LOG_PATH = doer_path("/var/log/zulip/webhooks_anomalous_payloads.log")
+WEBHOOK_UNSUPPORTED_EVENTS_LOG_PATH = doer_path("/var/log/zulip/webhooks_unsupported_events.log")
+SOFT_DEACTIVATION_LOG_PATH = doer_path("/var/log/zulip/soft_deactivation.log")
+TRACEMALLOC_DUMP_DIR = doer_path("/var/log/zulip/tracemalloc")
+RETENTION_LOG_PATH = doer_path("/var/log/zulip/message_retention.log")
+AUTH_LOG_PATH = doer_path("/var/log/zulip/auth.log")
+SCIM_LOG_PATH = doer_path("/var/log/zulip/scim.log")
+REGISTRATION_LOG_PATH = doer_path("/var/log/zulip/registration.log")
 
-ZULIP_WORKER_TEST_FILE = zulip_path("/var/log/zulip/zulip-worker-test-file")
+DOER_WORKER_TEST_FILE = doer_path("/var/log/zulip/doer-worker-test-file")
 
 LOCKFILE_DIRECTORY = (
     "/srv/zulip-locks" if not DEVELOPMENT else os.path.join(os.path.join(DEPLOY_ROOT, "var/locks"))
@@ -781,7 +781,7 @@ if IS_WORKER:
 else:
     FILE_LOG_PATH = SERVER_LOG_PATH
 
-DEFAULT_ZULIP_HANDLERS = [
+DEFAULT_DOER_HANDLERS = [
     *(["mail_admins"] if ERROR_REPORTING else []),
     "console",
     "file",
@@ -821,15 +821,15 @@ LOGGING: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "()": "zerver.lib.logging_util.ZulipFormatter",
+            "()": "zerver.lib.logging_util.DoerFormatter",
         },
         "webhook_request_data": {
-            "()": "zerver.lib.logging_util.ZulipWebhookFormatter",
+            "()": "zerver.lib.logging_util.DoerWebhookFormatter",
         },
     },
     "filters": {
-        "ZulipLimiter": {
-            "()": "zerver.lib.logging_util.ZulipLimiter",
+        "DoerLimiter": {
+            "()": "zerver.lib.logging_util.DoerLimiter",
         },
         "EmailLimiter": {
             "()": "zerver.lib.logging_util.EmailLimiter",
@@ -865,7 +865,7 @@ LOGGING: dict[str, Any] = {
             "level": "ERROR",
             "class": "django.utils.log.AdminEmailHandler",
             "filters": (
-                ["ZulipLimiter", "require_debug_false", "require_really_deployed"]
+                ["DoerLimiter", "require_debug_false", "require_really_deployed"]
                 if not DEBUG_ERROR_REPORTING
                 else []
             ),
@@ -912,7 +912,7 @@ LOGGING: dict[str, Any] = {
         # root logger
         "": {
             "level": "INFO",
-            "handlers": DEFAULT_ZULIP_HANDLERS,
+            "handlers": DEFAULT_DOER_HANDLERS,
         },
         # Django, alphabetized
         "django": {
@@ -1000,55 +1000,55 @@ LOGGING: dict[str, Any] = {
         "zerver.management.commands.deliver_scheduled_messages": {
             "level": "DEBUG",
         },
-        "zulip.analytics": {
+        "doer.analytics": {
             "handlers": ["analytics_file", "errors_file"],
             "propagate": False,
         },
-        "zulip.auth": {
+        "doer.auth": {
             "level": "DEBUG",
-            "handlers": [*DEFAULT_ZULIP_HANDLERS, "auth_file"],
+            "handlers": [*DEFAULT_DOER_HANDLERS, "auth_file"],
             "propagate": False,
         },
-        "zulip.ldap": {
+        "doer.ldap": {
             "level": "DEBUG",
             "handlers": ["console", "ldap_file", "errors_file"],
             "propagate": False,
         },
-        "zulip.management": {
+        "doer.management": {
             "handlers": ["file", "errors_file"],
             "propagate": False,
         },
-        "zulip.queue": {
+        "doer.queue": {
             "level": "WARNING",
         },
-        "zulip.registration": {
+        "doer.registration": {
             "handlers": ["registration_file", "errors_file"],
             "propagate": False,
         },
-        "zulip.retention": {
+        "doer.retention": {
             "handlers": ["file", "errors_file"],
             "propagate": False,
         },
-        "zulip.slow_queries": {
+        "doer.slow_queries": {
             "level": "INFO",
             "handlers": ["slow_queries_file"],
             "propagate": False,
         },
-        "zulip.soft_deactivation": {
+        "doer.soft_deactivation": {
             "handlers": ["file", "errors_file"],
             "propagate": False,
         },
-        "zulip.zerver.webhooks": {
+        "doer.zerver.webhooks": {
             "level": "DEBUG",
             "handlers": ["file", "errors_file", "webhook_file"],
             "propagate": False,
         },
-        "zulip.zerver.webhooks.unsupported": {
+        "doer.zerver.webhooks.unsupported": {
             "level": "DEBUG",
             "handlers": ["webhook_unsupported_file"],
             "propagate": False,
         },
-        "zulip.zerver.webhooks.anomalous": {
+        "doer.zerver.webhooks.anomalous": {
             "level": "DEBUG",
             "handlers": ["webhook_anomalous_file"],
             "propagate": False,
@@ -1074,10 +1074,10 @@ EVENT_QUEUE_LONGPOLL_TIMEOUT_SECONDS = 90
 # SSO AND LDAP SETTINGS
 ########################################################################
 
-USING_LDAP = "zproject.backends.ZulipLDAPAuthBackend" in AUTHENTICATION_BACKENDS
-ONLY_LDAP = AUTHENTICATION_BACKENDS == ("zproject.backends.ZulipLDAPAuthBackend",)
-USING_APACHE_SSO = "zproject.backends.ZulipRemoteUserBackend" in AUTHENTICATION_BACKENDS
-ONLY_SSO = AUTHENTICATION_BACKENDS == ("zproject.backends.ZulipRemoteUserBackend",)
+USING_LDAP = "zproject.backends.DoerLDAPAuthBackend" in AUTHENTICATION_BACKENDS
+ONLY_LDAP = AUTHENTICATION_BACKENDS == ("zproject.backends.DoerLDAPAuthBackend",)
+USING_APACHE_SSO = "zproject.backends.DoerRemoteUserBackend" in AUTHENTICATION_BACKENDS
+ONLY_SSO = AUTHENTICATION_BACKENDS == ("zproject.backends.DoerRemoteUserBackend",)
 
 if CUSTOM_HOME_NOT_LOGGED_IN is not None:
     # We import this with a different name to avoid a mypy bug with
@@ -1089,12 +1089,12 @@ elif ONLY_SSO:
 else:
     HOME_NOT_LOGGED_IN = "/login/"
 
-AUTHENTICATION_BACKENDS += ("zproject.backends.ZulipDummyBackend",)
+AUTHENTICATION_BACKENDS += ("zproject.backends.DoerDummyBackend",)
 
 POPULATE_PROFILE_VIA_LDAP = bool(AUTH_LDAP_SERVER_URI)
 
 if POPULATE_PROFILE_VIA_LDAP and not USING_LDAP:
-    AUTHENTICATION_BACKENDS += ("zproject.backends.ZulipLDAPUserPopulator",)
+    AUTHENTICATION_BACKENDS += ("zproject.backends.DoerLDAPUserPopulator",)
 else:
     POPULATE_PROFILE_VIA_LDAP = USING_LDAP or POPULATE_PROFILE_VIA_LDAP
 
@@ -1168,15 +1168,15 @@ SOCIAL_AUTH_GITHUB_TEAM_SECRET = SOCIAL_AUTH_GITHUB_SECRET
 SOCIAL_AUTH_GOOGLE_SECRET = get_secret("social_auth_google_secret")
 # Fallback to google-oauth settings in case social auth settings for
 # Google are missing; this is for backwards-compatibility with older
-# Zulip versions where /etc/zulip/settings.py has not been migrated yet.
+# Doer versions where /etc/zulip/settings.py has not been migrated yet.
 GOOGLE_OAUTH2_CLIENT_SECRET = get_secret("google_oauth2_client_secret")
 SOCIAL_AUTH_GOOGLE_KEY = SOCIAL_AUTH_GOOGLE_KEY or GOOGLE_OAUTH2_CLIENT_ID
 SOCIAL_AUTH_GOOGLE_SECRET = SOCIAL_AUTH_GOOGLE_SECRET or GOOGLE_OAUTH2_CLIENT_SECRET
 
 if PRODUCTION:
-    SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = get_from_file_if_exists("/etc/zulip/saml/zulip-cert.crt")
+    SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = get_from_file_if_exists("/etc/zulip/saml/doer-cert.crt")
     SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = get_from_file_if_exists(
-        "/etc/zulip/saml/zulip-private-key.key"
+        "/etc/zulip/saml/doer-private-key.key"
     )
 
     if SOCIAL_AUTH_SAML_SP_PUBLIC_CERT and SOCIAL_AUTH_SAML_SP_PRIVATE_KEY:
@@ -1222,8 +1222,8 @@ SOCIAL_AUTH_PIPELINE = [
 # EMAIL SETTINGS
 ########################################################################
 
-# Django setting. Not used in the Zulip codebase.
-DEFAULT_FROM_EMAIL = ZULIP_ADMINISTRATOR
+# Django setting. Not used in the Doer codebase.
+DEFAULT_FROM_EMAIL = DOER_ADMINISTRATOR
 
 if EMAIL_BACKEND is not None:
     # If the server admin specified a custom email backend, use that.
@@ -1256,7 +1256,7 @@ AUTH_LDAP_BIND_PASSWORD = get_secret("auth_ldap_bind_password", "")
 
 if PRODUCTION:
     # Filter out user data
-    DEFAULT_EXCEPTION_REPORTER_FILTER = "zerver.filters.ZulipExceptionReporterFilter"
+    DEFAULT_EXCEPTION_REPORTER_FILTER = "zerver.filters.DoerExceptionReporterFilter"
 
 # This is a debugging option only
 PROFILE_ALL_REQUESTS = False
@@ -1278,11 +1278,11 @@ TWO_FACTOR_PATCH_ADMIN = False
 SENTRY_DSN = os.environ.get("SENTRY_DSN", SENTRY_DSN)
 
 SCIM_SERVICE_PROVIDER = {
-    "USER_ADAPTER": "zerver.lib.scim.ZulipSCIMUser",
-    "USER_FILTER_PARSER": "zerver.lib.scim_filter.ZulipUserFilterQuery",
-    "GROUP_ADAPTER": "zerver.lib.scim.ZulipSCIMGroup",
+    "USER_ADAPTER": "zerver.lib.scim.DoerSCIMUser",
+    "USER_FILTER_PARSER": "zerver.lib.scim_filter.DoerUserFilterQuery",
+    "GROUP_ADAPTER": "zerver.lib.scim.DoerSCIMGroup",
     "GROUP_MODEL": "zerver.models.groups.NamedUserGroup",
-    "GROUP_FILTER_PARSER": "zerver.lib.scim_filter.ZulipGroupFilterQuery",
+    "GROUP_FILTER_PARSER": "zerver.lib.scim_filter.DoerGroupFilterQuery",
     # NETLOC is actually overridden by the behavior of base_scim_location_getter,
     # but django-scim2 requires it to be set, even though it ends up not being used.
     # So we need to give it some value here, and EXTERNAL_HOST is the most generic.
@@ -1290,7 +1290,7 @@ SCIM_SERVICE_PROVIDER = {
     "SCHEME": EXTERNAL_URI_SCHEME,
     "GET_EXTRA_MODEL_FILTER_KWARGS_GETTER": "zerver.lib.scim.get_extra_model_filter_kwargs_getter",
     "BASE_LOCATION_GETTER": "zerver.lib.scim.base_scim_location_getter",
-    "AUTH_CHECK_MIDDLEWARE": "zerver.middleware.ZulipSCIMAuthCheckMiddleware",
+    "AUTH_CHECK_MIDDLEWARE": "zerver.middleware.DoerSCIMAuthCheckMiddleware",
     "AUTHENTICATION_SCHEMES": [
         {
             "type": "bearer",

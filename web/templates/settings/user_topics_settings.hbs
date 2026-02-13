@@ -1,7 +1,7 @@
 <div id="user-topic-settings" class="settings-section" data-name="topics">
     <p>
         {{#tr}}
-            Zulip lets you follow topics you are interested in, and mute topics you want to ignore.
+            Doer lets you follow topics you are interested in, and mute topics you want to ignore.
             You can also <z-automatically-follow>automatically follow</z-automatically-follow>
             topics you start or participate in, and topics where you're mentioned.
             {{#*inline "z-automatically-follow"}}<a href="/help/follow-a-topic#automatically-follow-topics" target="_blank" rel="noopener noreferrer">{{> @partial-block}}</a>{{/inline}}
@@ -19,16 +19,16 @@
             <thead class="table-sticky-headers">
                 <tr>
                     <th data-sort="alphabetic" data-sort-prop="stream">{{t "Channel" }}
-                        <i class="table-sortable-arrow zulip-icon zulip-icon-sort-arrow-down"></i>
+                        <i class="table-sortable-arrow doer-icon doer-icon-sort-arrow-down"></i>
                     </th>
                     <th data-sort="alphabetic" data-sort-prop="topic">{{t "Topic" }}
-                        <i class="table-sortable-arrow zulip-icon zulip-icon-sort-arrow-down"></i>
+                        <i class="table-sortable-arrow doer-icon doer-icon-sort-arrow-down"></i>
                     </th>
                     <th data-sort="numeric" data-sort-prop="visibility_policy">{{t "Status" }}
-                        <i class="table-sortable-arrow zulip-icon zulip-icon-sort-arrow-down"></i>
+                        <i class="table-sortable-arrow doer-icon doer-icon-sort-arrow-down"></i>
                     </th>
                     <th data-sort="numeric" data-sort-prop="date_updated" class="active topic_date_updated">{{t "Date updated" }}
-                        <i class="table-sortable-arrow zulip-icon zulip-icon-sort-arrow-down"></i>
+                        <i class="table-sortable-arrow doer-icon doer-icon-sort-arrow-down"></i>
                     </th>
                 </tr>
             </thead>

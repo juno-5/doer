@@ -62,12 +62,12 @@ class UserBaseSettings(models.Model):
     enter_sends = models.BooleanField(default=False)
 
     ### Preferences. ###
-    # left_side_userlist was removed from the UI in Zulip 6.0; the
+    # left_side_userlist was removed from the UI in Doer 6.0; the
     # database model is being temporarily preserved in case we want to
     # restore a version of the setting, preserving who had it enabled.
     left_side_userlist = models.BooleanField(default=False)
     default_language = models.CharField(default="en", max_length=MAX_LANGUAGE_ID_LENGTH)
-    # This setting controls which view is rendered first when Zulip loads.
+    # This setting controls which view is rendered first when Doer loads.
     # Values for it are URL suffix after `#`.
     web_home_view = models.TextField(default="inbox")
     web_escape_navigates_to_home_view = models.BooleanField(default=True)
@@ -98,7 +98,7 @@ class UserBaseSettings(models.Model):
     # UI setting to control how animated images are played.
     web_animate_image_previews = models.TextField(default="on_hover")
 
-    # UI setting controlling Zulip's behavior of demoting in the sort
+    # UI setting controlling Doer's behavior of demoting in the sort
     # order and graying out streams with no recent traffic.  The
     # default behavior, automatic, enables this behavior once a user
     # is subscribed to 30+ streams in the web app.
@@ -113,10 +113,10 @@ class UserBaseSettings(models.Model):
     demote_inactive_streams = models.PositiveSmallIntegerField(default=DEMOTE_STREAMS_AUTOMATIC)
 
     # UI setting to control showing channel folders in the left sidebar
-    # of the Zulip web app.
+    # of the Doer web app.
     web_left_sidebar_show_channel_folders = models.BooleanField(default=True, db_default=True)
 
-    # UI setting controlling whether or not the Zulip web app will
+    # UI setting controlling whether or not the Doer web app will
     # mark messages as read as it scrolls through the feed.
 
     MARK_READ_ON_SCROLL_ALWAYS = 1
@@ -202,7 +202,7 @@ class UserBaseSettings(models.Model):
     enable_stream_email_notifications = models.BooleanField(default=False)
     enable_stream_push_notifications = models.BooleanField(default=False)
     enable_stream_audible_notifications = models.BooleanField(default=False)
-    notification_sound = models.CharField(max_length=20, default="zulip")
+    notification_sound = models.CharField(max_length=20, default="doer")
     wildcard_mentions_notify = models.BooleanField(default=True)
 
     # Followed Topics notifications.
@@ -296,7 +296,7 @@ class UserBaseSettings(models.Model):
     receives_typing_notifications = models.BooleanField(default=True)
 
     # UI setting to control showing channel folders in the Inbox view
-    # of the Zulip web app.
+    # of the Doer web app.
     web_inbox_show_channel_folders = models.BooleanField(default=True, db_default=True)
 
     # Who in the organization has access to users' actual email
@@ -460,7 +460,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
     # On updating it here, update it there as well.
     OUTGOING_WEBHOOK_BOT = 3
     """
-    Embedded bots run within the Zulip server itself; events are added to the
+    Embedded bots run within the Doer server itself; events are added to the
     embedded_bots queue and then handled by a QueueProcessingWorker.
     """
     EMBEDDED_BOT = 4
@@ -479,7 +479,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
 
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")
 
-    # For historical reasons, Zulip has two email fields.  The
+    # For historical reasons, Doer has two email fields.  The
     # `delivery_email` field is the user's email address, where all
     # email notifications will be sent, and is used for all
     # authentication use cases.
@@ -488,7 +488,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
     # with EMAIL_ADDRESS_VISIBILITY_EVERYONE.  For other
     # organizations, it will be a unique value of the form
     # user1234@example.com.  This field exists for backwards
-    # compatibility in Zulip APIs where users are referred to by their
+    # compatibility in Doer APIs where users are referred to by their
     # email address, not their ID; it should be used in all API use cases.
     #
     # Both fields are unique within a realm (in a case-insensitive
@@ -533,7 +533,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
 
     # For a normal user, this is True unless the user or an admin has
     # deactivated their account.  The name comes from Django; this field
-    # isn't related to presence or to whether the user has recently used Zulip.
+    # isn't related to presence or to whether the user has recently used Doer.
     #
     # See also `long_term_idle`.
     is_active = models.BooleanField(default=True, db_index=True)
@@ -593,7 +593,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
 
     # Whether the user has been "soft-deactivated" due to weeks of inactivity.
     # For these users we avoid doing UserMessage table work, as an optimization
-    # for large Zulip organizations with lots of single-visit users.
+    # for large Doer organizations with lots of single-visit users.
     long_term_idle = models.BooleanField(default=False, db_index=True)
 
     # When we last added basic UserMessage rows for a long_term_idle user.
@@ -601,7 +601,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin, UserBaseSettings):
 
     # Mirror dummies are fake (!is_active) users used to provide
     # message senders in cross-protocol mirroring integrations, so
-    # that we can display mirrored content like native Zulip messages
+    # that we can display mirrored content like native Doer messages
     # (with a name + avatar, etc.).  We also abuse this for data
     # imports and deleted users.
     is_mirror_dummy = models.BooleanField(default=False)
@@ -1013,7 +1013,7 @@ def get_user_profile_narrow_by_id(user_profile_id: int) -> UserProfile:
 def get_user_profile_by_email(email: str) -> UserProfile:
     """This function is intended to be used for
     manual manage.py shell work; robust code must use get_user or
-    get_user_by_delivery_email instead, because Zulip supports
+    get_user_by_delivery_email instead, because Doer supports
     multiple users with a given (delivery) email address existing on a
     single server (in different realms).
     """
@@ -1043,7 +1043,7 @@ def get_user_profile_by_api_key(api_key: str) -> UserProfile:
 def get_user_by_delivery_email(email: str, realm: "Realm") -> UserProfile:
     """Fetches a user given their delivery email.  For use in
     authentication/registration contexts.  Do not use for user-facing
-    views (e.g. Zulip API endpoints) as doing so would violate the
+    views (e.g. Doer API endpoints) as doing so would violate the
     EMAIL_ADDRESS_VISIBILITY_ADMINS security model.  Use get_user in
     those code paths.
     """

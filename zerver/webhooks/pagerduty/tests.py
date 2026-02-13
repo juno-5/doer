@@ -3,7 +3,7 @@ from zerver.lib.test_classes import WebhookTestCase
 
 class PagerDutyHookTests(WebhookTestCase):
     def test_trigger(self) -> None:
-        expected_message = "Incident [3](https://zulip-test.pagerduty.com/incidents/P140S4Y) triggered by [Test service](https://zulip-test.pagerduty.com/services/PIL5CUQ) (assigned to [armooo](https://zulip-test.pagerduty.com/users/POBCFRJ)).\n\n``` quote\nfoo\n```"
+        expected_message = "Incident [3](https://doer-test.pagerduty.com/incidents/P140S4Y) triggered by [Test service](https://doer-test.pagerduty.com/services/PIL5CUQ) (assigned to [armooo](https://doer-test.pagerduty.com/users/POBCFRJ)).\n\n``` quote\nfoo\n```"
         self.check_webhook("trigger", "Incident 3", expected_message)
 
     def test_trigger_v2(self) -> None:
@@ -19,7 +19,7 @@ class PagerDutyHookTests(WebhookTestCase):
         self.check_webhook("trigger_without_assignee_v2", "Incident 33", expected_message)
 
     def test_unacknowledge(self) -> None:
-        expected_message = "Incident [3](https://zulip-test.pagerduty.com/incidents/P140S4Y) unacknowledged by [Test service](https://zulip-test.pagerduty.com/services/PIL5CUQ) (assigned to [armooo](https://zulip-test.pagerduty.com/users/POBCFRJ)).\n\n``` quote\nfoo\n```"
+        expected_message = "Incident [3](https://doer-test.pagerduty.com/incidents/P140S4Y) unacknowledged by [Test service](https://doer-test.pagerduty.com/services/PIL5CUQ) (assigned to [armooo](https://doer-test.pagerduty.com/users/POBCFRJ)).\n\n``` quote\nfoo\n```"
         self.check_webhook("unacknowledge", "Incident 3", expected_message)
 
     def test_unacknowledged_v3(self) -> None:
@@ -27,7 +27,7 @@ class PagerDutyHookTests(WebhookTestCase):
         self.check_webhook("unacknowledged_v3", "Incident Test Incident (#10)", expected_message)
 
     def test_resolved(self) -> None:
-        expected_message = "Incident [1](https://zulip-test.pagerduty.com/incidents/PO1XIJ5) resolved by [armooo](https://zulip-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\nIt is on fire\n```"
+        expected_message = "Incident [1](https://doer-test.pagerduty.com/incidents/PO1XIJ5) resolved by [armooo](https://doer-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\nIt is on fire\n```"
         self.check_webhook("resolved", "Incident 1", expected_message)
 
     def test_resolved_v2(self) -> None:
@@ -39,15 +39,15 @@ class PagerDutyHookTests(WebhookTestCase):
         self.check_webhook("resolved_v3", "Incident Test Incident (#6)", expected_message)
 
     def test_auto_resolved(self) -> None:
-        expected_message = "Incident [2](https://zulip-test.pagerduty.com/incidents/PX7K9J2) resolved.\n\n``` quote\nnew\n```"
+        expected_message = "Incident [2](https://doer-test.pagerduty.com/incidents/PX7K9J2) resolved.\n\n``` quote\nnew\n```"
         self.check_webhook("auto_resolved", "Incident 2", expected_message)
 
     def test_acknowledge(self) -> None:
-        expected_message = "Incident [1](https://zulip-test.pagerduty.com/incidents/PO1XIJ5) acknowledged by [armooo](https://zulip-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\nIt is on fire\n```"
+        expected_message = "Incident [1](https://doer-test.pagerduty.com/incidents/PO1XIJ5) acknowledged by [armooo](https://doer-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\nIt is on fire\n```"
         self.check_webhook("acknowledge", "Incident 1", expected_message)
 
     def test_acknowledge_without_trigger_summary_data(self) -> None:
-        expected_message = "Incident [1](https://zulip-test.pagerduty.com/incidents/PO1XIJ5) acknowledged by [armooo](https://zulip-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\n\n```"
+        expected_message = "Incident [1](https://doer-test.pagerduty.com/incidents/PO1XIJ5) acknowledged by [armooo](https://doer-test.pagerduty.com/users/POBCFRJ).\n\n``` quote\n\n```"
         self.check_webhook(
             "acknowledge_without_trigger_summary_data", "Incident 1", expected_message
         )

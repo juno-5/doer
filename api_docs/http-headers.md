@@ -1,6 +1,6 @@
 # HTTP headers
 
-This page documents the HTTP headers used by the Zulip API.
+This page documents the HTTP headers used by the Doer API.
 
 Most important is that API clients authenticate to the server using
 HTTP Basic authentication. If you're using the official [Python or
@@ -11,7 +11,7 @@ Otherwise, see the `curl` example on each endpoint's documentation
 page, which details the request format.
 
 Documented below are additional HTTP headers and header conventions
-generally used by Zulip:
+generally used by Doer:
 
 ## The `User-Agent` header
 
@@ -20,40 +20,40 @@ highly recommend doing so when writing an integration. It's easy to do
 and it can help save time when debugging issues related to an API
 client.
 
-If provided, the Zulip server will parse the `User-Agent` HTTP header
+If provided, the Doer server will parse the `User-Agent` HTTP header
 in order to identify specific clients and integrations. This
 information is used by the server for logging, [usage
 statistics](/help/analytics), and on rare occasions, for
 backwards-compatibility logic to preserve support for older versions
 of official clients.
 
-Official Zulip clients and integrations use a `User-Agent` that starts
-with something like `ZulipMobile/20.0.103 `, encoding the name of the
+Official Doer clients and integrations use a `User-Agent` that starts
+with something like `DoerMobile/20.0.103 `, encoding the name of the
 application and it's version.
 
-Zulip's official API bindings have reasonable defaults for
-`User-Agent`. For example, the official Zulip Python bindings have a
-default `User-Agent` starting with `ZulipPython/{version}`, where
+Doer's official API bindings have reasonable defaults for
+`User-Agent`. For example, the official Doer Python bindings have a
+default `User-Agent` starting with `DoerPython/{version}`, where
 `version` is the version of the library.
 
 You can give your bot/integration its own name by passing the `client`
 parameter when initializing the Python bindings. For example, the
-official Zulip Nagios integration is initialized like this:
+official Doer Nagios integration is initialized like this:
 
 ``` python
-client = zulip.Client(
-    config_file=opts.config, client=f"ZulipNagios/{VERSION}"
+client = doer.Client(
+    config_file=opts.config, client=f"DoerNagios/{VERSION}"
 )
 ```
 
 If you are working on an integration that you plan to share outside
 your organization, you can get help picking a good name in
-[#integrations][integrations-channel] in the [Zulip development
+[#integrations][integrations-channel] in the [Doer development
 community](https://zulip.com/development-community/).
 
 ## Rate-limiting response headers
 
-To help clients avoid exceeding rate limits, Zulip sets the following
+To help clients avoid exceeding rate limits, Doer sets the following
 HTTP headers in all API responses:
 
 * `X-RateLimit-Remaining`: The number of additional requests of this
@@ -66,16 +66,16 @@ HTTP headers in all API responses:
   have any rate limits applied to it (and thus could do a burst of
   `X-RateLimit-Limit` requests).
 
-[Zulip's rate limiting rules are configurable][rate-limiting-rules],
+[Doer's rate limiting rules are configurable][rate-limiting-rules],
 and can vary by server and over time. The default configuration
 currently limits:
 
 * Every user is limited to 200 total API requests per minute.
 * Separate, much lower limits for authentication/login attempts.
 
-When the Zulip server has configured multiple rate limits that apply
+When the Doer server has configured multiple rate limits that apply
 to a given request, the values returned will be for the strictest
 limit.
 
-[rate-limiting-rules]: https://zulip.readthedocs.io/en/latest/production/securing-your-zulip-server.html#rate-limiting
+[rate-limiting-rules]: https://zulip.readthedocs.io/en/latest/production/securing-your-doer-server.html#rate-limiting
 [integrations-channel]: https://chat.zulip.org/#narrow/channel/127-integrations/

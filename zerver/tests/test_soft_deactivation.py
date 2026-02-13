@@ -17,7 +17,7 @@ from zerver.lib.soft_deactivation import (
     reactivate_user_if_soft_deactivated,
 )
 from zerver.lib.stream_subscription import get_subscriptions_for_send_message
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_subscription, get_user_messages, make_client
 from zerver.models import (
     AlertWord,
@@ -33,10 +33,10 @@ from zerver.models.realm_audit_logs import AuditLogEventType
 from zerver.models.realms import get_realm
 from zerver.models.streams import get_stream
 
-logger_string = "zulip.soft_deactivation"
+logger_string = "doer.soft_deactivation"
 
 
-class UserSoftDeactivationTests(ZulipTestCase):
+class UserSoftDeactivationTests(DoerTestCase):
     def test_do_soft_deactivate_user(self) -> None:
         user = self.example_user("hamlet")
         self.assertFalse(user.long_term_idle)
@@ -100,7 +100,7 @@ class UserSoftDeactivationTests(ZulipTestCase):
                 count=count,
                 last_visit=last_visit,
             )
-        filter_kwargs = dict(user_profile__realm=get_realm("zulip"))
+        filter_kwargs = dict(user_profile__realm=get_realm("doer"))
         users_to_deactivate = get_users_for_soft_deactivation(-1, filter_kwargs)
 
         self.assert_length(users_to_deactivate, 10)
@@ -154,7 +154,7 @@ class UserSoftDeactivationTests(ZulipTestCase):
             user_profile.long_term_idle = True
             user_profile.save(update_fields=["long_term_idle"])
 
-        filter_kwargs = dict(realm=get_realm("zulip"))
+        filter_kwargs = dict(realm=get_realm("doer"))
         users_to_catch_up = get_soft_deactivated_users_for_catch_up(filter_kwargs)
 
         self.assert_length(users_to_catch_up, 10)
@@ -215,7 +215,7 @@ class UserSoftDeactivationTests(ZulipTestCase):
             self.example_user("desdemona"),
         ]
         sender = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream_name = "announce"
         for user in [*users, sender]:
             self.subscribe(user, stream_name)
@@ -295,7 +295,7 @@ class UserSoftDeactivationTests(ZulipTestCase):
         self.assertEqual(0, received_count)
 
 
-class SoftDeactivationMessageTest(ZulipTestCase):
+class SoftDeactivationMessageTest(DoerTestCase):
     def test_reactivate_user_if_soft_deactivated(self) -> None:
         recipient_list = [self.example_user("hamlet"), self.example_user("iago")]
         for user_profile in recipient_list:

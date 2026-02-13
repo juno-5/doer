@@ -9,7 +9,7 @@ import sys
 from typing import Any
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from version import LATEST_RELEASE_VERSION, ZULIP_VERSION
+from version import LATEST_RELEASE_VERSION, DOER_VERSION
 
 on_rtd = os.environ.get("READTHEDOCS") == "True"
 
@@ -24,11 +24,11 @@ extensions = [
     "sphinx_copybutton",
 ]
 templates_path = ["_templates"]
-project = "Zulip"
+project = "Doer"
 copyright = "2012–2015 Dropbox, Inc., 2015–2021 Kandra Labs, Inc., and contributors"
-author = "The Zulip Team"
-version = ZULIP_VERSION
-release = ZULIP_VERSION
+author = "The Doer Team"
+version = DOER_VERSION
+release = DOER_VERSION
 exclude_patterns = ["_build", "README.md"]
 suppress_warnings = [
     "myst.header",
@@ -62,7 +62,7 @@ html_theme_options = {
     "collapse_navigation": not on_rtd,  # makes local builds much faster
     "logo_only": True,
 }
-html_logo = "images/zulip-logo.svg"
+html_logo = "images/doer-logo.svg"
 html_static_path = ["_static"]
 # When copying code blocks, ignore line numbers and prompts
 copybutton_exclude = ".linenos, .gp"

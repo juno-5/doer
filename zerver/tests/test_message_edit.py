@@ -21,7 +21,7 @@ from zerver.lib import utils
 from zerver.lib.message import messages_for_ids
 from zerver.lib.message_cache import MessageDict
 from zerver.lib.stream_topic import StreamTopicTarget
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message, queries_captured
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import TOPIC_NAME
@@ -41,7 +41,7 @@ from zerver.models.realms import MessageEditHistoryVisibilityPolicyEnum, get_rea
 from zerver.models.streams import get_stream
 
 
-class EditMessageTest(ZulipTestCase):
+class EditMessageTest(DoerTestCase):
     def check_message(self, msg_id: int, topic_name: str, content: str) -> None:
         # Make sure we saved the message correctly to the DB.
         msg = Message.objects.select_related("realm").get(id=msg_id)
@@ -414,7 +414,7 @@ class EditMessageTest(ZulipTestCase):
         self.assert_json_error(result, "You don't have permission to edit this message")
 
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         do_set_realm_property(realm, "allow_message_editing", False, acting_user=None)
         result = self.client_patch(
             f"/json/messages/{msg_id}",
@@ -743,9 +743,9 @@ class EditMessageTest(ZulipTestCase):
             self.example_user("hamlet"),
             "Denmark",
             topic_name="editing",
-            content="Here is a link to [zulip](www.zulip.org).",
+            content="Here is a link to [doer](www.doer.org).",
         )
-        new_content_1 = "Here is a link to [zulip](www.zulipchat.com)."
+        new_content_1 = "Here is a link to [doer](www.zulipchat.com)."
         result_1 = self.client_patch(
             f"/json/messages/{msg_id_1}",
             {
@@ -761,20 +761,20 @@ class EditMessageTest(ZulipTestCase):
         # Check content of message after edit.
         self.assertEqual(
             message_history_1[0]["rendered_content"],
-            '<p>Here is a link to <a href="http://www.zulip.org">zulip</a>.</p>',
+            '<p>Here is a link to <a href="http://www.doer.org">doer</a>.</p>',
         )
         self.assertEqual(
             message_history_1[1]["rendered_content"],
-            '<p>Here is a link to <a href="http://www.zulipchat.com">zulip</a>.</p>',
+            '<p>Here is a link to <a href="http://www.zulipchat.com">doer</a>.</p>',
         )
         self.assertEqual(
             message_history_1[1]["content_html_diff"],
             (
                 '<div><p>Here is a link to <a href="http://www.zulipchat.com"'
-                ">zulip "
+                ">doer "
                 '<span class="highlight_text_inserted"> Link: http://www.zulipchat.com'
                 '</span> </a> <span class="highlight_text_inserted">.'
-                '</span> <span class="highlight_text_deleted"> Link: http://www.zulip.org .'
+                '</span> <span class="highlight_text_deleted"> Link: http://www.doer.org .'
                 "</span> </p></div>"
             ),
         )
@@ -896,7 +896,7 @@ class EditMessageTest(ZulipTestCase):
             )
 
     def test_edit_cases(self) -> None:
-        """This test verifies the accuracy of construction of Zulip's edit
+        """This test verifies the accuracy of construction of Doer's edit
         history data structures."""
         self.login("hamlet")
         hamlet = self.example_user("hamlet")
@@ -1314,7 +1314,7 @@ class EditMessageTest(ZulipTestCase):
 
         administrators_system_group = NamedUserGroup.objects.get(
             name=SystemGroups.ADMINISTRATORS,
-            realm_for_sharding=get_realm("zulip"),
+            realm_for_sharding=get_realm("doer"),
             is_system_group=True,
         )
 

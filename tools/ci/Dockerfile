@@ -5,8 +5,8 @@
 #  * Git and other basic utilities.
 
 # To rebuild from this file for a given release, say Ubuntu 22.04 jammy:
-#   docker build . --build-arg=BASE_IMAGE=ubuntu:22.04 --pull --tag=zulip/ci:jammy
-#   docker push zulip/ci:jammy
+#   docker build . --build-arg=BASE_IMAGE=ubuntu:22.04 --pull --tag=doer/ci:jammy
+#   docker push doer/ci:jammy
 #
 # tools/ci/build-docker-images will rebuild all images, but not push them.
 
@@ -18,7 +18,7 @@ RUN ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
 # Set the locale.
 ENV LC_ALL C.UTF-8
 
-# Extra packages used by Zulip.
+# Extra packages used by Doer.
 RUN apt-get update \
   && apt-get -y install --no-install-recommends \
     build-essential \
@@ -43,7 +43,7 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
 # We do not pre-install rabbitmq-server, as doing so fixes the
-# nodename to be the current hostname, which varies.  Letting Zulip
+# nodename to be the current hostname, which varies.  Letting Doer
 # install rabbitmq allows it to fix the nodename to 'localhost'.
     redis-server \
     sudo \

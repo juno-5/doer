@@ -66,7 +66,7 @@
             "title": "Test event from node.",
             "type": "default",
             "version": "7",
-            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/6886bb1fe7ce4497b7836f6083d5fd34/",
+            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/6886bb1fe7ce4497b7836f6083d5fd34/",
             "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1638840427/events/6886bb1fe7ce4497b7836f6083d5fd34/",
             "issue_url": "https://sentry.io/api/0/issues/1638840427/"
         },

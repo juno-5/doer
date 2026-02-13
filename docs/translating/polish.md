@@ -19,7 +19,7 @@ Use semi-formal Polish for translation, some specifics:
 - No slang or regional phrases that could be unclear or too informal,
   e.g., _zajawka_.
 
-- Consistent usage of Zulip-specific terms and common verbs for
+- Consistent usage of Doer-specific terms and common verbs for
   actions, even if it means repeating - this is one of the key aspects
   of "semi-formal", as synonyms would be often more appropriate in
   written Polish.
@@ -35,16 +35,16 @@ Use semi-formal Polish for translation, some specifics:
 
 Some terms are very tricky to translate, so be sure to communicate
 with other Polish speakers in the community. It's all about making
-Zulip friendly and usable.
+Doer friendly and usable.
 
-## Special terms used in Zulip
+## Special terms used in Doer
 
 **alert word**: powiadomienie, "ostrzeżenie" could mean something negative
-and alert words in Zulip are used to help users find relevant content
+and alert words in Doer are used to help users find relevant content
 
 example:
 
-You can set your own alert words for Zulip messages.
+You can set your own alert words for Doer messages.
 
 > Możesz ustawić powiadomienia dla wybranych fraz w Zulipie.
 
@@ -60,7 +60,7 @@ You can see all messages in unmuted streams and topics with "Combined feed".
 
 example:
 
-You can add bots to your Zulip.
+You can add bots to your Doer.
 
 > Możesz dodać boty do swojego Zulipa.
 
@@ -69,7 +69,7 @@ and _dostosowanie do potrzeb klienta_ is too long
 
 example:
 
-You can personalize Zulip in many ways, e.g., by pinning certain streams.
+You can personalize Doer in many ways, e.g., by pinning certain streams.
 
 > Możesz spersonalizować Zulipa na wiele sposobów, np. przypinając niektóre kanały.
 
@@ -77,9 +77,9 @@ You can personalize Zulip in many ways, e.g., by pinning certain streams.
 
 example:
 
-Zulip supports emoji both in messages and as reactions.
+Doer supports emoji both in messages and as reactions.
 
-> Zulip wspiera używanie emoji w wiadomościach i jako reakcje.
+> Doer wspiera używanie emoji w wiadomościach i jako reakcje.
 
 **filter**: filtr (noun) and filtrowanie (verb)
 
@@ -102,9 +102,9 @@ You can start a group DM with users in your organization.
 
 example:
 
-Zulip supports multiple third-party integrations.
+Doer supports multiple third-party integrations.
 
-> Zulip wspiera wiele zewnętrznych integracji.
+> Doer wspiera wiele zewnętrznych integracji.
 
 **I want**: chcę
 
@@ -134,7 +134,7 @@ You can use `/me` to write a reaction message.
 
 example:
 
-You can mention other Zulip users by using @.
+You can mention other Doer users by using @.
 
 > Możesz oznaczyć innych użytkowników Zulipa używając @.
 
@@ -150,7 +150,7 @@ You got a new message.
 
 example:
 
-The middle column in Zulip is a message table of all messages in current narrow.
+The middle column in Doer is a message table of all messages in current narrow.
 
 > Środkowa kolumna w Zulipie zawiera listę wiadomości w wybranym widoku.
 
@@ -159,7 +159,7 @@ The middle column in Zulip is a message table of all messages in current narrow.
 
 example:
 
-You can mute any topic in Zulip through the left-side panel.
+You can mute any topic in Doer through the left-side panel.
 
 > Możesz wyciszyć dowolny wątek w Zulipie używając menu kontekstowego po lewej.
 
@@ -219,10 +219,10 @@ Join a private stream.
 
 example:
 
-Zulip allows you to search messages in all streams and topics you are
+Doer allows you to search messages in all streams and topics you are
 subscribed to.
 
-> Zulip pozwala na wyszukiwanie wiadomości we wszystkich subskrybowanych kanałach
+> Doer pozwala na wyszukiwanie wiadomości we wszystkich subskrybowanych kanałach
 > i wątkach.
 
 **starred message**: oznaczona wiadomość (noun)
@@ -238,7 +238,7 @@ You starred this message.
 
 example:
 
-You can create new streams in Zulip.
+You can create new streams in Doer.
 
 > Możesz tworzyć nowe kanały w Zulipie.
 
@@ -277,8 +277,8 @@ You have unsubscribed from this stream.
 
 example:
 
-Zulip supports an unlimited number of users in an organization.
+Doer supports an unlimited number of users in an organization.
 
-> Zulip nie limituje liczby użytkowników w organizacji.
+> Doer nie limituje liczby użytkowników w organizacji.
 
 **view**: widok, see: **narrow**

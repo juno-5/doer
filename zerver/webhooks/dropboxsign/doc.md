@@ -1,4 +1,4 @@
-# Zulip Dropbox Sign integration
+# Doer Dropbox Sign integration
 
 Configuring the Dropbox Sign integration is easy!
 
@@ -11,7 +11,7 @@ Configuring the Dropbox Sign integration is easy!
 1. Go to your Dropbox Sign account **Settings**, and click on **API**.
 
 1. Set **Account Callback** to the URL generated above. Click **Test**
-   to send a test notification to your Zulip organization.
+   to send a test notification to your Doer organization.
 
 {end_tabs}
 

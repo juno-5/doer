@@ -103,7 +103,7 @@ export function initialize(emojiset_name: string): void {
     // will cache it for later use.  Note that we hardcode the octopus
     // emoji to the old Google one because it's better.
     //
-    // TODO: We should probably just make this work just like the Zulip emoji.
+    // TODO: We should probably just make this work just like the Doer emoji.
     const octopus_image = new Image();
     octopus_image.src = octopus_url;
 }

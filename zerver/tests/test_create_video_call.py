@@ -7,12 +7,12 @@ from django.http import HttpResponseRedirect
 from django.test import override_settings
 from typing_extensions import override
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.url_encoding import append_url_query_string
 
 
 @override_settings(VIDEO_ZOOM_SERVER_TO_SERVER_ACCOUNT_ID=None)
-class ZoomVideoCallTestUserAuth(ZulipTestCase):
+class ZoomVideoCallTestUserAuth(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -41,7 +41,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
 
         response = self.client_get(
             "/calls/zoom/complete",
-            {"code": "code", "state": '{"realm":"zulip","sid":""}'},
+            {"code": "code", "state": '{"realm":"doer","sid":""}'},
         )
         self.assertEqual(response.status_code, 200)
 
@@ -136,7 +136,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
     def test_create_zoom_sid_error(self) -> None:
         response = self.client_get(
             "/calls/zoom/complete",
-            {"code": "code", "state": '{"realm":"zulip","sid":"bad"}'},
+            {"code": "code", "state": '{"realm":"doer","sid":"bad"}'},
         )
         self.assert_json_error(response, "Invalid Zoom session identifier")
 
@@ -146,7 +146,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
 
         response = self.client_get(
             "/calls/zoom/complete",
-            {"code": "code", "state": '{"realm":"zulip","sid":""}'},
+            {"code": "code", "state": '{"realm":"doer","sid":""}'},
         )
         self.assert_json_error(response, "Invalid Zoom credentials")
 
@@ -160,7 +160,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
 
         response = self.client_get(
             "/calls/zoom/complete",
-            {"code": "code", "state": '{"realm":"zulip","sid":""}'},
+            {"code": "code", "state": '{"realm":"doer","sid":""}'},
         )
         self.assertEqual(response.status_code, 200)
 
@@ -185,7 +185,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
 
         response = self.client_get(
             "/calls/zoom/complete",
-            {"code": "code", "state": '{"realm":"zulip","sid":""}'},
+            {"code": "code", "state": '{"realm":"doer","sid":""}'},
         )
         self.assertEqual(response.status_code, 200)
 
@@ -223,7 +223,7 @@ class ZoomVideoCallTestUserAuth(ZulipTestCase):
         self.assert_json_success(response)
 
 
-class ZoomVideoCallTestServerAuth(ZulipTestCase):
+class ZoomVideoCallTestServerAuth(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -367,7 +367,7 @@ class ZoomVideoCallTestServerAuth(ZulipTestCase):
         self.assertEqual(json["url"], "example.com")
 
 
-class BigBlueButtonVideoCallTest(ZulipTestCase):
+class BigBlueButtonVideoCallTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -409,7 +409,7 @@ class BigBlueButtonVideoCallTest(ZulipTestCase):
                     "bigbluebutton="
                     + self.signer.sign_object(
                         {
-                            "meeting_id": "zulip-1",
+                            "meeting_id": "doer-1",
                             "name": "general > meeting",
                             "lock_settings_disable_cam": False,
                             "moderator": self.user.id,
@@ -430,7 +430,7 @@ class BigBlueButtonVideoCallTest(ZulipTestCase):
                     "bigbluebutton="
                     + self.signer.sign_object(
                         {
-                            "meeting_id": "zulip-1",
+                            "meeting_id": "doer-1",
                             "name": "general > meeting",
                             "lock_settings_disable_cam": True,
                             "moderator": self.user.id,
@@ -535,7 +535,7 @@ class BigBlueButtonVideoCallTest(ZulipTestCase):
             self.assert_json_error(response, "BigBlueButton is not configured.")
 
 
-class ConstructorGroupsVideoCallTest(ZulipTestCase):
+class ConstructorGroupsVideoCallTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -545,7 +545,7 @@ class ConstructorGroupsVideoCallTest(ZulipTestCase):
         self.base_api_url = "https://example.constructor.app/api/groups/xapi"
 
         self.test_room_guid = "a13b8686-d383-4763-b3b7-d2d4dd7f34ec"
-        self.test_room_name = "King Hamlet's Zulip room"
+        self.test_room_name = "King Hamlet's Doer room"
         self.test_room_url = f"https://example.constructor.app/groups/room/{self.test_room_name}"
 
         self.mock_valid_room = {
@@ -657,10 +657,10 @@ class ConstructorGroupsVideoCallTest(ZulipTestCase):
         assert responses.calls[0].request.body is not None
         request_body = orjson.loads(responses.calls[0].request.body)
         self.assertEqual(request_body["creator_email"], self.user_profile.delivery_email)
-        self.assertEqual(request_body["name"], f"{self.user_profile.full_name}'s Zulip room")
+        self.assertEqual(request_body["name"], f"{self.user_profile.full_name}'s Doer room")
         self.assertEqual(
             request_body["fallback_name"],
-            f"{self.user_profile.full_name}'s Zulip room ({self.user_profile.realm_id}-{self.user_profile.id})",
+            f"{self.user_profile.full_name}'s Doer room ({self.user_profile.realm_id}-{self.user_profile.id})",
         )
 
     def test_unsupported_http_method(self) -> None:

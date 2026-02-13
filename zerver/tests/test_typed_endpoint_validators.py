@@ -1,4 +1,4 @@
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.typed_endpoint_validators import (
     check_int_in,
     check_string_in,
@@ -7,7 +7,7 @@ from zerver.lib.typed_endpoint_validators import (
 )
 
 
-class ValidatorTestCase(ZulipTestCase):
+class ValidatorTestCase(DoerTestCase):
     def test_check_int_in(self) -> None:
         check_int_in(3, [1, 2, 3])
         with self.assertRaisesRegex(ValueError, "Not in the list of possible values"):

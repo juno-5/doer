@@ -86,7 +86,7 @@
             align-items: center;
             margin: 0 var(--input-pill-side-padding);
 
-            .zulip-icon-bot {
+            .doer-icon-bot {
                 margin-left: 0.4em;
             }
         }
@@ -319,7 +319,7 @@
         /* Zero out the margin placed to the left of the bot icon,
            and add in the 5px of padding to the right. Specificity
            necessitates duplicating the .pill-label class here. */
-        .pill-label .zulip-icon-bot {
+        .pill-label .doer-icon-bot {
             margin-left: 0;
             padding-right: 5px;
         }
@@ -441,7 +441,7 @@
     }
 }
 
-.display_only_group_pill .zulip-icon-user-group {
+.display_only_group_pill .doer-icon-user-group {
     /* Reserve the same square box for the user-group
        icon as on pill images. */
     height: var(--height-input-pill);

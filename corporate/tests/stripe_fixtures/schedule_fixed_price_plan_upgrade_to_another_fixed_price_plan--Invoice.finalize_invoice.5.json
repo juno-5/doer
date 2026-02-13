@@ -55,7 +55,7 @@
       {
         "amount": 10000,
         "currency": "usd",
-        "description": "Zulip Basic - renewal",
+        "description": "Doer Basic - renewal",
         "discount_amounts": [],
         "discountable": false,
         "discounts": [],
@@ -126,7 +126,7 @@
   "shipping_cost": null,
   "shipping_details": null,
   "starting_balance": 0,
-  "statement_descriptor": "Zulip Basic",
+  "statement_descriptor": "Doer Basic",
   "status": "open",
   "status_transitions": {
     "finalized_at": 1000000000,

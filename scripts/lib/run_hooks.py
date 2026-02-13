@@ -5,13 +5,13 @@ import subprocess
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     DEPLOYMENTS_DIR,
     assert_running_as_root,
     get_deploy_root,
-    get_zulip_pwent,
+    get_doer_pwent,
     parse_version_from,
-    su_to_zulip,
+    su_to_doer,
 )
 
 assert_running_as_root()
@@ -23,8 +23,8 @@ parser.add_argument("kind", choices=["pre-deploy", "post-deploy"], help="")
 parser.add_argument("--from-git", action="store_true", help="Upgrading from git")
 args = parser.parse_args()
 
-from version import ZULIP_MERGE_BASE as NEW_ZULIP_MERGE_BASE
-from version import ZULIP_VERSION as NEW_ZULIP_VERSION
+from version import DOER_MERGE_BASE as NEW_DOER_MERGE_BASE
+from version import DOER_VERSION as NEW_DOER_VERSION
 
 deploy_path = get_deploy_root()
 
@@ -46,17 +46,17 @@ if not os.path.exists(path):
 # Pass in, via environment variables, the old/new "version
 # string" (which is a `git describe` output)
 env = os.environ.copy()
-env["ZULIP_OLD_VERSION"] = old_version
-env["ZULIP_NEW_VERSION"] = NEW_ZULIP_VERSION
+env["DOER_OLD_VERSION"] = old_version
+env["DOER_NEW_VERSION"] = NEW_DOER_VERSION
 
-# preexec_fn=su_to_zulip normally handles this, but our explicit
+# preexec_fn=su_to_doer normally handles this, but our explicit
 # env overrides that
-env["HOME"] = get_zulip_pwent().pw_dir
+env["HOME"] = get_doer_pwent().pw_dir
 
 
 def resolve_version_string(version: str) -> str:
     return subprocess.check_output(
-        ["git", "rev-parse", version], cwd=deploy_path, preexec_fn=su_to_zulip, text=True
+        ["git", "rev-parse", version], cwd=deploy_path, preexec_fn=su_to_doer, text=True
     ).strip()
 
 
@@ -64,10 +64,10 @@ if args.from_git:
     # If we have a git repo, we also resolve those `git describe`
     # values to full commit hashes, as well as provide the
     # merge-base of the old/new commits with mainline.
-    env["ZULIP_OLD_COMMIT"] = resolve_version_string(old_version)
-    env["ZULIP_NEW_COMMIT"] = resolve_version_string(NEW_ZULIP_VERSION)
-    env["ZULIP_OLD_MERGE_BASE_COMMIT"] = resolve_version_string(old_merge_base)
-    env["ZULIP_NEW_MERGE_BASE_COMMIT"] = resolve_version_string(NEW_ZULIP_MERGE_BASE)
+    env["DOER_OLD_COMMIT"] = resolve_version_string(old_version)
+    env["DOER_NEW_COMMIT"] = resolve_version_string(NEW_DOER_VERSION)
+    env["DOER_OLD_MERGE_BASE_COMMIT"] = resolve_version_string(old_merge_base)
+    env["DOER_NEW_MERGE_BASE_COMMIT"] = resolve_version_string(NEW_DOER_MERGE_BASE)
 
 failures = []
 for script_name in sorted(f for f in os.listdir(path) if f.endswith(".hook")):
@@ -75,7 +75,7 @@ for script_name in sorted(f for f in os.listdir(path) if f.endswith(".hook")):
         [os.path.join(path, script_name)],
         check=False,
         cwd=deploy_path,
-        preexec_fn=su_to_zulip,
+        preexec_fn=su_to_doer,
         env=env,
     )
     if result.returncode != 0:

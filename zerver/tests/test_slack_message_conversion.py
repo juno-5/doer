@@ -5,14 +5,14 @@ import orjson
 from typing_extensions import override
 
 from zerver.data_import.slack_message_conversion import (
-    convert_to_zulip_markdown,
+    convert_to_doer_markdown,
     get_user_full_name,
 )
 from zerver.lib import mdiff
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class SlackMessageConversion(ZulipTestCase):
+class SlackMessageConversion(DoerTestCase):
     @override
     def assertEqual(self, first: Any, second: Any, msg: str = "") -> None:
         if isinstance(first, str) and isinstance(second, str):
@@ -46,7 +46,7 @@ class SlackMessageConversion(ZulipTestCase):
             slack_user_map: dict[str, int] = {}
             users: list[dict[str, Any]] = [{}]
             channel_map: dict[str, tuple[str, int]] = {}
-            converted = convert_to_zulip_markdown(test["input"], users, channel_map, slack_user_map)
+            converted = convert_to_doer_markdown(test["input"], users, channel_map, slack_user_map)
             converted_text = converted[0]
             with self.subTest(slack_message_conversion=name):
                 self.assertEqual(converted_text, test["conversion_output"])
@@ -79,7 +79,7 @@ class SlackMessageConversion(ZulipTestCase):
         ]
         channel_map = {"general": ("C5Z73A7RA", 137)}
         message = "Hi <@U08RGD1RD|john>: How are you? <#C5Z73A7RA|general>"
-        text, mentioned_users, _has_link = convert_to_zulip_markdown(
+        text, mentioned_users, _has_link = convert_to_doer_markdown(
             message, users, channel_map, slack_user_map
         )
         full_name = get_user_full_name(users[1])
@@ -91,7 +91,7 @@ class SlackMessageConversion(ZulipTestCase):
 
         # multiple mentioning
         message = "Hi <@U08RGD1RD|john>: How are you?<@U0CBK5KAT> asked."
-        text, mentioned_users, _has_link = convert_to_zulip_markdown(
+        text, mentioned_users, _has_link = convert_to_doer_markdown(
             message, users, channel_map, slack_user_map
         )
         self.assertEqual(text, "Hi @**John Doe**: How are you?@**aaron.anzalone** asked.")
@@ -99,7 +99,7 @@ class SlackMessageConversion(ZulipTestCase):
 
         # Check wrong mentioning
         message = "Hi <@U08RGD1RD|jon>: How are you?"
-        text, mentioned_users, _has_link = convert_to_zulip_markdown(
+        text, mentioned_users, _has_link = convert_to_doer_markdown(
             message, users, channel_map, slack_user_map
         )
         self.assertEqual(text, message)
@@ -109,28 +109,28 @@ class SlackMessageConversion(ZulipTestCase):
         slack_user_map: dict[str, int] = {}
 
         message = "<http://journals.plos.org/plosone/article>"
-        text, _mentioned_users, has_link = convert_to_zulip_markdown(
+        text, _mentioned_users, has_link = convert_to_doer_markdown(
             message, [], {}, slack_user_map
         )
         self.assertEqual(text, "http://journals.plos.org/plosone/article")
         self.assertEqual(has_link, True)
 
         message = "<http://chat.zulip.org/help/logging-in|Help logging in to CZO>"
-        text, _mentioned_users, has_link = convert_to_zulip_markdown(
+        text, _mentioned_users, has_link = convert_to_doer_markdown(
             message, [], {}, slack_user_map
         )
         self.assertEqual(text, "[Help logging in to CZO](http://chat.zulip.org/help/logging-in)")
         self.assertEqual(has_link, True)
 
         message = "<mailto:foo@foo.com>"
-        text, _mentioned_users, has_link = convert_to_zulip_markdown(
+        text, _mentioned_users, has_link = convert_to_doer_markdown(
             message, [], {}, slack_user_map
         )
         self.assertEqual(text, "mailto:foo@foo.com")
         self.assertEqual(has_link, True)
 
         message = "random message"
-        text, _mentioned_users, has_link = convert_to_zulip_markdown(
+        text, _mentioned_users, has_link = convert_to_doer_markdown(
             message, [], {}, slack_user_map
         )
         self.assertEqual(has_link, False)

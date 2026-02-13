@@ -157,8 +157,8 @@ def realm_summary_table(export: bool, filter: InstalationActivityFilter) -> str:
             coalesce(dau_table.value, 0) dau_count,
             coalesce(user_count_table.value, 0) user_profile_count,
             coalesce(bot_count_table.value, 0) bot_count,
-            coalesce(realm_audit_log_table.how_realm_creator_found_zulip, '') how_realm_creator_found_zulip,
-            coalesce(realm_audit_log_table.how_realm_creator_found_zulip_extra_context, '') how_realm_creator_found_zulip_extra_context,
+            coalesce(realm_audit_log_table.how_realm_creator_found_doer, '') how_realm_creator_found_doer,
+            coalesce(realm_audit_log_table.how_realm_creator_found_doer_extra_context, '') how_realm_creator_found_doer_extra_context,
             realm_admin_user.delivery_email admin_email
         FROM
             zerver_realm as realm
@@ -216,8 +216,8 @@ def realm_summary_table(export: bool, filter: InstalationActivityFilter) -> str:
             ) as bot_count_table ON realm.id = bot_count_table.realm_id
             LEFT OUTER JOIN (
                 SELECT
-                    extra_data->>'how_realm_creator_found_zulip' as how_realm_creator_found_zulip,
-                    extra_data->>'how_realm_creator_found_zulip_extra_context' as how_realm_creator_found_zulip_extra_context,
+                    extra_data->>'how_realm_creator_found_doer' as how_realm_creator_found_doer,
+                    extra_data->>'how_realm_creator_found_doer_extra_context' as how_realm_creator_found_doer_extra_context,
                     realm_id
                 from
                     zerver_realmauditlog
@@ -311,17 +311,17 @@ def realm_summary_table(export: bool, filter: InstalationActivityFilter) -> str:
         row["support_link"] = realm_support_link(realm_string_id)
         row["activity_link"] = realm_activity_link(realm_string_id)
 
-        how_found = row["how_realm_creator_found_zulip"]
-        extra_context = row["how_realm_creator_found_zulip_extra_context"]
+        how_found = row["how_realm_creator_found_doer"]
+        extra_context = row["how_realm_creator_found_doer_extra_context"]
         if how_found in (
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["other"],
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["ad"],
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["review_site"],
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["ai_chatbot"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["other"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["ad"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["review_site"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["ai_chatbot"],
         ):
-            row["how_realm_creator_found_zulip"] += f": {extra_context}"
-        elif how_found == RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["existing_user"]:
-            row["how_realm_creator_found_zulip"] = f"Organization: {extra_context}"
+            row["how_realm_creator_found_doer"] += f": {extra_context}"
+        elif how_found == RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["existing_user"]:
+            row["how_realm_creator_found_doer"] = f"Organization: {extra_context}"
 
         # Get human messages sent per day.
         try:
@@ -441,7 +441,7 @@ def get_integrations_activity(request: HttpRequest) -> HttpResponse:
         where
             (query in ('send_message_backend', '/api/v1/send_message')
             and client.name not in ('Android', 'ZulipiOS')
-            and client.name not like 'test: Zulip%%'
+            and client.name not like 'test: Doer%%'
             )
         or
             query like '%%external%%'

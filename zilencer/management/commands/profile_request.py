@@ -8,7 +8,7 @@ from django.core.management.base import CommandParser
 from django.http import HttpRequest, HttpResponseBase
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.request import RequestNotes
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.middleware import LogRequests
@@ -41,7 +41,7 @@ def profile_request(request: HttpRequest, num_before: int, num_after: int) -> Ht
     return response
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("email", metavar="<email>", help="Email address of the user")

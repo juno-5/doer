@@ -2,15 +2,15 @@
 title: Channel permissions
 ---
 
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 import ChannelAdminPermissions from "../include/_ChannelAdminPermissions.mdx";
 import ChannelPrivacyTypes from "../include/_ChannelPrivacyTypes.mdx";
 import ChannelsIntro from "../include/_ChannelsIntro.mdx";
 import WebPublicChannelsIntro from "../include/_WebPublicChannelsIntro.mdx";
 
-import GlobeIcon from "~icons/zulip-icon/globe";
-import HashtagIcon from "~icons/zulip-icon/hashtag";
-import LockIcon from "~icons/zulip-icon/lock";
+import GlobeIcon from "~icons/doer-icon/globe";
+import HashtagIcon from "~icons/doer-icon/hashtag";
+import LockIcon from "~icons/doer-icon/lock";
 
 <ChannelsIntro />
 
@@ -52,7 +52,7 @@ can be modified after the channel is created.
 
 [Private channels](#private-channels) (indicated by <LockIcon />) are for conversations that should be visible to users who
 are specifically granted access. There are two types of private channels in
-Zulip:
+Doer:
 
 * In private channels with **shared history**, new subscribers can access the
   channel's full message history. For example, a newly added team member can get
@@ -76,12 +76,12 @@ only by attempting to create a channel with the same name, if they have
 can't get any other information about private channels they are not subscribed
 to.
 
-<ZulipNote>
+<DoerNote>
   If you create a [bot](/help/bots-overview) that is allowed to read messages
   in a private channel (e.g., a **generic bot**, *not* an **incoming webhook bot**,
   which is more limited), an administrator can in theory gain access to messages
   in the channel by making themselves the bot's owner.
-</ZulipNote>
+</DoerNote>
 
 ## Public channels
 

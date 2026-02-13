@@ -8,18 +8,18 @@ from django.db.models import Q, QuerySet
 from typing_extensions import override
 
 from confirmation.models import one_click_unsubscribe_link
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.send_email import custom_email_sender, send_custom_email, send_custom_server_email
 from zerver.models import Realm, UserProfile
 
 if settings.ZILENCER_ENABLED:
     from corporate.lib.stripe import BILLING_SUPPORT_EMAIL
-    from zilencer.models import RemoteRealmBillingUser, RemoteServerBillingUser, RemoteZulipServer
+    from zilencer.models import RemoteRealmBillingUser, RemoteServerBillingUser, RemoteDoerServer
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
-    Send a custom email with Zulip branding to the specified users.
+    Send a custom email with Doer branding to the specified users.
 
     Useful to send a notice to all users of a realm or server.
 
@@ -40,7 +40,7 @@ class Command(ZulipBaseCommand):
         targets.add_argument(
             "--remote-servers",
             action="store_true",
-            help="Send to registered contact email addresses for remote Zulip servers.",
+            help="Send to registered contact email addresses for remote Doer servers.",
         )
         targets.add_argument(
             "--announce-release",
@@ -112,17 +112,17 @@ class Command(ZulipBaseCommand):
         distinct_email = False
 
         if options["remote_servers"]:
-            servers = RemoteZulipServer.objects.filter(deactivated=False)
+            servers = RemoteDoerServer.objects.filter(deactivated=False)
             add_server_context = None
             if options["json_file"]:
                 with open(options["json_file"]) as f:
                     server_data: dict[str, dict[str, object]] = orjson.loads(f.read())
-                servers = RemoteZulipServer.objects.filter(
+                servers = RemoteDoerServer.objects.filter(
                     id__in=[int(server_id) for server_id in server_data]
                 )
 
                 def add_server_context_from_dict(
-                    context: dict[str, object], server: RemoteZulipServer
+                    context: dict[str, object], server: RemoteDoerServer
                 ) -> None:
                     context.update(server_data.get(str(server.id), {}))
 

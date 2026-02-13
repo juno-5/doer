@@ -19,13 +19,13 @@ from corporate.lib.stripe import (
 from corporate.models.customers import Customer, get_customer_by_realm
 from corporate.models.licenses import LicenseLedger
 from corporate.models.plans import CustomerPlan, CustomerPlanOffer, get_current_plan_by_customer
-from corporate.models.sponsorships import SponsoredPlanTypes, ZulipSponsorshipRequest
+from corporate.models.sponsorships import SponsoredPlanTypes, DoerSponsorshipRequest
 from zerver.actions.create_realm import do_create_realm
 from zerver.actions.invites import do_create_multiuse_invite_link
 from zerver.actions.realm_settings import do_change_realm_org_type, do_send_realm_reactivation_email
 from zerver.actions.user_settings import do_change_user_setting
-from zerver.lib.test_classes import ZulipTestCase
-from zerver.lib.test_helpers import reset_email_visibility_to_everyone_in_zulip_realm
+from zerver.lib.test_classes import DoerTestCase
+from zerver.lib.test_helpers import reset_email_visibility_to_everyone_in_doer_realm
 from zerver.models import MultiuseInvite, PreregistrationUser, Realm, UserMessage, UserProfile
 from zerver.models.realm_audit_logs import AuditLogEventType
 from zerver.models.realms import OrgTypeEnum, get_org_type_display_name, get_realm
@@ -41,12 +41,12 @@ from zilencer.models import (
     RemoteRealmAuditLog,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
 )
 
 
-class TestRemoteServerSupportEndpoint(ZulipTestCase):
+class TestRemoteServerSupportEndpoint(DoerTestCase):
     @override
     def setUp(self) -> None:
         def add_sponsorship_request(
@@ -54,13 +54,13 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         ) -> None:
             remote_realm = RemoteRealm.objects.get(name=name)
             customer = Customer.objects.create(remote_realm=remote_realm, sponsorship_pending=True)
-            ZulipSponsorshipRequest.objects.create(
+            DoerSponsorshipRequest.objects.create(
                 customer=customer,
                 org_type=org_type,
                 org_website=website,
                 org_description="We help people.",
                 expected_total_users="20-35",
-                plan_to_use_zulip="For communication on moon.",
+                plan_to_use_doer="For communication on moon.",
                 paid_users_count=paid_users,
                 paid_users_description="",
                 requested_plan=plan,
@@ -113,16 +113,16 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
 
         # Set up some initial example data.
         for i in range(6):
-            hostname = f"zulip-{i}.example.com"
-            remote_server = RemoteZulipServer.objects.create(
+            hostname = f"doer-{i}.example.com"
+            remote_server = RemoteDoerServer.objects.create(
                 hostname=hostname, contact_email=f"admin@{hostname}", uuid=uuid.uuid4()
             )
-            RemoteZulipServerAuditLog.objects.create(
+            RemoteDoerServerAuditLog.objects.create(
                 event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
                 server=remote_server,
                 event_time=remote_server.last_updated,
             )
-            # We want at least one RemoteZulipServer that has no RemoteRealm
+            # We want at least one RemoteDoerServer that has no RemoteRealm
             # as an example of a pre-8.0 release registered remote server.
             if i > 1:
                 realm_name = f"realm-name-{i}"
@@ -137,7 +137,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
                 )
 
         # Add a deactivated server, which should be excluded from search results.
-        server = RemoteZulipServer.objects.get(hostname="zulip-0.example.com")
+        server = RemoteDoerServer.objects.get(hostname="doer-0.example.com")
         billing_user = RemoteServerBillingUser.objects.create(
             remote_server=server, email="server-admin-deactivated@example.com"
         )
@@ -180,7 +180,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         iago = self.example_user("iago")
         self.login_user(iago)
         with self.assert_database_query_count(28):
-            result = self.client_get("/activity/remote/support", {"q": "zulip-3.example.com"})
+            result = self.client_get("/activity/remote/support", {"q": "doer-3.example.com"})
             self.assertEqual(result.status_code, 200)
 
     def test_search(self) -> None:
@@ -195,7 +195,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
                     "<b>Billing users</b>:",
                     "<b>Date created</b>:",
                     "<b>UUID</b>:",
-                    "<b>Zulip version</b>:",
+                    "<b>Doer version</b>:",
                     "<b>Plan type</b>: Free<br />",
                     "<b>Non-guest user count</b>: 0<br />",
                     "<b>Guest user count</b>: 0<br />",
@@ -219,7 +219,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
                 ],
                 html_response,
             )
-            self.assert_not_in_success_response(["<h3>zulip-1.example.com"], html_response)
+            self.assert_not_in_success_response(["<h3>doer-1.example.com"], html_response)
 
         def check_deactivated_server(result: "TestHttpResponse", hostname: str) -> None:
             self.assert_not_in_success_response(
@@ -233,7 +233,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
                     "<b>Billing users</b>:",
                     "<b>Date created</b>:",
                     "<b>UUID</b>:",
-                    "<b>Zulip version</b>:",
+                    "<b>Doer version</b>:",
                     "📶 Push notification status:",
                     "💸 Discounts and sponsorship information:",
                     "♻️ Reactivate server:",
@@ -242,9 +242,9 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             )
 
         def check_remote_server_with_no_realms(result: "TestHttpResponse") -> None:
-            assert_server_details_in_response(result, "zulip-1.example.com")
+            assert_server_details_in_response(result, "doer-1.example.com")
             self.assert_not_in_success_response(
-                ["<h3>zulip-2.example.com", "<b>Remote realm host:</b>"], result
+                ["<h3>doer-2.example.com", "<b>Remote realm host:</b>"], result
             )
             self.assert_in_success_response(["<b>Has remote realms</b>: False<br />"], result)
 
@@ -290,11 +290,11 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             self.assert_in_success_response(
                 [
                     "Current plan information:",
-                    "<b>Plan name</b>: Zulip Basic (complimentary)<br />",
+                    "<b>Plan name</b>: Doer Basic (complimentary)<br />",
                     "<b>Status</b>: New plan scheduled<br />",
                     "<b>End date</b>: 01 February 2050<br />",
                     "⏱️ Next plan information:",
-                    "<b>Plan name</b>: Zulip Basic<br />",
+                    "<b>Plan name</b>: Doer Basic<br />",
                     "<b>Status</b>: Never started<br />",
                     "<b>Start date</b>: 01 February 2050<br />",
                     "<b>Billing schedule</b>: Monthly<br />",
@@ -309,7 +309,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             self.assert_in_success_response(
                 [
                     "Current plan information:",
-                    "<b>Plan name</b>: Zulip Basic (complimentary)<br />",
+                    "<b>Plan name</b>: Doer Basic (complimentary)<br />",
                     "<b>Status</b>: Active<br />",
                     "<b>End date</b>: 01 February 2050<br />",
                 ],
@@ -351,30 +351,30 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
 
         result = self.client_get("/activity/remote/support", {"q": "example.com"})
         for i in range(6):
-            self.assert_in_success_response([f"<h3>zulip-{i}.example.com <a"], result)
+            self.assert_in_success_response([f"<h3>doer-{i}.example.com <a"], result)
 
         server = 0
-        result = self.client_get("/activity/remote/support", {"q": f"zulip-{server}.example.com"})
-        check_deactivated_server(result, f"zulip-{server}.example.com")
+        result = self.client_get("/activity/remote/support", {"q": f"doer-{server}.example.com"})
+        check_deactivated_server(result, f"doer-{server}.example.com")
 
         server = 1
-        result = self.client_get("/activity/remote/support", {"q": f"zulip-{server}.example.com"})
+        result = self.client_get("/activity/remote/support", {"q": f"doer-{server}.example.com"})
         check_remote_server_with_no_realms(result)
 
         # RemoteRealm host matches appear in search results
         result = self.client_get("/activity/remote/support", {"q": "realm-host-"})
         for i in range(6):
             if i > server:
-                assert_server_details_in_response(result, f"zulip-{i}.example.com")
+                assert_server_details_in_response(result, f"doer-{i}.example.com")
                 assert_realm_details_in_response(result, f"realm-name-{i}", f"realm-host-{i}")
 
         server = 2
         with mock.patch("corporate.views.support.compute_max_monthly_messages", return_value=1000):
             result = self.client_get(
-                "/activity/remote/support", {"q": f"zulip-{server}.example.com"}
+                "/activity/remote/support", {"q": f"doer-{server}.example.com"}
             )
         self.assert_in_success_response(["<b>Max monthly messages</b>: 1000"], result)
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_sponsorship_request_no_website(result)
 
@@ -382,62 +382,62 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             "corporate.views.support.compute_max_monthly_messages", side_effect=MissingDataError
         ):
             result = self.client_get(
-                "/activity/remote/support", {"q": f"zulip-{server}.example.com"}
+                "/activity/remote/support", {"q": f"doer-{server}.example.com"}
             )
         self.assert_in_success_response(
             ["<b>Max monthly messages</b>: Recent analytics data missing"], result
         )
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_sponsorship_request_no_website(result)
 
         server = 3
-        result = self.client_get("/activity/remote/support", {"q": f"zulip-{server}.example.com"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        result = self.client_get("/activity/remote/support", {"q": f"doer-{server}.example.com"})
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_sponsorship_request_with_website(result)
         check_for_billing_users_emails(result)
 
         # Check search with billing user emails
         result = self.client_get("/activity/remote/support", {"q": "realm-admin@example.com"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_for_billing_users_emails(result)
 
         result = self.client_get("/activity/remote/support", {"q": "server-admin@example.com"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_for_billing_users_emails(result)
 
         server = 4
-        result = self.client_get("/activity/remote/support", {"q": f"zulip-{server}.example.com"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        result = self.client_get("/activity/remote/support", {"q": f"doer-{server}.example.com"})
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_no_sponsorship_request(result)
         check_complimentary_access_plan_with_upgrade(result)
 
         server = 5
-        result = self.client_get("/activity/remote/support", {"q": f"zulip-{server}.example.com"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        result = self.client_get("/activity/remote/support", {"q": f"doer-{server}.example.com"})
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
         check_no_sponsorship_request(result)
         check_complimentary_access_plan_without_upgrade(result)
 
         # search for UUIDs
-        remote_server = RemoteZulipServer.objects.get(hostname=f"zulip-{server}.example.com")
+        remote_server = RemoteDoerServer.objects.get(hostname=f"doer-{server}.example.com")
         result = self.client_get("/activity/remote/support", {"q": f"{remote_server.uuid}"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
 
         remote_realm = RemoteRealm.objects.get(host=f"realm-host-{server}")
         result = self.client_get("/activity/remote/support", {"q": f"{remote_realm.uuid}"})
-        assert_server_details_in_response(result, f"zulip-{server}.example.com")
+        assert_server_details_in_response(result, f"doer-{server}.example.com")
         assert_realm_details_in_response(result, f"realm-name-{server}", f"realm-host-{server}")
 
         server = 0
-        remote_server = RemoteZulipServer.objects.get(hostname=f"zulip-{server}.example.com")
+        remote_server = RemoteDoerServer.objects.get(hostname=f"doer-{server}.example.com")
         result = self.client_get("/activity/remote/support", {"q": f"{remote_server.uuid}"})
-        check_deactivated_server(result, f"zulip-{server}.example.com")
+        check_deactivated_server(result, f"doer-{server}.example.com")
 
         unknown_uuid = uuid.uuid4()
         result = self.client_get("/activity/remote/support", {"q": f"{unknown_uuid}"})
@@ -596,7 +596,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             },
         )
         self.assert_in_success_response(
-            ["Required plan tier for realm-name-4 set to Zulip Business."],
+            ["Required plan tier for realm-name-4 set to Doer Business."],
             result,
         )
         customer.refresh_from_db()
@@ -614,7 +614,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
             },
         )
         self.assert_in_success_response(
-            ["Required plan tier for realm-name-4 set to Zulip Basic."],
+            ["Required plan tier for realm-name-4 set to Doer Basic."],
             result,
         )
         result = self.client_post(
@@ -663,7 +663,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         self.login_user(iago)
 
         # A remote server cannot be deactivated when an upgrade is scheduled.
-        remote_server_with_upgrade = RemoteZulipServer.objects.get(hostname="zulip-4.example.com")
+        remote_server_with_upgrade = RemoteDoerServer.objects.get(hostname="doer-4.example.com")
         self.assertFalse(remote_server_with_upgrade.deactivated)
         result = self.client_post(
             "/activity/remote/support",
@@ -681,7 +681,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         remote_server_with_upgrade.refresh_from_db()
         self.assertFalse(remote_server_with_upgrade.deactivated)
 
-        remote_server_no_upgrade = RemoteZulipServer.objects.get(hostname="zulip-5.example.com")
+        remote_server_no_upgrade = RemoteDoerServer.objects.get(hostname="doer-5.example.com")
         self.assertFalse(remote_server_no_upgrade.deactivated)
         result = self.client_post(
             "/activity/remote/support",
@@ -695,14 +695,14 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         )
         remote_server_no_upgrade.refresh_from_db()
         self.assertTrue(remote_server_no_upgrade.deactivated)
-        audit_log = RemoteZulipServerAuditLog.objects.filter(
+        audit_log = RemoteDoerServerAuditLog.objects.filter(
             event_type=AuditLogEventType.REMOTE_SERVER_DEACTIVATED
         ).last()
         assert audit_log is not None
         self.assertEqual(audit_log.server, remote_server_no_upgrade)
         self.assertEqual(audit_log.acting_support_user, iago)
 
-        result = self.client_get("/activity/remote/support", {"q": "zulip-5.example.com"})
+        result = self.client_get("/activity/remote/support", {"q": "doer-5.example.com"})
         self.assert_in_success_response(
             [
                 '<span class="remote-label">Remote server: deactivated</span>',
@@ -716,7 +716,7 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         iago = self.example_user("iago")
         self.login_user(iago)
 
-        remote_server = RemoteZulipServer.objects.get(hostname="zulip-0.example.com")
+        remote_server = RemoteDoerServer.objects.get(hostname="doer-0.example.com")
         self.assertTrue(remote_server.deactivated)
         result = self.client_post(
             "/activity/remote/support",
@@ -727,14 +727,14 @@ class TestRemoteServerSupportEndpoint(ZulipTestCase):
         )
         remote_server.refresh_from_db()
         self.assertFalse(remote_server.deactivated)
-        audit_log = RemoteZulipServerAuditLog.objects.filter(
+        audit_log = RemoteDoerServerAuditLog.objects.filter(
             event_type=AuditLogEventType.REMOTE_SERVER_REACTIVATED
         ).last()
         assert audit_log is not None
         self.assertEqual(audit_log.server, remote_server)
 
 
-class TestSupportEndpoint(ZulipTestCase):
+class TestSupportEndpoint(DoerTestCase):
     def create_customer_and_plan(self, realm: Realm, monthly: bool = False) -> Customer:
         now = datetime(2016, 1, 2, tzinfo=timezone.utc)
         billing_schedule = CustomerPlan.BILLING_SCHEDULE_ANNUAL
@@ -768,11 +768,11 @@ class TestSupportEndpoint(ZulipTestCase):
         iago = self.example_user("iago")
         self.login_user(iago)
         with self.assert_database_query_count(23):
-            result = self.client_get("/activity/support", {"q": "zulip"}, subdomain="zulip")
+            result = self.client_get("/activity/support", {"q": "doer"}, subdomain="doer")
             self.assertEqual(result.status_code, 200)
 
     def test_search(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
         lear_user = self.lear_user("king")
         lear_user.is_staff = True
         lear_user.save(update_fields=["is_staff"])
@@ -802,7 +802,7 @@ class TestSupportEndpoint(ZulipTestCase):
                         "invite_expires_in_minutes": invite_expires_in_minutes,
                         "invite_as": PreregistrationUser.INVITE_AS["MEMBER"],
                     },
-                    subdomain=realm.string_id if realm is not None else "zulip",
+                    subdomain=realm.string_id if realm is not None else "doer",
                 )
 
         def check_hamlet_user_query_result(result: "TestHttpResponse") -> None:
@@ -838,21 +838,21 @@ class TestSupportEndpoint(ZulipTestCase):
                 result, "Polonius", self.example_email("polonius"), "Guest"
             )
 
-        def check_zulip_realm_query_result(result: "TestHttpResponse") -> None:
-            zulip_realm = get_realm("zulip")
-            first_human_user = zulip_realm.get_first_human_user()
+        def check_doer_realm_query_result(result: "TestHttpResponse") -> None:
+            doer_realm = get_realm("doer")
+            first_human_user = doer_realm.get_first_human_user()
             assert first_human_user is not None
             self.assert_in_success_response(
                 [
                     f"<b>First human user</b>: {first_human_user.delivery_email}\n",
-                    f'<input type="hidden" name="realm_id" value="{zulip_realm.id}"',
-                    "Zulip Dev</h3>",
+                    f'<input type="hidden" name="realm_id" value="{doer_realm.id}"',
+                    "Doer Dev</h3>",
                     '<option value="1" selected>Self-hosted</option>',
                     '<option value="2">Limited</option>',
                     'input type="number" name="monthly_discounted_price" value="None"',
                     'input type="number" name="annual_discounted_price" value="None"',
                     '<button type="submit" class="support-submit-button">Deactivate realm</button>',
-                    f'<option value="{zulip_realm.org_type}" selected>',
+                    f'<option value="{doer_realm.org_type}" selected>',
                 ],
                 result,
             )
@@ -870,7 +870,7 @@ class TestSupportEndpoint(ZulipTestCase):
                     'input type="number" name="monthly_discounted_price" value="None"',
                     'input type="number" name="annual_discounted_price" value="None"',
                     '<button type="submit" class="support-submit-button">Deactivate realm</button>',
-                    "<b>Plan name</b>: Zulip Cloud Standard",
+                    "<b>Plan name</b>: Doer Cloud Standard",
                     "<b>Status</b>: Active",
                     "<b>Billing schedule</b>: Annual",
                     "<b>Licenses</b>: 2/10 (Manual)",
@@ -932,7 +932,7 @@ class TestSupportEndpoint(ZulipTestCase):
                 [
                     '<span class="cloud-label">Cloud confirmation</span>\n',
                     "<h3>Multiuse invite</h3>\n",
-                    "<b>Link</b>: http://zulip.testserver/join/",
+                    "<b>Link</b>: http://doer.testserver/join/",
                     "<b>Expires in</b>: 1\xa0week, 3\xa0days",
                 ],
                 result,
@@ -943,14 +943,14 @@ class TestSupportEndpoint(ZulipTestCase):
                 [
                     '<span class="cloud-label">Cloud confirmation</span>\n',
                     "<h3>Realm reactivation</h3>\n",
-                    "<b>Link</b>: http://zulip.testserver/reactivate/",
+                    "<b>Link</b>: http://doer.testserver/reactivate/",
                     "<b>Expires in</b>: 1\xa0day",
                 ],
                 result,
             )
 
         def get_check_query_result(
-            query: str, count: int, subdomain: str = "zulip"
+            query: str, count: int, subdomain: str = "doer"
         ) -> "TestHttpResponse":
             result = self.client_get("/activity/support", {"q": query}, subdomain=subdomain)
             self.assertEqual(result.content.decode().count("support-query-result"), count)
@@ -980,13 +980,13 @@ class TestSupportEndpoint(ZulipTestCase):
 
         result = get_check_query_result(self.example_email("hamlet"), 1)
         check_hamlet_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         # Search should be case-insensitive:
         assert self.example_email("hamlet") != self.example_email("hamlet").upper()
         result = get_check_query_result(self.example_email("hamlet").upper(), 1)
         check_hamlet_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         result = get_check_query_result(lear_user.email, 1)
         check_lear_user_query_result(result)
@@ -994,7 +994,7 @@ class TestSupportEndpoint(ZulipTestCase):
 
         result = get_check_query_result(self.example_email("polonius"), 1)
         check_polonius_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         result = get_check_query_result("lear", 1)
         check_lear_realm_query_result(result)
@@ -1002,27 +1002,27 @@ class TestSupportEndpoint(ZulipTestCase):
         result = get_check_query_result("http://lear.testserver", 1)
         check_lear_realm_query_result(result)
 
-        with self.settings(REALM_HOSTS={"zulip": "localhost"}):
+        with self.settings(REALM_HOSTS={"doer": "localhost"}):
             result = get_check_query_result("http://localhost", 1)
-            check_zulip_realm_query_result(result)
+            check_doer_realm_query_result(result)
 
         result = get_check_query_result("hamlet@zulip.com, lear", 2)
         check_hamlet_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
         check_lear_realm_query_result(result)
 
         result = get_check_query_result("King hamlet,lear", 2)
         check_hamlet_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
         check_lear_realm_query_result(result)
 
         result = get_check_query_result("Othello, the Moor of Venice", 1)
         check_othello_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         result = get_check_query_result("lear, Hamlet <hamlet@zulip.com>", 2)
         check_hamlet_user_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
         check_lear_realm_query_result(result)
 
         self.client_post("/accounts/home/", {"email": self.nonreg_email("test")})
@@ -1034,16 +1034,16 @@ class TestSupportEndpoint(ZulipTestCase):
 
         result = query_result_from_before(self.nonreg_email("test"), 1)
         check_preregistration_user_query_result(result, self.nonreg_email("test"))
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         create_invitation("Denmark", self.nonreg_email("test1"))
         result = query_result_from_before(self.nonreg_email("test1"), 1)
         check_preregistration_user_query_result(result, self.nonreg_email("test1"), invite=True)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         email = self.nonreg_email("alice")
         self.submit_realm_creation_form(
-            email, realm_subdomain="custom-test", realm_name="Zulip test"
+            email, realm_subdomain="custom-test", realm_name="Doer test"
         )
         result = query_result_from_before(email, 1)
         check_realm_creation_query_result(result, email)
@@ -1055,15 +1055,15 @@ class TestSupportEndpoint(ZulipTestCase):
             invite_expires_in_minutes=invite_expires_in_minutes,
             include_realm_default_subscriptions=False,
         )
-        result = query_result_from_before("zulip", 2)
+        result = query_result_from_before("doer", 2)
         check_multiuse_invite_link_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
         MultiuseInvite.objects.all().delete()
 
-        do_send_realm_reactivation_email(get_realm("zulip"), acting_user=None)
-        result = query_result_from_before("zulip", 2)
+        do_send_realm_reactivation_email(get_realm("doer"), acting_user=None)
+        result = query_result_from_before("doer", 2)
         check_realm_reactivation_link_query_result(result)
-        check_zulip_realm_query_result(result)
+        check_doer_realm_query_result(result)
 
         lear_nonreg_email = "newguy@lear.org"
         self.client_post("/accounts/home/", {"email": lear_nonreg_email}, subdomain="lear")
@@ -1087,14 +1087,14 @@ class TestSupportEndpoint(ZulipTestCase):
         on the registration page (because organitions are not meant to be able to choose it),
         but should be correctly shown at the /support/ endpoint.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         do_change_realm_org_type(realm, 0, acting_user=None)
         self.assertEqual(realm.org_type, 0)
 
         self.login("iago")
 
-        result = self.client_get("/activity/support", {"q": "zulip"}, subdomain="zulip")
+        result = self.client_get("/activity/support", {"q": "doer"}, subdomain="doer")
         self.assert_in_success_response(
             [
                 f'<input type="hidden" name="realm_id" value="{realm.id}"',
@@ -1104,7 +1104,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
 
     def test_change_billing_modality(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         customer = self.create_customer_and_plan(realm)
 
         cordelia = self.example_user("cordelia")
@@ -1124,7 +1124,7 @@ class TestSupportEndpoint(ZulipTestCase):
             {"realm_id": f"{realm.id}", "billing_modality": "charge_automatically"},
         )
         self.assert_in_success_response(
-            ["Billing collection method of zulip updated to charge automatically"], result
+            ["Billing collection method of doer updated to charge automatically"], result
         )
         plan = get_current_plan_by_customer(customer)
         assert plan is not None
@@ -1134,7 +1134,7 @@ class TestSupportEndpoint(ZulipTestCase):
             "/activity/support", {"realm_id": f"{realm.id}", "billing_modality": "send_invoice"}
         )
         self.assert_in_success_response(
-            ["Billing collection method of zulip updated to send invoice"], result
+            ["Billing collection method of doer updated to send invoice"], result
         )
         plan.refresh_from_db()
         self.assertEqual(plan.charge_automatically, False)
@@ -1156,18 +1156,18 @@ class TestSupportEndpoint(ZulipTestCase):
             result = self.client_post(
                 "/activity/support", {"realm_id": f"{iago.realm_id}", "plan_type": "2"}
             )
-            m.assert_called_once_with(get_realm("zulip"), 2, acting_user=iago)
+            m.assert_called_once_with(get_realm("doer"), 2, acting_user=iago)
             self.assert_in_success_response(
-                ["Plan type of zulip changed from Self-hosted to Limited"], result
+                ["Plan type of doer changed from Self-hosted to Limited"], result
             )
 
         with mock.patch("corporate.views.support.do_change_realm_plan_type") as m:
             result = self.client_post(
                 "/activity/support", {"realm_id": f"{iago.realm_id}", "plan_type": "10"}
             )
-            m.assert_called_once_with(get_realm("zulip"), 10, acting_user=iago)
+            m.assert_called_once_with(get_realm("doer"), 10, acting_user=iago)
             self.assert_in_success_response(
-                ["Plan type of zulip changed from Self-hosted to Plus"], result
+                ["Plan type of doer changed from Self-hosted to Plus"], result
             )
 
     def test_change_org_type(self) -> None:
@@ -1187,13 +1187,13 @@ class TestSupportEndpoint(ZulipTestCase):
             result = self.client_post(
                 "/activity/support", {"realm_id": f"{iago.realm_id}", "org_type": "70"}
             )
-            m.assert_called_once_with(get_realm("zulip"), 70, acting_user=iago)
+            m.assert_called_once_with(get_realm("doer"), 70, acting_user=iago)
             self.assert_in_success_response(
-                ["Organization type of zulip changed from Business to Government"], result
+                ["Organization type of doer changed from Business to Government"], result
             )
 
     def test_change_max_invites(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
         self.login_user(iago)
 
@@ -1203,7 +1203,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
         self.assert_in_success_response(
             [
-                "Cannot update maximum number of daily invitations for zulip, because 1 is less than the default for the current plan type."
+                "Cannot update maximum number of daily invitations for doer, because 1 is less than the default for the current plan type."
             ],
             result,
         )
@@ -1214,7 +1214,7 @@ class TestSupportEndpoint(ZulipTestCase):
             "/activity/support", {"realm_id": f"{realm.id}", "max_invites": "700"}
         )
         self.assert_in_success_response(
-            ["Maximum number of daily invitations for zulip updated to 700."], result
+            ["Maximum number of daily invitations for doer updated to 700."], result
         )
         realm.refresh_from_db()
         self.assertEqual(realm.max_invites, 700)
@@ -1224,7 +1224,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
         self.assert_in_success_response(
             [
-                "Maximum number of daily invitations for zulip updated to the default for the current plan type."
+                "Maximum number of daily invitations for doer updated to the default for the current plan type."
             ],
             result,
         )
@@ -1236,7 +1236,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
         self.assert_in_success_response(
             [
-                "Cannot update maximum number of daily invitations for zulip, because the default for the current plan type is already set."
+                "Cannot update maximum number of daily invitations for doer, because the default for the current plan type is already set."
             ],
             result,
         )
@@ -1267,7 +1267,7 @@ class TestSupportEndpoint(ZulipTestCase):
             },
         )
         self.assert_in_success_response(
-            ["Required plan tier for lear set to Zulip Cloud Standard."],
+            ["Required plan tier for lear set to Doer Cloud Standard."],
             result,
         )
         result = self.client_post("/activity/support", discount_change_data)
@@ -1286,7 +1286,7 @@ class TestSupportEndpoint(ZulipTestCase):
         billing_cycle_string = start_next_billing_cycle.strftime("%d %B %Y")
 
         twenty_five_percent_discounted_response = [
-            "<b>Plan name</b>: Zulip Cloud Standard",
+            "<b>Plan name</b>: Doer Cloud Standard",
             "<b>Status</b>: Active",
             "<b>Discount</b>: 25%",
             "<b>Billing schedule</b>: Monthly",
@@ -1312,7 +1312,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
 
         no_discount_response = [
-            "<b>Plan name</b>: Zulip Cloud Standard",
+            "<b>Plan name</b>: Doer Cloud Standard",
             "<b>Status</b>: Active",
             "<b>Billing schedule</b>: Monthly",
             "<b>Licenses</b>: 2/10 (Manual)",
@@ -1358,7 +1358,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
 
         monthly_discounted_response = [
-            "<b>Plan name</b>: Zulip Cloud Standard",
+            "<b>Plan name</b>: Doer Cloud Standard",
             "<b>Status</b>: Active",
             "<b>Discount</b>: 25%",
             "<b>Billing schedule</b>: Monthly",
@@ -1401,7 +1401,7 @@ class TestSupportEndpoint(ZulipTestCase):
         result = self.client_get("/activity/support", {"q": "lear"})
         self.assert_in_success_response(
             [
-                "<b>Plan name</b>: Zulip Cloud Standard",
+                "<b>Plan name</b>: Doer Cloud Standard",
                 "<b>Status</b>: Active",
                 "<b>Discount</b>: 25%",
                 "<b>Billing schedule</b>: Annual",
@@ -1425,7 +1425,7 @@ class TestSupportEndpoint(ZulipTestCase):
         result = self.client_get("/activity/support", {"q": "lear"})
         self.assert_in_success_response(
             [
-                "<b>Plan name</b>: Zulip Cloud Standard",
+                "<b>Plan name</b>: Doer Cloud Standard",
                 "<b>Status</b>: Active",
                 "<b>Billing schedule</b>: Annual",
                 "<b>Licenses</b>: 2/10 (Manual)",
@@ -1448,7 +1448,7 @@ class TestSupportEndpoint(ZulipTestCase):
         result = self.client_get("/activity/support", {"q": "lear"})
         self.assert_in_success_response(
             [
-                "<b>Plan name</b>: Zulip Cloud Standard",
+                "<b>Plan name</b>: Doer Cloud Standard",
                 "<b>Status</b>: Active",
                 "<b>Discount</b>: 25%",
                 "<b>Billing schedule</b>: Monthly",
@@ -1982,7 +1982,7 @@ class TestSupportEndpoint(ZulipTestCase):
         )
 
         result = self.client_post(
-            "/activity/support", {"realm_id": f"{lear_realm.id}", "new_subdomain": "zulip"}
+            "/activity/support", {"realm_id": f"{lear_realm.id}", "new_subdomain": "doer"}
         )
         self.assert_in_success_response(
             ["Subdomain is already in use. Please choose a different one."], result
@@ -2022,7 +2022,7 @@ class TestSupportEndpoint(ZulipTestCase):
         self.assert_in_success_response(["Placeholder realm", "Redirects to", "new-lear"], result)
 
     def test_modify_plan_for_downgrade_at_end_of_billing_cycle(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         customer = self.create_customer_and_plan(realm)
 
         cordelia = self.example_user("cordelia")
@@ -2046,7 +2046,7 @@ class TestSupportEndpoint(ZulipTestCase):
                 },
             )
             self.assert_in_success_response(
-                ["zulip marked for downgrade at the end of billing cycle"], result
+                ["doer marked for downgrade at the end of billing cycle"], result
             )
             customer.refresh_from_db()
             plan = get_current_plan_by_customer(customer)
@@ -2056,7 +2056,7 @@ class TestSupportEndpoint(ZulipTestCase):
             self.assertEqual(m.output[0], expected_log)
 
     def test_modify_plan_for_downgrade_now_without_additional_licenses(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         customer = self.create_customer_and_plan(realm)
         plan = get_current_plan_by_customer(customer)
         assert plan is not None
@@ -2081,7 +2081,7 @@ class TestSupportEndpoint(ZulipTestCase):
             },
         )
         self.assert_in_success_response(
-            ["zulip downgraded without creating additional invoices"], result
+            ["doer downgraded without creating additional invoices"], result
         )
 
         plan.refresh_from_db()
@@ -2113,7 +2113,7 @@ class TestSupportEndpoint(ZulipTestCase):
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
         hamlet_email = hamlet.delivery_email
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login_user(cordelia)
 
         result = self.client_post(
@@ -2130,4 +2130,4 @@ class TestSupportEndpoint(ZulipTestCase):
                 {"realm_id": f"{realm.id}", "delete_user_by_id": hamlet.id},
             )
             m.assert_called_once_with(hamlet, acting_user=self.example_user("iago"))
-            self.assert_in_success_response([f"{hamlet_email} in zulip deleted"], result)
+            self.assert_in_success_response([f"{hamlet_email} in doer deleted"], result)

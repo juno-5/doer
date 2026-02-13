@@ -2,25 +2,25 @@
 #
 class kandra::prometheus::redis {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
-  $version = $zulip::common::versions['redis_exporter']['version']
+  $version = $doer::common::versions['redis_exporter']['version']
   $dir = "/srv/zulip-redis_exporter-${version}"
   $bin = "${dir}/redis_exporter"
 
-  zulip::external_dep { 'redis_exporter':
+  doer::external_dep { 'redis_exporter':
     version        => $version,
-    url            => "https://github.com/oliver006/redis_exporter/releases/download/v${version}/redis_exporter-v${version}.linux-${zulip::common::goarch}.tar.gz",
-    tarball_prefix => "redis_exporter-v${version}.linux-${zulip::common::goarch}",
+    url            => "https://github.com/oliver006/redis_exporter/releases/download/v${version}/redis_exporter-v${version}.linux-${doer::common::goarch}.tar.gz",
+    tarball_prefix => "redis_exporter-v${version}.linux-${doer::common::goarch}",
     bin            => [$bin],
     cleanup_after  => [Service[supervisor]],
   }
 
   kandra::firewall_allow { 'redis_exporter': port => '9121' }
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_redis_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_redis_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],

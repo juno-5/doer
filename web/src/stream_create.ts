@@ -485,11 +485,11 @@ export function show_new_stream_modal(): void {
         // "realm_default" for realms on limited plans, so we disable the setting.
         $("#stream_creation_form select[name=stream_message_retention_setting]").prop(
             "disabled",
-            !realm.zulip_plan_is_not_limited,
+            !realm.doer_plan_is_not_limited,
         );
 
         // This listener is only needed if the dropdown setting is enabled.
-        if (realm.zulip_plan_is_not_limited) {
+        if (realm.doer_plan_is_not_limited) {
             // Add listener to .show stream-message-retention-days-input that we've hidden above
             $<HTMLSelectOneElement>("#stream_creation_form .stream_message_retention_setting").on(
                 "change",

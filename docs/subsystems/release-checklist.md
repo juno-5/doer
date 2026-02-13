@@ -1,4 +1,4 @@
-# Zulip server release checklist
+# Doer server release checklist
 
 This document has reminders of things one might forget to do when
 preparing a new release.
@@ -11,9 +11,9 @@ preparing a new release.
     `pip list --outdated`).
   - Upgrade all puppet dependencies in `puppet/deps.yaml`
   - Upgrade all puppet-installed dependencies (e.g., Smokescreen, go,
-    etc) in `puppet/zulip/manifests/common.pp`
+    etc) in `puppet/doer/manifests/common.pp`
   - [Post a message to
-    Weblate](https://hosted.weblate.org/projects/zulip/#announcement)
+    Weblate](https://hosted.weblate.org/projects/doer/#announcement)
     inviting translators to translate new strings.
   - Merge draft updates to the [changelog](../overview/changelog.md)
     with changes since the last release. While doing so, take notes on
@@ -57,32 +57,32 @@ preparing a new release.
   - Verify the changelog passes lint, and has the right release date.
   - _Major releases only:_ Adjust the `changelog.md` heading to have
     the stable release series boilerplate.
-  - Update `ZULIP_VERSION` and `LATEST_RELEASE_VERSION` in `version.py`.
+  - Update `DOER_VERSION` and `LATEST_RELEASE_VERSION` in `version.py`.
   - _Major releases only:_ Update `API_FEATURE_LEVEL` to a feature
     level for the final release, and document a reserved range.
 - Run `tools/release` with the release version.
-- Update the [Docker image](https://github.com/zulip/docker-zulip):
+- Update the [Docker image](https://github.com/doer/docker-doer):
   - Commit the Docker updates:
-    - Update `ZULIP_GIT_REF` in `Dockerfile`
+    - Update `DOER_GIT_REF` in `Dockerfile`
     - Update `README.md`
-    - Update the image in `docker-compose.yml`, as well as the `ZULIP_GIT_REF`
+    - Update the image in `docker-compose.yml`, as well as the `DOER_GIT_REF`
   - Commit the Helm updates:
-    - Add a new entry to `kubernetes/chart/zulip/CHANGELOG.md`
-    - Update the `appVersion` in `kubernetes/chart/zulip/Chart.yaml`
-    - Update the `tag` in `kubernetes/chart/zulip/values.yaml`
+    - Add a new entry to `kubernetes/chart/doer/CHANGELOG.md`
+    - Update the `appVersion` in `kubernetes/chart/doer/Chart.yaml`
+    - Update the `tag` in `kubernetes/chart/doer/values.yaml`
     - Update the docs by running `helm-docs`
-    - Update the `image` in `kubernetes/manual/zulip-rc.yml`
-  - Build the image: `docker build --pull . -t zulip/docker-zulip:4.11-0 --no-cache`
-  - Also tag it with `latest`: `docker build . -t zulip/docker-zulip:latest`
-  - Push those tags: `docker push zulip/docker-zulip:4.11-0; docker push zulip/docker-zulip:latest`
+    - Update the `image` in `kubernetes/manual/doer-rc.yml`
+  - Build the image: `docker build --pull . -t doer/docker-doer:4.11-0 --no-cache`
+  - Also tag it with `latest`: `docker build . -t doer/docker-doer:latest`
+  - Push those tags: `docker push doer/docker-doer:4.11-0; docker push doer/docker-doer:latest`
   - Push the commits to `main`.
 - Merge the blog post PR.
 - Announce the release, pointing to the blog post, via:
-  - Email to [zulip-announce](https://groups.google.com/g/zulip-announce)
-  - Email to [zulip-blog-announce](https://groups.google.com/a/zulip.com/g/zulip-blog-announce)
+  - Email to [doer-announce](https://groups.google.com/g/doer-announce)
+  - Email to [doer-blog-announce](https://groups.google.com/a/zulip.com/g/doer-blog-announce)
   - Message in [#announce](https://chat.zulip.org/#narrow/channel/1-announce)
-  - Tweet from [@zulip](https://x.com/zulip).
-  - Toot from [fosstodon.org/@zulip](https://fosstodon.org/@zulip)
+  - Tweet from [@doer](https://x.com/doer).
+  - Toot from [fosstodon.org/@doer](https://fosstodon.org/@doer)
 
 ### Post-release
 
@@ -91,12 +91,12 @@ preparing a new release.
   DigitalOcean marketplace.
 - _Major releases only:_
   - Create a release branch (e.g., `4.x`).
-  - On the release branch, update `ZULIP_VERSION` in `version.py` to
+  - On the release branch, update `DOER_VERSION` in `version.py` to
     the present release with a `+git` suffix, e.g., `4.0+git`.
-  - On `main`, update `ZULIP_VERSION` to the future major release with
+  - On `main`, update `DOER_VERSION` to the future major release with
     a `-dev+git` suffix, e.g., `5.0-dev+git`. Make a Git tag for this
     update commit with a `-dev` suffix, e.g., `5.0-dev`. Push the tag
-    to both zulip.git and zulip-internal.git to get a correct version
+    to both doer.git and doer-internal.git to get a correct version
     number for future Cloud deployments.
   - Add the new release to `.github/ISSUE_TEMPLATE/2_bug_report.md`.
   - Consider removing a few old releases from the issue template and
@@ -106,7 +106,7 @@ preparing a new release.
     this component" on the Django release branch component.
   - In Weblate, remove the previous stable components.
   - Add a new CI production upgrade target:
-    - Build a docker image: `cd tools/ci && docker build --pull . -f Dockerfile.prod --build-arg=BASE_IMAGE=zulip/ci:bookworm --build-arg=VERSION=7.0 --tag=zulip/ci:bookworm-7.0 && docker push zulip/ci:bookworm-7.0`
+    - Build a docker image: `cd tools/ci && docker build --pull . -f Dockerfile.prod --build-arg=BASE_IMAGE=doer/ci:bookworm --build-arg=VERSION=7.0 --tag=doer/ci:bookworm-7.0 && docker push doer/ci:bookworm-7.0`
     - Add a new line to the `production_upgrade` matrix in
       `.github/workflows/production-suite.yml`.
   - Update /history page in `templates/corporate/history.md`.
@@ -115,13 +115,13 @@ preparing a new release.
   - Review possible improvements to API bindings to better match the
     defaults and features of the new release.
 - _Minor releases only (e.g., 3.2):_
-  - On the release branch, update `ZULIP_VERSION` to the present
+  - On the release branch, update `DOER_VERSION` to the present
     release with a `+git` suffix, e.g., `3.2+git`.
   - On main, update `LATEST_RELEASE_VERSION` with the released
     version, as well as the changelog changes from the release branch.
 - _Prereleases only (e.g., 7.0-beta3):_
   - Atop the prerelease commit (e.g., `7.0-beta3`), make a commit
-    updating `ZULIP_VERSION` to the prerelease version with a `+git`
+    updating `DOER_VERSION` to the prerelease version with a `+git`
     suffix, e.g., `7.0-beta3+git`. Push this to `main`. (If `main` has
     already diverged from the prerelease, a merge commit will be
     needed here.)

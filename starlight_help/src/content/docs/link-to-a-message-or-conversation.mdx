@@ -5,8 +5,8 @@ title: Link to a message or conversation
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ChannelActions from "../include/_ChannelActions.mdx";
 import ChannelLongPressMenu from "../include/_ChannelLongPressMenu.mdx";
 import MessageActionsMenu from "../include/_MessageActionsMenu.mdx";
@@ -15,16 +15,16 @@ import StartComposing from "../include/_StartComposing.mdx";
 import TopicActions from "../include/_TopicActions.mdx";
 import TopicLongPressMenu from "../include/_TopicLongPressMenu.mdx";
 
-import LinkIcon from "~icons/zulip-icon/link"
+import LinkIcon from "~icons/doer-icon/link"
 
-Zulip makes it easy to share links to messages, topics, and channels. You can
-link from one Zulip [conversation](/help/reading-conversations) to another, or
-share links to Zulip conversations in issue trackers, emails, or other external
+Doer makes it easy to share links to messages, topics, and channels. You can
+link from one Doer [conversation](/help/reading-conversations) to another, or
+share links to Doer conversations in issue trackers, emails, or other external
 tools.
 
-## Link to a channel within Zulip
+## Link to a channel within Doer
 
-Channel links are automatically formatted as [#channel name](#link-to-a-channel-within-zulip).
+Channel links are automatically formatted as [#channel name](#link-to-a-channel-within-doer).
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -37,23 +37,23 @@ Channel links are automatically formatted as [#channel name](#link-to-a-channel-
          selecting a topic.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To link to the channel you're composing to, type `#>`, and pick the
       top option from the autocomplete.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
-In the web and desktop apps, when you paste a channel link into Zulip,
+In the web and desktop apps, when you paste a channel link into Doer,
 it's automatically formatted as `#**channel name**`. You can use
 <kbd data-mac-following-key="⌥">Ctrl</kbd> + <kbd>Shift</kbd> +
 <kbd>V</kbd> to paste as plain text if you prefer.
 
 You can create a channel link manually by typing `#**channel name**`.
 
-## Link to a topic within Zulip
+## Link to a topic within Doer
 
-Topic links are automatically formatted as [#channel > topic](#link-to-a-topic-within-zulip).
+Topic links are automatically formatted as [#channel > topic](#link-to-a-topic-within-doer).
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -66,24 +66,24 @@ Topic links are automatically formatted as [#channel > topic](#link-to-a-topic-w
       1. Pick the desired topic from the autocomplete.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To link to a topic in the channel you're composing to, type `#>`
       followed by a few letters from the topic name, and pick the desired
       topic from the autocomplete.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
-In the web and desktop apps, when you paste a topic link into Zulip, it's
+In the web and desktop apps, when you paste a topic link into Doer, it's
 automatically formatted as `#**channel name>topic name**`. You can use
 <kbd data-mac-following-key="⌥">Ctrl</kbd> + <kbd>Shift</kbd> +
 <kbd>V</kbd> to paste as plain text if you prefer.
 
 You can create a topic link manually by typing `#**channel name>topic name**`.
 
-## Link to Zulip from anywhere
+## Link to Doer from anywhere
 
-All URLs in Zulip are designed to be **shareable**, including:
+All URLs in Doer are designed to be **shareable**, including:
 
 * Links to messages, topics, and channels.
 * Search URLs, though note that personal
@@ -95,33 +95,33 @@ In addition, links to messages, topics, and channels are **permanent**:
 * [Message links](#get-a-link-to-a-specific-message) will still work even when
   the message is [moved to another topic](/help/move-content-to-another-topic)
   or [channel](/help/move-content-to-another-channel), or if its [topic is
-  resolved](/help/resolve-a-topic). Zulip uses the same permanent link syntax
+  resolved](/help/resolve-a-topic). Doer uses the same permanent link syntax
   when [quoting a message](/help/quote-or-forward-a-message).
 * [Topic links](#get-a-link-to-a-specific-topic) will still work even when the
   topic is [renamed](/help/rename-a-topic), [moved to another
   channel](/help/move-content-to-another-channel), or
   [resolved](/help/resolve-a-topic).
-  <ZulipTip>
+  <DoerTip>
     When some messages are [moved out of a
     topic](/help/move-content-to-another-topic) and others are left in place,
     links to that topic will follow the location of the message whose ID is
     encoded in the topic URL (usually the first or last message in the topic).
-  </ZulipTip>
+  </DoerTip>
 * [Channel links](#get-a-link-to-a-specific-channel) will still work even when a
   channel is [renamed](/help/rename-a-channel) or
   [archived](/help/archive-a-channel).
 
-When you copy a Zulip link in the web and desktop apps, and paste it anywhere that
+When you copy a Doer link in the web and desktop apps, and paste it anywhere that
 accepts HTML formatting (e.g., your email, GitHub, docs, etc.), the link will be
-formatted as it would be in Zulip (e.g., [#channel > topic](#link-to-a-topic-within-zulip)).
+formatted as it would be in Doer (e.g., [#channel > topic](#link-to-a-topic-within-doer)).
 To paste the plain URL, you can paste without formatting (likely <kbd>Ctrl</kbd> +
 <kbd>Shift</kbd> + <kbd>V</kbd> in your browser).
 
-<ZulipNote>
-  Due to a Safari quirk, pasting Zulip links from Safari into GitHub
+<DoerNote>
+  Due to a Safari quirk, pasting Doer links from Safari into GitHub
   and some other apps may result in incorrect formatting. You can
   paste without formatting, or use a different browser.
-</ZulipNote>
+</DoerNote>
 
 ### Get a link to a specific message
 
@@ -147,10 +147,10 @@ When you send your message, the link will appear as
       1. Click **Copy link to message**.
     </FlattenedSteps>
 
-    <ZulipTip>
-      If using Zulip in a browser, you can also click on the timestamp
+    <DoerTip>
+      If using Doer in a browser, you can also click on the timestamp
       of a message, and copy the URL from your browser's address bar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -162,7 +162,7 @@ When you send your message, the link will appear as
   </TabItem>
 </Tabs>
 
-In the web and desktop apps, when you paste a message link into Zulip,
+In the web and desktop apps, when you paste a message link into Doer,
 it is automatically formatted for you. You can use
 <kbd data-mac-following-key="⌥">Ctrl</kbd> + <kbd>Shift</kbd> +
 <kbd>V</kbd> to paste as plain text if you prefer.
@@ -176,10 +176,10 @@ it is automatically formatted for you. You can use
          recipient bar.
     </Steps>
 
-    <ZulipTip>
-      If using Zulip in a browser, you can also click on a topic name,
+    <DoerTip>
+      If using Doer in a browser, you can also click on a topic name,
       and copy the URL from your browser's address bar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via left sidebar">
@@ -189,10 +189,10 @@ it is automatically formatted for you. You can use
       1. Click **Copy link to topic**.
     </FlattenedSteps>
 
-    <ZulipTip>
-      If using Zulip in a browser, you can also click on a topic name,
+    <DoerTip>
+      If using Doer in a browser, you can also click on a topic name,
       and copy the URL from your browser's address bar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -228,5 +228,5 @@ it is automatically formatted for you. You can use
 
 * [Add a custom linkifier](/help/add-a-custom-linkifier)
 * [Message formatting](/help/format-your-message-using-markdown)
-* [Linking to your organization](/help/linking-to-zulip)
+* [Linking to your organization](/help/linking-to-doer)
 * [Pin information](/help/pin-information)

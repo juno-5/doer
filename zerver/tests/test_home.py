@@ -12,16 +12,16 @@ from django.utils.timezone import now as timezone_now
 
 from corporate.models.customers import Customer
 from corporate.models.plans import CustomerPlan
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.actions.create_user import do_create_user
 from zerver.actions.realm_settings import do_change_realm_plan_type, do_set_realm_property
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.users import change_user_is_active
 from zerver.lib.compatibility import LAST_SERVER_UPGRADE_TIME, is_outdated_server
 from zerver.lib.events import has_pending_sponsorship_request
-from zerver.lib.home import get_furthest_read_time, promote_sponsoring_zulip_in_realm
+from zerver.lib.home import get_furthest_read_time, promote_sponsoring_doer_in_realm
 from zerver.lib.soft_deactivation import do_soft_deactivate_users
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     activate_push_notification_service,
     get_user_messages,
@@ -37,10 +37,10 @@ from zerver.worker.user_activity import UserActivityWorker
 if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
-logger_string = "zulip.soft_deactivation"
+logger_string = "doer.soft_deactivation"
 
 
-class HomeTest(ZulipTestCase):
+class HomeTest(DoerTestCase):
     # Keep this list sorted!!!
     expected_page_params_keys = [
         "apps_page_url",
@@ -57,10 +57,10 @@ class HomeTest(ZulipTestCase):
         "no_event_queue",
         "page_type",
         "presence_history_limit_days_for_web_app",
-        "promote_sponsoring_zulip",
+        "promote_sponsoring_doer",
         "realm_rendered_description",
         "request_language",
-        "show_try_zulip_modal",
+        "show_try_doer_modal",
         "state_data",
         "test_suite",
         "translation_data",
@@ -231,7 +231,7 @@ class HomeTest(ZulipTestCase):
         "realm_want_advertise_in_communities_directory",
         "realm_welcome_message_custom_text",
         "realm_wildcard_mention_policy",
-        "realm_zulip_update_announcements_stream_id",
+        "realm_doer_update_announcements_stream_id",
         "realm_moderation_request_channel_id",
         "recent_private_conversations",
         "reminders",
@@ -270,10 +270,10 @@ class HomeTest(ZulipTestCase):
         "user_settings",
         "user_status",
         "user_topics",
-        "zulip_feature_level",
-        "zulip_merge_base",
-        "zulip_plan_is_not_limited",
-        "zulip_version",
+        "doer_feature_level",
+        "doer_merge_base",
+        "doer_plan_is_not_limited",
+        "doer_version",
     ]
 
     def test_home(self) -> None:
@@ -339,10 +339,10 @@ class HomeTest(ZulipTestCase):
         self.assertCountEqual(page_params["state_data"]["realm_bots"][0], realm_bots_expected_keys)
 
     def test_home_demo_organization(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         # We construct a scheduled deletion date that's definitely in
-        # the future, regardless of how long ago the Zulip realm was
+        # the future, regardless of how long ago the Doer realm was
         # created.
         realm.demo_organization_scheduled_deletion_date = timezone_now() + timedelta(days=1)
         realm.save()
@@ -362,7 +362,7 @@ class HomeTest(ZulipTestCase):
         self.assertCountEqual(page_params["state_data"], expected_state_data_keys)
 
     def test_logged_out_home(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         do_set_realm_property(realm, "enable_spectator_access", False, acting_user=None)
 
         # Redirect to login if spectator access is disabled.
@@ -392,10 +392,10 @@ class HomeTest(ZulipTestCase):
             "no_event_queue",
             "page_type",
             "presence_history_limit_days_for_web_app",
-            "promote_sponsoring_zulip",
+            "promote_sponsoring_doer",
             "realm_rendered_description",
             "request_language",
-            "show_try_zulip_modal",
+            "show_try_doer_modal",
             "state_data",
             "test_suite",
             "translation_data",
@@ -407,13 +407,13 @@ class HomeTest(ZulipTestCase):
         self.assertIsNone(page_params["state_data"])
 
         with self.settings(DEVELOPMENT=True):
-            result = self.client_get("/?show_try_zulip_modal")
+            result = self.client_get("/?show_try_doer_modal")
         self.assertEqual(result.status_code, 200)
         page_params = self._get_page_params(result)
-        self.assertEqual(page_params["show_try_zulip_modal"], True)
+        self.assertEqual(page_params["show_try_doer_modal"], True)
 
     def test_realm_authentication_methods(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login("desdemona")
 
         with self.settings(
@@ -433,18 +433,18 @@ class HomeTest(ZulipTestCase):
                     "AzureAD": {
                         "enabled": True,
                         "available": False,
-                        "unavailable_reason": "You need to upgrade to the Zulip Cloud Standard plan to use this authentication method.",
+                        "unavailable_reason": "You need to upgrade to the Doer Cloud Standard plan to use this authentication method.",
                     },
                     "SAML": {
                         "enabled": True,
                         "available": False,
-                        "unavailable_reason": "You need to upgrade to the Zulip Cloud Plus plan to use this authentication method.",
+                        "unavailable_reason": "You need to upgrade to the Doer Cloud Plus plan to use this authentication method.",
                     },
                 },
             )
 
             # Now try with BILLING_ENABLED=False. This simulates a self-hosted deployment
-            # instead of Zulip Cloud. In this case, all authentication methods should be available.
+            # instead of Doer Cloud. In this case, all authentication methods should be available.
             with self.settings(BILLING_ENABLED=False):
                 result = self._get_home_page()
                 state_data = self._get_page_params(result)["state_data"]
@@ -480,7 +480,7 @@ class HomeTest(ZulipTestCase):
                     "SAML": {
                         "enabled": True,
                         "available": False,
-                        "unavailable_reason": "You need to upgrade to the Zulip Cloud Plus plan to use this authentication method.",
+                        "unavailable_reason": "You need to upgrade to the Doer Cloud Plus plan to use this authentication method.",
                     },
                 },
             )
@@ -509,7 +509,7 @@ class HomeTest(ZulipTestCase):
                     "SAML": {
                         "enabled": True,
                         "available": False,
-                        "unavailable_reason": "You need to upgrade to the Zulip Cloud Plus plan to use this authentication method.",
+                        "unavailable_reason": "You need to upgrade to the Doer Cloud Plus plan to use this authentication method.",
                     },
                 },
             )
@@ -550,16 +550,16 @@ class HomeTest(ZulipTestCase):
                 {
                     "dsn": "https://aaa@bbb.ingest.sentry.io/1234",
                     "environment": "development",
-                    "realm_key": "zulip",
+                    "realm_key": "doer",
                     "sample_rate": 1.0,
-                    "server_version": ZULIP_VERSION,
+                    "server_version": DOER_VERSION,
                     "trace_rate": 0.1,
                     "user": {"id": user.id, "role": "Member"},
                 },
             )
 
         # Make sure these still exist for logged-out users as well
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         do_set_realm_property(realm, "enable_spectator_access", True, acting_user=None)
         self.logout()
         self.assertIsNone(sentry_params())
@@ -570,9 +570,9 @@ class HomeTest(ZulipTestCase):
                 {
                     "dsn": "https://aaa@bbb.ingest.sentry.io/1234",
                     "environment": "development",
-                    "realm_key": "zulip",
+                    "realm_key": "doer",
                     "sample_rate": 1.0,
-                    "server_version": ZULIP_VERSION,
+                    "server_version": DOER_VERSION,
                     "trace_rate": 0.1,
                 },
             )
@@ -678,9 +678,9 @@ class HomeTest(ZulipTestCase):
         user = self.example_user("hamlet")
         self.login_user(user)
 
-        result = self.client_get("/", HTTP_USER_AGENT="ZulipElectron/2.3.82")
+        result = self.client_get("/", HTTP_USER_AGENT="DoerElectron/2.3.82")
         html = result.content.decode()
-        self.assertIn("You are using old version of the Zulip desktop", html)
+        self.assertIn("You are using old version of the Doer desktop", html)
 
     def test_unsupported_browser(self) -> None:
         user = self.example_user("hamlet")
@@ -695,7 +695,7 @@ class HomeTest(ZulipTestCase):
         for user_agent in unsupported_user_agents:
             result = self.client_get("/", HTTP_USER_AGENT=user_agent)
             html = result.content.decode()
-            self.assertIn("Internet Explorer is not supported by Zulip.", html)
+            self.assertIn("Internet Explorer is not supported by Doer.", html)
 
     def test_terms_of_service_first_time_template(self) -> None:
         user = self.example_user("hamlet")
@@ -732,7 +732,7 @@ class HomeTest(ZulipTestCase):
         self.assertEqual(result.status_code, 200)
         self.assert_in_response("I agree to the", result)
         self.assert_in_response(
-            "Administrators of this Zulip organization will be able to see this email address.",
+            "Administrators of this Doer organization will be able to see this email address.",
             result,
         )
 
@@ -773,7 +773,7 @@ class HomeTest(ZulipTestCase):
             result = self.client_get("/", dict(stream="Denmark"))
             self.assertEqual(result.status_code, 200)
             self.assert_in_response(
-                "Administrators of this Zulip organization will be able to see this email address.",
+                "Administrators of this Doer organization will be able to see this email address.",
                 result,
             )
 
@@ -809,7 +809,7 @@ class HomeTest(ZulipTestCase):
         )
 
     def test_new_stream_announcements_stream(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.new_stream_announcements_stream_id = get_stream("Denmark", realm).id
         realm.save()
         self.login("hamlet")
@@ -844,7 +844,7 @@ class HomeTest(ZulipTestCase):
         return user
 
     def test_signup_announcements_stream(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.signup_announcements_stream = get_stream("Denmark", realm)
         realm.save()
         self.login("hamlet")
@@ -855,20 +855,20 @@ class HomeTest(ZulipTestCase):
             get_stream("Denmark", realm).id,
         )
 
-    def test_zulip_update_announcements_stream(self) -> None:
-        realm = get_realm("zulip")
-        realm.zulip_update_announcements_stream = get_stream("Denmark", realm)
+    def test_doer_update_announcements_stream(self) -> None:
+        realm = get_realm("doer")
+        realm.doer_update_announcements_stream = get_stream("Denmark", realm)
         realm.save()
         self.login("hamlet")
         result = self._get_home_page()
         page_params = self._get_page_params(result)
         self.assertEqual(
-            page_params["state_data"]["realm_zulip_update_announcements_stream_id"],
+            page_params["state_data"]["realm_doer_update_announcements_stream_id"],
             get_stream("Denmark", realm).id,
         )
 
     def test_moderation_request_channel(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.moderation_request_channel = self.make_stream("private_stream", invite_only=True)
         realm.save()
         self.login("hamlet")
@@ -881,7 +881,7 @@ class HomeTest(ZulipTestCase):
 
     def test_people(self) -> None:
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login_user(hamlet)
 
         bots = {}
@@ -1042,7 +1042,7 @@ class HomeTest(ZulipTestCase):
             sponsorship_pending = has_pending_sponsorship_request(user)
         self.assertFalse(sponsorship_pending)
 
-        customer = Customer.objects.create(realm=get_realm("zulip"), stripe_customer_id="cus_id")
+        customer = Customer.objects.create(realm=get_realm("doer"), stripe_customer_id="cus_id")
         CustomerPlan.objects.create(
             customer=customer,
             billing_cycle_anchor=timezone_now(),
@@ -1074,28 +1074,28 @@ class HomeTest(ZulipTestCase):
             sponsorship_pending = has_pending_sponsorship_request(shiva)
         self.assertFalse(sponsorship_pending)
 
-    def test_promote_sponsoring_zulip_in_realm(self) -> None:
-        realm = get_realm("zulip")
+    def test_promote_sponsoring_doer_in_realm(self) -> None:
+        realm = get_realm("doer")
 
         do_change_realm_plan_type(realm, Realm.PLAN_TYPE_STANDARD_FREE, acting_user=None)
-        promote_zulip = promote_sponsoring_zulip_in_realm(realm)
-        self.assertTrue(promote_zulip)
+        promote_doer = promote_sponsoring_doer_in_realm(realm)
+        self.assertTrue(promote_doer)
 
-        with self.settings(PROMOTE_SPONSORING_ZULIP=False):
-            promote_zulip = promote_sponsoring_zulip_in_realm(realm)
-        self.assertFalse(promote_zulip)
+        with self.settings(PROMOTE_SPONSORING_DOER=False):
+            promote_doer = promote_sponsoring_doer_in_realm(realm)
+        self.assertFalse(promote_doer)
 
         do_change_realm_plan_type(realm, Realm.PLAN_TYPE_STANDARD_FREE, acting_user=None)
-        promote_zulip = promote_sponsoring_zulip_in_realm(realm)
-        self.assertTrue(promote_zulip)
+        promote_doer = promote_sponsoring_doer_in_realm(realm)
+        self.assertTrue(promote_doer)
 
         do_change_realm_plan_type(realm, Realm.PLAN_TYPE_LIMITED, acting_user=None)
-        promote_zulip = promote_sponsoring_zulip_in_realm(realm)
-        self.assertFalse(promote_zulip)
+        promote_doer = promote_sponsoring_doer_in_realm(realm)
+        self.assertFalse(promote_doer)
 
         do_change_realm_plan_type(realm, Realm.PLAN_TYPE_STANDARD, acting_user=None)
-        promote_zulip = promote_sponsoring_zulip_in_realm(realm)
-        self.assertFalse(promote_zulip)
+        promote_doer = promote_sponsoring_doer_in_realm(realm)
+        self.assertFalse(promote_doer)
 
     def test_desktop_home(self) -> None:
         self.login("hamlet")
@@ -1391,7 +1391,7 @@ class HomeTest(ZulipTestCase):
 
     def test_realm_push_notifications_enabled_end_timestamp(self) -> None:
         self.login("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         end_timestamp = timezone_now() + timedelta(days=1)
         realm.push_notifications_enabled_end_timestamp = end_timestamp
         realm.save()
@@ -1404,7 +1404,7 @@ class HomeTest(ZulipTestCase):
         )
 
     def test_invalid_default_language(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
         do_change_user_setting(cordelia, "default_language", "gl", acting_user=None)
@@ -1449,7 +1449,7 @@ class HomeTest(ZulipTestCase):
         self.assertEqual(cordelia.default_language, "de")
 
 
-class TestDocRedirectView(ZulipTestCase):
+class TestDocRedirectView(DoerTestCase):
     def test_doc_permalink_view(self) -> None:
         result = self.client_get("/doc-permalinks/usage-statistics")
         self.assertEqual(result.status_code, 302)

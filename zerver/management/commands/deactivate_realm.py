@@ -4,10 +4,10 @@ from typing import Any, cast
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_add_deactivated_redirect, do_deactivate_realm
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Script to deactivate a realm."""
 
     @override

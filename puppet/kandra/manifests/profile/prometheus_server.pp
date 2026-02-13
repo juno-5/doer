@@ -21,15 +21,15 @@ class kandra::profile::prometheus_server inherits kandra::profile::base {
   # Export prometheus stats to status.zulip.com
   include kandra::statuspage
 
-  $version = $zulip::common::versions['prometheus']['version']
+  $version = $doer::common::versions['prometheus']['version']
   $dir = "/srv/zulip-prometheus-${version}"
   $bin = "${dir}/prometheus"
   $data_dir = '/var/lib/prometheus'
 
-  zulip::external_dep { 'prometheus':
+  doer::external_dep { 'prometheus':
     version        => $version,
-    url            => "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-${version}.linux-${zulip::common::goarch}.tar.gz",
-    tarball_prefix => "prometheus-${version}.linux-${zulip::common::goarch}",
+    url            => "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-${version}.linux-${doer::common::goarch}.tar.gz",
+    tarball_prefix => "prometheus-${version}.linux-${doer::common::goarch}",
     bin            => [$bin, "${dir}/promtool"],
     cleanup_after  => [Service[supervisor]],
   }
@@ -65,7 +65,7 @@ class kandra::profile::prometheus_server inherits kandra::profile::base {
     notify  => Service[supervisor],
   }
 
-  file { "${zulip::common::supervisor_conf_dir}/prometheus.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus.conf":
     ensure  => file,
     require => [
       Package[supervisor],

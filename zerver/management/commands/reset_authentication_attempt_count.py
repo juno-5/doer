@@ -4,11 +4,11 @@ from typing import Any
 from django.core.management.base import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zproject.backends import RateLimitedAuthenticationByUsername
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Reset the rate limit for authentication attempts for username."""
 
     @override

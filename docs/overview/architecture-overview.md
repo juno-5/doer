@@ -1,63 +1,63 @@
-# Zulip architectural overview
+# Doer architectural overview
 
 ## Key codebases
 
-The main Zulip codebase is at <https://github.com/zulip/zulip>. It
-contains the Zulip backend (written in Python 3.x and Django), the
+The main Doer codebase is at <https://github.com/doer/doer>. It
+contains the Doer backend (written in Python 3.x and Django), the
 web app (written in JavaScript and TypeScript) and our library of
 incoming webhook [integrations](https://zulip.com/integrations/)
 with other services and applications (see [the directory structure
 guide](directory-structure.md)).
 
-[Zulip Flutter](https://github.com/zulip/zulip-flutter) is the official
-mobile Zulip client supporting both iOS and Android, built with Flutter,
-and [Zulip Desktop](https://github.com/zulip/zulip-desktop) is the
-official Zulip desktop client for macOS, Linux, and Windows.
-[Zulip Terminal](https://github.com/zulip/zulip-terminal) is our
+[Doer Flutter](https://github.com/doer/doer-flutter) is the official
+mobile Doer client supporting both iOS and Android, built with Flutter,
+and [Doer Desktop](https://github.com/doer/doer-desktop) is the
+official Doer desktop client for macOS, Linux, and Windows.
+[Doer Terminal](https://github.com/doer/doer-terminal) is our
 official terminal-based client.
 
 We also maintain several separate repositories for integrations and
 other glue code: [Python API
-bindings](https://github.com/zulip/python-zulip-api); [JavaScript API
-bindings](https://github.com/zulip/zulip-js); a [Hubot
-adapter](https://github.com/zulip/hubot-zulip); integrations with
-[Jenkins](https://github.com/zulip/zulip-jenkins-plugin),
-[Puppet](https://github.com/matthewbarr/puppet-zulip),
-[Redmine](https://github.com/zulip/zulip-redmine-plugin), and
-[Trello](https://github.com/zulip/trello-to-zulip);
-and [many more](https://github.com/zulip/).
+bindings](https://github.com/doer/python-doer-api); [JavaScript API
+bindings](https://github.com/doer/doer-js); a [Hubot
+adapter](https://github.com/doer/hubot-doer); integrations with
+[Jenkins](https://github.com/doer/doer-jenkins-plugin),
+[Puppet](https://github.com/matthewbarr/puppet-doer),
+[Redmine](https://github.com/doer/doer-redmine-plugin), and
+[Trello](https://github.com/doer/trello-to-doer);
+and [many more](https://github.com/doer/).
 
-We use [Weblate](https://hosted.weblate.org/projects/zulip/) to do
+We use [Weblate](https://hosted.weblate.org/projects/doer/) to do
 translations.
 
-In this overview, we'll mainly discuss the core Zulip server and web
+In this overview, we'll mainly discuss the core Doer server and web
 application.
 
 ## Usage assumptions and concepts
 
-Zulip is a real-time team chat application meant to provide a great
+Doer is a real-time team chat application meant to provide a great
 experience for a wide range of organizations, from companies to
 volunteer projects to groups of friends, ranging in size from a small
 team to tens of thousands of users. It has [hundreds of
 features](https://zulip.com/features/) both large and small, and
 supports dedicated apps for iOS, Android, Linux, Windows, and macOS,
 all modern web browsers, several cross-protocol chat clients, and
-numerous dedicated [Zulip API](https://zulip.com/api/) clients
+numerous dedicated [Doer API](https://zulip.com/api/) clients
 (e.g., bots).
 
-A server can host multiple Zulip _realms_ (organizations), each on its
+A server can host multiple Doer _realms_ (organizations), each on its
 own (sub)domain. While most installations host only one organization, some
 host thousands, such as zulip.com. Each organization is a private
 chamber with its own users, channels, customizations, and so on. This
-means that one person might be a user of multiple Zulip realms. The
+means that one person might be a user of multiple Doer realms. The
 administrators of an organization have a great deal of control over
 who can register an account, what permissions new users have, etc. For
 more on security considerations and options, see our [guide on securing
-your Zulip server][security-guide], [security overview][security-overview],
-and the [Zulip help center](https://zulip.com/help/).
+your Doer server][security-guide], [security overview][security-overview],
+and the [Doer help center](https://zulip.com/help/).
 
 [security-overview]: https://zulip.com/security/
-[security-guide]: ../production/securing-your-zulip-server.md
+[security-guide]: ../production/securing-your-doer-server.md
 
 ## Components
 
@@ -65,7 +65,7 @@ and the [Zulip help center](https://zulip.com/help/).
 
 ### Django and Tornado
 
-Zulip is primarily implemented in the
+Doer is primarily implemented in the
 [Django](https://www.djangoproject.com/) Python web framework. We
 also make use of [Tornado](https://www.tornadoweb.org) for the
 real-time push system.
@@ -82,7 +82,7 @@ connections -- that is to say, routes that maintain a persistent
 connection from every running client. For this reason, it's
 responsible for event (message) delivery, but not much else. We try to
 avoid any blocking calls in Tornado because we don't want to delay
-delivery to thousands of other connections (as this would make Zulip
+delivery to thousands of other connections (as this would make Doer
 very much not real-time). For instance, we avoid doing cache or
 database queries inside the Tornado code paths, since those blocking
 requests carry a very high performance penalty for a single-threaded,
@@ -100,7 +100,7 @@ the code is in `zerver/tornado`.
 
 #### HTML templates, JavaScript, etc.
 
-Zulip's HTML is primarily implemented using two types of HTML
+Doer's HTML is primarily implemented using two types of HTML
 templates: backend templates (powered by the [Jinja2][] template
 engine used for logged-out ("portico") pages and the web app's base
 content) and frontend templates (powered by [Handlebars][]) used for
@@ -118,12 +118,12 @@ For more details on the frontend, see our documentation on
 
 ### nginx
 
-nginx is the front-end web server to all Zulip traffic; it serves static
+nginx is the front-end web server to all Doer traffic; it serves static
 assets and proxies to Django and Tornado. It handles HTTP requests
 according to the rules laid down in the many config files found in
-`puppet/zulip/files/nginx/` and `puppet/zulip/templates/nginx/`.
+`puppet/doer/files/nginx/` and `puppet/doer/templates/nginx/`.
 
-`puppet/zulip/files/nginx/zulip-include-frontend/app` is the most
+`puppet/doer/files/nginx/doer-include-frontend/app` is the most
 important of these files. It explains what happens when requests come in
 from outside.
 
@@ -139,7 +139,7 @@ from outside.
   `uWSGI` via `unix:/home/zulip/deployments/uwsgi-socket`.
 - By default (i.e. if `LOCAL_UPLOADS_DIR` is set), nginx will serve
   user-uploaded content like avatars, custom emoji, and uploaded
-  files. However, one can configure Zulip to store these in a cloud
+  files. However, one can configure Doer to store these in a cloud
   storage service like Amazon S3 instead.
 
 Note that we do not use `nginx` in the development environment, opting
@@ -151,7 +151,7 @@ We use [supervisord](http://supervisord.org/) to start server processes,
 restart them automatically if they crash, and direct logging.
 
 The config file is
-`puppet/zulip/templates/supervisor/zulip.conf.template.erb`. This
+`puppet/doer/templates/supervisor/doer.conf.template.erb`. This
 is where Tornado and Django are set up, as well as a number of background
 processes that process event queues. We use event queues for the kinds
 of tasks that are best run in the background because they are
@@ -165,7 +165,7 @@ memcached is used to cache database model
 objects. `zerver/lib/cache.py` and `zerver/lib/cache_helpers.py`
 manage putting things into memcached, and invalidating the cache when
 values change. The memcached configuration is in
-`puppet/zulip/templates/memcached.conf.template.erb`. See our
+`puppet/doer/templates/memcached.conf.template.erb`. See our
 [caching guide](../subsystems/caching.md) to learn how this works in
 detail.
 
@@ -174,7 +174,7 @@ detail.
 Redis is used for a few very short-term data stores, primarily
 our rate-limiting system.
 
-Redis is configured in `puppet/zulip/templates/zulip-redis.template.erb` and
+Redis is configured in `puppet/doer/templates/doer-redis.template.erb` and
 the main contents are the following, which turns off persistence:
 
 ```text
@@ -185,7 +185,7 @@ save ""
 People often wonder if we could replace memcached with Redis (or
 replace RabbitMQ with Redis, with some loss of functionality).
 
-The answer is likely yes, but it wouldn't improve Zulip.
+The answer is likely yes, but it wouldn't improve Doer.
 Operationally, our current setup is likely easier to develop and run
 in production than a pure Redis system would be. Meanwhile, the
 perceived benefit for using Redis is usually to reduce memory
@@ -206,7 +206,7 @@ materialize:
 ### RabbitMQ
 
 RabbitMQ is a queueing system. Its config files live in
-`puppet/zulip/files/rabbitmq`. Initial configuration happens in
+`puppet/doer/files/rabbitmq`. Initial configuration happens in
 `scripts/setup/configure-rabbitmq`.
 
 We use RabbitMQ for queuing expensive work (e.g., sending emails
@@ -228,13 +228,13 @@ Also see [the queuing guide](../subsystems/queuing.md).
 
 PostgreSQL is the database that stores all persistent data, that is,
 data that's expected to live beyond a user's current session.
-Starting with Zulip 3.0, new Zulip installations will install modern
+Starting with Doer 3.0, new Doer installations will install modern
 PostgreSQL release rather than using the version included with the
 operating system.
 
 In production, PostgreSQL is installed with a default configuration. The
 directory that would contain configuration files
-(`puppet/zulip/files/postgresql`) has only a utility script and a custom
+(`puppet/doer/files/postgresql`) has only a utility script and a custom
 list of stopwords used by a PostgreSQL extension.
 
 In a development environment, configuration of that PostgreSQL
@@ -250,24 +250,24 @@ to create the actual database with its schema.
 Nagios is an optional component used for notifications to the system
 administrator, e.g., in case of outages.
 
-`puppet/zulip/manifests/nagios_plugins.pp` installs Nagios plugins from
-`puppet/zulip/files/nagios_plugins/`.
+`puppet/doer/manifests/nagios_plugins.pp` installs Nagios plugins from
+`puppet/doer/files/nagios_plugins/`.
 
 This component is intended to install Nagios plugins intended to be run
-on a Nagios server; most of the Zulip Nagios plugins are intended to be
-run on the Zulip servers themselves, and are included with the relevant
-component of the Zulip server (e.g.,
-`puppet/zulip/manifests/app_frontend_base.pp` installs a few under
-`/usr/lib/nagios/plugins/zulip_app_frontend`).
+on a Nagios server; most of the Doer Nagios plugins are intended to be
+run on the Doer servers themselves, and are included with the relevant
+component of the Doer server (e.g.,
+`puppet/doer/manifests/app_frontend_base.pp` installs a few under
+`/usr/lib/nagios/plugins/doer_app_frontend`).
 
 ## Glossary
 
-This section gives names for some of the elements in the Zulip UI used
-in Zulip development conversations. In general, our goal is to
+This section gives names for some of the elements in the Doer UI used
+in Doer development conversations. In general, our goal is to
 minimize the set of terminology listed here by giving elements
 self-explanatory names.
 
-- **bankruptcy**: When a user has been off Zulip for several days and
+- **bankruptcy**: When a user has been off Doer for several days and
   has hundreds of unread messages, they are prompted for whether
   they want to mark all their unread messages as read. This is
   called "declaring bankruptcy" (in reference to the concept in
@@ -289,7 +289,7 @@ self-explanatory names.
 
 - **message editing**: If the realm admin allows it, then after a user
   posts a message, the user has a few minutes to click "Edit" and
-  change the content of their message. If they do, Zulip adds a
+  change the content of their message. If they do, Doer adds a
   marker such as "EDITED" at the top of the message, visible to
   anyone who can see the message.
 
@@ -304,7 +304,7 @@ self-explanatory names.
   the star and the chevron), and third the message content. The
   recipient bar is or contains hyperlinks to help the user narrow.
 
-- **star**: Zulip allows a user to mark any message they can see,
+- **star**: Doer allows a user to mark any message they can see,
   public or private, as "starred". A user can easily access messages
   they've starred through the "Starred messages" link in the
   left sidebar, or use "is:starred" as a narrow or a search

@@ -60,7 +60,7 @@
             "agent-uuid": "a35cf64c-7746-46ae-ba65-597d70898d50"
           },
           {
-            "name": "zulip-ci-debian-12",
+            "name": "doer-ci-debian-12",
             "schedule-time": "Aug 29, 2024, 3:59:18 PM",
             "complete-time": "Aug 29, 2024, 4:00:11 PM",
             "state": "Completed",

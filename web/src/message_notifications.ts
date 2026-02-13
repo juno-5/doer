@@ -424,7 +424,7 @@ export function received_messages(messages: (Message | TestNotificationMessage)[
             continue;
         }
         if (!message.unread) {
-            // The message is already read; Zulip is currently in focus.
+            // The message is already read; Doer is currently in focus.
             continue;
         }
 

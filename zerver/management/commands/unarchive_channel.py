@@ -5,12 +5,12 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.streams import deactivated_streams_by_old_name, do_unarchive_stream
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import RealmAuditLog, Stream
 from zerver.models.realm_audit_logs import AuditLogEventType
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Reactivate a channel that was deactivated."""
 
     @override

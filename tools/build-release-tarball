@@ -5,7 +5,7 @@ set -eu
 . "$(dirname "$0")"/lib/git-tools.bash
 
 usage() {
-    echo "Usage: $0 <ZULIP_VERSION>" >&2
+    echo "Usage: $0 <DOER_VERSION>" >&2
     exit 1
 }
 
@@ -27,7 +27,7 @@ if [ -z "${1:-}" ]; then
 fi
 
 version="$1"
-prefix="zulip-server-$version"
+prefix="doer-server-$version"
 
 require_clean_work_tree 'build a release tarball'
 
@@ -63,16 +63,16 @@ git checkout-index -f -a --prefix "$OUTPUT_DIR/$prefix/"
 # Add the Git version information file
 if [[ "$version" =~ ^[0-9]+\.[0-9]+(-[0-9a-z]+)?$ ]]; then
     # We override the merge-base, to avoid having to push the commits before building the tarball.
-    OVERRIDE_MERGE_BASE="$version" ./tools/cache-zulip-git-version
-    generated_version=$(head -n1 zulip-git-version)
+    OVERRIDE_MERGE_BASE="$version" ./tools/cache-doer-git-version
+    generated_version=$(head -n1 doer-git-version)
     if [ "$generated_version" != "$version" ]; then
         echo "Version $version looks like a release version, but is not tagged yet!  Got $generated_version"
         exit 1
     fi
 else
-    ./tools/cache-zulip-git-version
+    ./tools/cache-doer-git-version
 fi
-mv zulip-git-version "$OUTPUT_DIR/$prefix/"
+mv doer-git-version "$OUTPUT_DIR/$prefix/"
 
 cd "$OUTPUT_DIR/$prefix"
 
@@ -111,7 +111,7 @@ cd "$OUTPUT_DIR"
 
 # We don't include starlight_help/dist_no_relative_links since that is only useful for zulip.com
 # and zulip.com doesn't use tarballs for deployment.
-tar --append -f "$TARBALL" "$prefix/prod-static" "$prefix/build_id" "$prefix/version" "$prefix/zulip-git-version" "$prefix/locale" "$prefix/staticfiles.json" "$prefix/webpack-stats-production.json" "$prefix/starlight_help/dist"
+tar --append -f "$TARBALL" "$prefix/prod-static" "$prefix/build_id" "$prefix/version" "$prefix/doer-git-version" "$prefix/locale" "$prefix/staticfiles.json" "$prefix/webpack-stats-production.json" "$prefix/starlight_help/dist"
 
 rm -rf "$prefix"
 

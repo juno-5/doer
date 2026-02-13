@@ -1,16 +1,16 @@
 # Reporting bugs
 
-There are several ways to report bugs (or possible bugs) you encounter in Zulip:
+There are several ways to report bugs (or possible bugs) you encounter in Doer:
 
 - If you have a concrete bug report with steps to reproduce the behavior, [file an
   issue](#filing-a-github-issue) in the appropriate GitHub repository.
 - If you are not sure whether the issue you encountered is a bug, or how to
   reproduce it, [start a
-  conversation](#starting-a-conversation-about-a-possible-bug) in the Zulip
+  conversation](#starting-a-conversation-about-a-possible-bug) in the Doer
   development community.
-- To report a possible security issue, contact Zulip's security team at
+- To report a possible security issue, contact Doer's security team at
   [security@zulip.com](mailto:security@zulip.com). _Do not_ report security issues
-  publicly (in GitHub or in the Zulip development community). We create a CVE for
+  publicly (in GitHub or in the Doer development community). We create a CVE for
   every security issue in our released software.
 - If reporting a bug requires sharing private details about your
   organization, email [support@zulip.com](mailto:support@zulip.com).
@@ -25,8 +25,8 @@ what to include in a bug report.
    Include screenshots and/or screen captures (see
    [recommended tools](../contributing/presenting-visual-changes.md#screenshot-and-gif-software))
    if they help communicate what you are describing, but avoid posting long videos.
-1. **Indicate the [version](https://zulip.com/help/view-zulip-version)** of the
-   Zulip app where you encountered the bug. It may also be helpful to note your
+1. **Indicate the [version](https://zulip.com/help/view-doer-version)** of the
+   Doer app where you encountered the bug. It may also be helpful to note your
    operating system, whether you are using the web app or the desktop app, and
    your browser if using the web app.
 
@@ -43,28 +43,28 @@ Filing a GitHub issue works best when:
 
 If all of the above accurately describe your situation, please file an issue!
 Otherwise, we recommend [starting a
-conversation](#starting-a-conversation-about-a-possible-bug) in the Zulip
+conversation](#starting-a-conversation-about-a-possible-bug) in the Doer
 development community so that the problem you encountered can be discussed
 interactively.
 
 Steps and best practices for filing a GitHub issue:
 
-1. Report the issue in the **appropriate [Zulip
-   repository](https://github.com/zulip)**. The most commonly used repositories
+1. Report the issue in the **appropriate [Doer
+   repository](https://github.com/doer)**. The most commonly used repositories
    are:
-   - [zulip/zulip](https://github.com/zulip/zulip/issues) for issues with the
-     Zulip web app or server. A good default if you aren't sure which repository
+   - [doer/doer](https://github.com/doer/doer/issues) for issues with the
+     Doer web app or server. A good default if you aren't sure which repository
      to use.
-   - [zulip/zulip-flutter](https://github.com/zulip/zulip-flutter/issues) for
+   - [doer/doer-flutter](https://github.com/doer/doer-flutter/issues) for
      issues with the mobile apps.
-   - [zulip/zulip-desktop](https://github.com/zulip/zulip-desktop/issues) for
-     issues that are specific to the Zulip desktop app, and therefore _do not_
+   - [doer/doer-desktop](https://github.com/doer/doer-desktop/issues) for
+     issues that are specific to the Doer desktop app, and therefore _do not_
      occur in the web app.
-   - [zulip/zulip-terminal](https://github.com/zulip/zulip-terminal/issues) for
+   - [doer/doer-terminal](https://github.com/doer/doer-terminal/issues) for
      issues with the terminal app.
 2. Do a **quick search** of the repository to see if your issue has already
    been filed. If it has, you can add a comment if that seems helpful.
-3. If you are aware of a related discussion in the Zulip development community,
+3. If you are aware of a related discussion in the Doer development community,
    please **cross-link** between the issue and the discussion thread. [Link to a
    specific
    message](https://zulip.com/help/link-to-a-message-or-conversation#get-a-link-to-a-specific-message)
@@ -72,7 +72,7 @@ Steps and best practices for filing a GitHub issue:
    renamed or resolved.
 
 To encourage prompt attention and discussion for a bug report you have filed,
-you can send a message in the Zulip development community with the key points
+you can send a message in the Doer development community with the key points
 from your report. Be sure to [link to the GitHub
 issue](https://zulip.com/development-community/#linking-to-github-issues-and-pull-requests).
 See the following section for advice on where and how to start the conversation.
@@ -80,29 +80,29 @@ See the following section for advice on where and how to start the conversation.
 ## Starting a conversation about a possible bug
 
 If you are not sure whether the issue you encountered is a bug, or how to
-reproduce it, we highly recommend reporting it in the [Zulip development
+reproduce it, we highly recommend reporting it in the [Doer development
 community](https://zulip.com/development-community/). It's the best place to
 interactively discuss your problem.
 
 Steps and best practices for starting a conversation:
 
-1. [**Join** the Zulip development
+1. [**Join** the Doer development
    community](https://zulip.com/development-community/) if you don't already
    have an account.
 2. Pick an **appropriate channel** to report your issue:
    - [#issues](https://chat.zulip.org/#narrow/channel/9-issues) for issues with
-     the Zulip web app or server. Use this channel if you aren't sure which
+     the Doer web app or server. Use this channel if you aren't sure which
      channel is most appropriate.
    - [#mobile](https://chat.zulip.org/#narrow/channel/48-mobile) for issues with
      the mobile apps.
    - [#desktop](https://chat.zulip.org/#narrow/channel/16-desktop) for issues
-     that are specific to the Zulip desktop app, and therefore _do not_
+     that are specific to the Doer desktop app, and therefore _do not_
      occur in the web app.
-   - [#zulip-terminal](https://chat.zulip.org/#narrow/channel/206-zulip-terminal)
+   - [#doer-terminal](https://chat.zulip.org/#narrow/channel/206-doer-terminal)
      for issues with the terminal app.
    - [#production
      help](https://chat.zulip.org/#narrow/channel/31-production-help) for issues
-     related to self-hosting Zulip. See the [troubleshooting
+     related to self-hosting Doer. See the [troubleshooting
      guide](../production/troubleshooting.md) for additional details.
 3. **[Start a new topic](https://zulip.com/help/introduction-to-topics#how-to-start-a-new-topic)**
    for discussing your issue, using a brief summary of the issue as the name of
@@ -152,6 +152,6 @@ renamed or resolved.
     we might want a core contributor to take it on, or the fix might be planned
     as part of a larger project.
   - Don't forget to cross-link between the issue and the discussion.
-- If a bug report in GitHub is not sufficiently clear, Zulip maintainers will
+- If a bug report in GitHub is not sufficiently clear, Doer maintainers will
   often encourage the reporter to discuss it interactively in the development
   community.

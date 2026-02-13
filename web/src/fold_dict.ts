@@ -6,7 +6,7 @@
     casings of "alice" (e.g. "ALICE", "Alice", "ALIce", etc.)
     to "alice" as the key.
 
-    Examples of case-insensitive data in Zulip are:
+    Examples of case-insensitive data in Doer are:
         - emails
         - stream names
         - topics

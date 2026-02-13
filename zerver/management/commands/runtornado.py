@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 if settings.PRODUCTION:
     settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -34,7 +34,7 @@ if settings.USING_RABBITMQ:
 asyncio.set_event_loop_policy(NoAutoCreateEventLoopPolicy())
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = "Starts a Tornado Web server wrapping Django."
 
     @override

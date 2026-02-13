@@ -21,13 +21,13 @@ import * as message_lists from "./message_lists.ts";
 import * as rows from "./rows.ts";
 import {realm} from "./state_data.ts";
 
-type ZulipMeta = {
-    zulip_url: string;
+type DoerMeta = {
+    doer_url: string;
 } & Meta;
 
 let drag_drop_img: HTMLElement | null = null;
-let compose_upload_object: Uppy<ZulipMeta, TusBody>;
-const upload_objects_by_message_edit_row = new Map<number, Uppy<ZulipMeta, TusBody>>();
+let compose_upload_object: Uppy<DoerMeta, TusBody>;
+const upload_objects_by_message_edit_row = new Map<number, Uppy<DoerMeta, TusBody>>();
 
 export function compose_upload_cancel(): void {
     compose_upload_object.cancelAll();
@@ -168,7 +168,7 @@ export function edit_config(row: number): Config {
 }
 
 export let hide_upload_banner = (
-    uppy: Uppy<ZulipMeta, TusBody>,
+    uppy: Uppy<DoerMeta, TusBody>,
     config: Config,
     file_id: string,
     delay = 0,
@@ -235,7 +235,7 @@ export function show_error_message(
 }
 
 export let upload_files = (
-    uppy: Uppy<ZulipMeta, TusBody>,
+    uppy: Uppy<DoerMeta, TusBody>,
     config: Config,
     files: File[] | FileList,
 ): void => {
@@ -383,7 +383,7 @@ class InMemoryUrlStorage {
     }
 }
 
-const zulip_upload_response_schema = z.object({
+const doer_upload_response_schema = z.object({
     url: z.string(),
     filename: z.string(),
 });
@@ -394,8 +394,8 @@ const get_safe_file_id: <M extends Meta>(
     instance_id: string,
 ) => string = getSafeFileId;
 
-export function setup_upload(config: Config): Uppy<ZulipMeta, TusBody> {
-    const uppy = new Uppy<ZulipMeta, TusBody>({
+export function setup_upload(config: Config): Uppy<DoerMeta, TusBody> {
+    const uppy = new Uppy<DoerMeta, TusBody>({
         debug: false,
         autoProceed: true,
         restrictions: {
@@ -422,7 +422,7 @@ export function setup_upload(config: Config): Uppy<ZulipMeta, TusBody> {
                 // Since we don't get a response with a body back from
                 // the server, pull the values that we got the last
                 // time around.
-                file.meta.zulip_url = files[file_id].meta.zulip_url!;
+                file.meta.doer_url = files[file_id].meta.doer_url!;
                 file.name = files[file_id].name!;
             }
 
@@ -438,7 +438,7 @@ export function setup_upload(config: Config): Uppy<ZulipMeta, TusBody> {
         // they can be accessed via the browser console even after
         // logging out, and contain some metadata about previously
         // uploaded files, which seems like a security risk for
-        // using Zulip on a public computer.
+        // using Doer on a public computer.
 
         // We use our own implementation of url storage that saves urls
         // in memory instead. We won't be able to retain this history
@@ -562,20 +562,20 @@ export function setup_upload(config: Config): Uppy<ZulipMeta, TusBody> {
         // will not send any further requests, meaning we will not
         // have a response body.  See the beforeUpload hook, above.
         if (response.body!.xhr.responseText === "") {
-            if (!file.meta.zulip_url) {
-                blueslip.warn("No zulip_url retrieved from previous upload", {file});
+            if (!file.meta.doer_url) {
+                blueslip.warn("No doer_url retrieved from previous upload", {file});
                 return;
             }
         } else {
             try {
-                const upload_response = zulip_upload_response_schema.parse(
+                const upload_response = doer_upload_response_schema.parse(
                     JSON.parse(response.body!.xhr.responseText),
                 );
                 uppy.setFileState(file.id, {
                     name: upload_response.filename,
                 });
                 uppy.setFileMeta(file.id, {
-                    zulip_url: upload_response.url,
+                    doer_url: upload_response.url,
                 });
                 file = uppy.getFile(file.id);
             } catch {
@@ -587,7 +587,7 @@ export function setup_upload(config: Config): Uppy<ZulipMeta, TusBody> {
         }
 
         const filtered_filename = file.name.replaceAll("[", "").replaceAll("]", "");
-        const syntax_to_insert = "[" + filtered_filename + "](" + file.meta.zulip_url + ")";
+        const syntax_to_insert = "[" + filtered_filename + "](" + file.meta.doer_url + ")";
         const $text_area = config.textarea();
         const replacement_successful = compose_ui.replace_syntax(
             // We need to replace the original file name, and not the

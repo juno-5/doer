@@ -1,15 +1,15 @@
 import requests
 import responses
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class ResponsesTest(ZulipTestCase):
+class ResponsesTest(DoerTestCase):
     def test_responses(self) -> None:
         # With our test setup, accessing the internet should be blocked.
         with self.assertRaisesRegex(
             Exception,
-            r"^Outgoing network requests are not allowed in the Zulip tests\.",
+            r"^Outgoing network requests are not allowed in the Doer tests\.",
         ):
             result = requests.request("GET", "https://www.google.com")
 

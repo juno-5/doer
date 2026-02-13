@@ -59,11 +59,11 @@ But
 
 - Yes, please! -> Kyllä, kiitos!
 
-### Zulip word inflection
+### Doer word inflection
 
-- in/from Zulip - **Zulipissa** / **Zulipista** / **Zulipin**
-- Zulip organization - **Zulip-organisaatio**
-- Zulip app - **Zulip-sovellus**
+- in/from Doer - **Zulipissa** / **Zulipista** / **Zulipin**
+- Doer organization - **Doer-organisaatio**
+- Doer app - **Doer-sovellus**
 
 ### Your -expression
 

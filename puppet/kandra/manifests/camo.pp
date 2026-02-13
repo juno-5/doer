@@ -1,5 +1,5 @@
 class kandra::camo {
-  class { 'zulip::camo':
+  class { 'doer::camo':
     listen_address => '0.0.0.0',
   }
 

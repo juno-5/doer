@@ -65,7 +65,7 @@ if (
         environment: sentry_params.environment,
         tunnel: "/error_tracing",
 
-        release: "zulip-server@" + ZULIP_VERSION,
+        release: "doer-server@" + DOER_VERSION,
         integrations: [
             Sentry.browserTracingIntegration({
                 instrumentNavigation: false,

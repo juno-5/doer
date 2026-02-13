@@ -1,6 +1,6 @@
-# Zulip Open Collective integration
+# Doer Open Collective integration
 
-Get Zulip notifications for new sign-ups on your **Open Collective** page.
+Get Doer notifications for new sign-ups on your **Open Collective** page.
 
 {start_tabs}
 

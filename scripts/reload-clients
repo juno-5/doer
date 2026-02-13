@@ -15,7 +15,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
-from scripts.lib.zulip_tools import get_config, get_config_file, get_tornado_ports
+from scripts.lib.doer_tools import get_config, get_config_file, get_tornado_ports
 
 config_file = get_config_file()
 reload_rate = int(
@@ -37,7 +37,7 @@ args = parser.parse_args()
 reload_rate = args.rate
 
 secret_config_file = configparser.RawConfigParser()
-secret_config_file.read("/etc/zulip/zulip-secrets.conf")
+secret_config_file.read("/etc/zulip/doer-secrets.conf")
 shared_secret = get_config(secret_config_file, "secrets", "shared_secret")
 assert shared_secret
 

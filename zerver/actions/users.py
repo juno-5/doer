@@ -161,7 +161,7 @@ def do_delete_user_core(
                 "recipient",
                 "uuid",
                 "last_login",
-                # These come from Django and aren't used by Zulip. We
+                # These come from Django and aren't used by Doer. We
                 # need to exclude them as they are ManyToManyFields
                 # and as such, would break the code below.
                 "groups",

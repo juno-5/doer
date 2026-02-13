@@ -7,17 +7,17 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import MobileMenu from "../include/_MobileMenu.mdx";
 
-import SearchIcon from "~icons/zulip-icon/search";
+import SearchIcon from "~icons/doer-icon/search";
 
-It's easy to find the right conversation with Zulip's powerful search. When you
+It's easy to find the right conversation with Doer's powerful search. When you
 find the message you were looking for, go directly to its topic for full context.
 
-Whenever you need a reminder of the search filters that Zulip offers, check out
+Whenever you need a reminder of the search filters that Doer offers, check out
 the convenient [**search filters**](#search-filters-reference) reference
-in the Zulip web and desktop apps.
+in the Doer web and desktop apps.
 
 ## Search for messages
 
@@ -48,7 +48,7 @@ in the Zulip web and desktop apps.
 
 ## Keyword search
 
-Zulip lets you search messages and topics by keyword. For example:
+Doer lets you search messages and topics by keyword. For example:
 
 * `new logo`: Search for messages with both `new` and `logo` in the message or
   its topic.
@@ -58,16 +58,16 @@ Zulip lets you search messages and topics by keyword. For example:
 Some details to keep in mind:
 
 * Keywords are case-insensitive, so `wave` will also match `Wave`.
-* Zulip will find messages containing similar keywords (keywords with the same
+* Doer will find messages containing similar keywords (keywords with the same
   stem), so, e.g., `wave` will match `waves` and `waving`.
-* Zulip search ignores very common words like `a`, `the`, and about 100 others.
+* Doer search ignores very common words like `a`, `the`, and about 100 others.
 * [Emoji](/help/emoji-and-emoticons) in messages (but not [emoji
   reactions](/help/emoji-reactions)) are included in searches, so if you search
   for `thumbs_up`, your results will include messages with the `:thumbs_up:` emoji (👍).
 
 ## Search filters
 
-Zulip also offers a wide array of search filters, which can be used on their
+Doer also offers a wide array of search filters, which can be used on their
 own, or in combination with keywords. For example:
 
 * `channel:design`: Navigate to **#design**.
@@ -76,15 +76,15 @@ own, or in combination with keywords. For example:
   include an image and contain the keywords `new` and `logo`. The keywords can
   appear in the message itself or its topic.
 
-<ZulipTip>
-  As you start typing into the search box, Zulip will suggest search filters
+<DoerTip>
+  As you start typing into the search box, Doer will suggest search filters
   you can use.
-</ZulipTip>
+</DoerTip>
 
 ### Search by location
 
 Sometimes you know approximately where the message you are looking for was sent.
-Zulip offers the following filters based on the location of the message.
+Doer offers the following filters based on the location of the message.
 
 * `channel:design`: Search within the channel **#design**.
 * `channel:design topic:new+logo`: Search within the topic "new logo" in
@@ -98,7 +98,7 @@ Zulip offers the following filters based on the location of the message.
 
 ### Search shared history
 
-To avoid cluttering your search results, by default, Zulip searches just the
+To avoid cluttering your search results, by default, Doer searches just the
 messages you received. You can use `channels:` or `channel:` filters to search
 additional messages.
 
@@ -116,10 +116,10 @@ additional messages.
 * `sender:Elena García`: Search messages sent by Elena.
 * `sender:me`: Search messages you've sent.
 
-<ZulipTip>
+<DoerTip>
   You can also access all messages someone has sent [via their **user
   card**](/help/view-messages-sent-by-a-user).
-</ZulipTip>
+</DoerTip>
 
 ### Search for attachments or links
 
@@ -128,11 +128,11 @@ additional messages.
   file](/help/share-and-upload-files).
 * `has:image`: Search messages that contain uploaded or linked images or videos.
 
-<ZulipTip>
+<DoerTip>
   You can also [view](/help/manage-your-uploaded-files) all the files you
   have uploaded or [browse](/help/view-images-and-videos) all the images and
   videos in the current view.
-</ZulipTip>
+</DoerTip>
 
 ### Search your important messages
 
@@ -157,8 +157,8 @@ additional messages.
 
 ### Search by message ID
 
-Each message in Zulip has a unique ID, which is used for [linking to a specific
-message](/help/link-to-a-message-or-conversation#link-to-zulip-from-anywhere).
+Each message in Doer has a unique ID, which is used for [linking to a specific
+message](/help/link-to-a-message-or-conversation#link-to-doer-from-anywhere).
 You can use the search bar to navigate to a message by its ID.
 
 * `near:12345`: Show messages around the message with ID `12345`.
@@ -167,7 +167,7 @@ You can use the search bar to navigate to a message by its ID.
 
 ### Exclude filters
 
-All of Zulip's search filters can be negated to **exclude** messages matching
+All of Doer's search filters can be negated to **exclude** messages matching
 the specified rule. For example:
 
 * `channel:design -is:resolved -has:image`: Search messages in [unresolved
@@ -176,13 +176,13 @@ the specified rule. For example:
 
 ## Linking to search results
 
-When you search Zulip, the URL shown in the address bar of the Zulip web app is a
+When you search Doer, the URL shown in the address bar of the Doer web app is a
 permanent link to your search. You can share this link with others, and they
 will see *their own* search results for your query.
 
 ## Search filters reference
 
-A summary of the search filters above is available in the Zulip app.
+A summary of the search filters above is available in the Doer app.
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -197,4 +197,4 @@ A summary of the search filters above is available in the Zulip app.
 * [Configure multi-language search](/help/configure-multi-language-search)
 * [Filter users](/help/user-list#filter-users)
 * [Link to a message or
-  conversation](/help/link-to-a-message-or-conversation#link-to-zulip-from-anywhere)
+  conversation](/help/link-to-a-message-or-conversation#link-to-doer-from-anywhere)

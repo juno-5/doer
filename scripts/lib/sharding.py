@@ -14,7 +14,7 @@ from scripts.lib.setup_path import setup_path
 
 setup_path()
 
-from scripts.lib.zulip_tools import get_config_file, get_tornado_ports
+from scripts.lib.doer_tools import get_config_file, get_tornado_ports
 
 
 def nginx_quote(s: str) -> str:
@@ -82,8 +82,8 @@ def write_updated_configs() -> None:
         for fh in (nginx_sharding_conf_f, sharding_json_f):
             os.fchown(
                 fh.fileno(),
-                pwd.getpwnam("zulip").pw_uid,
-                grp.getgrnam("zulip").gr_gid,
+                pwd.getpwnam("doer").pw_uid,
+                grp.getgrnam("doer").gr_gid,
             )
             os.fchmod(fh.fileno(), 0o644)
 

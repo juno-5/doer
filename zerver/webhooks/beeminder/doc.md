@@ -1,6 +1,6 @@
-# Zulip Beeminder integration
+# Doer Beeminder integration
 
-Get Beeminder notifications in Zulip whenever you're going
+Get Beeminder notifications in Doer whenever you're going
 to derail from your goal!
 
 {start_tabs}

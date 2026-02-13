@@ -11,7 +11,7 @@
       "name": "sample",
       "created_at": "2022-09-20T12:54:26.737Z",
       "stopped_at": "2022-09-20T12:54:38.599Z",
-      "url": "https://app.circleci.com/pipelines/github/zulip-testing/circleci-webhook-test/4/workflows/7381218b-d04c-4aa3-b8b8-8c00a9319d1f",
+      "url": "https://app.circleci.com/pipelines/github/doer-testing/circleci-webhook-test/4/workflows/7381218b-d04c-4aa3-b8b8-8c00a9319d1f",
       "status": "success"
     },
     "pipeline": {
@@ -23,8 +23,8 @@
       },
       "vcs": {
         "provider_name": "github",
-        "origin_repository_url": "https://github.com/zulip-testing/circleci-webhook-test",
-        "target_repository_url": "https://github.com/zulip-testing/circleci-webhook-test",
+        "origin_repository_url": "https://github.com/doer-testing/circleci-webhook-test",
+        "target_repository_url": "https://github.com/doer-testing/circleci-webhook-test",
         "revision": "a5e30a908224e46626a796d058289475f6d387b5",
         "commit": {
           "subject": ".circleci: Update Webhook URL.",
@@ -46,10 +46,10 @@
     "project": {
       "id": "c4fa043c-d2ba-4d97-a6ca-2745b3518114",
       "name": "circleci-webhook-test",
-      "slug": "github/zulip-testing/circleci-webhook-test"
+      "slug": "github/doer-testing/circleci-webhook-test"
     },
     "organization": {
       "id": "b4567a7d-7c4e-446b-82b7-a1e798c1afcf",
-      "name": "zulip-testing"
+      "name": "doer-testing"
     }
   }

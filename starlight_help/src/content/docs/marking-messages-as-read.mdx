@@ -6,32 +6,32 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ConfigureResolvedNoticesMarkedAsRead from "../include/_ConfigureResolvedNoticesMarkedAsRead.mdx";
 import GoToInbox from "../include/_GoToInbox.mdx";
 import GoToRecentConversations from "../include/_GoToRecentConversations.mdx";
 import MobileSettings from "../include/_MobileSettings.mdx";
 
 import ChevronDownIcon from "~icons/fa/chevron-down";
-import AllMessagesIcon from "~icons/zulip-icon/all-messages";
-import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
+import AllMessagesIcon from "~icons/doer-icon/all-messages";
+import MoreVerticalIcon from "~icons/doer-icon/more-vertical";
 
-Zulip automatically keeps track of which messages you have and haven't read.
+Doer automatically keeps track of which messages you have and haven't read.
 Unread messages have a line along the left side, which fades when the message
 gets marked as read.
 
-Zulip offers tools to manually mark one or more messages as read, and you can
+Doer offers tools to manually mark one or more messages as read, and you can
 configure whether messages are marked as read automatically when you scroll.
 
 ## Configure whether messages are automatically marked as read
 
-You can choose how messages are automatically marked as read in the Zulip web
+You can choose how messages are automatically marked as read in the Doer web
 and mobile apps. You can configure the mobile app differently from the
 web/desktop app.
 
 * **Always**: Messages are marked as read whenever you scroll through them in
   the app. You may be used to this from other chat applications.
-* **Only in conversation views**: In Zulip, a **conversation** is a [direct
+* **Only in conversation views**: In Doer, a **conversation** is a [direct
   message](/help/direct-messages) thread (one-on-one or with a group), or a
   [topic in a channel](/help/introduction-to-topics). This option makes it
   convenient to preview new messages in a channel, or skim [Combined
@@ -89,11 +89,11 @@ web/desktop app.
       1. Click **Mark all messages as read**.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also mark all messages in your current view as read by
       jumping to the bottom with the **Scroll to bottom**
       (<ChevronDownIcon />) button or the <kbd>End</kbd> shortcut.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via inbox view">
@@ -120,10 +120,10 @@ web/desktop app.
       1. Tap **Mark channel as read** or **Mark topic as read**.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also scroll down to the bottom of a message view, and tap **Mark
       all messages as read**.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -140,11 +140,11 @@ in muted topics or topics you don't follow.
       1. Select the desired option from the dropdown, and click **Confirm**.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also mark all messages in your current view as read by
       jumping to the bottom with the **Scroll to bottom**
       (<ChevronDownIcon />) button or the <kbd>End</kbd> shortcut.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">

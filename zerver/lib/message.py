@@ -1073,7 +1073,7 @@ def extract_unread_data_from_um_rows(
                 mentions.add(message_id)
 
     # Record whether the user had more than MAX_UNREAD_MESSAGES total
-    # unreads -- that's a state where Zulip's behavior will start to
+    # unreads -- that's a state where Doer's behavior will start to
     # be erroneous, and clients should display a warning.
     raw_unread_messages["old_unreads_missing"] = total_unreads == MAX_UNREAD_MESSAGES
 

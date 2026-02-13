@@ -999,7 +999,7 @@ def do_send_messages(
         do_widget_post_save_actions(send_request)
 
     # This next loop is responsible for notifying other parts of the
-    # Zulip system about the messages we just committed to the database:
+    # Doer system about the messages we just committed to the database:
     # * Sender automatically follows or unmutes the topic depending on 'automatically_follow_topics_policy'
     #   and 'automatically_unmute_topics_in_muted_streams_policy' user settings.
     # * Notifying clients via send_event_on_commit

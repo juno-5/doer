@@ -84,7 +84,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RemotePushDevice, RemotePushDeviceToken, RemoteZulipServer
+    from zilencer.models import RemotePushDevice, RemotePushDeviceToken, RemoteDoerServer
 
 # Time (in seconds) for which the server should retry registering
 # a push device to the bouncer. 24 hrs is a good time limit because
@@ -176,7 +176,7 @@ def has_apns_credentials() -> bool:
 
 @cache
 def get_apns_context() -> APNsContext | None:
-    # We lazily do this import as part of optimizing Zulip's base
+    # We lazily do this import as part of optimizing Doer's base
     # import time.
     import aioapns
 
@@ -279,11 +279,11 @@ def send_apple_push_notification(
     user_identity: UserPushIdentityCompat,
     devices: Sequence[DeviceToken],
     payload_data: Mapping[str, Any],
-    remote: Optional["RemoteZulipServer"] = None,
+    remote: Optional["RemoteDoerServer"] = None,
 ) -> int:
     if not devices:
         return 0
-    # We lazily do the APNS imports as part of optimizing Zulip's base
+    # We lazily do the APNS imports as part of optimizing Doer's base
     # import time; since these are only needed in the push
     # notification queue worker, it's best to only import them in the
     # code that needs them.
@@ -293,7 +293,7 @@ def send_apple_push_notification(
     if apns_context is None:
         logger.debug(
             "APNs: Dropping a notification because nothing configured.  "
-            "Set ZULIP_SERVICES_URL (or APNS_CERT_FILE)."
+            "Set DOER_SERVICES_URL (or APNS_CERT_FILE)."
         )
         return 0
 
@@ -362,7 +362,7 @@ def send_apple_push_notification(
             successfully_sent_count += 1
         elif result_info.delete_device_token is not None:
             # We remove all entries for this token (There
-            # could be multiple for different Zulip servers).
+            # could be multiple for different Doer servers).
             DeviceTokenClass._default_manager.alias(lower_token=Lower("token")).filter(
                 lower_token=result_info.delete_device_token.lower(),
                 kind=DeviceTokenClass.APNS,
@@ -416,11 +416,11 @@ def parse_fcm_options(options: dict[str, Any], data: dict[str, Any]) -> str:
     """
     Parse FCM options, supplying defaults, and raising an error if invalid.
 
-    The options permitted here form part of the Zulip notification
+    The options permitted here form part of the Doer notification
     bouncer's API.  They are:
 
     `priority`: Passed through to FCM; see upstream doc linked below.
-        Zulip servers should always set this; when unset, we guess a value
+        Doer servers should always set this; when unset, we guess a value
         based on the behavior of old server versions.
 
     Including unrecognized options is an error.
@@ -445,7 +445,7 @@ def parse_fcm_options(options: dict[str, Any], data: dict[str, Any]) -> str:
         )
 
     if options:
-        # We're strict about the API; there is no use case for a newer Zulip
+        # We're strict about the API; there is no use case for a newer Doer
         # server talking to an older bouncer, so we only need to provide
         # one-way compatibility.
         raise JsonableError(
@@ -462,7 +462,7 @@ def send_android_push_notification(
     devices: Sequence[DeviceToken],
     data: dict[str, Any],
     options: dict[str, Any],
-    remote: Optional["RemoteZulipServer"] = None,
+    remote: Optional["RemoteDoerServer"] = None,
 ) -> int:
     """
     Send a FCM message to the given devices.
@@ -480,7 +480,7 @@ def send_android_push_notification(
     if not fcm_app:
         logger.debug(
             "Skipping sending a FCM push notification since "
-            "ZULIP_SERVICE_PUSH_NOTIFICATIONS and ANDROID_FCM_CREDENTIALS_PATH are both unset"
+            "DOER_SERVICE_PUSH_NOTIFICATIONS and ANDROID_FCM_CREDENTIALS_PATH are both unset"
         )
         return 0
 
@@ -538,7 +538,7 @@ def send_android_push_notification(
                 logger.info("FCM: Removing %s due to %s", token, error.code)
 
                 # We remove all entries for this token (There
-                # could be multiple for different Zulip servers).
+                # could be multiple for different Doer servers).
                 DeviceTokenClass._default_manager.filter(
                     token=token, kind=DeviceTokenClass.FCM
                 ).delete()
@@ -554,7 +554,7 @@ def send_android_push_notification(
 
 
 def uses_notification_bouncer() -> bool:
-    return settings.ZULIP_SERVICE_PUSH_NOTIFICATIONS is True
+    return settings.DOER_SERVICE_PUSH_NOTIFICATIONS is True
 
 
 def sends_notifications_directly() -> bool:
@@ -695,7 +695,7 @@ def add_push_device_token(
     # If we're sending things to the push notification bouncer
     # register this user with them here
     post_data = {
-        "server_uuid": settings.ZULIP_ORG_ID,
+        "server_uuid": settings.DOER_ORG_ID,
         "user_uuid": str(user_profile.uuid),
         "realm_uuid": str(user_profile.realm.uuid),
         # user_id is sent so that the bouncer can delete any pre-existing registrations
@@ -737,7 +737,7 @@ def remove_push_device_token(user_profile: UserProfile, token_str: str, kind: in
     if uses_notification_bouncer():
         # TODO: Make this a remove item
         post_data = {
-            "server_uuid": settings.ZULIP_ORG_ID,
+            "server_uuid": settings.DOER_ORG_ID,
             "realm_uuid": str(user_profile.realm.uuid),
             # We don't know here if the token was registered with uuid
             # or using the legacy id format, so we need to send both.
@@ -756,7 +756,7 @@ def clear_push_device_tokens(user_profile_id: int) -> None:
         user_profile = get_user_profile_by_id(user_profile_id)
         user_uuid = str(user_profile.uuid)
         post_data = {
-            "server_uuid": settings.ZULIP_ORG_ID,
+            "server_uuid": settings.DOER_ORG_ID,
             "realm_uuid": str(user_profile.realm.uuid),
             # We want to clear all registered token, and they may have
             # been registered with either uuid or id.
@@ -778,8 +778,8 @@ def push_notifications_configured() -> bool:
     """True just if this server has configured a way to send push notifications."""
     if (
         uses_notification_bouncer()
-        and settings.ZULIP_ORG_KEY is not None
-        and settings.ZULIP_ORG_ID is not None
+        and settings.DOER_ORG_KEY is not None
+        and settings.DOER_ORG_ID is not None
     ):  # nocoverage
         # We have the needed configuration to send push notifications through
         # the bouncer.  Better yet would be to confirm that this config actually
@@ -1188,7 +1188,7 @@ def get_message_payload_apns(
             },
             "sound": "default",
             "badge": get_apns_badge_count(user_profile),
-            "custom": {"zulip": message_payload},
+            "custom": {"doer": message_payload},
         }
     return apns_data
 
@@ -1215,7 +1215,7 @@ def get_message_payload_gcm(
     message_payload = dict(copy.deepcopy(message_payload))
     if for_legacy_clients:
         message_payload["event"] = "message"
-        message_payload["zulip_message_id"] = message.id  # message_id is reserved for CCS
+        message_payload["doer_message_id"] = message.id  # message_id is reserved for CCS
     else:
         message_payload["type"] = "message"
         message_payload["message_id"] = message.id
@@ -1243,7 +1243,7 @@ def get_remove_payload_gcm(
 
     if for_legacy_clients:
         gcm_payload["event"] = "remove"
-        gcm_payload["zulip_message_ids"] = ",".join(str(id) for id in message_ids)
+        gcm_payload["doer_message_ids"] = ",".join(str(id) for id in message_ids)
     else:
         gcm_payload["type"] = "remove"
         gcm_payload["message_ids"] = message_ids
@@ -1253,15 +1253,15 @@ def get_remove_payload_gcm(
 
 
 def get_remove_payload_apns(user_profile: UserProfile, message_ids: list[int]) -> dict[str, Any]:
-    zulip_data = get_base_payload(user_profile)
-    zulip_data.update(
+    doer_data = get_base_payload(user_profile)
+    doer_data.update(
         event="remove",
-        zulip_message_ids=",".join(str(id) for id in message_ids),
+        doer_message_ids=",".join(str(id) for id in message_ids),
     )
-    remove_obsolete_fields_apns(zulip_data)
+    remove_obsolete_fields_apns(doer_data)
     apns_data = {
         "badge": get_apns_badge_count(user_profile, message_ids),
-        "custom": {"zulip": zulip_data},
+        "custom": {"doer": doer_data},
     }
     return apns_data
 
@@ -1373,7 +1373,7 @@ def send_push_notifications_legacy(
         if gcm_payload and gcm_payload.get("event") != "remove":
             gcm_payload = copy.deepcopy(gcm_payload)
             gcm_payload["content"] = placeholder_content
-        if apns_payload and apns_payload["custom"]["zulip"].get("event") != "remove":
+        if apns_payload and apns_payload["custom"]["doer"].get("event") != "remove":
             apns_payload = copy.deepcopy(apns_payload)
             apns_payload["alert"]["body"] = placeholder_content
 
@@ -1879,7 +1879,7 @@ def send_test_push_notification_directly_to_devices(
     user_identity: UserPushIdentityCompat,
     devices: Sequence[DeviceToken],
     base_payload: dict[str, Any],
-    remote: Optional["RemoteZulipServer"] = None,
+    remote: Optional["RemoteDoerServer"] = None,
 ) -> None:
     payload = copy.deepcopy(base_payload)
     payload["event"] = "test"
@@ -1902,7 +1902,7 @@ def send_test_push_notification_directly_to_devices(
             ),
         },
         "sound": "default",
-        "custom": {"zulip": apple_payload},
+        "custom": {"doer": apple_payload},
     }
     send_apple_push_notification(user_identity, apple_devices, apns_data, remote=remote)
 
@@ -2056,7 +2056,7 @@ class FailedToConnectBouncerError(JsonableError):
     @staticmethod
     @override
     def msg_format() -> str:
-        return _("Network error while connecting to Zulip push notification service.")
+        return _("Network error while connecting to Doer push notification service.")
 
 
 class InternalBouncerServerError(JsonableError):
@@ -2069,7 +2069,7 @@ class InternalBouncerServerError(JsonableError):
     @staticmethod
     @override
     def msg_format() -> str:
-        return _("Internal server error on Zulip push notification service, retry later.")
+        return _("Internal server error on Doer push notification service, retry later.")
 
 
 class PushNotificationAdminActionRequiredError(JsonableError):

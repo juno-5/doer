@@ -1041,7 +1041,7 @@
 }
 
 .user-mention {
-    i.zulip-icon-bot {
+    i.doer-icon-bot {
         vertical-align: middle;
         position: relative;
         top: -1px;

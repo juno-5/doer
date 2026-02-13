@@ -4,7 +4,7 @@ title: Restrict profile picture changes
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 
@@ -15,10 +15,10 @@ You can instead prevent users from changing their profile picture. This
 setting is primarily useful in organizations that are [synchronizing
 profile pictures from LDAP][ldap-sync-avatars] or a similar directory.
 
-<ZulipTip>
+<DoerTip>
   Organization administrators can always change their own profile
   picture.
-</ZulipTip>
+</DoerTip>
 
 <FlattenedSteps>
   <NavigationSteps target="settings/organization-permissions" />

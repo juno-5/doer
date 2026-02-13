@@ -1,15 +1,15 @@
-# Zulip's Slack-compatible incoming webhook
+# Doer's Slack-compatible incoming webhook
 
-Zulip can process incoming webhook messages written to work with Slack's
+Doer can process incoming webhook messages written to work with Slack's
 [incoming webhook API][1]. This makes it easy to quickly move your
-integrations when migrating your organization from Slack to Zulip.
+integrations when migrating your organization from Slack to Doer.
 
 !!! warn ""
 
      **Note:** In the long term, the recommended approach is to use
-     Zulip's native integrations, which take advantage of Zulip's topics.
+     Doer's native integrations, which take advantage of Doer's topics.
      There may also be some quirks when Slack's formatting system is
-     translated into Zulip's.
+     translated into Doer's.
 
 {start_tabs}
 
@@ -25,13 +25,13 @@ integrations when migrating your organization from Slack to Zulip.
 
 - [Slack's incoming webhook documentation][1]
 
-- [Moving from Slack to Zulip](/help/moving-from-slack)
+- [Moving from Slack to Doer](/help/moving-from-slack)
 
-- [Forward Slack messages into Zulip](/integrations/slack)
+- [Forward Slack messages into Doer](/integrations/slack)
 
-- [Forward messages Slack <-> Zulip][2] (both directions)
+- [Forward messages Slack <-> Doer][2] (both directions)
 
 {!webhooks-url-specification.md!}
 
 [1]: https://api.slack.com/messaging/webhooks
-[2]: https://github.com/zulip/python-zulip-api/blob/main/zulip/integrations/bridge_with_slack/README.md
+[2]: https://github.com/doer/python-doer-api/blob/main/doer/integrations/bridge_with_slack/README.md

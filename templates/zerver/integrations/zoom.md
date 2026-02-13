@@ -1,19 +1,19 @@
-# Use Zoom as your call provider in Zulip
+# Use Zoom as your call provider in Doer
 
 You can configure Zoom as the call provider for your organization. Users will be
 able to start a Zoom call and invite others using the **add video call** (<i
-class="zulip-icon zulip-icon-video-call"></i>) or **add voice call** (<i
-class="zulip-icon zulip-icon-voice-call"></i>) button [in the compose
+class="doer-icon doer-icon-video-call"></i>) or **add voice call** (<i
+class="doer-icon doer-icon-voice-call"></i>) button [in the compose
 box](/help/start-a-call).
 
 ## Configure Zoom as your call provider
 
-By default, Zulip integrates with
+By default, Doer integrates with
 [Jitsi Meet](https://jitsi.org/jitsi-meet/), a fully-encrypted, 100% open
-source video conferencing solution. You can configure Zulip to use Zoom as your
+source video conferencing solution. You can configure Doer to use Zoom as your
 call provider instead.
 
-### Configure Zoom on Zulip Cloud
+### Configure Zoom on Doer Cloud
 
 {start_tabs}
 

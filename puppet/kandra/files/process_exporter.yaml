@@ -8,7 +8,7 @@ process_names:
     comm:
       - uwsgi
     cmdline:
-      - zulip-django uWSGI worker (?P<Worker>\d+)
+      - doer-django uWSGI worker (?P<Worker>\d+)
   - name: process_fts_updates
     comm:
       - python3

@@ -1,13 +1,13 @@
 # Icons
 
-Zulip makes extensive use of icons to decorate elements in the UI as
+Doer makes extensive use of icons to decorate elements in the UI as
 well as for compact buttons and other small interactive elements.
 
 ## Using icons
 
-- Modern Zulip icons are implemented using a class-based combination
-  like `<i class="zulip-icon zulip-icon-smile"></i>`, which is rendered
-  using generated CSS that maps that class name (`zulip-icon-smile`)
+- Modern Doer icons are implemented using a class-based combination
+  like `<i class="doer-icon doer-icon-smile"></i>`, which is rendered
+  using generated CSS that maps that class name (`doer-icon-smile`)
   to the SVG file located at `web/icons/smile.svg`.
 
 - Older icons use [Font Awesome 4.7](https://fontawesome.com/),
@@ -35,27 +35,27 @@ it. The issue you're working on may not have an icon specified upfront. In that
 case, you should:
 
 1. Prototype using a [Lucide icon](https://lucide.dev/icons/), which is the
-   preferred source for icons in Zulip. New SVG files must be placed in the
+   preferred source for icons in Doer. New SVG files must be placed in the
    `web/icons/` directory to be used (don't forget to `git add` new
    icons along with your other changes).
 
 1. **When your feature is nearing completion**, post in the [appropriate
    channel](https://zulip.com/development-community/#where-do-i-send-my-message)
-   in the Zulip development community to discuss what icon should be used (e.g.,
+   in the Doer development community to discuss what icon should be used (e.g.,
    #design for web app icons). You can use the discussion thread linked from the
    issue you're working on if there is one.
 
 1. Once there is general consensus on the icon to be used, be sure to
-   [prepare the icon's SVG file](#preparing-icons-for-use-with-zulip)
-   so that it displays correctly in Zulip.
+   [prepare the icon's SVG file](#preparing-icons-for-use-with-doer)
+   so that it displays correctly in Doer.
 
 1. Follow the [attribution guidelines](../contributing/licensing.md)
    to document the icon's source in `docs/THIRDPARTY/`.
 
-## Preparing icons for use with Zulip
+## Preparing icons for use with Doer
 
 You may discover that your chosen icon looks terribly broken when displayed
-in Zulip. There are two common issues with SVG files that must be manually
+in Doer. There are two common issues with SVG files that must be manually
 corrected:
 
 1. [Icons that rely on strokes](#correcting-icons-that-include-strokes),
@@ -70,16 +70,16 @@ Each of those problems requires a different fix, followed by some
 
 For example, the unaltered [Lucide expand icon](https://lucide.dev/icons/expand)
 illustrates what we'd expect to see versus what we actually see after the icon
-goes through Zulip's automated SVG-to-font conversion:
+goes through Doer's automated SVG-to-font conversion:
 
 | Expected icon (SVG)                                                               | Broken appearance (SVG to font)                                                      |
 | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | ![Expected icon with four arrows](../images/icon-prep-stroke-correct-preview.png) | ![Broken icon with four triangles](../images/icon-prep-stroke-broken-conversion.png) |
 
 What happened there is that the icon uses strokes, which do not properly convert
-to font outlines in Zulip's automated conversion system.
+to font outlines in Doer's automated conversion system.
 
-To properly prepare an SVG icon for use with Zulip, you need to make sure that
+To properly prepare an SVG icon for use with Doer, you need to make sure that
 all stroke components are converted to paths:
 
 1. Open the SVG file in [Inkscape](https://inkscape.org/), a free and open-source
@@ -105,7 +105,7 @@ close Inkscape before [cleaning up the SVG file](#cleaning-up-the-svg-code).
 
 Certain icons may include a `fill-rule="evenodd"` attribute-value pairing. Those are
 often found on icons where one path appears inside of another. That is the case with
-the custom eye icon here, which turns solid black after going through Zulip's automated
+the custom eye icon here, which turns solid black after going through Doer's automated
 SVG-to-font conversion:
 
 | Expected icon (SVG)                                                              | Broken appearance (SVG to font)                                                    |

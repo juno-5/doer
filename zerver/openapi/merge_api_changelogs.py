@@ -61,7 +61,7 @@ def get_current_major_version() -> str | None:
     changelog_path = Path("api_docs/changelog.md")
     with open(changelog_path) as file:
         for line in file:
-            match = re.search(r"## Changes in Zulip (\d+\.\d+)", line)
+            match = re.search(r"## Changes in Doer (\d+\.\d+)", line)
             if match:
                 return match.group(1)
     return None
@@ -84,7 +84,7 @@ def merge_changelogs(changelogs: str, new_feature_level: int, update_changelog: 
             changelog_markdown_string += line
             if changelogs_merged:
                 continue
-            if re.fullmatch(r"## Changes in Zulip \d+\.\d+\n", line):
+            if re.fullmatch(r"## Changes in Doer \d+\.\d+\n", line):
                 changelogs_merged = True
                 updates = f"\n**Feature level {new_feature_level}**\n\n{changelogs}"
                 changelog_markdown_string += updates
@@ -101,10 +101,10 @@ def update_feature_level_in_api_docs(new_feature_level: int) -> None:
     num_replaces = 0
     current_version = get_current_major_version()
 
-    # Get all the markdown files in api_docs folder along with zulip.yaml.
+    # Get all the markdown files in api_docs folder along with doer.yaml.
     api_docs_folder = Path("api_docs")
     api_docs_paths = list(api_docs_folder.glob("*.md"))
-    api_docs_paths.append(Path("zerver/openapi/zulip.yaml"))
+    api_docs_paths.append(Path("zerver/openapi/doer.yaml"))
 
     for api_docs_path in api_docs_paths:
         with open(api_docs_path) as file:
@@ -118,8 +118,8 @@ def update_feature_level_in_api_docs(new_feature_level: int) -> None:
                 for file_name in changelog_files_list:
                     temporary_feature_level = file_name[: -len(".md")]
 
-                    pattern = rf"Zulip \d+\.\d+ \(feature level {temporary_feature_level}\)"
-                    replacement = f"Zulip {current_version} (feature level {new_feature_level})"
+                    pattern = rf"Doer \d+\.\d+ \(feature level {temporary_feature_level}\)"
+                    replacement = f"Doer {current_version} (feature level {new_feature_level})"
                     line = re.sub(pattern, replacement, line)
 
                 if old_line != line:

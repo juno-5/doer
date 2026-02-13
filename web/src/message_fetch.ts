@@ -567,7 +567,7 @@ export function maybe_load_older_messages(opts: {
         // to get a large amount of history.
         //
         // We can afford to do this in our server load budget, because
-        // this is a rare operation; prior to May 2024, Zulip fetched
+        // this is a rare operation; prior to May 2024, Doer fetched
         // all history since the oldest unread unconditionally.
 
         let fetched_substantial_history = false;

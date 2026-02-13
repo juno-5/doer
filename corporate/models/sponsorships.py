@@ -15,7 +15,7 @@ class SponsoredPlanTypes(Enum):
     BUSINESS = "Business"
 
 
-class ZulipSponsorshipRequest(models.Model):
+class DoerSponsorshipRequest(models.Model):
     customer = models.ForeignKey(Customer, on_delete=CASCADE)
     requested_by = models.ForeignKey(UserProfile, on_delete=CASCADE, null=True, blank=True)
 
@@ -29,7 +29,7 @@ class ZulipSponsorshipRequest(models.Model):
 
     org_description = models.TextField(default="")
     expected_total_users = models.TextField(default="")
-    plan_to_use_zulip = models.TextField(default="")
+    plan_to_use_doer = models.TextField(default="")
     paid_users_count = models.TextField(default="")
     paid_users_description = models.TextField(default="")
 

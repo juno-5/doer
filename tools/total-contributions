@@ -8,8 +8,8 @@ from pathlib import Path
 
 bot_commits = 0
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.chdir(ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(DOER_PATH)
 
 
 def add_log(committer_dict: dict[str, int], input: list[str]) -> None:
@@ -84,24 +84,24 @@ parser = argparse.ArgumentParser(
     prog="python3 total-contributions",
     formatter_class=argparse.RawTextHelpFormatter,
     description="""\
-Aggregates the total commit contributions to Zulip that should be
+Aggregates the total commit contributions to Doer that should be
 attributed to the time window between the two provided
-zulip/zulip versions (tags or branches).
+doer/doer versions (tags or branches).
 
 The attribution algorithm used by this tool attributes all changes for
-a Zulip project between:
+a Doer project between:
 
-* The last release of the target project before the first zulip/zulip version.
-* The last release of the target project before the last zulip/zulip version.
+* The last release of the target project before the first doer/doer version.
+* The last release of the target project before the last doer/doer version.
 
 This algorithm has the key property that the totals for a given contributor of
 2.1.0..4.0 will equal the sum of 2.1.0..3.0 and 3.0..4.0.
 
 Its main downside is that contributions to projects other than
-zulip/zulip in the last few weeks before a zulip/zulip release will be
-delayed (i.e. counted in the total for the next zulip/zulip release).
+doer/doer in the last few weeks before a doer/doer release will be
+delayed (i.e. counted in the total for the next doer/doer release).
 
-Expects that all Zulip repositories are in the current working
+Expects that all Doer repositories are in the current working
 directory, which does not need to be the directory this is run from.
 
 # Changes between two major releases.
@@ -119,7 +119,7 @@ parser.add_argument(
     # TODO: Ideally, we'd replace "1.3.0" with "First commit", to
     # simplify including contributions before the 1.3.0 release.
     default=["1.3.0", "main"],
-    help="Git tag or branch in zulip/zulip specifying one end of the commit range to use.",
+    help="Git tag or branch in doer/doer specifying one end of the commit range to use.",
 )
 
 parser.add_argument(
@@ -134,13 +134,13 @@ args = parser.parse_args()
 if len(args.version) > 2:
     parser.error("Expects 0 to 2 version number(s)")
 
-lower_zulip_version = args.version[0]
+lower_doer_version = args.version[0]
 if len(args.version) == 1:
-    upper_zulip_version = "main"
+    upper_doer_version = "main"
 else:
-    upper_zulip_version = args.version[1]
+    upper_doer_version = args.version[1]
 
-subprocess.check_call(["git", "fetch"], cwd=find_path("zulip"))
+subprocess.check_call(["git", "fetch"], cwd=find_path("doer"))
 
 # Extract git version and time. It's important that we use the commit
 # date (%ci), not the author date (%ai), since while those are often
@@ -150,12 +150,12 @@ subprocess.check_call(["git", "fetch"], cwd=find_path("zulip"))
 # time.
 try:
     lower_time = subprocess.check_output(
-        ["git", "log", "-1", "--format=%ci", lower_zulip_version],
+        ["git", "log", "-1", "--format=%ci", lower_doer_version],
         stderr=subprocess.DEVNULL,
         text=True,
     ).split()[0]
     upper_time = subprocess.check_output(
-        ["git", "log", "-1", "--format=%ci", upper_zulip_version],
+        ["git", "log", "-1", "--format=%ci", upper_doer_version],
         stderr=subprocess.DEVNULL,
         text=True,
     ).split()[0]
@@ -164,48 +164,48 @@ except subprocess.CalledProcessError:
     sys.exit(0)
 
 print(
-    f"Commit range {lower_zulip_version}..{upper_zulip_version} corresponds to {lower_time} to {upper_time}"
+    f"Commit range {lower_doer_version}..{upper_doer_version} corresponds to {lower_time} to {upper_time}"
 )
 
 repository_dict: dict[str, int] = defaultdict(int)
 out_dict: dict[str, int] = defaultdict(int)
-subprocess.check_call(["git", "fetch"], cwd=find_path("zulip"))
+subprocess.check_call(["git", "fetch"], cwd=find_path("doer"))
 process_repo(
     out_dict=out_dict,
-    repo_short="zulip",
-    repo_full="zulip/zulip",
-    lower_version=lower_zulip_version,
-    upper_version=upper_zulip_version,
+    repo_short="doer",
+    repo_full="doer/doer",
+    lower_version=lower_doer_version,
+    upper_version=upper_doer_version,
 )
 
 # TODO: We should migrate the last couple repositories to use the
 # `main` default branch name and then simplify this.
 for full_repository, branch in [
-    ("zulip/zulip-mobile", "main"),
-    ("zulip/zulip-flutter", "main"),
-    ("zulip/zulip-desktop", "main"),
-    ("zulip/docker-zulip", "main"),
-    ("zulip/python-zulip-api", "main"),
-    ("zulip/zulip-archive", "master"),
-    ("zulip/zulip-architecture", "main"),
-    ("zulip/zulip-terminal", "main"),
-    ("zulip/zulint", "main"),
-    ("zulip/github-actions-zulip", "main"),
-    ("zulip/zulip-js", "main"),
-    ("zulip/zulip-archive", "master"),
-    ("zulip/zulipbot", "main"),
-    ("zulip/zulip-zapier", "master"),
+    ("doer/doer-mobile", "main"),
+    ("doer/doer-flutter", "main"),
+    ("doer/doer-desktop", "main"),
+    ("doer/docker-doer", "main"),
+    ("doer/python-doer-api", "main"),
+    ("doer/doer-archive", "master"),
+    ("doer/doer-architecture", "main"),
+    ("doer/doer-terminal", "main"),
+    ("doer/zulint", "main"),
+    ("doer/github-actions-doer", "main"),
+    ("doer/doer-js", "main"),
+    ("doer/doer-archive", "master"),
+    ("doer/zulipbot", "main"),
+    ("doer/doer-zapier", "master"),
     # Legacy repositories, not actively developed.
-    ("zulip/zulip-desktop-legacy", "master"),
-    ("zulip/zulip-android-legacy", "master"),
-    ("zulip/zulip-ios-legacy", "master"),
-    ("zulip/hubot-zulip", "master"),
-    ("zulip/puppet-zulip", "master"),
-    ("zulip/trello-to-zulip", "master"),
-    ("zulip/swift-zulip-api", "master"),
-    ("zulip/errbot-backend-zulip", "master"),
-    ("zulip/zulip-redmine-plugin", "master"),
-    ("zulip/zulip-csharp", "master"),
+    ("doer/doer-desktop-legacy", "master"),
+    ("doer/doer-android-legacy", "master"),
+    ("doer/doer-ios-legacy", "master"),
+    ("doer/hubot-doer", "master"),
+    ("doer/puppet-doer", "master"),
+    ("doer/trello-to-doer", "master"),
+    ("doer/swift-doer-api", "master"),
+    ("doer/errbot-backend-doer", "master"),
+    ("doer/doer-redmine-plugin", "master"),
+    ("doer/doer-csharp", "master"),
 ]:
     repository = os.path.basename(full_repository)
 
@@ -243,5 +243,5 @@ for committer_name, commit_count in sorted(
 print(f"Excluded {bot_commits} commits authored by bots.")
 print(
     f"{grand_total} total commits by {len(out_dict)} contributors between "
-    f"{lower_zulip_version} and {upper_zulip_version}."
+    f"{lower_doer_version} and {upper_doer_version}."
 )

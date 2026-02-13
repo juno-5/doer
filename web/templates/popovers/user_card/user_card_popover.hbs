@@ -3,7 +3,7 @@
         <div class="popover-menu-user-avatar-container {{#if (not is_active)}}deactivated{{/if}}">
             <img class="popover-menu-user-avatar{{#if user_is_guest}} guest-avatar{{/if}}" src="{{user_avatar}}" />
             {{#if (and is_active (not is_bot))}}
-                <div class="popover-menu-user-presence user-circle zulip-icon zulip-icon-{{user_circle_class}} {{user_circle_class}} hidden-for-spectators" data-presence-indicator-user-id="{{user_id}}"></div>
+                <div class="popover-menu-user-presence user-circle doer-icon doer-icon-{{user_circle_class}} {{user_circle_class}} hidden-for-spectators" data-presence-indicator-user-id="{{user_id}}"></div>
             {{/if}}
             {{#if (not is_active)}}
                 <span class="popover-menu-user-presence conversation-partners-icon fa fa-ban fa-lg deactivated-user-icon user_circle"></span>
@@ -13,7 +13,7 @@
             <div class="popover-menu-user-full-name text-select" data-tippy-content="{{user_full_name}}">
                 {{> ../../user_full_name name=user_full_name}}
                 {{#if is_bot}}
-                    <i class="zulip-icon zulip-icon-bot" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-bot" aria-hidden="true"></i>
                 {{/if}}
             </div>
             <div class="popover-menu-user-type">
@@ -56,7 +56,7 @@
                 </span>
                 {{#if is_me}}
                     <a role="menuitem" tabindex="0" class="personal-menu-clear-status user-card-clear-status-button popover-menu-link" aria-label="{{t 'Clear status'}}" data-tippy-content="{{t 'Clear your status' }}">
-                        <i class="personal-menu-clear-status-icon popover-menu-icon zulip-icon zulip-icon-x-circle" aria-hidden="true"></i>
+                        <i class="personal-menu-clear-status-icon popover-menu-icon doer-icon doer-icon-x-circle" aria-hidden="true"></i>
                     </a>
                 {{/if}}
             </li>
@@ -65,7 +65,7 @@
             {{#if status_content_available}}
                 <li role="none" class="link-item popover-menu-list-item hidden-for-spectators">
                     <a role="menuitem" tabindex="0" class="update_status_text popover-menu-link">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-smile-smaller" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-smile-smaller" aria-hidden="true"></i>
                         <span class="popover-menu-label">{{t 'Edit status' }}</span>
                         {{popover_hotkey_hints "Shift" "Y"}}
                     </a>
@@ -73,7 +73,7 @@
             {{else}}
                 <li role="none" class="link-item popover-menu-list-item hidden-for-spectators">
                     <a role="menuitem" tabindex="0" class="update_status_text popover-menu-link">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-smile-smaller" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-smile-smaller" aria-hidden="true"></i>
                         <span class="popover-menu-label">{{t 'Set status' }}</span>
                         {{popover_hotkey_hints "Shift" "Y"}}
                     </a>
@@ -82,14 +82,14 @@
             {{#if invisible_mode}}
                 <li role="none" class="link-item popover-menu-list-item">
                     <a role="menuitem" tabindex="0" class="invisible_mode_turn_off popover-menu-link">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-play-circle" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-play-circle" aria-hidden="true"></i>
                         <span class="popover-menu-label">{{t 'Turn off invisible mode' }}</span>
                     </a>
                 </li>
             {{else}}
                 <li role="none" class="link-item popover-menu-list-item hidden-for-spectators">
                     <a role="menuitem" tabindex="0" class="invisible_mode_turn_on popover-menu-link">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-stop-circle" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-stop-circle" aria-hidden="true"></i>
                         <span class="popover-menu-label">{{t 'Go invisible' }}</span>
                     </a>
                 </li>
@@ -101,13 +101,13 @@
         {{#if is_active}}
             {{#unless is_bot}}
                 <li role="none" class="popover-menu-list-item text-item hidden-for-spectators">
-                    <i class="popover-menu-icon zulip-icon zulip-icon-past-time" aria-hidden="true"></i>
+                    <i class="popover-menu-icon doer-icon doer-icon-past-time" aria-hidden="true"></i>
                     <span class="popover-menu-label user-last-seen-time">{{user_last_seen_time_status}}</span>
                 </li>
             {{/unless}}
             {{#if user_time}}
                 <li role="none" class="popover-menu-list-item text-item hidden-for-spectators">
-                    <i class="popover-menu-icon zulip-icon zulip-icon-clock" aria-hidden="true"></i>
+                    <i class="popover-menu-icon doer-icon doer-icon-clock" aria-hidden="true"></i>
                     <span class="popover-menu-label">{{t "{user_time} local time" }}</span>
                 </li>
             {{/if}}
@@ -139,7 +139,7 @@
                 <li role="none" class="popover-menu-list-item text-item user-card-popover-email-field hidden-for-spectators">
                     <span class="user_popover_email">{{ user_email }}</span>
                     <span role="menuitem" tabindex="0" id="popover-menu-copy-email" class="popover-menu-link copy-button hide_copy_icon" aria-label="{{t 'Copy email'}}" data-tippy-content="{{t 'Copy email' }}" data-clipboard-text="{{ user_email }}">
-                        <i class="zulip-icon zulip-icon-copy hide" aria-hidden="true"></i>
+                        <i class="doer-icon doer-icon-copy hide" aria-hidden="true"></i>
                     </span>
                 </li>
             {{/if}}
@@ -147,7 +147,7 @@
         {{> ./user_card_popover_custom_fields profile_fields=display_profile_fields}}
         <li role="none" class="popover-menu-list-item link-item hidden-for-spectators">
             <a role="menuitem" class="popover-menu-link view_full_user_profile" tabindex="0">
-                <i class="popover-menu-icon zulip-icon zulip-icon-account" aria-hidden="true"></i>
+                <i class="popover-menu-icon doer-icon doer-icon-account" aria-hidden="true"></i>
                 {{#if is_me}}
                     <span class="popover-menu-label">{{t "View your profile" }}</span>
                 {{else}}
@@ -158,7 +158,7 @@
         {{#if can_send_private_message}}
             <li role="none" class="popover-menu-list-item link-item hidden-for-spectators">
                 <a role="menuitem" class="popover-menu-link {{ private_message_class }}" tabindex="0">
-                    <i class="popover-menu-icon zulip-icon zulip-icon-send-dm" aria-hidden="true"></i>
+                    <i class="popover-menu-icon doer-icon doer-icon-send-dm" aria-hidden="true"></i>
                     <span class="popover-menu-label">{{t "Send direct message" }}</span>
                     {{#if is_sender_popover}}
                         {{popover_hotkey_hints "Shift" "R"}}
@@ -170,7 +170,7 @@
             <li role="none" class="popover-menu-list-item link-item hidden-for-spectators">
                 {{#if has_message_context}}
                     <a role="menuitem" class="popover-menu-link mention_user" tabindex="0">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-at-sign" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-at-sign" aria-hidden="true"></i>
                         {{#if is_bot}}
                             <span class="popover-menu-label">{{t "Reply mentioning bot" }}</span>
                         {{else}}
@@ -182,7 +182,7 @@
                     </a>
                 {{else}}
                     <a role="menuitem" class="popover-menu-link copy_mention_syntax" tabindex="0" data-clipboard-text="{{ user_mention_syntax }}">
-                        <i class="popover-menu-icon fa zulip-icon zulip-icon-at-sign" aria-hidden="true"></i>
+                        <i class="popover-menu-icon fa doer-icon doer-icon-at-sign" aria-hidden="true"></i>
                         <span class="popover-menu-label">{{t "Copy mention syntax" }}</span>
                         {{#if is_sender_popover}}
                             {{popover_hotkey_hints "@"}}
@@ -194,7 +194,7 @@
         {{#if is_me}}
             <li role="none" class="popover-menu-list-item link-item hidden-for-spectators">
                 <a role="menuitem" class="popover-menu-link edit-your-profile" tabindex="0">
-                    <i class="popover-menu-icon zulip-icon zulip-icon-tool" aria-hidden="true"></i>
+                    <i class="popover-menu-icon doer-icon doer-icon-tool" aria-hidden="true"></i>
                     <span class="popover-menu-label">{{t "Edit your profile" }}</span>
                 </a>
             </li>
@@ -202,7 +202,7 @@
         <li role="separator" class="popover-menu-separator hidden-for-spectators"></li>
         <li role="none" class="popover-menu-list-item link-item">
             <a role="menuitem" href="{{ pm_with_url }}" class="narrow_to_private_messages popover-menu-link hidden-for-spectators" tabindex="0">
-                <i class="popover-menu-icon zulip-icon zulip-icon-user" aria-hidden="true"></i>
+                <i class="popover-menu-icon doer-icon doer-icon-user" aria-hidden="true"></i>
                 {{#if is_me}}
                     <span class="popover-menu-label">{{t "View messages with yourself" }}</span>
                 {{else}}
@@ -212,7 +212,7 @@
         </li>
         <li role="none" class="popover-menu-list-item link-item">
             <a role="menuitem" href="{{ sent_by_url }}" class="narrow_to_messages_sent popover-menu-link hidden-for-spectators" tabindex="0">
-                <i class="popover-menu-icon zulip-icon zulip-icon-message-square" aria-hidden="true"></i>
+                <i class="popover-menu-icon doer-icon doer-icon-message-square" aria-hidden="true"></i>
                 <span class="popover-menu-label">{{t "View messages sent" }}</span>
             </a>
         </li>
@@ -221,7 +221,7 @@
             {{#if can_mute}}
                 <li role="none" class="popover-menu-list-item link-item">
                     <a role="menuitem" class="sidebar-popover-mute-user popover-menu-link hidden-for-spectators" tabindex="0">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-hide" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-hide" aria-hidden="true"></i>
                         {{#if is_bot}}
                             <span class="popover-menu-label">{{t "Mute this bot" }}</span>
                         {{else}}
@@ -246,7 +246,7 @@
                 <li role="separator" class="popover-menu-separator hidden-for-spectators"></li>
                 <li role="none" class="popover-menu-list-item link-item">
                     <a role="menuitem" class="sidebar-popover-manage-user popover-menu-link hidden-for-spectators" tabindex="0">
-                        <i class="popover-menu-icon zulip-icon zulip-icon-user-cog" aria-hidden="true"></i>
+                        <i class="popover-menu-icon doer-icon doer-icon-user-cog" aria-hidden="true"></i>
                         {{#if is_bot}}
                             <span class="popover-menu-label">{{t "Manage this bot" }}</span>
                         {{else}}
@@ -257,7 +257,7 @@
                 {{#if (not is_active)}}
                     <li role="none" class="popover-menu-list-item link-item">
                         <a role="menuitem" class="sidebar-popover-reactivate-user popover-menu-link hidden-for-spectators" tabindex="0">
-                            <i class="popover-menu-icon zulip-icon zulip-icon-user-plus" aria-hidden="true"></i>
+                            <i class="popover-menu-icon doer-icon doer-icon-user-plus" aria-hidden="true"></i>
                             {{#if is_bot}}
                                 <span class="popover-menu-label">{{t "Reactivate this bot" }}</span>
                             {{else}}

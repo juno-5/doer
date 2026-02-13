@@ -4,18 +4,18 @@ import os
 import subprocess
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, DOER_PATH)
 
 from scripts.lib.setup_path import setup_path
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     DEPLOYMENTS_DIR,
     assert_not_running_as_root,
     get_config,
     get_config_file,
     parse_version_from,
 )
-from version import ZULIP_VERSION as NEW_VERSION
+from version import DOER_VERSION as NEW_VERSION
 
 assert_not_running_as_root()
 setup_path()
@@ -30,7 +30,7 @@ from zerver.lib.migration_status import STALE_MIGRATIONS
 django.setup()
 
 django_pg_version = connection.cursor().connection.server_version // 10000
-if os.path.exists("/etc/init.d/postgresql") and os.path.exists("/etc/zulip/zulip.conf"):
+if os.path.exists("/etc/init.d/postgresql") and os.path.exists("/etc/zulip/doer.conf"):
     postgresql_version = int(get_config(get_config_file(), "postgresql", "version", "0"))
     if postgresql_version == 0:
         postgresql_version = django_pg_version
@@ -38,7 +38,7 @@ if os.path.exists("/etc/init.d/postgresql") and os.path.exists("/etc/zulip/zulip
             [
                 "crudini",
                 "--set",
-                "/etc/zulip/zulip.conf",
+                "/etc/zulip/doer.conf",
                 "postgresql",
                 "version",
                 str(postgresql_version),
@@ -51,10 +51,10 @@ if os.path.exists("/etc/init.d/postgresql") and os.path.exists("/etc/zulip/zulip
             postgresql_version,
         )
         logging.info(
-            "/etc/zulip/zulip.conf claims that Zulip is running PostgreSQL\n"
+            "/etc/zulip/doer.conf claims that Doer is running PostgreSQL\n"
             "%d, but the server is connected to a PostgreSQL running\n"
             "version %d.  Check the output from pg_lsclusters to verify\n"
-            "which clusters are running, and update /etc/zulip/zulip.conf to match.\n"
+            "which clusters are running, and update /etc/zulip/doer.conf to match.\n"
             "\n"
             "In general, this results from manually upgrading PostgreSQL; you\n"
             "should follow our instructions for using our tool to do so:\n"
@@ -94,7 +94,7 @@ logging.error(
     "contains %s database migrations which %s (version %s) does not.",
     current_version,
     len(missing),
-    ZULIP_PATH,
+    DOER_PATH,
     NEW_VERSION,
 )
 sys.exit(1)

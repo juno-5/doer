@@ -25,7 +25,7 @@ class ErrorCode(Enum):
     BAD_EVENT_QUEUE_ID = auto()
     CSRF_FAILED = auto()
     INVITATION_FAILED = auto()
-    INVALID_ZULIP_SERVER = auto()
+    INVALID_DOER_SERVER = auto()
     INVALID_PUSH_DEVICE_TOKEN = auto()
     INVALID_REMOTE_PUSH_DEVICE_TOKEN = auto()
     INVALID_MARKDOWN_INCLUDE_STATEMENT = auto()
@@ -165,9 +165,9 @@ class UnauthorizedError(JsonableError):
             msg = _("Not logged in: API authentication or user session required")
         super().__init__(msg)
         if www_authenticate is None:
-            self.www_authenticate = 'Basic realm="zulip"'
+            self.www_authenticate = 'Basic realm="doer"'
         elif www_authenticate == "session":
-            self.www_authenticate = 'Session realm="zulip"'
+            self.www_authenticate = 'Session realm="doer"'
         else:
             raise AssertionError("Invalid www_authenticate value!")
 
@@ -437,7 +437,7 @@ class WebhookError(JsonableError):
 
 class UnsupportedWebhookEventTypeError(WebhookError):
     """Intended as an exception for event formats that we know the
-    third-party service generates but which Zulip doesn't support /
+    third-party service generates but which Doer doesn't support /
     generate a message for.
 
     Exceptions where we cannot parse the event type, possibly because
@@ -488,7 +488,7 @@ class MissingAuthenticationError(JsonableError):
         pass
 
     # No msg_format is defined since this exception is caught and
-    # converted into json_unauthorized in Zulip's middleware.
+    # converted into json_unauthorized in Doer's middleware.
 
 
 class RemoteBillingAuthenticationError(JsonableError):
@@ -621,7 +621,7 @@ class ResourceNotFoundError(JsonableError):
 
 class ValidationFailureError(JsonableError):
     # This class translations a Django ValidationError into a
-    # Zulip-style JsonableError, sending back just the first error for
+    # Doer-style JsonableError, sending back just the first error for
     # consistency of API.
     data_fields = ["errors"]
 
@@ -702,7 +702,7 @@ class RemoteRealmServerMismatchError(JsonableError):  # nocoverage
     @override
     def msg_format() -> str:
         return _(
-            "Your organization is registered to a different Zulip server. Please contact Zulip support for assistance in resolving this issue."
+            "Your organization is registered to a different Doer server. Please contact Doer support for assistance in resolving this issue."
         )
 
 

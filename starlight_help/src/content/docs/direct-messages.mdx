@@ -5,7 +5,7 @@ title: Direct messages
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import DmFeedInstructions from "../include/_DmFeedInstructions.mdx";
 import FindDmConversationLeftSidebar from "../include/_FindDmConversationLeftSidebar.mdx";
 import MobileDirectMessages from "../include/_MobileDirectMessages.mdx";
@@ -13,9 +13,9 @@ import SearchNoteForDmConversations from "../include/_SearchNoteForDmConversatio
 import SendDm from "../include/_SendDm.mdx";
 import ViewDmsLeftSidebar from "../include/_ViewDmsLeftSidebar.mdx";
 
-import ChevronRightIcon from "~icons/zulip-icon/chevron-right";
-import SearchIcon from "~icons/zulip-icon/search";
-import UserListIcon from "~icons/zulip-icon/user-list";
+import ChevronRightIcon from "~icons/doer-icon/chevron-right";
+import SearchIcon from "~icons/doer-icon/search";
+import UserListIcon from "~icons/doer-icon/user-list";
 
 **Direct messages (DMs)** are conversations with other users that happen outside
 of a [channel](/help/introduction-to-channels). They are convenient for 1:1 and
@@ -43,10 +43,10 @@ There are a few different ways to view your DM conversations.
       <ViewDmsLeftSidebar />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To return to the channel list in the left sidebar, click the **back to
       channels** link above the search box.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via right sidebar">
@@ -57,10 +57,10 @@ There are a few different ways to view your DM conversations.
       1. Click on any user to view your 1:1 DM conversation.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can find a user by typing their name in the **Filter users** box at the
       top of the right sidebar.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via compose box">
@@ -103,10 +103,10 @@ There are a few different ways to view your DM conversations.
          conversation.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also type `dm-including` in the search box to find all 1:1 and group
       DM conversations that include a particular user.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 

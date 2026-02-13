@@ -1,9 +1,9 @@
-# Zulip IFTTT integration
+# Doer IFTTT integration
 
 IFTTT supports integrations with hundreds of
 [physical and digital products](https://ifttt.com/services), like
 dishwashers, cars, web services, and more. Get IFTTT notifications directly
-in Zulip.
+in Doer.
 
 {start_tabs}
 

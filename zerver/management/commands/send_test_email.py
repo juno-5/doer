@@ -40,9 +40,9 @@ class Command(sendtestemail.Command):
 
         message = (
             "Success!  If you receive this message (and a second with a different subject), "
-            "you've successfully configured sending emails from your Zulip server.  "
+            "you've successfully configured sending emails from your Doer server.  "
             "Remember that you need to restart "
-            "the Zulip server with /home/zulip/deployments/current/scripts/restart-server "
+            "the Doer server with /home/zulip/deployments/current/scripts/restart-server "
             "after changing the settings in /etc/zulip before your changes will take effect."
         )
         with redirect_stderr(io.StringIO()) as f:
@@ -50,11 +50,11 @@ class Command(sendtestemail.Command):
             try:
                 sender = FromAddress.SUPPORT
                 print(f"  * {sender}")
-                send_mail("Zulip email test", message, sender, kwargs["email"])
+                send_mail("Doer email test", message, sender, kwargs["email"])
 
                 noreply_sender = FromAddress.tokenized_no_reply_address()
                 print(f"  * {noreply_sender}")
-                send_mail("Zulip noreply email test", message, noreply_sender, kwargs["email"])
+                send_mail("Doer noreply email test", message, noreply_sender, kwargs["email"])
             except smtplib.SMTPException as e:
                 print(f"Failed to send mails: {e}")
                 print()
@@ -65,7 +65,7 @@ class Command(sendtestemail.Command):
         print("Successfully sent 2 emails to {}!".format(", ".join(kwargs["email"])))
 
         if kwargs["managers"]:
-            mail_managers("Zulip manager email test", "This email was sent to the site managers.")
+            mail_managers("Doer manager email test", "This email was sent to the site managers.")
 
         if kwargs["admins"]:
-            mail_admins("Zulip admins email test", "This email was sent to the site admins.")
+            mail_admins("Doer admins email test", "This email was sent to the site admins.")

@@ -11,7 +11,7 @@ following general translation rules.
 **Informal.**
 
 Although written German tends to be quite formal, websites in German are
-usually following informal netiquette. As Zulip's guides are written
+usually following informal netiquette. As Doer's guides are written
 in a more colloquial style, German translations should be rather informal as well.
 
 **Don't use slang or regional phrases in the German translation:**
@@ -78,7 +78,7 @@ e.g., _Manage streams_ - _Kanäle verwalten_ instead of _Verwalte Kanäle_.
 German is famous for its concatenations of nouns
 (e.g., _Heizölrückstoßdämpfung_, which means _fuel oil recoil attenuation_).
 For the sake of correct rendering and simplicity, you should try to avoid such
-concatenations whenever possible, since they can break the layout of the Zulip
+concatenations whenever possible, since they can break the layout of the Doer
 frontend. Try to stick to a maximum length of 20 characters and follow your
 intuition.
 
@@ -128,7 +128,7 @@ Make sure to not walk into such a trap.
   developers will thank you ;)
 
 - Be consistent. Use the same terms for the same things, even if that
-  means repeating. Have a look at other German translations on Zulip
+  means repeating. Have a look at other German translations on Doer
   to get a feeling for the vocabulary.
 
 - Balance common verbs and nouns with specific IT-related translations
@@ -141,7 +141,7 @@ Make sure to not walk into such a trap.
   on translating German Wikipedia articles into English.
 
 Some terms are very tricky to translate, so be sure to communicate with other German
-speakers in the community. It's all about making Zulip friendly and usable.
+speakers in the community. It's all about making Doer friendly and usable.
 
 ## Terms (Begriffe)
 
@@ -171,7 +171,7 @@ _"Bereich" (Transifex), "Community" (Google+)_
 
 Even though the term **Stream** is not commonly used in German web applications,
 it is both understood well enough by many Germans with only little English
-skills, and the best choice for describing Zulip's chat hierarchy. The term
+skills, and the best choice for describing Doer's chat hierarchy. The term
 "Kanal" wouldn't fit here, since it translates to "channel" - these are used
 by other chat applications with a simple, flat chat hierarchy, that is,
 no differentiation between streams and topics.
@@ -187,7 +187,7 @@ _(Gmail - for email subjects, Transifex)_
 
 While some might find this direct translation a tad long, the alternative
 "Offener Stream" can be ambiguous - especially users who are inexperienced
-with Zulip could think of this as streams that are online.
+with Doer could think of this as streams that are online.
 
 _"Öffentlicher Stream" (Transifex)_
 
@@ -227,9 +227,9 @@ _"Signalwort" (Transifex), "Wort-Alarm" (Linguee)_
 
 - View - **View** (Developer documentation)
 
-Since this is a Zulip-specific term for
+Since this is a Doer-specific term for
 
-> every path that the Zulip server supports (doesn’t show a 404 page for),
+> every path that the Doer server supports (doesn’t show a 404 page for),
 
 and there is no German equivalent, talking of "Views" is preferable in the
 developer documentation and makes it easier to rely on parts of the German
@@ -303,7 +303,7 @@ _"Suchen" (YouTube, Google, Facebook, Transifex)_
 - Pin/Unpin - **Anpinnen/Loslösen**
 
 While "pinnen" is shorter than "anpinnen", "anpinnen" sweeps any ambiguity out of
-the way. This term is not used too often on Zulip, so the length shouldn't be a
+the way. This term is not used too often on Doer, so the length shouldn't be a
 problem.
 
 _"Anpinnen/Ablösen" (Transifex), "Pinnen" (Pinterest)_
@@ -347,7 +347,7 @@ _"Nutzer/Personen" (Transifex)_
 
 - You - **Du**
 
-Why not "Sie"? In brief, Zulip and other web applications tend to use a rather
+Why not "Sie"? In brief, Doer and other web applications tend to use a rather
 informal language. If you would like to read more about the reasoning behind
 this, refer to the [general notes](#formal-or-informal) for
 translating German.

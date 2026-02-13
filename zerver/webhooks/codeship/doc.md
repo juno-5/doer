@@ -1,6 +1,6 @@
-# Zulip Codeship integration
+# Doer Codeship integration
 
-Get notifications about Codeship build statuses in Zulip.
+Get notifications about Codeship build statuses in Doer.
 
 {start_tabs}
 

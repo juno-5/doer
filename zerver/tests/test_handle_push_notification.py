@@ -43,8 +43,8 @@ class HandlePushNotificationTest(PushNotificationTestCase):
     @override
     def request_callback(self, request: PreparedRequest) -> tuple[int, ResponseHeaders, bytes]:
         assert request.url is not None  # allow mypy to infer url is present.
-        assert settings.ZULIP_SERVICES_URL is not None
-        local_url = request.url.replace(settings.ZULIP_SERVICES_URL, "")
+        assert settings.DOER_SERVICES_URL is not None
+        local_url = request.url.replace(settings.DOER_SERVICES_URL, "")
         assert isinstance(request.body, bytes)
         result = self.uuid_post(
             self.server_uuid, local_url, request.body, content_type="application/json"
@@ -344,14 +344,14 @@ class HandlePushNotificationTest(PushNotificationTestCase):
             "message_id": message.id,
             "trigger": NotificationTriggers.DIRECT_MESSAGE,
         }
-        assert settings.ZULIP_SERVICES_URL is not None
-        URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/push/notify"
+        assert settings.DOER_SERVICES_URL is not None
+        URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/push/notify"
         responses.add(responses.POST, URL, body=ConnectionError())
         with self.assertRaises(PushNotificationBouncerRetryLaterError):
             handle_push_notification(self.user_profile.id, missed_message)
 
     @mock.patch("zerver.lib.push_notifications.push_notifications_configured", return_value=True)
-    @override_settings(ZULIP_SERVICE_PUSH_NOTIFICATIONS=False, ZULIP_SERVICES=set())
+    @override_settings(DOER_SERVICE_PUSH_NOTIFICATIONS=False, DOER_SERVICES=set())
     def test_read_message(self, mock_push_notifications: mock.MagicMock) -> None:
         self.setup_apns_tokens()
         self.setup_fcm_tokens()
@@ -688,13 +688,13 @@ class HandlePushNotificationTest(PushNotificationTestCase):
                 {
                     "badge": 0,
                     "custom": {
-                        "zulip": {
+                        "doer": {
                             "realm_name": self.sender.realm.name,
-                            "realm_uri": "http://zulip.testserver",
-                            "realm_url": "http://zulip.testserver",
+                            "realm_uri": "http://doer.testserver",
+                            "realm_url": "http://doer.testserver",
                             "user_id": self.user_profile.id,
                             "event": "remove",
-                            "zulip_message_ids": str(message.id),
+                            "doer_message_ids": str(message.id),
                         },
                     },
                 },
@@ -702,11 +702,11 @@ class HandlePushNotificationTest(PushNotificationTestCase):
                     "server": "testserver",
                     "realm_id": self.sender.realm.id,
                     "realm_name": self.sender.realm.name,
-                    "realm_uri": "http://zulip.testserver",
-                    "realm_url": "http://zulip.testserver",
+                    "realm_uri": "http://doer.testserver",
+                    "realm_url": "http://doer.testserver",
                     "user_id": self.user_profile.id,
                     "event": "remove",
-                    "zulip_message_ids": str(message.id),
+                    "doer_message_ids": str(message.id),
                 },
                 {"priority": "normal"},
                 list(
@@ -770,11 +770,11 @@ class HandlePushNotificationTest(PushNotificationTestCase):
                     "server": "testserver",
                     "realm_id": self.sender.realm.id,
                     "realm_name": self.sender.realm.name,
-                    "realm_uri": "http://zulip.testserver",
-                    "realm_url": "http://zulip.testserver",
+                    "realm_uri": "http://doer.testserver",
+                    "realm_url": "http://doer.testserver",
                     "user_id": self.user_profile.id,
                     "event": "remove",
-                    "zulip_message_ids": str(message.id),
+                    "doer_message_ids": str(message.id),
                 },
                 {"priority": "normal"},
             )
@@ -784,13 +784,13 @@ class HandlePushNotificationTest(PushNotificationTestCase):
                 {
                     "badge": 0,
                     "custom": {
-                        "zulip": {
+                        "doer": {
                             "realm_name": self.sender.realm.name,
-                            "realm_uri": "http://zulip.testserver",
-                            "realm_url": "http://zulip.testserver",
+                            "realm_uri": "http://doer.testserver",
+                            "realm_url": "http://doer.testserver",
                             "user_id": self.user_profile.id,
                             "event": "remove",
-                            "zulip_message_ids": str(message.id),
+                            "doer_message_ids": str(message.id),
                         }
                     },
                 },
@@ -867,7 +867,7 @@ class HandlePushNotificationTest(PushNotificationTestCase):
         sender = self.example_user("iago")
         self.subscribe(self.user_profile, "public_stream")
         self.subscribe(sender, "public_stream")
-        logger_string = "zulip.soft_deactivation"
+        logger_string = "doer.soft_deactivation"
         with self.assertLogs(logger_string, level="INFO") as info_logs:
             self.soft_deactivate_main_user()
 
@@ -926,23 +926,23 @@ class HandlePushNotificationTest(PushNotificationTestCase):
     ) -> None:
         othello = self.example_user("othello")
         cordelia = self.example_user("cordelia")
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         self.register_push_device_token(self.user_profile.id)
 
         # user groups having upto 'MAX_GROUP_SIZE_FOR_MENTION_REACTIVATION'
         # members are small user groups.
         small_user_group = check_add_user_group(
-            zulip_realm,
+            doer_realm,
             "small_user_group",
             [self.user_profile, othello],
             acting_user=othello,
         )
 
         large_user_group = check_add_user_group(
-            zulip_realm, "large_user_group", [self.user_profile], acting_user=othello
+            doer_realm, "large_user_group", [self.user_profile], acting_user=othello
         )
         subgroup = check_add_user_group(
-            zulip_realm, "subgroup", [othello, cordelia], acting_user=othello
+            doer_realm, "subgroup", [othello, cordelia], acting_user=othello
         )
         add_subgroups_to_user_group(large_user_group, [subgroup], acting_user=None)
 

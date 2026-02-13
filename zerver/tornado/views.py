@@ -278,7 +278,7 @@ def get_events_backend(
     if result["type"] == "async":
         # Return an AsynchronousResponse; this will result in
         # Tornado discarding the response and instead long-polling the
-        # request.  See zulip_finish for more design details.
+        # request.  See doer_finish for more design details.
         return AsynchronousResponse()
     if result["type"] == "error":
         raise result["exception"]

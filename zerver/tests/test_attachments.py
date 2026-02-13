@@ -5,13 +5,13 @@ from unittest import mock
 from typing_extensions import override
 
 from zerver.lib.attachments import user_attachments
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_test_image_file
 from zerver.lib.thumbnail import ThumbnailFormat
 from zerver.models import Attachment, ImageAttachment
 
 
-class AttachmentsTests(ZulipTestCase):
+class AttachmentsTests(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()

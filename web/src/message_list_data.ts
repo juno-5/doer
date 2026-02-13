@@ -55,7 +55,7 @@ export class MessageListData {
     participants: ConversationParticipants;
     // MessageListData is a core data structure for keeping track of a
     // contiguous block of messages matching a given narrow that can
-    // be displayed in a Zulip message feed.
+    // be displayed in a Doer message feed.
     //
     // See also MessageList and MessageListView, which are important
     // to actually display a message list.
@@ -275,7 +275,7 @@ export class MessageListData {
     first_unread_message_id(): number | undefined {
         // NOTE: This function returns the first unread that was fetched and is not
         // necessarily the first unread for the narrow. There could be more unread messages.
-        // See https://github.com/zulip/zulip/pull/30008#discussion_r1597279862 for how
+        // See https://github.com/doer/doer/pull/30008#discussion_r1597279862 for how
         // ideas on how to possibly improve this.
         // before `first_unread` calculated below that we haven't fetched yet.
         const first_unread = this._items.find((message) => message.unread);

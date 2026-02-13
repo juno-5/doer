@@ -1,6 +1,6 @@
 # Requirements and scalability
 
-To run a Zulip server, you will need:
+To run a Doer server, you will need:
 
 - A dedicated machine or VM
 - A supported OS:
@@ -27,7 +27,7 @@ For details on each of these requirements, see below.
 
 #### General
 
-The installer expects Zulip to be the **only thing** running on the
+The installer expects Doer to be the **only thing** running on the
 system; it will install system packages with `apt` (like nginx,
 PostgreSQL, and Redis) and configure them for its own use. We strongly
 recommend using either a fresh machine instance in a cloud provider, a
@@ -39,8 +39,8 @@ on issues you'll encounter](install-existing-server.md).
 #### Operating system
 
 Ubuntu 22.04, Ubuntu 24.04, Debian 12, and Debian 13
-are supported for running Zulip in production. You can also
-run Zulip on other platforms that support Docker using
+are supported for running Doer in production. You can also
+run Doer on other platforms that support Docker using
 {doc}`our Docker image <docker:index>`.
 
 We recommend installing on the newest supported OS release you're
@@ -72,7 +72,7 @@ sudo apt update
 - Disk space: You'll need at least 10 GB of dedicated free disk space
   for a server with dozens of users. We recommend using an SSD and
   avoiding cloud storage backends that limit the IOPS per second,
-  since the disk is primarily used for the Zulip database.
+  since the disk is primarily used for the Doer database.
 
 See our [documentation on scalability](#scalability) below for advice
 on hardware requirements for larger organizations.
@@ -83,9 +83,9 @@ on hardware requirements for larger organizations.
   [configurable](deployment.md#using-an-alternate-port))
   from the networks where your users are (usually, the public
   Internet).
-- Incoming port 80 access (optional). Zulip only serves content over
+- Incoming port 80 access (optional). Doer only serves content over
   HTTPS, and will redirect HTTP requests to HTTPS.
-- Incoming port 25 if you plan to enable Zulip's [incoming email
+- Incoming port 25 if you plan to enable Doer's [incoming email
   integration](email-gateway.md).
 - Incoming port 4369 should be protected by a firewall to prevent
   exposing `epmd`, an Erlang service which does not support binding
@@ -93,27 +93,27 @@ on hardware requirements for larger organizations.
   remote users to determine that the server is running RabbitMQ, and
   on which port, though no further information is leaked.
 - Outgoing HTTP(S) access (ports 80 and 443) to the public Internet so
-  that Zulip can properly manage image and website previews and mobile
+  that Doer can properly manage image and website previews and mobile
   push notifications. Outgoing Internet access is not required if you
   [disable those
   features](https://zulip.com/help/image-video-and-website-previews).
 - Outgoing SMTP access (usually port 587) to your [SMTP
-  server](email.md) so that Zulip can send emails.
-- A domain name (e.g., `zulip.example.com`) that your users will use to
-  access the Zulip server. In order to generate valid SSL
+  server](email.md) so that Doer can send emails.
+- A domain name (e.g., `doer.example.com`) that your users will use to
+  access the Doer server. In order to generate valid SSL
   certificates [with Certbot][doc-certbot], and to enable other
   services such as Google authentication, public DNS name is simpler,
-  but Zulip can be configured to use a non-public domain or even an IP
+  but Doer can be configured to use a non-public domain or even an IP
   address as its external hostname (though we don't recommend that
   configuration).
-- Zulip supports [running behind a reverse proxy][reverse-proxy].
-- Zulip configures [Smokescreen, an outgoing HTTP
+- Doer supports [running behind a reverse proxy][reverse-proxy].
+- Doer configures [Smokescreen, an outgoing HTTP
   proxy][smokescreen-proxy], to protect against [SSRF attacks][ssrf],
-  which prevents user from making the Zulip server make requests to
+  which prevents user from making the Doer server make requests to
   private resources. If your network has its own outgoing HTTP proxy,
-  Zulip supports using that instead.
+  Doer supports using that instead.
 
-Zulip does not, itself, require SSH, but most installations will also require
+Doer does not, itself, require SSH, but most installations will also require
 access to incoming port 22 for SSH access for remote access.
 
 [ssrf]: https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
@@ -124,10 +124,10 @@ access to incoming port 22 for SSH access for remote access.
 
 #### SSL certificate
 
-Your Zulip server will need an SSL certificate for the domain name it
-uses. For most Zulip servers, the recommended (and simplest) way to
+Your Doer server will need an SSL certificate for the domain name it
+uses. For most Doer servers, the recommended (and simplest) way to
 get this is to just [use the `--certbot` option][doc-certbot] in the
-Zulip installer, which will automatically get a certificate for you
+Doer installer, which will automatically get a certificate for you
 and keep it renewed.
 
 For test installations, an even simpler alternative is always
@@ -142,7 +142,7 @@ certificate documentation](ssl-certificates.md).
 
 #### Outgoing email
 
-- Outgoing email (SMTP) credentials that Zulip can use to send
+- Outgoing email (SMTP) credentials that Doer can use to send
   outgoing emails to users (e.g., email address confirmation emails
   during the signup process, message notification emails, password
   reset, etc.). If you don't have an existing outgoing SMTP solution,
@@ -150,17 +150,17 @@ certificate documentation](ssl-certificates.md).
   [free outgoing SMTP options and options for prototyping](email.md#free-outgoing-email-services).
 
 Once you have met these requirements, see [full instructions for installing
-Zulip in production](install.md).
+Doer in production](install.md).
 
 ## Scalability
 
-This section details some basic guidelines for running a Zulip server
+This section details some basic guidelines for running a Doer server
 for larger organizations (especially >1000 users or 500+ daily active
 users). These guidelines are conservative, since they are intended to
 be sufficient for a wide range of possible usage patterns that may not
 be applicable to your installation.
 
-Zulip's resource needs depend mainly on 3 parameters:
+Doer's resource needs depend mainly on 3 parameters:
 
 - daily active users (e.g., number of employees if everyone's an
   employee)
@@ -174,7 +174,7 @@ server services, Django dominates the resource requirements. One can
 run every service on its own system (as {doc}`our Docker deployment
 <docker:index>` does) but for most use cases, there's little
 scalability benefit to doing so. See [deployment
-options](deployment.md) for details on installing Zulip with a
+options](deployment.md) for details on installing Doer with a
 dedicated database server.
 
 - **Dedicated database**. For installations with hundreds of daily
@@ -185,13 +185,13 @@ dedicated database server.
 
   - With 25+ daily active users, 4 GB of RAM.
   - With 100+ daily active users, 8 GB of RAM.
-  - With 400+ daily active users, 16 GB of RAM for the Zulip
+  - With 400+ daily active users, 16 GB of RAM for the Doer
     application server, plus 16 GB for the database.
   - With 2000+ daily active users 32 GB of RAM, plus 32 GB for the
     database.
   - Roughly linear scaling beyond that.
 
-- **CPU:** The Zulip application server's CPU usage is heavily
+- **CPU:** The Doer application server's CPU usage is heavily
   optimized due to extensive work on optimizing the performance of
   requests for latency reasons. Because most servers with sufficient
   RAM have sufficient CPU resources, CPU requirements are rarely an
@@ -203,7 +203,7 @@ dedicated database server.
 - **Disk for application server:** We recommend using [the S3 file
   uploads backend][s3-uploads] to store uploaded files at scale. With
   the S3 backend configuration, we recommend 50 GB of disk for the OS,
-  Zulip software, logs and scratch/free space. Because uploaded files
+  Doer software, logs and scratch/free space. Because uploaded files
   are cached locally, you may need more disk space if you make heavy
   use of uploaded files.
 
@@ -215,7 +215,7 @@ dedicated database server.
   accounts) per (1M messages to public channels).
 
 - **Example:** When
-  [the Zulip development community](https://zulip.com/development-community/) server
+  [the Doer development community](https://zulip.com/development-community/) server
   had 12K user accounts (~300 daily actives) and 800K messages of
   history (400K to public channels), it was a default configuration
   single-server installation with 16 GB of RAM, 4 cores (essentially
@@ -229,22 +229,22 @@ dedicated database server.
   backend][s3-uploads].
 
 - **Sharding:** For servers with several thousand daily active users,
-  Zulip supports [sharding its real-time-push Tornado
+  Doer supports [sharding its real-time-push Tornado
   service][tornado-sharding], both by realm/organization (for hosting many
   organizations) and by user ID (for hosting single very large
   organizations).
 
-  Care must be taken when dividing traffic for a single Zulip realm
-  between multiple Zulip application servers, which is why we
+  Care must be taken when dividing traffic for a single Doer realm
+  between multiple Doer application servers, which is why we
   recommend a hot spare over load-balancing for most installations
   desiring extra redundancy.
 
-If you have scalability questions or are unsure whether Zulip is a fit
-for your use case, contact [Zulip sales or support][contact-support]
+If you have scalability questions or are unsure whether Doer is a fit
+for your use case, contact [Doer sales or support][contact-support]
 for assistance.
 
 For readers interested in technical details around what features
-impact Zulip's scalability, this [performance and scalability design
+impact Doer's scalability, this [performance and scalability design
 document](../subsystems/performance.md) may also be of interest.
 
 [s3-uploads]: upload-backends.md#s3-backend-configuration

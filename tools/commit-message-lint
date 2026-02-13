@@ -5,7 +5,7 @@
 
 # The rules can be found in /.gitlint
 
-repository="zulip/zulip"
+repository="doer/doer"
 
 if [[ "
 $(git remote -v)

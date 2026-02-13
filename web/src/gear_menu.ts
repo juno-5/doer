@@ -35,12 +35,12 @@ link:  Help center
 info:  Keyboard shortcuts
 info:  Message formatting
 info:  Search filters
-hash:  About Zulip
+hash:  About Doer
 ---
 link:  Desktop & mobile apps
 link:  Integrations
 link:  API documentation
-link:  Sponsor Zulip
+link:  Sponsor Doer
 link:  Plans and pricing
 ---
 hash:   Invite users
@@ -63,7 +63,7 @@ links:
     #channels
     #settings
     #organization
-    #about-zulip
+    #about-doer
     #invite
 
 When you click on the links there is a function

@@ -3,9 +3,9 @@ from zerver.lib.test_classes import WebhookTestCase
 
 class NewRelicHookTests(WebhookTestCase):
     def test_incident_activated_new_default_payload(self) -> None:
-        expected_topic_name = "zulip_app query result is > 1.0 for 1 minutes on 'Zulip S..."
+        expected_topic_name = "doer_app query result is > 1.0 for 1 minutes on 'Doer S..."
         expected_message = """
-:red_circle: **[zulip_app query result is > 1.0 for 1 minutes on 'Zulip Server Low Storage'](https://radar-api.service.newrelic.com/accounts/4420147/issues/c5faa7e6-7b54-402d-af79-f99601e0278c?notifier=WEBHOOK)**
+:red_circle: **[doer_app query result is > 1.0 for 1 minutes on 'Doer Server Low Storage'](https://radar-api.service.newrelic.com/accounts/4420147/issues/c5faa7e6-7b54-402d-af79-f99601e0278c?notifier=WEBHOOK)**
 
 ```quote
 **Priority**: CRITICAL
@@ -17,7 +17,7 @@ class NewRelicHookTests(WebhookTestCase):
 ```spoiler :file: Incident details
 
 - **Alert policies**: `Golden Signals`
-- **Conditions**: `Zulip Server Low Storage`
+- **Conditions**: `Doer Server Low Storage`
 - **Total incidents**: 1
 - **Incident created at**: <time:2024-04-22T03:05:31+00:00>
 
@@ -236,7 +236,7 @@ class NewRelicHookTests(WebhookTestCase):
             content_type="application/json",
         )
 
-    def test_incident_default_base_with_zulip_custom_fields(self) -> None:
+    def test_incident_default_base_with_doer_custom_fields(self) -> None:
         expected_topic_name = "PIETER-UBUNTU query result is > 1.0 for 5 minutes on 'Sto..."
         expected_message = """
 :orange_circle: **[PIETER-UBUNTU query result is > 1.0 for 5 minutes on 'Storage on Host Exceeded Threshold'](https://radar-api.service.newrelic.com/accounts/4420147/issues/13bbcdca-f0b6-470d-b0be-b34583c58869?notifier=WEBHOOK)**
@@ -264,13 +264,13 @@ class NewRelicHookTests(WebhookTestCase):
 """.strip()
 
         self.check_webhook(
-            "incident_default_base_with_zulip_custom_fields",
+            "incident_default_base_with_doer_custom_fields",
             expected_topic_name,
             expected_message,
             content_type="application/json",
         )
 
-    def test_incident_provided_base_with_zulip_custom_fields(self) -> None:
+    def test_incident_provided_base_with_doer_custom_fields(self) -> None:
         expected_topic_name = "main_app-UBUNTU query result is > 2.0 for 1 minutes on 'H..."
         expected_message = """
 :red_circle: **[main_app-UBUNTU query result is > 2.0 for 1 minutes on 'High CPU'](https://radar-api.service.newrelic.com/accounts/1/issues/0ea2df1c-adab-45d2-aae0-042b609d2322?notifier=SLACK)**
@@ -298,13 +298,13 @@ class NewRelicHookTests(WebhookTestCase):
 """.strip()
 
         self.check_webhook(
-            "incident_provided_base_with_zulip_custom_fields",
+            "incident_provided_base_with_doer_custom_fields",
             expected_topic_name,
             expected_message,
             content_type="application/json",
         )
 
-    def test_incident_with_invalid_zulip_custom_fields(self) -> None:
+    def test_incident_with_invalid_doer_custom_fields(self) -> None:
         expected_topic_name = "PIETER-UBUNTU query result is > 1.0 for 5 minutes on 'Sto..."
         expected_message = """
 :orange_circle: **[PIETER-UBUNTU query result is > 1.0 for 5 minutes on 'Storage on Host Exceeded Threshold'](https://radar-api.service.newrelic.com/accounts/4420147/issues/13bbcdca-f0b6-470d-b0be-b34583c58869?notifier=WEBHOOK)**
@@ -330,7 +330,7 @@ class NewRelicHookTests(WebhookTestCase):
 """.strip()
 
         self.check_webhook(
-            "incident_with_invalid_zulip_custom_fields",
+            "incident_with_invalid_doer_custom_fields",
             expected_topic_name,
             expected_message,
             content_type="application/json",

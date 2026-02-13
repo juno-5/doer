@@ -15,7 +15,7 @@ from corporate.models.customers import Customer
 from corporate.models.plans import CustomerPlan
 from zerver.context_processors import get_apps_page_url
 from zerver.lib.integrations import BOT_INTEGRATIONS, CATEGORIES, INTEGRATIONS, META_CATEGORY
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.lib.url_redirects import INTEGRATION_CATEGORY_SLUGS
 from zerver.models import Realm
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class DocPageTest(ZulipTestCase):
+class DocPageTest(DoerTestCase):
     def get_doc(self, url: str, subdomain: str) -> "TestHttpResponse":
         return self.client_get(url, subdomain=subdomain)
 
@@ -172,7 +172,7 @@ class DocPageTest(ZulipTestCase):
         assert "" in endpoint_list
 
         content = {
-            "/api/": "The Zulip API",
+            "/api/": "The Doer API",
             "/api/api-keys": "be careful with it",
             "/api/create-user": "zuliprc-admin",
             "/api/delete-queue": "Delete a previously registered queue",
@@ -259,7 +259,7 @@ class DocPageTest(ZulipTestCase):
         self._test("/emails/", ["Manually generate most emails"])
 
     def test_dev_help_default_page_endpoints(self) -> None:
-        # View on Zulip.com and View source URLs should be visible.
+        # View on Doer.com and View source URLs should be visible.
         self._test(
             "/help/status-and-availability",
             [
@@ -286,8 +286,8 @@ class DocPageTest(ZulipTestCase):
         )
 
         # Root /help and /help/ is a special case without subpath.
-        self._test("/help/?raw", ["---", "title: Zulip help center"])
-        self._test("/help?raw", ["---", "title: Zulip help center"])
+        self._test("/help/?raw", ["---", "title: Doer help center"])
+        self._test("/help?raw", ["---", "title: Doer help center"])
 
         with (
             mock.patch("builtins.open", side_effect=OSError("File read error")),
@@ -309,27 +309,27 @@ class DocPageTest(ZulipTestCase):
         self._test("/team/", ["industry veterans"])
         self._test("/apps/", ["Apps for every platform."])
 
-        self._test("/history/", ["Zulip released as open source!"])
+        self._test("/history/", ["Doer released as open source!"])
         # Test the i18n version of one of these pages.
-        self._test("/en/history/", ["Zulip released as open source!"])
+        self._test("/en/history/", ["Doer released as open source!"])
         self._test("/values/", ["designed our company"])
         self._test("/hello/", ["remote and flexible work"])
         self._test("/communities/", ["Open communities directory"])
-        self._test("/development-community/", ["Zulip development community"])
+        self._test("/development-community/", ["Doer development community"])
         self._test("/features/", ["Organized team chat solution"])
         self._test("/jobs/", ["Work with us"])
-        self._test("/self-hosting/", ["Self-host Zulip"])
-        self._test("/zulip-cloud/", ["Zulip Cloud"])
+        self._test("/self-hosting/", ["Self-host Doer"])
+        self._test("/doer-cloud/", ["Doer Cloud"])
         self._test("/security/", ["TLS encryption"])
         self._test("/use-cases/", ["Use cases and customer stories"])
-        self._test("/why-zulip/", ["Why Zulip?"])
+        self._test("/why-doer/", ["Why Doer?"])
         # /for/... pages
         self._test("/for/open-source/", ["for open source projects"])
         self._test("/for/events/", ["for conferences and events"])
         self._test("/for/education/", ["education pricing"])
         self._test("/for/research/", ["for research"])
         self._test("/for/business/", ["Communication efficiency represents"])
-        self._test("/for/communities/", ["Zulip for communities"])
+        self._test("/for/communities/", ["Doer for communities"])
         # case-studies
         self._test("/case-studies/tum/", ["Technical University of Munich"])
         self._test("/case-studies/ucsd/", ["UCSD"])
@@ -351,12 +351,12 @@ class DocPageTest(ZulipTestCase):
         self._test("/attribution/", ["Website attributions"])
 
     def test_open_organizations_endpoint(self) -> None:
-        zulip_dev_info = ["Zulip Dev", "great for testing!"]
+        doer_dev_info = ["Doer Dev", "great for testing!"]
 
         result = self.client_get("/communities/")
-        self.assert_not_in_success_response(zulip_dev_info, result)
+        self.assert_not_in_success_response(doer_dev_info, result)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.want_advertise_in_communities_directory = True
         realm.save()
 
@@ -364,11 +364,11 @@ class DocPageTest(ZulipTestCase):
         realm.save()
         result = self.client_get("/communities/")
         # Not shown because the realm has default description set.
-        self.assert_not_in_success_response(["Zulip Dev"], result)
+        self.assert_not_in_success_response(["Doer Dev"], result)
 
         realm.description = "Some description"
         realm.save()
-        self._test("/communities/", ["Open communities directory", "Zulip Dev", "Some description"])
+        self._test("/communities/", ["Open communities directory", "Doer Dev", "Some description"])
 
         # No org with research type so research category not displayed.
         result = self.client_get("/communities/")
@@ -377,7 +377,7 @@ class DocPageTest(ZulipTestCase):
         realm.org_type = Realm.ORG_TYPES["research"]["id"]
         realm.save()
         self._test(
-            "/communities/", ["Open communities directory", "Zulip Dev", 'data-category="research"']
+            "/communities/", ["Open communities directory", "Doer Dev", 'data-category="research"']
         )
 
         # Demo organizations are not shown.
@@ -386,7 +386,7 @@ class DocPageTest(ZulipTestCase):
         realm.save()
         result = self.client_get("/communities/")
         self.assert_not_in_success_response(
-            ["Zulip Dev", "Some description", 'data-category="research"'], result
+            ["Doer Dev", "Some description", 'data-category="research"'], result
         )
 
     def test_integration_doc_endpoints(self) -> None:
@@ -529,28 +529,28 @@ class DocPageTest(ZulipTestCase):
         )
 
     def test_integration_pages_open_graph_metadata(self) -> None:
-        og_description = '<meta property="og:description" content="Zulip comes with over'
+        og_description = '<meta property="og:description" content="Doer comes with over'
 
         # Test a particular integration page
         url = "/integrations/github"
-        title = '<meta property="og:title" content="GitHub | Zulip integrations" />'
-        description = '<meta property="og:description" content="Zulip comes with over'
+        title = '<meta property="og:title" content="GitHub | Doer integrations" />'
+        description = '<meta property="og:description" content="Doer comes with over'
         self._test(url, [title, description, get_canonical_url(url)])
 
         # Test category pages
         for category in CATEGORIES:
             url = f"/integrations/category/{category}"
             if category in META_CATEGORY:
-                title = f"<title>{CATEGORIES[category]} | Zulip integrations</title>"
-                og_title = f'<meta property="og:title" content="{CATEGORIES[category]} | Zulip integrations" />'
+                title = f"<title>{CATEGORIES[category]} | Doer integrations</title>"
+                og_title = f'<meta property="og:title" content="{CATEGORIES[category]} | Doer integrations" />'
             else:
-                title = f"<title>{CATEGORIES[category]} tools | Zulip integrations</title>"
-                og_title = f'<meta property="og:title" content="{CATEGORIES[category]} tools | Zulip integrations" />'
+                title = f"<title>{CATEGORIES[category]} tools | Doer integrations</title>"
+                og_title = f'<meta property="og:title" content="{CATEGORIES[category]} tools | Doer integrations" />'
             self._test(url, [title, og_title, og_description, get_canonical_url(url)])
 
         # Test integrations index page
         url = "/integrations/"
-        og_title = '<meta property="og:title" content="Zulip integrations" />'
+        og_title = '<meta property="og:title" content="Doer integrations" />'
         self._test(url, [og_title, og_description, get_canonical_url(url)])
 
     def test_integration_404s(self) -> None:
@@ -577,15 +577,15 @@ class DocPageTest(ZulipTestCase):
         # TODO: Ideally, this Mozilla would be the specific browser.
         self.assertTrue('data-platform="Mozilla"' in result.content.decode())
 
-        result = self.client_get("/accounts/password/reset/", HTTP_USER_AGENT="ZulipElectron/1.0.0")
-        self.assertTrue('data-platform="ZulipElectron"' in result.content.decode())
+        result = self.client_get("/accounts/password/reset/", HTTP_USER_AGENT="DoerElectron/1.0.0")
+        self.assertTrue('data-platform="DoerElectron"' in result.content.decode())
 
 
-class CustomShorthandLinksTest(ZulipTestCase):
+class CustomShorthandLinksTest(DoerTestCase):
     # We do not test relative links here since relative links were only
     # used in the old help pages. We should probably remove the logic
     # for relative links after we have done the official cutover to the
-    # starlight help center: https://github.com/zulip/zulip/issues/35654.
+    # starlight help center: https://github.com/doer/doer/issues/35654.
     def test_settings_links(self) -> None:
         result = self.client_get("/api/api-keys")
         self.assertEqual(result.status_code, 200)
@@ -603,7 +603,7 @@ class CustomShorthandLinksTest(ZulipTestCase):
         self.assertNotIn("/#settings", str(result.content))
 
 
-class IntegrationTest(ZulipTestCase):
+class IntegrationTest(DoerTestCase):
     def test_check_if_every_integration_has_logo_that_exists(self) -> None:
         for integration in INTEGRATIONS.values():
             assert integration.logo_url is not None
@@ -634,7 +634,7 @@ class IntegrationTest(ZulipTestCase):
         self.assertTrue(context["html_settings_links"])
 
 
-class AboutPageTest(ZulipTestCase):
+class AboutPageTest(DoerTestCase):
     @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
     def test_endpoint(self) -> None:
         with self.settings(CONTRIBUTOR_DATA_FILE_PATH="zerver/tests/fixtures/authors.json"):
@@ -655,7 +655,7 @@ class AboutPageTest(ZulipTestCase):
             self.assertEqual(result["Location"], "https://zulip.com/team/")
 
 
-class SmtpConfigErrorTest(ZulipTestCase):
+class SmtpConfigErrorTest(DoerTestCase):
     def test_smtp_error(self) -> None:
         with self.assertLogs("django.request", level="ERROR") as m:
             result = self.client_get("/config-error/smtp")
@@ -667,34 +667,34 @@ class SmtpConfigErrorTest(ZulipTestCase):
             )
 
 
-class PlansPageTest(ZulipTestCase):
+class PlansPageTest(DoerTestCase):
     def test_plans_auth(self) -> None:
         root_domain = ""
         result = self.client_get("/plans/", subdomain=root_domain)
-        self.assert_in_success_response(["Self-host Zulip"], result)
+        self.assert_in_success_response(["Self-host Doer"], result)
         self.assert_not_in_success_response(["/sponsorship/"], result)
         self.assert_in_success_response(["/accounts/go/?next=%2Fsponsorship%2F"], result)
 
         non_existent_domain = "moo"
         result = self.client_get("/plans/", subdomain=non_existent_domain)
         self.assertEqual(result.status_code, 404)
-        self.assert_in_response("There is no Zulip organization at", result)
+        self.assert_in_response("There is no Doer organization at", result)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.plan_type = Realm.PLAN_TYPE_STANDARD_FREE
         realm.save(update_fields=["plan_type"])
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assertEqual(result.status_code, 302)
         self.assertEqual(result["Location"], "/accounts/login/?next=/plans/")
 
         guest_user = "polonius"
         self.login(guest_user)
-        result = self.client_get("/plans/", subdomain="zulip", follow=True)
+        result = self.client_get("/plans/", subdomain="doer", follow=True)
         self.assertEqual(result.status_code, 404)
 
         organization_member = "hamlet"
         self.login(organization_member)
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assertEqual(result.status_code, 302)
         self.assertEqual("/billing/", result["Location"])
 
@@ -715,40 +715,40 @@ class PlansPageTest(ZulipTestCase):
         self.assert_in_success_response([sign_up_now, upgrade_to_standard], result)
         self.assert_not_in_success_response([current_plan, sponsorship_pending], result)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.plan_type = Realm.PLAN_TYPE_SELF_HOSTED
         realm.save(update_fields=["plan_type"])
 
         with self.settings(PRODUCTION=True):
-            result = self.client_get("/plans/", subdomain="zulip")
+            result = self.client_get("/plans/", subdomain="doer")
             self.assertEqual(result.status_code, 302)
             self.assertEqual(result["Location"], "https://zulip.com/plans/")
 
             self.login("iago")
 
             # SELF_HOSTED should hide the local plans page, even if logged in
-            result = self.client_get("/plans/", subdomain="zulip")
+            result = self.client_get("/plans/", subdomain="doer")
             self.assertEqual(result.status_code, 302)
             self.assertEqual(result["Location"], "https://zulip.com/plans/")
 
         realm.plan_type = Realm.PLAN_TYPE_LIMITED
         realm.save(update_fields=["plan_type"])
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assert_in_success_response([current_plan, upgrade_to_standard], result)
         self.assert_not_in_success_response([sign_up_now, sponsorship_pending], result)
 
         with self.settings(CLOUD_FREE_TRIAL_DAYS=60):
-            result = self.client_get("/plans/", subdomain="zulip")
+            result = self.client_get("/plans/", subdomain="doer")
             self.assert_in_success_response([current_plan, "Start 60-day free trial"], result)
             self.assert_not_in_success_response(
                 [sign_up_now, sponsorship_pending, upgrade_to_standard], result
             )
 
         # Sponsored realms always have Customer entry.
-        customer = Customer.objects.create(realm=get_realm("zulip"), stripe_customer_id="cus_id")
+        customer = Customer.objects.create(realm=get_realm("doer"), stripe_customer_id="cus_id")
         realm.plan_type = Realm.PLAN_TYPE_STANDARD_FREE
         realm.save(update_fields=["plan_type"])
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assert_in_success_response([current_plan], result)
         self.assert_not_in_success_response(
             [sign_up_now, upgrade_to_standard, sponsorship_pending], result
@@ -764,7 +764,7 @@ class PlansPageTest(ZulipTestCase):
 
         realm.plan_type = Realm.PLAN_TYPE_STANDARD
         realm.save(update_fields=["plan_type"])
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assert_in_success_response([current_plan], result)
         self.assert_not_in_success_response(
             [sign_up_now, upgrade_to_standard, sponsorship_pending], result
@@ -772,7 +772,7 @@ class PlansPageTest(ZulipTestCase):
 
         plan.status = CustomerPlan.FREE_TRIAL
         plan.save(update_fields=["status"])
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assert_in_success_response(["Current plan (free trial)"], result)
         self.assert_not_in_success_response(
             [sign_up_now, upgrade_to_standard, sponsorship_pending], result
@@ -783,13 +783,13 @@ class PlansPageTest(ZulipTestCase):
         customer.sponsorship_pending = True
         customer.save()
         plan.delete()
-        result = self.client_get("/plans/", subdomain="zulip")
+        result = self.client_get("/plans/", subdomain="doer")
         self.assert_in_success_response([current_plan], result)
         self.assert_in_success_response([current_plan, sponsorship_pending], result)
         self.assert_not_in_success_response([sign_up_now, upgrade_to_standard], result)
 
 
-class AppsPageTest(ZulipTestCase):
+class AppsPageTest(DoerTestCase):
     def test_get_apps_page_url(self) -> None:
         with self.settings(CORPORATE_ENABLED=False):
             apps_page_url = get_apps_page_url()
@@ -829,7 +829,7 @@ class AppsPageTest(ZulipTestCase):
             self.assertIn("Apps for every platform.", html)
 
     def test_app_download_link_view(self) -> None:
-        return_value = "https://desktop-download.zulip.com/v5.4.3/Zulip-Web-Setup-5.4.3.exe"
+        return_value = "https://desktop-download.zulip.com/v5.4.3/Doer-Web-Setup-5.4.3.exe"
         with mock.patch(
             "corporate.views.portico.get_latest_github_release_download_link_for_platform",
             return_value=return_value,
@@ -843,7 +843,7 @@ class AppsPageTest(ZulipTestCase):
         self.assertEqual(result.status_code, 404)
 
 
-class PrivacyTermsTest(ZulipTestCase):
+class PrivacyTermsTest(DoerTestCase):
     def test_terms_and_policies_index(self) -> None:
         with self.settings(POLICIES_DIRECTORY="corporate/policies"):
             response = self.client_get("/policies/")
@@ -922,10 +922,10 @@ class PrivacyTermsTest(ZulipTestCase):
         # line of the test would change if we were to adjust the
         # design.
         response = self.client_get("/policies/terms")
-        self.assert_not_in_success_response(["Back to Zulip"], response)
+        self.assert_not_in_success_response(["Back to Doer"], response)
 
         response = self.client_get("/policies/terms", {"nav": "no"})
-        self.assert_not_in_success_response(["Back to Zulip"], response)
+        self.assert_not_in_success_response(["Back to Doer"], response)
 
         response = self.client_get("/policies/privacy", {"nav": "no"})
-        self.assert_not_in_success_response(["Back to Zulip"], response)
+        self.assert_not_in_success_response(["Back to Doer"], response)

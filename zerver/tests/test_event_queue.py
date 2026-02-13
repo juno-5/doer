@@ -14,7 +14,7 @@ from zerver.actions.user_groups import check_add_user_group
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.user_topics import do_set_user_topic_visibility_policy
 from zerver.lib.cache import cache_delete, get_muting_users_cache_key
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock, dummy_handler, mock_queue_publish
 from zerver.models import PushDevice, Recipient, Subscription, UserProfile, UserTopic
 from zerver.models.streams import get_stream
@@ -29,7 +29,7 @@ from zerver.tornado.event_queue import (
 from zerver.tornado.views import cleanup_event_queue, get_events
 
 
-class MaybeEnqueueNotificationsTest(ZulipTestCase):
+class MaybeEnqueueNotificationsTest(DoerTestCase):
     def test_maybe_enqueue_notifications(self) -> None:
         # We've already tested the "when to send notifications" logic as part of the
         # notification_data module.
@@ -82,7 +82,7 @@ class MaybeEnqueueNotificationsTest(ZulipTestCase):
             self.assertEqual(email_notice["mentioned_user_group_id"], 33)
 
 
-class StreamWatchersTest(ZulipTestCase):
+class StreamWatchersTest(DoerTestCase):
     def test_stream_watchers(self) -> None:
         """
         We used to have a bug with stream_watchers, where we set their flags to
@@ -124,7 +124,7 @@ class StreamWatchersTest(ZulipTestCase):
         )
 
 
-class MissedMessageHookTest(ZulipTestCase):
+class MissedMessageHookTest(DoerTestCase):
     """Tests what arguments missedmessage_hook passes into maybe_enqueue_notifications.
     Combined with the previous test, this ensures that the missedmessage_hook is correct"""
 
@@ -1202,7 +1202,7 @@ class MissedMessageHookTest(ZulipTestCase):
             )
 
 
-class FileReloadLogicTest(ZulipTestCase):
+class FileReloadLogicTest(DoerTestCase):
     def test_persistent_queue_filename(self) -> None:
         with self.settings(
             JSON_PERSISTENT_QUEUE_FILENAME_PATTERN="/home/zulip/tornado/event_queues%s.json"
@@ -1227,7 +1227,7 @@ class FileReloadLogicTest(ZulipTestCase):
             )
 
 
-class PruneInternalDataTest(ZulipTestCase):
+class PruneInternalDataTest(DoerTestCase):
     def test_prune_internal_data(self) -> None:
         user_profile = self.example_user("hamlet")
         queue_data = dict(
@@ -1264,7 +1264,7 @@ class PruneInternalDataTest(ZulipTestCase):
         self.assertTrue("internal_data" in events[2])
 
 
-class EventQueueTest(ZulipTestCase):
+class EventQueueTest(DoerTestCase):
     def get_client_descriptor(self) -> ClientDescriptor:
         hamlet = self.example_user("hamlet")
         realm = hamlet.realm

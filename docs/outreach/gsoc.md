@@ -2,10 +2,10 @@
 
 This page describes ideas you can use as a starting point for your project
 proposal. If you have not done so yet, you should **start by reading our [guide on
-how to apply](./apply.md)** to a Zulip outreach program. As noted in the guide:
+how to apply](./apply.md)** to a Doer outreach program. As noted in the guide:
 
 > Your first priority during the contribution period should be figuring out how
-> to become an effective Zulip contributor. Start developing your project proposal
+> to become an effective Doer contributor. Start developing your project proposal
 > only once you have experience with iterating on your PRs to get them ready for
 > integration. That way, you'll have a much better idea of what you want to work
 > on and how much you can accomplish.
@@ -13,17 +13,17 @@ how to apply](./apply.md)** to a Zulip outreach program. As noted in the guide:
 ## Project size
 
 We have designed all our projects to have incremental milestones that can be
-completed throughout the program. Consequently, Zulip projects described below
+completed throughout the program. Consequently, Doer projects described below
 are generally compatible with both large-sized (350 hours) and medium-sized (175
 hours) projects. Of course, the amount of progress you will be expected to make
 depends on whether you are doing a 175-hour or 350-hour project. Because it
 takes significant time investment to learn how to contribute complex features to
-Zulip's codebase, we are not planning to offer small-size projects.
+Doer's codebase, we are not planning to offer small-size projects.
 
 Contributors who master the art of consistently packaging their work
 into correct, [reviewable pull
 requests](../contributing/reviewable-prs.md) are able to make major
-improvements to the Zulip app. If you pay attention to the contributor
+improvements to the Doer app. If you pay attention to the contributor
 guidelines, carefully review your own work before asking anyone else
 for review, take the time to clearly communicate your changes, and
 apply the feedback you receive to your next contribution, you'll be
@@ -37,36 +37,36 @@ HTML/CSS, Flutter, or performance optimization. So if you're an applicant with
 those skills and are looking for an organization to join, we'd love to
 talk to you!
 
-The Zulip project has a huge surface area, so even when we're focused
+The Doer project has a huge surface area, so even when we're focused
 on something, a large amount of essential work goes into other parts of
-the project. Every area of Zulip could benefit from the work of a
+the project. Every area of Doer could benefit from the work of a
 contributor with strong programming skills, so don't feel discouraged if
 the areas mentioned above are not your main strength.
 
 ## Project ideas by area
 
 This section contains the seeds of project ideas; you will need to do research
-on the Zulip codebase, read issues on GitHub, read documentation, and talk with
+on the Doer codebase, read issues on GitHub, read documentation, and talk with
 developers to put together a complete project proposal. It's also fine to come
 up with your own project ideas. As you'll see below, you can put together a
 great project around one of the [area
-labels](https://github.com/zulip/zulip/labels) on GitHub; each has a cluster of
-problems in one part of the Zulip project that we'd love to improve.
+labels](https://github.com/doer/doer/labels) on GitHub; each has a cluster of
+problems in one part of the Doer project that we'd love to improve.
 
 ### Full stack and web frontend focused projects
 
-Code: [github.com/zulip/zulip](https://github.com/zulip/zulip/) -- Python,
+Code: [github.com/doer/doer](https://github.com/doer/doer/) -- Python,
 Django, TypeScript/JavaScript, and CSS.
 
 - **Cluster of priority features**. Implement a cluster of new full
-  stack features for Zulip. The [high priority
-  label](https://github.com/zulip/zulip/issues?q=is%3Aissue+is%3Aopen+label%3A%22priority%3A+high%22)
+  stack features for Doer. The [high priority
+  label](https://github.com/doer/doer/issues?q=is%3Aissue+is%3Aopen+label%3A%22priority%3A+high%22)
   documents hundreds of issues that we've identified as important to
   the project. A great project can be 3-5 significant features around
   a theme (often, but not necessarily, an [area
-  label](https://github.com/zulip/zulip/labels)); the goal will be to
+  label](https://github.com/doer/doer/labels)); the goal will be to
   implement and get fully merged a cluster of features with a
-  meaningful impact on the project. Zulip has a lot of half-finished
+  meaningful impact on the project. Doer has a lot of half-finished
   PRs, so some features might be completed by reading, understanding,
   rebasing, and reviving an existing pull request. 175 or 350
   hours; difficulty will vary. **Skills required**: Depends on the
@@ -103,27 +103,27 @@ Django, TypeScript/JavaScript, and CSS.
 
   Experts: Tim Abbott and various others depending on project area
 
-[completion-candidate]: https://github.com/zulip/zulip/pulls?q=is%3Aopen+is%3Apr+label%3A%22completion+candidate%22
+[completion-candidate]: https://github.com/doer/doer/pulls?q=is%3Aopen+is%3Apr+label%3A%22completion+candidate%22
 [continuing-work]: ../contributing/continuing-unfinished-work.md
 
 - Add the core infrastructure for **topic-based permissions and settings**
-  like [pinned topics](https://github.com/zulip/zulip/issues/19483)
-  and [read-only topics](https://github.com/zulip/zulip/issues/26944),
+  like [pinned topics](https://github.com/doer/doer/issues/19483)
+  and [read-only topics](https://github.com/doer/doer/issues/26944),
   and then build some of those settings. This project will be a
   mixture of Python 3/PostgreSQL work, including thinking about
   database transactions and races, writing database migrations
   intended to be run live at scale, and complex logic to handle moving
   messages correctly in the context of these settings, including
-  significant changes to the Zulip API and API documentation.
+  significant changes to the Doer API and API documentation.
   175 or 350 hours; fairly difficult.
   **Skills required**: A high level of fluency with writing readable
   Python 3 and thinking about corner cases.
 
   Experts: Tim Abbott, Prakhar Pratyush
 
-- Zulip's [**REST API documentation**](https://zulip.com/api/), which is an
-  important resource for any organization integrating with Zulip, as
-  well as the developers of our API clients. Zulip has a [nice
+- Doer's [**REST API documentation**](https://zulip.com/api/), which is an
+  important resource for any organization integrating with Doer, as
+  well as the developers of our API clients. Doer has a [nice
   framework](../documentation/api.md) for writing API documentation
   built by past GSoC students based on the OpenAPI standard with
   built-in automated tests of the data both the Python and curl
@@ -143,10 +143,10 @@ Django, TypeScript/JavaScript, and CSS.
 
   Expert: Lauryn Menard
 
-[api-docs-area]: https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+documentation+%28api+and+integrations%29%22
+[api-docs-area]: https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+documentation+%28api+and+integrations%29%22
 
-- **Improve the UI and visual design** of the Zulip web app. We are working on a
-  major redesign for the core surfaces of the Zulip web app -- see the [redesign
+- **Improve the UI and visual design** of the Doer web app. We are working on a
+  major redesign for the core surfaces of the Doer web app -- see the [redesign
   label][redesign-label] for specced out work, with more to come. We're
   particularly excited about students who are interested in making our CSS clean
   and readable as part of working on the UI. 175 or 350 hours; medium to
@@ -155,14 +155,14 @@ Django, TypeScript/JavaScript, and CSS.
   break other parts of the app; design changes are very rewarding since they are
   highly user-facing, but that also means there is a higher bar for correctness
   and reviewability for one's work. A great application would include PRs making
-  small, clean improvements to the Zulip UI (whether logged-in or logged-out
+  small, clean improvements to the Doer UI (whether logged-in or logged-out
   pages).
 
   Experts: Aman Agrawal, Karl Stolley, Alya Abbott
 
-[redesign-label]: https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3Aredesign
+[redesign-label]: https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3Aredesign
 
-- **Improve type safety of node tests**. Rework Zulip's [automated
+- **Improve type safety of node tests**. Rework Doer's [automated
   node tests](../testing/testing-with-node.md) to use objects that
   consistently have the correct type. Currently, many tests use fake
   message, user, or channel objects with only a handful of fields
@@ -185,7 +185,7 @@ Django, TypeScript/JavaScript, and CSS.
 - **Replace hundreds of `dict[str, Any]` types with modern
   dataclasses**. While functionally efficient, `dataclasses` are more
   readable, safe against typos, and have nice support for optimizing
-  them further using `__slots__`. A lot of Zulip server code was
+  them further using `__slots__`. A lot of Doer server code was
   written before dataclasses existed, and while a lot has been
   converted naturally as part of other projects, we'd like to make a
   focused push to replace the remaining ones. This project will
@@ -201,7 +201,7 @@ Django, TypeScript/JavaScript, and CSS.
   Experts: Tim Abbott, Anders Kaseorg
 
 - **Optimize performance and scalability**, either for the web
-  frontend or the server. Zulip is already one of the faster web apps
+  frontend or the server. Doer is already one of the faster web apps
   out there, but we have a number of ideas for how to make it
   substantially faster yet. This is likely a particularly challenging
   project to do well, since there are a lot of subtle interactions to
@@ -217,15 +217,15 @@ Django, TypeScript/JavaScript, and CSS.
 
   Experts: Tim Abbott
 
-[perf-label]: https://github.com/zulip/zulip/labels/area%3A%20performance
+[perf-label]: https://github.com/doer/doer/labels/area%3A%20performance
 
-- Fill in gaps, fix bugs, and improve the framework for Zulip's **library of
+- Fill in gaps, fix bugs, and improve the framework for Doer's **library of
   native integrations**. We have about 120 native integrations, but there are a
   number of others we would like to add. Also, several extensions to the
   framework that would dramatically improve the user experience of using
   integrations, e.g., being able to do callbacks to third-party services
   like Stripe to display more user-friendly notifications. The [the integrations
-  label on GitHub](https://github.com/zulip/zulip/labels/area%3A%20integrations)
+  label on GitHub](https://github.com/doer/doer/labels/area%3A%20integrations)
   lists some of the priorities here (many of which are great preparatory
   projects). 175 or 350 hours; medium difficulty with various possible difficult
   extensions. **Skills required**: Strong Python experience, will to install and
@@ -234,7 +234,7 @@ Django, TypeScript/JavaScript, and CSS.
 
   Experts: Niloth, Lauryn Menard
 
-- **Make Zulip integrations easier for nontechnical users to set up**.
+- **Make Doer integrations easier for nontechnical users to set up**.
   This includes adding a backend permissions system for managing bot
   permissions (and implementing the enforcement logic), adding an
   OAuth system for presenting those controls to users, as well as
@@ -245,33 +245,33 @@ Django, TypeScript/JavaScript, and CSS.
   helpful. Understanding of implementing OAuth providers, e.g., having
   built a prototype with [the Django OAuth
   toolkit](https://django-oauth-toolkit.readthedocs.io/en/latest/)
-  would be great to demonstrate as part of an application. The [Zulip
+  would be great to demonstrate as part of an application. The [Doer
   integration writing guide](../documentation/integrations.md) and
   [integration documentation](https://zulip.com/integrations/) are
   useful materials for learning about how things currently work, and
   [the integrations label on
-  GitHub](https://github.com/zulip/zulip/labels/area%3A%20integrations)
+  GitHub](https://github.com/doer/doer/labels/area%3A%20integrations)
   has a bunch of good starter issues to demonstrate your skills if
   you're interested in this area.
 
   Experts: Niloth, Lauryn Menard
 
-  [all-settings-issues]: https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+settings+%28admin%2Forg%29%22%2C%22area%3A+settings+%28user%29%22%2C%22area%3A+stream+settings%22%2C%22area%3A+settings+UI%22
+  [all-settings-issues]: https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+settings+%28admin%2Forg%29%22%2C%22area%3A+settings+%28user%29%22%2C%22area%3A+stream+settings%22%2C%22area%3A+settings+UI%22
 
-- Work on Zulip's **development and testing infrastructure**. Zulip is a
+- Work on Doer's **development and testing infrastructure**. Doer is a
   project that takes great pride in building great tools for
   development, but there's always more to do to make the experience
-  delightful. Significantly, about 10% of Zulip's open issues are
+  delightful. Significantly, about 10% of Doer's open issues are
   ideas for how to improve the project's contributor experience, and
-  are [in](https://github.com/zulip/zulip/labels/area%3A%20tooling)
-  [these](https://github.com/zulip/zulip/labels/area%3A%20testing-coverage)
-  [four](https://github.com/zulip/zulip/labels/area%3A%20testing-infrastructure)
-  [labels](https://github.com/zulip/zulip/labels/area%3A%20provision)
+  are [in](https://github.com/doer/doer/labels/area%3A%20tooling)
+  [these](https://github.com/doer/doer/labels/area%3A%20testing-coverage)
+  [four](https://github.com/doer/doer/labels/area%3A%20testing-infrastructure)
+  [labels](https://github.com/doer/doer/labels/area%3A%20provision)
   for tooling improvements.
 
   This is a somewhat unusual project, in that it would likely consist of dozens
   of small improvements to the overall codebase, but this sort of work has a
-  huge impact on the experience of other Zulip developers and thus the community
+  huge impact on the experience of other Doer developers and thus the community
   as a whole (project leader Tim Abbott spends more time on the development
   experience than any other single area). 175 or 350 hours; difficult. **Skills
   required**: Python, some DevOps, and a passion for checking your work
@@ -283,13 +283,13 @@ Django, TypeScript/JavaScript, and CSS.
 ### Terminal app
 
 Code: [The official multi-platform terminal app, written in
-Python](https://github.com/zulip/zulip-terminal).
+Python](https://github.com/doer/doer-terminal).
 
 Experts: Neil Pilgrim, Aman Agrawal
 
-- **Contribute to Zulip Terminal, our terminal user interface (TUI) client**.
-  Zulip Terminal is out in beta, but there's still a lot to do for it to
-  approach parity with the web app - and Zulip keeps coming out with new features too!
+- **Contribute to Doer Terminal, our terminal user interface (TUI) client**.
+  Doer Terminal is out in beta, but there's still a lot to do for it to
+  approach parity with the web app - and Doer keeps coming out with new features too!
 
   Previous contributors have themed their projects according to a **cluster of
   features** or **completing unfinished projects**, or some combination, much
@@ -311,12 +311,12 @@ Experts: Neil Pilgrim, Aman Agrawal
 
 Code:
 [Our cross-platform desktop app, written in JavaScript on
-Electron](https://github.com/zulip/zulip-desktop).
+Electron](https://github.com/doer/doer-desktop).
 
 Expert: Anders Kaseorg
 
 - **Contribute to our [Electron-based desktop client
-  application](https://github.com/zulip/zulip-desktop)**. There's plenty of
+  application](https://github.com/doer/doer-desktop)**. There's plenty of
   feature/UI work to do, but focus areas for us include things to (1) improve
   the release process for the app, using automated testing, TypeScript, etc.,
   and (2) polishing the UI. Browse the open issues and get involved! 175 or 350
@@ -326,31 +326,31 @@ Expert: Anders Kaseorg
   required**: JavaScript, Electron; you can learn Electron as part of your
   application.
 
-- **Prototype a next generation Zulip desktop app implemented using
+- **Prototype a next generation Doer desktop app implemented using
   the Tauri Rust-based framework**. Tauri is a promising new project
   that we believe is likely a better technical direction for client
   applications than Electron for desktop apps, for security and
   resource consumption reasons. The goal of this project would be to
   build a working prototype to evaluate to what extent Tauri is a
-  viable platform for us to migrate the Zulip desktop app to. 350
+  viable platform for us to migrate the Doer desktop app to. 350
   hours only; difficult. **Skills required**: Ability to learn
   quickly. Experience with Rust and secure software design may be
   helpful.
 
 ### Mobile app
 
-Code: [Zulip's mobile app for Android and iOS, written in
-Flutter](https://github.com/zulip/zulip-flutter)
+Code: [Doer's mobile app for Android and iOS, written in
+Flutter](https://github.com/doer/doer-flutter)
 
 Experts: Greg Price, Chris Bobbe, Rajesh Malviya
 
-- Work on the **Flutter-based Zulip client**.
-  Zulip's brand new Futter-based mobile app was [released last
+- Work on the **Flutter-based Doer client**.
+  Doer's brand new Futter-based mobile app was [released last
   summer][flutter-release-post].
 
   This project will involve building features for the mobile app,
   including code for UI, data structures, and interacting with the
-  Zulip server and the Android and/or iOS platforms.
+  Doer server and the Android and/or iOS platforms.
   For a sense of the features we're working on, see our
   [project board][flutter-board];
   the tasks we'll be working on during GSoC will come mostly from
@@ -369,8 +369,8 @@ Experts: Greg Price, Chris Bobbe, Rajesh Malviya
   necessary.
 
 [flutter-release-post]: https://blog.zulip.com/2025/06/17/flutter-mobile-app-launched/
-[flutter-board]: https://github.com/orgs/zulip/projects/5/views/4
-[flutter-milestone-M9]: https://github.com/zulip/zulip-flutter/milestone/14
-[flutter-milestone-MXA]: https://github.com/zulip/zulip-flutter/milestone/4
+[flutter-board]: https://github.com/orgs/doer/projects/5/views/4
+[flutter-milestone-M9]: https://github.com/doer/doer-flutter/milestone/14
+[flutter-milestone-MXA]: https://github.com/doer/doer-flutter/milestone/4
 [flutter-upstream-summary]: https://chat.zulip.org/#narrow/channel/2-general/topic/Flutter/near/1524757
 [flutter-upstream-autocomplete]: https://github.com/flutter/flutter/pull/129802

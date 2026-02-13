@@ -1,13 +1,13 @@
 {
     "model":{
         "id":"597958d15c95392f2830e9f5",
-        "name":"Zulip",
+        "name":"Doer",
         "desc":"",
         "descData":null,
         "closed":false,
         "idOrganization":null,
         "pinned":false,
-        "url":"https://trello.com/b/l9NqJcCd/zulip",
+        "url":"https://trello.com/b/l9NqJcCd/doer",
         "shortUrl":"https://trello.com/b/l9NqJcCd",
         "prefs":{
             "permissionLevel":"private",
@@ -52,13 +52,13 @@
             },
             "board":{
                 "shortLink":"l9NqJcCd",
-                "name":"Zulip",
+                "name":"Doer",
                 "id":"597958d15c95392f2830e9f5"
             },
             "card":{
                 "shortLink":"R9VBNGce",
                 "idShort":1,
-                "name":"Work on Zulip!",
+                "name":"Work on Doer!",
                 "id":"597958df4120dc412438c3c4",
                 "pos":196607
             },
@@ -83,7 +83,7 @@
                     "pos":196607,
                     "id":"597958df4120dc412438c3c4",
                     "shortLink":"R9VBNGce",
-                    "text":"Work on Zulip!"
+                    "text":"Work on Doer!"
                 },
                 "memberCreator":{
                     "type":"member",

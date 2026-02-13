@@ -1,13 +1,13 @@
 # Typing indicators
 
-Zulip supports a feature called "typing indicators."
+Doer supports a feature called "typing indicators."
 
 Typing indicators are status messages (or visual indicators) that
-tell you when another user is writing a message to you. Zulip's
+tell you when another user is writing a message to you. Doer's
 typing UI is similar to what you see in other chat/text systems.
 
 This document describes how we have implemented the feature in
-the Zulip web app, and our main audience is developers who want to
+the Doer web app, and our main audience is developers who want to
 understand the system and possibly improve it. Any client should
 be able follow the protocol documented here.
 
@@ -20,7 +20,7 @@ There are two major roles for users in this system:
 - The "receiving user" is waiting to receive a message (or possibly
   ready to shift their attention elsewhere).
 
-Any Zulip user can play either one of these roles, and sometimes
+Any Doer user can play either one of these roles, and sometimes
 they can be playing both roles at once. Having said that, you
 can generally understand the system in terms of a single message
 being composed by the "writing user."
@@ -49,7 +49,7 @@ that facilitates this is called `send_typing_notification_ajax`.
 
 If the "writing user" is composing a long message, we want to send
 repeated updates to the server so that downstream clients know the
-user is still typing. Zulip messages tend to be longer than
+user is still typing. Doer messages tend to be longer than
 messages in other chat/text clients, so this detail is important.
 
 We have a small state machine in `web/src/typing_status.ts`
@@ -78,7 +78,7 @@ how long they pause to think, and how frequently they get interrupted.
 ## Server
 
 The server piece of typing notifications is currently pretty
-straightforward, since we take advantage of Zulip's
+straightforward, since we take advantage of Doer's
 [events system](events-system.md).
 
 We deliberately designed the server piece to be stateless,

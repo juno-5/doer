@@ -1,10 +1,10 @@
 from zerver.actions.navigation_views import do_add_navigation_view
 from zerver.lib.navigation_views import get_navigation_views_for_user
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import UserProfile
 
 
-class NavigationViewTests(ZulipTestCase):
+class NavigationViewTests(DoerTestCase):
     def create_example_navigation_view(
         self, user: UserProfile, fragment: str, is_pinned: bool, name: str | None = None
     ) -> str:

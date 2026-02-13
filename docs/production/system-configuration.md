@@ -1,18 +1,18 @@
 ## System configuration
 
-The file `/etc/zulip/zulip.conf` is an [INI
+The file `/etc/zulip/doer.conf` is an [INI
 format](https://en.wikipedia.org/wiki/INI_file) configuration file
 used to configure properties of the system and deployment;
 `/etc/zulip/settings.py` is used to [configure the application
-itself](settings.md). The `zulip.conf` sections and settings are
-described below. Changes to `zulip.conf` generally do not take effect
-until you run `zulip-puppet-apply` as root:
+itself](settings.md). The `doer.conf` sections and settings are
+described below. Changes to `doer.conf` generally do not take effect
+until you run `doer-puppet-apply` as root:
 
 ```console
-# /home/zulip/deployments/current/scripts/zulip-puppet-apply
+# /home/zulip/deployments/current/scripts/doer-puppet-apply
 ```
 
-The `zulip-puppet-apply` command will display the configuration
+The `doer-puppet-apply` command will display the configuration
 changes it will make and prompt for you to confirm you'd like to make
 those changes, before executing them (if you approve).
 
@@ -37,21 +37,21 @@ Any other value (including the empty string) is considered false.
 #### `puppet_classes`
 
 A comma-separated list of the Puppet classes to install on the server.
-The most common is **`zulip::profile::standalone`**, used for a
+The most common is **`doer::profile::standalone`**, used for a
 stand-alone single-host deployment.
 [Components](../overview/architecture-overview.md#components) of
 that include:
 
-- **`zulip::profile::app_frontend`**
-- **`zulip::profile::memcached`**
-- **`zulip::profile::postgresql`**
-- **`zulip::profile::rabbitmq`**
-- **`zulip::profile::redis`**
-- **`zulip::profile::smokescreen`**
+- **`doer::profile::app_frontend`**
+- **`doer::profile::memcached`**
+- **`doer::profile::postgresql`**
+- **`doer::profile::rabbitmq`**
+- **`doer::profile::redis`**
+- **`doer::profile::smokescreen`**
 
 If you are using a [Apache as a single-sign-on
 authenticator](authentication-methods.md#apache-based-sso-with-remote_user),
-you will need to add **`zulip::apache_sso`** to the list.
+you will need to add **`doer::apache_sso`** to the list.
 
 #### `pgroonga`
 
@@ -63,18 +63,18 @@ extension](../subsystems/full-text-search.md#multi-language-full-text-search).
 What time synchronization daemon to use; defaults to `chrony`, but also supports
 `ntpd` and `none`. Installations should not adjust this unless they are aligning
 with a fleet-wide standard of `ntpd`. `none` is only reasonable in containers
-like LXC which do not allow adjustment of the clock; a Zulip server will not
+like LXC which do not allow adjustment of the clock; a Doer server will not
 function correctly without an accurate clock.
 
 ### `[deployment]`
 
 #### `deploy_options`
 
-Options passed by `upgrade-zulip` and `upgrade-zulip-from-git` into
-`upgrade-zulip-stage-2`. These might be any of:
+Options passed by `upgrade-doer` and `upgrade-doer-from-git` into
+`upgrade-doer-stage-2`. These might be any of:
 
 - **`--skip-puppet`** skips doing Puppet/apt upgrades. The user will need
-  to run `zulip-puppet-apply` manually after the upgrade.
+  to run `doer-puppet-apply` manually after the upgrade.
 - **`--skip-migrations`** skips running database migrations. The
   user will need to run `./manage.py migrate` manually after the upgrade.
 - **`--skip-purge-old-deployments`** skips purging old deployments;
@@ -82,7 +82,7 @@ Options passed by `upgrade-zulip` and `upgrade-zulip-from-git` into
 
 Generally installations will not want to set any of these options; the
 `--skip-*` options are primarily useful for reducing upgrade downtime
-for servers that are upgraded frequently by core Zulip developers.
+for servers that are upgraded frequently by core Doer developers.
 
 #### `git_repo_url`
 
@@ -93,11 +93,11 @@ repository](upgrade.md#upgrading-from-a-git-repository).
 
 #### `http_only`
 
-If set to true, [configures Zulip to allow HTTP access][using-http];
-use if Zulip is deployed behind a reverse proxy that is handling
+If set to true, [configures Doer to allow HTTP access][using-http];
+use if Doer is deployed behind a reverse proxy that is handling
 SSL/TLS termination.
 
-[using-http]: reverse-proxies.md#configuring-zulip-to-allow-http
+[using-http]: reverse-proxies.md#configuring-doer-to-allow-http
 
 #### `nginx_listen_port`
 
@@ -124,11 +124,11 @@ consumed by nginx. This number, times the number of worker processes
 
 #### `queue_workers_multiprocess`
 
-By default, Zulip automatically detects whether the system has enough
-memory to run Zulip queue processors in the higher-throughput but more
+By default, Doer automatically detects whether the system has enough
+memory to run Doer queue processors in the higher-throughput but more
 multiprocess mode (or to save 1.5GiB of RAM with the multithreaded
 mode). The calculation is based on whether the system has enough
-memory (currently 3.5GiB) to run a single-server Zulip installation in
+memory (currently 3.5GiB) to run a single-server Doer installation in
 the multiprocess mode.
 
 Set explicitly to true or false to override the automatic
@@ -142,7 +142,7 @@ using remote servers for PostgreSQL, memcached, Redis, and RabbitMQ.
 #### `rolling_restart`
 
 If set to true, when using `./scripts/restart-server` to restart
-Zulip, restart the uwsgi processes one-at-a-time, instead of all at
+Doer, restart the uwsgi processes one-at-a-time, instead of all at
 once. This decreases the number of 502's served to clients, at the
 cost of slightly increased memory usage, and the possibility that
 different requests will be served by different versions of the code.
@@ -150,7 +150,7 @@ different requests will be served by different versions of the code.
 #### `service_file_descriptor_limit`
 
 The number of file descriptors which [Supervisor is configured to allow
-processes to use][supervisor-minfds]; defaults to 40000. If your Zulip deployment
+processes to use][supervisor-minfds]; defaults to 40000. If your Doer deployment
 is very large (hundreds of thousands of concurrent users), your Django processes
 hit this limit and refuse connections to clients. Raising it above this default
 may require changing system-level limits, particularly if you are using a
@@ -198,7 +198,7 @@ necessary on quite large installs.
 
 When the [S3 storage backend][s3-backend] is in use, downloads from S3 are
 proxied from nginx, whose configuration requires an explicit value of a DNS
-nameserver to resolve the S3 server's hostname. Zulip defaults to using the
+nameserver to resolve the S3 server's hostname. Doer defaults to using the
 resolver found in `/etc/resolv.conf`; this setting overrides any value found
 there.
 
@@ -235,13 +235,13 @@ Set to the port number for the KaTeX server; defaults to port 9700.
 
 If you use a custom certificate authority for your authentication
 provider, you will need to provide the certificate of the signing CA
-so Zulip can successfully make requests to it.
+so Doer can successfully make requests to it.
 
 Set this to the fully-qualified path to the `.crt` file containing the
 PEM-encoded CA certificate to trust; we suggest storing this in
 `/etc/zulip/`.
 
-Setting this path also means that Zulip will use the operating
+Setting this path also means that Doer will use the operating
 system's CA certificate store, and not its built-in one. There may be
 minor differences in trusted root CA sets.
 
@@ -261,7 +261,7 @@ setting](https://www.postgresql.org/docs/current/runtime-config-connection.html#
 
 Override PostgreSQL's [`random_page_cost`
 setting](https://www.postgresql.org/docs/current/runtime-config-query.html#GUC-RANDOM-PAGE-COST).
-Zulip defaults this value to 1.1, which is an appropriate value for
+Doer defaults this value to 1.1, which is an appropriate value for
 SSDs; if your server uses spinning disks, you should set this back to
 the upstream default of 4.0.
 
@@ -337,7 +337,7 @@ and `brotli` are middling compromises.
 #### `missing_dictionaries`
 
 If set to a true value during initial database creation, uses PostgreSQL's
-standard `pg_catalog.english` text search configuration, rather than Zulip's
+standard `pg_catalog.english` text search configuration, rather than Doer's
 improved set of stopwords. Has no effect after initial database construction.
 
 #### `ssl_ca_file`
@@ -379,7 +379,7 @@ configured to consume; defaults to 1/8th of the total server memory.
 #### `max_item_size`
 
 Override the maximum size that an item in memcached can store. This defaults to
-1m; adjusting it should only be necessary if your Zulip server has organizations
+1m; adjusting it should only be necessary if your Doer server has organizations
 which have more than 20k users.
 
 #### `size_reporting`
@@ -426,7 +426,7 @@ Tornado shards by joining the ports in the key with `_`:
 9801_9802 = very-large-realm
 ```
 
-After running `scripts/zulip-puppet-apply`, a separate step to run
+After running `scripts/doer-puppet-apply`, a separate step to run
 `scripts/refresh-sharding-and-restart` is required for any sharding
 changes to take effect.
 
@@ -444,9 +444,9 @@ Set to a true value if incoming requests from load loadbalancer's IP addresses
 which do not contain an `X-Forwarded-Proto` should be assumed to have come into
 them over HTTPS. This setting _is a security vulnerability_ unless the load
 balancer unilaterally rejects unencrypted HTTP connections, or responds to them
-with 301 status codes. Note that Zulip's HSTS headers are not sufficient
+with 301 status codes. Note that Doer's HSTS headers are not sufficient
 protection here, since API clients do not respect them; the load balancer _must
-not_ send any requests to Zulip which came in unencrypted.
+not_ send any requests to Doer which came in unencrypted.
 
 ### `[http_proxy]`
 

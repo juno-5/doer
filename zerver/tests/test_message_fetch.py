@@ -49,7 +49,7 @@ from zerver.lib.narrow_helpers import NeverNegatedNarrowTerm
 from zerver.lib.narrow_predicate import build_narrow_predicate
 from zerver.lib.sqlalchemy_utils import get_sqlalchemy_connection
 from zerver.lib.streams import StreamDict, create_streams_if_needed, get_public_streams_queryset
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock, get_user_messages, queries_captured
 from zerver.lib.topic import MATCH_TOPIC, RESOLVED_TOPIC_PREFIX, TOPIC_NAME, messages_for_topic
 from zerver.lib.types import UserDisplayRecipient
@@ -116,11 +116,11 @@ def first_visible_id_as(message_id: int) -> Any:
     )
 
 
-class NarrowBuilderTest(ZulipTestCase):
+class NarrowBuilderTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
         self.user_profile = self.example_user("hamlet")
         self.builder = NarrowBuilder(self.user_profile, column("id", Integer), self.realm)
         self.raw_query = select(column("id", Integer)).select_from(table("zerver_message"))
@@ -176,7 +176,7 @@ class NarrowBuilderTest(ZulipTestCase):
                 "history_public_to_subscribers": True,
             },
         ]
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         created, existing = create_streams_if_needed(realm, channel_dicts)
         self.assert_length(created, 3)
         self.assert_length(existing, 0)
@@ -212,7 +212,7 @@ class NarrowBuilderTest(ZulipTestCase):
                 "history_public_to_subscribers": True,
             },
         ]
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         created, existing = create_streams_if_needed(realm, channel_dicts)
         self.assert_length(created, 3)
         self.assert_length(existing, 0)
@@ -849,7 +849,7 @@ class NarrowBuilderTest(ZulipTestCase):
         )
 
 
-class NarrowLibraryTest(ZulipTestCase):
+class NarrowLibraryTest(DoerTestCase):
     def test_build_narrow_predicate(self) -> None:
         narrow_predicate = build_narrow_predicate(
             [NeverNegatedNarrowTerm(operator="channel", operand="devel")]
@@ -1219,7 +1219,7 @@ class NarrowLibraryTest(ZulipTestCase):
         )
 
 
-class IncludeHistoryTest(ZulipTestCase):
+class IncludeHistoryTest(DoerTestCase):
     def test_ok_to_include_history(self) -> None:
         user_profile = self.example_user("hamlet")
         self.make_stream("public_channel", realm=user_profile.realm)
@@ -1377,7 +1377,7 @@ class IncludeHistoryTest(ZulipTestCase):
         self.assertTrue(ok_to_include_history(narrow, subscribed_user_profile, False))
 
 
-class PostProcessTest(ZulipTestCase):
+class PostProcessTest(DoerTestCase):
     def test_basics(self) -> None:
         def verify(
             in_ids: list[int],
@@ -1959,7 +1959,7 @@ class PostProcessTest(ZulipTestCase):
         )
 
 
-class GetOldMessagesTest(ZulipTestCase):
+class GetOldMessagesTest(DoerTestCase):
     def get_and_check_messages(
         self, modified_params: dict[str, str | int], **kwargs: Any
     ) -> dict[str, Any]:
@@ -2049,15 +2049,15 @@ class GetOldMessagesTest(ZulipTestCase):
         return query_ids
 
     def check_unauthenticated_response(
-        self, result: "TestHttpResponse", www_authenticate: str = 'Session realm="zulip"'
+        self, result: "TestHttpResponse", www_authenticate: str = 'Session realm="doer"'
     ) -> None:
         """
         In `JsonErrorHandler`, we convert `MissingAuthenticationError` into responses with `WWW-Authenticate`
         set depending on which endpoint encounters the error.
 
         This verifies the status code as well as the value of the set header.
-        `www_authenticate` should be `Basic realm="zulip"` for paths starting with "/api", and
-        `Session realm="zulip"` otherwise.
+        `www_authenticate` should be `Basic realm="doer"` for paths starting with "/api", and
+        `Session realm="doer"` otherwise.
         """
         self.assert_json_error(
             result, "Not logged in: API authentication or user session required", status_code=401
@@ -2160,7 +2160,7 @@ class GetOldMessagesTest(ZulipTestCase):
         # Paths starting with /api/v1 should receive a response that asks
         # for basic auth.
         result = self.client_get("/api/v1/messages", dict(get_params))
-        self.check_unauthenticated_response(result, www_authenticate='Basic realm="zulip"')
+        self.check_unauthenticated_response(result, www_authenticate='Basic realm="doer"')
 
         # Successful access to web-public channel messages.
         web_public_channel_get_params: dict[str, int | str | bool] = {
@@ -2207,11 +2207,11 @@ class GetOldMessagesTest(ZulipTestCase):
 
         # Spectator login disabled in Realm.
         do_set_realm_property(
-            get_realm("zulip"), "enable_spectator_access", False, acting_user=None
+            get_realm("doer"), "enable_spectator_access", False, acting_user=None
         )
         result = self.client_get("/json/messages", dict(web_public_channel_get_params))
         self.check_unauthenticated_response(result)
-        do_set_realm_property(get_realm("zulip"), "enable_spectator_access", True, acting_user=None)
+        do_set_realm_property(get_realm("doer"), "enable_spectator_access", True, acting_user=None)
         # Verify works after enabling `realm.enable_spectator_access` again.
         result = self.client_get("/json/messages", dict(web_public_channel_get_params))
         self.assert_json_success(result)
@@ -2307,7 +2307,7 @@ class GetOldMessagesTest(ZulipTestCase):
 
     def test_message_fetch_for_inaccessible_message_ids(self) -> None:
         # Add new channels
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel_dicts: list[StreamDict] = [
             {
                 "name": "private-channel",
@@ -2355,7 +2355,7 @@ class GetOldMessagesTest(ZulipTestCase):
         self.assert_length(messages, 2)
 
         # These messages are not accessible if they are after first_visible_message_id.
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.first_visible_message_id = max(message_ids) + 1
         realm.save(update_fields=["first_visible_message_id"])
 
@@ -2905,7 +2905,7 @@ class GetOldMessagesTest(ZulipTestCase):
             cursor.execute(
                 """
             UPDATE zerver_message SET
-            search_tsvector = to_tsvector('zulip.english_us_search',
+            search_tsvector = to_tsvector('doer.english_us_search',
             subject || rendered_content)
             """
             )
@@ -4248,7 +4248,7 @@ class GetOldMessagesTest(ZulipTestCase):
             client_gravatar=False,
             allow_empty_topic_name=True,
             can_access_sender=True,
-            realm_host=get_realm("zulip").host,
+            realm_host=get_realm("doer").host,
             is_incoming_1_to_1=False,
         )
         self.assertEqual(final_dict["content"], "<p>test content</p>")
@@ -4807,7 +4807,7 @@ class GetOldMessagesTest(ZulipTestCase):
         doing.
         """
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.make_stream("web stuff")
         self.make_stream("bogus")
         user_profile = self.example_user("hamlet")
@@ -4890,7 +4890,7 @@ class GetOldMessagesTest(ZulipTestCase):
         self.assertEqual([m["id"] for m in result["messages"]], [mention_message_id])
 
     def test_exclude_muting_conditions(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.make_stream("web stuff")
         user_profile = self.example_user("hamlet")
 
@@ -5350,9 +5350,9 @@ WHERE zerver_subscription.user_profile_id = {hamlet_id} AND zerver_subscription.
         sql_template = """\
 SELECT anon_1.message_id, anon_1.flags, anon_1.escaped_topic_name, anon_1.rendered_content, anon_1.content_matches, anon_1.topic_matches \n\
 FROM (SELECT message_id, flags, escape_html(subject) AS escaped_topic_name, rendered_content, array((SELECT ARRAY[sum(length(anon_3) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_3, '</ts-match>') - 1] AS anon_2 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', rendered_content, plainto_tsquery('zulip.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', rendered_content, plainto_tsquery('doer.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
  LIMIT ALL OFFSET 1)) AS content_matches, array((SELECT ARRAY[sum(length(anon_5) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_5, '</ts-match>') - 1] AS anon_4 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', escape_html(subject), plainto_tsquery('zulip.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', escape_html(subject), plainto_tsquery('doer.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
  LIMIT ALL OFFSET 1)) AS topic_matches \n\
 FROM zerver_usermessage JOIN zerver_message ON zerver_usermessage.message_id = zerver_message.id JOIN zerver_recipient ON zerver_message.recipient_id = zerver_recipient.id \n\
 WHERE user_profile_id = {hamlet_id} AND (zerver_recipient.type != 2 OR (EXISTS (SELECT  \n\
@@ -5370,9 +5370,9 @@ WHERE zerver_subscription.user_profile_id = {hamlet_id} AND zerver_subscription.
         sql_template = """\
 SELECT anon_1.message_id, anon_1.escaped_topic_name, anon_1.rendered_content, anon_1.content_matches, anon_1.topic_matches \n\
 FROM (SELECT id AS message_id, escape_html(subject) AS escaped_topic_name, rendered_content, array((SELECT ARRAY[sum(length(anon_3) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_3, '</ts-match>') - 1] AS anon_2 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', rendered_content, plainto_tsquery('zulip.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', rendered_content, plainto_tsquery('doer.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
  LIMIT ALL OFFSET 1)) AS content_matches, array((SELECT ARRAY[sum(length(anon_5) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_5, '</ts-match>') - 1] AS anon_4 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', escape_html(subject), plainto_tsquery('zulip.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', escape_html(subject), plainto_tsquery('doer.english_us_search', 'jumping'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
  LIMIT ALL OFFSET 1)) AS topic_matches \n\
 FROM zerver_message \n\
 WHERE realm_id = 2 AND recipient_id = {scotland_recipient} AND (search_tsvector @@ plainto_tsquery('zulip.english_us_search', 'jumping')) ORDER BY zerver_message.id ASC \n\
@@ -5392,9 +5392,9 @@ WHERE realm_id = 2 AND recipient_id = {scotland_recipient} AND (search_tsvector 
         sql_template = """\
 SELECT anon_1.message_id, anon_1.flags, anon_1.escaped_topic_name, anon_1.rendered_content, anon_1.content_matches, anon_1.topic_matches \n\
 FROM (SELECT message_id, flags, escape_html(subject) AS escaped_topic_name, rendered_content, array((SELECT ARRAY[sum(length(anon_3) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_3, '</ts-match>') - 1] AS anon_2 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', rendered_content, plainto_tsquery('zulip.english_us_search', '"jumping" quickly'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', rendered_content, plainto_tsquery('doer.english_us_search', '"jumping" quickly'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_3\n\
  LIMIT ALL OFFSET 1)) AS content_matches, array((SELECT ARRAY[sum(length(anon_5) - 11) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) + 11, strpos(anon_5, '</ts-match>') - 1] AS anon_4 \n\
-FROM unnest(string_to_array(ts_headline('zulip.english_us_search', escape_html(subject), plainto_tsquery('zulip.english_us_search', '"jumping" quickly'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
+FROM unnest(string_to_array(ts_headline('doer.english_us_search', escape_html(subject), plainto_tsquery('doer.english_us_search', '"jumping" quickly'), 'HighlightAll = TRUE, StartSel = <ts-match>, StopSel = </ts-match>'), '<ts-match>')) AS anon_5\n\
  LIMIT ALL OFFSET 1)) AS topic_matches \n\
 FROM zerver_usermessage JOIN zerver_message ON zerver_usermessage.message_id = zerver_message.id JOIN zerver_recipient ON zerver_message.recipient_id = zerver_recipient.id \n\
 WHERE user_profile_id = {hamlet_id} AND (zerver_recipient.type != 2 OR (EXISTS (SELECT  \n\
@@ -5577,13 +5577,13 @@ WHERE zerver_subscription.user_profile_id = {hamlet_id} AND zerver_subscription.
         self.assertGreater(len(result["messages"]), 0)
 
 
-class MessageHasKeywordsTest(ZulipTestCase):
+class MessageHasKeywordsTest(DoerTestCase):
     """Test for keywords like has_link, has_image, has_attachment."""
 
     def setup_dummy_attachments(self, user_profile: UserProfile) -> list[str]:
         realm_id = user_profile.realm_id
         dummy_files = [
-            ("zulip.txt", f"{realm_id}/31/4CBjtTLYZhk66pZrF8hnYGwc/zulip.txt"),
+            ("doer.txt", f"{realm_id}/31/4CBjtTLYZhk66pZrF8hnYGwc/doer.txt"),
             ("temp_file.py", f"{realm_id}/31/4CBjtTLYZhk66pZrF8hnYGwc/temp_file.py"),
             ("abc.py", f"{realm_id}/31/4CBjtTLYZhk66pZrF8hnYGwc/abc.py"),
         ]
@@ -5599,7 +5599,7 @@ class MessageHasKeywordsTest(ZulipTestCase):
     def test_claim_attachment(self) -> None:
         user_profile = self.example_user("hamlet")
         dummy_path_ids = self.setup_dummy_attachments(user_profile)
-        dummy_urls = [f"http://zulip.testserver/user_uploads/{x}" for x in dummy_path_ids]
+        dummy_urls = [f"http://doer.testserver/user_uploads/{x}" for x in dummy_path_ids]
 
         # Send message referring the attachment
         self.subscribe(user_profile, "Denmark")
@@ -5611,7 +5611,7 @@ class MessageHasKeywordsTest(ZulipTestCase):
         # This message should claim attachments 1 only because attachment 2
         # is not being parsed as a link by Markdown.
         body = (
-            f"Some files here ...[zulip.txt]({dummy_urls[0]})"
+            f"Some files here ...[doer.txt]({dummy_urls[0]})"
             f"{dummy_urls[1]}.... Some more...."
             f"{dummy_urls[1]}"
         )
@@ -5717,10 +5717,10 @@ class MessageHasKeywordsTest(ZulipTestCase):
     def test_has_attachment(self) -> None:
         hamlet = self.example_user("hamlet")
         dummy_path_ids = self.setup_dummy_attachments(hamlet)
-        dummy_urls = [f"http://zulip.testserver/user_uploads/{x}" for x in dummy_path_ids]
+        dummy_urls = [f"http://doer.testserver/user_uploads/{x}" for x in dummy_path_ids]
         self.subscribe(hamlet, "Denmark")
 
-        body = f"Files ...[zulip.txt]({dummy_urls[0]}) {dummy_urls[1]} {dummy_urls[2]}"
+        body = f"Files ...[doer.txt]({dummy_urls[0]}) {dummy_urls[1]} {dummy_urls[2]}"
 
         msg_id = self.send_stream_message(hamlet, "Denmark", body, "test")
         msg = Message.objects.get(id=msg_id)
@@ -5824,7 +5824,7 @@ class MessageHasKeywordsTest(ZulipTestCase):
         self.assert_length(messages, 1)
 
 
-class MessageIsTest(ZulipTestCase):
+class MessageIsTest(DoerTestCase):
     def test_message_is_followed(self) -> None:
         self.login("iago")
         is_followed_narrow = orjson.dumps([dict(operator="is", operand="followed")]).decode()
@@ -5931,7 +5931,7 @@ class MessageIsTest(ZulipTestCase):
         # covers that code path pretty well.
 
 
-class MessageVisibilityTest(ZulipTestCase):
+class MessageVisibilityTest(DoerTestCase):
     def test_update_first_visible_message_id(self) -> None:
         Message.objects.all().delete()
         message_ids = [
@@ -5940,7 +5940,7 @@ class MessageVisibilityTest(ZulipTestCase):
 
         # If message_visibility_limit is None update_first_visible_message_id
         # should set first_visible_message_id to 0
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.message_visibility_limit = None
         # Setting to a random value other than 0 as the default value of
         # first_visible_message_id is 0
@@ -5963,7 +5963,7 @@ class MessageVisibilityTest(ZulipTestCase):
         self.assertEqual(get_first_visible_message_id(realm), 0)
 
     def test_maybe_update_first_visible_message_id(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         lookback_hours = 30
 
         realm.message_visibility_limit = None
@@ -5990,9 +5990,9 @@ class MessageVisibilityTest(ZulipTestCase):
         m.assert_called_once_with(realm)
 
 
-class PersonalMessagesTest(ZulipTestCase):
+class PersonalMessagesTest(DoerTestCase):
     def test_pm_message_url(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         message = dict(
             type="personal",
             id=555,
@@ -6005,11 +6005,11 @@ class PersonalMessagesTest(ZulipTestCase):
             realm=realm,
             message=message,
         )
-        self.assertEqual(url, "http://zulip.testserver/#narrow/dm/77,80/near/555")
+        self.assertEqual(url, "http://doer.testserver/#narrow/dm/77,80/near/555")
 
         url = message_link_url(
             realm=realm,
             message=message,
             conversation_link=True,
         )
-        self.assertEqual(url, "http://zulip.testserver/#narrow/dm/77,80/with/555")
+        self.assertEqual(url, "http://doer.testserver/#narrow/dm/77,80/with/555")

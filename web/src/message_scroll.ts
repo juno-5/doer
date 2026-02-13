@@ -153,7 +153,7 @@ export function initialize(): void {
     );
 
     // Scroll handler that marks messages as read when you scroll past them.
-    $(document).on("message_selected.zulip", (event) => {
+    $(document).on("message_selected.doer", (event) => {
         if (event.id === -1) {
             return;
         }

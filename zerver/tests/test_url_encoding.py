@@ -1,4 +1,4 @@
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.url_encoding import (
     encode_channel,
     encode_hash_component,
@@ -11,7 +11,7 @@ from zerver.models.realms import get_realm
 from zerver.models.streams import get_stream
 
 
-class URLEncodeTest(ZulipTestCase):
+class URLEncodeTest(DoerTestCase):
     def test_encode_channel(self) -> None:
         # We have more tests for this function in `test_topic_link_utils.py`
         self.assertEqual(encode_channel(9, "Verona"), "9-Verona")
@@ -52,7 +52,7 @@ class URLEncodeTest(ZulipTestCase):
         self.assertEqual(encode_user_full_name_and_id("User_Name", 5), "5-User_Name")
 
     def test_stream_message_url(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         topic = "test topic"
         channel = get_stream("Verona", realm)
         channel_message_id = self.send_stream_message(

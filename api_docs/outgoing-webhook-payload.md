@@ -1,26 +1,26 @@
 # Outgoing webhook payloads
 
-Zulip supports [outgoing webhooks](/help/outgoing-webhooks) in a clean,
-native [Zulip format](#zulip-format), as well as in a [Slack-compatible
+Doer supports [outgoing webhooks](/help/outgoing-webhooks) in a clean,
+native [Doer format](#doer-format), as well as in a [Slack-compatible
 format](#slack-compatible-format).
 
-## Zulip format
+## Doer format
 
-{generate_code_example|/zulip-outgoing-webhook:post|fixture}
+{generate_code_example|/doer-outgoing-webhook:post|fixture}
 
 ### Fields documentation
 
-{generate_return_values_table|zulip.yaml|/zulip-outgoing-webhook:post}
+{generate_return_values_table|doer.yaml|/doer-outgoing-webhook:post}
 
 ## Slack-compatible format
 
 This webhook format is compatible with [Slack's outgoing webhook
 API](https://api.slack.com/custom-integrations/outgoing-webhooks),
 which can help with porting an existing Slack integration to work with
-Zulip, and allows immediate integration with many third-party systems
+Doer, and allows immediate integration with many third-party systems
 that already support Slack outgoing webhooks.
 
-The following table details how the Zulip server translates a Zulip
+The following table details how the Doer server translates a Doer
 message into the Slack-compatible webhook format.
 
 <table class="table">
@@ -38,11 +38,11 @@ message into the Slack-compatible webhook format.
         </tr>
         <tr>
             <td><code>team_id</code></td>
-            <td>ID of the Zulip organization prefixed by "T".</td>
+            <td>ID of the Doer organization prefixed by "T".</td>
         </tr>
         <tr>
             <td><code>team_domain</code></td>
-            <td>Hostname of the Zulip organization</td>
+            <td>Hostname of the Doer organization</td>
         </tr>
         <tr>
             <td><code>channel_id</code></td>
@@ -88,7 +88,7 @@ The above data is posted as list of tuples (not JSON), here's an example:
 ```
 [('token', 'v9fpCdldZIej2bco3uoUvGp06PowKFOf'),
  ('team_id', 'T1512'),
- ('team_domain', 'zulip.example.com'),
+ ('team_domain', 'doer.example.com'),
  ('channel_id', 'C123'),
  ('channel_name', 'integrations'),
  ('thread_ts', 1532078950),

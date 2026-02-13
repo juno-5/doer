@@ -1,6 +1,6 @@
-# Zulip Airbrake integration
+# Doer Airbrake integration
 
-Get Zulip notifications for your Airbrake bug tracker!
+Get Doer notifications for your Airbrake bug tracker!
 
 {start_tabs}
 

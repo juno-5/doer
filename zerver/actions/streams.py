@@ -92,7 +92,7 @@ def maybe_set_moderation_or_announcement_channels_none(stream: Stream) -> None:
         "moderation_request_channel_id",
         "new_stream_announcements_stream_id",
         "signup_announcements_stream_id",
-        "zulip_update_announcements_stream_id",
+        "doer_update_announcements_stream_id",
     )
     update_realm_moderation_or_announcement_channels = []
 

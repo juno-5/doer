@@ -1,6 +1,6 @@
-# Zulip Shortcut integration
+# Doer Shortcut integration
 
-Get Zulip notifications for your Shortcut Stories and Epics!
+Get Doer notifications for your Shortcut Stories and Epics!
 
 {start_tabs}
 

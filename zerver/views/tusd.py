@@ -66,7 +66,7 @@ class TusHook(BaseModel):
 
 
 # Note that we do not raise JsonableError in these views
-# because our client is not a consumer of the Zulip API -- it's tusd,
+# because our client is not a consumer of the Doer API -- it's tusd,
 # which has its own ideas of what error responses look like.
 def tusd_json_response(data: dict[str, Any]) -> HttpResponse:
     return HttpResponse(
@@ -187,7 +187,7 @@ def handle_upload_pre_finish_hook(
         # https://tus.github.io/tusd/storage-backends/overview/#storage-format
         # tusd also creates a .info file next to the upload, which
         # must be preserved for HEAD requests (to check for upload
-        # state) to work.  These files are inaccessible via Zulip, and
+        # state) to work.  These files are inaccessible via Doer, and
         # small enough to not pose any notable storage use; but we
         # should store them with the right StorageClass.
         if settings.S3_UPLOADS_STORAGE_CLASS != "STANDARD":

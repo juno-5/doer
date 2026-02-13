@@ -6,11 +6,11 @@ from django.core.cache import cache
 from django.db.models import F
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserMessage
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Script to mark all messages as unread."""
 
     @override

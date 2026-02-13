@@ -14,7 +14,7 @@ from django.db.models.functions import Upper
 from django.utils.translation import gettext as _
 from django_otp.middleware import is_verified
 from typing_extensions import NotRequired
-from zulip_bots.custom_exceptions import ConfigValidationError
+from doer_bots.custom_exceptions import ConfigValidationError
 
 from zerver.lib.avatar import avatar_url, get_avatar_field, get_avatar_for_inaccessible_user
 from zerver.lib.cache import cache_with_key, get_cross_realm_dicts_key
@@ -179,7 +179,7 @@ def check_valid_bot_config(
         except ConfigValidationError:
             # The exception provides a specific error message, but that
             # message is not tagged translatable, because it is
-            # triggered in the external zulip_bots package.
+            # triggered in the external doer_bots package.
             # TODO: Think of some clever way to provide a more specific
             # error message.
             raise JsonableError(_("Invalid configuration data!"))
@@ -650,7 +650,7 @@ def format_user_row(
         # or can reveal personal information about a user.
         del result["timezone"]
 
-    # Zulip clients that support using `GET /avatar/{user_id}` as a
+    # Doer clients that support using `GET /avatar/{user_id}` as a
     # fallback if we didn't send an avatar URL in the user object pass
     # user_avatar_url_field_optional in client_capabilities.
     #
@@ -1151,7 +1151,7 @@ def get_users_for_api(
     user_ids: list[int] | None = None,
 ) -> dict[int, APIUserDict]:
     """Fetches data about the target user(s) appropriate for sending to
-    acting_user via the standard format for the Zulip API.  If
+    acting_user via the standard format for the Doer API.  If
     target_user is None, we fetch all users in the realm.
     """
     profiles_by_user_id = None

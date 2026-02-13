@@ -5,10 +5,10 @@ title: View someone's profile
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import RightSidebarViewProfile from "../include/_RightSidebarViewProfile.mdx";
 
-import LinkIcon from "~icons/zulip-icon/link";
+import LinkIcon from "~icons/doer-icon/link";
 
 A user's profile displays key information about the user.
 
@@ -54,11 +54,11 @@ A user's profile displays key information about the user.
       <RightSidebarViewProfile />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click on a user's profile picture or name on a
       message they sent to open their **user card**, and skip to
       the last step.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">

@@ -1,15 +1,15 @@
 # How we communicate
 
-The primary communication forum for the Zulip community is the Zulip server
+The primary communication forum for the Doer community is the Doer server
 hosted at [chat.zulip.org](https://chat.zulip.org/). If you are not familiar
-with it, start by reading the [Zulip development community
+with it, start by reading the [Doer development community
 guide](https://zulip.com/development-community/). The guidelines here also apply
 to how we communicate on GitHub issues and pull requests, but other pages in
 this section go into greater detail about expectations that are specific to pull
 requests.
 
 We are deeply committed to maintaining a respectful, collaborative atmosphere in
-across all interactions in the Zulip community. To get a feel for what that
+across all interactions in the Doer community. To get a feel for what that
 means to us, please review the [code of conduct](../code-of-conduct.md) for our
 community.
 
@@ -62,7 +62,7 @@ better decisions as a group, and learn and have fun along the way.
 - If you think someone is factually mistaken, consider how they might have reached
   their conclusion, and aim to get to a shared understanding. For example:
 
-  - “I wasn't able to replicate this -- is it possible you are on an old Zulip
+  - “I wasn't able to replicate this -- is it possible you are on an old Doer
     server?”, rather than “This bug report is wrong.”
   - “Using this function won't work here, because...” instead of “That's the
     wrong function.”
@@ -75,7 +75,7 @@ better decisions as a group, and learn and have fun along the way.
 
 ## Expressing your appreciation
 
-There are many ways to contribute to the Zulip community, and it's important to
+There are many ways to contribute to the Doer community, and it's important to
 express our appreciation for all the different ways in which folks jump in to
 help. It helps motivate others, builds consensus towards decisions, and creates
 a more positive atmosphere in the community.
@@ -101,7 +101,7 @@ to try something new.
   on their work.
 
 - You can use a variety of channels to express your appreciation. A comment
-  directly in a Zulip thread or on a pull request is often best, but in some
+  directly in a Doer thread or on a pull request is often best, but in some
   cases you may also want to send a friendly direct message. For example:
 
   - “I've noticed that you've been answering lots of questions in #**development

@@ -1,6 +1,6 @@
 # Code style and conventions
 
-This page documents code style policies that every Zulip developer
+This page documents code style policies that every Doer developer
 should understand. We aim for this document to be short and focused
 only on details that cannot be easily enforced another way (e.g.,
 through linters, automated tests, or subsystem design that makes classes
@@ -8,7 +8,7 @@ of mistakes unlikely). This approach minimizes the cognitive
 load of ensuring a consistent coding style for both contributors and
 maintainers.
 
-One can summarize Zulip's coding philosophy as a relentless focus on
+One can summarize Doer's coding philosophy as a relentless focus on
 making the codebase easy to understand and difficult to make dangerous
 mistakes in (see the sections on [dangerous constructs](#dangerous-constructs-in-django)
 at the end of this page). The majority of work in any large software
@@ -26,7 +26,7 @@ interface works).
 
 After an introduction to our lint tools and test suites, this document
 outlines some general
-[conventions and practices](#follow-zulip-conventions-and-practices)
+[conventions and practices](#follow-doer-conventions-and-practices)
 applicable to all languages used in the codebase, as well as specific
 guidance on [Python](#python-specific-conventions-and-practices) and
 [JavaScript and TypeScript](#javascript-and-typescript-conventions-and-practices).
@@ -98,7 +98,7 @@ $ ./tools/test-all
 But consult [our documentation on running tests](../testing/testing.md#running-tests),
 which covers more targeted approaches to commanding the test-runners.
 
-## Follow Zulip conventions and practices
+## Follow Doer conventions and practices
 
 What follows is language-neutral advice that is beyond the bounds of
 linters and automated tests.
@@ -120,7 +120,7 @@ that injects or modifies HTML (e.g., error messages).
 ### Correctly prepare paths destined for state or log files
 
 When writing out state or log files, always pass an absolute path
-through `zulip_path` (found in `zproject/computed_settings.py`), which
+through `doer_path` (found in `zproject/computed_settings.py`), which
 will do the right thing in both development and production.
 
 ### Never include secrets inline with code

@@ -1,7 +1,7 @@
-diff --git scripts/setup/apt-repos/zulip/custom.sh scripts/setup/apt-repos/zulip/custom.sh
+diff --git scripts/setup/apt-repos/doer/custom.sh scripts/setup/apt-repos/doer/custom.sh
 index be7c780b7e..ee363c7d65 100755
---- scripts/setup/apt-repos/zulip/custom.sh
-+++ scripts/setup/apt-repos/zulip/custom.sh
+--- scripts/setup/apt-repos/doer/custom.sh
++++ scripts/setup/apt-repos/doer/custom.sh
 @@ -2,7 +2,6 @@
  set -euo pipefail
  

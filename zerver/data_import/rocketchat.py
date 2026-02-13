@@ -186,7 +186,7 @@ def convert_channel_data(
             )
 
         # If the channel is read-only, then only admins and moderators
-        # should be allowed to post in the converted Zulip stream.
+        # should be allowed to post in the converted Doer stream.
         # For more details: https://zulip.com/help/channel-posting-policy
         #
         # See `Stream` model in `zerver/models/streams.py` to know about what each
@@ -206,7 +206,7 @@ def convert_channel_data(
 
         if stream_name == ROCKETCHAT_DEFAULT_ANNOUNCEMENTS_CHANNEL_NAME:
             zerver_realm[0]["new_stream_announcements_stream"] = stream["id"]
-            zerver_realm[0]["zulip_update_announcements_stream"] = stream["id"]
+            zerver_realm[0]["doer_update_announcements_stream"] = stream["id"]
 
         streams.append(stream)
 
@@ -476,8 +476,8 @@ def process_raw_message_batch(
         for user_id in mention_user_ids:
             user = user_handler.get_user(user_id=user_id)
             rc_mention = "@{short_name}".format(**user)
-            zulip_mention = "@**{full_name}**".format(**user)
-            content = content.replace(rc_mention, zulip_mention)
+            doer_mention = "@**{full_name}**".format(**user)
+            content = content.replace(rc_mention, doer_mention)
 
         content = content.replace("@all", "@**all**")
         # We don't have an equivalent for Rocket.Chat's @here mention
@@ -487,8 +487,8 @@ def process_raw_message_batch(
         # Fix channel mentions
         for mention_data in rc_channel_mention_data:
             rc_mention = mention_data["rc_mention"]
-            zulip_mention = mention_data["zulip_mention"]
-            content = content.replace(rc_mention, zulip_mention)
+            doer_mention = mention_data["doer_mention"]
+            content = content.replace(rc_mention, doer_mention)
 
         return content
 
@@ -691,11 +691,11 @@ def process_messages(
                     # direct messages to yourself only have one user.
                     rc_member_ids.append(rc_member_ids[0])
                 if rc_sender_id == rc_member_ids[0]:
-                    zulip_member_id = user_id_mapper.get(rc_member_ids[1])
-                    message_dict["recipient_id"] = user_id_to_recipient_id[zulip_member_id]
+                    doer_member_id = user_id_mapper.get(rc_member_ids[1])
+                    message_dict["recipient_id"] = user_id_to_recipient_id[doer_member_id]
                 else:
-                    zulip_member_id = user_id_mapper.get(rc_member_ids[0])
-                    message_dict["recipient_id"] = user_id_to_recipient_id[zulip_member_id]
+                    doer_member_id = user_id_mapper.get(rc_member_ids[0])
+                    message_dict["recipient_id"] = user_id_to_recipient_id[doer_member_id]
         elif message["rid"] in dsc_id_to_dsc_map:
             # Message is in a discussion
             message_dict["is_channel_message"] = True
@@ -747,7 +747,7 @@ def process_messages(
                 rc_channel = room_id_to_room_map[mention_rc_channel_id]
                 converted_stream_name = get_stream_name(rc_channel)
 
-                zulip_mention = f"#**{converted_stream_name}**"
+                doer_mention = f"#**{converted_stream_name}**"
             elif mention_rc_channel_id in dsc_id_to_dsc_map:
                 # Channel is a discussion and is converted to a topic.
                 dsc_channel = dsc_id_to_dsc_map[mention_rc_channel_id]
@@ -776,12 +776,12 @@ def process_messages(
                 parent_rc_channel = room_id_to_room_map[parent_channel_id]
                 parent_stream_name = get_stream_name(parent_rc_channel)
 
-                zulip_mention = f"#**{parent_stream_name}>{converted_topic_name}**"
+                doer_mention = f"#**{parent_stream_name}>{converted_topic_name}**"
             else:  # nocoverage
-                logging.info("Failed to map mention '%s' to zulip syntax.", mention)
+                logging.info("Failed to map mention '%s' to doer syntax.", mention)
                 continue
 
-            mention_data = {"rc_mention": rc_mention, "zulip_mention": zulip_mention}
+            mention_data = {"rc_mention": rc_mention, "doer_mention": doer_mention}
             rc_channel_mention_data.append(mention_data)
         message_dict["rc_channel_mention_data"] = rc_channel_mention_data
 
@@ -919,7 +919,7 @@ def categorize_channels_and_map_with_id(
                     # We ignore these minor database corruptions
                     # in the Rocket.Chat export. Doing so is safe,
                     # because a direct message group with no message
-                    # history has no value in Zulip's data model.
+                    # history has no value in Doer's data model.
                     logging.debug("Skipping direct message group with 0 messages: %s", channel)
                 elif (
                     direct_message_group_members in direct_message_group_hashed_channels

@@ -12,7 +12,7 @@ from zerver.actions.users import (
     do_change_user_role,
 )
 from zerver.lib.exceptions import JsonableError
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserProfile
 
 ROLE_CHOICES = [
@@ -27,7 +27,7 @@ ROLE_CHOICES = [
 ]
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Change role of an existing user in their (own) Realm.
 
 ONLY perform this on customer request from an authorized person.

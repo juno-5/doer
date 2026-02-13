@@ -125,7 +125,7 @@ type GearMenuContext = {
     can_invite_users_by_email: boolean;
     is_guest: boolean;
     login_link: string;
-    promote_sponsoring_zulip: boolean;
+    promote_sponsoring_doer: boolean;
     show_billing: boolean;
     show_remote_billing: boolean;
     show_plans: boolean;
@@ -166,7 +166,7 @@ export function get_actions_popover_content_context(message_id: number): ActionP
     }
 
     // We do not offer "Mark as unread" on messages in streams
-    // that the user is not currently subscribed to. Zulip has an
+    // that the user is not currently subscribed to. Doer has an
     // invariant that all unread messages must be in streams the
     // user is subscribed to, and so the server will ignore any
     // messages in such streams; it's better to hint this is not
@@ -376,7 +376,7 @@ function get_billing_info(): BillingInfo {
     const is_org_on_paid_plan = is_plan_standard || is_plan_plus;
 
     billing_info.show_remote_billing = !page_params.corporate_enabled;
-    billing_info.show_plans = !realm.zulip_plan_is_not_limited;
+    billing_info.show_plans = !realm.doer_plan_is_not_limited;
     billing_info.show_billing = is_org_on_paid_plan;
 
     return billing_info;
@@ -408,7 +408,7 @@ export function get_gear_menu_content_context(): GearMenuContext {
         is_education_org:
             realm.realm_org_type === settings_config.all_org_type_values.education_nonprofit.code ||
             realm.realm_org_type === settings_config.all_org_type_values.education.code,
-        standard_plan_name: "Zulip Cloud Standard",
+        standard_plan_name: "Doer Cloud Standard",
         server_needs_upgrade: realm.server_needs_upgrade,
         version_display_string: gear_menu_util.version_display_string(),
         apps_page_url: page_params.apps_page_url,
@@ -416,7 +416,7 @@ export function get_gear_menu_content_context(): GearMenuContext {
         can_invite_users_by_email: settings_data.user_can_invite_users_by_email(),
         is_guest: current_user.is_guest,
         login_link: page_params.development_environment ? "/devlogin/" : "/login/",
-        promote_sponsoring_zulip: page_params.promote_sponsoring_zulip,
+        promote_sponsoring_doer: page_params.promote_sponsoring_doer,
         show_billing: billing_info.show_billing,
         show_remote_billing: billing_info.show_remote_billing,
         show_plans: billing_info.show_plans,

@@ -21,7 +21,7 @@ from django.utils.translation import gettext as _
 from tornado import autoreload
 from typing_extensions import override
 
-from version import API_FEATURE_LEVEL, ZULIP_MERGE_BASE, ZULIP_VERSION
+from version import API_FEATURE_LEVEL, DOER_MERGE_BASE, DOER_VERSION
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.message_cache import MessageDict
 from zerver.lib.narrow_helpers import narrow_dataclasses_from_tuples
@@ -379,7 +379,7 @@ class EventQueue:
             # simple events, such as update_message_flags events that
             # simply contain a list of message IDs to operate on, to
             # be compressed together. This is primarily useful for
-            # flags/add/read, where normal Zulip usage will result in
+            # flags/add/read, where normal Doer usage will result in
             # many small flags/add/read events as users scroll.
             #
             # We need to exclude flags/remove/read, because it has an
@@ -656,9 +656,9 @@ def load_event_queues(port: int) -> None:
 def send_restart_events() -> None:
     event: dict[str, Any] = dict(
         type="restart",
-        zulip_version=ZULIP_VERSION,
-        zulip_merge_base=ZULIP_MERGE_BASE,
-        zulip_feature_level=API_FEATURE_LEVEL,
+        doer_version=DOER_VERSION,
+        doer_merge_base=DOER_MERGE_BASE,
+        doer_feature_level=API_FEATURE_LEVEL,
         server_generation=settings.SERVER_GENERATION,
     )
     for client in clients.values():
@@ -802,10 +802,10 @@ def build_offline_notification(user_profile_id: int, message_id: int) -> dict[st
 def missedmessage_hook(
     user_profile_id: int, client: ClientDescriptor, last_for_client: bool
 ) -> None:
-    """The receiver_is_off_zulip logic used to determine whether a user
+    """The receiver_is_off_doer logic used to determine whether a user
     has no active client suffers from a somewhat fundamental race
     condition.  If the client is no longer on the Internet,
-    receiver_is_off_zulip will still return False for
+    receiver_is_off_doer will still return False for
     DEFAULT_EVENT_QUEUE_TIMEOUT_SECS, until the queue is
     garbage-collected.  This would cause us to reliably miss
     push/email notifying users for messages arriving during the
@@ -816,7 +816,7 @@ def missedmessage_hook(
     at that time, resulting in at most a DEFAULT_EVENT_QUEUE_TIMEOUT_SECS
     delay in the arrival of their notifications.
 
-    As Zulip's APIs get more popular and the mobile apps start using
+    As Doer's APIs get more popular and the mobile apps start using
     long-lived event queues for perf optimization, future versions of
     this will likely need to replace checking `last_for_client` with
     something more complicated, so that we only consider clients like
@@ -934,15 +934,15 @@ def missedmessage_hook(
         )
 
 
-def receiver_is_off_zulip(user_profile_id: int) -> bool:
-    # If a user has no message-receiving event queues, they've got no open zulip
+def receiver_is_off_doer(user_profile_id: int) -> bool:
+    # If a user has no message-receiving event queues, they've got no open doer
     # session so we notify them.
     all_client_descriptors = get_client_descriptors_for_user(user_profile_id)
     message_event_queues = [
         client for client in all_client_descriptors if client.accepts_messages()
     ]
-    off_zulip = len(message_event_queues) == 0
-    return off_zulip
+    off_doer = len(message_event_queues) == 0
+    return off_doer
 
 
 def maybe_enqueue_notifications(
@@ -1128,12 +1128,12 @@ def process_message_event(
 
     wide_dict: dict[str, Any] = event_template["message_dict"]
 
-    # Temporary transitional code: Zulip servers that have message
+    # Temporary transitional code: Doer servers that have message
     # events in their event queues and upgrade to the new version
     # that expects sender_delivery_email in these events will
     # throw errors processing events.  We can remove this block
     # once we don't expect anyone to be directly upgrading from
-    # 2.0.x to the latest Zulip.
+    # 2.0.x to the latest Doer.
     if "sender_delivery_email" not in wide_dict:  # nocoverage
         wide_dict["sender_delivery_email"] = wide_dict["sender_email"]
 
@@ -1205,12 +1205,12 @@ def process_message_event(
 
         # If the message isn't notifiable had the user been idle, then the user
         # shouldn't receive notifications even if they were online. In that case we can
-        # avoid the more expensive `receiver_is_off_zulip` call, and move on to process
+        # avoid the more expensive `receiver_is_off_doer` call, and move on to process
         # the next user.
         if not user_notifications_data.is_notifiable(acting_user_id=sender_id, idle=True):
             continue
 
-        idle = receiver_is_off_zulip(user_profile_id) or (user_profile_id in presence_idle_user_ids)
+        idle = receiver_is_off_doer(user_profile_id) or (user_profile_id in presence_idle_user_ids)
 
         extra_user_data[user_profile_id]["internal_data"].update(
             maybe_enqueue_notifications(
@@ -1558,7 +1558,7 @@ def maybe_enqueue_notifications_for_message_update(
         # model.
         return
 
-    idle = presence_idle or receiver_is_off_zulip(user_notifications_data.user_id)
+    idle = presence_idle or receiver_is_off_doer(user_notifications_data.user_id)
 
     # We don't yet support custom user group mentions for message edit notifications.
     # Users will still receive notifications (because of the mentioned flag), but those

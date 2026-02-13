@@ -254,7 +254,7 @@ export function insert_local_message(
     insert_new_messages: (opts: InsertNewMessagesOpts) => Message[],
 ): Message {
     // Shallow clone of message request object that is turned into something suitable
-    // for zulip.js:add_message
+    // for doer.js:add_message
     // Keep this in sync with changes to compose.send_message
     const raw_content = message_request.content;
     const topic = message_request.topic;

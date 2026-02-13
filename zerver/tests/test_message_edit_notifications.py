@@ -8,7 +8,7 @@ from typing_extensions import override
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.user_topics import do_set_user_topic_visibility_policy
 from zerver.lib.push_notifications import get_apns_badge_count, get_apns_badge_count_future
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import mock_queue_publish
 from zerver.models import PushDevice, Subscription, UserPresence, UserTopic
 from zerver.models.scheduled_jobs import NotificationTriggers
@@ -16,7 +16,7 @@ from zerver.models.streams import get_stream
 from zerver.tornado.event_queue import maybe_enqueue_notifications
 
 
-class EditMessageSideEffectsTest(ZulipTestCase):
+class EditMessageSideEffectsTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -158,7 +158,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         updated_content: str,
         enable_online_push_notifications: bool = False,
         expect_short_circuit: bool = False,
-        connected_to_zulip: bool = False,
+        connected_to_doer: bool = False,
         present_on_web: bool = False,
     ) -> dict[str, Any]:
         message_id = self._login_and_send_original_stream_message(
@@ -169,8 +169,8 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         if present_on_web:
             self._make_cordelia_present_on_web()
 
-        if connected_to_zulip:
-            with self._cordelia_connected_to_zulip():
+        if connected_to_doer:
+            with self._cordelia_connected_to_doer():
                 info = self._get_queued_data_for_message_update(
                     message_id=message_id,
                     content=updated_content,
@@ -287,16 +287,16 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         updated_content = "nothing special about updated message"
         self._send_and_update_message(original_content, updated_content, expect_short_circuit=True)
 
-    def _cordelia_connected_to_zulip(self) -> Any:
+    def _cordelia_connected_to_doer(self) -> Any:
         """
         Right now the easiest way to make Cordelia look
-        connected to Zulip is to mock the function below.
+        connected to Doer is to mock the function below.
 
         This is a bit blunt, as it affects other users too,
         but we only really look at Cordelia's data, anyway.
         """
         return mock.patch(
-            "zerver.tornado.event_queue.receiver_is_off_zulip",
+            "zerver.tornado.event_queue.receiver_is_off_doer",
             return_value=False,
         )
 
@@ -311,7 +311,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         original_content = "no mention"
         updated_content = "nothing special about updated message"
         self._send_and_update_message(
-            original_content, updated_content, expect_short_circuit=True, connected_to_zulip=True
+            original_content, updated_content, expect_short_circuit=True, connected_to_doer=True
         )
 
     def _make_cordelia_present_on_web(self) -> None:
@@ -335,7 +335,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
             original_content,
             updated_content,
             expect_short_circuit=True,
-            connected_to_zulip=True,
+            connected_to_doer=True,
             present_on_web=True,
         )
 
@@ -351,7 +351,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
             original_content,
             updated_content,
             enable_online_push_notifications=True,
-            connected_to_zulip=True,
+            connected_to_doer=True,
             present_on_web=True,
         )
 
@@ -387,7 +387,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
             original_content,
             updated_content,
             enable_online_push_notifications=True,
-            connected_to_zulip=True,
+            connected_to_doer=True,
             present_on_web=True,
         )
 
@@ -423,7 +423,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
         )
 
         message_id = notification_message_data["message_id"]
@@ -474,7 +474,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
         )
 
         message_id = notification_message_data["message_id"]
@@ -520,7 +520,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
         )
 
         message_id = notification_message_data["message_id"]
@@ -556,7 +556,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
         )
 
         message_id = notification_message_data["message_id"]
@@ -587,7 +587,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
         )
 
         message_id = notification_message_data["message_id"]
@@ -612,7 +612,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         original_content = "Mention @**all**"
         updated_content = "now we mention @**Cordelia, Lear's daughter**"
         self._send_and_update_message(
-            original_content, updated_content, expect_short_circuit=True, connected_to_zulip=True
+            original_content, updated_content, expect_short_circuit=True, connected_to_doer=True
         )
 
     def test_updates_with_upgrade_wildcard_mention_disabled(self) -> None:
@@ -629,7 +629,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         original_content = "Mention @**all**"
         updated_content = "now we mention @**Cordelia, Lear's daughter**"
         self._send_and_update_message(
-            original_content, updated_content, expect_short_circuit=True, connected_to_zulip=True
+            original_content, updated_content, expect_short_circuit=True, connected_to_doer=True
         )
 
     def test_updates_with_stream_mention_of_fully_present_user(self) -> None:
@@ -643,7 +643,7 @@ class EditMessageSideEffectsTest(ZulipTestCase):
         notification_message_data = self._send_and_update_message(
             original_content,
             updated_content,
-            connected_to_zulip=True,
+            connected_to_doer=True,
             present_on_web=True,
         )
 

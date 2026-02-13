@@ -20,7 +20,7 @@ from zerver.lib.streams import (
     can_access_stream_metadata_user_ids,
     update_stream_active_status_for_realm,
 )
-from zerver.lib.test_classes import ZulipTestCase, get_topic_messages
+from zerver.lib.test_classes import DoerTestCase, get_topic_messages
 from zerver.lib.test_helpers import queries_captured
 from zerver.lib.topic import RESOLVED_TOPIC_PREFIX
 from zerver.lib.types import UserGroupMembersData
@@ -33,7 +33,7 @@ from zerver.models.streams import StreamTopicsPolicyEnum, get_stream
 from zerver.tornado.django_api import send_event_on_commit
 
 
-class MessageMoveStreamTest(ZulipTestCase):
+class MessageMoveStreamTest(DoerTestCase):
     def assert_has_usermessage(self, user_profile_id: int, message_id: int) -> None:
         self.assertEqual(
             UserMessage.objects.filter(

@@ -1,7 +1,7 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
-# This file defines the Python code examples that appears in Zulip's
+# This file defines the Python code examples that appears in Doer's
 # REST API documentation, and also contains a system for running the
 # example code as part of the `tools/test-api` test suite.
 #
@@ -21,13 +21,13 @@ from functools import wraps
 from typing import Any, TypeVar
 
 from typing_extensions import ParamSpec
-from zulip import Client
+from doer import Client
 
 from zerver.models.realms import get_realm
 from zerver.models.users import get_user
 from zerver.openapi.openapi import validate_against_openapi_schema
 
-ZULIP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 TEST_FUNCTIONS: dict[str, Callable[..., object]] = {}
 REGISTERED_TEST_FUNCTIONS: set[str] = set()
@@ -64,7 +64,7 @@ def openapi_test_function(
 def ensure_users(ids_list: list[int], user_names: list[str]) -> None:
     # Ensure that the list of user ids (ids_list)
     # matches the users we want to refer to (user_names).
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     user_ids = [
         get_user(Address(username=name, domain="zulip.com").addr_spec, realm).id
         for name in user_names
@@ -657,15 +657,15 @@ def create_realm_profile_field(client: Client) -> None:
 
 @openapi_test_function("/realm/filters:post")
 def add_realm_filter(client: Client) -> int:
-    # TODO: Switch back to using client.add_realm_filter when python-zulip-api
+    # TODO: Switch back to using client.add_realm_filter when python-doer-api
     # begins to support url_template.
 
     # {code_example|start}
     # Add a filter to automatically linkify #<number> to the corresponding
-    # issue in Zulip's server repository.
+    # issue in Doer's server repository.
     request = {
         "pattern": "#(?P<id>[0-9]+)",
-        "url_template": "https://github.com/zulip/zulip/issues/{id}",
+        "url_template": "https://github.com/doer/doer/issues/{id}",
     }
     result = client.call_endpoint("/realm/filters", method="POST", request=request)
     # {code_example|end}
@@ -680,7 +680,7 @@ def update_realm_filter(client: Client, filter_id: int) -> None:
     # Update a linkifier.
     request = {
         "pattern": "#(?P<id>[0-9]+)",
-        "url_template": "https://github.com/zulip/zulip/issues/{id}",
+        "url_template": "https://github.com/doer/doer/issues/{id}",
     }
     result = client.call_endpoint(
         url=f"/realm/filters/{filter_id}", method="PATCH", request=request
@@ -894,7 +894,7 @@ def get_subscribers(client: Client) -> None:
 
 def get_user_agent(client: Client) -> None:
     result = client.get_user_agent()
-    assert result.startswith("ZulipPython/")
+    assert result.startswith("DoerPython/")
 
 
 @openapi_test_function("/users/me/subscriptions:get")
@@ -1289,7 +1289,7 @@ def get_saved_snippets(client: Client) -> int:
 def edit_saved_snippet(client: Client, saved_snippet_id: int) -> None:
     # {code_example|start}
     # Edit a saved snippet.
-    request = {"title": "New welcome message", "content": "Welcome to Zulip!"}
+    request = {"title": "New welcome message", "content": "Welcome to Doer!"}
     result = client.call_endpoint(
         request=request,
         url=f"/saved_snippets/{saved_snippet_id}",
@@ -1628,7 +1628,7 @@ def update_settings(client: Client) -> None:
 
 @openapi_test_function("/user_uploads:post")
 def upload_file(client: Client) -> None:
-    path_to_file = os.path.join(ZULIP_DIR, "zerver", "tests", "images", "img.jpg")
+    path_to_file = os.path.join(DOER_DIR, "zerver", "tests", "images", "img.jpg")
     # {code_example|start}
     # Upload a file.
     with open(path_to_file, "rb") as fp:
@@ -1659,7 +1659,7 @@ def get_stream_topics(client: Client, stream_id: int) -> None:
 @openapi_test_function("/users/me/apns_device_token:post")
 def add_apns_token(client: Client) -> None:
     # {code_example|start}
-    request = {"token": "c0ffee", "appid": "org.zulip.Zulip"}
+    request = {"token": "c0ffee", "appid": "org.zulip.Doer"}
     result = client.call_endpoint(url="/users/me/apns_device_token", method="POST", request=request)
     # {code_example|end}
     assert_success_response(result)
@@ -1814,7 +1814,7 @@ def set_message_edit_typing_status(client: Client, message_id: int) -> None:
 
 @openapi_test_function("/realm/emoji/{emoji_name}:post")
 def upload_custom_emoji(client: Client) -> None:
-    emoji_path = os.path.join(ZULIP_DIR, "zerver", "tests", "images", "img.jpg")
+    emoji_path = os.path.join(DOER_DIR, "zerver", "tests", "images", "img.jpg")
     # {code_example|start}
     # Upload a custom emoji; assume `emoji_path` is the path to your image.
     with open(emoji_path, "rb") as fp:

@@ -12,7 +12,7 @@ from types import FrameType
 from django.conf import settings
 from django.utils.timezone import now as timezone_now
 
-logger = logging.getLogger("zulip.debug")
+logger = logging.getLogger("doer.debug")
 
 
 # Interactive debugging code from
@@ -101,7 +101,7 @@ def maybe_tracemalloc_listen() -> None:
     To trigger once this is listening:
       echo | socat -u stdin unix-sendto:/var/log/zulip/tracemalloc/tracemalloc.$pid
 
-    To enable in the Zulip web server: edit /etc/zulip/uwsgi.ini ,
+    To enable in the Doer web server: edit /etc/zulip/uwsgi.ini ,
     and add e.g. ` PYTHONTRACEMALLOC=5` to the `env=` line.
     This function is called in middleware, so the process will
     automatically start listening.

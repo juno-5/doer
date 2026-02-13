@@ -51,8 +51,8 @@ from zerver.models.realms import get_realm
 from zproject.config import get_config
 
 ParamT = ParamSpec("ParamT")
-logger = logging.getLogger("zulip.requests")
-slow_query_logger = logging.getLogger("zulip.slow_queries")
+logger = logging.getLogger("doer.requests")
+slow_query_logger = logging.getLogger("doer.slow_queries")
 
 
 def record_request_stop_data(log_data: MutableMapping[str, Any]) -> None:
@@ -269,7 +269,7 @@ def parse_client(
         return "Unspecified", None
 
     client_name = user_agent["name"]
-    if client_name.startswith("Zulip"):
+    if client_name.startswith("Doer"):
         return client_name, user_agent.get("version")
 
     # We could show browser versions in logs, and it'd probably be a
@@ -657,7 +657,7 @@ class DetectProxyMisconfiguration(MiddlewareMixin):
         proxy_state_header = request.headers.get("X-Proxy-Misconfiguration", "")
         # Our nginx configuration sets this header if:
         #  1. the request came in over HTTP with no proxy headers set
-        #  2. there is an X-Forwarded-For set but no proxies configured in Zulip
+        #  2. there is an X-Forwarded-For set but no proxies configured in Doer
         #  3. proxies are configured but the request did not come from them
         #  4. proxies are configured and the request came through them,
         #     but there was no X-Forwarded-Proto header
@@ -665,16 +665,16 @@ class DetectProxyMisconfiguration(MiddlewareMixin):
         # Note that (2) and (3)  may be false-positives.  We only
         # display the error if the request also came in over HTTP (and
         # a trusted proxy didn't say they get it over HTTPS), which
-        # should be impossible because Zulip only supports external
+        # should be impossible because Doer only supports external
         # https:// URLs in production.  nginx configuration ensures
         # that request.is_secure() is only true if our nginx is
         # serving the request over HTTPS, or it came from a trusted
         # proxy which reports that it is doing so.  This will result
-        # in false negatives if Zulip's nginx is serving responses
+        # in false negatives if Doer's nginx is serving responses
         # over HTTPS to a proxy whose IP is not configured, or
         # misconfigured, but we cannot distinguish this from a random
         # client which is providing proxy headers to a correctly
-        # configured Zulip.
+        # configured Doer.
         #
         # There are a couple complications to the above logic --
         # first, we do expect that requests not through the proxy may
@@ -741,7 +741,7 @@ def validate_scim_bearer_token(request: HttpRequest) -> bool:
     return True
 
 
-class ZulipSCIMAuthCheckMiddleware(SCIMAuthCheckMiddleware):
+class DoerSCIMAuthCheckMiddleware(SCIMAuthCheckMiddleware):
     """
     Overridden version of middleware implemented in django-scim2
     (https://github.com/15five/django-scim2/blob/master/src/django_scim/middleware.py)

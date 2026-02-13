@@ -1,8 +1,8 @@
-# Zulip OpenSearch integration
+# Doer OpenSearch integration
 
-Get OpenSearch alerts in Zulip!
+Get OpenSearch alerts in Doer!
 
-### Create Zulip bot for OpenSearch notifications
+### Create Doer bot for OpenSearch notifications
 
 {start_tabs}
 
@@ -24,7 +24,7 @@ Get OpenSearch alerts in Zulip!
    endpoints by** to **Webhook URL**. Paste the URL generated above into the
    **Webhook URL** field.
 
-1. Click **Send test message**. A test message should appear in Zulip. Click
+1. Click **Send test message**. A test message should appear in Doer. Click
    **Create** to save the notification channel.
 
 {end_tabs}
@@ -44,8 +44,8 @@ Get OpenSearch alerts in Zulip!
    channel created above as the **Notification** action.
 
 1. OpenSearch sends notifications as plain text, so you will want to use a
-   **Message template** to format your messages in Zulip. To generate the
-   topic of your Zulip messages via the notification content, you can use
+   **Message template** to format your messages in Doer. To generate the
+   topic of your Doer messages via the notification content, you can use
    the first line of your template to do so. It must be formatted as
    **topic: DYNAMIC_TOPIC_CONTENT**, and all message content should start on
    the second line of the template. For example, this template was used to

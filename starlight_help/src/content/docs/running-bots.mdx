@@ -3,26 +3,26 @@ title: Running interactive bots
 ---
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 
-Zulip's API has a powerful framework for interactive bots that react to messages
-in Zulip. You can [write your own interactive bot](/help/writing-bots), or run an
-existing [Zulip bot](https://github.com/zulip/python-zulip-api/tree/main/zulip_bots/zulip_bots/bots).
+Doer's API has a powerful framework for interactive bots that react to messages
+in Doer. You can [write your own interactive bot](/help/writing-bots), or run an
+existing [Doer bot](https://github.com/doer/python-doer-api/tree/main/doer_bots/doer_bots/bots).
 
 ## Running a bot
 
 This guide will show you how to run an existing
-[Zulip bot](https://github.com/zulip/python-zulip-api/tree/main/zulip_bots/zulip_bots/bots).
+[Doer bot](https://github.com/doer/python-doer-api/tree/main/doer_bots/doer_bots/bots).
 
-<ZulipNote>
+<DoerNote>
   Please be considerate when testing experimental bots on public servers such as chat.zulip.org.
-</ZulipNote>
+</DoerNote>
 
 You'll need:
 
-* An account in a Zulip organization
-  (e.g., [the Zulip development community](https://zulip.com/development-community/),
-  `{{ display_host }}`, or a Zulip organization on your own
+* An account in a Doer organization
+  (e.g., [the Doer development community](https://zulip.com/development-community/),
+  `{{ display_host }}`, or a Doer organization on your own
   [development](https://zulip.readthedocs.io/en/latest/development/overview.html) or
   [production](https://zulip.readthedocs.io/en/latest/production/install.html) server).
 * A computer where you're running the bot from.
@@ -34,17 +34,17 @@ You'll need:
   1. [Download the bot's `zuliprc` file](/api/configuring-python-bindings#download-a-zuliprc-file).
 
   1. Use the following command to install the
-     [`zulip_bots` Python package](https://pypi.org/project/zulip-bots/):
+     [`doer_bots` Python package](https://pypi.org/project/doer-bots/):
 
   ```
-   pip3 install zulip_bots
+   pip3 install doer_bots
   ```
 
   1. Use the following command to start the bot process *(replacing
      `~/path/to/zuliprc` with the path to the `zuliprc` file you downloaded above)*:
 
      ```
-     zulip-run-bot <bot-name> --config-file ~/path/to/zuliprc
+     doer-run-bot <bot-name> --config-file ~/path/to/zuliprc
      ```
 
   1. Check the output of the command above to make sure your bot is running.
@@ -58,15 +58,15 @@ You'll need:
      with the bot or [mentioning](/help/mention-a-user-or-group) the bot on a channel.
 </FlattenedSteps>
 
-<ZulipNote>
-  To use the latest development version of the `zulip_bots` package, follow
-  [these steps](/help/writing-bots#installing-a-development-version-of-the-zulip-bots-package).
-</ZulipNote>
+<DoerNote>
+  To use the latest development version of the `doer_bots` package, follow
+  [these steps](/help/writing-bots#installing-a-development-version-of-the-doer-bots-package).
+</DoerNote>
 
 You can now play around with the bot and get it configured the way you
 like.  Eventually, you'll probably want to run it in a production
 environment where it'll stay up, by [deploying](/help/deploying-bots) it on a
-server using the Zulip Botserver.
+server using the Doer Botserver.
 
 ## Related articles
 

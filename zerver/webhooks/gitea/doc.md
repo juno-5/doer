@@ -1,6 +1,6 @@
-# Zulip Gitea integration
+# Doer Gitea integration
 
-Receive Gitea notifications in Zulip!
+Receive Gitea notifications in Doer!
 
 {start_tabs}
 

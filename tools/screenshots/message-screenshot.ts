@@ -67,7 +67,7 @@ async function run(): Promise<void> {
             waitUntil: "networkidle2",
         });
         // eslint-disable-next-line no-undef
-        const message_list_id = await page.evaluate(() => zulip_test.current_msg_list?.id);
+        const message_list_id = await page.evaluate(() => doer_test.current_msg_list?.id);
         assert.ok(message_list_id !== undefined);
         const messageSelector = `#message-row-${message_list_id}-${CSS.escape(messageId)}`;
         await page.waitForSelector(messageSelector);

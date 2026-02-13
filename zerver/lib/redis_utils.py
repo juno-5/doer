@@ -13,15 +13,15 @@ from django.conf import settings
 MAX_KEY_LENGTH = 1024
 
 
-class ZulipRedisError(Exception):
+class DoerRedisError(Exception):
     pass
 
 
-class ZulipRedisKeyTooLongError(ZulipRedisError):
+class DoerRedisKeyTooLongError(DoerRedisError):
     pass
 
 
-class ZulipRedisKeyOfWrongFormatError(ZulipRedisError):
+class DoerRedisKeyOfWrongFormatError(DoerRedisError):
     pass
 
 
@@ -45,7 +45,7 @@ def put_dict_in_redis(
 ) -> str:
     key_length = len(key_format) - len("{token}") + token_length
     if key_length > MAX_KEY_LENGTH:
-        raise ZulipRedisKeyTooLongError(
+        raise DoerRedisKeyTooLongError(
             f"Requested key too long in put_dict_in_redis. Key format: {key_format}, token length: {token_length}",
         )
     if token is None:
@@ -69,7 +69,7 @@ def get_dict_from_redis(
     # against bugs where a caller requests a key based on user input and doesn't
     # validate it - which could potentially allow users to poke around arbitrary Redis keys.
     if len(key) > MAX_KEY_LENGTH:
-        raise ZulipRedisKeyTooLongError(
+        raise DoerRedisKeyTooLongError(
             f"Requested key too long in get_dict_from_redis: {key}",
         )
     validate_key_fits_format(key, key_format)
@@ -85,7 +85,7 @@ def validate_key_fits_format(key: str, key_format: str) -> None:
     regex = key_format.format(token=r"[a-zA-Z0-9]+")
 
     if not re.fullmatch(regex, key):
-        raise ZulipRedisKeyOfWrongFormatError(f"{key} does not match format {key_format}")
+        raise DoerRedisKeyOfWrongFormatError(f"{key} does not match format {key_format}")
 
 
 REDIS_KEY_PREFIX = ""

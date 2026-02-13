@@ -50,7 +50,7 @@ type TimeFormat = "time" | "time_sec";
 
 type DateOrTimeFormat = DateFormat | TimeFormat | DateWithTimeFormat;
 
-// Translates Zulip-specific format names, documented in the comments
+// Translates Doer-specific format names, documented in the comments
 // below, into the appropriate options to pass to the Intl library
 // along with the user's locale to render date in that style of format.
 //
@@ -586,8 +586,8 @@ export function are_timezones_on_same_clock_now(timezone1: string, timezone2: st
     }
 }
 
-export function is_browser_timezone_same_as(zulip_time_zone: string): boolean {
+export function is_browser_timezone_same_as(doer_time_zone: string): boolean {
     // We delegate most of this check to facilitate testing.
     // We don't want to mock browser_time_zone.
-    return are_timezones_on_same_clock_now(browser_time_zone(), zulip_time_zone);
+    return are_timezones_on_same_clock_now(browser_time_zone(), doer_time_zone);
 }

@@ -1,15 +1,15 @@
-# Use Jitsi Meet as your call provider in Zulip
+# Use Jitsi Meet as your call provider in Doer
 
-By default, Zulip integrates with [Jitsi Meet](https://jitsi.org/jitsi-meet/),
+By default, Doer integrates with [Jitsi Meet](https://jitsi.org/jitsi-meet/),
 a fully-encrypted, 100% open source video conferencing solution. Users will be
 able to start a Jitsi Meet call and invite others using the **add video call**
-(<i class="zulip-icon zulip-icon-video-call"></i>) or **add voice call**
-(<i class="zulip-icon zulip-icon-voice-call"></i>) button [in the compose
+(<i class="doer-icon doer-icon-video-call"></i>) or **add voice call**
+(<i class="doer-icon doer-icon-voice-call"></i>) button [in the compose
 box](/help/start-a-call).
 
 ## Configure a self-hosted instance of Jitsi Meet
 
-Zulip uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
+Doer uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
 as its default video call provider. You can also use a self-hosted
 instance of Jitsi Meet.
 

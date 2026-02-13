@@ -12,13 +12,13 @@
                         "id": "PUIGL4T",
                         "name": "Default"
                     },
-                    "html_url": "https://zulip-test.pagerduty.com/incidents/PO1XIJ5",
+                    "html_url": "https://doer-test.pagerduty.com/incidents/PO1XIJ5",
                     "id": "PO1XIJ5",
                     "incident_key": "It is on fire",
                     "incident_number": 1,
                     "last_status_change_by": {
                         "email": "armooo@zulip.com",
-                        "html_url": "https://zulip-test.pagerduty.com/users/POBCFRJ",
+                        "html_url": "https://doer-test.pagerduty.com/users/POBCFRJ",
                         "id": "POBCFRJ",
                         "name": "Jason MIchalski"
                     },
@@ -26,18 +26,18 @@
                     "number_of_escalations": 0,
                     "resolved_by_user": {
                         "email": "armooo@zulip.com",
-                        "html_url": "https://zulip-test.pagerduty.com/users/POBCFRJ",
+                        "html_url": "https://doer-test.pagerduty.com/users/POBCFRJ",
                         "id": "POBCFRJ",
                         "name": "Jason MIchalski"
                     },
                     "service": {
                         "deleted_at": null,
-                        "html_url": "https://zulip-test.pagerduty.com/services/PIL5CUQ",
+                        "html_url": "https://doer-test.pagerduty.com/services/PIL5CUQ",
                         "id": "PIL5CUQ",
                         "name": "Test service"
                     },
                     "status": "resolved",
-                    "trigger_details_html_url": "https://zulip-test.pagerduty.com/incidents/PO1XIJ5/log_entries/Q01ZH27LNRIAUB",
+                    "trigger_details_html_url": "https://doer-test.pagerduty.com/incidents/PO1XIJ5/log_entries/Q01ZH27LNRIAUB",
                     "trigger_summary_data": {
                         "subject": "It is on fire"
                     },

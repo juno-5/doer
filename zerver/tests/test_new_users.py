@@ -12,7 +12,7 @@ from zerver.actions.create_user import notify_new_user
 from zerver.actions.streams import do_set_stream_property
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.lib.initial_password import initial_password
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, Recipient, Stream, UserProfile
 from zerver.models.realms import get_realm
 from zerver.models.recipients import get_direct_message_group_user_ids
@@ -21,7 +21,7 @@ from zerver.models.users import get_system_bot
 from zerver.signals import JUST_CREATED_THRESHOLD, get_device_browser, get_device_os
 
 
-class SendLoginEmailTest(ZulipTestCase):
+class SendLoginEmailTest(DoerTestCase):
     """
     Uses django's user_logged_in signal to send emails on new login.
 
@@ -88,7 +88,7 @@ class SendLoginEmailTest(ZulipTestCase):
             self.register("test@zulip.com", "test")
 
             # Verify that there's just 1 email for new user registration.
-            self.assertEqual(mail.outbox[0].subject, "Activate your Zulip account")
+            self.assertEqual(mail.outbox[0].subject, "Activate your Doer account")
             self.assert_length(mail.outbox, 1)
 
     def test_without_path_info_dont_send_login_emails_for_new_user_registration_logins(
@@ -124,7 +124,7 @@ class SendLoginEmailTest(ZulipTestCase):
         self.assert_length(mail.outbox, 1)
 
 
-class TestBrowserAndOsUserAgentStrings(ZulipTestCase):
+class TestBrowserAndOsUserAgentStrings(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -205,16 +205,16 @@ class TestBrowserAndOsUserAgentStrings(ZulipTestCase):
                 "Safari",
                 "macOS",
             ),
-            ("ZulipAndroid/1.0", "Zulip", "Android"),
-            ("ZulipMobile/1.0.12 (Android 7.1.1)", "Zulip", "Android"),
-            ("ZulipMobile/0.7.1.1 (iOS 10.3.1)", "Zulip", "iOS"),
+            ("DoerAndroid/1.0", "Doer", "Android"),
+            ("DoerMobile/1.0.12 (Android 7.1.1)", "Doer", "Android"),
+            ("DoerMobile/0.7.1.1 (iOS 10.3.1)", "Doer", "iOS"),
             (
                 (
-                    "ZulipElectron/1.1.0-beta Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-                    " AppleWebKit/537.36 (KHTML, like Gecko) Zulip/1.1.0-beta"
+                    "DoerElectron/1.1.0-beta Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+                    " AppleWebKit/537.36 (KHTML, like Gecko) Doer/1.1.0-beta"
                     " Chrome/56.0.2924.87 Electron/1.6.8 Safari/537.36"
                 ),
-                "Zulip",
+                "Doer",
                 "Windows",
             ),
             (
@@ -266,12 +266,12 @@ class TestBrowserAndOsUserAgentStrings(ZulipTestCase):
             self.assertEqual(device_os, user_agent[2])
 
 
-class TestNotifyNewUser(ZulipTestCase):
+class TestNotifyNewUser(DoerTestCase):
     def get_message_count(self) -> int:
         return Message.objects.all().count()
 
     def test_notify_realm_of_new_user(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.signup_announcements_stream = get_stream("core team", realm)
         realm.save(update_fields=["signup_announcements_stream"])
         new_user = self.example_user("cordelia")
@@ -296,7 +296,7 @@ class TestNotifyNewUser(ZulipTestCase):
         self.assertEqual(self.get_message_count(), message_count + 1)
 
     def test_notify_realm_of_new_user_in_empty_topic_only_channel(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
         stream = get_stream("core team", realm)
         realm.signup_announcements_stream = stream
@@ -318,7 +318,7 @@ class TestNotifyNewUser(ZulipTestCase):
         )
 
     def test_notify_realm_of_new_user_in_manual_license_management(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         admin_user_ids = set(realm.get_human_admin_users().values_list("id", flat=True))
         notification_bot = get_system_bot(settings.NOTIFICATION_BOT, realm.id)
         expected_group_direct_message_user_ids = admin_user_ids | {notification_bot.id}
@@ -382,26 +382,26 @@ class TestNotifyNewUser(ZulipTestCase):
         )
         create_new_user_and_verify_strings_in_notification_message(
             strings_present=[
-                "Your organization has only three Zulip licenses remaining",
+                "Your organization has only three Doer licenses remaining",
                 "to allow more than three users to",
             ],
         )
         create_new_user_and_verify_strings_in_notification_message(
             strings_present=[
-                "Your organization has only two Zulip licenses remaining",
+                "Your organization has only two Doer licenses remaining",
                 "to allow more than two users to",
             ],
         )
 
         create_new_user_and_verify_strings_in_notification_message(
             strings_present=[
-                "Your organization has only one Zulip license remaining",
+                "Your organization has only one Doer license remaining",
                 "to allow more than one user to",
             ],
         )
         create_new_user_and_verify_strings_in_notification_message(
             strings_present=[
-                "Your organization has no Zulip licenses remaining",
+                "Your organization has no Doer licenses remaining",
                 "to allow new users to",
             ]
         )

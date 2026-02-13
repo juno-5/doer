@@ -23,7 +23,7 @@ proxy_service:
   public_addr: teleport.zulipchat.net:443
   acme:
     enabled: "yes"
-    email: zulip-ops@zulip.com
+    email: doer-ops@zulip.com
 
 ssh_service:
   enabled: no

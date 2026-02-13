@@ -27,7 +27,7 @@
     overflow: auto;
 }
 
-.buddy-list-section-toggle.zulip-icon-heading-triangle-right {
+.buddy-list-section-toggle.doer-icon-heading-triangle-right {
     transition:
         opacity 140ms linear,
         rotate 140ms linear;
@@ -82,7 +82,7 @@
         padding: 1px 0 0 1px;
         border-radius: 3px;
 
-        & .zulip-icon-more-vertical {
+        & .doer-icon-more-vertical {
             /* 17px at 16px em */
             font-size: 1.0625em;
         }

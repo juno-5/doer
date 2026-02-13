@@ -7,7 +7,7 @@ from corporate.lib.activity import ActivityHeaderEntry, format_optional_datetime
 from zerver.decorator import require_server_admin
 from zerver.lib.typed_endpoint import PathOnly
 from zerver.models.realm_audit_logs import AbstractRealmAuditLog, AuditLogEventType
-from zilencer.models import RemoteRealmAuditLog, RemoteZulipServer, RemoteZulipServerAuditLog
+from zilencer.models import RemoteRealmAuditLog, RemoteDoerServer, RemoteDoerServerAuditLog
 
 USER_ROLES_KEY = "100: owner, 200: admin, 300: moderator, 400: member, 600: guest"
 
@@ -20,7 +20,7 @@ def get_remote_realm_host(audit_log: RemoteRealmAuditLog) -> str:
     return audit_log.remote_realm.host
 
 
-def get_human_role_count_data(audit_log: RemoteRealmAuditLog | RemoteZulipServerAuditLog) -> str:
+def get_human_role_count_data(audit_log: RemoteRealmAuditLog | RemoteDoerServerAuditLog) -> str:
     extra_data = audit_log.extra_data
     role_count = extra_data.get(AbstractRealmAuditLog.ROLE_COUNT, {})
     human_count_raw: dict[str, Any] = role_count.get(AbstractRealmAuditLog.ROLE_COUNT_HUMANS, {})
@@ -36,11 +36,11 @@ def get_human_role_count_data(audit_log: RemoteRealmAuditLog | RemoteZulipServer
 @require_server_admin
 def get_remote_server_logs(request: HttpRequest, *, uuid: PathOnly[str]) -> HttpResponse:
     try:
-        remote_server = RemoteZulipServer.objects.get(uuid=uuid)
-    except RemoteZulipServer.DoesNotExist:
+        remote_server = RemoteDoerServer.objects.get(uuid=uuid)
+    except RemoteDoerServer.DoesNotExist:
         return HttpResponseNotFound()
 
-    remote_server_audit_logs = RemoteZulipServerAuditLog.objects.filter(
+    remote_server_audit_logs = RemoteDoerServerAuditLog.objects.filter(
         server=remote_server
     ).order_by("-id")
     remote_realm_audit_logs = (
@@ -58,7 +58,7 @@ def get_remote_server_logs(request: HttpRequest, *, uuid: PathOnly[str]) -> Http
         "Role count: human",
     ]
 
-    def row(audit_log: RemoteRealmAuditLog | RemoteZulipServerAuditLog) -> list[Any]:
+    def row(audit_log: RemoteRealmAuditLog | RemoteDoerServerAuditLog) -> list[Any]:
         return [
             audit_log.event_time,
             AuditLogEventType(audit_log.event_type).name,
@@ -77,7 +77,7 @@ def get_remote_server_logs(request: HttpRequest, *, uuid: PathOnly[str]) -> Http
     if remote_server.last_version is not None:
         header_entries.append(
             ActivityHeaderEntry(
-                name="Zulip version",
+                name="Doer version",
                 value=remote_server.last_version,
             )
         )

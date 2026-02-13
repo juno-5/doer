@@ -10,7 +10,7 @@ from zerver.actions.realm_settings import (
 from zerver.actions.user_groups import check_add_user_group
 from zerver.lib.emoji import get_emoji_file_name
 from zerver.lib.exceptions import JsonableError
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_test_image_file
 from zerver.lib.thumbnail import BadImageError
 from zerver.models import NamedUserGroup, RealmEmoji, UserProfile
@@ -18,7 +18,7 @@ from zerver.models.groups import SystemGroups
 from zerver.models.realms import get_realm
 
 
-class RealmEmojiTest(ZulipTestCase):
+class RealmEmojiTest(DoerTestCase):
     def create_test_emoji(self, name: str, author: UserProfile) -> RealmEmoji:
         with get_test_image_file("img.png") as img_file:
             realm_emoji = check_add_realm_emoji(
@@ -44,7 +44,7 @@ class RealmEmojiTest(ZulipTestCase):
     def test_list_admins_only(self) -> None:
         # Test that realm emoji list is public
         self.login("othello")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         administrators_system_group = NamedUserGroup.objects.get(
             name=SystemGroups.ADMINISTRATORS, realm_for_sharding=realm, is_system_group=True
         )
@@ -108,7 +108,7 @@ class RealmEmojiTest(ZulipTestCase):
         file_name = get_emoji_file_name("image/png", realm_emoji.id)
         self.assertEqual(
             repr(realm_emoji),
-            f"<RealmEmoji: zulip: {realm_emoji.id} green_tick False {file_name}>",
+            f"<RealmEmoji: doer: {realm_emoji.id} green_tick False {file_name}>",
         )
 
     def test_upload_exception(self) -> None:

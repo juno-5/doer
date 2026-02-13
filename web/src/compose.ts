@@ -401,7 +401,7 @@ export function do_post_send_tasks(): void {
     clear_preview_area();
     // TODO: Do we want to fire the event even if the send failed due
     // to a server-side error?
-    $(document).trigger("compose_finished.zulip");
+    $(document).trigger("compose_finished.doer");
     reload.maybe_reset_pending_reload_timeout("compose_end");
 }
 

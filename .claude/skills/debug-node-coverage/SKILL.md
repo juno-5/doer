@@ -18,7 +18,7 @@ ERROR: web/src/filter.ts no longer has complete node test coverage
 ```
 
 This means the listed lines in the source file were never executed by
-any test. Zulip enforces 100% line coverage for all files not listed
+any test. Doer enforces 100% line coverage for all files not listed
 in `EXEMPT_FILES` in `tools/test-js-with-node`.
 
 ## Step 1: Read the uncovered lines

@@ -38,7 +38,7 @@ def register_development_user(request: HttpRequest) -> HttpResponse:
     realm = get_realm_from_request(request)
     if realm is None:  # nocoverage
         return HttpResponseRedirect(
-            f"{settings.EXTERNAL_URI_SCHEME}{settings.REALM_HOSTS['zulip']}/devtools/register_user/",
+            f"{settings.EXTERNAL_URI_SCHEME}{settings.REALM_HOSTS['doer']}/devtools/register_user/",
             status=307,
         )
 
@@ -81,8 +81,8 @@ def register_development_realm(request: HttpRequest) -> HttpResponse:
         password="test",
         realm_subdomain=realm_subdomain,
         terms="true",
-        how_realm_creator_found_zulip="ad",
-        how_realm_creator_found_zulip_extra_context="test",
+        how_realm_creator_found_doer="ad",
+        how_realm_creator_found_doer_extra_context="test",
     )
 
     return accounts_register(request)
@@ -94,8 +94,8 @@ def register_demo_development_realm(request: HttpRequest) -> HttpResponse:
         request,
         realm_type=Realm.ORG_TYPES["education"]["id"],
         realm_default_language="en",
-        how_realm_creator_found_zulip="existing_user",
-        how_realm_creator_found_zulip_extra_context="test",
+        how_realm_creator_found_doer="existing_user",
+        how_realm_creator_found_doer_extra_context="test",
         timezone="US/Pacific",
     )
 

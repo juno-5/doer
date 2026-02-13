@@ -1,13 +1,13 @@
 # @summary Install a static hook file
 #
 define kandra::hooks::file() {
-  include zulip::hooks::base
+  include doer::hooks::base
 
   file { "/etc/zulip/hooks/${title}":
     ensure => file,
     mode   => '0755',
-    owner  => 'zulip',
-    group  => 'zulip',
+    owner  => 'doer',
+    group  => 'doer',
     source => "puppet:///modules/kandra/hooks/${title}",
     tag    => ['hooks'],
   }

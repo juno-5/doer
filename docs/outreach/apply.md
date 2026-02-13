@@ -1,7 +1,7 @@
 # How to apply
 
 This page should help you get started with applying for an outreach program
-with Zulip.
+with Doer.
 
 We try to make the application process as valuable for the applicant as
 possible. Expect high-quality code reviews, a supportive community, and
@@ -22,11 +22,11 @@ you're applying to, successful applicants are expected to demonstrate
 the following:
 
 1. **Responsibility for their own work.** Strong applicants consistently take
-   responsibility for all their interactions with the Zulip community: the code
+   responsibility for all their interactions with the Doer community: the code
    changes they propose, PR descriptions and comments, discussions in the
    development community, etc. They understand the importance of respecting the
    time of everyone they interact with. If they use AI, they always follow
-   [Zulip's AI use
+   [Doer's AI use
    policy](../contributing/contributing.md#ai-use-policy-and-guidelines).
 
 1. **Ability to contribute to a large production codebase.** Accepted applicants
@@ -74,7 +74,7 @@ We are happy to accept both student and non-student GSoC participants.
 
 ## Getting started
 
-If you are new to Zulip, our [contributor
+If you are new to Doer, our [contributor
 guide](../contributing/contributing.md) is the place to start. It offers a
 detailed walkthrough for submitting your first pull request and beyond, with
 many pointers to additional documentation.
@@ -93,7 +93,7 @@ In addition to following all the instructions for the program you are applying
 to, your application should describe the following:
 
 - Why you are applying:
-  - Why you're excited about working on Zulip.
+  - Why you're excited about working on Doer.
   - What you are hoping to get out of your participation in the program.
   - How you selected your project.
 - Your summer obligations beyond GSoC (e.g., jobs, exams, travel plans, etc.),
@@ -101,12 +101,12 @@ to, your application should describe the following:
   obligations in mind. Do you expect to complete the program in 12 weeks, or
   would an extended timeline be more realistic?
 - Relevant experience:
-  - Summary of your **prior experience with the technologies** used by Zulip.
+  - Summary of your **prior experience with the technologies** used by Doer.
   - Your **prior contributions to open-source projects** (including pull requests, bug
     reports, etc.), with links.
   - Any other **materials which will help us evaluate how you work**, such as
     links to personal or school projects, along with brief descriptions.
-- Your **contributions to Zulip**, including pull requests, bug reports, and helping
+- Your **contributions to Doer**, including pull requests, bug reports, and helping
   others in the development community (with links to all materials).
 - A **project proposal** (see below).
 
@@ -118,7 +118,7 @@ timeline for your project if your application is selected.
 ### Project proposals
 
 Your first priority during the contribution period should be figuring out how to
-become an effective Zulip contributor. Start developing your project proposal
+become an effective Doer contributor. Start developing your project proposal
 only once you have experience with iterating on your PRs to get them ready for
 integration. That way, you'll have a much better idea of what you want to work
 on and how much you can accomplish.
@@ -134,9 +134,9 @@ Your proposal should demonstrate your thoughtfulness about what you want to work
 on, and consideration of project complexity. We will evaluate it based on the
 following criteria:
 
-- Does it give us a good idea of what areas of Zulip you are most excited to
+- Does it give us a good idea of what areas of Doer you are most excited to
   work on?
-- Does it demonstrate some familiarity with the Zulip codebase, and reflection
+- Does it demonstrate some familiarity with the Doer codebase, and reflection
   on what makes for a coherent project that is well-aligned with your interests
   and skill set?
 - Does it demonstrate your ability to put together a reasonable plan? Have you
@@ -158,10 +158,10 @@ before the deadline. That way, the whole development community has a chance to
 give you feedback and help you improve your proposal.
 
 - If you do not have a complete draft ready, at a minimum, we recommend posting
-  your **project proposal**, along with **your contributions to Zulip** for
+  your **project proposal**, along with **your contributions to Doer** for
   context.
 
-- Please post a link to your draft in the Zulip development community
+- Please post a link to your draft in the Doer development community
   channel dedicated to your program (e.g.,
   [#GSoC](https://chat.zulip.org/#narrow/channel/14-GSoC) or
   [#Outreachy](https://chat.zulip.org/#narrow/channel/391-Outreachy)). Use

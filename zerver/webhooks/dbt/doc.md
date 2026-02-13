@@ -1,6 +1,6 @@
-# Zulip DBT integration
+# Doer DBT integration
 
-Get notifications about DBT cloud job runs in Zulip!
+Get notifications about DBT cloud job runs in Doer!
 
 {start_tabs}
 
@@ -16,12 +16,12 @@ Get notifications about DBT cloud job runs in Zulip!
    **Notification Settings**, go to the **Webhooks** section, and
    click **Create webhook**.
 
-1. Set **Webhook name** to a name of your choice, such as `Zulip`. Select
+1. Set **Webhook name** to a name of your choice, such as `Doer`. Select
     the **Events** and **Jobs** you want to receive notifications for,
     and set **Endpoint** to the URL generated above. Click **Save**.
 
 1. Click **Test Endpoint** to send a test notification to
-    your Zulip organization.
+    your Doer organization.
 
 {end_tabs}
 

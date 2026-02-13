@@ -1,6 +1,6 @@
-# Zulip PagerDuty integration
+# Doer PagerDuty integration
 
-Get Zulip notifications for your PagerDuty services!
+Get Doer notifications for your PagerDuty services!
 
 {start_tabs}
 

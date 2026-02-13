@@ -22,7 +22,7 @@ from zerver.models.users import get_user_by_delivery_email
 from zerver.views.invite import INVITATION_LINK_VALIDITY_MINUTES
 from zproject.email_backends import get_forward_address, set_forward_address
 
-ZULIP_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../")
+DOER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../")
 
 
 @typed_endpoint
@@ -64,8 +64,8 @@ def generate_all_emails(request: HttpRequest) -> HttpResponse:
     unregistered_email_1 = "new-person@zulip.com"
     unregistered_email_2 = "new-person-2@zulip.com"
     invite_expires_in_minutes = INVITATION_LINK_VALIDITY_MINUTES
-    realm = get_realm("zulip")
-    other_realm = Realm.objects.exclude(string_id="zulip").first()
+    realm = get_realm("doer")
+    other_realm = Realm.objects.exclude(string_id="doer").first()
     user = get_user_by_delivery_email(registered_email, realm)
 
     # Password reset emails

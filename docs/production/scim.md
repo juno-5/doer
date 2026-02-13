@@ -1,25 +1,25 @@
 # SCIM provisioning
 
-Zulip has beta support for user provisioning and deprovisioning via
+Doer has beta support for user provisioning and deprovisioning via
 the SCIM protocol. In SCIM, a third-party SCIM Identity Provider (IdP)
-acts as the SCIM client, connecting to the service provider (your Zulip
+acts as the SCIM client, connecting to the service provider (your Doer
 server).
 
 See the [SCIM help center page](https://zulip.com/help/scim) for
-documentation on SCIM in [Zulip Cloud](https://zulip.com) as well as
+documentation on SCIM in [Doer Cloud](https://zulip.com) as well as
 detailed documentation for how to configure some SCIM IdP providers.
 
 Synchronizing groups via SCIM is currently not supported.
 
 ## Server configuration
 
-The Zulip server-side configuration is straightforward:
+The Doer server-side configuration is straightforward:
 
 1. Pick a client name for your SCIM client. This name is internal to
-   your Zulip configuration, so the name of your IdP provider is a
+   your Doer configuration, so the name of your IdP provider is a
    good choice. We'll use `okta` in the examples below.
 
-1. Configure the Zulip server by adding a `SCIM_CONFIG` block to your
+1. Configure the Doer server by adding a `SCIM_CONFIG` block to your
    `/etc/zulip/settings.py`:
 
    ```python
@@ -41,10 +41,10 @@ The Zulip server-side configuration is straightforward:
    Make sure to restart the server after editing your settings, by running
    `/home/zulip/deployments/current/scripts/restart-server`.
 
-   The SCIM IdP will authenticate its requests to your Zulip server by
+   The SCIM IdP will authenticate its requests to your Doer server by
    sending a `WWW-Authenticate` header like this:
    `WWW-Authenticate: Bearer <secret token>`. `name_formatted_included` needs to be set
-   to `False` for Okta. It tells Zulip whether the IdP includes
+   to `False` for Okta. It tells Doer whether the IdP includes
    `name.formatted` in its `User` representation.
 
 1. Now you can proceed to [configuring your SCIM IdP](https://zulip.com/help/scim).

@@ -47,7 +47,7 @@ export type MessageSelectedEventOpts = {
 
 export type MessageSelectedEvent<TDelegateTarget, TData, TCurrentTarget, TTarget> =
     JQuery.EventBase<TDelegateTarget, TData, TCurrentTarget, TTarget> & {
-        type: "message_selected.zulip";
+        type: "message_selected.doer";
     } & MessageSelectedEventOpts;
 
 declare global {
@@ -55,7 +55,7 @@ declare global {
     namespace JQuery {
         // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
         interface TypeToTriggeredEventMap<TDelegateTarget, TData, TCurrentTarget, TTarget> {
-            ["message_selected.zulip"]: MessageSelectedEvent<
+            ["message_selected.doer"]: MessageSelectedEvent<
                 TDelegateTarget,
                 TData,
                 TCurrentTarget,
@@ -410,7 +410,7 @@ export class MessageList {
         }
 
         if (this.should_trigger_message_selected_event) {
-            $(document).trigger(new $.Event("message_selected.zulip", opts));
+            $(document).trigger(new $.Event("message_selected.doer", opts));
         }
     }
 

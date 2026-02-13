@@ -1,6 +1,6 @@
 import os
 
-from scripts.lib.zulip_tools import run
+from scripts.lib.doer_tools import run
 
 DEFAULT_PRODUCTION = False
 

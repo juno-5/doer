@@ -9,7 +9,7 @@
     },
     "trigger_parameters": {
       "gitlab": {
-        "web_url": "https://gitlab.com/zulip-testing/circleci-webhook-test",
+        "web_url": "https://gitlab.com/doer-testing/circleci-webhook-test",
         "x_gitlab_event_id": "",
         "commit_author_name": "Hari Prashant Bhimaraju",
         "user_id": "12677834",
@@ -20,7 +20,7 @@
         "tag": "",
         "commit_message": "app: Enhance message within hello().",
         "total_commits_count": "1",
-        "repo_url": "git@gitlab.com:zulip-testing/circleci-webhook-test.git",
+        "repo_url": "git@gitlab.com:doer-testing/circleci-webhook-test.git",
         "user_avatar": "https://secure.gravatar.com/avatar/8527d1b08a499c8e274790c6b4575d24?s=80&d=identicon",
         "type": "push",
         "project_id": "39861975",
@@ -46,7 +46,7 @@
         "checkout_sha": "c31f86994c54672f97b5bd5e544315b7bd40e4c1",
         "ref": "refs/heads/main",
         "branch": "main",
-        "checkout_url": "git@gitlab.com:zulip-testing/circleci-webhook-test.git"
+        "checkout_url": "git@gitlab.com:doer-testing/circleci-webhook-test.git"
       }
     }
   },
@@ -57,7 +57,7 @@
   "type": "job-completed",
   "organization": {
     "id": "39f0325f-b957-4b73-bdf5-05eb3d76699f",
-    "name": "zulip-testing"
+    "name": "doer-testing"
   },
   "workflow": {
     "id": "b23ceb64-127a-4075-a27c-d204a7a0a3b3",

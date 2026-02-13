@@ -17,7 +17,7 @@ from zerver.data_import.microsoft_teams import (
     MICROSOFT_GRAPH_API_URL,
     ChannelMetadata,
     MicrosoftTeamsFieldsT,
-    MicrosoftTeamsUserIdToZulipUserIdT,
+    MicrosoftTeamsUserIdToDoerUserIdT,
     MicrosoftTeamsUserRoleData,
     ODataQueryParameter,
     convert_users,
@@ -31,7 +31,7 @@ from zerver.data_import.microsoft_teams import (
 )
 from zerver.lib.export import MESSAGE_BATCH_CHUNK_SIZE
 from zerver.lib.import_realm import do_import_realm
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.topic import messages_for_topic
 from zerver.models.messages import Message
 from zerver.models.realms import get_realm
@@ -46,12 +46,12 @@ ParamT = ParamSpec("ParamT")
 ResponseTuple: TypeAlias = tuple[int, dict[str, str], str]
 
 EXPORTED_MICROSOFT_TEAMS_USER_EMAIL = dict(
-    aaron="aaron@ZulipChat.onmicrosoft.com",
-    alya="alya@ZulipChat.onmicrosoft.com",
-    cordelia="cordelia@ZulipChat.onmicrosoft.com",
+    aaron="aaron@DoerChat.onmicrosoft.com",
+    alya="alya@DoerChat.onmicrosoft.com",
+    cordelia="cordelia@DoerChat.onmicrosoft.com",
     guest="guest@example.com",
-    pieter="pieterk@ZulipChat.onmicrosoft.com",
-    zoe="zoe@ZulipChat.onmicrosoft.com",
+    pieter="pieterk@DoerChat.onmicrosoft.com",
+    zoe="zoe@DoerChat.onmicrosoft.com",
 )
 
 EXPORTED_REALM_OWNER_EMAILS = [
@@ -83,20 +83,20 @@ EXPORTED_MICROSOFT_TEAMS_TEAM_ID: dict[str, str] = {
 
 
 def get_exported_microsoft_teams_user_data() -> list[MicrosoftTeamsFieldsT]:
-    test_class = ZulipTestCase()
+    test_class = DoerTestCase()
     return json.loads(
         test_class.fixture_data(
-            "usersList.json", "microsoft_teams_fixtures/TeamsData_ZulipChat/users"
+            "usersList.json", "microsoft_teams_fixtures/TeamsData_DoerChat/users"
         )
     )
 
 
 def get_exported_team_data(team_id: str) -> MicrosoftTeamsFieldsT:
-    test_class = ZulipTestCase()
+    test_class = DoerTestCase()
     team_list = json.loads(
         test_class.fixture_data(
             "teamsList.json",
-            "microsoft_teams_fixtures/TeamsData_ZulipChat/teams",
+            "microsoft_teams_fixtures/TeamsData_DoerChat/teams",
         )
     )
 
@@ -104,7 +104,7 @@ def get_exported_team_data(team_id: str) -> MicrosoftTeamsFieldsT:
     team_settings = json.loads(
         test_class.fixture_data(
             "teamsSettings.json",
-            "microsoft_teams_fixtures/TeamsData_ZulipChat/teams",
+            "microsoft_teams_fixtures/TeamsData_DoerChat/teams",
         )
     )
     team_settings_data = next(
@@ -114,32 +114,32 @@ def get_exported_team_data(team_id: str) -> MicrosoftTeamsFieldsT:
 
 
 def get_exported_team_subscription_list(team_id: str) -> list[MicrosoftTeamsFieldsT]:
-    test_class = ZulipTestCase()
+    test_class = DoerTestCase()
     return json.loads(
         test_class.fixture_data(
             f"teamMembers_{team_id}.json",
-            f"microsoft_teams_fixtures/TeamsData_ZulipChat/teams/{team_id}",
+            f"microsoft_teams_fixtures/TeamsData_DoerChat/teams/{team_id}",
         )
     )
 
 
 def get_exported_team_message_list(team_id: str) -> list[MicrosoftTeamsFieldsT]:
-    test_class = ZulipTestCase()
+    test_class = DoerTestCase()
     return json.loads(
         test_class.fixture_data(
             f"messages_{team_id}.json",
-            f"microsoft_teams_fixtures/TeamsData_ZulipChat/teams/{team_id}",
+            f"microsoft_teams_fixtures/TeamsData_DoerChat/teams/{team_id}",
         )
     )
 
 
 def get_exported_team_channel_metadata(team_id: str) -> dict[str, ChannelMetadata]:
-    test_class = ZulipTestCase()
+    test_class = DoerTestCase()
     microsoft_teams_channel_metadata = {}
     team_channels = json.loads(
         test_class.fixture_data(
             f"channels_{team_id}.json",
-            f"microsoft_teams_fixtures/TeamsData_ZulipChat/teams/{team_id}",
+            f"microsoft_teams_fixtures/TeamsData_DoerChat/teams/{team_id}",
         )
     )
 
@@ -161,7 +161,7 @@ def graph_api_users_callback(request: PreparedRequest) -> ResponseTuple:
     query_params = parse_qs(parsed.query)
 
     if query_params.get("$filter") == ["userType eq 'Guest'"]:
-        test_class = ZulipTestCase()
+        test_class = DoerTestCase()
         body = test_class.fixture_data(
             "users_guest.json",
             "microsoft_graph_api_response_fixtures",
@@ -222,11 +222,11 @@ def mock_microsoft_graph_api_calls(
     return _wrapped
 
 
-class MicrosoftTeamsImportTestCase(ZulipTestCase):
+class MicrosoftTeamsImportTestCase(DoerTestCase):
     def get_exported_microsoft_teams_user_data(self) -> list[MicrosoftTeamsFieldsT]:
         return json.loads(
             self.fixture_data(
-                "usersList.json", "microsoft_teams_fixtures/TeamsData_ZulipChat/users"
+                "usersList.json", "microsoft_teams_fixtures/TeamsData_DoerChat/users"
             )
         )
 
@@ -248,7 +248,7 @@ class MicrosoftTeamsImporterIntegrationTest(MicrosoftTeamsImportTestCase):
         fixture_file_path = self.fixture_file_name(fixture_folder, "microsoft_teams_fixtures")
         if not os.path.isdir(fixture_file_path):
             raise AssertionError(f"Fixture file not found: {fixture_file_path}")
-        with self.assertLogs(level="INFO"), self.settings(EXTERNAL_HOST="zulip.example.com"):
+        with self.assertLogs(level="INFO"), self.settings(EXTERNAL_HOST="doer.example.com"):
             do_convert_directory(
                 fixture_file_path, self.converted_file_output_dir, "MICROSOFT_GRAPH_API_TOKEN"
             )
@@ -259,7 +259,7 @@ class MicrosoftTeamsImporterIntegrationTest(MicrosoftTeamsImportTestCase):
             do_import_realm(self.converted_file_output_dir, self.test_realm_subdomain)
 
     @mock_microsoft_graph_api_calls
-    def do_import_realm_fixture(self, fixture: str = "TeamsData_ZulipChat/") -> None:
+    def do_import_realm_fixture(self, fixture: str = "TeamsData_DoerChat/") -> None:
         self.converted_file_output_dir = make_export_output_dir()
         self.test_realm_subdomain = "test-import-teams-realm"
         self.import_microsoft_teams_export_fixture(fixture)
@@ -369,7 +369,7 @@ class MicrosoftTeamsImporterIntegrationTest(MicrosoftTeamsImportTestCase):
             sender_id = get_microsoft_teams_sender_id_from_message(message)
             if sender_id not in self.exported_user_data_map:
                 assert sender_id in DELETED_MICROSOFT_TEAMS_USERS
-                sender_email = f"{sender_id}@zulip.example.com"
+                sender_email = f"{sender_id}@doer.example.com"
                 deleted_user_message_exists = True
             else:
                 sender_email = self.exported_user_data_map[sender_id]["Mail"]
@@ -425,7 +425,7 @@ class MicrosoftTeamsImporterIntegrationTest(MicrosoftTeamsImportTestCase):
         )
 
         # Microsoft Teams channels are correctly converted and imported
-        # as Zulip topics.
+        # as Doer topics.
         for (
             microsoft_team_channel_id,
             microsoft_team_channel_data,
@@ -438,11 +438,11 @@ class MicrosoftTeamsImporterIntegrationTest(MicrosoftTeamsImportTestCase):
 
             topic_name = microsoft_team_channel_data.display_name
 
-            imported_messages_in_a_zulip_topic = messages_for_topic(
+            imported_messages_in_a_doer_topic = messages_for_topic(
                 test_realm.id, channel.recipient.id, topic_name
             )
             self.assertEqual(
-                len(messages_in_a_microsoft_team_channel), len(imported_messages_in_a_zulip_topic)
+                len(messages_in_a_microsoft_team_channel), len(imported_messages_in_a_doer_topic)
             )
 
 
@@ -454,7 +454,7 @@ class MicrosoftTeamsImporterUnitTest(MicrosoftTeamsImportTestCase):
         users_list: list[MicrosoftTeamsFieldsT] | None = None,
         user_data_fixture_name: str | None = None,
         microsoft_teams_user_role_data: MicrosoftTeamsUserRoleData = MICROSOFT_TEAMS_EXPORT_USER_ROLE_DATA,
-    ) -> MicrosoftTeamsUserIdToZulipUserIdT:
+    ) -> MicrosoftTeamsUserIdToDoerUserIdT:
         if users_list is None:
             users_list = self.get_exported_microsoft_teams_user_data()
 
@@ -553,16 +553,16 @@ class MicrosoftTeamsImporterUnitTest(MicrosoftTeamsImportTestCase):
         realm["zerver_recipient"] = []
         realm["zerver_subscription"] = []
         with self.assertLogs(level="INFO"):
-            microsoft_teams_user_id_to_zulip_user_id = self.convert_users_handler(
+            microsoft_teams_user_id_to_doer_user_id = self.convert_users_handler(
                 realm=realm, microsoft_teams_user_role_data=MICROSOFT_TEAMS_EXPORT_USER_ROLE_DATA
             )
 
         self.assert_length(
             realm["zerver_recipient"], len(self.get_exported_microsoft_teams_user_data())
         )
-        zulip_user_ids = set(microsoft_teams_user_id_to_zulip_user_id.values())
+        doer_user_ids = set(microsoft_teams_user_id_to_doer_user_id.values())
         for recipient in realm["zerver_recipient"]:
-            self.assertTrue(recipient["type_id"] in zulip_user_ids)
+            self.assertTrue(recipient["type_id"] in doer_user_ids)
             self.assertTrue(recipient["type"] == Recipient.PERSONAL)
 
     @responses.activate
@@ -654,11 +654,11 @@ class MicrosoftTeamsImporterUnitTest(MicrosoftTeamsImportTestCase):
         # messages from multiple files.
         message_file_paths = [
             self.fixture_file_name(
-                "TeamsData_ZulipChat/teams/7c050abd-3cbb-448b-a9de-405f54cc14b2/messages_7c050abd-3cbb-448b-a9de-405f54cc14b2.json",
+                "TeamsData_DoerChat/teams/7c050abd-3cbb-448b-a9de-405f54cc14b2/messages_7c050abd-3cbb-448b-a9de-405f54cc14b2.json",
                 "microsoft_teams_fixtures",
             ),
             self.fixture_file_name(
-                "TeamsData_ZulipChat/teams/2a00a70a-00f5-4da5-8618-8281194f0de0/messages_2a00a70a-00f5-4da5-8618-8281194f0de0.json",
+                "TeamsData_DoerChat/teams/2a00a70a-00f5-4da5-8618-8281194f0de0/messages_2a00a70a-00f5-4da5-8618-8281194f0de0.json",
                 "microsoft_teams_fixtures",
             ),
         ]

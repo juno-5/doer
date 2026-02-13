@@ -6,18 +6,18 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ConfigureResolvedNoticesMarkedAsRead from "../include/_ConfigureResolvedNoticesMarkedAsRead.mdx";
 import FilterResolvedLeftSidebar from "../include/_FilterResolvedLeftSidebar.mdx";
 import TopicActions from "../include/_TopicActions.mdx";
 import TopicLongPressMenu from "../include/_TopicLongPressMenu.mdx";
 import TopicLongPressMenuTip from "../include/_TopicLongPressMenuTip.mdx";
 
-import CheckIcon from "~icons/zulip-icon/check";
-import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
-import SearchIcon from "~icons/zulip-icon/search";
+import CheckIcon from "~icons/doer-icon/check";
+import MoreVerticalIcon from "~icons/doer-icon/more-vertical";
+import SearchIcon from "~icons/doer-icon/search";
 
-Zulip's [topics](/help/introduction-to-topics) are very
+Doer's [topics](/help/introduction-to-topics) are very
 helpful for customer support, answering questions, investigating
 issues and production errors, as well as other workflows.
 Resolving topics makes it easy to track the status of each question,
@@ -65,10 +65,10 @@ Users can resolve or unresolve a topic if they have
       1. Select **Mark as resolved**.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click on the **mark as resolved** (<CheckIcon />)
       icon in the message recipient bar to mark an unresolved topic as resolved.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -97,10 +97,10 @@ accident.
       1. Select **Mark as unresolved**.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click on the **ellipsis** (<MoreVerticalIcon />)
       in the message recipient bar, and select the **Mark as unresolved** option.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -134,10 +134,10 @@ accident.
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   To get a feed of unread messages in all unresolved topics, search for
   `is:unresolved is:unread`.
-</ZulipTip>
+</DoerTip>
 
 ## Search for messages in resolved topics
 

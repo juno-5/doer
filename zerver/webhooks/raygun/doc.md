@@ -1,6 +1,6 @@
-# Zulip Raygun integration
+# Doer Raygun integration
 
-Get Zulip notifications for your Raygun events!
+Get Doer notifications for your Raygun events!
 
 {start_tabs}
 

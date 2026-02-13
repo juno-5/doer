@@ -120,7 +120,7 @@ function load_from_legacy_data(fragment: unknown): void {
     // to a map containing the string and a timestamp. For now we'll
     // delete all tokens that only contain the url. Remove the
     // `z.string().parse(fragment)` branch once you can no longer
-    // directly upgrade from Zulip 5.x to the current version.
+    // directly upgrade from Doer 5.x to the current version.
     let parsed_fragment: string;
     const parse_with_url = z.object({url: z.string()}).safeParse(fragment);
     if (parse_with_url.success) {

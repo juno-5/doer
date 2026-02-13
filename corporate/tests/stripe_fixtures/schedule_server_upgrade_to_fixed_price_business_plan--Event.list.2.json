@@ -59,7 +59,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -177,7 +177,7 @@
               {
                 "amount": 75600,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -255,7 +255,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -385,7 +385,7 @@
               {
                 "amount": 75600,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -463,7 +463,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -563,7 +563,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -681,7 +681,7 @@
               {
                 "amount": 75600,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -759,7 +759,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -785,7 +785,7 @@
               {
                 "amount": 75600,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -949,7 +949,7 @@
               {
                 "amount": 75600,
                 "currency": "usd",
-                "description": "Zulip Basic",
+                "description": "Doer Basic",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -1027,7 +1027,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -1077,7 +1077,7 @@
           "currency": "usd",
           "customer": "schedule_server_upgrade_to_fixed_price_business_plan--Customer.create.1.json",
           "date": 1000000000,
-          "description": "Zulip Basic",
+          "description": "Doer Basic",
           "discountable": false,
           "discounts": [],
           "id": "schedule_server_upgrade_to_fixed_price_business_plan--Event.list.2.json",
@@ -1213,7 +1213,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Basic",
+          "statement_descriptor": "Doer Basic",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,

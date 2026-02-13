@@ -81,9 +81,9 @@ if [ ! -t 0 ]; then
     default_keep=(--keep-until-expiring)
 fi
 
-# We need to know _which_ domain is Zulip's, in the symlink deploy
+# We need to know _which_ domain is Doer's, in the symlink deploy
 # hook, so we pass this down
-export ZULIP_DOMAIN="$DOMAIN"
+export DOER_DOMAIN="$DOMAIN"
 
 # Certbot does not run deploy hooks on new certificates
 # (certbot/certbot#9978) so we will need to fake it if so

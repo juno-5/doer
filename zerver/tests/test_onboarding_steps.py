@@ -8,7 +8,7 @@ from typing_extensions import override
 from zerver.actions.create_user import do_create_user
 from zerver.actions.onboarding_steps import do_mark_onboarding_step_as_read
 from zerver.lib.onboarding_steps import ALL_ONBOARDING_STEPS, get_next_onboarding_steps
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import OnboardingStep, ScheduledMessage
 from zerver.models.realms import get_realm
 from zerver.models.users import get_system_bot
@@ -16,12 +16,12 @@ from zerver.models.users import get_system_bot
 
 # Splitting this out, since I imagine this will eventually have most of the
 # complicated onboarding steps logic.
-class TestGetNextOnboardingSteps(ZulipTestCase):
+class TestGetNextOnboardingSteps(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
         self.user = do_create_user(
-            "user@zulip.com", "password", get_realm("zulip"), "user", acting_user=None
+            "user@zulip.com", "password", get_realm("doer"), "user", acting_user=None
         )
 
     def test_some_done_some_not(self) -> None:
@@ -58,7 +58,7 @@ class TestGetNextOnboardingSteps(ZulipTestCase):
         self.assertEqual(get_next_onboarding_steps(self.user), [])
 
 
-class TestOnboardingSteps(ZulipTestCase):
+class TestOnboardingSteps(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -124,4 +124,4 @@ class TestOnboardingSteps(ZulipTestCase):
         self.assertEqual(
             scheduled_message.sender.id, get_system_bot(settings.WELCOME_BOT, user.realm_id).id
         )
-        self.assertIn("Welcome to Zulip video", scheduled_message.content)
+        self.assertIn("Welcome to Doer video", scheduled_message.content)

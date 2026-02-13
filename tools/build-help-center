@@ -38,7 +38,7 @@ args = parser.parse_args()
 
 def run() -> None:
     env = os.environ.copy()
-    env["SUPPORT_EMAIL"] = parseaddr(settings.ZULIP_ADMINISTRATOR)[1]
+    env["SUPPORT_EMAIL"] = parseaddr(settings.DOER_ADMINISTRATOR)[1]
     env["CORPORATE_ENABLED"] = str(settings.CORPORATE_ENABLED).lower()
     env["SHOW_RELATIVE_LINKS"] = str(args.show_relative_links).lower()
     build_command = ["/usr/local/bin/corepack", "pnpm", "build"]

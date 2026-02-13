@@ -9,7 +9,7 @@ from zerver.lib.avatar import get_gravatar_url
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.message_cache import MessageDict
 from zerver.lib.outgoing_webhook import get_service_interface_class, process_success_response
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import TOPIC_NAME
 from zerver.models import Message
@@ -21,12 +21,12 @@ from zerver.models.users import get_user
 from zerver.openapi.openapi import validate_against_openapi_schema
 
 
-class TestGenericOutgoingWebhookService(ZulipTestCase):
+class TestGenericOutgoingWebhookService(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
 
-        self.bot_user = get_user("outgoing-webhook@zulip.com", get_realm("zulip"))
+        self.bot_user = get_user("outgoing-webhook@zulip.com", get_realm("doer"))
         service_class = get_service_interface_class("whatever")  # GenericOutgoingWebhookService
         self.handler = service_class(
             service_name="test-service", token="abcdef", user_profile=self.bot_user
@@ -76,7 +76,7 @@ class TestGenericOutgoingWebhookService(ZulipTestCase):
         gravatar_url = get_gravatar_url(
             othello.delivery_email,
             othello.avatar_version,
-            get_realm("zulip").id,
+            get_realm("doer").id,
         )
 
         expected_message_data = {
@@ -93,7 +93,7 @@ class TestGenericOutgoingWebhookService(ZulipTestCase):
             "sender_email": othello.email,
             "sender_full_name": "Othello, the Moor of Venice",
             "sender_id": othello.id,
-            "sender_realm_str": "zulip",
+            "sender_realm_str": "doer",
             "stream_id": stream.id,
             TOPIC_NAME: "test",
             "submessages": [],
@@ -121,7 +121,7 @@ class TestGenericOutgoingWebhookService(ZulipTestCase):
             self.assertEqual(session.post.call_args[0], (test_url,))
             request_data = session.post.call_args[1]["json"]
 
-        validate_against_openapi_schema(request_data, "/zulip-outgoing-webhook", "post", "200")
+        validate_against_openapi_schema(request_data, "/doer-outgoing-webhook", "post", "200")
         self.assertEqual(request_data["bot_full_name"], self.bot_user.full_name)
         self.assertEqual(request_data["data"], "@**test**")
         self.assertEqual(request_data["token"], "abcdef")
@@ -156,11 +156,11 @@ class TestGenericOutgoingWebhookService(ZulipTestCase):
         self.assertEqual(success_response, None)
 
 
-class TestSlackOutgoingWebhookService(ZulipTestCase):
+class TestSlackOutgoingWebhookService(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.bot_user = get_user("outgoing-webhook@zulip.com", get_realm("zulip"))
+        self.bot_user = get_user("outgoing-webhook@zulip.com", get_realm("doer"))
         self.stream_message_event = {
             "command": "@**test**",
             "user_profile_id": 12,
@@ -169,7 +169,7 @@ class TestSlackOutgoingWebhookService(ZulipTestCase):
             "message": {
                 "content": "test_content",
                 "type": "stream",
-                "sender_realm_str": "zulip",
+                "sender_realm_str": "doer",
                 "sender_email": "sampleuser@zulip.com",
                 "stream_id": "123",
                 "display_recipient": "integrations",
@@ -186,7 +186,7 @@ class TestSlackOutgoingWebhookService(ZulipTestCase):
             "trigger": NotificationTriggers.DIRECT_MESSAGE,
             "message": {
                 "sender_id": 3,
-                "sender_realm_str": "zulip",
+                "sender_realm_str": "doer",
                 "timestamp": 1529821610,
                 "sender_email": "cordelia@zulip.com",
                 "type": "private",
@@ -216,7 +216,7 @@ class TestSlackOutgoingWebhookService(ZulipTestCase):
 
         self.assertEqual(request_data[0][1], "abcdef")  # token
         self.assertEqual(request_data[1][1], "T2")  # team_id
-        self.assertEqual(request_data[2][1], "zulip.testserver")  # team_domain
+        self.assertEqual(request_data[2][1], "doer.testserver")  # team_domain
         self.assertEqual(request_data[3][1], "C123")  # channel_id
         self.assertEqual(request_data[4][1], "integrations")  # channel_name
         self.assertEqual(request_data[5][1], 123456)  # thread_id

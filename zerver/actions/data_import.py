@@ -20,7 +20,7 @@ from zerver.models.prereg_users import PreregistrationRealm
 from zerver.models.realms import Realm
 from zerver.models.users import RealmUserDefault, UserProfile, get_user_by_delivery_email
 
-logger = logging.getLogger("zulip.registration")
+logger = logging.getLogger("doer.registration")
 
 
 def import_slack_data(event: dict[str, Any]) -> None:
@@ -109,7 +109,7 @@ def import_slack_data(event: dict[str, Any]) -> None:
                 preregistration_realm.status = confirmation_settings.STATUS_USED
             except UserProfile.DoesNotExist:
                 # If the email address that the importing user
-                # validated with Zulip does not appear in the data
+                # validated with Doer does not appear in the data
                 # export, we will prompt them which account is theirs.
                 preregistration_realm.data_import_metadata["need_select_realm_owner"] = True
 

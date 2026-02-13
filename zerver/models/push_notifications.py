@@ -81,7 +81,7 @@ class AbstractPushDevice(models.Model):
 
 
 class PushDevice(AbstractPushDevice):
-    """Core zulip server table storing registrations that are potentially
+    """Core doer server table storing registrations that are potentially
     registered with the mobile push notifications bouncer service.
 
     Each row corresponds to an account on an install of the app

@@ -1,6 +1,6 @@
-# Zulip Discourse integration
+# Doer Discourse integration
 
-Forward new Discourse posts to Zulip!
+Forward new Discourse posts to Doer!
 
 {start_tabs}
 
@@ -9,20 +9,20 @@ Forward new Discourse posts to Zulip!
 1. Install the Discourse [Chat Integration][chat-integration].
 
 1. In your **Discourse site settings**, toggle
-   `chat_integration_zulip_enabled`, and fill in the following information:
+   `chat_integration_doer_enabled`, and fill in the following information:
 
-    * `chat_integration_zulip_server`: {{ zulip_url }}
-    * `chat_integration_zulip_bot_api_key`: your bot's API key
-    * `chat_integration_zulip_bot_email_address`: your bot's email
+    * `chat_integration_doer_server`: {{ doer_url }}
+    * `chat_integration_doer_bot_api_key`: your bot's API key
+    * `chat_integration_doer_bot_email_address`: your bot's email
 
 1. Go to the **Plugins** tab, click on **Chat Integration**. Select
-   **Zulip**, and click **Add Channel**.
+   **Doer**, and click **Add Channel**.
 
 1. Set **Stream** to the [channel](/help/create-a-channel) name that you'd
    like to receive notifications in, set **Subject** to the topic name, and
    click **Save Channel**.
 
-1. To filter the posts you'd like to forward to Zulip,
+1. To filter the posts you'd like to forward to Doer,
    [configure the rules][configuring-rules] in your Discourse forum's
    **Chat Integrations** panel.
 
@@ -35,7 +35,7 @@ Forward new Discourse posts to Zulip!
 ### Related documentation
 
 - [Discourse Chat Integration][chat-integration]
-- [Discourse's documentation on the Zulip integration][setup-instructions]
+- [Discourse's documentation on the Doer integration][setup-instructions]
 
 [setup-instructions]: https://meta.discourse.org/t/68501
 [chat-integration]: https://meta.discourse.org/t/discourse-chat-integration/66522

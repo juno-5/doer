@@ -19,7 +19,7 @@ from analytics.models import (
 )
 from zerver.actions.create_realm import do_create_realm
 from zerver.lib.create_user import create_user
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.storage import static_path
 from zerver.lib.stream_color import STREAM_ASSIGNMENT_COLORS
 from zerver.lib.stream_subscription import create_stream_subscription
@@ -31,7 +31,7 @@ from zerver.models.groups import NamedUserGroup, SystemGroups, UserGroupMembersh
 from zerver.models.realm_audit_logs import AuditLogEventType
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Populates analytics tables with randomly generated data."""
 
     DAYS_OF_DATA = 100
@@ -278,14 +278,14 @@ class Command(ZulipBaseCommand):
 
         website, _created = Client.objects.get_or_create(name="website")
         old_desktop, _created = Client.objects.get_or_create(name="desktop app Linux 0.3.7")
-        android, _created = Client.objects.get_or_create(name="ZulipAndroid")
+        android, _created = Client.objects.get_or_create(name="DoerAndroid")
         iOS, _created = Client.objects.get_or_create(name="ZulipiOS")
-        react_native, _created = Client.objects.get_or_create(name="ZulipMobile")
-        flutter, _created = Client.objects.get_or_create(name="ZulipFlutter")
+        react_native, _created = Client.objects.get_or_create(name="DoerMobile")
+        flutter, _created = Client.objects.get_or_create(name="DoerFlutter")
         API, _created = Client.objects.get_or_create(name="API: Python")
         irc_mirror, _created = Client.objects.get_or_create(name="irc_mirror")
         unused, _created = Client.objects.get_or_create(name="unused")
-        long_webhook, _created = Client.objects.get_or_create(name="ZulipLooooooooooongNameWebhook")
+        long_webhook, _created = Client.objects.get_or_create(name="DoerLooooooooooongNameWebhook")
 
         stat = COUNT_STATS["messages_sent:client:day"]
         user_data = {

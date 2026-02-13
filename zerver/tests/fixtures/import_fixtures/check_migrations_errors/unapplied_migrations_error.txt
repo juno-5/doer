@@ -1,4 +1,4 @@
-Error: Export was generated on a different Zulip version.
+Error: Export was generated on a different Doer version.
 Export version: {version_placeholder}
 Server version: {version_placeholder}
 

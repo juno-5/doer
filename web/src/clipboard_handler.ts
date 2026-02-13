@@ -28,7 +28,7 @@ export function execute_copy(
 
 export async function copy_link_to_clipboard(link: string): Promise<void> {
     // The caller is responsible for making sure what it is passes in
-    // to this function is a Zulip internal link.
+    // to this function is a Doer internal link.
     return new Promise((resolve) => {
         const stream_topic_details = hash_util.decode_stream_topic_from_url(link);
 

@@ -2,26 +2,26 @@
 #
 class kandra::prometheus::wal_g {
   include kandra::prometheus::base
-  include zulip::supervisor
-  include zulip::wal_g
+  include doer::supervisor
+  include doer::wal_g
 
   file { '/usr/local/bin/wal-g-exporter':
     ensure  => file,
-    require => User[zulip],
-    owner   => 'zulip',
-    group   => 'zulip',
+    require => User[doer],
+    owner   => 'doer',
+    group   => 'doer',
     mode    => '0755',
-    source  => 'puppet:///modules/zulip/postgresql/wal-g-exporter',
+    source  => 'puppet:///modules/doer/postgresql/wal-g-exporter',
   }
 
   # We embed the hash of the contents into the name of the process, so
   # that `supervisorctl reread` knows that it has updated.
-  $full_exporter_hash = sha256(file('zulip/postgresql/wal-g-exporter'))
+  $full_exporter_hash = sha256(file('doer/postgresql/wal-g-exporter'))
   $exporter_hash = $full_exporter_hash[0,8]
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_wal_g_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_wal_g_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File['/usr/local/bin/wal-g-exporter'],
     ],

@@ -998,7 +998,7 @@ function navigate_to_anchor_message(opts: {
         // for date anchor heavily relies on has_found_oldest/newest being up-to-date.
         // When using load_local_messages, we do not copy fetch_status over to
         // msg_list_data, which causes error in message_list_data_to_target_message_id.
-        // See https://github.com/zulip/zulip/pull/37198#issuecomment-3858015457 for
+        // See https://github.com/doer/doer/pull/37198#issuecomment-3858015457 for
         // more details.
         const msg_list_data = new MessageListData({
             filter: message_lists.current.data.filter,

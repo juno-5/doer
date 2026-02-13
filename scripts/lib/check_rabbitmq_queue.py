@@ -7,10 +7,10 @@ import time
 from collections import defaultdict
 from typing import Any
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-sys.path.append(ZULIP_PATH)
-from scripts.lib.zulip_tools import atomic_nagios_write, get_config, get_config_file
+sys.path.append(DOER_PATH)
+from scripts.lib.doer_tools import atomic_nagios_write, get_config, get_config_file
 
 normal_queues = [
     "deferred_work",
@@ -166,7 +166,7 @@ def check_rabbitmq_queues() -> None:
                 queues_with_consumers.append(queue)
 
     queue_stats_dir = subprocess.check_output(
-        [os.path.join(ZULIP_PATH, "scripts/get-django-setting"), "QUEUE_STATS_DIR"],
+        [os.path.join(DOER_PATH, "scripts/get-django-setting"), "QUEUE_STATS_DIR"],
         text=True,
     ).strip()
     queue_stats: dict[str, dict[str, Any]] = {}

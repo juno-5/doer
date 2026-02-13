@@ -19,18 +19,18 @@ from zerver.lib.rate_limiter import (
     RateLimiterLockingError,
     get_tor_ips,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import ratelimit_rule
 from zerver.models import PushDeviceToken, UserProfile
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RateLimitedRemoteZulipServer, RemoteZulipServer
+    from zilencer.models import RateLimitedRemoteDoerServer, RemoteDoerServer
 
 if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class RateLimitTests(ZulipTestCase):
+class RateLimitTests(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -168,7 +168,7 @@ class RateLimitTests(ZulipTestCase):
         with self.settings(OPEN_REALM_CREATION=True):
             self.do_test_hit_ratelimits(
                 lambda: self.submit_realm_creation_form(
-                    email="new@zulip.com", realm_subdomain="custom-test", realm_name="Zulip test"
+                    email="new@zulip.com", realm_subdomain="custom-test", realm_name="Doer test"
                 ),
                 is_json=False,
             )
@@ -235,7 +235,7 @@ class RateLimitTests(ZulipTestCase):
             request_count += 1
             if request_count % 2 == 1:
                 return self.submit_realm_creation_form(
-                    email="new@zulip.com", realm_subdomain="custom-test", realm_name="Zulip test"
+                    email="new@zulip.com", realm_subdomain="custom-test", realm_name="Doer test"
                 )
             else:
                 return self.client_post("/accounts/find/", {"emails": "new@zulip.com"})
@@ -368,7 +368,7 @@ class RateLimitTests(ZulipTestCase):
     @ratelimit_rule(1, 5, domain="api_by_remote_server")
     def test_hit_ratelimits_as_remote_server(self) -> None:
         server_uuid = str(uuid.uuid4())
-        server = RemoteZulipServer(
+        server = RemoteDoerServer(
             uuid=server_uuid,
             api_key="magic_secret_api_key",
             hostname="demo.example.com",
@@ -383,7 +383,7 @@ class RateLimitTests(ZulipTestCase):
             original_default_subdomain = self.DEFAULT_SUBDOMAIN
             self.DEFAULT_SUBDOMAIN = ""
 
-            RateLimitedRemoteZulipServer(server).clear_history()
+            RateLimitedRemoteDoerServer(server).clear_history()
             with self.assertLogs("zilencer.auth", level="WARNING") as m:
                 self.do_test_hit_ratelimits(lambda: self.uuid_post(server_uuid, endpoint, payload))
             self.assertEqual(

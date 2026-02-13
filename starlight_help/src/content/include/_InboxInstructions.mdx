@@ -1,11 +1,11 @@
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import GoToInbox from "../include/_GoToInbox.mdx";
 
-import ArrowDownIcon from "~icons/zulip-icon/arrow-down";
-import InboxIcon from "~icons/zulip-icon/inbox";
+import ArrowDownIcon from "~icons/doer-icon/arrow-down";
+import InboxIcon from "~icons/doer-icon/inbox";
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -29,11 +29,11 @@ import InboxIcon from "~icons/zulip-icon/inbox";
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   You can collapse or expand the list of topics in a channel by clicking the
   **collapse**
   (<ArrowDownIcon />)
   or **expand**
   (<ArrowDownIcon />)
   icon to the left of a channel name.
-</ZulipTip>
+</DoerTip>

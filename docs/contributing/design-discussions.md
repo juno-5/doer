@@ -1,10 +1,10 @@
 # Design discussions
 
-We discuss ideas for improving Zulip's user experience, interface, and visual
-design in the [Zulip development
+We discuss ideas for improving Doer's user experience, interface, and visual
+design in the [Doer development
 community](https://zulip.com/development-community/). The purpose of these
 design discussions is to help us make smart, well-informed decisions about
-design changes to the Zulip product. We want Zulip to work great for a diverse
+design changes to the Doer product. We want Doer to work great for a diverse
 array of users and organizations, and discussions in the development community
 are an incredibly valuable source of insight and ideas. We welcome all
 perspectives, respectfully shared.
@@ -13,7 +13,7 @@ Most design discussions take place in the [#design][design channel] channel in t
 development community. Discussions about mobile app design happen in
 [#mobile-design][mobile-design channel],
 and design of the terminal app is discussed in
-[#zulip-terminal][zulip-terminal channel].
+[#doer-terminal][doer-terminal channel].
 
 ## Guidelines for all participants
 
@@ -24,7 +24,7 @@ incorporate a variety of ideas, experiences, and perspectives into the
 discussion, the better decisions we'll be able to make.
 
 Please start by reviewing the guide to [how we
-communicate](how-we-communicate.md) in the Zulip community. Also, when sharing
+communicate](how-we-communicate.md) in the Doer community. Also, when sharing
 your ideas:
 
 - Think about corner cases and interactions with existing features that the
@@ -36,7 +36,7 @@ your ideas:
   some refactoring that would take me another hour,” is probably not
   worth bringing up if X would produce a better user
   experience. “Adding X might require removing feature Y,” or “X is
-  incompatible with Zulip's security model,” is important to present
+  incompatible with Doer's security model,” is important to present
   early.
 
 Note that [#design][design channel] is a high-traffic channel, and thoughtful
@@ -57,7 +57,7 @@ discussions:
   discussion (with or without "moderator" permissions in the organization).
 
 - **Design team**: Anyone working actively on the design of the feature at hand
-  and/or overall design for the Zulip product.
+  and/or overall design for the Doer product.
 
 - [Decision makers](#guidelines-for-decision-makers): Project maintainers
   responsible for design decisions, including design leaders, product leaders,
@@ -67,10 +67,10 @@ discussions:
 
 When you are working on a PR that includes frontend changes, you may find it helpful
 to get interactive feedback on the design. The best way to do so is by posting a
-message in the appropriate design channel in the Zulip development
+message in the appropriate design channel in the Doer development
 community: [#design][design channel] for the web/desktop app,
 [#mobile-design][mobile-design channel] for the mobile app, or
-[#zulip-terminal][zulip-terminal channel] for the terminal app.
+[#doer-terminal][doer-terminal channel] for the terminal app.
 
 ### When to post
 
@@ -122,7 +122,7 @@ questions you are looking for feedback on. Some advice:
   in this area. Educate others by sharing any tradeoffs and relevant
   considerations you’re aware of.
 
-Keep in mind that the Zulip community is distributed around the world, and you
+Keep in mind that the Doer community is distributed around the world, and you
 should not expect to get realtime feedback. However, feel free to bump the
 thread if you don’t see a response after a couple of business days.
 
@@ -172,7 +172,7 @@ it's seen by the appropriate audience.
 
 - We generally aim to discuss raw user feedback on the product’s design in
   [#feedback](https://chat.zulip.org/#narrow/channel/137-feedback) (when it
-  applies to the web and desktop apps, or to all Zulip clients). The
+  applies to the web and desktop apps, or to all Doer clients). The
   [#design][design channel] should be reserved for design aspects that we’re
   actively (considering) working on. This lets the design team focus on
   discussions that are expected to result in actionable decisions.
@@ -186,7 +186,7 @@ it's seen by the appropriate audience.
   [#frontend](https://chat.zulip.org/#narrow/channel/6-frontend) for the web
   app, and see our [guide to chat.zulip.org
   channels](https://zulip.com/development-community/#channels-for-code-contributors)
-  for other Zulip codebases. The line can sometimes blur (and that’s OK), but we
+  for other Doer codebases. The line can sometimes blur (and that’s OK), but we
   should aim to move (parts of) the thread if there is an extensive conversation
   that belongs in the other channel.
 
@@ -208,7 +208,7 @@ it's seen by the appropriate audience.
   mobile team follows closely.
 
   Similarly, discussions of the design of the terminal app should move to
-  [#zulip-terminal][zulip-terminal channel].
+  [#doer-terminal][doer-terminal channel].
 
 ## Guidelines for decision makers
 
@@ -293,4 +293,4 @@ to a decision:
 
 [design channel]: https://chat.zulip.org/#narrow/channel/101-design
 [mobile-design channel]: https://chat.zulip.org/#narrow/channel/530-mobile-design
-[zulip-terminal channel]: https://chat.zulip.org/#narrow/channel/206-zulip-terminal
+[doer-terminal channel]: https://chat.zulip.org/#narrow/channel/206-doer-terminal

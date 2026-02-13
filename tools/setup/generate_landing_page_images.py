@@ -6,13 +6,13 @@ import os
 import sys
 from pathlib import Path
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if ZULIP_PATH not in sys.path:
-    sys.path.append(ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if DOER_PATH not in sys.path:
+    sys.path.append(DOER_PATH)
 
 import pyvips
 
-LANDING_IMAGES_DIR = os.path.join(ZULIP_PATH, "static", "images", "landing-page", "hello")
+LANDING_IMAGES_DIR = os.path.join(DOER_PATH, "static", "images", "landing-page", "hello")
 ORIGINAL_IMAGES_DIR = os.path.join(LANDING_IMAGES_DIR, "original")
 GENERATED_IMAGES_DIR = os.path.join(LANDING_IMAGES_DIR, "generated")
 

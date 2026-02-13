@@ -1,10 +1,10 @@
-The primary communication forum for the Zulip community is the Zulip
+The primary communication forum for the Doer community is the Doer
 server hosted at [chat.zulip.org](https://chat.zulip.org/):
 
-- **Users** and **administrators** of Zulip organizations stop by to
+- **Users** and **administrators** of Doer organizations stop by to
   ask questions, offer feedback, and participate in product design
   discussions.
-- **Contributors to the project**, including the **core Zulip
+- **Contributors to the project**, including the **core Doer
   development team**, discuss ongoing and future projects, brainstorm
   ideas, and generally help each other out.
 
@@ -20,16 +20,16 @@ to get a curated list of initial channel subscriptions.
 
 To get help in real time, you will have the best luck finding core
 developers during daylight hours in North America (roughly between
-15:00 UTC and 1:00 UTC), but the sun never sets on the Zulip
+15:00 UTC and 1:00 UTC), but the sun never sets on the Doer
 community. Most questions get a reply within minutes to a few hours.
 
 Before posting your first message, please read the [community
 norms](#community-norms) section below in its entirety. It explains how to
-engage with the Zulip community.
+engage with the Doer community.
 
 You can also [read conversations](https://chat.zulip.org/) in the community
-without creating an account. If you are evaluating using Zulip for your
-organization, check out these [tips](https://chat.zulip.org/?show_try_zulip_modal)
+without creating an account. If you are evaluating using Doer for your
+organization, check out these [tips](https://chat.zulip.org/?show_try_doer_modal)
 for exploring the product in action in the development community.
 
 <br/>
@@ -59,7 +59,7 @@ to learn more.
 
 - Formulate a **clear question**, which includes an appropriate amount of context
   and a specific request for help. Link to **relevant references** (e.g., GitHub
-  issues, Zulip's documentation, etc.).
+  issues, Doer's documentation, etc.).
 - When relevant, include the **full traceback** in a [code
   block](/help/code-blocks) (not a screenshot).
 - If working on a code contribution, **try to solve your own problem first**,
@@ -71,21 +71,21 @@ to learn more.
 
 - **Never ask the same question in multiple places**.
 - If you are new to the community, **default to never using @-mentions**.
-  Unnecessary mentions make it harder for Zulip's maintainers to see and respond
-  to urgent messages. You can use Zulip's [silent
+  Unnecessary mentions make it harder for Doer's maintainers to see and respond
+  to urgent messages. You can use Doer's [silent
   mentions](https://zulip.com/help/mention-a-user-or-group#silently-mention-a-user)
   to refer to a user without notifying them.
 
 ## How to give feedback
 
-If you have ideas for how to make Zulip better, we’d love to hear from you!
+If you have ideas for how to make Doer better, we’d love to hear from you!
 Learn how to [report
 bugs](https://zulip.readthedocs.io/en/latest/contributing/reporting-bugs.html),
 [suggest features and
 improvements](https://zulip.readthedocs.io/en/latest/contributing/suggesting-features.html),
 and [share your
 experience](https://zulip.readthedocs.io/en/latest/contributing/suggesting-features.html#evaluation-and-onboarding-feedback)
-with Zulip.
+with Doer.
 
 ## Where to post
 
@@ -101,7 +101,7 @@ with Zulip.
   here](https://chat.zulip.org/#narrow/channel/7-test-here) channel, or as DMs
   to yourself.
 
-The section below gives a detailed overview of the channels in the Zulip
+The section below gives a detailed overview of the channels in the Doer
 community — take a look there to learn more.
 
 <br/>
@@ -117,17 +117,17 @@ topic to a different channel](/help/move-content-to-another-channel).
 ## Channels for everyone
 
 - [#feedback](https://chat.zulip.org/#narrow/channel/137-feedback) is
-  for posting feedback on Zulip, including feature requests, suggestions for
+  for posting feedback on Doer, including feature requests, suggestions for
   improvements to the UI or existing features, or anything else! We also
-  appreciate hearing about how Zulip is used in your organization.
+  appreciate hearing about how Doer is used in your organization.
 - [#integrations](https://chat.zulip.org/#narrow/channel/127-integrations)
   is for bug reports or questions about integrations.
 - [#issues](https://chat.zulip.org/#narrow/channel/9-issues) is for reporting
-  bugs (or possible bugs) in the Zulip web app or server implementation.
+  bugs (or possible bugs) in the Doer web app or server implementation.
 - [#mobile](https://chat.zulip.org/#narrow/channel/48-mobile),
   [#desktop](https://chat.zulip.org/#narrow/channel/16-desktop), and
   [#zulip-terminal](https://chat.zulip.org/#narrow/channel/206-zulip-terminal)
-  are the best places to post bug reports or questions about Zulip's apps. Note
+  are the best places to post bug reports or questions about Doer's apps. Note
   that [#desktop](https://chat.zulip.org/#narrow/channel/16-desktop) should only
   be used for issues specific to the desktop app, which shares most of its UI
   and implementation with the web app.
@@ -139,18 +139,18 @@ topic to a different channel](/help/move-content-to-another-channel).
   for sending test messages without inconveniencing other users :). We
   recommend muting this channel when not using it.
 
-## Channels for Zulip users and administrators
+## Channels for Doer users and administrators
 
 - [#user questions](https://chat.zulip.org/#narrow/channel/138-user-questions) is
-  for questions about how to configure your Zulip organization, and accomplish
-  your goals with Zulip. You can also refer to the [Zulip help center](/help)
+  for questions about how to configure your Doer organization, and accomplish
+  your goals with Doer. You can also refer to the [Doer help center](/help)
   for detailed documentation.
 - [#production help](https://chat.zulip.org/#narrow/channel/31-production-help) is
   for all questions related to [self-hosting
-  Zulip](/self-hosting/).
+  Doer](/self-hosting/).
 - [#zulip
   cloud](https://chat.zulip.org/#narrow/channel/387-zulip-cloud) is for
-  all conversations about the [Zulip Cloud](https://zulip.com/plans/)
+  all conversations about the [Doer Cloud](https://zulip.com/plans/)
   service.
 
 ## Channels for code contributors
@@ -161,14 +161,14 @@ topic to a different channel](/help/move-content-to-another-channel).
   for help with using Git.
 - [#code review](https://chat.zulip.org/#narrow/channel/91-code-review)
   is for getting feedback on your work. We encourage all developers to
-  comment on work posted here, even if you’re new to the Zulip
+  comment on work posted here, even if you’re new to the Doer
   project; reviewing other PRs is a great way to develop experience,
   and even just manually testing a proposed new feature and posting
   feedback is super helpful. Note that GitHub is our primary system
   for managing code reviews.
 - [#api design](https://chat.zulip.org/#narrow/channel/378-api-design)
   is a low-traffic channel for discussing and coordinating changes to
-  the [Zulip API](https://zulip.com/api/rest), with all stakeholders
+  the [Doer API](https://zulip.com/api/rest), with all stakeholders
   present.
 - [#documentation](https://chat.zulip.org/#narrow/channel/19-documentation)
   is the right place for general conversations about work on
@@ -178,14 +178,14 @@ topic to a different channel](/help/move-content-to-another-channel).
 ### Server and web app
 
 - [#development help](https://chat.zulip.org/#narrow/channel/49-development-help)
-  is for asking for help with any Zulip server/web app development work.
+  is for asking for help with any Doer server/web app development work.
 - [#provision help](https://chat.zulip.org/#narrow/channel/21-provision-help)
   is for help specifically on setting up the server/web app development
   environment. [#tools](https://chat.zulip.org/#narrow/channel/18-tools)
   is other conversations about the server/web app developer tooling.
 - [#backend](https://chat.zulip.org/#narrow/channel/3-backend) and
   [#frontend](https://chat.zulip.org/#narrow/channel/6-frontend) are
-  the right place for general conversations about work on the Zulip
+  the right place for general conversations about work on the Doer
   server and web app respectively (including design discussions,
   questions, updates on a project, or anything else).
 - [#design](https://chat.zulip.org/#narrow/channel/101-design) is the
@@ -197,13 +197,13 @@ topic to a different channel](/help/move-content-to-another-channel).
   testing](https://chat.zulip.org/#narrow/channel/43-automated-testing)
   is primarily used for automated notifications about [CI
   failures](https://zulip.readthedocs.io/en/latest/testing/continuous-integration.html),
-  but is also a good place to discuss projects to improve Zulip’s
+  but is also a good place to discuss projects to improve Doer’s
   automated testing infrastructure.
 
 ### Mobile app
 
 - [#mobile-dev-help](https://chat.zulip.org/#narrow/channel/516-mobile-dev-help)
-  is for asking for help with any development work on the Zulip mobile app.
+  is for asking for help with any development work on the Doer mobile app.
 - [#mobile-team](https://chat.zulip.org/#narrow/channel/243-mobile-team)
   is the right place for general conversations about work on the
   mobile app (including technical design discussions, questions,
@@ -220,12 +220,12 @@ topic to a different channel](/help/move-content-to-another-channel).
 
 - [#desktop](https://chat.zulip.org/#narrow/channel/16-desktop) and
   [#zulip-terminal](https://chat.zulip.org/#narrow/channel/206-zulip-terminal)
-  are for discussing work on the Zulip desktop and terminal apps
+  are for discussing work on the Doer desktop and terminal apps
   respectively.
 
 ## Channels for translators
 - [#translation](https://chat.zulip.org/#narrow/channel/58-translation)
-  is for discussing [Zulip’s
+  is for discussing [Doer’s
   translations](https://zulip.readthedocs.io/en/latest/translating/translating.html).
 - Some languages have channels named like
   [#translation/fr](https://chat.zulip.org/#narrow/channel/371-translation.2Ffr)
@@ -256,29 +256,29 @@ topic to a different channel](/help/move-content-to-another-channel).
 - [#documentation](https://chat.zulip.org/#narrow/channel/19-documentation)
   and
   [#api documentation](https://chat.zulip.org/#narrow/channel/412-api-documentation)
-  are where we discuss improving Zulip’s user, sysadmin, API, and
+  are where we discuss improving Doer’s user, sysadmin, API, and
   developer documentation.
 - [#general](https://chat.zulip.org/#narrow/channel/2-general) is for
   all topics of general interest.
 - [#learning](https://chat.zulip.org/#narrow/channel/92-learning) is
   for posting great learning resources one comes across.
 - [#off topic](https://chat.zulip.org/#narrow/channel/97-off-topic) is
-  is for occasional conversations not related to Zulip, usually things
+  is for occasional conversations not related to Doer, usually things
   of general interest to open-source communities.
 
 You can always find the description for the channel you’re reading at
-the top of the Zulip app.
+the top of the Doer app.
 
 <br/>
 # Anything else to keep in mind?
 
 ## Don’t try to read *everything*
 
-Keeping up with **everything** happening in the Zulip project is both
+Keeping up with **everything** happening in the Doer project is both
 difficult and rarely a useful goal. To make the best use of your time,
 we highly recommend that you unsubscribe from channels that you aren’t
 interested in, mute channels that are only of occasional interest, and
-make use of [Zulip’s skimming features](/help/reading-strategies),
+make use of [Doer’s skimming features](/help/reading-strategies),
 like Recent conversations, to spend your time on topics that interest
 you.
 
@@ -295,10 +295,10 @@ on public channels you’re not subscribed to.
 ## Linking to GitHub issues and pull requests
 
 We've set up [custom linkifiers](/help/add-a-custom-linkifier)
-so that it's easy to link to issues and pull requests in Zulip
+so that it's easy to link to issues and pull requests in Doer
 project repositories when composing a message or starting a
 [new topic](/help/introduction-to-topics). Here are examples for linking
-to issue 1234 in the main Zulip project repositories:
+to issue 1234 in the main Doer project repositories:
 
 - [Server and web app][server-web-repository]: `#1234`
 - [Flutter mobile client][flutter-repository]: `#F1234`
@@ -308,8 +308,8 @@ to issue 1234 in the main Zulip project repositories:
 ## New features are tested here
 
 We [continuously test out new features or ideas][release-lifecycle] on
-chat.zulip.org before rolling them out to Zulip Cloud or including
-them in a Zulip Server release (or deciding not to!). Please report in
+chat.zulip.org before rolling them out to Doer Cloud or including
+them in a Doer Server release (or deciding not to!). Please report in
 [#issues](https://chat.zulip.org/#narrow/channel/9-issues) anything you
 notice that seems broken! It’s likely you’ve found a bug in an upcoming
 feature.

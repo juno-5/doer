@@ -1544,7 +1544,7 @@ test("initialize", ({override, override_rewire, mock_template}) => {
                     '<div class="typeahead-content">\n' +
                     '        <div class="typeahead-image">\n' +
                     `            <img class="typeahead-image-avatar" src="/avatar/${othello.user_id}" />\n` +
-                    '            <span class="zulip-icon zulip-icon-user-circle-offline user-circle-offline user-circle"></span>\n' +
+                    '            <span class="doer-icon doer-icon-user-circle-offline user-circle-offline user-circle"></span>\n' +
                     "        </div>\n" +
                     '    <div class="typeahead-text-container">\n' +
                     '        <strong class="typeahead-strong-section">Othello, the Moor of Venice</strong>        <span class="autocomplete_secondary">othello@zulip.com</span>' +
@@ -1559,7 +1559,7 @@ test("initialize", ({override, override_rewire, mock_template}) => {
                 actual_value = options.item_html(hamletcharacters);
                 expected_value =
                     '<div class="typeahead-content">\n' +
-                    '        <i class="typeahead-image zulip-icon zulip-icon-user-group" aria-hidden="true"></i>\n' +
+                    '        <i class="typeahead-image doer-icon doer-icon-user-group" aria-hidden="true"></i>\n' +
                     '        <div class="typeahead-text-container">\n' +
                     '        <strong class="typeahead-strong-section">hamletcharacters</strong>        <span class="autocomplete_secondary">Characters of Hamlet</span>' +
                     "    </div>\n" +

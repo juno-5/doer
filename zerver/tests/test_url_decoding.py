@@ -1,11 +1,11 @@
 import orjson
 
 from zerver.lib.narrow_helpers import NarrowTerm
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.url_decoding import is_same_server_message_link, parse_narrow_url
 
 
-class URLDecodeTest(ZulipTestCase):
+class URLDecodeTest(DoerTestCase):
     def test_is_same_server_message_link(self) -> None:
         tests = orjson.loads(self.fixture_data("message_link_test_cases.json"))
         for test in tests:
@@ -14,7 +14,7 @@ class URLDecodeTest(ZulipTestCase):
             )
 
 
-class NarrowURLDecodeTest(ZulipTestCase):
+class NarrowURLDecodeTest(DoerTestCase):
     def test_decode_narrow_url(self) -> None:
         tests = orjson.loads(self.fixture_data("narrow_url_to_narrow_terms.json"))
 

@@ -3,7 +3,7 @@ from typing import Any
 from django.core.management.base import CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.retention import (
     restore_all_data_from_archive,
     restore_data_from_archive,
@@ -12,14 +12,14 @@ from zerver.lib.retention import (
 from zerver.models import ArchiveTransaction
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 Restore recently deleted messages from the archive, that
 have not been vacuumed (because the time limit of
 ARCHIVED_DATA_VACUUMING_DELAY_DAYS has not passed).
 
 Intended primarily for use after against potential bugs in
-Zulip's message retention and deletion features.
+Doer's message retention and deletion features.
 
 Examples:
 To restore all recently deleted messages:

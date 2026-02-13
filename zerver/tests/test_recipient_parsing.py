@@ -1,9 +1,9 @@
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.recipient_parsing import extract_direct_message_recipient_ids, extract_stream_id
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class TestRecipientParsing(ZulipTestCase):
+class TestRecipientParsing(DoerTestCase):
     def test_extract_stream_id(self) -> None:
         # stream message recipient = single stream ID.
         stream_id = extract_stream_id(1)

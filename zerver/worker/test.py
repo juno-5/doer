@@ -21,7 +21,7 @@ class TestWorker(QueueProcessingWorker):
     # and appends it to a file in /var/log/zulip.
     @override
     def consume(self, event: Mapping[str, Any]) -> None:  # nocoverage
-        fn = settings.ZULIP_WORKER_TEST_FILE
+        fn = settings.DOER_WORKER_TEST_FILE
         message = orjson.dumps(event)
         logging.info("TestWorker should append this message to %s: %s", fn, message.decode())
         with open(fn, "ab") as f:

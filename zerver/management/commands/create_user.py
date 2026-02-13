@@ -6,16 +6,16 @@ from django.db.utils import IntegrityError
 from typing_extensions import override
 
 from zerver.actions.create_user import do_create_user
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserProfile
 
 
-class Command(ZulipBaseCommand):
-    help = """Create a new Zulip user via the command line.
+class Command(DoerBaseCommand):
+    help = """Create a new Doer user via the command line.
 
 Prompts the user for <email> and <full name> if not specified.
 
-We recommend the Zulip API (https://zulip.com/api/create-user) instead
+We recommend the Doer API (https://zulip.com/api/create-user) instead
 of this tool for most use cases.
 
 If the server has Terms of Service configured, the user will be

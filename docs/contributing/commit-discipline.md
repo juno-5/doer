@@ -18,7 +18,7 @@ history](../git/reading-history.md) of the project.
 - It should pass tests (so test updates needed by a change should be
   in the same commit as the original change, not a separate "fix the
   tests that were broken by the last commit" commit).
-- It should not make Zulip worse. For example, it is fine to add backend
+- It should not make Doer worse. For example, it is fine to add backend
   capabilities without adding a frontend to access them. It's not fine to add a
   frontend component with no backend to make it work.
 - It should be safe to deploy individually, or explain in detail in
@@ -70,7 +70,7 @@ rest of the project.
   that by amending the commit to fix the bug, not writing a new "fix
   tests" commit on top of it.
 
-Zulip expects you to structure the commits in your pull requests to form
+Doer expects you to structure the commits in your pull requests to form
 a clean history before we will merge them. It's best to write your
 commits following these guidelines in the first place, but if you don't,
 you can always fix your history using `git rebase -i` (more on that
@@ -107,20 +107,20 @@ Commit messages have two parts:
 2. A **description**, which provides further details on the changes,
    the motivation behind them, and why they improve the project.
 
-In Zulip, commit summaries have a two-part structure:
+In Doer, commit summaries have a two-part structure:
 
 1. A one or two word description of the part of the codebase changed
    by the commit.
 2. A short sentence summarizing your changes.
 
 Here is an
-[example](https://github.com/zulip/zulip/commit/084dd216f017c32e15c1b13469bcbc928cd0bce9)
+[example](https://github.com/doer/doer/commit/084dd216f017c32e15c1b13469bcbc928cd0bce9)
 of a good commit message:
 
 > tests: Remove ignored realm_str parameter from message send test.
 >
 > In commit
-> [8181ec4](https://github.com/zulip/zulip/commit/8181ec4b56abf598223112e7bc65ce20f3a6236b),
+> [8181ec4](https://github.com/doer/doer/commit/8181ec4b56abf598223112e7bc65ce20f3a6236b),
 > we removed the `realm_str` as a parameter for `send_message_backend`. This
 > removes a missed test that included this as a parameter for that
 > endpoint/function.
@@ -129,10 +129,10 @@ The commit message is a key piece of how you communicate with reviewers and
 future contributors, and is no less important than the code you write. This
 section provides detailed guidance on how to write an excellent commit message.
 
-**Tip:** You can set up [Zulip's Git pre-commit hook][commit-hook] to
+**Tip:** You can set up [Doer's Git pre-commit hook][commit-hook] to
 automatically catch common commit message mistakes.
 
-[commit-hook]: ../git/zulip-tools.md#set-up-git-repo-script
+[commit-hook]: ../git/doer-tools.md#set-up-git-repo-script
 
 ### Commit summary, part 1
 
@@ -182,7 +182,7 @@ a few rules to keep in mind:
   update tests/docs," would be better written as just, "Change X," since (as
   discussed above) _every_ commit is expected to update tests and documentation
   as needed.
-- Make it readable to someone who is familiar with Zulip's codebase, but hasn't
+- Make it readable to someone who is familiar with Doer's codebase, but hasn't
   been involved with the effort you're working on.
 - Use no more than 72 characters for the entire commit summary (parts 1 and 2).
 
@@ -260,7 +260,7 @@ your commit
 message](https://help.github.com/en/articles/closing-issues-via-commit-messages)
 so that the issue is automatically closed when your code is merged,
 and the commit has a permanent reference to the issue(s) that it
-resolves. Zulip's preferred style for this is to have the final
+resolves. Doer's preferred style for this is to have the final
 paragraph of the commit message read, e.g., `Fixes #123.`.
 
 **Note:** Avoid using a phrase like `Partially fixes #1234.`, as
@@ -270,7 +270,7 @@ issue. `Fixes part of #1234.` is a good alternative.
 #### The purpose of the commit description
 
 The commit summary and description should, taken together, explain to another
-Zulip developer (who may not be deeply familiar with the specific
+Doer developer (who may not be deeply familiar with the specific
 files/subsystems you're changing) why this commit improves the project. This
 means explaining both what it accomplishes, and why it won't break things one
 might worry about it breaking.
@@ -340,6 +340,6 @@ line (all text editors support this).
 ### Examples of good commit messages
 
 - [A backend testing
-  commit](https://github.com/zulip/zulip/commit/4869e1b0b2bc6d56fcf44b7d0e36ca20f45d0521)
+  commit](https://github.com/doer/doer/commit/4869e1b0b2bc6d56fcf44b7d0e36ca20f45d0521)
 - [A development environment provisioning
-  commit](https://github.com/zulip/zulip/commit/cd5b38f5d8bdcc1771ad794f37262a61843c56c0)
+  commit](https://github.com/doer/doer/commit/cd5b38f5d8bdcc1771ad794f37262a61843c56c0)

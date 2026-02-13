@@ -1,7 +1,7 @@
 \set dbuser :dbuser
-SELECT CASE WHEN :'dbuser' = ':dbuser' THEN 'zulip' ELSE :'dbuser' END AS dbuser \gset
+SELECT CASE WHEN :'dbuser' = ':dbuser' THEN 'doer' ELSE :'dbuser' END AS dbuser \gset
 \set dbname :dbname
-SELECT CASE WHEN :'dbname' = ':dbname' THEN 'zulip' ELSE :'dbname' END AS dbname \gset
+SELECT CASE WHEN :'dbname' = ':dbname' THEN 'doer' ELSE :'dbname' END AS dbname \gset
 
 \connect postgres
 DROP DATABASE IF EXISTS :"dbname";

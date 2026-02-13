@@ -1,7 +1,7 @@
 # @summary Export Weblate translation stats
 class kandra::prometheus::weblate {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
   # We embed the hash of the contents into the name of the process, so
   # that `supervisorctl reread` knows that it has updated.
@@ -17,10 +17,10 @@ class kandra::prometheus::weblate {
     source => 'puppet:///modules/kandra/weblate_exporter',
   }
 
-  file { "${zulip::common::supervisor_conf_dir}/weblate_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/weblate_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],
@@ -32,7 +32,7 @@ class kandra::prometheus::weblate {
   }
 
   include kandra::prometheus::pushgateway
-  zulip::cron { 'weblate-to-pushgateway':
+  doer::cron { 'weblate-to-pushgateway':
     minute    => '*/15',
     command   => 'curl http://localhost:9189/metrics | curl --data-binary @- http://localhost:9091/metrics/job/weblate',
     use_proxy => false,

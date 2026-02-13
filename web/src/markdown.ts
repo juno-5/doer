@@ -12,7 +12,7 @@ import type {LinkifierMatch, ParseOptions, RegExpOrStub} from "../third/marked/l
 import * as fenced_code from "./fenced_code.ts";
 import * as util from "./util.ts";
 
-// This contains zulip's frontend Markdown implementation; see
+// This contains doer's frontend Markdown implementation; see
 // docs/subsystems/markdown.md for docs on our Markdown syntax.  The other
 // main piece in rendering Markdown client-side is
 // web/third/marked/lib/marked.cjs, which we have significantly
@@ -530,7 +530,7 @@ function handleEmoji({
     const alt_text = ":" + emoji_name + ":";
     const title = emoji_name.replaceAll("_", " ");
 
-    // Zulip supports both standard/Unicode emoji, served by a
+    // Doer supports both standard/Unicode emoji, served by a
     // spritesheet and custom realm-specific emoji (served by URL).
     // We first check if this is a realm emoji, and if so, render it.
     //
@@ -758,18 +758,18 @@ export function parse({
     disable_markdown_regex(marked.Lexer.rules.tables, "lheading");
 
     // Disable __strong__ (keeping **strong**)
-    marked.InlineLexer.rules.zulip.strong = /^\*\*([\S\s]+?)\*\*(?!\*)/;
+    marked.InlineLexer.rules.doer.strong = /^\*\*([\S\s]+?)\*\*(?!\*)/;
 
     // Make sure <del> syntax matches the backend processor
-    marked.InlineLexer.rules.zulip.del = /^(?!<~)~~([^~]+)~~(?!~)/;
+    marked.InlineLexer.rules.doer.del = /^(?!<~)~~([^~]+)~~(?!~)/;
 
     // Disable _emphasis_ (keeping *emphasis*)
     // Text inside ** must start and end with a word character
     // to prevent misparsing things like "char **x = (char **)y"
-    marked.InlineLexer.rules.zulip.em = /^\*(?!\s+)((?:\*\*|[\S\s])+?)(\S)\*(?!\*)/;
+    marked.InlineLexer.rules.doer.em = /^\*(?!\s+)((?:\*\*|[\S\s])+?)(\S)\*(?!\*)/;
 
     // Disable autolink as (a) it is not used in our backend and (b) it interferes with @mentions
-    disable_markdown_regex(marked.InlineLexer.rules.zulip, "autolink");
+    disable_markdown_regex(marked.InlineLexer.rules.doer, "autolink");
 
     // Tell our fenced code preprocessor how to insert arbitrary
     // HTML into the output. This generated HTML is safe to not escape
@@ -843,7 +843,7 @@ export function parse({
         sanitize: true,
         smartLists: true,
         smartypants: false,
-        zulip: true,
+        doer: true,
         renderer,
         preprocessors: [preprocess_code_blocks, preprocess_translate_emoticons],
     };
@@ -889,7 +889,7 @@ export function parse_non_message(raw_content: string): string {
     assert(web_app_helpers !== undefined);
     // Occasionally we get markdown from the server that is not technically
     // a message, but we want to convert it to HTML. Note that we parse
-    // raw_content exactly as if it were a Zulip message, so we will
+    // raw_content exactly as if it were a Doer message, so we will
     // handle things like mentions, stream links, and linkifiers.
     return parse({raw_content, helper_config: web_app_helpers}).content;
 }

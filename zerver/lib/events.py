@@ -10,7 +10,7 @@ from django.conf import settings
 from django.utils.translation import gettext as _
 from typing_extensions import NotRequired, TypedDict
 
-from version import API_FEATURE_LEVEL, ZULIP_MERGE_BASE, ZULIP_VERSION
+from version import API_FEATURE_LEVEL, DOER_MERGE_BASE, DOER_VERSION
 from zerver.actions.default_streams import default_stream_groups_to_dicts_sorted
 from zerver.actions.realm_settings import (
     do_set_realm_property,
@@ -204,9 +204,9 @@ def fetch_initial_state_data(
         want = set(event_types).__contains__
 
     # Show the version info unconditionally.
-    state["zulip_version"] = ZULIP_VERSION
-    state["zulip_feature_level"] = API_FEATURE_LEVEL
-    state["zulip_merge_base"] = ZULIP_MERGE_BASE
+    state["doer_version"] = DOER_VERSION
+    state["doer_feature_level"] = API_FEATURE_LEVEL
+    state["doer_merge_base"] = DOER_MERGE_BASE
 
     if user_profile is not None:
         settings_user = user_profile
@@ -229,7 +229,7 @@ def fetch_initial_state_data(
             # us avoid unnecessary conditionals.
             role=UserProfile.ROLE_GUEST,
             avatar_source=UserProfile.AVATAR_FROM_GRAVATAR,
-            # ID=0 is not used in real Zulip databases, ensuring this is unique.
+            # ID=0 is not used in real Doer databases, ensuring this is unique.
             id=0,
             default_language=spectator_requested_language,
             # Set home view to recent conversations for spectators regardless of default.
@@ -399,7 +399,7 @@ def fetch_initial_state_data(
         # currently active setting, not a server-level default).
         #
         # Other settings, which are just server-level settings or data
-        # about the version of Zulip, can be named without prefixes,
+        # about the version of Doer, can be named without prefixes,
         # e.g. gif_rating_policy_options or development_environment.
 
         # If we no longer have a translation for the organization's language,
@@ -518,7 +518,7 @@ def fetch_initial_state_data(
         state["development_environment"] = settings.DEVELOPMENT
         state["realm_org_type"] = realm.org_type
         state["realm_plan_type"] = realm.plan_type
-        state["zulip_plan_is_not_limited"] = realm.plan_type != Realm.PLAN_TYPE_LIMITED
+        state["doer_plan_is_not_limited"] = realm.plan_type != Realm.PLAN_TYPE_LIMITED
         state["upgrade_text_for_wide_organization_logo"] = str(Realm.UPGRADE_TEXT_STANDARD)
 
         if realm.push_notifications_enabled_end_timestamp is not None:
@@ -574,7 +574,7 @@ def fetch_initial_state_data(
             "moderation_request_channel_id",
             "new_stream_announcements_stream_id",
             "signup_announcements_stream_id",
-            "zulip_update_announcements_stream_id",
+            "doer_update_announcements_stream_id",
         ]:
             if getattr(realm, channel_field) is None:
                 state["realm_" + channel_field] = -1
@@ -734,7 +734,7 @@ def fetch_initial_state_data(
         state["can_create_web_public_streams"] = (
             realm.can_create_web_public_channel_group_id in settings_user_recursive_group_ids
         )
-        # TODO/compatibility: Deprecated in Zulip 5.0 (feature level
+        # TODO/compatibility: Deprecated in Doer 5.0 (feature level
         # 102); we can remove this once we no longer need to support
         # legacy mobile app versions that read the old property.
         state["can_create_streams"] = (
@@ -1627,7 +1627,7 @@ def apply_event(
 
                 if key == "plan_type":
                     # Then there are some extra fields that also need to be set.
-                    state["zulip_plan_is_not_limited"] = value != Realm.PLAN_TYPE_LIMITED
+                    state["doer_plan_is_not_limited"] = value != Realm.PLAN_TYPE_LIMITED
         elif event["op"] == "deactivated":
             # The realm has just been deactivated.  If our request had
             # arrived a moment later, we'd have rendered the
@@ -2013,7 +2013,7 @@ def apply_event(
 
 class ClientCapabilities(TypedDict):
     # This field was accidentally made required when it was added in v2.0.0-781;
-    # this was not realized until after the release of Zulip 2.1.2. (It remains
+    # this was not realized until after the release of Doer 2.1.2. (It remains
     # required to help ensure backwards compatibility of client code.)
     notification_settings_null: bool
     # Any new fields of `client_capabilities` should be optional. Add them here.

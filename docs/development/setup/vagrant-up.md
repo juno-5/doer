@@ -2,12 +2,12 @@ The first time you run this command it will take some time because Vagrant
 does the following:
 
 - downloads the base Ubuntu 22.04 virtual machine/Docker image
-- configures this virtual machine/container for use with Zulip,
-- creates a shared directory mapping your clone of the Zulip code inside the
-  virtual machine/container at `~/zulip`
+- configures this virtual machine/container for use with Doer,
+- creates a shared directory mapping your clone of the Doer code inside the
+  virtual machine/container at `~/doer`
 - runs the `./tools/provision` script inside the virtual machine/container, which
   downloads all required dependencies, sets up the Python environment for
-  the Zulip development server, and initializes a default test
+  the Doer development server, and initializes a default test
   database. We call this process "provisioning", and it is documented
   in some detail in our [dependencies documentation](/subsystems/dependencies.md).
 
@@ -21,5 +21,5 @@ documented in the
 [Troubleshooting and common errors](/development/setup-recommended.md#troubleshooting-and-common-errors)
 section. If that doesn't help, please visit
 [#provision help](https://chat.zulip.org/#narrow/channel/21-provision-help)
-in the [Zulip development community server](https://zulip.com/development-community/) for
+in the [Doer development community server](https://zulip.com/development-community/) for
 real-time help.

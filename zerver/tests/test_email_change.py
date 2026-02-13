@@ -21,14 +21,14 @@ from zerver.actions.create_user import do_reactivate_user
 from zerver.actions.realm_settings import do_deactivate_realm, do_set_realm_property
 from zerver.actions.user_settings import do_change_user_setting, do_start_email_change_process
 from zerver.actions.users import do_deactivate_user
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import EmailChangeStatus, UserProfile
 from zerver.models.realms import Realm, get_realm
 from zerver.models.scheduled_jobs import ScheduledEmail
 from zerver.models.users import get_user, get_user_by_delivery_email, get_user_profile_by_id
 
 
-class EmailChangeTestCase(ZulipTestCase):
+class EmailChangeTestCase(DoerTestCase):
     def generate_email_change_link(self, new_email: str) -> str:
         data = {"email": new_email}
         url = "/json/settings"
@@ -39,7 +39,7 @@ class EmailChangeTestCase(ZulipTestCase):
         email_message = mail.outbox[0]
         self.assertEqual(
             email_message.subject,
-            "Verify your new email address for zulip.testserver",
+            "Verify your new email address for doer.testserver",
         )
         body = email_message.body
         self.assertIn("We received a request to change the email", body)
@@ -97,7 +97,7 @@ class EmailChangeTestCase(ZulipTestCase):
         old_email = user_profile.delivery_email
         new_email = '"<li>hamlet-new<li>"@zulip.com'
         new_email_address = Address(addr_spec=new_email)
-        new_realm = get_realm("zulip")
+        new_realm = get_realm("doer")
         self.login("hamlet")
         obj = EmailChangeStatus.objects.create(
             new_email=new_email,
@@ -115,7 +115,7 @@ class EmailChangeTestCase(ZulipTestCase):
         response = self.client_post("/accounts/confirm_new_email/", {"key": key})
         self.assert_in_success_response(
             [
-                "This confirms that the email address for your Zulip",
+                "This confirms that the email address for your Doer",
                 f'<a href="mailto:{escape(new_email)}">{escape(new_email_address.username)}@<wbr>{escape(new_email_address.domain)}</wbr></a>',
             ],
             response,
@@ -182,7 +182,7 @@ class EmailChangeTestCase(ZulipTestCase):
         do_deactivate_user(user_profile, acting_user=None)
         response = self.use_email_change_confirmation_link(activation_url)
         self.assertEqual(response.status_code, 401)
-        error_page_title = "<title>Account is deactivated | Zulip</title>"
+        error_page_title = "<title>Account is deactivated | Doer</title>"
         self.assert_in_response(error_page_title, response)
 
         do_reactivate_user(user_profile, acting_user=None)
@@ -216,7 +216,7 @@ class EmailChangeTestCase(ZulipTestCase):
         email_message = mail.outbox[0]
         self.assertEqual(
             email_message.subject,
-            "Verify your new email address for zulip.testserver",
+            "Verify your new email address for doer.testserver",
         )
         body = email_message.body
         self.assertIn("We received a request to change the email", body)
@@ -226,7 +226,7 @@ class EmailChangeTestCase(ZulipTestCase):
             rf"^testserver account security <{self.TOKENIZED_NOREPLY_REGEX}>\Z",
         )
 
-        self.assertEqual(email_message.extra_headers["List-Id"], "Zulip Dev <zulip.testserver>")
+        self.assertEqual(email_message.extra_headers["List-Id"], "Doer Dev <doer.testserver>")
 
         activation_url = [s for s in body.split("\n") if s][2]
         response = self.use_email_change_confirmation_link(activation_url)
@@ -391,11 +391,11 @@ class EmailChangeTestCase(ZulipTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assert_in_success_response(
-            ["This confirms that the email address for your Zulip"], response
+            ["This confirms that the email address for your Doer"], response
         )
         user_profile = get_user_profile_by_id(user_profile.id)
         self.assertEqual(user_profile.delivery_email, new_email)
-        self.assertEqual(user_profile.email, f"user{user_profile.id}@zulip.testserver")
+        self.assertEqual(user_profile.email, f"user{user_profile.id}@doer.testserver")
         obj.refresh_from_db()
         self.assertEqual(obj.status, 1)
         with self.assertRaises(UserProfile.DoesNotExist):
@@ -441,7 +441,7 @@ class EmailChangeTestCase(ZulipTestCase):
         email_message = mail.outbox[0]
         self.assertEqual(
             email_message.subject,
-            "Verify your email address for your Zulip demo organization",
+            "Verify your email address for your Doer demo organization",
         )
         body = email_message.body
         self.assertIn(
@@ -482,15 +482,15 @@ class EmailChangeTestCase(ZulipTestCase):
         self.assert_length(scheduled_emails, 3)
         self.assertEqual(
             orjson.loads(scheduled_emails[0].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_topics",
+            "zerver/emails/onboarding_doer_topics",
         )
         self.assertEqual(
             orjson.loads(scheduled_emails[1].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_guide",
+            "zerver/emails/onboarding_doer_guide",
         )
         self.assertEqual(
             orjson.loads(scheduled_emails[2].data)["template_prefix"],
-            "zerver/emails/onboarding_team_to_zulip",
+            "zerver/emails/onboarding_team_to_doer",
         )
 
         # Set password

@@ -45,7 +45,7 @@ Contact {support_email} if you need help debugging!
 """
 
 INVALID_JSON_MESSAGE = """
-Hi there! It looks like you tried to set up the Zulip {webhook_name} integration,
+Hi there! It looks like you tried to set up the Doer {webhook_name} integration,
 but didn't correctly configure the webhook to send data in the JSON format
 that this integration expects!
 """
@@ -154,7 +154,7 @@ def check_send_webhook_message(
     no_previews: bool = False,
 ) -> int | None:
     if complete_event_type is not None and (
-        # Here, we implement Zulip's generic support for filtering
+        # Here, we implement Doer's generic support for filtering
         # events sent by the third-party service.
         #
         # If complete_event_type is passed to this function, we will check the event
@@ -346,7 +346,7 @@ def validate_webhook_signature(
         raise JsonableError(_("Webhook signature verification failed."))
 
 
-def guess_zulip_user_from_external_account(
+def guess_doer_user_from_external_account(
     realm: Realm,
     external_username: str,
     external_account_field_name: str,

@@ -1,6 +1,6 @@
-# Zulip AppVeyor integration
+# Doer AppVeyor integration
 
-Receive AppVeyor notifications in Zulip!
+Receive AppVeyor notifications in Doer!
 
 {start_tabs}
 

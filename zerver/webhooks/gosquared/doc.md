@@ -1,6 +1,6 @@
-# Zulip GoSquared integration
+# Doer GoSquared integration
 
-Receive GoSquared notifications in Zulip!
+Receive GoSquared notifications in Doer!
 
 {start_tabs}
 
@@ -13,7 +13,7 @@ Receive GoSquared notifications in Zulip!
    **Add new**.
 
 1. Set **Webhook URL** to the URL generated above. Set **Name** to a
-   name of your choice, such as `Zulip`. Click **Save Integration**.
+   name of your choice, such as `Doer`. Click **Save Integration**.
 
 1. In your project's **Settings**, click on **Notifications**. Click
    **Add new notification**.

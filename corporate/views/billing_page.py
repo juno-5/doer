@@ -13,14 +13,14 @@ from corporate.lib.decorator import (
 )
 from corporate.models.customers import get_customer_by_realm
 from corporate.models.plans import CustomerPlan, get_current_plan_by_customer
-from zerver.decorator import process_as_post, require_billing_access, zulip_login_required
+from zerver.decorator import process_as_post, require_billing_access, doer_login_required
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.response import json_success
 from zerver.lib.typed_endpoint import typed_endpoint
 from zerver.lib.typed_endpoint_validators import check_int_in
 from zerver.models import UserProfile
 from zilencer.lib.remote_counts import MissingDataError
-from zilencer.models import RemoteRealm, RemoteZulipServer
+from zilencer.models import RemoteRealm, RemoteDoerServer
 
 if TYPE_CHECKING:
     from corporate.lib.stripe import RemoteRealmBillingSession, RemoteServerBillingSession
@@ -39,7 +39,7 @@ ALLOWED_PLANS_API_STATUS_VALUES = [
 ]
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def billing_page(
     request: HttpRequest,
@@ -169,7 +169,7 @@ def remote_server_billing_page(
     }
 
     if (
-        billing_session.remote_server.plan_type == RemoteZulipServer.PLAN_TYPE_COMMUNITY
+        billing_session.remote_server.plan_type == RemoteDoerServer.PLAN_TYPE_COMMUNITY
     ):  # nocoverage
         return HttpResponseRedirect(
             reverse(
@@ -202,8 +202,8 @@ def remote_server_billing_page(
             billing_session.get_complimentary_access_next_plan_name(customer) is None
             and billing_session.remote_server.plan_type
             in [
-                RemoteZulipServer.PLAN_TYPE_SELF_MANAGED,
-                RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY,
+                RemoteDoerServer.PLAN_TYPE_SELF_MANAGED,
+                RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY,
             ]
         )
     ):

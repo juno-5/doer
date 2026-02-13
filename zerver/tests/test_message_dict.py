@@ -9,7 +9,7 @@ from zerver.lib.markdown import version as markdown_version
 from zerver.lib.message import messages_for_ids
 from zerver.lib.message_cache import MessageDict, sew_messages_and_reactions
 from zerver.lib.per_request_cache import flush_per_request_caches
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import make_client
 from zerver.lib.topic import TOPIC_LINKS, TOPIC_NAME
 from zerver.lib.types import DisplayRecipientT, UserDisplayRecipient
@@ -19,7 +19,7 @@ from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.streams import get_stream
 
 
-class MessageDictTest(ZulipTestCase):
+class MessageDictTest(DoerTestCase):
     def test_both_codepaths(self) -> None:
         """
         We have two different codepaths that
@@ -83,7 +83,7 @@ class MessageDictTest(ZulipTestCase):
                 client_gravatar=client_gravatar,
                 allow_empty_topic_name=True,
                 can_access_sender=True,
-                realm_host=get_realm("zulip").host,
+                realm_host=get_realm("doer").host,
                 is_incoming_1_to_1=False,
             )
             return narrow_dict
@@ -100,7 +100,7 @@ class MessageDictTest(ZulipTestCase):
                 apply_markdown=apply_markdown,
                 client_gravatar=client_gravatar,
                 allow_empty_topic_name=True,
-                realm=get_realm("zulip"),
+                realm=get_realm("doer"),
                 user_recipient_id=None,
             )
             final_dict = unhydrated_dict
@@ -144,7 +144,7 @@ class MessageDictTest(ZulipTestCase):
     def test_bulk_message_fetching(self) -> None:
         sender = self.example_user("othello")
         receiver = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         pm_recipient = Recipient.objects.get(type_id=receiver.id, type=Recipient.PERSONAL)
         stream_name = "Çiğdem"
         stream = self.make_stream(stream_name)
@@ -242,26 +242,26 @@ class MessageDictTest(ZulipTestCase):
         # because there is an ugly hack we need to cover.  So don't just say "row = message".
         dct = MessageDict.ids_to_dict([message.id])[0]
         error_content = (
-            "<p>[Zulip note: Sorry, we could not understand the formatting of your message]</p>"
+            "<p>[Doer note: Sorry, we could not understand the formatting of your message]</p>"
         )
         self.assertEqual(dct["rendered_content"], error_content)
 
     def test_topic_links_use_stream_realm(self) -> None:
-        # Set up a realm filter on 'zulip' and assert that messages
-        # sent to a stream on 'zulip' have the topic linkified,
+        # Set up a realm filter on 'doer' and assert that messages
+        # sent to a stream on 'doer' have the topic linkified,
         # and not linkified when sent to a stream in 'lear'.
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         lear_realm = get_realm("lear")
         url_template = r"https://trac.example.com/ticket/{id}"
         links = {"url": "https://trac.example.com/ticket/123", "text": "#123"}
         topic_name = "test #123"
 
         linkifier = RealmFilter(
-            realm=zulip_realm, pattern=r"#(?P<id>[0-9]{2,8})", url_template=url_template
+            realm=doer_realm, pattern=r"#(?P<id>[0-9]{2,8})", url_template=url_template
         )
         self.assertEqual(
             repr(linkifier),
-            "<RealmFilter: zulip: #(?P<id>[0-9]{2,8}) https://trac.example.com/ticket/{id}>",
+            "<RealmFilter: doer: #(?P<id>[0-9]{2,8}) https://trac.example.com/ticket/{id}>",
         )
 
         def get_message(sender: UserProfile, realm: Realm) -> Message:
@@ -277,13 +277,13 @@ class MessageDictTest(ZulipTestCase):
             self.assertEqual(dct[TOPIC_LINKS], links)
 
         # Send messages before and after saving the realm filter from each user.
-        assert_topic_links([], get_message(self.example_user("othello"), zulip_realm))
+        assert_topic_links([], get_message(self.example_user("othello"), doer_realm))
         assert_topic_links([], get_message(self.lear_user("cordelia"), lear_realm))
-        assert_topic_links([], get_message(self.notification_bot(zulip_realm), zulip_realm))
+        assert_topic_links([], get_message(self.notification_bot(doer_realm), doer_realm))
         linkifier.save()
-        assert_topic_links([links], get_message(self.example_user("othello"), zulip_realm))
+        assert_topic_links([links], get_message(self.example_user("othello"), doer_realm))
         assert_topic_links([], get_message(self.lear_user("cordelia"), lear_realm))
-        assert_topic_links([links], get_message(self.notification_bot(zulip_realm), zulip_realm))
+        assert_topic_links([links], get_message(self.notification_bot(doer_realm), doer_realm))
 
     def test_reaction(self) -> None:
         sender = self.example_user("othello")
@@ -334,9 +334,9 @@ class MessageDictTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid anchor")
 
 
-class MessageHydrationTest(ZulipTestCase):
+class MessageHydrationTest(DoerTestCase):
     def test_hydrate_stream_recipient_info(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
 
         stream_id = get_stream("Verona", realm).id
@@ -450,7 +450,7 @@ class MessageHydrationTest(ZulipTestCase):
             topic_name="test",
             content="test message again",
         )
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = get_stream("test_stream1", realm)
 
         assert stream.recipient_id is not None
@@ -584,7 +584,7 @@ class MessageHydrationTest(ZulipTestCase):
         self.assertEqual(cordelia_display_recipient["email"], cordelia_new_email)
 
 
-class TestMessageForIdsDisplayRecipientFetching(ZulipTestCase):
+class TestMessageForIdsDisplayRecipientFetching(DoerTestCase):
     def _verify_display_recipient(
         self,
         display_recipient: DisplayRecipientT,
@@ -755,11 +755,11 @@ class TestMessageForIdsDisplayRecipientFetching(ZulipTestCase):
         self.assertEqual(messages[3][TOPIC_NAME], "test")
 
 
-class SewMessageAndReactionTest(ZulipTestCase):
+class SewMessageAndReactionTest(DoerTestCase):
     def test_sew_messages_and_reaction(self) -> None:
         sender = self.example_user("othello")
         receiver = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         pm_recipient = Recipient.objects.get(type_id=receiver.id, type=Recipient.PERSONAL)
         stream_name = "Çiğdem"
         stream = self.make_stream(stream_name)

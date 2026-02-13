@@ -1,9 +1,9 @@
 # Submitting a pull request
 
-A pull request (PR) is a presentation of your proposed changes to Zulip. Your aim
+A pull request (PR) is a presentation of your proposed changes to Doer. Your aim
 should be to explain your changes as clearly as possible. This will help
 reviewers evaluate whether the proposed changes are correct, and address any
-open questions. Clear communication helps the whole Zulip project move more
+open questions. Clear communication helps the whole Doer project move more
 quickly by saving maintainers time when they review your code. It will also make
 a big difference for getting your work integrated without delay.
 
@@ -22,7 +22,7 @@ step is described in detail below, with links to additional resources:
 To learn more about putting together pull requests maintainers will love to
 review, check out [this FOSDEM
 talk](https://fosdem.org/2026/schedule/event/L7ERNP-prs-maintainers-will-love/)
-by a Zulip maintainer.
+by a Doer maintainer.
 
 See the [pull request review process](../contributing/review-process.md) guide
 for a detailed overview of what happens once your pull request is submitted.
@@ -33,7 +33,7 @@ When you write code, you should make sure that you understand _why it works_ as
 intended. This is the foundation for being able to explain your proposed changes
 to others.
 
-Zulip’s coding philosophy is to focus relentlessly on making the codebase easy
+Doer’s coding philosophy is to focus relentlessly on making the codebase easy
 to understand and difficult to make dangerous mistakes. Our linters, tests, code
 style guidelines, [testing philosophy](../testing/philosophy.md), [commit
 discipline](../contributing/commit-discipline.md), this documentation, and our
@@ -68,7 +68,7 @@ commit messages. Your pull request can only be reviewed once you've followed
 these guidelines to the best of your ability. This makes it much easier for
 reviewers to understand your work and identify any problems.
 
-Ideally, when reviewing a pull request for a complex project, Zulip's
+Ideally, when reviewing a pull request for a complex project, Doer's
 maintainers should be able to verify and merge the first few commits, and leave
 comments on the rest. It is by far the most efficient way to do collaborative
 development, since one is constantly making progress, we keep branches small,
@@ -102,10 +102,10 @@ description and comments easy to read.
 ### Discussions in the development community
 
 Any questions for which broader feedback or visibility is helpful are discussed
-in the [Zulip development community](https://zulip.com/development-community/).
+in the [Doer development community](https://zulip.com/development-community/).
 
-If there has been a conversation in the [Zulip development
-community][zulip-dev-community] about the changes you've made or the issue your
+If there has been a conversation in the [Doer development
+community][doer-dev-community] about the changes you've made or the issue your
 pull request addresses, please cross-link between your pull request and those
 conversations in both directions. This provides helpful context for maintainers
 and reviewers. Specifically, it's best to link from your pull request [to a
@@ -125,7 +125,7 @@ look over your work before asking others to do so. Catching mistakes yourself
 will help your PRs be merged faster, and reviewers will appreciate the quality
 and professionalism of your work.
 
-The pull request template in the `zulip/zulip` repository has a checklist of
+The pull request template in the `doer/doer` repository has a checklist of
 reminders for points you need to cover in your review. Make sure that all the
 relevant items on the self-review checklist have been addressed, and check them
 off on the list.

@@ -3,11 +3,11 @@ from unittest import mock
 
 from django.conf import settings
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zproject.email_backends import get_forward_address
 
 
-class EmailLogTest(ZulipTestCase):
+class EmailLogTest(DoerTestCase):
     def test_generate_and_clear_email_log(self) -> None:
         with (
             self.settings(EMAIL_BACKEND="zproject.email_backends.EmailLogBackEnd"),
@@ -23,7 +23,7 @@ class EmailLogTest(ZulipTestCase):
             self.assertIn("emails", result["Location"])
 
             result = self.client_get("/emails/")
-            self.assert_in_success_response(["All emails sent in the Zulip"], result)
+            self.assert_in_success_response(["All emails sent in the Doer"], result)
 
             result = self.client_get("/emails/clear/")
             self.assertEqual(result.status_code, 302)

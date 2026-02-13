@@ -84,7 +84,7 @@
                 <span>
                     <a type="submit" download="{{zuliprc}}" data-email="{{email}}" data-user-id="{{user_id}}" class="hidden-zuliprc-download" hidden></a>
                     {{> ../components/icon_button
-                      custom_classes="download-bot-zuliprc tippy-zulip-delayed-tooltip"
+                      custom_classes="download-bot-zuliprc tippy-doer-delayed-tooltip"
                       icon="download"
                       intent="brand"
                       data-tippy-content=(t 'Download zuliprc')
@@ -94,7 +94,7 @@
                   icon="copy"
                   intent="success"
                   id="copy-zuliprc-config"
-                  custom_classes="copy-zuliprc tippy-zulip-delayed-tooltip"
+                  custom_classes="copy-zuliprc tippy-doer-delayed-tooltip"
                   data-tippy-content=(t "Copy zuliprc")
                   }}
             </div>
@@ -109,7 +109,7 @@
                     {{> ../components/icon_button
                       icon="refresh-cw"
                       intent="brand"
-                      custom_classes="bot-modal-regenerate-bot-api-key tippy-zulip-delayed-tooltip"
+                      custom_classes="bot-modal-regenerate-bot-api-key tippy-doer-delayed-tooltip"
                       data-tippy-content=(t "Generate new API key")
                       }}
                 </span>
@@ -118,7 +118,7 @@
                       icon="copy"
                       intent="success"
                       id="copy-api-key-button"
-                      custom_classes="copy-api-key tippy-zulip-delayed-tooltip"
+                      custom_classes="copy-api-key tippy-doer-delayed-tooltip"
                       data-tippy-content=(t "Copy API key")
                       }}
                 </span>

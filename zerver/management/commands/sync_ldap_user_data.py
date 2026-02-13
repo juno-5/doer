@@ -9,12 +9,12 @@ from django.db.models import QuerySet
 from typing_extensions import override
 
 from zerver.lib.logging_util import log_to_file
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserProfile
-from zproject.backends import ZulipLDAPError, sync_user_from_ldap
+from zproject.backends import DoerLDAPError, sync_user_from_ldap
 
 ## Setup ##
-logger = logging.getLogger("zulip.sync_ldap_user_data")
+logger = logging.getLogger("doer.sync_ldap_user_data")
 log_to_file(logger, settings.LDAP_SYNC_LOG_PATH)
 
 
@@ -32,7 +32,7 @@ def sync_ldap_user_data(
             # does not exist.
             try:
                 sync_user_from_ldap(u, logger)
-            except ZulipLDAPError as e:
+            except DoerLDAPError as e:
                 logger.error("Error attempting to update user %s:", u.delivery_email)
                 logger.error(e.args[0])
 
@@ -63,7 +63,7 @@ def sync_ldap_user_data(
     logger.info("Finished update.")
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
@@ -87,12 +87,12 @@ class Command(ZulipBaseCommand):
             if not user_profiles.exists():
                 # This case provides a special error message if one
                 # tries setting up LDAP sync before creating a realm.
-                raise CommandError("Zulip server contains no users. Have you created a realm?")
+                raise CommandError("Doer server contains no users. Have you created a realm?")
 
         if len(user_profiles) == 0:
             # We emphasize that this error is purely about the
             # command-line parameters, since this has nothing to do
             # with your LDAP configuration.
-            raise CommandError("Zulip server contains no users matching command-line parameters.")
+            raise CommandError("Doer server contains no users matching command-line parameters.")
 
         sync_ldap_user_data(user_profiles, not options["force"])

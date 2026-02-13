@@ -16,7 +16,7 @@ merge of the PR, rather than requiring the PR to be manually
 With --merge, also go ahead and merge the PR.
 
 REMOTE defaults to the value of the Git config variable
-\`zulip.zulipRemote\` if set, else to \`upstream\`.
+\`doer.zulipRemote\` if set, else to \`upstream\`.
 
 If we have a pseudo-remote-tracking branch for the PR (as created
 by \`reset-to-pull-request\`, like \`pr/1234\`), then the tracking
@@ -60,8 +60,8 @@ done
 
 set -- "${args[@]}"
 
-remote_default="$(git config zulip.zulipRemote || echo upstream)"
-pseudo_remote="$(git config zulip.prPseudoRemote || echo)"
+remote_default="$(git config doer.zulipRemote || echo upstream)"
+pseudo_remote="$(git config doer.prPseudoRemote || echo)"
 
 pr_id="$1"
 remote="${2:-"$remote_default"}"

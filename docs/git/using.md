@@ -42,15 +42,15 @@ You can also configure [Bash][gitbook-other-envs-bash] and
 ## Keep your fork up to date
 
 You'll want to [keep your fork][github-help-sync-fork] up-to-date with changes
-from Zulip's main repositories.
+from Doer's main repositories.
 
 **Note about `git pull`**: You might be used to using `git pull` on other
-projects. With Zulip, because we don't use merge commits, you'll want to avoid
+projects. With Doer, because we don't use merge commits, you'll want to avoid
 it. Rather than using `git pull`, which by default is a shortcut for
 `git fetch && git merge FETCH_HEAD` ([docs][gitbook-git-pull]), you
 should use `git fetch` and then `git rebase`.
 
-First, [fetch][gitbook-fetch] changes from Zulip's upstream repository you
+First, [fetch][gitbook-fetch] changes from Doer's upstream repository you
 configured in the step above:
 
 ```console
@@ -99,8 +99,8 @@ feature. Recall from [how Git is different][how-git-is-different] that
 **Git is designed for lightweight branching and merging.** You can and should
 create as many branches as you'd like.
 
-First, make sure your `main` branch is up-to-date with Zulip upstream ([see
-how][zulip-git-guide-up-to-date]).
+First, make sure your `main` branch is up-to-date with Doer upstream ([see
+how][doer-git-guide-up-to-date]).
 
 Next, from your `main` branch, create a new tracking branch, providing a
 descriptive name for your feature branch:
@@ -289,16 +289,16 @@ sense. For a commit that you intend to be final or that encompasses a
 significant amount or complex work, you should include a longer message.
 
 Keep in mind that your commit should contain a 'minimal coherent idea' and have
-a quality commit message. See Zulip docs [Commit
-Discipline][zulip-rtd-commit-discipline] and [Commit
-messages][zulip-rtd-commit-messages] for details.
+a quality commit message. See Doer docs [Commit
+Discipline][doer-rtd-commit-discipline] and [Commit
+messages][doer-rtd-commit-messages] for details.
 
 Here's an example of a longer commit message that will be used for a pull request:
 
 ```text
 Integrate Fail2Ban.
 
-Updates Zulip logging to put an unambiguous entry into the logs such
+Updates Doer logging to put an unambiguous entry into the logs such
 that fail2ban can be configured to look for these entries.
 
 Tested on my local Ubuntu development server, but would appreciate
@@ -345,7 +345,7 @@ Compressing objects: 100% (4/4), done.
 Writing objects: 100% (6/6), 658 bytes | 0 bytes/s, done.
 Total 6 (delta 3), reused 0 (delta 0)
 remote: Resolving deltas: 100% (3/3), completed with 1 local objects.
-To git@github.com:christi3k/zulip.git
+To git@github.com:christi3k/doer.git
  * [new branch]      issue-demo -> issue-demo
 ```
 
@@ -360,8 +360,8 @@ you push and you'll see `* [new branch]` in the command output.
 
 Examining your commit history prior to submitting your pull request is a good
 idea. Is it tidy such that each commit represents a minimally coherent idea
-(see [commit discipline][zulip-rtd-commit-discipline])? Do your commit messages
-follow [Zulip's style][zulip-rtd-commit-messages]? Will the person reviewing
+(see [commit discipline][doer-rtd-commit-discipline])? Do your commit messages
+follow [Doer's style][doer-rtd-commit-messages]? Will the person reviewing
 your commit history be able to clearly understand your progression of work?
 
 On the command line, you can use the `git log` command to display an easy to
@@ -406,9 +406,9 @@ updates will be rejected with a message such as:
 
 ```console
 $ git push origin 1754-docs-add-git-workflow
-To git@github.com:christi3k/zulip.git
+To git@github.com:christi3k/doer.git
  ! [rejected] 1754-docs-add-git-workflow -> 1754-docs-add-git-workflow (non-fast-forward)
-error: failed to push some refs to 'git@github.com:christi3k/zulip.git'
+error: failed to push some refs to 'git@github.com:christi3k/doer.git'
 hint: Updates were rejected because the tip of your current branch is behind
 hint: its remote counterpart. Integrate the remote changes (e.g.,
 hint: 'git pull ...') before pushing again.
@@ -426,7 +426,7 @@ Compressing objects: 100% (12/12), done.
 Writing objects: 100% (12/12), 3.71 KiB | 0 bytes/s, done.
 Total 12 (delta 8), reused 0 (delta 0)
 remote: Resolving deltas: 100% (8/8), completed with 2 local objects.
-To git@github.com:christi3k/zulip.git
+To git@github.com:christi3k/doer.git
  + 2d49e2d...bfb2433 1754-docs-add-git-workflow -> 1754-docs-add-git-workflow (forced update)
 ```
 
@@ -452,6 +452,6 @@ complicated rebase.
 [github-help-sync-fork]: https://help.github.com/en/articles/syncing-a-fork
 [how-git-is-different]: the-git-difference.md
 [self-multiple-computers]: troubleshooting.md#working-from-multiple-computers
-[zulip-git-guide-up-to-date]: #keep-your-fork-up-to-date
-[zulip-rtd-commit-discipline]: ../contributing/commit-discipline.md
-[zulip-rtd-commit-messages]: ../contributing/commit-discipline.md
+[doer-git-guide-up-to-date]: #keep-your-fork-up-to-date
+[doer-rtd-commit-discipline]: ../contributing/commit-discipline.md
+[doer-rtd-commit-messages]: ../contributing/commit-discipline.md

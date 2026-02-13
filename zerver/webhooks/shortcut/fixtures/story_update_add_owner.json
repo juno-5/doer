@@ -11,7 +11,7 @@
             "action":"update",
             "name":"A new story by Shakespeare!",
             "story_type":"feature",
-            "app_url":"https://app.shortcut.com/zulip/story/26",
+            "app_url":"https://app.shortcut.com/doer/story/26",
             "changes":{
                 "owner_ids":{
                     "adds":[

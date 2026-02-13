@@ -5,8 +5,8 @@ title: Polls
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import PollsExamples from "../include/_PollsExamples.mdx";
 import PollsIntro from "../include/_PollsIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
@@ -14,10 +14,10 @@ import StartComposing from "../include/_StartComposing.mdx";
 import CheckIcon from "~icons/fa/check";
 import PencilIcon from "~icons/fa/pencil";
 import RemoveIcon from "~icons/fa/remove";
-import GripVerticalIcon from "~icons/zulip-icon/grip-vertical";
-import PollIcon from "~icons/zulip-icon/poll";
-import SendIcon from "~icons/zulip-icon/send";
-import TrashIcon from "~icons/zulip-icon/trash";
+import GripVerticalIcon from "~icons/doer-icon/grip-vertical";
+import PollIcon from "~icons/doer-icon/poll";
+import SendIcon from "~icons/doer-icon/send";
+import TrashIcon from "~icons/doer-icon/trash";
 
 <PollsIntro />
 
@@ -38,12 +38,12 @@ import TrashIcon from "~icons/zulip-icon/trash";
          message.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To reorder the list of options, click and drag the **vertical dots**
       (<GripVerticalIcon />) to the left of each
       option. To delete an option, click the **delete**
       (<TrashIcon />) icon to the right of it.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via Markdown">
@@ -58,18 +58,18 @@ import TrashIcon from "~icons/zulip-icon/trash";
          message.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You will be able to add options after the poll is created.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
 ## Add options to a poll
 
-<ZulipNote>
+<DoerNote>
   To preserve the meaning of votes in the poll, existing poll options cannot
   be modified.
-</ZulipNote>
+</DoerNote>
 
 <Steps>
   1. Fill out the **New option** field at the bottom of the poll.
@@ -79,9 +79,9 @@ import TrashIcon from "~icons/zulip-icon/trash";
 
 ## Edit the question
 
-<ZulipNote>
+<DoerNote>
   Only the creator of a poll can edit the question.
-</ZulipNote>
+</DoerNote>
 
 <Steps>
   1. Click the **pencil** (<PencilIcon />) icon
@@ -91,10 +91,10 @@ import TrashIcon from "~icons/zulip-icon/trash";
      <kbd>Enter</kbd> to save your changes.
 </Steps>
 
-<ZulipTip>
+<DoerTip>
   You can click the <RemoveIcon /> icon or press
   <kbd>Esc</kbd> to discard your changes.
-</ZulipTip>
+</DoerTip>
 
 ## Examples
 

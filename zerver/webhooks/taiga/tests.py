@@ -256,47 +256,47 @@ class TaigaHookTests(WebhookTestCase):
         self.check_webhook("issue_changed_remove_sprint", self.TOPIC_NAME, message)
 
     def test_taiga_epic_created(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) created epic **Zulip is awesome!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) created epic **Doer is awesome!**."
         self.check_webhook("epic_created", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_assigned(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) assigned epic **Zulip is awesome!** to Eeshan Garg."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) assigned epic **Doer is awesome!** to Eeshan Garg."
         self.check_webhook("epic_changed_assigned", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_unassigned(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) unassigned epic **Zulip is awesome!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) unassigned epic **Doer is awesome!**."
         self.check_webhook("epic_changed_unassigned", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_reassigned(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) reassigned epic **Zulip is awesome!** from Eeshan Garg to Angela Johnson."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) reassigned epic **Doer is awesome!** from Eeshan Garg to Angela Johnson."
         self.check_webhook("epic_changed_reassigned", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_blocked(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) blocked epic **Zulip is awesome!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) blocked epic **Doer is awesome!**."
         self.check_webhook("epic_changed_blocked", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_unblocked(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) unblocked epic **Zulip is awesome!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) unblocked epic **Doer is awesome!**."
         self.check_webhook("epic_changed_unblocked", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_status(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) changed status of epic **Zulip is awesome!** from New to In progress."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) changed status of epic **Doer is awesome!** from New to In progress."
         self.check_webhook("epic_changed_status", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_renamed(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) renamed epic from **Zulip is awesome!** to **Zulip is great!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) renamed epic from **Doer is awesome!** to **Doer is great!**."
         self.check_webhook("epic_changed_renamed", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_description(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) updated description of epic **Zulip is great!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) updated description of epic **Doer is great!**."
         self.check_webhook("epic_changed_description", self.TOPIC_NAME, message)
 
     def test_taiga_epic_changed_commented(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) commented on epic **Zulip is great!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) commented on epic **Doer is great!**."
         self.check_webhook("epic_changed_commented", self.TOPIC_NAME, message)
 
     def test_taiga_epic_deleted(self) -> None:
-        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) deleted epic **Zulip is great!**."
+        message = "[Eeshan Garg](https://tree.taiga.io/profile/eeshangarg) deleted epic **Doer is great!**."
         self.check_webhook("epic_deleted", self.TOPIC_NAME, message)
 
     def test_taiga_relateduserstory_created(self) -> None:

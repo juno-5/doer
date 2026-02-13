@@ -1,6 +1,6 @@
-# Zulip AppOptics/Librato integration
+# Doer AppOptics/Librato integration
 
-Get Zulip notifications for your AppOptics/Librato alerts!
+Get Doer notifications for your AppOptics/Librato alerts!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Zulip notifications for your AppOptics/Librato alerts!
 1. Go to your AppOptics/Librato homepage, and click on **Settings**.
    Select **Notification Services**, and click **Webhooks**.
 
-1. Set **Title** to a title of your choice, such as `Zulip`. Set **URL**
+1. Set **Title** to a title of your choice, such as `Doer`. Set **URL**
    to the URL generated above, and click **Add**. When you create a
    new **Alert**, you can enable this webhook under the **Notification
    Services** tab.

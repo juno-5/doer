@@ -23,7 +23,7 @@ from zilencer.models import (
     RemoteCustomerUserCount,
     RemoteRealm,
     RemoteRealmAuditLog,
-    RemoteZulipServer,
+    RemoteDoerServer,
     get_remote_customer_user_count,
 )
 
@@ -190,7 +190,7 @@ def get_remote_activity_plan_data(
     license_ledger: LicenseLedger,
     *,
     remote_realm: RemoteRealm | None = None,
-    remote_server: RemoteZulipServer | None = None,
+    remote_server: RemoteDoerServer | None = None,
 ) -> RemoteActivityPlanData:
     from corporate.lib.stripe import RemoteRealmBillingSession, RemoteServerBillingSession
 
@@ -382,7 +382,7 @@ def get_remote_realm_user_counts(
         )
         # Important: extra_data is empty for some pre-2020 audit logs
         # prior to the introduction of realm_user_count_by_role
-        # logging. Meanwhile, modern Zulip servers using
+        # logging. Meanwhile, modern Doer servers using
         # bulk_create_users to create the users in the system bot
         # realm also generate such audit logs. Such audit logs should
         # never be the latest in a normal realm.
@@ -408,7 +408,7 @@ def get_remote_server_audit_logs(
         )
         # Important: extra_data is empty for some pre-2020 audit logs
         # prior to the introduction of realm_user_count_by_role
-        # logging. Meanwhile, modern Zulip servers using
+        # logging. Meanwhile, modern Doer servers using
         # bulk_create_users to create the users in the system bot
         # realm also generate such audit logs. Such audit logs should
         # never be the latest in a normal realm.

@@ -1,11 +1,11 @@
 from zerver.actions.realm_playgrounds import check_add_realm_playground
 from zerver.actions.realm_settings import do_set_realm_property
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import RealmPlayground
 from zerver.models.realms import get_realm
 
 
-class RealmPlaygroundTests(ZulipTestCase):
+class RealmPlaygroundTests(DoerTestCase):
     def test_create_one_playground_entry(self) -> None:
         iago = self.example_user("iago")
 
@@ -19,7 +19,7 @@ class RealmPlaygroundTests(ZulipTestCase):
         self.assert_json_success(resp)
 
         # Check if the actual object exists
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.assertTrue(
             RealmPlayground.objects.filter(realm=realm, name="Python playground").exists()
         )
@@ -43,7 +43,7 @@ class RealmPlaygroundTests(ZulipTestCase):
             resp = self.api_post(iago, "/api/v1/realm/playgrounds", payload)
             self.assert_json_success(resp)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.assertTrue(
             RealmPlayground.objects.filter(realm=realm, name="Python playground 1").exists()
         )
@@ -115,7 +115,7 @@ class RealmPlaygroundTests(ZulipTestCase):
 
     def test_delete_realm_playground(self) -> None:
         iago = self.example_user("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         playground_id = check_add_realm_playground(
             realm,
@@ -135,7 +135,7 @@ class RealmPlaygroundTests(ZulipTestCase):
 
     def test_delete_default_code_block_language_playground(self) -> None:
         iago = self.example_user("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         playground_id = check_add_realm_playground(
             realm,

@@ -1,6 +1,6 @@
-# Zulip Jotform integration
+# Doer Jotform integration
 
-Get Zulip notifications for your Jotform responses!
+Get Doer notifications for your Jotform responses!
 
 {start_tabs}
 
@@ -16,7 +16,7 @@ Get Zulip notifications for your Jotform responses!
 
 !!! tip ""
 
-    By default, the form's title will be used as the Zulip topic.
+    By default, the form's title will be used as the Doer topic.
 
 {end_tabs}
 

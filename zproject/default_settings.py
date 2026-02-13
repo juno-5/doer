@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Any, Literal, Optional
 
 from django_auth_ldap.config import GroupOfUniqueNamesType, LDAPGroupType
 
-from scripts.lib.zulip_tools import deport
+from scripts.lib.doer_tools import deport
 from zproject.settings_types import JwtAuthKey, OIDCIdPConfigDict, SAMLIdPConfigDict, SCIMConfigDict
 
 from .config import DEVELOPMENT, PRODUCTION, get_config, get_secret
@@ -14,9 +14,9 @@ if TYPE_CHECKING:
     from django_auth_ldap.config import LDAPSearch
 
 if PRODUCTION:  # nocoverage
-    from .prod_settings import EXTERNAL_HOST, ZULIP_ADMINISTRATOR
+    from .prod_settings import EXTERNAL_HOST, DOER_ADMINISTRATOR
 else:
-    from .dev_settings import EXTERNAL_HOST, ZULIP_ADMINISTRATOR
+    from .dev_settings import EXTERNAL_HOST, DOER_ADMINISTRATOR
 
 DEBUG = DEVELOPMENT
 
@@ -26,7 +26,7 @@ STATIC_URL: str | None = None
 
 # These settings are intended for the server admin to set.  We document them in
 # prod_settings_template.py, and in the initial /etc/zulip/settings.py on a new
-# install of the Zulip server.
+# install of the Doer server.
 
 # Extra HTTP "Host" values to allow (standard ones added in computed_settings.py)
 ALLOWED_HOSTS: list[str] = []
@@ -77,7 +77,7 @@ LDAP_SYNCHRONIZED_GROUPS_BY_REALM: dict[str, list[str]] = {}
 AUTH_LDAP_GROUP_TYPE: LDAPGroupType = GroupOfUniqueNamesType()
 
 # Social auth; we support providing values for some of these
-# settings in zulip-secrets.conf instead of settings.py in development.
+# settings in doer-secrets.conf instead of settings.py in development.
 SOCIAL_AUTH_GITHUB_KEY = get_secret("social_auth_github_key", development_only=True)
 SOCIAL_AUTH_GITHUB_ORG_NAME: str | None = None
 SOCIAL_AUTH_GITHUB_TEAM_ID: str | None = None
@@ -191,7 +191,7 @@ GIPHY_API_KEY = get_secret("giphy_api_key")
 # Tenor API key
 TENOR_API_KEY = get_secret("tenor_api_key")
 
-# Allow setting BigBlueButton settings in zulip-secrets.conf in
+# Allow setting BigBlueButton settings in doer-secrets.conf in
 # development; this is useful since there are no public BigBlueButton servers.
 BIG_BLUE_BUTTON_URL = get_secret("big_blue_button_url", development_only=True)
 
@@ -213,7 +213,7 @@ MEMCACHED_USERNAME = None if get_secret("memcached_password") is None else "zuli
 RABBITMQ_HOST = "127.0.0.1"
 RABBITMQ_PORT = 5672
 RABBITMQ_VHOST = "/"
-RABBITMQ_USERNAME = "zulip"
+RABBITMQ_USERNAME = "doer"
 RABBITMQ_USE_TLS = False
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
@@ -243,27 +243,27 @@ PASSWORD_MIN_GUESSES = 10000
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2  # 2 weeks
 
-ZULIP_SERVICES_URL: str | None = "https://push.zulipchat.com"
-ZULIP_SERVICE_PUSH_NOTIFICATIONS = False
+DOER_SERVICES_URL: str | None = "https://push.zulipchat.com"
+DOER_SERVICE_PUSH_NOTIFICATIONS = False
 
 # For this setting, we need to have None as the default value, so
 # that we can distinguish between the case of the setting not being
 # set at all and being disabled (set to False).
 # That's because unless the setting is explicitly configured, we want to
-# enable it in computed_settings when ZULIP_SERVICE_PUSH_NOTIFICATIONS
+# enable it in computed_settings when DOER_SERVICE_PUSH_NOTIFICATIONS
 # is enabled.
-ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS: bool | None = None
-ZULIP_SERVICE_SECURITY_ALERTS = False
+DOER_SERVICE_SUBMIT_USAGE_STATISTICS: bool | None = None
+DOER_SERVICE_SECURITY_ALERTS = False
 
 # Old setting kept around for backwards compatibility. Some old servers
 # may have it in their settings.py.
 PUSH_NOTIFICATION_BOUNCER_URL: str | None = None
 # Keep this default True, so that legacy deployments that configured PUSH_NOTIFICATION_BOUNCER_URL
 # without overriding SUBMIT_USAGE_STATISTICS get the original behavior. If a server configures
-# the modern ZULIP_SERVICES setting, all this will be ignored.
+# the modern DOER_SERVICES setting, all this will be ignored.
 SUBMIT_USAGE_STATISTICS = True
 
-PROMOTE_SPONSORING_ZULIP = True
+PROMOTE_SPONSORING_DOER = True
 RATE_LIMITING = True
 RATE_LIMITING_AUTHENTICATE = True
 RATE_LIMIT_TOR_TOGETHER = False
@@ -288,8 +288,8 @@ DEFAULT_RATE_LIMITING_RULES = {
         (60, 100),
     ],
     # Limits total requests to the Mobile Push Notifications Service
-    # by each individual Zulip server that is using the service. This
-    # is a Zulip Cloud setting that has no effect on self-hosted Zulip
+    # by each individual Doer server that is using the service. This
+    # is a Doer Cloud setting that has no effect on self-hosted Doer
     # servers that are not hosting their own copy of the push
     # notifications service.
     "api_by_remote_server": [
@@ -298,7 +298,7 @@ DEFAULT_RATE_LIMITING_RULES = {
     # Limits how many authentication attempts with login+password can
     # be made to a single username. This applies to the authentication
     # backends such as LDAP or email+password where a login+password
-    # gets submitted to the Zulip server. No limit is applied for
+    # gets submitted to the Doer server. No limit is applied for
     # external authentication methods (like GitHub SSO), since with
     # those authentication backends, we only receive a username if
     # authentication is successful.
@@ -310,7 +310,7 @@ DEFAULT_RATE_LIMITING_RULES = {
     # address. A low/strict limit is recommended here, since there is
     # not real use case for triggering several of these from a single
     # user account, and by definition, the emails are sent to an email
-    # address that does not already have a relationship with Zulip, so
+    # address that does not already have a relationship with Doer, so
     # this feature can be abused to attack the server's spam
     # reputation. Applies in addition to sends_email_by_ip.
     "email_change_by_user": [
@@ -338,7 +338,7 @@ DEFAULT_RATE_LIMITING_RULES = {
     # Limits access to uploaded files, in web-public contexts, done by
     # unauthenticated users. Each file gets its own bucket, and every
     # access to the file by an unauthenticated user counts towards the
-    # limit.  This is important to prevent abuse of Zulip's file
+    # limit.  This is important to prevent abuse of Doer's file
     # uploads feature for file distribution.
     "spectator_attachment_access_by_file": [
         # 1000 per day per file
@@ -384,7 +384,7 @@ TWO_FACTOR_AUTHENTICATION_ENABLED = False
 
 # The new user tutorial can be disabled for self-hosters who want to
 # disable the tutorial entirely on their system. Primarily useful for
-# products embedding Zulip as their chat feature.
+# products embedding Doer as their chat feature.
 TUTORIAL_ENABLED = True
 
 # We log emails in development environment for accessing
@@ -407,7 +407,7 @@ DEVELOPMENT_DISABLE_PUSH_BOUNCER_DOMAIN_CHECK = False
 #    for dev and test environments; or
 #  * don't make sense to change on a typical production server with
 #    one or a handful of realms, though they might on an installation
-#    like Zulip Cloud or to work around a problem on another server.
+#    like Doer Cloud or to work around a problem on another server.
 
 NOTIFICATION_BOT = "notification-bot@zulip.com"
 EMAIL_GATEWAY_BOT = "emailgateway@zulip.com"
@@ -423,8 +423,8 @@ REMINDER_BOT = "reminder-bot@zulip.com"
 # sending tests.
 NAGIOS_STAGING_SEND_BOT = "nagios-staging-send-bot@zulip.com" if PRODUCTION else None
 NAGIOS_STAGING_RECEIVE_BOT = "nagios-staging-receive-bot@zulip.com" if PRODUCTION else None
-# SYSTEM_BOT_REALM would be a constant always set to 'zulip',
-# except that it isn't that on Zulip Cloud.  We will likely do a
+# SYSTEM_BOT_REALM would be a constant always set to 'doer',
+# except that it isn't that on Doer Cloud.  We will likely do a
 # migration and eliminate this parameter in the future.
 SYSTEM_BOT_REALM = "zulipinternal"
 
@@ -433,11 +433,11 @@ SYSTEM_BOT_REALM = "zulipinternal"
 # than a separate app.
 EXTRA_INSTALLED_APPS = ["analytics"]
 
-# Used to construct URLs to point to the Zulip server.  Since we
+# Used to construct URLs to point to the Doer server.  Since we
 # only support HTTPS in production, this is just for development.
 EXTERNAL_URI_SCHEME = "https://"
 
-# Whether anyone can create a new organization on the Zulip server.
+# Whether anyone can create a new organization on the Doer server.
 OPEN_REALM_CREATION = False
 
 # Whether it's possible to create web-public streams on this server.
@@ -445,7 +445,7 @@ WEB_PUBLIC_STREAMS_ENABLED = False
 
 # Setting for where the system bot users are.  Likely has no
 # purpose now that the REALMS_HAVE_SUBDOMAINS migration is finished.
-SYSTEM_ONLY_REALMS = {"zulip"}
+SYSTEM_ONLY_REALMS = {"doer"}
 
 # Default deadline for demo organizations
 DEMO_ORG_DEADLINE_DAYS: int | None = None
@@ -501,7 +501,7 @@ APNS_TOKEN_KEY_ID = get_secret("apns_token_key_id", development_only=True)
 APNS_TEAM_ID = get_secret("apns_team_id", development_only=True)
 APNS_SANDBOX = True
 # APNS_TOPIC is obsolete. Clients now pass the APNs topic to use.
-# ZULIP_IOS_APP_ID is obsolete. Clients now pass the iOS app ID to use for APNs.
+# DOER_IOS_APP_ID is obsolete. Clients now pass the iOS app ID to use for APNs.
 ANDROID_FCM_CREDENTIALS_PATH: str | None = None
 
 # Limits related to the size of file uploads; last few in MB.
@@ -542,7 +542,7 @@ CAN_CREATE_REALM_LINK_VALIDITY_DAYS = 7
 
 # Version number for ToS.  Change this if you want to force every
 # user to click through to re-accept terms of service before using
-# Zulip again on the web.
+# Doer again on the web.
 TERMS_OF_SERVICE_VERSION: str | None = None
 # HTML template path (e.g. "corporate/zulipchat_migration_tos.html")
 # displayed to users when increasing TERMS_OF_SERVICE_VERSION when a
@@ -560,9 +560,9 @@ JWT_AUTH_KEYS: dict[str, JwtAuthKey] = {}
 
 # https://docs.djangoproject.com/en/5.0/ref/settings/#std:setting-SERVER_EMAIL
 # Django setting for what from address to use in error emails.
-SERVER_EMAIL = ZULIP_ADMINISTRATOR
+SERVER_EMAIL = DOER_ADMINISTRATOR
 # Django setting for who receives error emails.
-ADMINS = (("Zulip Administrator", ZULIP_ADMINISTRATOR),)
+ADMINS = (("Doer Administrator", DOER_ADMINISTRATOR),)
 
 # From address for welcome emails.
 WELCOME_EMAIL_SENDER: dict[str, str] | None = None
@@ -572,7 +572,7 @@ SEND_DIGEST_EMAILS = True
 # The variable part of email sender names to be used for outgoing emails.
 INSTALLATION_NAME = EXTERNAL_HOST
 
-# Used to change the Zulip logo in portico pages.
+# Used to change the Doer logo in portico pages.
 CUSTOM_LOGO_URL: str | None = None
 
 # Random salt used when deterministically generating passwords in
@@ -589,7 +589,7 @@ LOG_API_EVENT_TYPES = False
 STAGING = False
 
 # Presence tuning parameters. These values were hardcoded in clients
-# before Zulip 7.0 (feature level 164); modern clients should get them
+# before Doer 7.0 (feature level 164); modern clients should get them
 # via the /register API response, making it possible to tune these to
 # adjust the trade-off between freshness and presence-induced load.
 #
@@ -601,7 +601,7 @@ STAGING = False
 OFFLINE_THRESHOLD_SECS = 200
 # How often a client should ping by asking for presence data of all users.
 PRESENCE_PING_INTERVAL_SECS = 60
-# Zulip sends immediate presence updates via the events system when a
+# Doer sends immediate presence updates via the events system when a
 # user joins or becomes online. In larger organizations, this can
 # become prohibitively expensive, so we limit how many active users an
 # organization can have before these presence update events are
@@ -755,7 +755,7 @@ MAX_PER_USER_MONTHLY_AI_COST: float | None = 0.5
 # URL of the navigation tour video displayed to new users.
 # Set it to None to disable it.
 NAVIGATION_TOUR_VIDEO_URL: str | None = (
-    "https://static.zulipchat.com/static/navigation-tour-video/zulip-10.mp4"
+    "https://static.zulipchat.com/static/navigation-tour-video/doer-10.mp4"
 )
 
 # Webhook signature verification.

@@ -1,29 +1,29 @@
-# Clients in Zulip
+# Clients in Doer
 
-`zerver.models.Client` is Zulip's analogue of the HTTP User-Agent
+`zerver.models.Client` is Doer's analogue of the HTTP User-Agent
 header (and is populated from User-Agent). It exists for use in
 analytics and other places to provide human-readable summary data
-about "which Zulip client" was used for an operation (e.g., was it the
+about "which Doer client" was used for an operation (e.g., was it the
 Android app, the desktop app, or a bot?).
 
 In general, it shouldn't be used for anything controlling the behavior
-of Zulip; it's primarily intended to assist debugging.
+of Doer; it's primarily intended to assist debugging.
 
 ## Analytics
 
 A `Client` is used to sort messages into client categories such as
-`ZulipElectron` on the `/stats` page. For more information see,
+`DoerElectron` on the `/stats` page. For more information see,
 [Analytics](analytics.md).
 
 ## Integrations
 
-Generally, integrations in Zulip should declare a unique User-Agent,
+Generally, integrations in Doer should declare a unique User-Agent,
 so that it's easy to figure out which integration is involved when
 debugging an issue. For incoming webhook integrations, we do that
 conveniently via the auth decorators (as we will describe shortly);
 other integrations generally should set the first User-Agent element
 on their HTTP requests to something of the form
-ZulipIntegrationName/1.2 so that they are categorized properly.
+DoerIntegrationName/1.2 so that they are categorized properly.
 
 The `webhook_view` auth decorator, used for most incoming
 webhooks, accepts the name of the integration as an argument and uses

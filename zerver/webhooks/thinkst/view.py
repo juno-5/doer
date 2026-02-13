@@ -129,7 +129,7 @@ def api_thinkst_webhook(
     Thinkst offers public canarytokens with canarytokens.org and with their canary
     product, but the schema returned by these identically named services are
     completely different - canarytokens from canarytokens.org are handled by a
-    different Zulip integration.
+    different Doer integration.
 
     Thinkst's documentation for the schema is linked below, but in practice the JSON
     received doesn't always conform.

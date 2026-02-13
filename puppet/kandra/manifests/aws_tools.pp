@@ -23,8 +23,8 @@ class kandra::aws_tools {
     } else {
       $archname = 'Aarch64'
     }
-    $helper_version = $zulip::common::versions['aws_signing_helper']['version']
-    zulip::external_dep { 'aws_signing_helper':
+    $helper_version = $doer::common::versions['aws_signing_helper']['version']
+    doer::external_dep { 'aws_signing_helper':
       version => $helper_version,
       url     => "https://rolesanywhere.amazonaws.com/releases/${helper_version}/${archname}/Linux/Amzn2023/aws_signing_helper",
       before  => File['/root/.aws/config'],

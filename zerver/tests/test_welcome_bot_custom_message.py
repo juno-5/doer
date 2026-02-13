@@ -1,9 +1,9 @@
 from typing_extensions import override
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class WelcomeBotCustomMessageTest(ZulipTestCase):
+class WelcomeBotCustomMessageTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()

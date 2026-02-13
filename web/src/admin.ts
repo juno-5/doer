@@ -31,18 +31,18 @@ import * as util from "./util.ts";
 const admin_settings_label = {
     // Organization profile
     realm_want_advertise_in_communities_directory: $t({
-        defaultMessage: "Advertise organization in the Zulip communities directory",
+        defaultMessage: "Advertise organization in the Doer communities directory",
     }),
     // Organization settings
     realm_new_stream_announcements_stream: $t({defaultMessage: "New channel announcements"}),
     realm_signup_announcements_stream: $t({defaultMessage: "New user announcements"}),
-    realm_zulip_update_announcements_stream: $t({defaultMessage: "Zulip update announcements"}),
+    realm_doer_update_announcements_stream: $t({defaultMessage: "Doer update announcements"}),
     realm_moderation_request_channel: $t({defaultMessage: "Moderation requests"}),
     realm_inline_image_preview: $t({
         defaultMessage: "Show previews of uploaded and linked images and videos",
     }),
     realm_inline_url_embed_preview: $t({defaultMessage: "Show previews of linked websites"}),
-    realm_send_welcome_emails: $t({defaultMessage: "Send emails introducing Zulip to new users"}),
+    realm_send_welcome_emails: $t({defaultMessage: "Send emails introducing Doer to new users"}),
     realm_require_e2ee_push_notifications: $t({
         defaultMessage: "Require end-to-end encryption for push notification content",
     }),
@@ -195,8 +195,8 @@ export function build_page(): void {
         realm_moderation_request_channel_id: realm.realm_moderation_request_channel_id,
         realm_new_stream_announcements_stream_id: realm.realm_new_stream_announcements_stream_id,
         realm_signup_announcements_stream_id: realm.realm_signup_announcements_stream_id,
-        realm_zulip_update_announcements_stream_id:
-            realm.realm_zulip_update_announcements_stream_id,
+        realm_doer_update_announcements_stream_id:
+            realm.realm_doer_update_announcements_stream_id,
         is_admin: current_user.is_admin,
         is_guest: current_user.is_guest,
         is_owner: current_user.is_owner,
@@ -223,7 +223,7 @@ export function build_page(): void {
         realm_digest_emails_enabled: realm.realm_digest_emails_enabled,
         realm_digest_weekday: realm.realm_digest_weekday,
         development: page_params.development_environment,
-        zulip_plan_is_not_limited: realm.zulip_plan_is_not_limited,
+        doer_plan_is_not_limited: realm.doer_plan_is_not_limited,
         upgrade_text_for_wide_organization_logo: realm.upgrade_text_for_wide_organization_logo,
         realm_default_external_accounts: realm.realm_default_external_accounts,
         admin_settings_label,
@@ -266,7 +266,7 @@ export function build_page(): void {
             settings_config.realm_name_in_email_notifications_policy_values,
         twenty_four_hour_time_values: settings_config.twenty_four_hour_time_values,
         disable_enable_spectator_access_setting:
-            !realm.server_web_public_streams_enabled || !realm.zulip_plan_is_not_limited,
+            !realm.server_web_public_streams_enabled || !realm.doer_plan_is_not_limited,
         realm_push_notifications_enabled: realm.realm_push_notifications_enabled,
         realm_org_type_values: settings_org.get_org_type_dropdown_options(),
         realm_want_advertise_in_communities_directory:
@@ -328,11 +328,11 @@ export function build_page(): void {
         const opts: {content?: string} = {};
         if (settings_data.user_has_billing_access()) {
             opts.content = $t({
-                defaultMessage: "This feature is available on Zulip Cloud Plus. Upgrade to access.",
+                defaultMessage: "This feature is available on Doer Cloud Plus. Upgrade to access.",
             });
         } else {
             opts.content = $t({
-                defaultMessage: "This feature is available on Zulip Cloud Plus.",
+                defaultMessage: "This feature is available on Doer Cloud Plus.",
             });
         }
 

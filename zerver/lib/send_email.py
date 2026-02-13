@@ -43,13 +43,13 @@ from zerver.models.users import get_user_profile_by_id
 from zproject.email_backends import EmailLogBackEnd, get_forward_address
 
 if settings.ZILENCER_ENABLED:
-    from zilencer.models import RemoteZulipServer
+    from zilencer.models import RemoteDoerServer
 
 MAX_CONNECTION_TRIES = 3
 
 ## Logging setup ##
 
-logger = logging.getLogger("zulip.send_email")
+logger = logging.getLogger("doer.send_email")
 log_to_file(logger, settings.EMAIL_LOG_PATH)
 
 
@@ -58,7 +58,7 @@ def get_inliner_instance() -> css_inline.CSSInliner:
 
 
 class FromAddress:
-    SUPPORT = parseaddr(settings.ZULIP_ADMINISTRATOR)[1]
+    SUPPORT = parseaddr(settings.DOER_ADMINISTRATOR)[1]
     NOREPLY = parseaddr(settings.NOREPLY_EMAIL_ADDRESS)[1]
 
     support_placeholder = "SUPPORT"
@@ -181,10 +181,10 @@ def build_email(
 
     # The i18n story for emails is a bit complicated.  For emails
     # going to a single user, we want to use the language that user
-    # has configured for their Zulip account.  For emails going to
-    # multiple users or to email addresses without a known Zulip
+    # has configured for their Doer account.  For emails going to
+    # multiple users or to email addresses without a known Doer
     # account (E.g. invitations), we want to use the default language
-    # configured for the Zulip organization.
+    # configured for the Doer organization.
     #
     # See our i18n documentation for some high-level details:
     # https://zulip.readthedocs.io/en/latest/translating/internationalization.html
@@ -200,7 +200,7 @@ def build_email(
         logger.warning("Missing language for email template '%s'", template_prefix)
 
     if from_name is None:
-        from_name = "Zulip"
+        from_name = "Doer"
     if from_address is None:
         from_address = FromAddress.NOREPLY
     if from_address == FromAddress.tokenized_no_reply_placeholder:
@@ -232,7 +232,7 @@ def build_email(
     if reply_to_email is not None:
         reply_to = [reply_to_email]
     # Remove the from_name in the reply-to for noreply emails, so that users
-    # see "noreply@..." rather than "Zulip" or whatever the from_name is
+    # see "noreply@..." rather than "Doer" or whatever the from_name is
     # when they reply in their email client.
     elif from_address == FromAddress.NOREPLY:
         reply_to = [FromAddress.NOREPLY]
@@ -793,11 +793,11 @@ def send_custom_email(
 
 
 def send_custom_server_email(
-    remote_servers: QuerySet["RemoteZulipServer"],
+    remote_servers: QuerySet["RemoteDoerServer"],
     *,
     dry_run: bool,
     options: dict[str, str],
-    add_context: Callable[[dict[str, object], "RemoteZulipServer"], None] | None = None,
+    add_context: Callable[[dict[str, object], "RemoteDoerServer"], None] | None = None,
 ) -> None:
     assert settings.CORPORATE_ENABLED
     from corporate.lib.stripe import BILLING_SUPPORT_EMAIL

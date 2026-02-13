@@ -6,7 +6,7 @@ from typing_extensions import override
 
 from zerver.lib.bot_lib import EmbeddedBotQuitError
 from zerver.lib.display_recipient import get_display_recipient
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import UserProfile
 from zerver.models.bots import get_service_profile
 from zerver.models.realms import get_realm
@@ -14,7 +14,7 @@ from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.users import get_user
 
 
-class TestEmbeddedBotMessaging(ZulipTestCase):
+class TestEmbeddedBotMessaging(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -83,7 +83,7 @@ class TestEmbeddedBotMessaging(ZulipTestCase):
         assert self.bot_profile is not None
         self.subscribe(self.user_profile, "Denmark")
         with patch(
-            "zulip_bots.bots.helloworld.helloworld.HelloWorldHandler.initialize", create=True
+            "doer_bots.bots.helloworld.helloworld.HelloWorldHandler.initialize", create=True
         ) as mock_initialize:
             self.send_stream_message(
                 self.user_profile,
@@ -97,7 +97,7 @@ class TestEmbeddedBotMessaging(ZulipTestCase):
         assert self.bot_profile is not None
         with (
             patch(
-                "zulip_bots.bots.helloworld.helloworld.HelloWorldHandler.handle_message",
+                "doer_bots.bots.helloworld.helloworld.HelloWorldHandler.handle_message",
                 side_effect=EmbeddedBotQuitError("I'm quitting!"),
             ),
             self.assertLogs(level="WARNING") as m,
@@ -111,7 +111,7 @@ class TestEmbeddedBotMessaging(ZulipTestCase):
             self.assertEqual(m.output, ["WARNING:root:I'm quitting!"])
 
 
-class TestEmbeddedBotFailures(ZulipTestCase):
+class TestEmbeddedBotFailures(DoerTestCase):
     def test_message_embedded_bot_with_invalid_service(self) -> None:
         user_profile = self.example_user("othello")
         self.create_test_bot(
@@ -120,7 +120,7 @@ class TestEmbeddedBotFailures(ZulipTestCase):
             bot_type=UserProfile.EMBEDDED_BOT,
             service_name="helloworld",
         )
-        bot_profile = get_user("embedded-bot@zulip.testserver", get_realm("zulip"))
+        bot_profile = get_user("embedded-bot@doer.testserver", get_realm("doer"))
         service_profile = get_service_profile(bot_profile.id, "helloworld")
         service_profile.name = "invalid"
         service_profile.save()

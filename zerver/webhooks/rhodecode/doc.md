@@ -1,6 +1,6 @@
-# Zulip RhodeCode integration
+# Doer RhodeCode integration
 
-Get RhodeCode notifications in Zulip!
+Get RhodeCode notifications in Doer!
 
 {start_tabs}
 

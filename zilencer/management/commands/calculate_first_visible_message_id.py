@@ -4,12 +4,12 @@ from typing import Any
 from django.core.management.base import CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_unless_locked
 from zerver.lib.message import maybe_update_first_visible_message_id
 from zerver.models import Realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Calculate the value of first visible message ID and store it in cache"""
 
     @override

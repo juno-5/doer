@@ -4,14 +4,14 @@ from django.conf import settings
 from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 if settings.BILLING_ENABLED:
     from corporate.lib.stripe import RealmBillingSession
     from corporate.models.plans import CustomerPlan
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     def add_arguments(self, parser: CommandParser) -> None:
         self.add_realm_args(parser)

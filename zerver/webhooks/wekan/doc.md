@@ -1,6 +1,6 @@
-# Zulip Wekan integration
+# Doer Wekan integration
 
-Get Wekan notifications in Zulip!
+Get Wekan notifications in Doer!
 
 {start_tabs}
 

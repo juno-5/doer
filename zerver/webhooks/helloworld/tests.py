@@ -49,7 +49,7 @@ class HelloWorldHookTests(WebhookTestCase):
         # Note that this is really just a test for check_send_webhook_message
         self.channel_name = "nonexistent"
         self.url = self.build_webhook_url()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         notification_bot = get_system_bot(settings.NOTIFICATION_BOT, realm.id)
         expected_message = "Your bot `webhook-bot@zulip.com` tried to send a message to channel #**nonexistent**, but that channel does not exist. Click [here](#channels/new) to create it."
         self.send_and_test_private_message(

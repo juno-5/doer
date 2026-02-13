@@ -12,14 +12,14 @@
                     @
                 </span>
             {{else if is_followed}}
-                <i class="zulip-icon zulip-icon-follow visibility-policy-icon" role="button" aria-hidden="true" data-tippy-content="{{t 'You follow this topic.'}}"></i>
+                <i class="doer-icon doer-icon-follow visibility-policy-icon" role="button" aria-hidden="true" data-tippy-content="{{t 'You follow this topic.'}}"></i>
             {{/if}}
             <span class="unread_count normal-count {{#if is_zero}}zero_count{{/if}}">
                 {{unread}}
             </span>
         </div>
         <span class="sidebar-menu-icon topic-sidebar-menu-icon">
-            <i class="zulip-icon zulip-icon-more-vertical" aria-hidden="true"></i>
+            <i class="doer-icon doer-icon-more-vertical" aria-hidden="true"></i>
         </span>
     </a>
 </li>

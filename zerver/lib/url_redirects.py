@@ -48,7 +48,7 @@ LANDING_PAGE_REDIRECTS = [
     URLRedirect("/developer-community/", "/development-community"),
     URLRedirect("/for/companies/", "/for/business"),
     URLRedirect("/for/working-groups-and-communities/", "/for/communities"),
-    URLRedirect("/try-zulip/", "https://chat.zulip.org/?show_try_zulip_modal"),
+    URLRedirect("/try-doer/", "https://chat.zulip.org/?show_try_doer_modal"),
 ]
 
 DOCUMENTATION_REDIRECTS = (

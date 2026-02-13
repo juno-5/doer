@@ -92,7 +92,7 @@ from zerver.lib.types import RemoteRealmDictValue
 from zerver.models.realm_audit_logs import AuditLogEventType
 from zerver.models.realms import DisposableEmailError, Realm
 from zilencer.auth import (
-    InvalidZulipServerKeyError,
+    InvalidDoerServerKeyError,
     generate_registration_transfer_verification_secret,
     validate_registration_transfer_verification_secret,
 )
@@ -105,8 +105,8 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmAuditLog,
     RemoteRealmCount,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
 )
 
 logger = logging.getLogger(__name__)
@@ -136,7 +136,7 @@ def validate_bouncer_token_request(token: str, kind: int) -> None:
 @typed_endpoint_without_parameters
 def deactivate_remote_server(
     request: HttpRequest,
-    remote_server: RemoteZulipServer,
+    remote_server: RemoteDoerServer,
 ) -> HttpResponse:
     from corporate.lib.stripe import RemoteServerBillingSession
 
@@ -183,7 +183,7 @@ def transfer_remote_server_registration(request: HttpRequest, *, hostname: str) 
 
     validate_hostname_or_raise_error(hostname)
 
-    if not RemoteZulipServer.objects.filter(hostname=hostname, deactivated=False).exists():
+    if not RemoteDoerServer.objects.filter(hostname=hostname, deactivated=False).exists():
         raise JsonableError(_("{hostname} not yet registered").format(hostname=hostname))
 
     verification_secret = generate_registration_transfer_verification_secret(hostname)
@@ -214,22 +214,22 @@ class ServerAdminEmailError(JsonableError):
 def register_remote_server(
     request: HttpRequest,
     *,
-    zulip_org_id: Annotated[
+    doer_org_id: Annotated[
         str,
         RequiredStringConstraint,
-        AfterValidator(lambda s: check_string_fixed_length(s, RemoteZulipServer.UUID_LENGTH)),
+        AfterValidator(lambda s: check_string_fixed_length(s, RemoteDoerServer.UUID_LENGTH)),
     ],
-    zulip_org_key: Annotated[
+    doer_org_key: Annotated[
         str,
         RequiredStringConstraint,
-        AfterValidator(lambda s: check_string_fixed_length(s, RemoteZulipServer.API_KEY_LENGTH)),
+        AfterValidator(lambda s: check_string_fixed_length(s, RemoteDoerServer.API_KEY_LENGTH)),
     ],
-    hostname: Annotated[str, StringConstraints(max_length=RemoteZulipServer.HOSTNAME_MAX_LENGTH)],
+    hostname: Annotated[str, StringConstraints(max_length=RemoteDoerServer.HOSTNAME_MAX_LENGTH)],
     contact_email: str,
     new_org_key: Annotated[
         str | None,
         RequiredStringConstraint,
-        AfterValidator(lambda s: check_string_fixed_length(s, RemoteZulipServer.API_KEY_LENGTH)),
+        AfterValidator(lambda s: check_string_fixed_length(s, RemoteDoerServer.API_KEY_LENGTH)),
     ] = None,
 ) -> HttpResponse:
     # StringConstraints validated the field lengths, but we still need to
@@ -283,39 +283,39 @@ def register_remote_server(
                 )
 
     try:
-        validate_uuid(zulip_org_id)
+        validate_uuid(doer_org_id)
     except ValidationError as e:
         raise JsonableError(e.message)
 
     try:
-        remote_server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
-    except RemoteZulipServer.DoesNotExist:
+        remote_server = RemoteDoerServer.objects.get(uuid=doer_org_id)
+    except RemoteDoerServer.DoesNotExist:
         remote_server = None
 
     if remote_server is not None:
-        if not constant_time_compare(remote_server.api_key, zulip_org_key):
-            raise InvalidZulipServerKeyError(zulip_org_id)
+        if not constant_time_compare(remote_server.api_key, doer_org_key):
+            raise InvalidDoerServerKeyError(doer_org_id)
 
         if remote_server.deactivated:
             raise RemoteServerDeactivatedError
 
     if (
         remote_server is None
-        and RemoteZulipServer.objects.filter(hostname=hostname, deactivated=False).exists()
+        and RemoteDoerServer.objects.filter(hostname=hostname, deactivated=False).exists()
     ):
         raise HostnameAlreadyInUseBouncerError(hostname)
 
     with transaction.atomic(durable=True):
         if remote_server is None:
             created = True
-            remote_server = RemoteZulipServer.objects.create(
-                uuid=zulip_org_id,
+            remote_server = RemoteDoerServer.objects.create(
+                uuid=doer_org_id,
                 hostname=hostname,
                 contact_email=contact_email,
-                api_key=zulip_org_key,
+                api_key=doer_org_key,
                 last_request_datetime=timezone_now(),
             )
-            RemoteZulipServerAuditLog.objects.create(
+            RemoteDoerServerAuditLog.objects.create(
                 event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
                 server=remote_server,
                 event_time=remote_server.last_updated,
@@ -335,7 +335,7 @@ def register_remote_server(
 
 class RegistrationTransferVerificationSession(OutgoingSession):
     def __init__(self) -> None:
-        # The generous timeout and retries here are likely to be unnecessary; a functional Zulip server should
+        # The generous timeout and retries here are likely to be unnecessary; a functional Doer server should
         # respond instantly.
         super().__init__(role="verify_registration_transfer_challenge", timeout=5, max_retries=3)
 
@@ -355,7 +355,7 @@ def verify_registration_transfer_challenge_ack_endpoint(
 ) -> HttpResponse:
     """
     The host should POST to this endpoint to announce it is ready to serve the received
-    secret at {hostname}/zulip-services/verify/{access_token}.
+    secret at {hostname}/doer-services/verify/{access_token}.
     The access_token is randomly generated by the host in order to prevent 3rd parties
     from accessing the verification secret served at that URL.
 
@@ -388,12 +388,12 @@ def verify_registration_transfer_challenge_ack_endpoint(
         )
 
     try:
-        remote_server = RemoteZulipServer.objects.get(hostname=hostname, deactivated=False)
-    except RemoteZulipServer.DoesNotExist:
+        remote_server = RemoteDoerServer.objects.get(hostname=hostname, deactivated=False)
+    except RemoteDoerServer.DoesNotExist:
         raise JsonableError(_("Registration not found for this hostname"))
 
     session = RegistrationTransferVerificationSession()
-    url = urljoin(f"https://{hostname}", f"/api/v1/zulip-services/verify/{access_token}/")
+    url = urljoin(f"https://{hostname}", f"/api/v1/doer-services/verify/{access_token}/")
 
     exception_and_error_message: tuple[Exception, str] | None = None
     try:
@@ -431,12 +431,12 @@ def verify_registration_transfer_challenge_ack_endpoint(
     validate_registration_transfer_verification_secret(verification_secret, hostname)
 
     logger.info("verify_registration_transfer:host:%s|success", hostname)
-    new_secret_key = get_random_string(RemoteZulipServer.API_KEY_LENGTH)
+    new_secret_key = get_random_string(RemoteDoerServer.API_KEY_LENGTH)
     with transaction.atomic(durable=True):
         remote_server.api_key = new_secret_key
         remote_server.save(update_fields=["api_key"])
 
-        RemoteZulipServerAuditLog.objects.create(
+        RemoteDoerServerAuditLog.objects.create(
             event_type=AuditLogEventType.REMOTE_SERVER_REGISTRATION_TRANSFERRED,
             server=remote_server,
             event_time=timezone_now(),
@@ -444,7 +444,7 @@ def verify_registration_transfer_challenge_ack_endpoint(
 
     return json_success(
         request,
-        data={"zulip_org_id": str(remote_server.uuid), "zulip_org_key": new_secret_key},
+        data={"doer_org_id": str(remote_server.uuid), "doer_org_key": new_secret_key},
     )
 
 
@@ -462,7 +462,7 @@ def check_transfer_challenge_response_secret_not_prepared(response: requests.Res
 
 def get_remote_push_device_token(
     *,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     token: str,
     kind: int,
 ) -> QuerySet[RemotePushDeviceToken]:
@@ -483,7 +483,7 @@ def get_remote_push_device_token(
 @typed_endpoint
 def register_remote_push_device(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     user_id: Json[int] | None = None,
     user_uuid: str | None = None,
@@ -639,7 +639,7 @@ def do_register_remote_push_device(
 @typed_endpoint
 def register_remote_push_device_for_e2ee_push_notification(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     realm_uuid: str,
     push_account_id: Json[int],
@@ -666,7 +666,7 @@ def register_remote_push_device_for_e2ee_push_notification(
 @typed_endpoint
 def unregister_remote_push_device(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     token: Annotated[str, RequiredStringConstraint],
     token_kind: Json[int],
@@ -693,7 +693,7 @@ def unregister_remote_push_device(
 @typed_endpoint
 def unregister_all_remote_push_devices(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     user_id: Json[int] | None = None,
     user_uuid: str | None = None,
@@ -709,7 +709,7 @@ def unregister_all_remote_push_devices(
 
 def update_remote_realm_last_request_datetime_helper(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     realm_uuid: str | None,
     user_uuid: str | None,
 ) -> None:
@@ -730,7 +730,7 @@ def delete_duplicate_registrations(
     user_uuid. Given no good way of detecting these duplicates at database level, we need to
     take advantage of the fact that when a remote server sends a push notification request
     to us, it sends both user_id and user_uuid of the user.
-    See https://github.com/zulip/zulip/issues/24969 for reference.
+    See https://github.com/doer/doer/issues/24969 for reference.
 
     This function, knowing the user_id and user_uuid of the user, can detect duplicates
     and delete the legacy user_id registration if appropriate.
@@ -796,7 +796,7 @@ class TestNotificationPayload(BaseModel):
 @typed_endpoint
 def remote_server_send_test_notification(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     payload: JsonBodyPayload[TestNotificationPayload],
 ) -> HttpResponse:
@@ -835,7 +835,7 @@ def remote_server_send_test_notification(
 
 def get_remote_realm_helper(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     realm_uuid: str,
 ) -> RemoteRealm | None:
     """
@@ -867,8 +867,8 @@ def get_remote_realm_helper(
     return remote_realm
 
 
-class OldZulipServerError(JsonableError):
-    code = ErrorCode.INVALID_ZULIP_SERVER
+class OldDoerServerError(JsonableError):
+    code = ErrorCode.INVALID_DOER_SERVER
 
     def __init__(self, msg: str) -> None:
         self._msg: str = msg
@@ -899,7 +899,7 @@ class RemoteServerNotificationPayload(BaseModel):
 @typed_endpoint
 def remote_server_notify_push(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     payload: JsonBodyPayload[RemoteServerNotificationPayload],
 ) -> HttpResponse:
@@ -927,7 +927,7 @@ def remote_server_notify_push(
     log_data["extra"] = f"[can_push={push_status.can_push}/{push_status.message}]"
     if not push_status.can_push:
         if server.last_api_feature_level is None:
-            raise OldZulipServerError(_("Your plan doesn't allow sending push notifications."))
+            raise OldDoerServerError(_("Your plan doesn't allow sending push notifications."))
         else:
             reason = push_status.message
             raise PushNotificationsDisallowedError(reason=reason)
@@ -990,14 +990,14 @@ def remote_server_notify_push(
     # commit.
     def truncate_payload(payload: dict[str, Any]) -> dict[str, Any]:
         MAX_MESSAGE_IDS = 200
-        if payload and payload.get("event") == "remove" and payload.get("zulip_message_ids"):
-            ids = [int(id) for id in payload["zulip_message_ids"].split(",")]
+        if payload and payload.get("event") == "remove" and payload.get("doer_message_ids"):
+            ids = [int(id) for id in payload["doer_message_ids"].split(",")]
             truncated_ids = sorted(ids)[-MAX_MESSAGE_IDS:]
-            payload["zulip_message_ids"] = ",".join(str(id) for id in truncated_ids)
+            payload["doer_message_ids"] = ",".join(str(id) for id in truncated_ids)
         return payload
 
     # The full request must complete within 30s, the timeout set by
-    # Zulip remote hosts for push notification requests (see
+    # Doer remote hosts for push notification requests (see
     # PushBouncerSession).  The timeouts in the FCM and APNS codepaths
     # must be set accordingly; see send_android_push_notification and
     # send_apple_push_notification.
@@ -1011,9 +1011,9 @@ def remote_server_notify_push(
     )
 
     if isinstance(apns_payload.get("custom"), dict) and isinstance(
-        apns_payload["custom"].get("zulip"), dict
+        apns_payload["custom"].get("doer"), dict
     ):
-        apns_payload["custom"]["zulip"] = truncate_payload(apns_payload["custom"]["zulip"])
+        apns_payload["custom"]["doer"] = truncate_payload(apns_payload["custom"]["doer"])
     apple_successfully_delivered = send_apple_push_notification(
         user_identity, apple_devices, apns_payload, remote=server
     )
@@ -1065,7 +1065,7 @@ class DevicesToCleanUpDict(TypedDict):
 
 def get_deleted_devices(
     user_identity: UserPushIdentityCompat,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     android_devices: list[str],
     apple_devices: list[str],
 ) -> DevicesToCleanUpDict:
@@ -1122,7 +1122,7 @@ def get_deleted_devices(
 
 
 def validate_incoming_table_data(
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     model: Any,
     rows: list[dict[str, Any]],
     *,
@@ -1160,7 +1160,7 @@ ModelT = TypeVar("ModelT", bound=Model)
 
 
 def batch_create_table_data(
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     model: type[ModelT],
     row_objects: list[ModelT],
 ) -> None:
@@ -1208,7 +1208,7 @@ def ensure_devices_set_remote_realm(
 
 
 def update_remote_realm_data_for_server(
-    server: RemoteZulipServer, server_realms_info: list[RealmDataForAnalytics]
+    server: RemoteDoerServer, server_realms_info: list[RealmDataForAnalytics]
 ) -> None:
     from corporate.lib.stripe import BILLING_SUPPORT_EMAIL, RemoteRealmBillingSession
 
@@ -1391,7 +1391,7 @@ def update_remote_realm_data_for_server(
 
 
 def get_human_user_realm_uuids(
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
 ) -> list[UUID]:
     query = RemoteRealm.objects.filter(
         server=server,
@@ -1412,7 +1412,7 @@ def get_human_user_realm_uuids(
 
 @transaction.atomic(durable=True)
 def handle_customer_migration_from_server_to_realm(
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
 ) -> None:
     from corporate.lib.stripe import RemoteRealmBillingSession, RemoteServerBillingSession
 
@@ -1521,7 +1521,7 @@ def handle_customer_migration_from_server_to_realm(
             )
         except MissingDataError:  # nocoverage
             logger.warning(
-                "Failed to migrate customer from server (id: %s) to realm (id: %s): RemoteZulipServer has stale "
+                "Failed to migrate customer from server (id: %s) to realm (id: %s): RemoteDoerServer has stale "
                 "audit log data and cannot update license ledger for plan with automated license management.",
                 server.id,
                 remote_realm.id,
@@ -1535,7 +1535,7 @@ def handle_customer_migration_from_server_to_realm(
     # TODO: Might be better to call do_change_plan_type here.
     remote_realm.plan_type = server.plan_type
     remote_realm.save(update_fields=["plan_type"])
-    server.plan_type = RemoteZulipServer.PLAN_TYPE_SELF_MANAGED
+    server.plan_type = RemoteDoerServer.PLAN_TYPE_SELF_MANAGED
     server.save(update_fields=["plan_type"])
     RemoteRealmAuditLog.objects.create(
         server=server,
@@ -1554,7 +1554,7 @@ def handle_customer_migration_from_server_to_realm(
 @transaction.atomic(durable=True)
 def remote_server_post_analytics(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     realm_counts: Json[list[RealmCountDataForAnalytics]],
     installation_counts: Json[list[InstallationCountDataForAnalytics]],
@@ -1572,11 +1572,11 @@ def remote_server_post_analytics(
 
     # Lock the server, preventing this from racing with other
     # duplicate submissions of the data
-    server = RemoteZulipServer.objects.select_for_update().get(id=server.id)
+    server = RemoteDoerServer.objects.select_for_update().get(id=server.id)
 
     remote_server_version_updated = False
     if version is not None:
-        version = version[0 : RemoteZulipServer.VERSION_MAX_LENGTH]
+        version = version[0 : RemoteDoerServer.VERSION_MAX_LENGTH]
     if (
         version != server.last_version
         or merge_base != server.last_merge_base
@@ -1749,7 +1749,7 @@ def remote_server_post_analytics(
 
 
 def build_realm_id_to_remote_realm_dict(
-    server: RemoteZulipServer, realms: list[RealmDataForAnalytics] | None
+    server: RemoteDoerServer, realms: list[RealmDataForAnalytics] | None
 ) -> dict[int, RemoteRealm]:
     if realms is None:
         return {}
@@ -1764,7 +1764,7 @@ def build_realm_id_to_remote_realm_dict(
 
 
 def fix_remote_realm_foreign_keys(
-    server: RemoteZulipServer, realms: list[RealmDataForAnalytics]
+    server: RemoteDoerServer, realms: list[RealmDataForAnalytics]
 ) -> None:
     """
     Finds the RemoteRealmCount and RemoteRealmAuditLog entries without .remote_realm
@@ -1788,7 +1788,7 @@ def fix_remote_realm_foreign_keys(
         ).update(remote_realm=realm_id_to_remote_realm[realm_id])
 
 
-def get_last_id_from_server(server: RemoteZulipServer, model: Any) -> int:
+def get_last_id_from_server(server: RemoteDoerServer, model: Any) -> int:
     last_count = (
         model.objects.filter(server=server)
         # Rows with remote_id=None are managed by the bouncer service itself,
@@ -1804,7 +1804,7 @@ def get_last_id_from_server(server: RemoteZulipServer, model: Any) -> int:
 
 
 @typed_endpoint_without_parameters
-def remote_server_check_analytics(request: HttpRequest, server: RemoteZulipServer) -> HttpResponse:
+def remote_server_check_analytics(request: HttpRequest, server: RemoteDoerServer) -> HttpResponse:
     result = {
         "last_realm_count_id": get_last_id_from_server(server, RemoteRealmCount),
         "last_installation_count_id": get_last_id_from_server(server, RemoteInstallationCount),
@@ -1821,7 +1821,7 @@ class SendE2EEPushNotificationPayload(BaseModel):
 @typed_endpoint
 def remote_server_send_e2ee_push_notification(
     request: HttpRequest,
-    server: RemoteZulipServer,
+    server: RemoteDoerServer,
     *,
     payload: JsonBodyPayload[SendE2EEPushNotificationPayload],
 ) -> HttpResponse:

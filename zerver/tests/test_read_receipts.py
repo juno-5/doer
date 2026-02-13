@@ -6,11 +6,11 @@ from zerver.actions.realm_settings import do_set_realm_property
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.users import do_deactivate_user
 from zerver.lib.muted_users import add_user_mute, get_mute_object
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import UserMessage, UserProfile
 
 
-class TestReadReceipts(ZulipTestCase):
+class TestReadReceipts(DoerTestCase):
     def mark_message_read(self, user: UserProfile, message_id: int) -> None:
         result = self.api_post(
             user,

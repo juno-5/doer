@@ -33,13 +33,13 @@ from zerver.data_import.sequencer import IdMapper
 from zerver.data_import.user_handler import UserHandler
 from zerver.lib.emoji import name_to_codepoint
 from zerver.lib.import_realm import do_import_realm
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, Reaction, Recipient, UserProfile
 from zerver.models.realms import get_realm
 from zerver.models.users import get_user
 
 
-class RocketChatImporter(ZulipTestCase):
+class RocketChatImporter(DoerTestCase):
     def test_rocketchat_data_to_dict(self) -> None:
         fixture_dir_name = self.fixture_file_name("", "rocketchat_fixtures")
         rocketchat_data = rocketchat_data_to_dict(fixture_dir_name)
@@ -310,7 +310,7 @@ class RocketChatImporter(ZulipTestCase):
         self.assertEqual(zerver_stream[0]["realm"], realm_id)
 
         self.assertEqual(
-            zerver_realm[0]["zulip_update_announcements_stream"], zerver_stream[0]["id"]
+            zerver_realm[0]["doer_update_announcements_stream"], zerver_stream[0]["id"]
         )
         self.assertEqual(zerver_realm[0]["new_stream_announcements_stream"], zerver_stream[0]["id"])
 
@@ -608,8 +608,8 @@ class RocketChatImporter(ZulipTestCase):
         self.assertEqual(records_json[1]["realm_id"], 3)
         self.assertTrue(os.path.isfile(os.path.join(output_dir, "emoji", records_json[0]["path"])))
 
-        self.assertEqual(records_json[2]["name"], "zulip")
-        self.assertEqual(records_json[2]["file_name"], "zulip.png")
+        self.assertEqual(records_json[2]["name"], "doer")
+        self.assertEqual(records_json[2]["file_name"], "doer.png")
         self.assertEqual(records_json[2]["realm_id"], 3)
         self.assertTrue(os.path.isfile(os.path.join(output_dir, "emoji", records_json[2]["path"])))
 
@@ -853,7 +853,7 @@ class RocketChatImporter(ZulipTestCase):
             {"name": "heart", "user_id": 3},
             {"name": "rocket", "user_id": 4},
             {"name": "check", "user_id": 2},
-            {"name": "zulip", "user_id": 3},
+            {"name": "doer", "user_id": 3},
             {"name": "harry-ron", "user_id": 4},
         ]
 
@@ -864,7 +864,7 @@ class RocketChatImporter(ZulipTestCase):
             zerver_realmemoji=zerver_realmemoji,
         )
 
-        # :grin: is not present in Zulip's default emoji set,
+        # :grin: is not present in Doer's default emoji set,
         # or in Reaction.UNICODE_EMOJI reaction type.
         self.assert_length(total_reactions, 8)
 
@@ -891,7 +891,7 @@ class RocketChatImporter(ZulipTestCase):
                 "heart",
                 "rocket",
                 "check",
-                "zulip",
+                "doer",
                 "harry-ron",
             },
         )
@@ -904,7 +904,7 @@ class RocketChatImporter(ZulipTestCase):
                 rocket_emoji_code,
                 star_struck_emoji_code,
                 realmemoji_code["check"],
-                realmemoji_code["zulip"],
+                realmemoji_code["doer"],
                 realmemoji_code["harry-ron"],
             },
         )
@@ -978,7 +978,7 @@ class RocketChatImporter(ZulipTestCase):
 
         with (
             self.assertLogs(level="INFO") as info_log,
-            self.settings(EXTERNAL_HOST="zulip.example.com"),
+            self.settings(EXTERNAL_HOST="doer.example.com"),
         ):
             # We need to mock EXTERNAL_HOST to be a valid domain because rocketchat's importer
             # uses it to generate email addresses for users without an email specified.
@@ -1031,7 +1031,7 @@ class RocketChatImporter(ZulipTestCase):
         self.assertEqual(
             exported_user_emails,
             {
-                "rocket.cat-bot@zulip.example.com",
+                "rocket.cat-bot@doer.example.com",
                 "priyansh3133@email.com",
                 "harrypotter@email.com",
                 "hermionegranger@email.com",
@@ -1097,8 +1097,8 @@ class RocketChatImporter(ZulipTestCase):
 
         realm = get_realm("hogwarts")
 
-        self.assertFalse(get_user("rocket.cat-bot@zulip.example.com", realm).is_mirror_dummy)
-        self.assertTrue(get_user("rocket.cat-bot@zulip.example.com", realm).is_bot)
+        self.assertFalse(get_user("rocket.cat-bot@doer.example.com", realm).is_mirror_dummy)
+        self.assertTrue(get_user("rocket.cat-bot@doer.example.com", realm).is_bot)
         self.assertFalse(get_user("harrypotter@email.com", realm).is_mirror_dummy)
         self.assertFalse(get_user("harrypotter@email.com", realm).is_bot)
         self.assertFalse(get_user("ronweasley@email.com", realm).is_mirror_dummy)

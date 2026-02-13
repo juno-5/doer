@@ -1,6 +1,6 @@
-# Zulip Hubot Integration
+# Doer Hubot Integration
 
-Use Hubot to execute scripts and commands within Zulip!
+Use Hubot to execute scripts and commands within Doer!
 
 {start_tabs}
 
@@ -8,7 +8,7 @@ Use Hubot to execute scripts and commands within Zulip!
    to create your Hubot. You'll have a new directory from which `bin/hubot`
    starts a vanilla Hubot instance with the shell backend.
 
-1. In your Hubot's directory, install the Zulip adapter by running:
+1. In your Hubot's directory, install the Doer adapter by running:
 
       `npm install --save hubot-zulip`
 
@@ -18,9 +18,9 @@ Use Hubot to execute scripts and commands within Zulip!
    information of the bot you created, by running:
 
     ```
-    export HUBOT_ZULIP_SITE="{{ zulip_url }}"
-    export HUBOT_ZULIP_BOT="hubot-bot@{{ zulip_url }}"
-    export HUBOT_ZULIP_API_KEY="0123456789abcdef0123456789abcdef"
+    export HUBOT_DOER_SITE="{{ doer_url }}"
+    export HUBOT_DOER_BOT="hubot-bot@{{ doer_url }}"
+    export HUBOT_DOER_API_KEY="0123456789abcdef0123456789abcdef"
     ```
 
 1. Run Hubot:
@@ -45,13 +45,13 @@ result like this:
 
 * To make Hubot listen only on the channels that it is subscribed to, run:
 
-     `export HUBOT_ZULIP_ONLY_SUBSCRIBED_STREAMS`
+     `export HUBOT_DOER_ONLY_SUBSCRIBED_STREAMS`
 
 ### Related documentation
 
-* [GitHub repository for Zulip Hubot adapter][hubot-zulip]
+* [GitHub repository for Doer Hubot adapter][hubot-zulip]
 
-* Zulip Integrations using Hubot: [Assembla](/integrations/assembla) |
+* Doer Integrations using Hubot: [Assembla](/integrations/assembla) |
   [Bonusly](/integrations/bonusly) |
   [Chartbeat](/integrations/chartbeat) |
   [Dark Sky](/integrations/darksky) |

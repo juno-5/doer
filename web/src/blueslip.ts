@@ -99,7 +99,7 @@ export function error(
 
     // Note that original_error could be of any type, because you can "raise"
     // any type -- something we do see in practice with the error
-    // object being "dead": https://github.com/zulip/zulip/issues/18374
+    // object being "dead": https://github.com/doer/doer/issues/18374
     Sentry.captureException(new Error(msg, {cause: original_error}));
 
     const args = build_arg_list(msg, more_info);

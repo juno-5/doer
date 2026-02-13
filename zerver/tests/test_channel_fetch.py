@@ -15,7 +15,7 @@ from zerver.actions.streams import (
 )
 from zerver.lib.email_mirror_helpers import encode_email_address, get_channel_email_token
 from zerver.lib.subscription_info import gather_subscriptions, gather_subscriptions_helper
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message
 from zerver.lib.types import (
     APIStreamDict,
@@ -43,12 +43,12 @@ def fix_expected_fields_for_stream_group_settings(expected_fields: set[str]) -> 
     return expected_fields
 
 
-class GetStreamsTest(ZulipTestCase):
+class GetStreamsTest(DoerTestCase):
     def test_streams_api_for_bot_owners(self) -> None:
         hamlet = self.example_user("hamlet")
         test_bot = self.create_test_bot("foo", hamlet)
         assert test_bot is not None
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login_user(hamlet)
 
         # Check it correctly lists the bot owner's subs with
@@ -337,7 +337,7 @@ class GetStreamsTest(ZulipTestCase):
         a list of streams
         """
         user = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login_user(user)
 
         # Check it correctly lists the user's subs with include_public=false
@@ -374,7 +374,7 @@ class GetStreamsTest(ZulipTestCase):
         """
         # Cordelia is not subscribed to private stream `core team`.
         user = self.example_user("cordelia")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login_user(user)
         user_group_members_dict = UserGroupMembersData(
             direct_members=[user.id], direct_subgroups=[]
@@ -410,7 +410,7 @@ class GetStreamsTest(ZulipTestCase):
 
     def test_get_single_stream_api(self) -> None:
         self.login("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         denmark_stream = get_stream("Denmark", realm)
         result = self.client_get(f"/json/streams/{denmark_stream.id}")
         json = self.assert_json_success(result)
@@ -444,7 +444,7 @@ class GetStreamsTest(ZulipTestCase):
         hamlet = self.example_user("hamlet")
         iago = self.example_user("iago")
         polonius = self.example_user("polonius")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         email_gateway_bot = get_system_bot(settings.EMAIL_GATEWAY_BOT, realm.id)
         denmark_stream = get_stream("Denmark", realm)
         result = self.client_get(f"/json/streams/{denmark_stream.id}/email_address")
@@ -541,7 +541,7 @@ class GetStreamsTest(ZulipTestCase):
         self.assertEqual(set(stream_names), set(expected_stream_names))
 
 
-class StreamIdTest(ZulipTestCase):
+class StreamIdTest(DoerTestCase):
     def test_get_stream_id(self) -> None:
         user = self.example_user("hamlet")
         self.login_user(user)
@@ -557,7 +557,7 @@ class StreamIdTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid channel name 'wrongname'")
 
 
-class GetSubscribersTest(ZulipTestCase):
+class GetSubscribersTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -1062,7 +1062,7 @@ class GetSubscribersTest(ZulipTestCase):
         Check never_subscribed streams are fetched correctly and not include invite_only streams,
         or invite_only and public streams to guest users.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         users_to_subscribe = [
             self.example_user("othello").id,
             self.example_user("cordelia").id,
@@ -1245,16 +1245,16 @@ class GetSubscribersTest(ZulipTestCase):
         guest_user = self.example_user("polonius")
 
         stream_name_sub = "public_stream_1"
-        self.make_stream(stream_name_sub, realm=get_realm("zulip"))
+        self.make_stream(stream_name_sub, realm=get_realm("doer"))
         self.subscribe(guest_user, stream_name_sub)
 
         stream_name_unsub = "public_stream_2"
-        self.make_stream(stream_name_unsub, realm=get_realm("zulip"))
+        self.make_stream(stream_name_unsub, realm=get_realm("doer"))
         self.subscribe(guest_user, stream_name_unsub)
         self.unsubscribe(guest_user, stream_name_unsub)
 
         stream_name_never_sub = "public_stream_3"
-        self.make_stream(stream_name_never_sub, realm=get_realm("zulip"))
+        self.make_stream(stream_name_never_sub, realm=get_realm("doer"))
 
         normal_user = self.example_user("aaron")
         self.subscribe(normal_user, stream_name_sub)
@@ -1340,7 +1340,7 @@ class GetSubscribersTest(ZulipTestCase):
         guest_user = self.example_user("polonius")
         stream_name = "private_stream"
 
-        stream = self.make_stream(stream_name, realm=get_realm("zulip"), invite_only=True)
+        stream = self.make_stream(stream_name, realm=get_realm("doer"), invite_only=True)
         self.subscribe(admin_user, stream_name)
         self.subscribe(non_admin_user, stream_name)
         self.subscribe(guest_user, stream_name)
@@ -1390,8 +1390,8 @@ class GetSubscribersTest(ZulipTestCase):
         guest_user = self.example_user("polonius")
         member_user = self.example_user("hamlet")
 
-        self.make_stream(public_stream_name, realm=get_realm("zulip"))
-        self.make_stream(web_public_stream_name, realm=get_realm("zulip"), is_web_public=True)
+        self.make_stream(public_stream_name, realm=get_realm("doer"))
+        self.make_stream(web_public_stream_name, realm=get_realm("doer"), is_web_public=True)
 
         for stream_name in [public_stream_name, web_public_stream_name]:
             self.subscribe(guest_user, stream_name)

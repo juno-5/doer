@@ -1,11 +1,11 @@
 # Developing on a remote machine
 
-The Zulip developer environment works well on remote virtual machines. This can
+The Doer developer environment works well on remote virtual machines. This can
 be a good alternative for those with poor network connectivity or who have
 limited storage/memory on their local machines.
 
-We recommend giving the Zulip development environment its own virtual
-machine with at least 2GB of memory. If the Zulip development
+We recommend giving the Doer development environment its own virtual
+machine with at least 2GB of memory. If the Doer development
 environment will be the only thing running on the remote virtual
 machine, we recommend installing
 [directly][install-direct]. Otherwise, we recommend the
@@ -32,7 +32,7 @@ networks.
 ## Setting up user accounts
 
 You will need a non-root user account with sudo privileges to set up
-the Zulip development environment. If you have one already, continue
+the Doer development environment. If you have one already, continue
 to the next section.
 
 You can create a new user with sudo privileges by running the
@@ -52,7 +52,7 @@ following commands as root:
 After you have connected to your remote server, you need to install the
 development environment.
 
-If the Zulip development environment will be the only thing running on
+If the Doer development environment will be the only thing running on
 the remote virtual machine, we recommend installing
 [directly][install-direct]. Otherwise, we recommend the
 [Vagrant][install-vagrant] method so you can easily uninstall if you
@@ -67,26 +67,26 @@ documented below).
 
 If your server has a static IP address, we recommend putting this
 command in `~/.bashrc`, so you don't need to remember to run it every
-time. This allows you to access Zulip running in your development
+time. This allows you to access Doer running in your development
 environment using a browser on another host.
 
 ## Running the development server
 
 Once you have set up the development environment, you can start up the
 development server with the following command in the directory where
-you cloned Zulip:
+you cloned Doer:
 
 ```bash
 ./tools/run-dev --interface=''
 ```
 
-This will start up the Zulip server on port 9991. You can then
+This will start up the Doer server on port 9991. You can then
 navigate to `http://<REMOTE_IP>:9991/devlogin` and you should see something like
-this screenshot of the Zulip development environment:
+this screenshot of the Doer development environment:
 
-![Image of Zulip development environment](../images/zulip-devlogin.png)
+![Image of Doer development environment](../images/doer-devlogin.png)
 
-The `--interface=''` option makes the Zulip development environment
+The `--interface=''` option makes the Doer development environment
 accessible from any IP address (in contrast with the much more secure
 default of only being accessible from localhost, which is great for
 developing on your laptop).
@@ -94,16 +94,16 @@ developing on your laptop).
 To properly secure your remote development environment, you can
 [port forward](https://help.ubuntu.com/community/SSH/OpenSSH/PortForwarding)
 using ssh instead of running the development environment on an exposed
-interface. For example, if you're running Zulip on a remote server
+interface. For example, if you're running Doer on a remote server
 such as a DigitalOcean Droplet or an AWS EC2 instance, you can set up
-port-forwarding to access Zulip by running the following command in
+port-forwarding to access Doer by running the following command in
 your terminal:
 
 ```bash
 ssh -L 3000:127.0.0.1:9991 <username>@<remote_server_ip> -N
 ```
 
-Now you can access Zulip by navigating to `http://127.0.0.1:3000` in
+Now you can access Doer by navigating to `http://127.0.0.1:3000` in
 your local computer's browser.
 
 For more information, see [Using the development
@@ -113,11 +113,11 @@ environment][rtd-using-dev-env].
 
 To see changes on your remote development server, you need to do one of the following:
 
-- [Edit locally](#editing-locally): Clone Zulip code to your computer and
+- [Edit locally](#editing-locally): Clone Doer code to your computer and
   then use your favorite editor to make changes. When you want to see changes
-  on your remote Zulip development instance, sync with Git.
+  on your remote Doer development instance, sync with Git.
 - [Edit remotely](#editing-remotely): Edit code directly on your remote
-  Zulip development instance using a [Web-based IDE](#web-based-ide) (recommended for
+  Doer development instance using a [Web-based IDE](#web-based-ide) (recommended for
   beginners) or a [command line editor](#command-line-editors), or a
   [desktop IDE](#desktop-gui-editors) using a plugin to sync your
   changes to the server when you save.
@@ -135,7 +135,7 @@ don't have a favorite, here are some suggestions:
 - [PyCharm](https://www.jetbrains.com/pycharm/)
 
 Next, follow our [Git and GitHub guide](../git/index.md) to clone and configure
-your fork of zulip on your local computer.
+your fork of doer on your local computer.
 
 Once you have cloned your code locally, you can get to work.
 
@@ -151,7 +151,7 @@ guide][rtd-git-guide]. In brief, the steps are as follows.
 On your **local computer**:
 
 1. Open _Terminal_ (macOS/Linux) or _Git for BASH_.
-2. Change directory to where you cloned Zulip (e.g., `cd zulip`).
+2. Change directory to where you cloned Doer (e.g., `cd doer`).
 3. Use `git add` and `git commit` to stage and commit your changes (if you
    haven't already).
 4. Push your commits to GitHub with `git push origin branchname`.
@@ -163,7 +163,7 @@ from your remote development instance:
 
 1. In _Terminal_ or _Git BASH_, connect to your remote development
    instance with `ssh user@host`.
-2. Change to the zulip directory (e.g., `cd zulip`).
+2. Change to the doer directory (e.g., `cd doer`).
 3. Fetch new commits from GitHub with `git fetch origin`.
 4. Change to the branch you want to work on with `git checkout branchname`.
 5. Merge the new commits into your branch with `git merge origin/branchname`.
@@ -249,7 +249,7 @@ If you are relatively new to working on the command line, or just want to get
 started working quickly, we recommend web-based IDE
 [Codeanywhere][codeanywhere].
 
-To set up Codeanywhere for Zulip:
+To set up Codeanywhere for Doer:
 
 1. Create a [Codeanywhere][codeanywhere] account and log in.
 2. Create a new **SFTP-SSH** project. Use _Public key_ for authentication.
@@ -264,7 +264,7 @@ Now your workspace should look similar this:
 
 #### Next steps
 
-Next, read the following to learn more about developing for Zulip:
+Next, read the following to learn more about developing for Doer:
 
 - [Git & GitHub guide][rtd-git-guide]
 - [Using the development environment][rtd-using-dev-env]
@@ -283,11 +283,11 @@ Next, read the following to learn more about developing for Zulip:
 ## Using an nginx reverse proxy
 
 For some applications (e.g., developing an OAuth2 integration for
-Facebook), you may need your Zulip development to have a valid SSL
+Facebook), you may need your Doer development to have a valid SSL
 certificate. While `run-dev` doesn't support that, you can do this
 with an `nginx` reverse proxy sitting in front of `run-dev`.
 
-The following instructions assume you have a Zulip Droplet working and
+The following instructions assume you have a Doer Droplet working and
 that the user is `zulipdev`; edit accordingly if the situation is
 different.
 
@@ -299,7 +299,7 @@ different.
    # apt install -y crudini
    mkdir -p /var/lib/zulip/certbot-webroot/
    # if nginx running this will fail and you need to run `service nginx stop`
-   /home/zulipdev/zulip/scripts/setup/setup-certbot \
+   /home/zulipdev/doer/scripts/setup/setup-certbot \
      hostname.example.com \
      --email=username@example.com --method=standalone
    ```
@@ -308,13 +308,13 @@ different.
 
    ```bash
    apt install -y nginx-full
-   cp -a /home/zulipdev/zulip/tools/droplets/zulipdev /etc/nginx/sites-available/
+   cp -a /home/zulipdev/doer/tools/droplets/zulipdev /etc/nginx/sites-available/
    ln -nsf /etc/nginx/sites-available/zulipdev /etc/nginx/sites-enabled/
    nginx -t  # Verifies your nginx configuration
    service nginx reload  # Actually enabled your nginx configuration
    ```
 
-1. Start the Zulip development environment in HTTPS mode with the following command:
+1. Start the Doer development environment in HTTPS mode with the following command:
    ```bash
    env EXTERNAL_HOST="hostname.example.com" ./tools/run-dev --behind-https-proxy --interface=''
    ```

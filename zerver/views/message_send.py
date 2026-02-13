@@ -93,7 +93,7 @@ def same_realm_jabber_user(user_profile: UserProfile, email: str) -> bool:
         return False
 
     # If your Jabber users have a different email domain than the
-    # Zulip users, this is where you would do any translation.
+    # Doer users, this is where you would do any translation.
     domain = Address(addr_spec=email).domain.lower()
 
     # Assumes allow_subdomains=False for all RealmDomain's corresponding to

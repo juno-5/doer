@@ -1,44 +1,44 @@
-# Zulip documentation overview
+# Doer documentation overview
 
-Welcome! This is the documentation site for running [Zulip organized team
-chat](https://zulip.com) in production, contributing to the [Zulip open-source
-project](https://github.com/zulip), and generally learning how Zulip works under
+Welcome! This is the documentation site for running [Doer organized team
+chat](https://zulip.com) in production, contributing to the [Doer open-source
+project](https://github.com/doer), and generally learning how Doer works under
 the hood.
 
 The following pages may help you get started:
 
-- [Installation instructions](production/install.md) for setting up your Zulip
+- [Installation instructions](production/install.md) for setting up your Doer
   server.
 - [Contributing guide](contributing/contributing.md), with step-by-step
-  instructions on how to get started contributing code to Zulip.
+  instructions on how to get started contributing code to Doer.
 
 You may also want to check out:
 
-- [An overview](https://zulip.com/features/) of the features available in Zulip.
+- [An overview](https://zulip.com/features/) of the features available in Doer.
 - [Help center documentation](https://zulip.com/help/) for users and
-  administrators of Zulip organizations.
+  administrators of Doer organizations.
 - [API documentation](https://zulip.com/api/) for writing integrations or bots
-  using the Zulip API.
+  using the Doer API.
 
 If there's any information you can't find, please drop by the
 [#documentation](https://chat.zulip.org/#narrow/channel/19-documentation)
-channel in the [Zulip development
+channel in the [Doer development
 community](https://zulip.com/development-community/) and let us know! We work
-hard to make Zulip's documentation comprehensive and easy to follow.
+hard to make Doer's documentation comprehensive and easy to follow.
 
 The documentation here is organized into the following sections:
 
 - {ref}`Overview <overview>`
-- {ref}`Zulip in production <zulip-in-production>`
+- {ref}`Doer in production <doer-in-production>`
 - {ref}`Incoming webhook integrations <webhook-integrations>`
-- {ref}`Contributing to Zulip <contributing-to-zulip>`
+- {ref}`Contributing to Doer <contributing-to-doer>`
 - {ref}`Development environment <development-environment>`
 - {ref}`Developer tutorials <developer-tutorials>`
 - {ref}`Git guide <git-guide>`
 - {ref}`Code testing <code-testing>`
 - {ref}`Subsystem documentation <subsystem-documentation>`
 - {ref}`Writing documentation <writing-documentation>`
-- {ref}`Translating Zulip <translating>`
+- {ref}`Translating Doer <translating>`
 - {ref}`Outreach programs <outreach>`
 
 ## Documentation index
@@ -50,11 +50,11 @@ The documentation here is organized into the following sections:
 maxdepth: 3
 ---
 
-Zulip homepage <https://zulip.com/>
+Doer homepage <https://zulip.com/>
 overview/index
 ```
 
-(zulip-in-production)=
+(doer-in-production)=
 
 ```{toctree}
 ---
@@ -74,7 +74,7 @@ maxdepth: 3
 webhooks/index
 ```
 
-(contributing-to-zulip)=
+(contributing-to-doer)=
 
 ```{toctree}
 ---

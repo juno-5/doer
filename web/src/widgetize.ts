@@ -14,7 +14,7 @@ import type {AnyWidgetData} from "./widget_schema.ts";
 // don't really need to know the nitty-gritty of the server details,
 // but the server basically just stores submessages in the database
 // and then sends events to active users when new submessages arrive
-// via the standard Zulip events mechanism.
+// via the standard Doer events mechanism.
 type ActivateArguments = {
     any_data: AnyWidgetData;
     events: Event[];

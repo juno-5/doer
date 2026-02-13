@@ -12,7 +12,7 @@
                         "id": "PUIGL4T",
                         "name": "Default"
                     },
-                    "html_url": "https://zulip-test.pagerduty.com/incidents/PX7K9J2",
+                    "html_url": "https://doer-test.pagerduty.com/incidents/PX7K9J2",
                     "id": "PX7K9J2",
                     "incident_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                     "incident_number": 2,
@@ -22,12 +22,12 @@
                     "resolved_by_user": null,
                     "service": {
                         "deleted_at": null,
-                        "html_url": "https://zulip-test.pagerduty.com/services/PIL5CUQ",
+                        "html_url": "https://doer-test.pagerduty.com/services/PIL5CUQ",
                         "id": "PIL5CUQ",
                         "name": "Test service"
                     },
                     "status": "resolved",
-                    "trigger_details_html_url": "https://zulip-test.pagerduty.com/incidents/PX7K9J2/log_entries/Q2LOVDWN1FGDPC",
+                    "trigger_details_html_url": "https://doer-test.pagerduty.com/incidents/PX7K9J2/log_entries/Q2LOVDWN1FGDPC",
                     "trigger_summary_data": {
                         "subject": "new"
                     },

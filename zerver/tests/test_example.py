@@ -9,7 +9,7 @@ from zerver.actions.realm_settings import do_change_realm_permission_group_setti
 from zerver.actions.users import do_change_can_create_users, do_change_user_role
 from zerver.lib.exceptions import JsonableError, StreamWildcardMentionNotAllowedError
 from zerver.lib.streams import access_stream_for_send_message
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message
 from zerver.lib.users import is_administrator_role
 from zerver.models import Realm, UserProfile, UserStatus
@@ -19,10 +19,10 @@ from zerver.models.streams import get_stream
 from zerver.models.users import get_user_by_delivery_email
 
 
-# Most Zulip tests use ZulipTestCase, which inherits from django.test.TestCase.
+# Most Doer tests use DoerTestCase, which inherits from django.test.TestCase.
 # We recommend learning Django basics first, so search the web for "django testing".
 # A common first result is https://docs.djangoproject.com/en/5.0/topics/testing/
-class TestBasics(ZulipTestCase):
+class TestBasics(DoerTestCase):
     def test_basics(self) -> None:
         # Django's tests are based on Python's unittest module, so you
         # will see us use things like assertEqual, assertTrue, and assertRaisesRegex
@@ -31,8 +31,8 @@ class TestBasics(ZulipTestCase):
         self.assertEqual(7 * 6, 42)
 
 
-class TestBasicUserStuff(ZulipTestCase):
-    # Zulip has test fixtures with built-in users.  It's good to know
+class TestBasicUserStuff(DoerTestCase):
+    # Doer has test fixtures with built-in users.  It's good to know
     # which users are special. For example, Iago is our built-in
     # realm administrator.  You can also modify users as needed.
     def test_users(self) -> None:
@@ -86,8 +86,8 @@ class TestBasicUserStuff(ZulipTestCase):
         self.assertFalse(is_administrator_role(hamlet.role))
 
 
-class TestFullStack(ZulipTestCase):
-    # Zulip's backend tests are largely full-stack integration tests,
+class TestFullStack(DoerTestCase):
+    # Doer's backend tests are largely full-stack integration tests,
     # making use of some strategic mocking at times, though we do use
     # unit tests for some classes of low-level functions.
     #
@@ -101,8 +101,8 @@ class TestFullStack(ZulipTestCase):
         # The login_user helper basically wraps Django's client.login().
         self.login_user(hamlet)
 
-        # Zulip's client_get is a very thin wrapper on Django's client.get.
-        # We always use the Zulip wrappers for client_get and client_post.
+        # Doer's client_get is a very thin wrapper on Django's client.get.
+        # We always use the Doer wrappers for client_get and client_post.
         url = f"/json/users/{cordelia.id}"
         result = self.client_get(url)
 
@@ -148,12 +148,12 @@ class TestFullStack(ZulipTestCase):
         iago = self.example_user("iago")
         self.login_user(iago)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.assertEqual(realm.id, iago.realm_id)
 
         # Get our failing test first.
         self.assertRaises(
-            UserProfile.DoesNotExist, lambda: get_user_by_delivery_email("romeo@zulip.net", realm)
+            UserProfile.DoesNotExist, lambda: get_user_by_delivery_email("romeo@doer.net", realm)
         )
 
         # Before we can successfully post, we need to ensure
@@ -161,12 +161,12 @@ class TestFullStack(ZulipTestCase):
         do_change_can_create_users(iago, True)
 
         params = dict(
-            email="romeo@zulip.net",
+            email="romeo@doer.net",
             password="xxxx",
             full_name="Romeo Montague",
         )
 
-        # Use the Zulip wrapper.
+        # Use the Doer wrapper.
         result = self.client_post("/json/users", params)
 
         # Once again we check that the HTTP request was successful.
@@ -175,7 +175,7 @@ class TestFullStack(ZulipTestCase):
 
         # Finally we test the side effect of the post.
         user_id = content["user_id"]
-        romeo = get_user_by_delivery_email("romeo@zulip.net", realm)
+        romeo = get_user_by_delivery_email("romeo@doer.net", realm)
         self.assertEqual(romeo.id, user_id)
 
     def test_can_create_users(self) -> None:
@@ -188,7 +188,7 @@ class TestFullStack(ZulipTestCase):
 
         do_change_can_create_users(iago, False)
         valid_params = dict(
-            email="romeo@zulip.net",
+            email="romeo@doer.net",
             password="xxxx",
             full_name="Romeo Montague",
         )
@@ -217,7 +217,7 @@ class TestFullStack(ZulipTestCase):
         self.assert_json_error(result, "Email is already in use.", 400)
 
     def test_tornado_redirects(self) -> None:
-        # Let's poke a bit at Zulip's event system.
+        # Let's poke a bit at Doer's event system.
         # See https://zulip.readthedocs.io/en/latest/subsystems/events-system.html
         # for context on the system itself and how it should be tested.
         #
@@ -234,7 +234,7 @@ class TestFullStack(ZulipTestCase):
 
         self.assert_json_success(result)
 
-        # Check that the POST to Zulip caused the expected events to be sent
+        # Check that the POST to Doer caused the expected events to be sent
         # to Tornado.
         self.assertEqual(
             events[0]["event"],
@@ -251,8 +251,8 @@ class TestFullStack(ZulipTestCase):
         self.assertEqual(row.status_text, "on vacation")
 
 
-class TestStreamHelpers(ZulipTestCase):
-    # Streams are an important concept in Zulip, and ZulipTestCase
+class TestStreamHelpers(DoerTestCase):
+    # Streams are an important concept in Doer, and DoerTestCase
     # has helpers such as subscribe, users_subscribed_to_stream,
     # and make_stream.
     def test_new_streams(self) -> None:
@@ -298,7 +298,7 @@ class TestStreamHelpers(ZulipTestCase):
             access_stream_for_send_message(othello, stream, forwarder_user_profile=None)
 
 
-class TestMessageHelpers(ZulipTestCase):
+class TestMessageHelpers(DoerTestCase):
     # If you are testing behavior related to messages, then it's good
     # to know about send_stream_message, send_personal_message, and
     # most_recent_message.
@@ -349,7 +349,7 @@ class TestMessageHelpers(ZulipTestCase):
         self.assertEqual(cordelia_message.content, "hello there!")
 
 
-class TestQueryCounts(ZulipTestCase):
+class TestQueryCounts(DoerTestCase):
     def test_capturing_queries(self) -> None:
         # It's a common pitfall in Django to accidentally perform
         # database queries in a loop, due to lazy evaluation of
@@ -372,7 +372,7 @@ class TestQueryCounts(ZulipTestCase):
             )
 
 
-class TestDevelopmentEmailsLog(ZulipTestCase):
+class TestDevelopmentEmailsLog(DoerTestCase):
     # The /emails/generate/ endpoint can be used to generate
     # all sorts of emails. Those can be accessed at /emails/
     # in development server. Let's test that here.
@@ -426,10 +426,10 @@ class TestDevelopmentEmailsLog(ZulipTestCase):
 
             # assert_in_success_response() verifies that the content
             # we received from client_get includes the strings we expect
-            self.assert_in_success_response(["All emails sent in the Zulip"], result)
+            self.assert_in_success_response(["All emails sent in the Doer"], result)
 
 
-class TestMocking(ZulipTestCase):
+class TestMocking(DoerTestCase):
     # Mocking, primarily used in testing, is a technique that allows you to
     # replace methods or objects with fake entities.
     #
@@ -508,7 +508,7 @@ class TestMocking(ZulipTestCase):
         self.assertEqual(message.content, all_mention)
 
 
-class TestTimeTravel(ZulipTestCase):
+class TestTimeTravel(DoerTestCase):
     def test_edit_message(self) -> None:
         """
         Verify if the time limit imposed on message editing is working correctly.

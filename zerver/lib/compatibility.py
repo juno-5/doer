@@ -52,7 +52,7 @@ def pop_numerals(ver: str) -> tuple[list[int], str]:
 
 def version_lt(ver1: str, ver2: str) -> bool | None:
     """
-    Compare two Zulip-style version strings.
+    Compare two Doer-style version strings.
 
     Versions are dot-separated sequences of decimal integers,
     followed by arbitrary trailing decoration.  Comparison is
@@ -103,16 +103,16 @@ def find_mobile_os(user_agent: str) -> str | None:
 def is_outdated_desktop_app(user_agent_str: str) -> tuple[bool, bool, bool]:
     # Returns (insecure, banned, auto_update_broken)
     user_agent = parse_user_agent(user_agent_str)
-    if user_agent["name"] == "ZulipDesktop":
+    if user_agent["name"] == "DoerDesktop":
         # The deprecated QT/webkit based desktop app, last updated in ~2016.
         return (True, True, True)
 
-    if user_agent["name"] != "ZulipElectron":
+    if user_agent["name"] != "DoerElectron":
         return (False, False, False)
 
     if version_lt(user_agent["version"], "4.0.0"):
         # Version 2.3.82 and older (aka <4.0.0) of the modern
-        # Electron-based Zulip desktop app with known security issues.
+        # Electron-based Doer desktop app with known security issues.
         # won't auto-update; we may want a special notice to
         # distinguish those from modern releases.
         return (True, True, True)
@@ -149,7 +149,7 @@ def is_pronouns_field_type_supported(user_agent_str: str | None) -> bool:
         return True
 
     user_agent = parse_user_agent(user_agent_str)
-    if user_agent["name"] != "ZulipMobile":
+    if user_agent["name"] != "DoerMobile":
         return True
 
     FIRST_VERSION_TO_SUPPORT_PRONOUNS_FIELD = "27.192"

@@ -24,7 +24,7 @@ import requests
 
 print("Fetching old versions of setting templates from Github...")
 templ = {}
-url: str | None = "https://api.github.com/repos/zulip/zulip/tags?per_page=100"
+url: str | None = "https://api.github.com/repos/doer/doer/tags?per_page=100"
 
 while url is not None:
     resp = requests.get(url)
@@ -43,7 +43,7 @@ while url is not None:
 
         print(f"  - {tag}")
         resp = requests.get(
-            f"https://raw.githubusercontent.com/zulip/zulip/{tag}/{filename}",
+            f"https://raw.githubusercontent.com/doer/doer/{tag}/{filename}",
         )
         if resp.status_code == 200:
             templ[tag] = resp.content.decode()
@@ -64,7 +64,7 @@ print(f"Most likely version: {likely[0]}")
 diff = difflib.unified_diff(
     templ[likely[0]].splitlines(keepends=True),
     current_contents.splitlines(keepends=True),
-    fromfile=f"zulip-server-{version}/zproject/prod_settings_template.py",
+    fromfile=f"doer-server-{version}/zproject/prod_settings_template.py",
     tofile=current_path,
 )
 

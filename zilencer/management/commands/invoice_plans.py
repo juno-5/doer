@@ -5,13 +5,13 @@ from django.conf import settings
 from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_unless_locked
 
 if settings.BILLING_ENABLED:
     from corporate.lib.stripe import invoice_plans_as_needed
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Generates invoices for customers if needed."""
 
     @override

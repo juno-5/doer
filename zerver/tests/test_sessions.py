@@ -18,12 +18,12 @@ from zerver.lib.sessions import (
     set_expirable_session_var,
     user_sessions,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Realm, UserProfile
 from zerver.models.realms import get_realm
 
 
-class TestSessions(ZulipTestCase):
+class TestSessions(DoerTestCase):
     def do_test_session(
         self, user: UserProfile, action: Callable[[], Any], realm: Realm, expected_result: bool
     ) -> None:
@@ -50,21 +50,21 @@ class TestSessions(ZulipTestCase):
     def test_delete_user_sessions(self) -> None:
         user_profile = self.example_user("hamlet")
         self.do_test_session(
-            user_profile, lambda: delete_user_sessions(user_profile), get_realm("zulip"), True
+            user_profile, lambda: delete_user_sessions(user_profile), get_realm("doer"), True
         )
         self.do_test_session(
             self.example_user("othello"),
             lambda: delete_user_sessions(user_profile),
-            get_realm("zulip"),
+            get_realm("doer"),
             False,
         )
 
     def test_delete_realm_user_sessions(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.do_test_session(
             self.example_user("hamlet"),
             lambda: delete_realm_user_sessions(realm),
-            get_realm("zulip"),
+            get_realm("doer"),
             True,
         )
         self.do_test_session(
@@ -78,7 +78,7 @@ class TestSessions(ZulipTestCase):
         self.do_test_session(
             self.example_user("hamlet"),
             delete_all_user_sessions,
-            get_realm("zulip"),
+            get_realm("doer"),
             True,
         )
 
@@ -128,7 +128,7 @@ class TestSessions(ZulipTestCase):
         self.assertTrue('is_spectator":true' in str(result.content))
 
 
-class TestExpirableSessionVars(ZulipTestCase):
+class TestExpirableSessionVars(DoerTestCase):
     @override
     def setUp(self) -> None:
         self.session = self.client.session

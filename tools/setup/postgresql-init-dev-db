@@ -11,16 +11,16 @@ else
 fi
 
 if [[ "$MODE" == "dev" ]]; then
-    USERNAME=zulip
-    DBNAME=zulip
+    USERNAME=doer
+    DBNAME=doer
     STATUS_FILE_NAME=migration_status_dev
 elif [[ "$MODE" == "test" ]]; then
-    USERNAME=zulip_test
-    DBNAME=zulip_test
+    USERNAME=doer_test
+    DBNAME=doer_test
     STATUS_FILE_NAME=migration_status_test
 else
     echo "Usage instructions"
-    echo "Run with either no arguments (sets up devel db for local deploy--zulip with user zulip)"
+    echo "Run with either no arguments (sets up devel db for local deploy--doer with user doer)"
     echo "or specify 'test'"
     exit 1
 fi
@@ -60,7 +60,7 @@ fi
 
 # We need to remove the stamp file indicating that the database
 # is properly provisioned with migrations.
-uuid_var_path=$("$(readlink -f "$(dirname "$0")/../../scripts/lib/zulip_tools.py")" get_dev_uuid)
+uuid_var_path=$("$(readlink -f "$(dirname "$0")/../../scripts/lib/doer_tools.py")" get_dev_uuid)
 rm -f "$uuid_var_path/$STATUS_FILE_NAME"
 
 "${ROOT_POSTGRES[@]}" -v ON_ERROR_STOP=1 -e "$DEFAULT_DB" <<EOF
@@ -85,7 +85,7 @@ EOF
 fi
 
 "${ROOT_POSTGRES[@]}" -v ON_ERROR_STOP=1 -e "$DEFAULT_DB" <<EOF
-ALTER ROLE "$VAGRANTUSERNAME" SET search_path TO zulip,public;
+ALTER ROLE "$VAGRANTUSERNAME" SET search_path TO doer,public;
 EOF
 
 umask go-rw

@@ -4,7 +4,7 @@ import orjson
 import time_machine
 from django.utils.timezone import now as timezone_now
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.user_status import (
     UserInfoDict,
     get_all_users_status_dict,
@@ -23,7 +23,7 @@ def user_status_info(user: UserProfile, acting_user: UserProfile | None = None) 
     return user_dict.get(str(user.id), {})
 
 
-class UserStatusTest(ZulipTestCase):
+class UserStatusTest(DoerTestCase):
     def test_basics(self) -> None:
         hamlet = self.example_user("hamlet")
 
@@ -211,7 +211,7 @@ class UserStatusTest(ZulipTestCase):
                 hamlet,
                 "/api/v1/users/me/presence",
                 dict(status="active"),
-                HTTP_USER_AGENT="ZulipAndroid/1.0",
+                HTTP_USER_AGENT="DoerAndroid/1.0",
             )
             self.assert_json_success(result)
 

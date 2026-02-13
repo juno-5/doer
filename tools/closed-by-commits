@@ -110,7 +110,7 @@ class PullRequest:
 class CommitRangeAnalyzer:
     COMMIT_PRS_QUERY = """
     query($oid: GitObjectID!, $repo: String!) {
-      repository(owner: "zulip", name: $repo) {
+      repository(owner: "doer", name: $repo) {
         object(oid: $oid) {
           ... on Commit {
             messageBody
@@ -161,7 +161,7 @@ class CommitRangeAnalyzer:
 
     ISSUE_QUERY = """
     query($number: Int!, $repo: String!) {
-      repository(owner: "zulip", name: $repo) {
+      repository(owner: "doer", name: $repo) {
         issue(number: $number) {
           number
           title
@@ -199,7 +199,7 @@ class CommitRangeAnalyzer:
         if not text:
             return set()
 
-        matches = re.findall(r"https://chat\.zulip\.org/[^\s\)\]\>]+", text)
+        matches = re.findall(r"https://chat\.doer\.org/[^\s\)\]\>]+", text)
 
         urls = set()
         for url in matches:
@@ -223,7 +223,7 @@ class CommitRangeAnalyzer:
             return set()
 
         # https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue#linking-a-pull-request-to-an-issue-using-a-keyword
-        pattern = rf"\b(?:close[sd]?|fix(?:es|ed)?|resolve[sd]?):?\s+(?:zulip/{reponame})?#(\d+)\b"
+        pattern = rf"\b(?:close[sd]?|fix(?:es|ed)?|resolve[sd]?):?\s+(?:doer/{reponame})?#(\d+)\b"
         matches = re.findall(pattern, text, re.IGNORECASE)
         return {int(num) for num in matches}
 
@@ -255,7 +255,7 @@ class CommitRangeAnalyzer:
 
             if "errors" in result:
                 console.log(
-                    "Failed to fetch zulip/%s#%d: %s", self.reponame, number, result["errors"]
+                    "Failed to fetch doer/%s#%d: %s", self.reponame, number, result["errors"]
                 )
                 return None
 
@@ -336,7 +336,7 @@ class CommitRangeAnalyzer:
     def analyze_range(self, base: str, head: str) -> list[Issue]:
         console = Console(stderr=True, log_path=False)
 
-        repository = self.github.get_repo(f"zulip/{self.reponame}")
+        repository = self.github.get_repo(f"doer/{self.reponame}")
         comparison = repository.compare(base, head)
         commit_shas = [commit.sha for commit in comparison.commits]
         console.log(f"Found {len(commit_shas)} commits")
@@ -380,14 +380,14 @@ def validate_github_token(value: str) -> str:
 from enum import Enum
 
 
-class ZulipRepo(str, Enum):
-    zulip = ("zulip",)
-    flutter = "zulip-flutter"
+class DoerRepo(str, Enum):
+    doer = ("doer",)
+    flutter = "doer-flutter"
 
 
 repo_issue_prefixes = {
-    ZulipRepo.zulip: "",
-    ZulipRepo.flutter: "F",
+    DoerRepo.doer: "",
+    DoerRepo.flutter: "F",
 }
 
 
@@ -408,7 +408,7 @@ def main(
             ),
         ),
     ],
-    repo: ZulipRepo = ZulipRepo.zulip,
+    repo: DoerRepo = DoerRepo.doer,
 ) -> int:
     """Find issues which are closed in a commit range."""
 

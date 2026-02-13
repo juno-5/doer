@@ -1,4 +1,4 @@
-# Creates a Zulip remote development environment droplet or
+# Creates a Doer remote development environment droplet or
 # a production droplet in DigitalOcean.
 #
 # Particularly useful for sprints/hackathons, interns, and other
@@ -7,7 +7,7 @@
 # Requires python-digitalocean library:
 # https://github.com/koalalorenzo/python-digitalocean
 #
-# Also requires DigitalOcean team membership for Zulip and API token:
+# Also requires DigitalOcean team membership for Doer and API token:
 # https://cloud.digitalocean.com/settings/api/tokens
 #
 # Copy conf.ini-template to conf.ini and populate with your API token.
@@ -25,9 +25,9 @@ from typing import Any
 import digitalocean
 import requests
 
-parser = argparse.ArgumentParser(description="Create a Zulip development VM DigitalOcean droplet.")
+parser = argparse.ArgumentParser(description="Create a Doer development VM DigitalOcean droplet.")
 parser.add_argument(
-    "username", help="GitHub username for whom you want to create a Zulip dev droplet"
+    "username", help="GitHub username for whom you want to create a Doer dev droplet"
 )
 parser.add_argument("--tags", nargs="+", default=[])
 parser.add_argument("-f", "--recreate", action="store_true")
@@ -75,9 +75,9 @@ def get_ssh_public_keys_from_github(github_username: str) -> list[dict[str, Any]
         sys.exit(1)
 
 
-def assert_user_forked_zulip_server_repo(username: str) -> bool:
-    print("Checking to see GitHub user has forked zulip/zulip...")
-    apiurl_fork = f"https://api.github.com/repos/{username}/zulip"
+def assert_user_forked_doer_server_repo(username: str) -> bool:
+    print("Checking to see GitHub user has forked doer/doer...")
+    apiurl_fork = f"https://api.github.com/repos/{username}/doer"
     try:
         response = urllib.request.urlopen(apiurl_fork)
         json.load(response)
@@ -85,7 +85,7 @@ def assert_user_forked_zulip_server_repo(username: str) -> bool:
         return True
     except urllib.error.HTTPError as err:
         print(err)
-        print(f"Has user {username} forked zulip/zulip?")
+        print(f"Has user {username} forked doer/doer?")
         sys.exit(1)
 
 
@@ -131,8 +131,8 @@ def generate_dev_droplet_user_data(
         "git clean -f"
     )
 
-    server_repo_setup = setup_repo.format(username, "zulip")
-    python_api_repo_setup = setup_repo.format(username, "python-zulip-api")
+    server_repo_setup = setup_repo.format(username, "doer")
+    python_api_repo_setup = setup_repo.format(username, "python-doer-api")
 
     erlang_cookie = secrets.token_hex(16)
     setup_erlang_cookie = (
@@ -144,7 +144,7 @@ def generate_dev_droplet_user_data(
     cloudconf = f"""\
 #!/bin/bash
 
-{setup_zulipdev_ssh_keys}
+{setup_doerdev_ssh_keys}
 {setup_root_ssh_keys}
 {setup_erlang_cookie}
 sed -i "s/PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config
@@ -257,15 +257,15 @@ COMPLETE! Droplet for GitHub user {username} is available at {droplet_domain_nam
 Instructions for use are below. (copy and paste to the user)
 
 ------
-Your remote Zulip dev server has been created!
+Your remote Doer dev server has been created!
 
 - Connect to your server by running
   `ssh zulipdev@{droplet_domain_name}` on the command line
   (Terminal for macOS and Linux, Bash for Git on Windows).
 - There is no password; your account is configured to use your SSH keys.
-- Once you log in, you should see `(zulip-server) ~$`.
-- To start the dev server, `cd zulip` and then run `./tools/run-dev`.
-- While the dev server is running, you can see the Zulip server in your browser at
+- Once you log in, you should see `(doer-server) ~$`.
+- To start the dev server, `cd doer` and then run `./tools/run-dev`.
+- While the dev server is running, you can see the Doer server in your browser at
   http://{droplet_domain_name}:9991.
 """
     )
@@ -274,11 +274,11 @@ Your remote Zulip dev server has been created!
         "See [Developing remotely](https://zulip.readthedocs.io/en/latest/development/remote.html) "
         "for tips on using the remote dev instance and "
         "[Git & GitHub guide](https://zulip.readthedocs.io/en/latest/git/index.html) "
-        "to learn how to use Git with Zulip.\n"
+        "to learn how to use Git with Doer.\n"
     )
     print(
         "Note that this droplet will automatically be deleted after a month of inactivity. "
-        "If you are leaving Zulip for more than a few weeks, we recommend pushing all of your "
+        "If you are leaving Doer for more than a few weeks, we recommend pushing all of your "
         "active branches to GitHub."
     )
     print("------")
@@ -300,7 +300,7 @@ ssh root@{droplet_domain_name}
     )
 
 
-def get_zulip_oneclick_app_slug(api_token: str) -> str:
+def get_doer_oneclick_app_slug(api_token: str) -> str:
     response = requests.get(
         "https://api.digitalocean.com/v2/1-clicks", headers={"Authorization": f"Bearer {api_token}"}
     ).json()
@@ -309,7 +309,7 @@ def get_zulip_oneclick_app_slug(api_token: str) -> str:
     for one_click in one_clicks:
         if one_click["slug"].startswith("kandralabs"):
             return one_click["slug"]
-    raise Exception("Unable to find Zulip One-click app slug")
+    raise Exception("Unable to find Doer One-click app slug")
 
 
 if __name__ == "__main__":
@@ -325,7 +325,7 @@ if __name__ == "__main__":
     if args.production:
         print(f"Creating production droplet for GitHub user {username}...")
     else:
-        print(f"Creating Zulip developer environment for GitHub user {username}...")
+        print(f"Creating Doer developer environment for GitHub user {username}...")
 
     config = get_config()
     api_token = config["digitalocean"]["api_token"]
@@ -336,11 +336,11 @@ if __name__ == "__main__":
     droplet_domain_name = f"{subdomain}.zulipdev.org"
 
     if args.production:
-        template_id = get_zulip_oneclick_app_slug(api_token)
+        template_id = get_doer_oneclick_app_slug(api_token)
         user_data = generate_prod_droplet_user_data(username=username, userkey_dicts=public_keys)
 
     else:
-        assert_user_forked_zulip_server_repo(username=username)
+        assert_user_forked_doer_server_repo(username=username)
         user_data = generate_dev_droplet_user_data(
             username=username, subdomain=subdomain, userkey_dicts=public_keys
         )

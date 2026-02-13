@@ -1719,7 +1719,7 @@ def list_to_streams(
         # We already filtered out existing streams, so dup_streams
         # will normally be an empty list below, but we protect against somebody
         # else racing to create the same stream.  (This is not an entirely
-        # paranoid approach, since often on Zulip two people will discuss
+        # paranoid approach, since often on Doer two people will discuss
         # creating a new stream, and both people eagerly do it.)
         created_streams, dup_streams = create_streams_if_needed(
             realm=user_profile.realm,

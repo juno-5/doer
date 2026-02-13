@@ -29,7 +29,7 @@ from zerver.lib.thumbnail import (
     resize_avatar,
     resize_emoji,
 )
-from zerver.lib.upload.base import StreamingSourceWithSize, ZulipUploadBackend
+from zerver.lib.upload.base import StreamingSourceWithSize, DoerUploadBackend
 from zerver.models import Attachment, Message, Realm, RealmEmoji, ScheduledMessage, UserProfile
 from zerver.models.users import is_cross_realm_bot_email
 
@@ -165,7 +165,7 @@ def get_file_info(user_file: UploadedFile) -> tuple[str, str]:
 if settings.LOCAL_UPLOADS_DIR is not None:
     from zerver.lib.upload.local import LocalUploadBackend
 
-    upload_backend: ZulipUploadBackend = LocalUploadBackend()
+    upload_backend: DoerUploadBackend = LocalUploadBackend()
 else:  # nocoverage
     from zerver.lib.upload.s3 import S3UploadBackend
 
@@ -309,7 +309,7 @@ def write_avatar_images(
     image_data: bytes,
     *,
     content_type: str | None,
-    backend: ZulipUploadBackend | None = None,
+    backend: DoerUploadBackend | None = None,
     future: bool = True,
 ) -> None:
     if backend is None:
@@ -343,7 +343,7 @@ def upload_avatar_image(
     user_file: IO[bytes],
     user_profile: UserProfile,
     content_type: str | None = None,
-    backend: ZulipUploadBackend | None = None,
+    backend: DoerUploadBackend | None = None,
     future: bool = True,
 ) -> None:
     if content_type is None:
@@ -432,7 +432,7 @@ def upload_emoji_image(
     emoji_file_name: str,
     user_profile: UserProfile,
     content_type: str,
-    backend: ZulipUploadBackend | None = None,
+    backend: DoerUploadBackend | None = None,
 ) -> bool:
     if backend is None:
         backend = upload_backend

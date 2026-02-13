@@ -69,7 +69,7 @@ class EmojiData:
 
 
 def get_emoji_data(realm_id: int, emoji_name: str) -> EmojiData:
-    # Even if emoji_name is either in name_to_codepoint or named "zulip",
+    # Even if emoji_name is either in name_to_codepoint or named "doer",
     # we still need to call get_realm_active_emoji.
     realm_emoji_dict = get_name_keyed_dict_for_active_realm_emoji(realm_id)
     realm_emoji = realm_emoji_dict.get(emoji_name)
@@ -78,8 +78,8 @@ def get_emoji_data(realm_id: int, emoji_name: str) -> EmojiData:
         emoji_code = str(realm_emoji["id"])
         return EmojiData(emoji_code=emoji_code, reaction_type=Reaction.REALM_EMOJI)
 
-    if emoji_name == "zulip":
-        return EmojiData(emoji_code=emoji_name, reaction_type=Reaction.ZULIP_EXTRA_EMOJI)
+    if emoji_name == "doer":
+        return EmojiData(emoji_code=emoji_name, reaction_type=Reaction.DOER_EXTRA_EMOJI)
 
     if emoji_name in name_to_codepoint:
         emoji_code = name_to_codepoint[emoji_name]
@@ -103,8 +103,8 @@ def check_emoji_request(realm: Realm, emoji_name: str, emoji_code: str, emoji_ty
             raise JsonableError(_("Invalid custom emoji name."))
         if realm_emoji["deactivated"]:
             raise JsonableError(_("This custom emoji has been deactivated."))
-    elif emoji_type == "zulip_extra_emoji":
-        if emoji_code != "zulip":
+    elif emoji_type == "doer_extra_emoji":
+        if emoji_code != "doer":
             raise JsonableError(_("Invalid emoji code."))
         if emoji_name != emoji_code:
             raise JsonableError(_("Invalid emoji name."))

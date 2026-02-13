@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.management.base import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_unless_locked
 from zerver.lib.soft_deactivation import (
     do_auto_soft_deactivate_users,
     do_soft_activate_users,
@@ -31,7 +31,7 @@ def get_users_from_emails(emails: list[str], filter_kwargs: dict[str, Realm]) ->
     return users
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Soft activate/deactivate users. Users are recognised by their emails here."""
 
     @override

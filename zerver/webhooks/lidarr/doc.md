@@ -1,6 +1,6 @@
-# Zulip Lidarr integration
+# Doer Lidarr integration
 
-Receive Lidarr notifications in Zulip!
+Receive Lidarr notifications in Doer!
 
 {start_tabs}
 
@@ -12,7 +12,7 @@ Receive Lidarr notifications in Zulip!
    then click on the **+** icon.
 
 1. Select **Webhook**, and set the webhook name to a name of your
-   choice, such as `Zulip`. Select the scenarios you would like to
+   choice, such as `Doer`. Select the scenarios you would like to
    receive notifications for. You may also enter tags if you would like
    to be notified about artists with specific tags.
 

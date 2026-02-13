@@ -10,13 +10,13 @@ export function update_indicators(): void {
         const is_deactivated = !people.is_active_user_or_system_bot(user_id || 0);
         assert(!Number.isNaN(user_id));
         const user_circle_class = buddy_data.get_user_circle_class(user_id, is_deactivated);
-        const user_circle_class_with_icon = `${user_circle_class} zulip-icon-${user_circle_class}`;
+        const user_circle_class_with_icon = `${user_circle_class} doer-icon-${user_circle_class}`;
         $(this)
             .removeClass(
                 `
-                user-circle-active zulip-icon-user-circle-active
-                user-circle-idle zulip-icon-user-circle-idle
-                user-circle-offline zulip-icon-user-circle-offline
+                user-circle-active doer-icon-user-circle-active
+                user-circle-idle doer-icon-user-circle-idle
+                user-circle-offline doer-icon-user-circle-offline
             `,
             )
             .addClass(user_circle_class_with_icon);

@@ -21,11 +21,11 @@ from zerver.lib.event_schema import check_web_reload_client_event
 from zerver.lib.events import fetch_initial_state_data, post_process_state
 from zerver.lib.exceptions import AccessDeniedError
 from zerver.lib.request import RequestVariableMissingError
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     HostRequestMock,
     dummy_handler,
-    reset_email_visibility_to_everyone_in_zulip_realm,
+    reset_email_visibility_to_everyone_in_doer_realm,
     stub_event_queue_user_events,
 )
 from zerver.lib.users import get_users_for_api
@@ -47,7 +47,7 @@ from zerver.tornado.views import get_events
 from zerver.views.events_register import _default_all_public_streams, _default_narrow
 
 
-class EventsEndpointTest(ZulipTestCase):
+class EventsEndpointTest(DoerTestCase):
     def test_events_register_without_user_agent(self) -> None:
         result = self.client_post("/json/register", skip_user_agent=True)
         self.assert_json_success(result)
@@ -176,8 +176,8 @@ class EventsEndpointTest(ZulipTestCase):
             result = self.client_post("/json/register")
             result_dict = self.assert_json_success(result)
             self.assertEqual(result_dict["queue_id"], None)
-            self.assertEqual(result_dict["realm_url"], "http://zulip.testserver")
-            self.assertEqual(result_dict["realm_uri"], "http://zulip.testserver")
+            self.assertEqual(result_dict["realm_url"], "http://doer.testserver")
+            self.assertEqual(result_dict["realm_uri"], "http://doer.testserver")
 
         result = self.client_post("/json/register")
         self.assertEqual(result.status_code, 200)
@@ -200,7 +200,7 @@ class EventsEndpointTest(ZulipTestCase):
         )
 
     def test_channel_folders_for_spectators(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
 
         frontend_folder = check_add_channel_folder(realm, "Frontend", "", acting_user=iago)
@@ -312,7 +312,7 @@ class EventsEndpointTest(ZulipTestCase):
         self.assertEqual(orjson.loads(result.content)["sent_events"], 0)
 
 
-class GetEventsTest(ZulipTestCase):
+class GetEventsTest(DoerTestCase):
     def tornado_call(
         self,
         view_func: Callable[[HttpRequest, UserProfile], HttpResponse],
@@ -602,7 +602,7 @@ class GetEventsTest(ZulipTestCase):
             queue_data = dict(
                 apply_markdown=True,
                 all_public_streams=True,
-                client_type_name="ZulipMobile",
+                client_type_name="DoerMobile",
                 event_types=["custom_profile_fields"],
                 last_connection_time=time.time(),
                 queue_timeout=0,
@@ -623,7 +623,7 @@ class GetEventsTest(ZulipTestCase):
                 user_profile,
                 {
                     "queue_id": client.event_queue.id,
-                    "user_client": "ZulipAndroid",
+                    "user_client": "DoerAndroid",
                     "last_event_id": -1,
                     "dont_block": orjson.dumps(True).decode(),
                 },
@@ -645,7 +645,7 @@ class GetEventsTest(ZulipTestCase):
         check_pronouns_type_field_supported(True, "Pronouns")
 
 
-class FetchInitialStateDataTest(ZulipTestCase):
+class FetchInitialStateDataTest(DoerTestCase):
     # Non-admin users don't have access to all bots
     def test_realm_bots_non_admin(self) -> None:
         user_profile = self.example_user("cordelia")
@@ -763,7 +763,7 @@ class FetchInitialStateDataTest(ZulipTestCase):
             and urlsplit(user_dict["avatar_url"]).hostname == "secure.gravatar.com"
         ]
 
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Test again with client_gravatar = True
         result = fetch_initial_state_data(
@@ -851,7 +851,7 @@ class FetchInitialStateDataTest(ZulipTestCase):
         self.assert_length(result["unread_msgs"]["streams"][0]["unread_message_ids"], 2)
 
 
-class ClientDescriptorsTest(ZulipTestCase):
+class ClientDescriptorsTest(DoerTestCase):
     def test_get_client_info_for_all_public_streams(self) -> None:
         hamlet = self.example_user("hamlet")
         realm = hamlet.realm
@@ -1166,7 +1166,7 @@ class ClientDescriptorsTest(ZulipTestCase):
         )
 
 
-class ReloadWebClientsTest(ZulipTestCase):
+class ReloadWebClientsTest(DoerTestCase):
     def test_web_reload_clients(self) -> None:
         hamlet = self.example_user("hamlet")
         realm = hamlet.realm
@@ -1206,7 +1206,7 @@ class ReloadWebClientsTest(ZulipTestCase):
         )
 
 
-class FetchQueriesTest(ZulipTestCase):
+class FetchQueriesTest(DoerTestCase):
     def test_queries(self) -> None:
         user = self.example_user("hamlet")
 
@@ -1285,7 +1285,7 @@ class FetchQueriesTest(ZulipTestCase):
                 fetch_initial_state_data(user, realm=user.realm, event_types=event_types)
 
 
-class TestEventsRegisterAllPublicStreamsDefaults(ZulipTestCase):
+class TestEventsRegisterAllPublicStreamsDefaults(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -1329,7 +1329,7 @@ class TestEventsRegisterAllPublicStreamsDefaults(ZulipTestCase):
         self.assertFalse(result)
 
 
-class TestEventsRegisterNarrowDefaults(ZulipTestCase):
+class TestEventsRegisterNarrowDefaults(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -1362,7 +1362,7 @@ class TestEventsRegisterNarrowDefaults(ZulipTestCase):
         self.assertEqual(result, [])
 
 
-class TestGetUserAPIDataSystemBotRealm(ZulipTestCase):
+class TestGetUserAPIDataSystemBotRealm(DoerTestCase):
     def test_get_users_api_data_on_system_bot_realm(self) -> None:
         realm = get_realm(settings.SYSTEM_BOT_REALM)
         result = get_users_for_api(
@@ -1378,7 +1378,7 @@ class TestGetUserAPIDataSystemBotRealm(ZulipTestCase):
             self.assertTrue(result[bot_profile.id]["is_system_bot"])
 
 
-class TestUserPresenceUpdatesDisabled(ZulipTestCase):
+class TestUserPresenceUpdatesDisabled(DoerTestCase):
     # For this test, we verify do_update_user_presence doesn't send
     # events for organizations with more than
     # USER_LIMIT_FOR_SENDING_PRESENCE_UPDATE_EVENTS users, unless

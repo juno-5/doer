@@ -55,7 +55,7 @@
       {
         "amount": 72000,
         "currency": "usd",
-        "description": "Zulip Cloud Plus - renewal",
+        "description": "Doer Cloud Plus - renewal",
         "discount_amounts": [],
         "discountable": false,
         "discounts": [],
@@ -126,7 +126,7 @@
   "shipping_cost": null,
   "shipping_details": null,
   "starting_balance": 0,
-  "statement_descriptor": "Zulip Cloud Plus",
+  "statement_descriptor": "Doer Cloud Plus",
   "status": "open",
   "status_transitions": {
     "finalized_at": 1000000000,

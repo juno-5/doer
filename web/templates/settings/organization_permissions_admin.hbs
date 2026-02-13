@@ -5,7 +5,7 @@
             <div class="subsection-header">
                 <h3>
                     {{t "Joining the organization" }}
-                    <i class="fa fa-info-circle settings-info-icon tippy-zulip-tooltip" aria-hidden="true" data-tippy-content="{{t 'Only owners can change these settings.' }}"></i>
+                    <i class="fa fa-info-circle settings-info-icon tippy-doer-tooltip" aria-hidden="true" data-tippy-content="{{t 'Only owners can change these settings.' }}"></i>
                 </h3>
                 {{> settings_save_discard_widget section_name="join-settings" show_save_discard_buttons=true }}
             </div>
@@ -377,7 +377,7 @@
                     {{> group_setting_value_pill_input
                       setting_name="realm_can_manage_billing_group"
                       label=group_setting_labels.can_manage_billing_group
-                      help_link="/help/zulip-cloud-billing"
+                      help_link="/help/doer-cloud-billing"
                       }}
                 {{/if}}
 
@@ -388,7 +388,7 @@
                             {{#if is_plan_self_hosted}}
                             {{t "AI summaries are not enabled on this server."}}
                             {{else}}
-                            {{t "AI summaries are not available on Zulip Cloud yet."}}
+                            {{t "AI summaries are not available on Doer Cloud yet."}}
                             {{/if}}
                         </div>
                     {{/unless}}

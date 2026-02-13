@@ -1,13 +1,13 @@
 /*
-  Zulip's OpenAPI-based API documentation system is documented at
+  Doer's OpenAPI-based API documentation system is documented at
   https://zulip.readthedocs.io/en/latest/documentation/api.html
 
   This file contains example code fenced off by comments, and is
-  designed to be run as part of Zulip's test-api test suite to verify
+  designed to be run as part of Doer's test-api test suite to verify
   that the documented examples are all correct, runnable code.
 */
 
-import zulipInit from "zulip-js";
+import zulipInit from "doer-js";
 
 const examples_handler = function () {
     const config = {

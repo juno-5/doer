@@ -1,6 +1,6 @@
-# Zulip Gogs integration
+# Doer Gogs integration
 
-Receive Gogs notifications in Zulip!
+Receive Gogs notifications in Doer!
 
 {start_tabs}
 

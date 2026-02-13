@@ -14,7 +14,7 @@ from zerver.lib.markdown.fenced_code import get_unused_fence
 from zerver.lib.mention import silent_mention_syntax_for_user
 from zerver.lib.message import truncate_content
 from zerver.lib.message_report import MAX_REPORT_MESSAGE_SNIPPET_LENGTH
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timestamp import datetime_to_global_time
 from zerver.lib.topic_link_util import (
     get_message_link_syntax,
@@ -32,7 +32,7 @@ from zerver.models.users import get_system_bot
 MOCKED_DATE_SENT = timezone_now() + timedelta(days=1)
 
 
-class ReportMessageTest(ZulipTestCase):
+class ReportMessageTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -161,7 +161,7 @@ class ReportMessageTest(ZulipTestCase):
         submitted_report: Message | None,
     ) -> None:
         assert submitted_report is not None
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         reporting_user_mention = silent_mention_syntax_for_user(reporting_user)
         reported_user_mention = silent_mention_syntax_for_user(reported_user)
         reported_dm_date_sent = datetime_to_global_time(reported_dm.date_sent)
@@ -198,7 +198,7 @@ class ReportMessageTest(ZulipTestCase):
         submitted_report: Message | None,
     ) -> None:
         assert submitted_report is not None
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         reporting_user_mention = silent_mention_syntax_for_user(reporting_user)
         reported_user_mention = silent_mention_syntax_for_user(reported_user)
         reported_gdm_date_sent = datetime_to_global_time(reported_gdm.date_sent)

@@ -48,7 +48,7 @@
   "data": {
     "workspace": {
       "id": "84d2dd6e-82aa-406e-91f3-bf8dbf176e69",
-      "name": "Zulip Airbyte Integration",
+      "name": "Doer Airbyte Integration",
       "url": "https://cloud.airbyte.com/workspaces/84d2dd6e-82aa-406e-91f3-bf8dbf176e69"
     },
     "connection": {

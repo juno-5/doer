@@ -75,7 +75,7 @@ class AbstractMessage(models.Model):
 
     # The message's topic.
     #
-    # Early versions of Zulip called this concept a "subject", as in an email
+    # Early versions of Doer called this concept a "subject", as in an email
     # "subject line", before changing to "topic" in 2013 (commit dac5a46fa).
     # UI and user documentation now consistently say "topic".  New APIs and
     # new code should generally also say "topic".
@@ -96,7 +96,7 @@ class AbstractMessage(models.Model):
 
     date_sent = models.DateTimeField("date sent", db_index=True)
 
-    # A Client object indicating what type of Zulip client sent this message.
+    # A Client object indicating what type of Doer client sent this message.
     sending_client = models.ForeignKey(Client, on_delete=CASCADE)
 
     # The last time the message was modified by message editing or moving.
@@ -166,7 +166,7 @@ class ArchivedMessage(AbstractMessage):
 
 class Message(AbstractMessage):
     # Recipient types used when a Message object is provided to
-    # Zulip clients via the API.
+    # Doer clients via the API.
     #
     # A detail worth noting:
     # * "direct" was introduced in 2023 with the goal of
@@ -328,7 +328,7 @@ post_save.connect(flush_message, sender=Message)
 
 class AbstractSubMessage(models.Model):
     # We can send little text messages that are associated with a regular
-    # Zulip message.  These can be used for experimental widgets like embedded
+    # Doer message.  These can be used for experimental widgets like embedded
     # games, surveys, mini threads, etc.  These are designed to be pretty
     # generic in purpose.
 
@@ -375,11 +375,11 @@ class AbstractEmoji(models.Model):
 
     UNICODE_EMOJI = "unicode_emoji"
     REALM_EMOJI = "realm_emoji"
-    ZULIP_EXTRA_EMOJI = "zulip_extra_emoji"
+    DOER_EXTRA_EMOJI = "doer_extra_emoji"
     REACTION_TYPES = (
         (UNICODE_EMOJI, gettext_lazy("Unicode emoji")),
         (REALM_EMOJI, gettext_lazy("Custom emoji")),
-        (ZULIP_EXTRA_EMOJI, gettext_lazy("Zulip extra emoji")),
+        (DOER_EXTRA_EMOJI, gettext_lazy("Doer extra emoji")),
     )
     reaction_type = models.CharField(default=UNICODE_EMOJI, choices=REACTION_TYPES, max_length=30)
 
@@ -402,7 +402,7 @@ class AbstractEmoji(models.Model):
     # * For user uploaded custom emoji (`reaction_type="realm_emoji"`), the stringified ID
     #   of the RealmEmoji object, computed as `str(realm_emoji.id)`.
     #
-    # * For "Zulip extra emoji" (like :zulip:), the name of the emoji (e.g. "zulip").
+    # * For "Doer extra emoji" (like :doer:), the name of the emoji (e.g. "doer").
     emoji_code = models.TextField()
 
     class Meta:
@@ -463,7 +463,7 @@ class ArchivedReaction(AbstractReaction):
 # queries for "User X's messages with flag Y" extremely fast without
 # consuming much storage space.
 #
-# UserMessage is the largest table in many Zulip installations, even
+# UserMessage is the largest table in many Doer installations, even
 # though each row is only 4 integers.
 class AbstractUserMessage(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -498,7 +498,7 @@ class AbstractUserMessage(models.Model):
         "active_mobile_push_notification",
     ]
     # Certain flags are used only for internal accounting within the
-    # Zulip backend, and don't make sense to expose to the API.
+    # Doer backend, and don't make sense to expose to the API.
     NON_API_FLAGS = {"is_private", "active_mobile_push_notification"}
     # Certain additional flags are just set once when the UserMessage
     # row is created.

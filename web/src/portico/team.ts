@@ -15,29 +15,29 @@ import render_total_contributor_count from "../../templates/team/total_contribut
 // referenced from Contributor, rather than having repository names be
 // direct keys in the namespace that also has `email`.
 const all_repository_names = [
-    "docker-zulip",
-    "errbot-backend-zulip",
-    "github-actions-zulip",
-    "hubot-zulip",
-    "puppet-zulip",
-    "python-zulip-api",
-    "trello-to-zulip",
-    "swift-zulip-api",
+    "docker-doer",
+    "errbot-backend-doer",
+    "github-actions-doer",
+    "hubot-doer",
+    "puppet-doer",
+    "python-doer-api",
+    "trello-to-doer",
+    "swift-doer-api",
     "zulint",
-    "zulip",
-    "zulip-android-legacy",
-    "zulip-architecture",
-    "zulip-archive",
-    "zulip-csharp",
-    "zulip-desktop",
-    "zulip-desktop-legacy",
-    "zulip-flutter",
-    "zulip-ios-legacy",
-    "zulip-js",
-    "zulip-mobile",
-    "zulip-redmine-plugin",
-    "zulip-terminal",
-    "zulip-zapier",
+    "doer",
+    "doer-android-legacy",
+    "doer-architecture",
+    "doer-archive",
+    "doer-csharp",
+    "doer-desktop",
+    "doer-desktop-legacy",
+    "doer-flutter",
+    "doer-ios-legacy",
+    "doer-js",
+    "doer-mobile",
+    "doer-redmine-plugin",
+    "doer-terminal",
+    "doer-zapier",
     "zulipbot",
 ] as const;
 
@@ -54,25 +54,25 @@ type RepositoryName = (typeof all_repository_names)[number];
 type TabName = (typeof all_tab_names)[number];
 
 const tab_name_to_repo_list: Record<TabName, RepositoryName[]> = {
-    server: ["zulip", "docker-zulip"],
-    desktop: ["zulip-desktop", "zulip-desktop-legacy"],
-    mobile: ["zulip-mobile", "zulip-flutter", "zulip-ios-legacy", "zulip-android-legacy"],
-    terminal: ["zulip-terminal"],
+    server: ["doer", "docker-doer"],
+    desktop: ["doer-desktop", "doer-desktop-legacy"],
+    mobile: ["doer-mobile", "doer-flutter", "doer-ios-legacy", "doer-android-legacy"],
+    terminal: ["doer-terminal"],
     "api-clients": [
-        "python-zulip-api",
-        "zulip-js",
-        "zulip-archive",
-        "errbot-backend-zulip",
-        "github-actions-zulip",
-        "hubot-zulip",
-        "puppet-zulip",
-        "trello-to-zulip",
-        "swift-zulip-api",
-        "zulip-csharp",
-        "zulip-redmine-plugin",
-        "zulip-zapier",
+        "python-doer-api",
+        "doer-js",
+        "doer-archive",
+        "errbot-backend-doer",
+        "github-actions-doer",
+        "hubot-doer",
+        "puppet-doer",
+        "trello-to-doer",
+        "swift-doer-api",
+        "doer-csharp",
+        "doer-redmine-plugin",
+        "doer-zapier",
     ],
-    devtools: ["zulipbot", "zulint", "zulip-architecture"],
+    devtools: ["zulipbot", "zulint", "doer-architecture"],
 };
 
 export type Contributor = {
@@ -112,12 +112,12 @@ function get_profile_url(contributor: Contributor, tab_name?: string): string | 
     }
 
     if (tab_name) {
-        return `https://github.com/zulip/${tab_name}/commits?author=${email}`;
+        return `https://github.com/doer/${tab_name}/commits?author=${email}`;
     }
 
     for (const repo_name of all_repository_names) {
         if (repo_name in contributor) {
-            return `https://github.com/zulip/${repo_name}/commits?author=${email}`;
+            return `https://github.com/doer/${repo_name}/commits?author=${email}`;
         }
     }
 
@@ -222,7 +222,7 @@ export default function render_tabs(contributors: Contributor[]): void {
                 }).length;
                 const repos = repo_list.map((name) => ({
                     name,
-                    url: `https://github.com/zulip/${name}`,
+                    url: `https://github.com/doer/${name}`,
                 }));
                 $(`#tab-${CSS.escape(tab_name)}`).prepend(
                     $(

@@ -4,13 +4,13 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserProfile
 from zerver.models.realms import get_realm
 from zerver.models.users import get_user_by_delivery_email
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Sync your API key from ~/.zuliprc into your development instance"""
 
     @override
@@ -25,7 +25,7 @@ class Command(ZulipBaseCommand):
         email = config.get("api", "email")
 
         try:
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
             user_profile = get_user_by_delivery_email(email, realm)
             user_profile.api_key = api_key
             user_profile.save(update_fields=["api_key"])

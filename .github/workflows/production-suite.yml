@@ -1,4 +1,4 @@
-name: Zulip production suite
+name: Doer production suite
 
 on:
   push:
@@ -46,14 +46,14 @@ jobs:
     # Docker images are built from 'tools/ci/Dockerfile'; the comments at
     # the top explain how to build and upload these images.
     # Ubuntu 22.04 ships with Python 3.10.12.
-    container: zulip/ci:jammy
+    container: doer/ci:jammy
 
     steps:
       - name: Add required permissions
         run: |
-          # The checkout actions doesn't clone to ~/zulip or allow
+          # The checkout actions doesn't clone to ~/doer or allow
           # us to use the path option to clone outside the current
-          # /__w/zulip/zulip directory. Since this directory is owned
+          # /__w/doer/doer directory. Since this directory is owned
           # by root we need to change it's ownership to allow the
           # github user to clone the code here.
           # Note: /__w/ is a docker volume mounted to $GITHUB_WORKSPACE
@@ -69,7 +69,7 @@ jobs:
 
       - name: Create cache directories
         run: |
-          dirs=(/srv/zulip-emoji-cache)
+          dirs=(/srv/doer-emoji-cache)
           sudo mkdir -p "${dirs[@]}"
           sudo chown -R github "${dirs[@]}"
 
@@ -89,7 +89,7 @@ jobs:
       - name: Restore emoji cache
         uses: actions/cache@v4
         with:
-          path: /srv/zulip-emoji-cache
+          path: /srv/doer-emoji-cache
           key: v1-emoji-jammy-${{ hashFiles('tools/setup/emoji/emoji_map.json') }}-${{ hashFiles('tools/setup/emoji/build_emoji') }}-${{ hashFiles('tools/setup/emoji/emoji_setup_utils.py') }}-${{ hashFiles('tools/setup/emoji/emoji_names.py') }}-${{ hashFiles('package.json') }}
           restore-keys: v1-emoji-jammy
 
@@ -114,14 +114,14 @@ jobs:
 
       - name: Generate failure report string
         id: failure_report_string
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
         run: tools/ci/generate-failure-message >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
-        uses: zulip/github-actions-zulip/send-message@v1
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
+        uses: doer/github-actions-doer/send-message@v1
         with:
-          api-key: ${{ secrets.ZULIP_BOT_KEY }}
+          api-key: ${{ secrets.DOER_BOT_KEY }}
           email: "github-actions-bot@chat.zulip.org"
           organization-url: "https://chat.zulip.org"
           to: "automated testing"
@@ -132,29 +132,29 @@ jobs:
   production_install:
     # This job installs the server release tarball built above on a
     # range of platforms, and does some basic health checks on the
-    # resulting installer Zulip server.
+    # resulting installer Doer server.
     strategy:
       fail-fast: false
       matrix:
         include:
           # Docker images are built from 'tools/ci/Dockerfile'; the comments at
           # the top explain how to build and upload these images.
-          - docker_image: zulip/ci:jammy
+          - docker_image: doer/ci:jammy
             name: Ubuntu 22.04 production install and PostgreSQL upgrade with pgroonga
             os: jammy
             extra-args: ""
 
-          - docker_image: zulip/ci:noble
+          - docker_image: doer/ci:noble
             name: Ubuntu 24.04 production install
             os: noble
             extra-args: ""
 
-          - docker_image: zulip/ci:bookworm
+          - docker_image: doer/ci:bookworm
             name: Debian 12 production install with custom db name and user
             os: bookworm
             extra-args: --test-custom-db
 
-          - docker_image: zulip/ci:trixie
+          - docker_image: doer/ci:trixie
             name: Debian 13 production install
             os: trixie
             extra-args: ""
@@ -190,7 +190,7 @@ jobs:
 
       - name: Create cache directories
         run: |
-          dirs=(/srv/zulip-emoji-cache)
+          dirs=(/srv/doer-emoji-cache)
           sudo mkdir -p "${dirs[@]}"
           sudo chown -R github "${dirs[@]}"
 
@@ -218,14 +218,14 @@ jobs:
 
       - name: Generate failure report string
         id: failure_report_string
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
         run: /tmp/generate-failure-message >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
-        uses: zulip/github-actions-zulip/send-message@v1
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
+        uses: doer/github-actions-doer/send-message@v1
         with:
-          api-key: ${{ secrets.ZULIP_BOT_KEY }}
+          api-key: ${{ secrets.DOER_BOT_KEY }}
           email: "github-actions-bot@chat.zulip.org"
           organization-url: "https://chat.zulip.org"
           to: "automated testing"
@@ -235,7 +235,7 @@ jobs:
 
   production_upgrade:
     # The production upgrade job starts with a container with a
-    # previous Zulip release installed, and attempts to upgrade it to
+    # previous Doer release installed, and attempts to upgrade it to
     # the release tarball built for the current commit being tested.
     #
     # This is intended to catch bugs that result in the upgrade
@@ -246,22 +246,22 @@ jobs:
         include:
           # Docker images are built from 'tools/ci/Dockerfile.prod'; the comments at
           # the top explain how to build and upload these images.
-          - docker_image: zulip/ci:jammy-6.0
+          - docker_image: doer/ci:jammy-6.0
             name: 6.0 Version Upgrade
             os: jammy
-          - docker_image: zulip/ci:bookworm-7.0
+          - docker_image: doer/ci:bookworm-7.0
             name: 7.0 Version Upgrade
             os: bookworm
-          - docker_image: zulip/ci:bookworm-8.0
+          - docker_image: doer/ci:bookworm-8.0
             name: 8.0 Version Upgrade
             os: bookworm
-          - docker_image: zulip/ci:noble-9.0
+          - docker_image: doer/ci:noble-9.0
             name: 9.0 Version Upgrade
             os: noble
-          - docker_image: zulip/ci:noble-10.0
+          - docker_image: doer/ci:noble-10.0
             name: 10.0 Version Upgrade
             os: noble
-          - docker_image: zulip/ci:trixie-11.0
+          - docker_image: doer/ci:trixie-11.0
             name: 11.0 Version Upgrade
             os: trixie
 
@@ -294,7 +294,7 @@ jobs:
 
       - name: Create cache directories
         run: |
-          dirs=(/srv/zulip-emoji-cache)
+          dirs=(/srv/doer-emoji-cache)
           sudo mkdir -p "${dirs[@]}"
           sudo chown -R github "${dirs[@]}"
 
@@ -309,14 +309,14 @@ jobs:
 
       - name: Generate failure report string
         id: failure_report_string
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
         run: /tmp/generate-failure-message >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ failure() && github.repository == 'zulip/zulip' && github.event_name == 'push' }}
-        uses: zulip/github-actions-zulip/send-message@v1
+        if: ${{ failure() && github.repository == 'doer/doer' && github.event_name == 'push' }}
+        uses: doer/github-actions-doer/send-message@v1
         with:
-          api-key: ${{ secrets.ZULIP_BOT_KEY }}
+          api-key: ${{ secrets.DOER_BOT_KEY }}
           email: "github-actions-bot@chat.zulip.org"
           organization-url: "https://chat.zulip.org"
           to: "automated testing"

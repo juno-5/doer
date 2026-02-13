@@ -1,26 +1,26 @@
 # PostgreSQL database details
 
-Zulip supports a range of PostgreSQL versions:
+Doer supports a range of PostgreSQL versions:
 
 ```{include} postgresql-support-table.md
 
 ```
 
 We recommend that installations [upgrade to the latest
-PostgreSQL][upgrade-postgresql] supported by their version of Zulip.
+PostgreSQL][upgrade-postgresql] supported by their version of Doer.
 
 [upgrade-postgresql]: upgrade.md#upgrading-postgresql
 
 ## Separate PostgreSQL database
 
-It is possible to run Zulip against a PostgreSQL database which is not on the
+It is possible to run Doer against a PostgreSQL database which is not on the
 primary application server. There are two possible flavors of this -- using a
 managed PostgreSQL instance from a cloud provider, or separating the PostgreSQL
-server onto a separate (but still Zulip-managed) server for scaling purposes.
+server onto a separate (but still Doer-managed) server for scaling purposes.
 
 ### Cloud-provider-managed PostgreSQL (e.g., Amazon RDS)
 
-You can use a database-as-a-service like Amazon RDS for the Zulip database. The
+You can use a database-as-a-service like Amazon RDS for the Doer database. The
 experience is slightly degraded, in that most providers don't include useful
 dictionary files in their installations, and don't provide a way to provide them
 yourself. [Full-text search][fts] will be less useful, due to the inferior
@@ -30,22 +30,22 @@ stemming rules that the built-in dictionaries provide.
 
 #### Step 1: Choose database name and username
 
-Zulip defaults to a database user named `zulip` and a database named `zulip`.
+Doer defaults to a database user named `doer` and a database named `doer`.
 It does support alternate values for those -- for instance, if required by
 convention of your central database server.
 
-#### Step 1: Set up Zulip
+#### Step 1: Set up Doer
 
 Follow the [standard install instructions](install.md), with modified `install`
 arguments -- providing an updated `--puppet-classes`, as well as the database
 and user names, and the version of the remote PostgreSQL server.
 
 ```bash
-./zulip-server-*/scripts/setup/install --certbot \
+./doer-server-*/scripts/setup/install --certbot \
     --email=YOUR_EMAIL --hostname=YOUR_HOSTNAME \
-    --puppet-classes=zulip::profile::standalone_nodb,zulip::process_fts_updates \
-    --postgresql-database-name=zulip \
-    --postgresql-database-user=zulip \
+    --puppet-classes=doer::profile::standalone_nodb,doer::process_fts_updates \
+    --postgresql-database-name=doer \
+    --postgresql-database-user=doer \
     --postgresql-version=YOUR_SERVERS_POSTGRESQL_VERSION
 ```
 
@@ -54,20 +54,20 @@ and user names, and the version of the remote PostgreSQL server.
 Access an administrative `psql` shell on your PostgreSQL database, and
 run the commands in `scripts/setup/create-db.sql`. This will:
 
-- Create a database called `zulip` with `C.UTF-8` collation.
-- Create a user called `zulip` with full rights on that database.
+- Create a database called `doer` with `C.UTF-8` collation.
+- Create a user called `doer` with full rights on that database.
 
 If you cannot run that SQL directly, or need to use different database
 or usernames, you should perform the equivalent actions.
 
 Depending on how authentication works for your PostgreSQL installation, you may
-also need to set a password for the Zulip user, generate a client certificate,
+also need to set a password for the Doer user, generate a client certificate,
 or similar; consult the documentation for your database provider for the
 available options.
 
-#### Step 4: Configure Zulip to use the PostgreSQL database
+#### Step 4: Configure Doer to use the PostgreSQL database
 
-In `/etc/zulip/settings.py` on your Zulip server, configure the
+In `/etc/zulip/settings.py` on your Doer server, configure the
 following settings with details for how to connect to your PostgreSQL
 server. Your database provider should provide these details.
 
@@ -78,7 +78,7 @@ server. Your database provider should provide these details.
 [ssl-mode]: https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION
 
 If you're using password authentication, you should specify the
-password of the `zulip` user in /etc/zulip/zulip-secrets.conf as
+password of the `doer` user in /etc/zulip/doer-secrets.conf as
 follows:
 
 ```ini
@@ -88,51 +88,51 @@ postgres_password = abcd1234
 Now complete the installation by running the following commands.
 
 ```bash
-# Ask Zulip installer to initialize the PostgreSQL database.
-su zulip -c '/home/zulip/deployments/current/scripts/setup/initialize-database'
+# Ask Doer installer to initialize the PostgreSQL database.
+su doer -c '/home/zulip/deployments/current/scripts/setup/initialize-database'
 
 # And then generate a realm creation link:
-su zulip -c '/home/zulip/deployments/current/manage.py generate_realm_creation_link'
+su doer -c '/home/zulip/deployments/current/manage.py generate_realm_creation_link'
 ```
 
 ### Remote PostgreSQL database
 
 This assumes two servers; one hosting the PostgreSQL database, and one hosting
-the remainder of the Zulip services.
+the remainder of the Doer services.
 
-#### Step 1: Set up Zulip
+#### Step 1: Set up Doer
 
 Follow the [standard install instructions](install.md), with modified `install`
 arguments:
 
 ```bash
-./zulip-server-*/scripts/setup/install --certbot \
+./doer-server-*/scripts/setup/install --certbot \
     --email=YOUR_EMAIL --hostname=YOUR_HOSTNAME \
-    --puppet-classes=zulip::profile::standalone_nodb
+    --puppet-classes=doer::profile::standalone_nodb
 ```
 
 #### Step 2: Create the PostgreSQL database server
 
-On the host that will run PostgreSQL, download the Zulip tarball and install
+On the host that will run PostgreSQL, download the Doer tarball and install
 just the PostgreSQL server part:
 
 ```bash
-./zulip-server-*/scripts/setup/install \
-    --puppet-classes=zulip::profile::postgresql
+./doer-server-*/scripts/setup/install \
+    --puppet-classes=doer::profile::postgresql
 
-./zulip-server-*/scripts/setup/create-database
+./doer-server-*/scripts/setup/create-database
 ```
 
 You will need to [configure `/etc/postgresql/*/main/pg_hba.conf`][pg-hba] to
-allow connections to the `zulip` database as the `zulip` user from the
+allow connections to the `doer` database as the `doer` user from the
 application frontend host. How you configure this is up to you (i.e. password
 authentication, certificates, etc), and is outside the scope of this document.
 
 [pg-hba]: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
 
-#### Step 3: Configure Zulip to use the PostgreSQL database
+#### Step 3: Configure Doer to use the PostgreSQL database
 
-In `/etc/zulip/settings.py` on your Zulip server, configure the following
+In `/etc/zulip/settings.py` on your Doer server, configure the following
 settings with details for how to connect to your PostgreSQL server.
 
 - `REMOTE_POSTGRES_HOST`: Name or IP address of the PostgreSQL server.
@@ -140,14 +140,14 @@ settings with details for how to connect to your PostgreSQL server.
 - `REMOTE_POSTGRES_SSLMODE`: [SSL Mode][ssl-mode] used to connect to the server.
 
 If you're using password authentication, you should specify the
-password of the `zulip` user in /etc/zulip/zulip-secrets.conf as
+password of the `doer` user in /etc/zulip/doer-secrets.conf as
 follows:
 
 ```ini
 postgres_password = abcd1234
 ```
 
-Set the remote server's PostgreSQL version in `/etc/zulip/zulip.conf`:
+Set the remote server's PostgreSQL version in `/etc/zulip/doer.conf`:
 
 ```ini
 [postgresql]
@@ -158,24 +158,24 @@ version = 18
 Now complete the installation by running the following commands.
 
 ```bash
-# Ask Zulip installer to initialize the PostgreSQL database.
-su zulip -c '/home/zulip/deployments/current/scripts/setup/initialize-database'
+# Ask Doer installer to initialize the PostgreSQL database.
+su doer -c '/home/zulip/deployments/current/scripts/setup/initialize-database'
 
 # And then generate a realm creation link:
-su zulip -c '/home/zulip/deployments/current/manage.py generate_realm_creation_link'
+su doer -c '/home/zulip/deployments/current/manage.py generate_realm_creation_link'
 ```
 
 ## PostgreSQL warm standby
 
-Zulip's configuration allows for [warm standby database replicas][warm-standby]
+Doer's configuration allows for [warm standby database replicas][warm-standby]
 as a disaster recovery solution; see the linked PostgreSQL documentation for
-details on this type of deployment. Zulip's configuration can, but is not
+details on this type of deployment. Doer's configuration can, but is not
 required to, build on top of `wal-g`, our [streaming database backup
 solution][wal-g], for ease of establishing base images without incurring load on
 the primary.
 
 Warm standby replicas should configure the hostname of their primary replica,
-and username to use for replication, in `/etc/zulip/zulip.conf`:
+and username to use for replication, in `/etc/zulip/doer.conf`:
 
 ```ini
 [postgresql]
@@ -187,9 +187,9 @@ The `postgres` user on the replica will need to be able to authenticate as the
 `replication_user` user, which may require further configuration of
 `pg_hba.conf` and client certificates on the replica. If you are using password
 authentication, you can set a `postgresql_replication_password` secret in
-`/etc/zulip/zulip-secrets.conf`.
+`/etc/zulip/doer-secrets.conf`.
 
-Use `zulip-puppet-apply` to rebuild the PostgreSQL configuration with those
+Use `doer-puppet-apply` to rebuild the PostgreSQL configuration with those
 values. If [wal-g][wal-g] is used, use `env-wal-g backup-fetch` to fetch the
 latest copy of the base backup; otherwise, use [`pg_basebackup`][pg_basebackup].
 The PostgreSQL replica should then begin live-replicating from the primary.
@@ -200,7 +200,7 @@ be taken to ensure that the old primary cannot come back online, and leave the
 cluster with two diverging timelines.
 
 To make fail-over to the warm-standby faster, without requiring a restart of
-Zulip services, you can configure Zulip with a comma-separated list of remote
+Doer services, you can configure Doer with a comma-separated list of remote
 PostgreSQL servers to connect to; it will choose the first which accepts writes
 (i.e. is not a read-only replica). In the event that the primary fails, it will
 repeatedly retry the list, in order, until the replica is promoted and becomes

@@ -3,9 +3,9 @@ import argparse
 import os
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if ZULIP_PATH not in sys.path:
-    sys.path.append(ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if DOER_PATH not in sys.path:
+    sys.path.append(DOER_PATH)
 from scripts.lib.setup_path import setup_path
 
 setup_path()
@@ -38,7 +38,7 @@ def generate_integration_bots_avatars(check_missing: bool = False) -> None:
         if not integration.is_enabled_in_catalog():
             continue
         bot_avatar_path = integration.get_bot_avatar_path()
-        bot_avatar_path = os.path.join(ZULIP_PATH, "static", bot_avatar_path)
+        bot_avatar_path = os.path.join(DOER_PATH, "static", bot_avatar_path)
         if check_missing:
             if not os.path.isfile(bot_avatar_path):
                 missing.add(integration.name)

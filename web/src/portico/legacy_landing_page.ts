@@ -59,7 +59,7 @@ const apps_events = function (): void {
         windows: {
             alt: "Windows",
             description:
-                "The Zulip desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Zulip accounts, and a dedicated tray icon.",
+                "The Doer desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Doer accounts, and a dedicated tray icon.",
             download_link: "/apps/download/windows",
             show_instructions: true,
             install_guide: "/help/desktop-app-install-guide",
@@ -70,7 +70,7 @@ const apps_events = function (): void {
         mac: {
             alt: "macOS",
             description:
-                "The Zulip desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Zulip accounts, and a dedicated tray icon.",
+                "The Doer desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Doer accounts, and a dedicated tray icon.",
             download_link: "/apps/download/mac-arm64",
             mac_intel_link: "/apps/download/mac-intel",
             show_instructions: true,
@@ -82,25 +82,25 @@ const apps_events = function (): void {
         android: {
             alt: "Android",
             description:
-                "Zulip's native Android app makes it easy to keep up while on the go, with fully customizable <a class='apps-page-link' href='/help/mobile-notifications'>mobile notifications</a>.",
+                "Doer's native Android app makes it easy to keep up while on the go, with fully customizable <a class='apps-page-link' href='/help/mobile-notifications'>mobile notifications</a>.",
             show_instructions: false,
             play_store_link: "https://play.google.com/store/apps/details?id=com.zulipmobile",
-            download_link: "https://github.com/zulip/zulip-flutter/releases/latest",
-            legacy_download_link: "https://github.com/zulip/zulip-mobile/releases/latest",
+            download_link: "https://github.com/doer/doer-flutter/releases/latest",
+            legacy_download_link: "https://github.com/doer/doer-mobile/releases/latest",
             app_type: "mobile",
         },
         ios: {
             alt: "iOS",
             description:
-                "Zulip's native iOS app makes it easy to keep up while on the go, with fully customizable <a class='apps-page-link' href='/help/mobile-notifications'>mobile notifications</a>.",
+                "Doer's native iOS app makes it easy to keep up while on the go, with fully customizable <a class='apps-page-link' href='/help/mobile-notifications'>mobile notifications</a>.",
             show_instructions: false,
-            app_store_link: "https://itunes.apple.com/us/app/zulip/id1203036395",
+            app_store_link: "https://itunes.apple.com/us/app/doer/id1203036395",
             app_type: "mobile",
         },
         linux: {
             alt: "Linux",
             description:
-                "The Zulip desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Zulip accounts, and a dedicated tray icon.",
+                "The Doer desktop app comes with native <a class='apps-page-link' href='/help/desktop-notifications'>desktop notifications</a>, support for multiple Doer accounts, and a dedicated tray icon.",
             download_link: "/apps/download/linux",
             show_instructions: true,
             install_guide: "/help/desktop-app-install-guide",
@@ -241,7 +241,7 @@ $(document).on("click", ".markdown h1, .markdown h2, .markdown h3", function () 
     window.location.hash = $(this).attr("id")!;
 });
 
-$(document).on("click", ".nav-zulip-logo", (e) => {
+$(document).on("click", ".nav-doer-logo", (e) => {
     if (document.querySelector(".portico-hello-page")) {
         e.preventDefault();
         window.scrollTo({top: 0, behavior: "smooth"});
@@ -254,7 +254,7 @@ $(document).on("click", ".pricing-tab", function () {
     $pricing_wrapper.removeClass("showing-cloud showing-self-hosted");
     $pricing_wrapper.addClass(`showing-${id}`);
 
-    const $comparison_table = $(".zulip-plans-comparison");
+    const $comparison_table = $(".doer-plans-comparison");
     const comparison_table_id = $comparison_table.attr(id);
 
     // Not all pages that show plans include the comparison
@@ -287,7 +287,7 @@ $(document).on("click", ".comparison-tab", function (this: HTMLElement, _event: 
     const plans_columns_count = plans_columns_counts[tab_label];
     const visible_plans_id = `showing-${tab_label}`;
 
-    $(".zulip-plans-comparison").attr("id", visible_plans_id);
+    $(".doer-plans-comparison").attr("id", visible_plans_id);
 
     // Set the correct values for span and colspan
     $(".features-col-group").attr("span", plans_columns_count);

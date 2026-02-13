@@ -10,7 +10,7 @@ from django.utils.crypto import get_random_string
 from requests.models import Response
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.remote_server import (
     PushBouncerSession,
     prepare_for_registration_transfer_challenge,
@@ -21,11 +21,11 @@ from zerver.lib.remote_server import (
 if settings.DEVELOPMENT:
     SECRETS_FILENAME = "zproject/dev-secrets.conf"
 else:
-    SECRETS_FILENAME = "/etc/zulip/zulip-secrets.conf"
+    SECRETS_FILENAME = "/etc/zulip/doer-secrets.conf"
 
 
-class Command(ZulipBaseCommand):
-    help = """Register a remote Zulip server for push notifications."""
+class Command(DoerBaseCommand):
+    help = """Register a remote Doer server for push notifications."""
 
     @override
     def add_arguments(self, parser: ArgumentParser) -> None:
@@ -38,17 +38,17 @@ class Command(ZulipBaseCommand):
         action.add_argument(
             "--rotate-key",
             action="store_true",
-            help="Automatically rotate your server's zulip_org_key",
+            help="Automatically rotate your server's doer_org_key",
         )
         action.add_argument(
             "--registration-transfer",
             action="store_true",
             help="""\
 If your server uses a publicly verifiable SSL certificate for a
-hostname that is already registered for Zulip services, transfers the
-registration to this server by changing the zulip_org_key secret for
+hostname that is already registered for Doer services, transfers the
+registration to this server by changing the doer_org_key secret for
 that registration and saving the updated secret in
-/etc/zulip/zulip-secrets.conf.""",
+/etc/zulip/doer-secrets.conf.""",
         )
         action.add_argument(
             "--deactivate",
@@ -58,21 +58,21 @@ that registration and saving the updated secret in
 
     @override
     def handle(self, *args: Any, **options: Any) -> None:
-        if not settings.ZULIP_ORG_ID:
+        if not settings.DOER_ORG_ID:
             raise CommandError(
-                "Missing zulip_org_id; run scripts/setup/generate_secrets.py to generate."
+                "Missing doer_org_id; run scripts/setup/generate_secrets.py to generate."
             )
-        if not settings.ZULIP_ORG_KEY:
+        if not settings.DOER_ORG_KEY:
             raise CommandError(
-                "Missing zulip_org_key; run scripts/setup/generate_secrets.py to generate."
+                "Missing doer_org_key; run scripts/setup/generate_secrets.py to generate."
             )
-        if not settings.ZULIP_SERVICES_URL:
+        if not settings.DOER_SERVICES_URL:
             raise CommandError(
-                "ZULIP_SERVICES_URL is not set; was the default incorrectly overridden in /etc/zulip/settings.py?"
+                "DOER_SERVICES_URL is not set; was the default incorrectly overridden in /etc/zulip/settings.py?"
             )
-        if not settings.ZULIP_SERVICE_PUSH_NOTIFICATIONS:
+        if not settings.DOER_SERVICE_PUSH_NOTIFICATIONS:
             raise CommandError(
-                "Please set ZULIP_SERVICE_PUSH_NOTIFICATIONS to True in /etc/zulip/settings.py"
+                "Please set DOER_SERVICE_PUSH_NOTIFICATIONS to True in /etc/zulip/settings.py"
             )
 
         if options["deactivate"]:
@@ -82,10 +82,10 @@ that registration and saving the updated secret in
 
         hostname = settings.EXTERNAL_HOST
         request: dict[str, object] = {
-            "zulip_org_id": settings.ZULIP_ORG_ID,
-            "zulip_org_key": settings.ZULIP_ORG_KEY,
+            "doer_org_id": settings.DOER_ORG_ID,
+            "doer_org_key": settings.DOER_ORG_KEY,
             "hostname": hostname,
-            "contact_email": settings.ZULIP_ADMINISTRATOR,
+            "contact_email": settings.DOER_ADMINISTRATOR,
         }
         if options["rotate_key"]:
             if not os.access(SECRETS_FILENAME, os.W_OK):
@@ -99,13 +99,13 @@ that registration and saving the updated secret in
             f"* This server's configured contact email address: {request['contact_email']}\n"
             "* Metadata about each organization hosted by the server; see:\n\n"
             "    <https://zulip.com/doc-permalinks/basic-metadata>\n\n"
-            "Use of this service is governed by the Zulip Terms of Service:\n\n"
+            "Use of this service is governed by the Doer Terms of Service:\n\n"
             "    <https://zulip.com/policies/terms>\n"
         )
 
         if not options["agree_to_terms_of_service"] and not options["rotate_key"]:
             tos_prompt = input(
-                "Do you want to agree to the Zulip Terms of Service and proceed? [Y/n] "
+                "Do you want to agree to the Doer Terms of Service and proceed? [Y/n] "
             )
             print()
             if not (
@@ -120,10 +120,10 @@ that registration and saving the updated secret in
             org_id, org_key = self.do_registration_transfer_flow(hostname)
             # We still want to proceed with a regular request to the registration endpoint,
             # as it'll update the registration with new information such as the contact email.
-            request["zulip_org_id"] = org_id
-            request["zulip_org_key"] = org_key
-            settings.ZULIP_ORG_ID = org_id
-            settings.ZULIP_ORG_KEY = org_key
+            request["doer_org_id"] = org_id
+            request["doer_org_key"] = org_key
+            settings.DOER_ORG_ID = org_id
+            settings.DOER_ORG_KEY = org_key
             print()
             print("Proceeding to update the registration with current metadata...")
 
@@ -150,7 +150,7 @@ that registration and saving the updated secret in
                         "--set",
                         SECRETS_FILENAME,
                         "secrets",
-                        "zulip_org_key",
+                        "doer_org_key",
                         new_org_key,
                     ]
                 )
@@ -181,8 +181,8 @@ that registration and saving the updated secret in
             dict(hostname=params["hostname"], access_token=token_for_push_bouncer),
         )
 
-        org_id = response.json()["zulip_org_id"]
-        org_key = response.json()["zulip_org_key"]
+        org_id = response.json()["doer_org_id"]
+        org_key = response.json()["doer_org_key"]
         # Update the secrets file.
         print("Success! Updating secrets file with received credentials.")
         subprocess.check_call(
@@ -192,7 +192,7 @@ that registration and saving the updated secret in
                 "--set",
                 SECRETS_FILENAME,
                 "secrets",
-                "zulip_org_id",
+                "doer_org_id",
                 org_id,
             ]
         )
@@ -203,7 +203,7 @@ that registration and saving the updated secret in
                 "--set",
                 SECRETS_FILENAME,
                 "secrets",
-                "zulip_org_key",
+                "doer_org_key",
                 org_key,
             ]
         )
@@ -211,20 +211,20 @@ that registration and saving the updated secret in
         return org_id, org_key
 
     def _request_push_notification_bouncer_url(self, url: str, params: dict[str, Any]) -> Response:
-        assert settings.ZULIP_SERVICES_URL is not None
-        request_url = settings.ZULIP_SERVICES_URL + url
+        assert settings.DOER_SERVICES_URL is not None
+        request_url = settings.DOER_SERVICES_URL + url
         session = PushBouncerSession()
         try:
             response = session.post(request_url, data=params)
         except requests.RequestException:
             raise CommandError(
                 "Network error connecting to push notifications service "
-                f"({settings.ZULIP_SERVICES_URL})",
+                f"({settings.DOER_SERVICES_URL})",
             )
         try:
             response.raise_for_status()
         except requests.HTTPError as e:
-            # Report nice errors from the Zulip API if possible.
+            # Report nice errors from the Doer API if possible.
             try:
                 content_dict = response.json()
             except Exception:

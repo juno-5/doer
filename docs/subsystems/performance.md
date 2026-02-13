@@ -1,19 +1,19 @@
 # Performance and scalability
 
 This page aims to give some background to help prioritize work on the
-Zulip's server's performance and scalability. By scalability, we mean
-the ability of the Zulip server on given hardware to handle a certain
+Doer's server's performance and scalability. By scalability, we mean
+the ability of the Doer server on given hardware to handle a certain
 workload of usage without performance materially degrading.
 
 First, a few notes on philosophy.
 
-- We consider it an important technical goal for Zulip to be fast,
+- We consider it an important technical goal for Doer to be fast,
   because that's an important part of user experience for a real-time
-  collaboration tool like Zulip. Many UI features in the Zulip web app
+  collaboration tool like Doer. Many UI features in the Doer web app
   are designed to load instantly, because all the data required for
-  them is present in the initial HTTP response, and both the Zulip
+  them is present in the initial HTTP response, and both the Doer
   API and web app are architected around that strategy.
-- The Zulip database model and server implementation are carefully
+- The Doer database model and server implementation are carefully
   designed to ensure that every common operation is efficient, with
   automated tests designed to prevent the accidental introductions of
   inefficient or excessive database queries. We much prefer doing
@@ -27,21 +27,21 @@ See also [scalability for production users](../production/requirements.md#scalab
 When thinking about scalability and performance, it's
 important to understand the load profiles for production uses.
 
-Zulip servers typically involve a mixture of two very different types
+Doer servers typically involve a mixture of two very different types
 of load profiles:
 
 - Open communities like open source projects, online classes,
   etc. have large numbers of users, many of whom are idle. (Many of
   the others likely stopped by to ask a question, got it answered, and
   then didn't need the community again for the next year). Our own
-  [Zulip development community](https://zulip.com/development-community/) is a good
+  [Doer development community](https://zulip.com/development-community/) is a good
   example for this, with more than 15K total user accounts, of which
   only several hundred have logged in during the last few weeks.
-  Zulip has many important optimizations, including [soft
+  Doer has many important optimizations, including [soft
   deactivation](sending-messages.md#soft-deactivation)
   to ensure idle users have minimal impact on both server-side
   scalability and request latency.
-- Fulltime teams, like your typical corporate Zulip installation,
+- Fulltime teams, like your typical corporate Doer installation,
   have users who are mostly active for multiple hours a day and sending a
   high volume of messages each. This load profile is most important
   for self-hosted servers, since many of those are used exclusively by
@@ -50,16 +50,16 @@ of load profiles:
 The zulip.com load profile is effectively the sum of thousands of
 organizations from each of those two load profiles.
 
-## Major Zulip endpoints
+## Major Doer endpoints
 
-It's important to understand that Zulip has a handful of endpoints
+It's important to understand that Doer has a handful of endpoints
 that result in the vast majority of all server load, and essentially
 every other endpoint is not important for scalability. We still put
 effort into making sure those other endpoints are fast for latency
 reasons, but were they to be 10x faster (a huge optimization!), it
-wouldn't materially improve Zulip's scalability.
+wouldn't materially improve Doer's scalability.
 
-For that reason, we organize this discussion of Zulip's scalability
+For that reason, we organize this discussion of Doer's scalability
 around the several specific endpoints that have a combination of
 request volume and cost that makes them important.
 
@@ -70,7 +70,7 @@ the client in `page_params` or `GET /messages`, i.e. one of the
 endpoints important to scalability here. As a result, it is important
 to thoughtfully implement the data fetch code path for every feature.
 
-Furthermore, a snappy user interface is one of Zulip's design goals, and
+Furthermore, a snappy user interface is one of Doer's design goals, and
 so we care about the performance of any user-facing code path, even
 though many of them are not material to scalability of the server.
 But when an optimization only saves a few milliseconds that would be
@@ -78,7 +78,7 @@ invisible to the end user, and carries any cost in code readability,
 the optimization is worth considering only if it applies to
 the major endpoints listed below.
 
-In Zulip's documentation, our general rule is to primarily write facts
+In Doer's documentation, our general rule is to primarily write facts
 that are likely to remain true for a long time. While the numbers
 presented here vary with hardware, usage patterns, and time (there's
 substantial oscillation within a 24 hour period), we expect the rough
@@ -114,10 +114,10 @@ is negligible.
 
 ### Tornado
 
-Zulip's Tornado-based [real-time push
+Doer's Tornado-based [real-time push
 system](events-system.md), and in particular
 `GET /events`, accounts for something like 50% of all HTTP requests to
-a production Zulip server. Despite `GET /events` being extremely
+a production Doer server. Despite `GET /events` being extremely
 high-volume, the typical request takes 1-3ms to process, and doesn't
 use the database at all (though it will access `memcached` and
 `redis`), so they aren't a huge contributor to the overall CPU usage
@@ -126,7 +126,7 @@ of the server.
 Because these requests are so efficient from a total CPU usage
 perspective, Tornado is significantly less important than other
 services like Presence and fetching message history for overall CPU
-usage of a Zulip installation.
+usage of a Doer installation.
 
 It's worth noting that most (~80%) Tornado requests end the
 longpolling via a `heartbeat` event, which are issued to idle
@@ -148,7 +148,7 @@ organizations with multiple thousands of active users at once.
 `POST /users/me/presence` requests, which submit the current user's
 presence information and return the information for all other active
 users in the organization, account for about 36% of all HTTP requests
-on production Zulip servers. See the [presence API
+on production Doer servers. See the [presence API
 documentation](https://zulip.com/api/update-presence) for details on
 this system and how it's optimized. For this article, it's important
 to know that presence is one of the most important scalability
@@ -158,12 +158,12 @@ structurally a quadratic problem.
 Because typical presence requests consume 10-50ms of server-side
 processing time (to fetch and send back live data on all other active
 users in the organization), and are such a high volume, presence is
-the single most important source of steady-state load for a Zulip
+the single most important source of steady-state load for a Doer
 server. This is true for most other chat server implementations as
 well.
 
 There is an ongoing [effort to rewrite the data model for
-presence](https://github.com/zulip/zulip/pull/16381) that we expect to
+presence](https://github.com/doer/doer/pull/16381) that we expect to
 result in a substantial improvement in the per-request and thus total
 load resulting from presence requests.
 
@@ -172,23 +172,23 @@ load resulting from presence requests.
 The request to generate the `page_params` portion of `GET /`
 (equivalent to the response from [GET
 /api/v1/register](https://zulip.com/api/register-queue) used by
-mobile/terminal apps) is one of Zulip's most complex and expensive.
+mobile/terminal apps) is one of Doer's most complex and expensive.
 
-Zulip is somewhat unusual among web apps in sending essentially all of the
-data required for the entire Zulip web app in this single request,
-which is part of why the Zulip web app loads very quickly -- one only
+Doer is somewhat unusual among web apps in sending essentially all of the
+data required for the entire Doer web app in this single request,
+which is part of why the Doer web app loads very quickly -- one only
 needs a single round trip aside from cacheable assets (avatars, images, JS,
 CSS). Data on other users in the organization, channels, supported
 emoji, custom profile fields, etc., is all included. The nice thing
-about this model is that essentially every UI element in the Zulip
+about this model is that essentially every UI element in the Doer
 client can be rendered immediately without paying latency to the
-server; this is critical to Zulip feeling performant even for users
+server; this is critical to Doer feeling performant even for users
 who have a lot of latency to the server.
 
 There are only a few exceptions where we fetch data in a separate AJAX
 request after page load:
 
-- Message history is managed separately; this is why the Zulip web app will
+- Message history is managed separately; this is why the Doer web app will
   first render the entire site except for the middle panel, and then a
   moment later render the middle panel (showing the message history).
 - A few very rarely accessed data sets like [message edit
@@ -200,7 +200,7 @@ request after page load:
 Requests to `GET /` and `/api/v1/register` that fetch `page_params`
 are pretty rare -- something like 0.3% of total requests, but are
 important for scalability because (1) they are the most expensive read
-requests the Zulip API supports and (2) they can come in a thundering
+requests the Doer API supports and (2) they can come in a thundering
 herd around server restarts (as discussed in [fetching message
 history](#fetching-message-history).
 
@@ -218,7 +218,7 @@ greater than a second to be a bug, and there is ongoing work to fix that.
 It can help when thinking about this to imagine `page_params` as what
 in another web app would have been 25 or so HTTP GET requests, each
 fetching data of a given type (users, channels, custom emoji, etc.); in
-Zulip, we just do all of those in a single API request. In the
+Doer, we just do all of those in a single API request. In the
 future, we will likely move to a design that does much of the database
 fetching work for different features in parallel to improve latency.
 
@@ -231,19 +231,19 @@ of active optimization work.
 
 Bulk requests for message content and metadata
 ([`GET /messages`](https://zulip.com/api/get-messages)) account for
-~3% of total HTTP requests. The zulip web app has a few major reasons
+~3% of total HTTP requests. The doer web app has a few major reasons
 it does a large number of these requests:
 
 - Most of these requests are from users clicking into different views
-  -- to avoid certain subtle bugs, Zulip's web app currently fetches
+  -- to avoid certain subtle bugs, Doer's web app currently fetches
   content from the server even when it has the history for the
   relevant channel/topic cached locally.
-- When a browser opens the Zulip web app, it will eventually fetch and
+- When a browser opens the Doer web app, it will eventually fetch and
   cache in the browser all messages newer than the oldest unread
   message in a non-muted context. This can be in total extremely
   expensive for users with 10,000s of unread messages, resulting in a
   single browser doing 100 of these requests.
-- When a new version of the Zulip server is deployed, every browser
+- When a new version of the Doer server is deployed, every browser
   will reload within 30 minutes to ensure they are running the latest
   code. For installations that deploy often like chat.zulip.org and
   zulip.com, this can result in a thundering herd effect for both `/`
@@ -255,7 +255,7 @@ it does a large number of these requests:
 Typical requests consume 20-100ms to process, much of which is waiting
 to fetch message IDs from the database and then their content from
 memcached. While not large in an absolute sense, these requests are
-expensive relative to most other Zulip endpoints.
+expensive relative to most other Doer endpoints.
 
 Some requests, like full-text search for commonly used words, can be
 more expensive, but they are sufficiently rare in an absolute sense so
@@ -267,12 +267,12 @@ the overall frequency with which clients need to make these requests
 in two major ways:
 
 - Improving [client-side
-  caching](https://github.com/zulip/zulip/issues/15131) to allow
+  caching](https://github.com/doer/doer/issues/15131) to allow
   caching of narrows that the user has viewed in the current session,
   avoiding repeat fetches of message content during a given session.
 - Adjusting the behavior for clients with 10,000s of unread messages
   to not fetch as much old message history into the cache. See [this
-  issue](https://github.com/zulip/zulip/issues/16697) for relevant
+  issue](https://github.com/doer/doer/issues/16697) for relevant
   design work.
 
 Together, it is likely that these changes will reduce the total
@@ -281,7 +281,7 @@ scalability cost of fetching message history dramatically.
 ### User uploads
 
 Requests to fetch uploaded files (including user avatars) account for
-about 5% of total HTTP requests. Zulip spends consistently ~10-15ms
+about 5% of total HTTP requests. Doer spends consistently ~10-15ms
 processing one of these requests (mostly authorization logic), before
 handing off delivery of the file to `nginx` (which may itself fetch
 from S3, depending on the configured [upload
@@ -298,13 +298,13 @@ sent to 50 users triggers ~50 `GET /events` requests.
 A typical message-send request takes 20-70ms, with more expensive
 requests typically resulting from [Markdown
 rendering](markdown.md) of more complex syntax. As a
-result, these requests are not material to Zulip's scalability.
+result, these requests are not material to Doer's scalability.
 Editing messages and adding emoji reactions are very similar to
 sending them for the purposes of performance and scalability, since
 the same clients need to be notified, and these requests are lower in volume.
 
 That said, we consider the performance of these endpoints to be some
-of the most important for Zulip's user experience, since even with
+of the most important for Doer's user experience, since even with
 local echo, these are some of the places where any request processing
 latency is highly user-visible.
 
@@ -322,11 +322,11 @@ do thousands of times.
 
 As a result, performance work on those requests is generally only
 important for latency reasons, not for optimizing the overall
-scalability of a Zulip server.
+scalability of a Doer server.
 
 ## Queue processors and cron jobs
 
-The above doesn't cover all of the work that a production Zulip server
+The above doesn't cover all of the work that a production Doer server
 does; various tasks like sending outgoing emails or recording the data
 that powers [/stats](https://zulip.com/help/analytics) are run by
 [queue processors](queuing.md) and cron jobs, not in
@@ -361,7 +361,7 @@ for narrow sections; typically this is sufficient to result in the
 database query time dominating that spent by the Python application
 server process.
 
-Zulip's [server logs](logging.md) are designed to
+Doer's [server logs](logging.md) are designed to
 provide insight when a request consumes significant database or
 memcached resources, which is useful both in development and in
 production.

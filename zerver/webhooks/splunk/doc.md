@@ -1,6 +1,6 @@
-# Zulip Splunk integration
+# Doer Splunk integration
 
-See your Splunk Search alerts in Zulip!
+See your Splunk Search alerts in Doer!
 
 {start_tabs}
 

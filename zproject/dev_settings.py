@@ -1,13 +1,13 @@
 import os
 import pwd
 
-from scripts.lib.zulip_tools import deport
+from scripts.lib.doer_tools import deport
 from zproject.settings_types import SCIMConfigDict
 
-ZULIP_ADMINISTRATOR = "desdemona+admin@zulip.com"
+DOER_ADMINISTRATOR = "desdemona+admin@zulip.com"
 
 # Initiatize TEST_SUITE early, so other code can rely on the setting.
-TEST_SUITE = os.getenv("ZULIP_TEST_SUITE") == "true"
+TEST_SUITE = os.getenv("DOER_TEST_SUITE") == "true"
 
 # We want LOCAL_UPLOADS_DIR to be an absolute path so that code can
 # chdir without having problems accessing it.  Unfortunately, this
@@ -35,12 +35,12 @@ if external_host_env is None:
         # Serve the main dev realm at the literal name "localhost",
         # so it works out of the box even when not on the Internet.
         REALM_HOSTS = {
-            "zulip": "localhost:9991",
+            "doer": "localhost:9991",
         }
 else:
     EXTERNAL_HOST = external_host_env
     REALM_HOSTS = {
-        "zulip": EXTERNAL_HOST,
+        "doer": EXTERNAL_HOST,
     }
 
 EXTERNAL_HOST_WITHOUT_PORT = deport(EXTERNAL_HOST)
@@ -74,8 +74,8 @@ if os.getenv("BEHIND_HTTPS_PROXY"):
 EMAIL_GATEWAY_PATTERN = "%s@" + EXTERNAL_HOST_WITHOUT_PORT
 NOTIFICATION_BOT = "notification-bot@zulip.com"
 EMAIL_GATEWAY_BOT = "emailgateway@zulip.com"
-PHYSICAL_ADDRESS = "Zulip Headquarters, 123 Octo Stream, South Pacific Ocean"
-STAFF_SUBDOMAIN = "zulip"
+PHYSICAL_ADDRESS = "Doer Headquarters, 123 Octo Stream, South Pacific Ocean"
+STAFF_SUBDOMAIN = "doer"
 EXTRA_INSTALLED_APPS = ["zilencer", "analytics", "corporate"]
 # Disable Camo in development
 CAMO_URI = ""
@@ -105,7 +105,7 @@ POST_MIGRATION_CACHE_FLUSHING = True
 
 # If a sandbox APNs key or cert is provided, use it.
 # To create such a key or cert, see instructions at:
-#   https://github.com/zulip/zulip-mobile/blob/main/docs/howto/push-notifications.md#ios
+#   https://github.com/doer/doer-mobile/blob/main/docs/howto/push-notifications.md#ios
 _candidate_apns_token_key_file = "zproject/apns-dev-key.p8"
 _candidate_apns_cert_file = "zproject/apns-dev.pem"
 if os.path.isfile(_candidate_apns_token_key_file):
@@ -125,7 +125,7 @@ TWO_FACTOR_SMS_GATEWAY = "two_factor.gateways.fake.Fake"
 # FAKE_LDAP_MODE supports using a fake LDAP database in the
 # development environment, without needing an LDAP server!
 #
-# Three modes are allowed, and each will set up Zulip and the fake LDAP
+# Three modes are allowed, and each will set up Doer and the fake LDAP
 # database in a way appropriate for the corresponding mode described
 # in https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#ldap-including-active-directory
 #   (A) If users' email addresses are in LDAP and used as username.
@@ -145,15 +145,15 @@ if FAKE_LDAP_MODE:
     # prod_settings_template.py and on ReadTheDocs.
     LDAP_APPEND_DOMAIN = None
     AUTH_LDAP_USER_SEARCH = LDAPSearch(
-        "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(user)s)"
+        "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(user)s)"
     )
     AUTH_LDAP_REVERSE_EMAIL_SEARCH = LDAPSearch(
-        "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(email=%(email)s)"
+        "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(email=%(email)s)"
     )
 
     if FAKE_LDAP_MODE == "a":
         AUTH_LDAP_REVERSE_EMAIL_SEARCH = LDAPSearch(
-            "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(email)s)"
+            "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(email)s)"
         )
         AUTH_LDAP_USERNAME_ATTR = "uid"
         AUTH_LDAP_USER_ATTR_MAP = {
@@ -178,7 +178,7 @@ if FAKE_LDAP_MODE:
         AUTH_LDAP_USER_ATTR_MAP = {
             "full_name": "cn",
         }
-    AUTHENTICATION_BACKENDS += ("zproject.backends.ZulipLDAPAuthBackend",)
+    AUTHENTICATION_BACKENDS += ("zproject.backends.DoerLDAPAuthBackend",)
 
 BILLING_ENABLED = True
 LANDING_PAGE_NAVBAR_MESSAGE: str | None = None
@@ -193,14 +193,14 @@ USE_X_FORWARDED_PORT = True
 # Override the default SAML entity ID
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = "http://localhost:9991"
 if IS_DEV_DROPLET:
-    SOCIAL_AUTH_SAML_SP_ENTITY_ID = EXTERNAL_URI_SCHEME + "zulip." + EXTERNAL_HOST
+    SOCIAL_AUTH_SAML_SP_ENTITY_ID = EXTERNAL_URI_SCHEME + "doer." + EXTERNAL_HOST
 
 SOCIAL_AUTH_SUBDOMAIN = "auth"
 
 MEMCACHED_USERNAME: str | None = None
 
 SCIM_CONFIG: dict[str, SCIMConfigDict] = {
-    "zulip": {
+    "doer": {
         "bearer_token": "token1234",
         "scim_client_name": "test-scim-client",
         "name_formatted_included": True,
@@ -209,10 +209,10 @@ SCIM_CONFIG: dict[str, SCIMConfigDict] = {
 
 SELF_HOSTING_MANAGEMENT_SUBDOMAIN = "selfhosting"
 DEVELOPMENT_DISABLE_PUSH_BOUNCER_DOMAIN_CHECK = True
-ZULIP_SERVICES_URL = f"http://{EXTERNAL_HOST}"
+DOER_SERVICES_URL = f"http://{EXTERNAL_HOST}"
 
-ZULIP_SERVICE_PUSH_NOTIFICATIONS = True
-ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = True
+DOER_SERVICE_PUSH_NOTIFICATIONS = True
+DOER_SERVICE_SUBMIT_USAGE_STATISTICS = True
 
 # This value needs to be lower in development than usual to allow
 # for quicker testing of the feature.

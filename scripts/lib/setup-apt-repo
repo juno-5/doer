@@ -6,7 +6,7 @@
 # the trusted signing keys, as opposed to blindly trusting HTTPS.
 #
 # Each /etc/apt/sources.list.d/foo.list file is created via `--list
-# foo`, where `foo` defaults to `zulip`.  The default `zulip.list` is
+# foo`, where `foo` defaults to `doer`.  The default `doer.list` is
 # installed in `scripts/lib/install` / `tools/lib/provision.py`, and
 # other `.list` files may be installed by Puppet.
 set -x
@@ -18,7 +18,7 @@ shopt -s extglob
 verify=false
 args="$(getopt -o '' --long verify,list: -- "$@")"
 eval "set -- $args"
-LIST=zulip
+LIST=doer
 while true; do
     case "$1" in
         --verify)

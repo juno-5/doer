@@ -4,27 +4,27 @@ title: Configure call provider
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 
 <AdminOnly />
 
-By default, Zulip integrates with
+By default, Doer integrates with
 [Jitsi Meet](https://jitsi.org/jitsi-meet/), a fully-encrypted, 100% open
 source video conferencing solution. Organization administrators can also
 change the organization's call provider. The call providers
-supported by Zulip are:
+supported by Doer are:
 
 * [Jitsi Meet](/integrations/jitsi)
 * [Zoom integration](/integrations/zoom)
 * [BigBlueButton integration](/integrations/big-blue-button)
 * [Constructor Groups integration](/integrations/constructor-groups)
 
-<ZulipTip>
+<DoerTip>
   You can disable the video and voice call buttons for your organization
   by setting the **call provider** to "None".
-</ZulipTip>
+</DoerTip>
 
 ## Configure your organization's call provider
 
@@ -39,7 +39,7 @@ supported by Zulip are:
 
 ## Use a self-hosted instance of Jitsi Meet
 
-Zulip uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
+Doer uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
 as its default call provider. You can also use a self-hosted
 instance of Jitsi Meet.
 

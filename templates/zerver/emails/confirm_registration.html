@@ -7,7 +7,7 @@
 {% block content %}
     {% if create_realm %}
         <p>
-            {{ _("You have requested a new Zulip organization:") }}
+            {{ _("You have requested a new Doer organization:") }}
         </p>
         <ul>
             <li>{% trans %}Organization URL: {{ organization_url }}{% endtrans %}</li>
@@ -15,7 +15,7 @@
         </ul>
     {% else %}
         <p>
-            {{ _("You recently signed up for Zulip. Awesome!") }}
+            {{ _("You recently signed up for Doer. Awesome!") }}
         </p>
     {% endif %}
     <p>
@@ -28,7 +28,7 @@
     </p>
     <p>
         {% if corporate_enabled %}
-            {{macros.contact_us_zulip_cloud(support_email)}}
+            {{macros.contact_us_doer_cloud(support_email)}}
         {% else %}
             {{macros.contact_us_self_hosted(support_email)}}
         {% endif %}

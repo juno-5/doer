@@ -16,8 +16,8 @@ from zerver.openapi.merge_api_changelogs import (
 )
 
 if __name__ == "__main__":
-    ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.chdir(ZULIP_PATH)
+    DOER_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.chdir(DOER_PATH)
 
     changelogs = get_unmerged_changelogs()
     if changelogs:

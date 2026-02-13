@@ -6,7 +6,7 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 import ChannelPrivacyTypes from "../include/_ChannelPrivacyTypes.mdx";
 import ChannelSettingsNavbarTip from "../include/_ChannelSettingsNavbarTip.mdx";
 import ContentAccessDefinition from "../include/_ContentAccessDefinition.mdx";
@@ -22,10 +22,10 @@ web-public if they have content access to it:
 
 <ContentAccessDefinition />
 
-<ZulipNote>
+<DoerNote>
   **Warning**: Be careful making a private channel public. All past messages
   will become accessible, even if the channel previously had protected history.
-</ZulipNote>
+</DoerNote>
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -49,7 +49,7 @@ web-public if they have content access to it:
     mobile device browser.
 
     Implementation of this feature in the mobile app is tracked [on
-    GitHub](https://github.com/zulip/zulip-flutter/issues/1102). If
+    GitHub](https://github.com/doer/doer-flutter/issues/1102). If
     you're interested in this feature, please react to the issue's
     description with 👍.
   </TabItem>

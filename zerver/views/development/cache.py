@@ -9,7 +9,7 @@ from zerver.lib.per_request_cache import flush_per_request_caches
 from zerver.lib.response import json_success
 from zerver.models.clients import clear_client_cache
 
-ZULIP_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
+DOER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
 
 
 # This is used only by the Puppeteer tests to clear all the cache after each run.

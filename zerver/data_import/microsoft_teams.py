@@ -37,21 +37,21 @@ from zerver.models.users import UserProfile
 @dataclass
 class TeamMetadata:
     """
-    "team" is equivalent to a Zulip channel
+    "team" is equivalent to a Doer channel
     """
 
     description: str
     display_name: str
     visibility: Literal["public", "private"]
     is_archived: bool
-    zulip_channel_id: int
-    zulip_recipient_id: int
+    doer_channel_id: int
+    doer_recipient_id: int
 
 
 @dataclass
 class ChannelMetadata:
     """
-    "channel" is equivalent to Zulip topics.
+    "channel" is equivalent to Doer topics.
     """
 
     display_name: str
@@ -63,15 +63,15 @@ class ChannelMetadata:
 
 
 AddedTeamsT: TypeAlias = dict[str, TeamMetadata]
-TeamIdToZulipRecipientIdT: TypeAlias = dict[str, int]
-MicrosoftTeamsUserIdToZulipUserIdT: TypeAlias = dict[str, int]
+TeamIdToDoerRecipientIdT: TypeAlias = dict[str, int]
+MicrosoftTeamsUserIdToDoerUserIdT: TypeAlias = dict[str, int]
 MicrosoftTeamsFieldsT: TypeAlias = dict[str, Any]
 
 MICROSOFT_TEAMS_DEFAULT_ANNOUNCEMENTS_CHANNEL_NAME = "All company"
 
 
 def convert_teams_to_channels(
-    microsoft_teams_user_id_to_zulip_user_id: MicrosoftTeamsUserIdToZulipUserIdT,
+    microsoft_teams_user_id_to_doer_user_id: MicrosoftTeamsUserIdToDoerUserIdT,
     realm: dict[str, Any],
     realm_id: int,
     teams_data_dir: str,
@@ -85,18 +85,18 @@ def convert_teams_to_channels(
     logging.info("######### IMPORTING TEAMS STARTED #########\n")
 
     # Build teams subscription map
-    team_id_to_zulip_subscriber_ids: dict[str, set[int]] = defaultdict(set)
+    team_id_to_doer_subscriber_ids: dict[str, set[int]] = defaultdict(set)
     for team_id in team_data_folders:
         team_members_file_name = f"teamMembers_{team_id}.json"
         team_members_file_path = os.path.join(teams_data_dir, team_id, team_members_file_name)
         team_members: list[MicrosoftTeamsFieldsT] = get_data_file(team_members_file_path)
 
         for member in team_members:
-            zulip_user_id = microsoft_teams_user_id_to_zulip_user_id[member["UserId"]]
-            team_id_to_zulip_subscriber_ids[team_id].add(zulip_user_id)
+            doer_user_id = microsoft_teams_user_id_to_doer_user_id[member["UserId"]]
+            team_id_to_doer_subscriber_ids[team_id].add(doer_user_id)
 
     # Compile teamsSettings.json and teamsList.json and convert
-    # teams to Zulip channels.
+    # teams to Doer channels.
     teams_list = get_data_file(os.path.join(teams_data_dir, "teamsList.json"))
     teams_settings = get_data_file(os.path.join(teams_data_dir, "teamsSettings.json"))
     team_dict: dict[str, Any] = {team["GroupsId"]: team for team in teams_list}
@@ -128,10 +128,10 @@ def convert_teams_to_channels(
         recipient = build_recipient(channel_id, recipient_id, Recipient.STREAM)
         realm["zerver_recipient"].append(recipient)
 
-        for zulip_user_id in team_id_to_zulip_subscriber_ids[team_id]:
+        for doer_user_id in team_id_to_doer_subscriber_ids[team_id]:
             sub = build_subscription(
                 recipient_id=recipient_id,
-                user_id=zulip_user_id,
+                user_id=doer_user_id,
                 subscription_id=NEXT_ID("subscription"),
             )
             realm["zerver_subscription"].append(sub)
@@ -141,7 +141,7 @@ def convert_teams_to_channels(
             compiled_team_data["Name"] == MICROSOFT_TEAMS_DEFAULT_ANNOUNCEMENTS_CHANNEL_NAME
         ):  # nocoverage
             realm["zerver_realm"][0]["new_stream_announcements_stream"] = channel_id
-            realm["zerver_realm"][0]["zulip_update_announcements_stream"] = channel_id
+            realm["zerver_realm"][0]["doer_update_announcements_stream"] = channel_id
             realm["zerver_realm"][0]["signup_announcements_stream"] = channel_id
             logging.info("Using the channel 'All company' as default announcements channel.")
 
@@ -150,8 +150,8 @@ def convert_teams_to_channels(
             display_name=compiled_team_data["DisplayName"],
             visibility=compiled_team_data["Visibility"],
             is_archived=compiled_team_data["IsArchived"],
-            zulip_channel_id=channel_id,
-            zulip_recipient_id=recipient_id,
+            doer_channel_id=channel_id,
+            doer_recipient_id=recipient_id,
         )
 
     return teams_metadata
@@ -287,12 +287,12 @@ def get_user_email(user: MicrosoftTeamsFieldsT) -> str:
 
 def create_is_mirror_dummy_user(
     microsoft_team_user_id: str,
-    microsoft_teams_user_id_to_zulip_user_id: MicrosoftTeamsUserIdToZulipUserIdT,
+    microsoft_teams_user_id_to_doer_user_id: MicrosoftTeamsUserIdToDoerUserIdT,
     realm: dict[str, Any],
     realm_id: int,
     domain_name: str,
 ) -> None:
-    zulip_user_id = NEXT_ID("user")
+    doer_user_id = NEXT_ID("user")
     user_full_name = f"Deleted Teams user {microsoft_team_user_id}"
     email = Address(username=microsoft_team_user_id, domain=domain_name).addr_spec
     user_profile_dict = build_user_profile(
@@ -301,7 +301,7 @@ def create_is_mirror_dummy_user(
         delivery_email=email,
         email=email,
         full_name=user_full_name,
-        id=zulip_user_id,
+        id=doer_user_id,
         is_active=False,
         role=UserProfile.ROLE_MEMBER,
         is_mirror_dummy=True,
@@ -310,12 +310,12 @@ def create_is_mirror_dummy_user(
         timezone="UTC",
     )
     realm["zerver_userprofile"].append(user_profile_dict)
-    microsoft_teams_user_id_to_zulip_user_id[microsoft_team_user_id] = zulip_user_id
+    microsoft_teams_user_id_to_doer_user_id[microsoft_team_user_id] = doer_user_id
 
     recipient_id = NEXT_ID("recipient")
     subscription_id = NEXT_ID("subscription")
-    recipient = build_recipient(zulip_user_id, recipient_id, Recipient.PERSONAL)
-    sub = build_subscription(recipient_id, zulip_user_id, subscription_id)
+    recipient = build_recipient(doer_user_id, recipient_id, Recipient.PERSONAL)
+    sub = build_subscription(recipient_id, doer_user_id, subscription_id)
     realm["zerver_recipient"].append(recipient)
     realm["zerver_subscription"].append(sub)
 
@@ -326,9 +326,9 @@ def convert_users(
     realm_id: int,
     timestamp: int,
     users_list: list[MicrosoftTeamsFieldsT],
-) -> MicrosoftTeamsUserIdToZulipUserIdT:
+) -> MicrosoftTeamsUserIdToDoerUserIdT:
     zerver_user_profile: list[ZerverFieldsT] = []
-    microsoft_teams_user_id_to_zulip_user_id: MicrosoftTeamsUserIdToZulipUserIdT = defaultdict(int)
+    microsoft_teams_user_id_to_doer_user_id: MicrosoftTeamsUserIdToDoerUserIdT = defaultdict(int)
     found_emails: dict[str, int] = {}
     has_owner = False
 
@@ -346,8 +346,8 @@ def convert_users(
 
         microsoft_teams_user_email = get_user_email(user)
 
-        zulip_user_id = NEXT_ID("user")
-        found_emails[microsoft_teams_user_email.lower()] = zulip_user_id
+        doer_user_id = NEXT_ID("user")
+        found_emails[microsoft_teams_user_email.lower()] = doer_user_id
 
         user_profile_dict = build_user_profile(
             avatar_source=UserProfile.AVATAR_FROM_GRAVATAR,
@@ -355,7 +355,7 @@ def convert_users(
             delivery_email=microsoft_teams_user_email,
             email=microsoft_teams_user_email,
             full_name=user_full_name,
-            id=zulip_user_id,
+            id=doer_user_id,
             # This function only processes user data from `users/usersList.json` which only
             # lists active users -- no bot or deleted user accounts.
             is_active=True,
@@ -368,15 +368,15 @@ def convert_users(
 
         user_profile_dict["realm"] = realm_id
         zerver_user_profile.append(user_profile_dict)
-        microsoft_teams_user_id_to_zulip_user_id[microsoft_teams_user_id] = zulip_user_id
+        microsoft_teams_user_id_to_doer_user_id[microsoft_teams_user_id] = doer_user_id
 
         if user_role == UserProfile.ROLE_REALM_OWNER:
             has_owner = True
 
         recipient_id = NEXT_ID("recipient")
         subscription_id = NEXT_ID("subscription")
-        recipient = build_recipient(zulip_user_id, recipient_id, Recipient.PERSONAL)
-        sub = build_subscription(recipient_id, zulip_user_id, subscription_id)
+        recipient = build_recipient(doer_user_id, recipient_id, Recipient.PERSONAL)
+        sub = build_subscription(recipient_id, doer_user_id, subscription_id)
         realm["zerver_recipient"].append(recipient)
         realm["zerver_subscription"].append(sub)
 
@@ -393,7 +393,7 @@ def convert_users(
     validate_user_emails_for_import(list(found_emails))
     realm["zerver_userprofile"] = zerver_user_profile
     logging.info("######### IMPORTING USERS FINISHED #########\n")
-    return microsoft_teams_user_id_to_zulip_user_id
+    return microsoft_teams_user_id_to_doer_user_id
 
 
 def get_timestamp_from_message(message: MicrosoftTeamsFieldsT) -> float:
@@ -414,7 +414,7 @@ def process_messages(
     channel_metadata: None | dict[str, ChannelMetadata],
     is_private: bool,
     messages: list[MicrosoftTeamsFieldsT],
-    microsoft_teams_user_id_to_zulip_user_id: MicrosoftTeamsUserIdToZulipUserIdT,
+    microsoft_teams_user_id_to_doer_user_id: MicrosoftTeamsUserIdToDoerUserIdT,
     realm: dict[str, Any],
     realm_id: int,
     subscriber_map: dict[int, set[int]],
@@ -450,7 +450,7 @@ def process_messages(
                 continue
             topic_name = current_channel.display_name
             is_direct_message_type = False
-            recipient_id = added_teams[message["ChannelIdentity"]["TeamId"]].zulip_recipient_id
+            recipient_id = added_teams[message["ChannelIdentity"]["TeamId"]].doer_recipient_id
         else:  # nocoverage
             assert message["ChatId"] is not None
             # TODO: Converting direct messages is not yet supported. Since
@@ -461,23 +461,23 @@ def process_messages(
 
         microsoft_teams_sender_id: str = get_microsoft_teams_sender_id_from_message(message)
 
-        if microsoft_teams_sender_id not in microsoft_teams_user_id_to_zulip_user_id:
+        if microsoft_teams_sender_id not in microsoft_teams_user_id_to_doer_user_id:
             create_is_mirror_dummy_user(
                 microsoft_teams_sender_id,
-                microsoft_teams_user_id_to_zulip_user_id,
+                microsoft_teams_user_id_to_doer_user_id,
                 realm,
                 realm_id,
                 domain_name,
             )
 
         message_id = NEXT_ID("message")
-        zulip_message = build_message(
+        doer_message = build_message(
             topic_name=topic_name,
             date_sent=get_timestamp_from_message(message),
             message_id=message_id,
             content=content,
             rendered_content=None,
-            user_id=microsoft_teams_user_id_to_zulip_user_id[microsoft_teams_sender_id],
+            user_id=microsoft_teams_user_id_to_doer_user_id[microsoft_teams_sender_id],
             recipient_id=recipient_id,
             realm_id=realm_id,
             is_channel_message=not is_direct_message_type,
@@ -487,7 +487,7 @@ def process_messages(
             has_attachment=False,
             is_direct_message_type=is_direct_message_type,
         )
-        zerver_messages.append(zulip_message)
+        zerver_messages.append(doer_message)
 
         (num_created, num_skipped) = build_usermessages(
             zerver_usermessage=zerver_usermessage,
@@ -532,7 +532,7 @@ def get_batched_export_message_data(
 def convert_messages(
     added_teams: dict[str, TeamMetadata],
     domain_name: str,
-    microsoft_teams_user_id_to_zulip_user_id: MicrosoftTeamsUserIdToZulipUserIdT,
+    microsoft_teams_user_id_to_doer_user_id: MicrosoftTeamsUserIdToDoerUserIdT,
     output_dir: str,
     realm_id: int,
     realm: dict[str, Any],
@@ -576,7 +576,7 @@ def convert_messages(
             domain_name=domain_name,
             is_private=False,
             messages=message_chunk,
-            microsoft_teams_user_id_to_zulip_user_id=microsoft_teams_user_id_to_zulip_user_id,
+            microsoft_teams_user_id_to_doer_user_id=microsoft_teams_user_id_to_doer_user_id,
             subscriber_map=subscriber_map,
             realm=realm,
             realm_id=realm_id,
@@ -615,7 +615,7 @@ def do_convert_directory(
     realm["zerver_recipient"] = []
     realm["zerver_subscription"] = []
 
-    microsoft_teams_user_id_to_zulip_user_id = convert_users(
+    microsoft_teams_user_id_to_doer_user_id = convert_users(
         microsoft_teams_user_role_data=get_user_roles(microsoft_graph_api_token),
         realm=realm,
         realm_id=realm_id,
@@ -626,7 +626,7 @@ def do_convert_directory(
     teams_data_dir = os.path.join(microsoft_teams_dir, "teams")
 
     added_teams = convert_teams_to_channels(
-        microsoft_teams_user_id_to_zulip_user_id=microsoft_teams_user_id_to_zulip_user_id,
+        microsoft_teams_user_id_to_doer_user_id=microsoft_teams_user_id_to_doer_user_id,
         realm=realm,
         realm_id=realm_id,
         teams_data_dir=teams_data_dir,
@@ -635,7 +635,7 @@ def do_convert_directory(
     convert_messages(
         added_teams=added_teams,
         domain_name=domain_name,
-        microsoft_teams_user_id_to_zulip_user_id=microsoft_teams_user_id_to_zulip_user_id,
+        microsoft_teams_user_id_to_doer_user_id=microsoft_teams_user_id_to_doer_user_id,
         output_dir=output_dir,
         realm_id=realm_id,
         realm=realm,
@@ -653,4 +653,4 @@ def do_convert_directory(
     do_common_export_processes(output_dir)
 
     logging.info("######### DATA CONVERSION FINISHED #########\n")
-    logging.info("Zulip data dump created at %s", output_dir)
+    logging.info("Doer data dump created at %s", output_dir)

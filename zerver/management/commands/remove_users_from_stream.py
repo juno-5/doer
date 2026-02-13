@@ -4,11 +4,11 @@ from django.core.management.base import CommandParser
 from typing_extensions import override
 
 from zerver.actions.streams import bulk_remove_subscriptions
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models.streams import get_stream
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Remove some or all users in a realm from a stream."""
 
     @override

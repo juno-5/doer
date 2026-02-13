@@ -1,6 +1,6 @@
 class kandra::mirror_to_czo {
-  include zulip::hooks::base
-  include zulip::supervisor
+  include doer::hooks::base
+  include doer::supervisor
 
   # We embed the hash of the contents into the name of the process, so
   # that `supervisorctl reread` knows that it has updated.
@@ -16,10 +16,10 @@ class kandra::mirror_to_czo {
     source => 'puppet:///modules/kandra/mirror_to_czo',
   }
 
-  file { "${zulip::common::supervisor_conf_dir}/mirror_to_czo.conf":
+  file { "${doer::common::supervisor_conf_dir}/mirror_to_czo.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],

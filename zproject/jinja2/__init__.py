@@ -23,7 +23,7 @@ def environment(**options: Any) -> Environment:
     env = Environment(autoescape=options.pop("autoescape", True), **options)
     env.globals.update(
         # default_page_params is provided here for responses where
-        # zulip_default_context is not run, including the 404.html and
+        # doer_default_context is not run, including the 404.html and
         # 500.html error pages.
         #
         # Note that we can't use detect the user's language using

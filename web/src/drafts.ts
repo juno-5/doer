@@ -155,7 +155,7 @@ export const draft_model = (function () {
             // this invalid topic value.
             //
             // TODO/compatibility: This can be deleted once servers
-            // can no longer directly upgrade from Zulip 6.0beta1 and
+            // can no longer directly upgrade from Doer 6.0beta1 and
             // earlier development branch where the bug was present,
             // since we expect bugged drafts will have either been run
             // through this code or been deleted by the previous

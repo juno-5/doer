@@ -15,7 +15,7 @@ from zerver.actions.message_delete import do_delete_messages
 from zerver.lib.cache import cache_delete, cache_get, preview_url_cache_key
 from zerver.lib.camo import get_camo_url
 from zerver.lib.queue import queue_json_publish_rollback_unsafe
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import mock_queue_publish
 from zerver.lib.url_preview.oembed import get_oembed_data, strip_cdata
 from zerver.lib.url_preview.parsers import GenericParser, OpenGraphParser
@@ -41,7 +41,7 @@ def reconstruct_url(url: str, maxwidth: int = 640, maxheight: int = 480) -> str:
 
 
 @override_settings(INLINE_URL_EMBED_PREVIEW=True)
-class OembedTestCase(ZulipTestCase):
+class OembedTestCase(DoerTestCase):
     @responses.activate
     def test_present_provider(self) -> None:
         response_data = {
@@ -174,7 +174,7 @@ class OembedTestCase(ZulipTestCase):
         self.assertEqual(iframe_content, stripped_html)
 
 
-class OpenGraphParserTestCase(ZulipTestCase):
+class OpenGraphParserTestCase(DoerTestCase):
     def test_page_with_og(self) -> None:
         html = b"""<html>
           <head>
@@ -213,7 +213,7 @@ class OpenGraphParserTestCase(ZulipTestCase):
         self.assertEqual(result.title, "中文")
 
 
-class GenericParserTestCase(ZulipTestCase):
+class GenericParserTestCase(DoerTestCase):
     def test_parser(self) -> None:
         html = b"""
           <html>
@@ -299,7 +299,7 @@ class GenericParserTestCase(ZulipTestCase):
         self.assertIsNone(result.description)
 
 
-class PreviewTestCase(ZulipTestCase):
+class PreviewTestCase(DoerTestCase):
     open_graph_html = """
           <html>
             <head>
@@ -649,7 +649,7 @@ class PreviewTestCase(ZulipTestCase):
             self.send_personal_message(
                 self.example_user("prospero"),
                 self.example_user("cordelia"),
-                content="http://zulip.testserver/api/",
+                content="http://doer.testserver/api/",
             )
             patched.assert_not_called()
 
@@ -1022,7 +1022,7 @@ class PreviewTestCase(ZulipTestCase):
         }
 
         mocked_data = UrlEmbedData(
-            title="Clearer Code at Scale - Static Types at Zulip and Dropbox"
+            title="Clearer Code at Scale - Static Types at Doer and Dropbox"
         )
         self.create_mock_response(url)
         with self.settings(TEST_SUITE=False):
@@ -1040,7 +1040,7 @@ class PreviewTestCase(ZulipTestCase):
             )
 
         msg.refresh_from_db()
-        expected_content = f"""<p><a href="https://www.youtube.com/watch?v=eSJTXC7Ixgg">YouTube - Clearer Code at Scale - Static Types at Zulip and Dropbox</a></p>\n<div class="youtube-video message_inline_image"><a data-id="eSJTXC7Ixgg" href="https://www.youtube.com/watch?v=eSJTXC7Ixgg"><img src="{get_camo_url("https://i.ytimg.com/vi/eSJTXC7Ixgg/mqdefault.jpg")}"></a></div>"""
+        expected_content = f"""<p><a href="https://www.youtube.com/watch?v=eSJTXC7Ixgg">YouTube - Clearer Code at Scale - Static Types at Doer and Dropbox</a></p>\n<div class="youtube-video message_inline_image"><a data-id="eSJTXC7Ixgg" href="https://www.youtube.com/watch?v=eSJTXC7Ixgg"><img src="{get_camo_url("https://i.ytimg.com/vi/eSJTXC7Ixgg/mqdefault.jpg")}"></a></div>"""
         self.assertEqual(expected_content, msg.rendered_content)
 
     @responses.activate
@@ -1062,7 +1062,7 @@ class PreviewTestCase(ZulipTestCase):
         }
 
         mocked_data = UrlEmbedData(
-            title="Clearer Code at Scale - Static Types at Zulip and Dropbox"
+            title="Clearer Code at Scale - Static Types at Doer and Dropbox"
         )
         self.create_mock_response(url)
         with self.settings(TEST_SUITE=False):

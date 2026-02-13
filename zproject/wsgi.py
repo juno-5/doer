@@ -1,5 +1,5 @@
 """
-WSGI config for zulip project.
+WSGI config for doer project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
@@ -95,7 +95,7 @@ except Exception:
     # initialization will fail in django.setup().  In this case, our
     # normal configuration to logs errors to /var/log/zulip/errors.log
     # won't have been initialized.  Since it's really valuable for the
-    # debugging process for a Zulip 500 error to always be "check
+    # debugging process for a Doer 500 error to always be "check
     # /var/log/zulip/errors.log", we log to that file directly here.
     import logging
 

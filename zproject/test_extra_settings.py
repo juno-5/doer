@@ -17,22 +17,22 @@ from .settings import (
     LOGGING,
 )
 
-FULL_STACK_ZULIP_TEST = "FULL_STACK_ZULIP_TEST" in os.environ
+FULL_STACK_DOER_TEST = "FULL_STACK_DOER_TEST" in os.environ
 PUPPETEER_TESTS = "PUPPETEER_TESTS" in os.environ
 
 
-FAKE_EMAIL_DOMAIN = "zulip.testserver"
+FAKE_EMAIL_DOMAIN = "doer.testserver"
 
 # Clear out the REALM_HOSTS set in dev_settings.py
 REALM_HOSTS: dict[str, str] = {}
 
 DATABASES["default"] = {
-    "NAME": os.getenv("ZULIP_DB_NAME", "zulip_test"),
-    "USER": "zulip_test",
+    "NAME": os.getenv("DOER_DB_NAME", "doer_test"),
+    "USER": "doer_test",
     "PASSWORD": LOCAL_DATABASE_PASSWORD,
     "HOST": "localhost",
     "ENGINE": "django.db.backends.postgresql",
-    "TEST_NAME": "django_zulip_tests",
+    "TEST_NAME": "django_doer_tests",
     "OPTIONS": {
         "connection_factory": TimeTrackingConnection,
         "cursor_factory": TimeTrackingCursor,
@@ -40,7 +40,7 @@ DATABASES["default"] = {
 }
 
 
-if FULL_STACK_ZULIP_TEST:
+if FULL_STACK_DOER_TEST:
     TORNADO_PORTS = [9983]
 else:
     # Backend tests don't use tornado
@@ -76,11 +76,11 @@ GOOGLE_OAUTH2_CLIENT_ID = "test_client_id"
 # Makes testing LDAP backend require less mocking
 AUTH_LDAP_ALWAYS_UPDATE_USER = False
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
-    "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(user)s)"
+    "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(user)s)"
 )
 AUTH_LDAP_USERNAME_ATTR = "uid"
 AUTH_LDAP_REVERSE_EMAIL_SEARCH = LDAPSearch(
-    "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(mail=%(email)s)"
+    "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(mail=%(email)s)"
 )
 
 RATE_LIMITING = False
@@ -92,7 +92,7 @@ USING_RABBITMQ = False
 
 CACHES["database"] = {
     "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-    "LOCATION": "zulip-database-test-cache",
+    "LOCATION": "doer-database-test-cache",
     "TIMEOUT": 3600,
     "CONN_MAX_AGE": 600,
     "OPTIONS": {
@@ -120,13 +120,13 @@ if not PUPPETEER_TESTS:
     def set_loglevel(logger_name: str, level: str) -> None:
         LOGGING["loggers"].setdefault(logger_name, {})["level"] = level
 
-    set_loglevel("zulip.requests", "CRITICAL")
-    set_loglevel("zulip.management", "CRITICAL")
-    set_loglevel("zulip.auth", "WARNING")
+    set_loglevel("doer.requests", "CRITICAL")
+    set_loglevel("doer.management", "CRITICAL")
+    set_loglevel("doer.auth", "WARNING")
     set_loglevel("django.request", "ERROR")
     set_loglevel("django_auth_ldap", "WARNING")
     set_loglevel("fakeldap", "ERROR")
-    set_loglevel("zulip.send_email", "ERROR")
+    set_loglevel("doer.send_email", "ERROR")
     set_loglevel("zerver.lib.push_notifications", "WARNING")
     set_loglevel("zerver.lib.digest", "ERROR")
     set_loglevel("zerver.lib.email_mirror", "ERROR")
@@ -211,14 +211,14 @@ CONSTRUCTOR_GROUPS_SECRET_KEY = "test-secret-key"
 TWO_FACTOR_AUTHENTICATION_ENABLED = False
 
 DEVELOPMENT_DISABLE_PUSH_BOUNCER_DOMAIN_CHECK = False
-ZULIP_SERVICES_URL = f"http://push.{EXTERNAL_HOST}"
+DOER_SERVICES_URL = f"http://push.{EXTERNAL_HOST}"
 
-# Disable all Zulip services by default. Tests can activate them by
+# Disable all Doer services by default. Tests can activate them by
 # overriding settings explicitly when they want to enable something,
 # often using activate_push_notification_service.
-ZULIP_SERVICE_PUSH_NOTIFICATIONS = False
-ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = False
-ZULIP_SERVICE_SECURITY_ALERTS = False
+DOER_SERVICE_PUSH_NOTIFICATIONS = False
+DOER_SERVICE_SUBMIT_USAGE_STATISTICS = False
+DOER_SERVICE_SECURITY_ALERTS = False
 
 # Hack: This should be computed in computed_settings, but the transmission
 # of test settings overrides is wonky. See test_settings for more details.
@@ -226,15 +226,15 @@ ANALYTICS_DATA_UPLOAD_LEVEL = AnalyticsDataUploadLevel.NONE
 
 # The most common value used by tests. Set it as the default so that it doesn't
 # have to be repeated every time.
-ZULIP_SERVICES_URL = "https://push.zulip.org.example.com"
+DOER_SERVICES_URL = "https://push.zulip.org.example.com"
 
 # Logging the emails while running the tests adds them
 # to /emails page.
 DEVELOPMENT_LOG_EMAILS = False
 
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = "http://" + EXTERNAL_HOST
-SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = get_from_file_if_exists("zerver/tests/fixtures/saml/zulip.crt")
-SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = get_from_file_if_exists("zerver/tests/fixtures/saml/zulip.key")
+SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = get_from_file_if_exists("zerver/tests/fixtures/saml/doer.crt")
+SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = get_from_file_if_exists("zerver/tests/fixtures/saml/doer.key")
 
 SOCIAL_AUTH_SAML_ORG_INFO = {
     "en-US": {
@@ -286,7 +286,7 @@ CLOUD_FREE_TRIAL_DAYS: int | None = None
 SELF_HOSTING_FREE_TRIAL_DAYS: int | None = None
 
 SCIM_CONFIG: dict[str, SCIMConfigDict] = {
-    "zulip": {
+    "doer": {
         "bearer_token": "token1234",
         "scim_client_name": "test-scim-client",
         "name_formatted_included": True,

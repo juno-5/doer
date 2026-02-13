@@ -1,6 +1,6 @@
-# Zulip Airbyte integration
+# Doer Airbyte integration
 
-Get Zulip notifications from Airbyte.
+Get Doer notifications from Airbyte.
 
 {start_tabs}
 

@@ -6,7 +6,7 @@ from zerver.lib.test_classes import WebhookTestCase
 
 class ShortcutWebhookTest(WebhookTestCase):
     def test_legacy_urls(self) -> None:
-        expected_message = "New story [Add cool feature!](https://app.shortcut.com/zulip/story/11) of type **feature** was created."
+        expected_message = "New story [Add cool feature!](https://app.shortcut.com/doer/story/11) of type **feature** was created."
 
         legacy_names = ["clubhouse"]
         for legacy_name in legacy_names:
@@ -14,7 +14,7 @@ class ShortcutWebhookTest(WebhookTestCase):
             self.check_webhook("story_create", "Add cool feature!", expected_message)
 
     def test_story_create(self) -> None:
-        expected_message = "New story [Add cool feature!](https://app.shortcut.com/zulip/story/11) of type **feature** was created."
+        expected_message = "New story [Add cool feature!](https://app.shortcut.com/doer/story/11) of type **feature** was created."
         self.check_webhook("story_create", "Add cool feature!", expected_message)
 
     def test_story_delete(self) -> None:
@@ -22,7 +22,7 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.check_webhook("story_delete", "New random story", expected_message)
 
     def test_epic_story_create(self) -> None:
-        expected_message = "New story [An epic story!](https://app.shortcut.com/zulip/story/23) was created and added to the epic **New Cool Epic!**."
+        expected_message = "New story [An epic story!](https://app.shortcut.com/doer/story/23) was created and added to the epic **New Cool Epic!**."
         self.check_webhook("epic_create_story", "An epic story!", expected_message)
 
     def test_epic_delete(self) -> None:
@@ -31,17 +31,17 @@ class ShortcutWebhookTest(WebhookTestCase):
 
     def test_story_archive(self) -> None:
         expected_message = (
-            "The story [Story 2](https://app.shortcut.com/zulip/story/9) was archived."
+            "The story [Story 2](https://app.shortcut.com/doer/story/9) was archived."
         )
         self.check_webhook("story_archive", "Story 2", expected_message)
 
     def test_epic_archive(self) -> None:
-        expected_message = "The epic **Zulip is epic!** was archived."
-        self.check_webhook("epic_archive", "Zulip is epic!", expected_message)
+        expected_message = "The epic **Doer is epic!** was archived."
+        self.check_webhook("epic_archive", "Doer is epic!", expected_message)
 
     def test_story_unarchive(self) -> None:
         expected_message = (
-            "The story [Story 2](https://app.shortcut.com/zulip/story/9) was unarchived."
+            "The story [Story 2](https://app.shortcut.com/doer/story/9) was unarchived."
         )
         self.check_webhook("story_unarchive", "Story 2", expected_message)
 
@@ -54,7 +54,7 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.check_webhook("epic_update_add_comment", "New Cool Epic!", expected_message)
 
     def test_story_update_add_comment(self) -> None:
-        expected_message = "New comment added to the story [Add cool feature!](https://app.shortcut.com/zulip/story/11):\n``` quote\nJust leaving a comment here!\n```"
+        expected_message = "New comment added to the story [Add cool feature!](https://app.shortcut.com/doer/story/11):\n``` quote\nJust leaving a comment here!\n```"
         self.check_webhook("story_update_add_comment", "Add cool feature!", expected_message)
 
     def test_epic_update_add_description(self) -> None:
@@ -70,15 +70,15 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.check_webhook("epic_update_change_description", "New Cool Epic!", expected_message)
 
     def test_story_update_add_description(self) -> None:
-        expected_message = "New description added to the story [Story 2](https://app.shortcut.com/zulip/story/9):\n``` quote\nAdded a description.\n```"
+        expected_message = "New description added to the story [Story 2](https://app.shortcut.com/doer/story/9):\n``` quote\nAdded a description.\n```"
         self.check_webhook("story_update_add_description", "Story 2", expected_message)
 
     def test_story_update_remove_description(self) -> None:
-        expected_message = "Description for the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was removed."
+        expected_message = "Description for the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was removed."
         self.check_webhook("story_update_remove_description", "Add cool feature!", expected_message)
 
     def test_story_update_change_description(self) -> None:
-        expected_message = "Description for the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was changed from:\n``` quote\nWe should probably add this cool feature!\n```\nto\n``` quote\nWe should probably add this cool feature! Just edited this. :)\n```"
+        expected_message = "Description for the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was changed from:\n``` quote\nWe should probably add this cool feature!\n```\nto\n``` quote\nWe should probably add this cool feature! Just edited this. :)\n```"
         self.check_webhook("story_update_description", "Add cool feature!", expected_message)
 
     def test_epic_update_change_state(self) -> None:
@@ -88,7 +88,7 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.check_webhook("epic_update_change_state", "New Cool Epic!", expected_message)
 
     def test_story_update_change_state(self) -> None:
-        expected_message = "State of the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was changed from **Unscheduled** to **Ready for Review**."
+        expected_message = "State of the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was changed from **Unscheduled** to **Ready for Review**."
         self.check_webhook("story_update_change_state", "Add cool feature!", expected_message)
 
     def test_epic_update_change_name(self) -> None:
@@ -96,25 +96,25 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.check_webhook("epic_update_change_title", "New Cool Epic!", expected_message)
 
     def test_story_update_change_name(self) -> None:
-        expected_message = "The name of the story [Add super cool feature!](https://app.shortcut.com/zulip/story/11) was changed from:\n``` quote\nAdd cool feature!\n```\nto\n``` quote\nAdd super cool feature!\n```"
+        expected_message = "The name of the story [Add super cool feature!](https://app.shortcut.com/doer/story/11) was changed from:\n``` quote\nAdd cool feature!\n```\nto\n``` quote\nAdd super cool feature!\n```"
         self.check_webhook("story_update_change_title", "Add super cool feature!", expected_message)
 
     def test_story_update_add_owner(self) -> None:
-        expected_message = "New owner added to the story [A new story by Shakespeare!](https://app.shortcut.com/zulip/story/26)."
+        expected_message = "New owner added to the story [A new story by Shakespeare!](https://app.shortcut.com/doer/story/26)."
         self.check_webhook(
             "story_update_add_owner", "A new story by Shakespeare!", expected_message
         )
 
     def test_story_task_created(self) -> None:
-        expected_message = "Task **Added a new task** was added to the story [Add cool feature!](https://app.shortcut.com/zulip/story/11)."
+        expected_message = "Task **Added a new task** was added to the story [Add cool feature!](https://app.shortcut.com/doer/story/11)."
         self.check_webhook("story_task_create", "Add cool feature!", expected_message)
 
     def test_story_task_deleted(self) -> None:
-        expected_message = "Task **Added a new task** was removed from the story [Add cool feature!](https://app.shortcut.com/zulip/story/11)."
+        expected_message = "Task **Added a new task** was removed from the story [Add cool feature!](https://app.shortcut.com/doer/story/11)."
         self.check_webhook("story_task_delete", "Add cool feature!", expected_message)
 
     def test_story_task_completed(self) -> None:
-        expected_message = "Task **A new task for this story** ([Add cool feature!](https://app.shortcut.com/zulip/story/11)) was completed. :tada:"
+        expected_message = "Task **A new task for this story** ([Add cool feature!](https://app.shortcut.com/doer/story/11)) was completed. :tada:"
         self.check_webhook("story_task_complete", "Add cool feature!", expected_message)
 
     @patch("zerver.webhooks.shortcut.view.check_send_webhook_message")
@@ -126,33 +126,33 @@ class ShortcutWebhookTest(WebhookTestCase):
 
     def test_story_epic_changed(self) -> None:
         expected_message = (
-            "The story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was moved from **Release 1.9**"
+            "The story [Add cool feature!](https://app.shortcut.com/doer/story/11) was moved from **Release 1.9**"
             " to **Shortcut Fork**."
         )
         self.check_webhook("story_update_change_epic", "Add cool feature!", expected_message)
 
     def test_story_epic_added(self) -> None:
-        expected_message = "The story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was added to the epic **Release 1.9**."
+        expected_message = "The story [Add cool feature!](https://app.shortcut.com/doer/story/11) was added to the epic **Release 1.9**."
         self.check_webhook("story_update_add_epic", "Add cool feature!", expected_message)
 
     def test_story_epic_removed(self) -> None:
-        expected_message = "The story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was removed from the epic **Release 1.9**."
+        expected_message = "The story [Add cool feature!](https://app.shortcut.com/doer/story/11) was removed from the epic **Release 1.9**."
         self.check_webhook("story_update_remove_epic", "Add cool feature!", expected_message)
 
     def test_story_estimate_changed(self) -> None:
-        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was set to 4 points."
+        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was set to 4 points."
         self.check_webhook("story_update_change_estimate", "Add cool feature!", expected_message)
 
     def test_story_estimate_added(self) -> None:
-        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was set to 4 points."
+        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was set to 4 points."
         self.check_webhook("story_update_add_estimate", "Add cool feature!", expected_message)
 
     def test_story_estimate_removed(self) -> None:
-        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was set to *Unestimated*."
+        expected_message = "The estimate for the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was set to *Unestimated*."
         self.check_webhook("story_update_remove_estimate", "Add cool feature!", expected_message)
 
     def test_story_file_attachment_added(self) -> None:
-        expected_message = "A file attachment `zuliprc` was added to the story [Add cool feature!](https://app.shortcut.com/zulip/story/11)."
+        expected_message = "A file attachment `zuliprc` was added to the story [Add cool feature!](https://app.shortcut.com/doer/story/11)."
         self.check_webhook("story_update_add_attachment", "Add cool feature!", expected_message)
 
     @patch("zerver.webhooks.shortcut.view.check_send_webhook_message")
@@ -165,15 +165,15 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.assert_json_success(result)
 
     def test_story_label_added(self) -> None:
-        expected_message = "The label **mockup** was added to the story [An epic story!](https://app.shortcut.com/zulip/story/23)."
+        expected_message = "The label **mockup** was added to the story [An epic story!](https://app.shortcut.com/doer/story/23)."
         self.check_webhook("story_update_add_label", "An epic story!", expected_message)
 
     def test_story_label_multiple_added(self) -> None:
-        expected_message = "The labels **mockup**, **label** were added to the story [An epic story!](https://app.shortcut.com/zulip/story/23)."
+        expected_message = "The labels **mockup**, **label** were added to the story [An epic story!](https://app.shortcut.com/doer/story/23)."
         self.check_webhook("story_update_add_multiple_labels", "An epic story!", expected_message)
 
     def test_story_label_added_label_name_in_actions(self) -> None:
-        expected_message = "The label **sad** was added to the story [An emotional story!](https://app.shortcut.com/zulip/story/28)."
+        expected_message = "The label **sad** was added to the story [An emotional story!](https://app.shortcut.com/doer/story/28)."
         self.check_webhook(
             "story_update_add_label_name_in_action", "An emotional story!", expected_message
         )
@@ -186,15 +186,15 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.assert_json_success(result)
 
     def test_story_update_project(self) -> None:
-        expected_message = "The story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was moved from the **Backend** project to **Devops**."
+        expected_message = "The story [Add cool feature!](https://app.shortcut.com/doer/story/11) was moved from the **Backend** project to **Devops**."
         self.check_webhook("story_update_change_project", "Add cool feature!", expected_message)
 
     def test_story_update_type(self) -> None:
-        expected_message = "The type of the story [Add cool feature!](https://app.shortcut.com/zulip/story/11) was changed from **feature** to **bug**."
+        expected_message = "The type of the story [Add cool feature!](https://app.shortcut.com/doer/story/11) was changed from **feature** to **bug**."
         self.check_webhook("story_update_change_type", "Add cool feature!", expected_message)
 
     def test_story_update_add_github_pull_request(self) -> None:
-        expected_message = "New GitHub PR [#10](https://github.com/eeshangarg/Scheduler/pull/10) opened for story [Testing pull requests with Story](https://app.shortcut.com/zulip/story/28) (Unscheduled -> Ready for Review)."
+        expected_message = "New GitHub PR [#10](https://github.com/eeshangarg/Scheduler/pull/10) opened for story [Testing pull requests with Story](https://app.shortcut.com/doer/story/28) (Unscheduled -> Ready for Review)."
         self.check_webhook(
             "story_update_add_github_pull_request",
             "Testing pull requests with Story",
@@ -202,7 +202,7 @@ class ShortcutWebhookTest(WebhookTestCase):
         )
 
     def test_story_update_add_github_pull_request_without_workflow_state(self) -> None:
-        expected_message = "New GitHub PR [#10](https://github.com/eeshangarg/Scheduler/pull/10) opened for story [Testing pull requests with Story](https://app.shortcut.com/zulip/story/28)."
+        expected_message = "New GitHub PR [#10](https://github.com/eeshangarg/Scheduler/pull/10) opened for story [Testing pull requests with Story](https://app.shortcut.com/doer/story/28)."
         self.check_webhook(
             "story_update_add_github_pull_request_without_workflow_state",
             "Testing pull requests with Story",
@@ -284,7 +284,7 @@ class ShortcutWebhookTest(WebhookTestCase):
         self.assertEqual(check_send_webhook_message_mock.call_args_list, expected_list)
 
     def test_story_update_add_github_branch(self) -> None:
-        expected_message = "New GitHub branch [eeshangarg/ch27/testing-pull-requests-with-story](https://github.com/eeshangarg/scheduler/tree/eeshangarg/ch27/testing-pull-requests-with-story) associated with story [Testing pull requests with Story](https://app.shortcut.com/zulip/story/27) (Unscheduled -> In Development)."
+        expected_message = "New GitHub branch [eeshangarg/ch27/testing-pull-requests-with-story](https://github.com/eeshangarg/scheduler/tree/eeshangarg/ch27/testing-pull-requests-with-story) associated with story [Testing pull requests with Story](https://app.shortcut.com/doer/story/27) (Unscheduled -> In Development)."
         self.check_webhook(
             "story_update_add_github_branch", "Testing pull requests with Story", expected_message
         )

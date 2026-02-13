@@ -19,7 +19,7 @@ from zerver.lib.webhooks.common import PresetUrlOption, WebhookConfigOption, Web
 from zerver.webhooks import fixtureless_integrations
 
 """This module declares all of the (documented) integrations available
-in the Zulip server.
+in the Doer server.
 
 The Integration class is used as part of generating the
 documentation on the /integrations/ page, while the
@@ -245,7 +245,7 @@ class Integration:
 class BotIntegration(Integration):
     DEFAULT_LOGO_STATIC_PATH_PNG = "generated/bots/{name}/logo.png"
     DEFAULT_LOGO_STATIC_PATH_SVG = "generated/bots/{name}/logo.svg"
-    ZULIP_LOGO_STATIC_PATH_PNG = "images/logo/zulip-icon-128x128.png"
+    DOER_LOGO_STATIC_PATH_PNG = "images/logo/doer-icon-128x128.png"
     DEFAULT_DOC_PATH = "{name}/doc.md"
 
     def __init__(
@@ -266,7 +266,7 @@ class BotIntegration(Integration):
             fixtureless_screenshot_config_options=fixtureless_screenshot_config_options,
             secondary_line_text=secondary_line_text,
             logo=logo,
-            fallback_logo_path=self.ZULIP_LOGO_STATIC_PATH_PNG,
+            fallback_logo_path=self.DOER_LOGO_STATIC_PATH_PNG,
         )
 
         if display_name is None:
@@ -322,7 +322,7 @@ class PythonAPIIntegration(Integration):
 class IncomingWebhookIntegration(Integration):
     DEFAULT_FUNCTION_PATH = "zerver.webhooks.{dir_name}.view.api_{dir_name}_webhook"
     DEFAULT_URL = "api/v1/external/{name}"
-    DEFAULT_CLIENT_NAME = "Zulip{name}Webhook"
+    DEFAULT_CLIENT_NAME = "Doer{name}Webhook"
     DEFAULT_DOC_PATH = "{name}/doc.md"
 
     def __init__(
@@ -458,13 +458,13 @@ class EmbeddedBotIntegration(Integration):
     and valid such that these are capable of being deployed on the server.
     """
 
-    DEFAULT_CLIENT_NAME = "Zulip{name}EmbeddedBot"
-    ZULIP_LOGO_STATIC_PATH_PNG = "images/logo/zulip-icon-128x128.png"
+    DEFAULT_CLIENT_NAME = "Doer{name}EmbeddedBot"
+    DOER_LOGO_STATIC_PATH_PNG = "images/logo/doer-icon-128x128.png"
 
     def __init__(self, name: str, *args: Any, **kwargs: Any) -> None:
         assert kwargs.get("client_name") is None
         kwargs["client_name"] = self.DEFAULT_CLIENT_NAME.format(name=name.title())
-        kwargs["fallback_logo_path"] = self.ZULIP_LOGO_STATIC_PATH_PNG
+        kwargs["fallback_logo_path"] = self.DOER_LOGO_STATIC_PATH_PNG
         super().__init__(name, *args, **kwargs)
 
     @override
@@ -903,7 +903,7 @@ INCOMING_WEBHOOK_INTEGRATIONS: list[IncomingWebhookIntegration] = [
             WebhookScreenshotConfig(
                 "",
                 extra_params={
-                    "project": "Zulip Mobile",
+                    "project": "Doer Mobile",
                     "language": "en",
                     "resource": "file",
                     "event": "review_completed",
@@ -1006,7 +1006,7 @@ PLUGIN_INTEGRATIONS: list[Integration] = [
     Integration("onyx", ["productivity"], logo="images/integrations/logos/onyx.png"),
 ]
 
-# Each of these integrations have their own Zulip repository in GitHub.
+# Each of these integrations have their own Doer repository in GitHub.
 STANDALONE_REPO_INTEGRATIONS: list[Integration] = [
     Integration("errbot", ["meta-integration", "bots"]),
     Integration(
@@ -1019,7 +1019,7 @@ STANDALONE_REPO_INTEGRATIONS: list[Integration] = [
     Integration("puppet", ["deployment"]),
 ]
 
-ZULIP_SEND_INTEGRATIONS: list[Integration] = [
+DOER_SEND_INTEGRATIONS: list[Integration] = [
     Integration("capistrano", ["deployment"]),
 ]
 
@@ -1029,7 +1029,7 @@ OTHER_INTEGRATIONS = [
     *ZAPIER_INTEGRATIONS,
     *PLUGIN_INTEGRATIONS,
     *STANDALONE_REPO_INTEGRATIONS,
-    *ZULIP_SEND_INTEGRATIONS,
+    *DOER_SEND_INTEGRATIONS,
 ]
 
 PYTHON_API_INTEGRATIONS: list[PythonAPIIntegration] = [

@@ -1,10 +1,10 @@
-# Zulip Thinkst Canarytoken integration
+# Doer Thinkst Canarytoken integration
 
-See your Thinkst Canarytoken alerts in Zulip!
+See your Thinkst Canarytoken alerts in Doer!
 
 This integration works with Canarytokens from
 [canarytokens.org][canarytokens], not Thinkst's paid product. See the
-[Zulip Thinkst integration](/integrations/thinkst) for those!
+[Doer Thinkst integration](/integrations/thinkst) for those!
 
 {start_tabs}
 

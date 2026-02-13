@@ -1,4 +1,4 @@
-import type * as zulip_test_module from "./zulip_test.ts";
+import type * as doer_test_module from "./doer_test.ts";
 
 type JQueryCaretRange = {
     start: number;
@@ -16,7 +16,7 @@ type JQueryIdleOptions = Partial<{
 }>;
 
 declare global {
-    const zulip_test: typeof zulip_test_module;
+    const doer_test: typeof doer_test_module;
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
     interface JQuery {
@@ -40,5 +40,5 @@ declare global {
     }
 
     const DEVELOPMENT: boolean;
-    const ZULIP_VERSION: string;
+    const DOER_VERSION: string;
 }

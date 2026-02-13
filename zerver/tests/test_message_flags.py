@@ -26,7 +26,7 @@ from zerver.lib.message import (
     get_raw_unread_data,
 )
 from zerver.lib.message_cache import MessageDict
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_subscription
 from zerver.lib.user_message import DEFAULT_HISTORICAL_FLAGS, create_historical_user_messages
 from zerver.models import (
@@ -59,7 +59,7 @@ def check_flags(flags: list[str], expected: set[str]) -> None:
         raise AssertionError(f"expected flags (ignoring has_alert_word) to be {expected}")
 
 
-class FirstUnreadAnchorTests(ZulipTestCase):
+class FirstUnreadAnchorTests(DoerTestCase):
     """
     HISTORICAL NOTE:
 
@@ -171,7 +171,7 @@ class FirstUnreadAnchorTests(ZulipTestCase):
         self.assert_length(messages, 1)
 
 
-class UnreadCountTests(ZulipTestCase):
+class UnreadCountTests(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -723,18 +723,18 @@ class UnreadCountTests(ZulipTestCase):
         result = self.client_post(
             "/json/mark_topic_as_read",
             {
-                "stream_id": get_stream("Denmark", get_realm("zulip")).id,
+                "stream_id": get_stream("Denmark", get_realm("doer")).id,
                 "topic_name": invalid_topic_name,
             },
         )
         self.assert_json_error(result, "No such topic 'abc'")
 
 
-class FixUnreadTests(ZulipTestCase):
+class FixUnreadTests(DoerTestCase):
     def test_fix_unreads(self) -> None:
         user = self.example_user("hamlet")
         othello = self.example_user("othello")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         def send_message(stream_name: str, topic_name: str) -> int:
             self.subscribe(othello, stream_name)
@@ -804,24 +804,24 @@ class FixUnreadTests(ZulipTestCase):
         # fix unsubscribed
         with (
             connection.cursor() as cursor,
-            self.assertLogs("zulip.fix_unreads", "INFO") as info_logs,
+            self.assertLogs("doer.fix_unreads", "INFO") as info_logs,
         ):
             fix_unsubscribed(cursor, user)
 
-        self.assertEqual(info_logs.output[0], "INFO:zulip.fix_unreads:get recipients")
-        self.assertTrue("INFO:zulip.fix_unreads:[" in info_logs.output[1])
-        self.assertTrue("INFO:zulip.fix_unreads:elapsed time:" in info_logs.output[2])
+        self.assertEqual(info_logs.output[0], "INFO:doer.fix_unreads:get recipients")
+        self.assertTrue("INFO:doer.fix_unreads:[" in info_logs.output[1])
+        self.assertTrue("INFO:doer.fix_unreads:elapsed time:" in info_logs.output[2])
         self.assertEqual(
             info_logs.output[3],
-            "INFO:zulip.fix_unreads:finding unread messages for non-active streams",
+            "INFO:doer.fix_unreads:finding unread messages for non-active streams",
         )
-        self.assertEqual(info_logs.output[4], "INFO:zulip.fix_unreads:rows found: 1")
-        self.assertTrue("INFO:zulip.fix_unreads:elapsed time:" in info_logs.output[5])
+        self.assertEqual(info_logs.output[4], "INFO:doer.fix_unreads:rows found: 1")
+        self.assertTrue("INFO:doer.fix_unreads:elapsed time:" in info_logs.output[5])
         self.assertEqual(
             info_logs.output[6],
-            "INFO:zulip.fix_unreads:fixing unread messages for non-active streams",
+            "INFO:doer.fix_unreads:fixing unread messages for non-active streams",
         )
-        self.assertTrue("INFO:zulip.fix_unreads:elapsed time:" in info_logs.output[7])
+        self.assertTrue("INFO:doer.fix_unreads:elapsed time:" in info_logs.output[7])
 
         # Muted messages don't change.
         assert_unread(um_muted_topic_id)
@@ -831,20 +831,20 @@ class FixUnreadTests(ZulipTestCase):
         # The unsubscribed entry should change.
         assert_read(um_unsubscribed_id)
 
-        with self.assertLogs("zulip.fix_unreads", "INFO") as info_logs:
+        with self.assertLogs("doer.fix_unreads", "INFO") as info_logs:
             # test idempotency
             fix(user)
 
-        self.assertEqual(info_logs.output[0], f"INFO:zulip.fix_unreads:\n---\nFixing {user.id}:")
-        self.assertEqual(info_logs.output[1], "INFO:zulip.fix_unreads:get recipients")
-        self.assertTrue("INFO:zulip.fix_unreads:[" in info_logs.output[2])
-        self.assertTrue("INFO:zulip.fix_unreads:elapsed time:" in info_logs.output[3])
+        self.assertEqual(info_logs.output[0], f"INFO:doer.fix_unreads:\n---\nFixing {user.id}:")
+        self.assertEqual(info_logs.output[1], "INFO:doer.fix_unreads:get recipients")
+        self.assertTrue("INFO:doer.fix_unreads:[" in info_logs.output[2])
+        self.assertTrue("INFO:doer.fix_unreads:elapsed time:" in info_logs.output[3])
         self.assertEqual(
             info_logs.output[4],
-            "INFO:zulip.fix_unreads:finding unread messages for non-active streams",
+            "INFO:doer.fix_unreads:finding unread messages for non-active streams",
         )
-        self.assertEqual(info_logs.output[5], "INFO:zulip.fix_unreads:rows found: 0")
-        self.assertTrue("INFO:zulip.fix_unreads:elapsed time:" in info_logs.output[6])
+        self.assertEqual(info_logs.output[5], "INFO:doer.fix_unreads:rows found: 0")
+        self.assertTrue("INFO:doer.fix_unreads:elapsed time:" in info_logs.output[6])
 
         assert_unread(um_normal_id)
         assert_unread(um_muted_topic_id)
@@ -852,7 +852,7 @@ class FixUnreadTests(ZulipTestCase):
         assert_read(um_unsubscribed_id)
 
 
-class PushNotificationMarkReadFlowsTest(ZulipTestCase):
+class PushNotificationMarkReadFlowsTest(DoerTestCase):
     def get_mobile_push_notification_ids(self, user_profile: UserProfile) -> list[int]:
         return list(
             UserMessage.objects.filter(
@@ -1003,7 +1003,7 @@ class PushNotificationMarkReadFlowsTest(ZulipTestCase):
         )
 
 
-class MarkAllAsReadEndpointTest(ZulipTestCase):
+class MarkAllAsReadEndpointTest(DoerTestCase):
     def test_mark_all_as_read_endpoint(self) -> None:
         self.login("hamlet")
         hamlet = self.example_user("hamlet")
@@ -1039,7 +1039,7 @@ class MarkAllAsReadEndpointTest(ZulipTestCase):
             self.assertFalse(result_dict["complete"])
 
 
-class GetUnreadMsgsTest(ZulipTestCase):
+class GetUnreadMsgsTest(DoerTestCase):
     def mute_stream(self, user_profile: UserProfile, stream: Stream) -> None:
         recipient = Recipient.objects.get(type_id=stream.id, type=Recipient.STREAM)
         subscription = Subscription.objects.get(
@@ -1586,7 +1586,7 @@ class GetUnreadMsgsTest(ZulipTestCase):
         self.assertEqual(result["mentions"], [])
 
 
-class MessageAccessTests(ZulipTestCase):
+class MessageAccessTests(DoerTestCase):
     def test_update_invalid_flags(self) -> None:
         message = self.send_personal_message(
             self.example_user("cordelia"),
@@ -2137,7 +2137,7 @@ class MessageAccessTests(ZulipTestCase):
         self.assert_length(filtered_messages, 2)
 
 
-class PersonalMessagesFlagTest(ZulipTestCase):
+class PersonalMessagesFlagTest(DoerTestCase):
     def test_is_private_flag_not_leaked(self) -> None:
         """
         Make sure `is_private` flag is not leaked to the API.
@@ -2151,9 +2151,9 @@ class PersonalMessagesFlagTest(ZulipTestCase):
             self.assertNotIn("is_private", msg["flags"])
 
 
-class MarkUnreadTest(ZulipTestCase):
+class MarkUnreadTest(DoerTestCase):
     def mute_stream(self, stream_name: str, user: UserProfile) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = get_stream(stream_name, realm)
         recipient = stream.recipient
         subscription = Subscription.objects.get(

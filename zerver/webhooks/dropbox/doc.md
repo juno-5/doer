@@ -1,6 +1,6 @@
-# Zulip Dropbox integration
+# Doer Dropbox integration
 
-Get Dropbox notifications in Zulip!
+Get Dropbox notifications in Doer!
 
 {start_tabs}
 

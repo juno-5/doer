@@ -3,13 +3,13 @@ from django.test import override_settings
 from typing_extensions import override
 
 from zerver.actions.message_send import internal_send_private_message
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import message_stream_count, most_recent_message
 from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.users import get_system_bot
 
 
-class TutorialTests(ZulipTestCase):
+class TutorialTests(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -38,7 +38,7 @@ class TutorialTests(ZulipTestCase):
             self.send_personal_message(user, bot, content)
             expected_response = (
                 "You can [download](/apps/) the [mobile and desktop apps](/apps/). "
-                "Zulip also works great in a browser."
+                "Doer also works great in a browser."
             )
             self.assertEqual(most_recent_message(user).content, expected_response)
 
@@ -67,7 +67,7 @@ class TutorialTests(ZulipTestCase):
                 "You can switch between [light and dark theme](/help/dark-theme), "
                 "[pick your favorite emoji set](/help/emoji-and-emoticons#change-your-emoji-set), "
                 "[change your language](/help/change-your-language), and otherwise customize "
-                "your Zulip experience in your [Preferences](#settings/preferences)."
+                "your Doer experience in your [Preferences](#settings/preferences)."
             )
             self.assertEqual(most_recent_message(user).content, expected_response)
 
@@ -93,8 +93,8 @@ class TutorialTests(ZulipTestCase):
         for content in messages:
             self.send_personal_message(user, bot, content)
             expected_response = (
-                "[Topics](/help/introduction-to-topics) summarize what each conversation in Zulip "
-                "is about. You can read Zulip one topic at a time, seeing each message in context, "
+                "[Topics](/help/introduction-to-topics) summarize what each conversation in Doer "
+                "is about. You can read Doer one topic at a time, seeing each message in context, "
                 "no matter how many other conversations are going on.\n\n"
                 "When you start a conversation, label it with a new topic. For a good topic name, "
                 "think about finishing the sentence: “Hey, can we chat about…?”\n\n"
@@ -110,7 +110,7 @@ class TutorialTests(ZulipTestCase):
         for content in messages:
             self.send_personal_message(user, bot, content)
             expected_response = (
-                "Zulip's [keyboard shortcuts](#keyboard-shortcuts) "
+                "Doer's [keyboard shortcuts](#keyboard-shortcuts) "
                 "let you navigate the app quickly and efficiently.\n\n"
                 "Press `?` any time to see a [cheat sheet](#keyboard-shortcuts)."
             )
@@ -142,7 +142,7 @@ class TutorialTests(ZulipTestCase):
                 "Here are a few messages I understand: "
                 "`apps`, `profile`, `theme`, "
                 "`channels`, `topics`, `message formatting`, `keyboard shortcuts`.\n\n"
-                "Check out our [Getting started guide](/help/getting-started-with-zulip), "
+                "Check out our [Getting started guide](/help/getting-started-with-doer), "
                 "or browse the [help center](/help/) to learn more!"
             )
             self.assertEqual(most_recent_message(user).content, expected_response)
@@ -162,7 +162,7 @@ class TutorialTests(ZulipTestCase):
                 "Here are a few messages I understand: "
                 "`apps`, `profile`, `theme`, "
                 "`channels`, `topics`, `message formatting`, `keyboard shortcuts`.\n\n"
-                "Check out our [Getting started guide](/help/getting-started-with-zulip), "
+                "Check out our [Getting started guide](/help/getting-started-with-doer), "
                 "or browse the [help center](/help/) to learn more!"
             )
             message = most_recent_message(user)
@@ -206,7 +206,7 @@ class TutorialTests(ZulipTestCase):
         self.send_personal_message(user, bot, "apps")
         expected_response = (
             "You can [download](/apps/) the [mobile and desktop apps](/apps/). "
-            "Zulip also works great in a browser."
+            "Doer also works great in a browser."
         )
         self.assertEqual(most_recent_message(user).content, expected_response)
 
@@ -238,7 +238,7 @@ class TutorialTests(ZulipTestCase):
         self.send_personal_message(user, bot, "apps")
         expected_response = (
             "You can [download](/apps/) the [mobile and desktop apps](/apps/). "
-            "Zulip also works great in a browser."
+            "Doer also works great in a browser."
         )
         self.assertEqual(most_recent_message(user).content, expected_response)
 

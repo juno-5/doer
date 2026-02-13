@@ -5,10 +5,10 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from analytics.lib.counts import do_drop_all_analytics_tables
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Clear analytics tables."""
 
     @override

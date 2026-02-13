@@ -1,8 +1,8 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
 # This file contains the top-level logic for testing the cURL examples
-# in Zulip's API documentation; the details are in
+# in Doer's API documentation; the details are in
 # zerver.openapi.curl_param_value_generators.
 
 import html
@@ -14,7 +14,7 @@ import subprocess
 
 import markdown
 from django.conf import settings
-from zulip import Client
+from doer import Client
 
 from zerver.models.realms import get_realm
 from zerver.openapi import markdown_extension
@@ -41,7 +41,7 @@ UNTESTED_GENERATED_CURL_EXAMPLES = {
 def test_generated_curl_examples_for_success(client: Client) -> None:
     default_authentication_line = f"{client.email}:{client.api_key}"
     # A limited Markdown engine that just processes the code example syntax.
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     md_engine = markdown.Markdown(
         extensions=[markdown_extension.makeExtension(api_url=realm.url + "/api")]
     )
@@ -132,7 +132,7 @@ that was generated was faulty and when tried, it resulted in an unsuccessful
 response.
 
 Common reasons for why this could occur:
-    1. One or more example values in zerver/openapi/zulip.yaml for this endpoint
+    1. One or more example values in zerver/openapi/doer.yaml for this endpoint
        do not line up with the values in the test database.
     2. One or more mandatory parameters were included in the "exclude" list.
 

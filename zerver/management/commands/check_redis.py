@@ -7,13 +7,13 @@ from django.conf import settings
 from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.partial import partial
 from zerver.lib.rate_limiter import RateLimitedUser, client
 from zerver.models.users import get_user_profile_by_id
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Checks Redis to make sure our rate limiting system hasn't grown a bug
     and left Redis with a bunch of data
 

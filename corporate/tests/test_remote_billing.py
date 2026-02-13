@@ -31,11 +31,11 @@ from zerver.models.realms import get_realm
 from zilencer.models import (
     PreregistrationRemoteRealmBillingUser,
     PreregistrationRemoteServerBillingUser,
-    RateLimitedRemoteZulipServer,
+    RateLimitedRemoteDoerServer,
     RemoteRealm,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
+    RemoteDoerServer,
 )
 
 if TYPE_CHECKING:
@@ -103,7 +103,7 @@ class RemoteRealmBillingTestCase(BouncerTestCase):
             self.assert_in_success_response(
                 [
                     "To finish logging in, check your email account (",
-                    ") for a confirmation email from Zulip.",
+                    ") for a confirmation email from Doer.",
                     user.delivery_email,
                 ],
                 result,
@@ -114,7 +114,7 @@ class RemoteRealmBillingTestCase(BouncerTestCase):
                     f"{settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN}.{settings.EXTERNAL_HOST}"
                     r"(\S+)"
                 ),
-                email_body_contains="confirm your email and log in to Zulip plan management",
+                email_body_contains="confirm your email and log in to Doer plan management",
             )
             if return_without_clicking_confirmation_link:
                 return result
@@ -133,7 +133,7 @@ class RemoteRealmBillingTestCase(BouncerTestCase):
         # Final confirmation page - just confirm your details, possibly
         # agreeing to ToS if needed and an authenticated session will be granted:
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Log in to Zulip plan management"], result)
+        self.assert_in_success_response(["Log in to Doer plan management"], result)
         self.assert_in_success_response([user.realm.host], result)
 
         params = {}
@@ -197,7 +197,7 @@ class SelfHostedBillingEndpointBasicTest(RemoteRealmBillingTestCase):
         self_hosted_billing_url = "/self-hosted-billing/"
         self_hosted_billing_json_url = "/json/self-hosted-billing"
 
-        with self.settings(ZULIP_SERVICE_PUSH_NOTIFICATIONS=False):
+        with self.settings(DOER_SERVICE_PUSH_NOTIFICATIONS=False):
             with self.settings(CORPORATE_ENABLED=True):
                 result = self.client_get(self_hosted_billing_url)
                 self.assertEqual(result.status_code, 404)
@@ -240,12 +240,12 @@ class SelfHostedBillingEndpointBasicTest(RemoteRealmBillingTestCase):
         ):
             result = self.client_get(self_hosted_billing_url)
             self.assertEqual(result.status_code, 403)
-            self.assert_in_response("Unexpected Zulip server registration", result)
+            self.assert_in_response("Unexpected Doer server registration", result)
 
             result = self.client_get(self_hosted_billing_json_url)
             self.assert_json_error(
                 result,
-                "Your organization is registered to a different Zulip server. Please contact Zulip support for assistance in resolving this issue.",
+                "Your organization is registered to a different Doer server. Please contact Doer support for assistance in resolving this issue.",
                 403,
             )
 
@@ -272,7 +272,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         self.login("desdemona")
 
         with (
-            self.settings(CORPORATE_ENABLED=False, ZULIP_SERVICE_PUSH_NOTIFICATIONS=False),
+            self.settings(CORPORATE_ENABLED=False, DOER_SERVICE_PUSH_NOTIFICATIONS=False),
             self.assertLogs("django.request"),
         ):
             result = self.client_get("/self-hosted-billing/not-configured/")
@@ -287,7 +287,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
             self.assertEqual(result.status_code, 404)
 
         # Also doesn't make sense on zulipchat.com (where CORPORATE_ENABLED is True).
-        with self.settings(CORPORATE_ENABLED=True, ZULIP_SERVICE_PUSH_NOTIFICATIONS=False):
+        with self.settings(CORPORATE_ENABLED=True, DOER_SERVICE_PUSH_NOTIFICATIONS=False):
             result = self.client_get("/self-hosted-billing/not-configured/")
             self.assertEqual(result.status_code, 404)
 
@@ -317,7 +317,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
     @responses.activate
     def test_remote_billing_authentication_flow_rate_limited(self) -> None:
         RateLimitedIPAddr("127.0.0.1", domain="sends_email_by_ip").clear_history()
-        RateLimitedRemoteZulipServer(
+        RateLimitedRemoteDoerServer(
             self.server, domain="sends_email_by_remote_server"
         ).clear_history()
 
@@ -587,7 +587,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         # some basic expected content.
         result = self.client_get(result["Location"], subdomain="selfhosting")
         self.assert_in_success_response(
-            ["Request Zulip", "sponsorship", "Description of your organization"], result
+            ["Request Doer", "sponsorship", "Description of your organization"], result
         )
 
     @responses.activate
@@ -610,7 +610,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         with mock.patch("corporate.lib.stripe.has_stale_audit_log", return_value=False):
             result = self.client_get(result["Location"], subdomain="selfhosting")
             self.assert_in_success_response(
-                ["Upgrade", "Purchase Zulip", "Your subscription will renew automatically."], result
+                ["Upgrade", "Purchase Doer", "Your subscription will renew automatically."], result
             )
 
     @responses.activate
@@ -684,7 +684,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         with time_machine.travel(now, tick=False):
             result = self.client_get(first_confirmation_url, subdomain="selfhosting")
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Log in to Zulip plan management"], result)
+        self.assert_in_success_response(["Log in to Doer plan management"], result)
 
         # This created the RemoteRealmBillingUser entry.
         remote_billing_user = RemoteRealmBillingUser.objects.latest("id")
@@ -703,7 +703,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         ):
             result = self.client_get(second_confirmation_url, subdomain="selfhosting")
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Log in to Zulip plan management"], result)
+        self.assert_in_success_response(["Log in to Doer plan management"], result)
 
         # The RemoteRealmBillingUser entry stays the same.
         self.assertEqual(RemoteRealmBillingUser.objects.latest("id"), remote_billing_user)
@@ -739,7 +739,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         assert server_customer is not None
         server_plan = get_current_plan_by_customer(server_customer)
         assert server_plan is not None
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
         self.assertEqual(server_plan.tier, CustomerPlan.TIER_SELF_HOSTED_LEGACY)
         self.assertEqual(server_plan.status, CustomerPlan.ACTIVE)
 
@@ -757,7 +757,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         )
 
         # There are four test realms on this server:
-        # <Realm: zulipinternal 1>, <Realm: zephyr 3>, <Realm: lear 4>, <Realm: zulip 2>
+        # <Realm: zulipinternal 1>, <Realm: zephyr 3>, <Realm: lear 4>, <Realm: doer 2>
         self.assert_length(Realm.objects.all(), 4)
 
         # Delete any existing remote realms.
@@ -776,7 +776,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Server plan status stayed the same.
         self.server.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
 
         # RemoteRealm objects should be created for all realms on the server but no customer plans.
         self.assert_length(RemoteRealm.objects.all(), 4)
@@ -788,8 +788,8 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         self.assertEqual(get_current_plan_by_customer(server_customer), server_plan)
         self.assertEqual(server_plan.customer, server_customer)
 
-        # Deactivate realms other than bot realm and zulip realm then try the migration again.
-        Realm.objects.exclude(string_id__in=["zulip", "zulipinternal"]).update(deactivated=True)
+        # Deactivate realms other than bot realm and doer realm then try the migration again.
+        Realm.objects.exclude(string_id__in=["doer", "zulipinternal"]).update(deactivated=True)
 
         # Send server data to push bouncer.
         send_server_data_to_push_bouncer(consider_usage_statistics=False)
@@ -802,7 +802,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Server plan status was reset
         self.server.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED)
         # Check if zephyr and lear were deactivated
         self.assertEqual(
             set(RemoteRealm.objects.filter(realm_deactivated=True).values_list("host", flat=True)),
@@ -824,7 +824,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         self.assertIsNone(get_customer_by_remote_realm(system_bot_remote_realm))
 
-        self.assertEqual(remote_realm_with_plan.host, "zulip.testserver")
+        self.assertEqual(remote_realm_with_plan.host, "doer.testserver")
         customer = get_customer_by_remote_realm(remote_realm_with_plan)
         assert customer is not None
         # Customer got transferred from server to realm.
@@ -848,7 +848,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
     ) -> None:
         self.login("desdemona")
         desdemona = self.example_user("desdemona")
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
 
         server_billing_session = RemoteServerBillingSession(self.server)
         server_customer = server_billing_session.update_or_create_customer(
@@ -861,21 +861,21 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
             tier=CustomerPlan.TIER_SELF_HOSTED_COMMUNITY,
             status=CustomerPlan.ACTIVE,
         )
-        self.server.plan_type = RemoteZulipServer.PLAN_TYPE_COMMUNITY
+        self.server.plan_type = RemoteDoerServer.PLAN_TYPE_COMMUNITY
         self.server.save(update_fields=["plan_type"])
 
         # Delete any existing remote realms.
         RemoteRealm.objects.all().delete()
 
         # We want there to be only a single (non-system bot) realm on the server for our setup.
-        Realm.objects.exclude(string_id__in=["zulip", "zulipinternal"]).update(deactivated=True)
+        Realm.objects.exclude(string_id__in=["doer", "zulipinternal"]).update(deactivated=True)
 
         # Send server data to push bouncer.
         self.add_mock_response()
         send_server_data_to_push_bouncer(consider_usage_statistics=False)
 
         # Let's create a plan for the realm. This will conflict with the server plan.
-        remote_realm = RemoteRealm.objects.get(uuid=zulip_realm.uuid)
+        remote_realm = RemoteRealm.objects.get(uuid=doer_realm.uuid)
         realm_billing_session = RemoteRealmBillingSession(remote_realm)
         realm_customer = realm_billing_session.update_or_create_customer(
             stripe_customer_id="cus_123realm"
@@ -968,7 +968,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Server plan status was reset
         self.server.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED)
 
         # The Customer objects remain as they were.
         self.assertEqual(get_customer_by_remote_realm(remote_realm), realm_customer)
@@ -996,7 +996,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Assert current server is not on any plan.
         self.assertIsNone(get_customer_by_remote_server(self.server))
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED)
 
         # Add server to business plan.
         server_billing_session = RemoteServerBillingSession(self.server)
@@ -1020,11 +1020,11 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
             licenses=initial_license_count,
             licenses_at_next_renewal=initial_license_count,
         )
-        self.server.plan_type = RemoteZulipServer.PLAN_TYPE_BUSINESS
+        self.server.plan_type = RemoteDoerServer.PLAN_TYPE_BUSINESS
         self.server.save(update_fields=["plan_type"])
 
         # There are four test realms on this server:
-        # <Realm: zulipinternal 1>, <Realm: zephyr 3>, <Realm: lear 4>, <Realm: zulip 2>
+        # <Realm: zulipinternal 1>, <Realm: zephyr 3>, <Realm: lear 4>, <Realm: doer 2>
         self.assert_length(Realm.objects.all(), 4)
 
         # Delete any existing remote realms.
@@ -1043,7 +1043,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Server plan status stayed the same.
         self.server.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_BUSINESS)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_BUSINESS)
 
         # RemoteRealm objects should be created for all realms on the server but no customer plans.
         self.assert_length(RemoteRealm.objects.all(), 4)
@@ -1055,8 +1055,8 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         self.assertEqual(get_current_plan_by_customer(server_customer), server_plan)
         self.assertEqual(server_plan.customer, server_customer)
 
-        # Deactivate realms other than bot realm and zulip realm then try the migration again.
-        Realm.objects.exclude(string_id__in=["zulip", "zulipinternal"]).update(deactivated=True)
+        # Deactivate realms other than bot realm and doer realm then try the migration again.
+        Realm.objects.exclude(string_id__in=["doer", "zulipinternal"]).update(deactivated=True)
 
         # Send server data to push bouncer.
         send_server_data_to_push_bouncer(consider_usage_statistics=False)
@@ -1069,7 +1069,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         # Server plan status was reset
         self.server.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED)
 
         # Check business CustomerPlan exists for all realms except bot realm.
 
@@ -1085,7 +1085,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
 
         self.assertIsNone(get_customer_by_remote_realm(system_bot_remote_realm))
 
-        self.assertEqual(remote_realm_with_plan.host, "zulip.testserver")
+        self.assertEqual(remote_realm_with_plan.host, "doer.testserver")
         customer = get_customer_by_remote_realm(remote_realm_with_plan)
         assert customer is not None
         # Customer got transferred from server to realm.
@@ -1162,14 +1162,14 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         # Server stays on the same plan.
         server_plan = get_current_plan_by_customer(server_customer)
         assert server_plan is not None
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY)
         self.assertEqual(server_plan.tier, CustomerPlan.TIER_SELF_HOSTED_LEGACY)
         self.assertEqual(server_plan.status, CustomerPlan.ACTIVE)
 
         # CASE: Server has business plan but all realms are deactivated.
         server_plan.tier = CustomerPlan.TIER_SELF_HOSTED_BUSINESS
         server_plan.save(update_fields=["tier"])
-        self.server.plan_type = RemoteZulipServer.PLAN_TYPE_BUSINESS
+        self.server.plan_type = RemoteDoerServer.PLAN_TYPE_BUSINESS
         self.server.save(update_fields=["plan_type"])
 
         # Login to plan management.
@@ -1182,7 +1182,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         # Server stays on the same plan.
         server_customer.refresh_from_db()
         server_plan.refresh_from_db()
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_BUSINESS)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_BUSINESS)
         self.assertEqual(server_plan.tier, CustomerPlan.TIER_SELF_HOSTED_BUSINESS)
 
         # CASE: Server has business plan but there are no realms.
@@ -1193,7 +1193,7 @@ class RemoteBillingAuthenticationTest(RemoteRealmBillingTestCase):
         server_customer.refresh_from_db()
         server_plan.refresh_from_db()
         # Server stays on same plan.
-        self.assertEqual(self.server.plan_type, RemoteZulipServer.PLAN_TYPE_BUSINESS)
+        self.assertEqual(self.server.plan_type, RemoteDoerServer.PLAN_TYPE_BUSINESS)
         self.assertEqual(server_plan.tier, CustomerPlan.TIER_SELF_HOSTED_BUSINESS)
         self.assertEqual(server_plan.status, CustomerPlan.ACTIVE)
 
@@ -1216,7 +1216,7 @@ class RemoteServerTestCase(BouncerTestCase):
     ) -> "TestHttpResponse":
         now = timezone_now()
         with time_machine.travel(now, tick=False):
-            payload = {"zulip_org_id": self.uuid, "zulip_org_key": self.secret}
+            payload = {"doer_org_id": self.uuid, "doer_org_key": self.secret}
             if next_page is not None:
                 payload["next_page"] = next_page
             result = self.client_post(
@@ -1280,7 +1280,7 @@ class RemoteServerTestCase(BouncerTestCase):
             result = self.client_get(confirmation_url, subdomain="selfhosting")
         self.assertEqual(result.status_code, 200)
         self.assert_in_success_response(
-            [f"Log in to Zulip plan management for {self.server.hostname}", email], result
+            [f"Log in to Doer plan management for {self.server.hostname}", email], result
         )
         self.assert_in_success_response([f'action="{confirmation_url}"'], result)
         if expect_tos:
@@ -1323,7 +1323,7 @@ class LegacyServerLoginTest(RemoteServerTestCase):
     @ratelimit_rule(10, 2, domain="sends_email_by_ip")
     def test_remote_billing_authentication_flow_rate_limited(self) -> None:
         RateLimitedIPAddr("127.0.0.1", domain="sends_email_by_ip").clear_history()
-        RateLimitedRemoteZulipServer(
+        RateLimitedRemoteDoerServer(
             self.server, domain="sends_email_by_remote_server"
         ).clear_history()
 
@@ -1375,28 +1375,28 @@ class LegacyServerLoginTest(RemoteServerTestCase):
     def test_server_login_get(self) -> None:
         result = self.client_get("/serverlogin/", subdomain="selfhosting")
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Authenticate server for Zulip plan management"], result)
+        self.assert_in_success_response(["Authenticate server for Doer plan management"], result)
 
-    def test_server_login_invalid_zulip_org_id(self) -> None:
+    def test_server_login_invalid_doer_org_id(self) -> None:
         result = self.client_post(
             "/serverlogin/",
-            {"zulip_org_id": "invalid", "zulip_org_key": "secret"},
+            {"doer_org_id": "invalid", "doer_org_key": "secret"},
             subdomain="selfhosting",
         )
         self.assertEqual(result.status_code, 200)
         self.assert_in_success_response(
-            ["This zulip_org_id is not registered with Zulip&#39;s billing management system."],
+            ["This doer_org_id is not registered with Doer&#39;s billing management system."],
             result,
         )
 
-    def test_server_login_invalid_zulip_org_key(self) -> None:
+    def test_server_login_invalid_doer_org_key(self) -> None:
         result = self.client_post(
             "/serverlogin/",
-            {"zulip_org_id": self.uuid, "zulip_org_key": "invalid"},
+            {"doer_org_id": self.uuid, "doer_org_key": "invalid"},
             subdomain="selfhosting",
         )
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Invalid zulip_org_key for this zulip_org_id."], result)
+        self.assert_in_success_response(["Invalid doer_org_key for this doer_org_id."], result)
 
     def test_server_login_deactivated_server(self) -> None:
         self.server.deactivated = True
@@ -1404,7 +1404,7 @@ class LegacyServerLoginTest(RemoteServerTestCase):
 
         result = self.client_post(
             "/serverlogin/",
-            {"zulip_org_id": self.uuid, "zulip_org_key": self.secret},
+            {"doer_org_id": self.uuid, "doer_org_key": self.secret},
             subdomain="selfhosting",
         )
         self.assertEqual(result.status_code, 200)
@@ -1462,7 +1462,7 @@ class LegacyServerLoginTest(RemoteServerTestCase):
         # First test an invalid next_page value.
         result = self.client_post(
             "/serverlogin/",
-            {"zulip_org_id": self.uuid, "zulip_org_key": self.secret, "next_page": "invalid"},
+            {"doer_org_id": self.uuid, "doer_org_key": self.secret, "next_page": "invalid"},
             subdomain="selfhosting",
         )
         self.assert_json_error(result, "Invalid next_page", 400)
@@ -1476,7 +1476,7 @@ class LegacyServerLoginTest(RemoteServerTestCase):
         self.assertEqual(result["Location"], f"/server/{self.uuid}/sponsorship/")
 
         result = self.client_get(result["Location"], subdomain="selfhosting")
-        self.assert_in_success_response(["Request Zulip", "sponsorship", "Community"], result)
+        self.assert_in_success_response(["Request Doer", "sponsorship", "Community"], result)
 
     def test_server_login_next_page_in_form_persists(self) -> None:
         result = self.client_get("/serverlogin/?next_page=billing", subdomain="selfhosting")
@@ -1486,11 +1486,11 @@ class LegacyServerLoginTest(RemoteServerTestCase):
 
         result = self.client_post(
             "/serverlogin/",
-            {"zulip_org_id": self.uuid, "zulip_org_key": "invalid", "next_page": "billing"},
+            {"doer_org_id": self.uuid, "doer_org_key": "invalid", "next_page": "billing"},
             subdomain="selfhosting",
         )
         self.assertEqual(result.status_code, 200)
-        self.assert_in_success_response(["Invalid zulip_org_key for this zulip_org_id."], result)
+        self.assert_in_success_response(["Invalid doer_org_key for this doer_org_id."], result)
         # The next_page param should be preserved in the form.
         self.assert_in_success_response(
             ['<input type="hidden" name="next_page" value="billing" />'], result

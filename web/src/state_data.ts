@@ -583,7 +583,7 @@ export const realm_schema = z.object({
     realm_waiting_period_threshold: z.number(),
     realm_want_advertise_in_communities_directory: z.boolean(),
     realm_welcome_message_custom_text: z.string(),
-    realm_zulip_update_announcements_stream_id: z.number(),
+    realm_doer_update_announcements_stream_id: z.number(),
     server_avatar_changes_disabled: z.boolean(),
     server_can_summarize_topics: z.boolean(),
     server_emoji_data_url: z.string(),
@@ -611,10 +611,10 @@ export const realm_schema = z.object({
     stop_words: z.array(z.string()),
     tenor_api_key: z.string(),
     upgrade_text_for_wide_organization_logo: z.string(),
-    zulip_feature_level: z.number(),
-    zulip_merge_base: z.string(),
-    zulip_plan_is_not_limited: z.boolean(),
-    zulip_version: z.string(),
+    doer_feature_level: z.number(),
+    doer_merge_base: z.string(),
+    doer_plan_is_not_limited: z.boolean(),
+    doer_version: z.string(),
 });
 
 export const split_state_data_schema = z.object({

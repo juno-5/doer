@@ -1,18 +1,18 @@
 # Full-text search
 
-Zulip supports full-text search, which can be combined arbitrarily
-with Zulip's full suite of narrowing operators. By default, it only
+Doer supports full-text search, which can be combined arbitrarily
+with Doer's full suite of narrowing operators. By default, it only
 supports English text, but there is an experimental
 [PGroonga](https://pgroonga.github.io/) integration that provides
 full-text search for all languages.
 
-The user interface and feature set for Zulip's full-text search is
+The user interface and feature set for Doer's full-text search is
 documented in the in-app "Search filters" reference which can be
-accessed from the Zulip app's gear menu.
+accessed from the Doer app's gear menu.
 
 ## The default full-text search implementation
 
-Zulip uses [PostgreSQL's built-in full-text search
+Doer uses [PostgreSQL's built-in full-text search
 feature](https://www.postgresql.org/docs/current/textsearch.html),
 with a custom set of English stop words to improve the quality of the
 search results.
@@ -21,18 +21,18 @@ In order to optimize the performance of delivering messages, the
 full-text search index is updated for newly sent messages in the
 background, after the message has been delivered. This background
 updating is done by
-`puppet/zulip/files/postgresql/process_fts_updates`, which is usually
+`puppet/doer/files/postgresql/process_fts_updates`, which is usually
 deployed on the database server, but could be deployed on an
 application server instead.
 
 ## Multi-language full-text search
 
-Zulip also supports using [PGroonga](https://pgroonga.github.io/) for
+Doer also supports using [PGroonga](https://pgroonga.github.io/) for
 full-text search. While PostgreSQL's built-in full-text search feature
-supports only one language at a time (in Zulip's case, English), the
+supports only one language at a time (in Doer's case, English), the
 PGroonga full-text search engine supports all languages
 simultaneously, including Japanese and Chinese. Once we have tested
-this new backend sufficiently, we expect to switch Zulip deployments
+this new backend sufficiently, we expect to switch Doer deployments
 to always use PGroonga.
 
 ### Enabling PGroonga
@@ -42,13 +42,13 @@ All steps in this section should be run as the `root` user; on most installs, th
 1. Alter the deployment setting:
 
    ```bash
-   crudini --set /etc/zulip/zulip.conf machine pgroonga enabled
+   crudini --set /etc/zulip/doer.conf machine pgroonga enabled
    ```
 
 1. Update the deployment to respect that new setting:
 
    ```bash
-   /home/zulip/deployments/current/scripts/zulip-puppet-apply
+   /home/zulip/deployments/current/scripts/doer-puppet-apply
    ```
 
 1. Edit `/etc/zulip/settings.py`, to add:
@@ -60,16 +60,16 @@ All steps in this section should be run as the `root` user; on most installs, th
 1. Apply the PGroonga migrations:
 
    ```bash
-   su zulip -c '/home/zulip/deployments/current/manage.py migrate pgroonga'
+   su doer -c '/home/zulip/deployments/current/manage.py migrate pgroonga'
    ```
 
    Note that the migration may take a long time, and users will be
    unable to send new messages until the migration finishes.
 
-1. Once the migrations are complete, restart Zulip:
+1. Once the migrations are complete, restart Doer:
 
    ```bash
-   su zulip -c '/home/zulip/deployments/current/scripts/restart-server'
+   su doer -c '/home/zulip/deployments/current/scripts/restart-server'
    ```
 
 ### Disabling PGroonga
@@ -77,7 +77,7 @@ All steps in this section should be run as the `root` user; on most installs, th
 1. Remove the PGroonga migration:
 
    ```bash
-   su zulip -c '/home/zulip/deployments/current/manage.py migrate pgroonga zero'
+   su doer -c '/home/zulip/deployments/current/manage.py migrate pgroonga zero'
    ```
 
    If you intend to re-enable PGroonga later, you can skip this step,
@@ -90,14 +90,14 @@ All steps in this section should be run as the `root` user; on most installs, th
    USING_PGROONGA = False
    ```
 
-1. Restart Zulip:
+1. Restart Doer:
 
    ```bash
-   su zulip -c '/home/zulip/deployments/current/scripts/restart-server'
+   su doer -c '/home/zulip/deployments/current/scripts/restart-server'
    ```
 
 1. Finally, remove the deployment setting:
 
    ```bash
-   crudini --del /etc/zulip/zulip.conf machine pgroonga
+   crudini --del /etc/zulip/doer.conf machine pgroonga
    ```

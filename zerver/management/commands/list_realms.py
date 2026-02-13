@@ -4,11 +4,11 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import Realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """List realms in the server and it's configuration settings(optional).
 
 Usage examples:

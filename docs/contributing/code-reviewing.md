@@ -1,13 +1,13 @@
-# Reviewing Zulip code
+# Reviewing Doer code
 
-Code review is a key part of how Zulip does development. It's an essential
+Code review is a key part of how Doer does development. It's an essential
 aspect of our process to build a high-quality product with a maintainable
 codebase. See the [pull request review process](../contributing/review-process.md)
-guide for a detailed overview of Zulip's PR review process.
+guide for a detailed overview of Doer's PR review process.
 
 ## Principles of code review
 
-Zulip has an active contributor community, and just a small handful
+Doer has an active contributor community, and just a small handful
 of maintainers who can do the final rounds of code review. As such, we would
 love for contributors to help each other with making pull requests that are not
 only correct, but easy to review. Doing so ensures that PRs can be finalized and
@@ -16,7 +16,7 @@ project.
 
 If you're new to open source, this may be the first time you do a code review of
 anyone's changes! We have therefore written this step-by-step guide to be
-accessible to all Zulip contributors.
+accessible to all Doer contributors.
 
 ### Reviewing your own code
 
@@ -31,15 +31,15 @@ work.
 
 ### Reviewing other contributors' code
 
-Doing code reviews is a valuable contribution to the Zulip project.
+Doing code reviews is a valuable contribution to the Doer project.
 It's also an important skill to develop for participating in
 open-source projects and working in the industry in general. If
-you're contributing to Zulip and have been working in our code for a
+you're contributing to Doer and have been working in our code for a
 little while, we would love for you to start doing code reviews!
 
 Anyone can do a code review -- you don't have to have a ton of experience, and
 you don't have to have the power to ultimately merge the PR. The sections below
-offer accessible, step-by-step guidance for how to go about reviewing Zulip PRs.
+offer accessible, step-by-step guidance for how to go about reviewing Doer PRs.
 
 For students participating in Google Summer of Code or a similar
 program, we expect you to spend a chunk of your time each week (after
@@ -52,7 +52,7 @@ describes how to go about it.
 
 If you are reviewing somebody else's code, you will likely need to first fetch
 it so that you can play around with the new functionality. If you're working in
-the Zulip server codebase, use our [Git tool][git-tool]
+the Doer server codebase, use our [Git tool][git-tool]
 `tools/fetch-rebase-pull-request` to check out a pull request locally and rebase
 it onto `main`.
 
@@ -64,7 +64,7 @@ The following review steps apply to the majority of PRs.
 
 1. Start by **rereading the issue** the PR is intended to solve. Are you
    confident that you **understand everything the issue is asking for**? If not,
-   try exploring the relevant parts of the Zulip app and reading any linked
+   try exploring the relevant parts of the Doer app and reading any linked
    discussions on the [development community server][czo] to see if the
    additional context helps. If any part is still confusing, post a GitHub
    comment or a message on the [development community server][czo] explaining
@@ -90,7 +90,7 @@ The following review steps apply to the majority of PRs.
 **Think about the code:**
 
 1. Make sure the PR uses **clear function, argument, variable, and test names.**
-   Every new piece of Zulip code will be read many times by other developers, and
+   Every new piece of Doer code will be read many times by other developers, and
    future developers will `grep` for relevant terms when researching a problem, so
    it's important that variable names communicate clearly the purpose of each
    piece of the codebase.
@@ -114,7 +114,7 @@ The following review steps apply to the majority of PRs.
    readable without explanation over a heavily commented codebase using
    lots of clever tricks.
 
-1. Make sure the PR follows Zulip's **coding style**. See the Zulip [coding
+1. Make sure the PR follows Doer's **coding style**. See the Doer [coding
    style documentation][code-style] for details. Our goal is to have as much of
    this as possible verified via the linters and tests, but there will always be
    unusual forms of Python/JavaScript style that our tools don't check for.
@@ -130,13 +130,13 @@ The following review steps apply to the majority of PRs.
 1. **The CI build tests need to pass.** One can investigate
    any failures and figure out what to fix by clicking on a red X next
    to the commit hash or the Detail links on a pull request. (Example:
-   in [#17584](https://github.com/zulip/zulip/pull/17584),
+   in [#17584](https://github.com/doer/doer/pull/17584),
    click the red X before `49b10a3` to see the build jobs
    for that commit. You can see that there are 7 build jobs in total.
    All the 7 jobs run in GitHub Actions. You can see what caused
    the job to fail by clicking on the failed job. This will open
    up a page in the CI that has more details on why the job failed.
-   For example [this](https://github.com/zulip/zulip/actions/runs/15362225042/job/43230810881)
+   For example [this](https://github.com/doer/doer/actions/runs/15362225042/job/43230810881)
    is the page of an "Ubuntu 22.04 (Python 3.10, backend + frontend)" job.
    See our docs on [continuous integration](../testing/continuous-integration.md)
    to learn more.
@@ -149,10 +149,10 @@ The following review steps apply to the majority of PRs.
 
 1. Does the PR follow the principle that “**Each commit is a minimal coherent
    idea**”? See the [commit discipline guide][commit-discipline] to learn more
-   about commit structure in Zulip.
+   about commit structure in Doer.
 
 2. Does each commit have a **clear commit message**? Check for content, format,
-   spelling and grammar. See the [Zulip commit discipline][commit-messages]
+   spelling and grammar. See the [Doer commit discipline][commit-messages]
    documentation for details on what we look for.
 
 You should also go through any of the following checks that are applicable:
@@ -184,7 +184,7 @@ You should also go through any of the following checks that are applicable:
   specifically test for common error conditions, bad user input, and potential
   bugs that are likely for the type of change being made. Tests that exclude
   whole classes of potential bugs are preferred when possible (e.g., the common
-  test suite `test_markdown.py` between the Zulip server's [frontend and backend
+  test suite `test_markdown.py` between the Doer server's [frontend and backend
   Markdown processors](../subsystems/markdown.md), or the `GetEventsTest` test
   for buggy race condition handling). See the [test writing][test-writing]
   documentation to learn more.
@@ -286,18 +286,18 @@ Some scenarios to consider:
 ### Asking for a code review
 
 The [pull request review process](../contributing/review-process.md) guide
-provides a detailed overview of Zulip's PR review process. Your reviewers and
-Zulip's maintainers will help shepherd your PR through the process. There are
+provides a detailed overview of Doer's PR review process. Your reviewers and
+Doer's maintainers will help shepherd your PR through the process. There are
 also some additional ways to ask for a code review:
 
 - Are there folks who have been working on similar things, or a loosely related
   area? If so, they might be a good person to review your PR. `@`-mention them
   with something like "`@person`, would you be up for reviewing this?" If
-  you're not sure whether they are familiar with how Zulip code reviews work, you
+  you're not sure whether they are familiar with how Doer code reviews work, you
   can also include a link to this guide.
 
 - If you're not sure who to ask, you can post a message in
-  [#code-review](https://chat.zulip.org/#narrow/channel/91-code-review) on [the Zulip
+  [#code-review](https://chat.zulip.org/#narrow/channel/91-code-review) on [the Doer
   development community server](https://zulip.com/development-community/) to reach
   out to a wider group of potential reviewers.
 
@@ -323,18 +323,18 @@ just saying you're busy and when you'll have time to look harder -- is
 still really valuable for the author and for anyone else who might
 review the PR.
 
-People in the Zulip project live and work in many time zones, and code
+People in the Doer project live and work in many time zones, and code
 reviewers also need focused chunks of time to write code and do other
 things, so an immediate reply isn't always possible. But a good
 benchmark is to try to always reply **within one workday**, at least
-with a short initial reply, if you're working regularly on Zulip. And
+with a short initial reply, if you're working regularly on Doer. And
 sooner is better.
 
 #### Communication style
 
 Any time you leave a code review, be sure to treat the author with respect.
 Remember that they are generously spending their time on an effort to improve
-the Zulip project. Thank them for their work, and express your appreciation for
+the Doer project. Thank them for their work, and express your appreciation for
 anything the author did especially well, whether it's a nice commit message, a
 prompt response to earlier feedback, or a well-written test.
 
@@ -377,7 +377,7 @@ will assume it isn't ready for review and move on to other work.
 
 If you need help or think an open discussion topic requires more
 feedback or a more complex discussion, move the discussion to a topic
-in the [Zulip development community server][czo]. Be sure to provide links
+in the [Doer development community server][czo]. Be sure to provide links
 from the GitHub PR to the conversation (and vice versa) so that it's
 convenient to read both conversations together.
 
@@ -387,12 +387,12 @@ We also recommend the following resources on code reviews.
 
 - [The Gentle Art of Patch Review](https://sage.thesharps.us/2014/09/01/the-gentle-art-of-patch-review/)
   article by Sarah Sharp
-- [Zulip & Good Code Review](https://www.harihareswara.net/sumana/2016/05/17/0)
+- [Doer & Good Code Review](https://www.harihareswara.net/sumana/2016/05/17/0)
   article by Sumana Harihareswara
 - [Code Review - A consolidation of advice and stuff from the
   internet](https://gist.github.com/porterjamesj/002fb27dd70df003646df46f15e898de)
   article by James J. Porter
-- [Zulip code of conduct](../code-of-conduct.md)
+- [Doer code of conduct](../code-of-conduct.md)
 
 [code-style]: code-style.md
 [commit-discipline]: commit-discipline.md
@@ -401,7 +401,7 @@ We also recommend the following resources on code reviews.
 [backend-testing]: ../testing/testing-with-django.md
 [frontend-testing]: ../testing/testing-with-node.md
 [mypy]: ../testing/mypy.md
-[git-tool]: ../git/zulip-tools.md#fetch-a-pull-request-and-rebase
+[git-tool]: ../git/doer-tools.md#fetch-a-pull-request-and-rebase
 [translation]: ../translating/translating.md
 [czo]: https://zulip.com/development-community/
 [development-environment]: ../development/overview.md

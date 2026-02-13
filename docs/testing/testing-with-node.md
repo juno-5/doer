@@ -1,7 +1,7 @@
 # JavaScript/TypeScript unit tests
 
 Our node-based unit tests system is the preferred way to test
-JavaScript/TypeScript code in Zulip. We prefer it over the [Puppeteer
+JavaScript/TypeScript code in Doer. We prefer it over the [Puppeteer
 black-box whole-app testing](testing-with-puppeteer.md),
 system since it is much (>100x) faster and also easier to do correctly
 than the Puppeteer system.
@@ -45,28 +45,28 @@ there are, you should strive to follow the patterns of the existing tests
 and add your own tests.
 
 A good first test to read is
-[example1.test.cjs](https://github.com/zulip/zulip/blob/main/web/tests/example1.test.cjs).
+[example1.test.cjs](https://github.com/doer/doer/blob/main/web/tests/example1.test.cjs).
 (And then there are several other example files.)
 
 ## How the node tests work
 
 Unlike the [Puppeteer unit tests](testing-with-puppeteer.md),
-which use a headless Chromium browser connected to a running Zulip
+which use a headless Chromium browser connected to a running Doer
 development server, our node unit tests don't have a browser, don't
 talk to a server, and generally don't use a complete virtual DOM (a
 handful of tests use the `jsdom` library for this purpose) because
 those slow down the tests a lot, and often don't add much value.
 
 Instead, the preferred model for our unit tests is to mock DOM
-manipulations (which in Zulip are almost exclusively done via
+manipulations (which in Doer are almost exclusively done via
 `jQuery`) using a custom library
-[zjquery](https://github.com/zulip/zulip/blob/main/web/tests/lib/zjquery.cjs).
+[zjquery](https://github.com/doer/doer/blob/main/web/tests/lib/zjquery.cjs).
 
 The
-[unit test file](https://github.com/zulip/zulip/blob/main/web/tests/zjquery.test.cjs)
+[unit test file](https://github.com/doer/doer/blob/main/web/tests/zjquery.test.cjs)
 for `zjquery` is designed to be also serve as nice documentation for
 how to use `zjquery`, and is **highly recommended reading** for anyone
-working on or debugging the Zulip node tests.
+working on or debugging the Doer node tests.
 
 Conceptually, the `zjquery` library provides minimal versions of most
 `jQuery` DOM manipulation functions, and has a convenient system for
@@ -161,7 +161,7 @@ tests are usually both more effective at catching bugs and cheaper to
 maintain than tests that make heavy use of mocks.
 
 One place where mocks can often be useful is when testing logic for
-rendering an HTML template in Zulip. The interesting logic that one
+rendering an HTML template in Doer. The interesting logic that one
 wants to verify can be split between two places:
 
 - Computing the **context data** object passed into the HTML template.
@@ -173,7 +173,7 @@ result.
 
 But often, one can write a more readable test by instead verifying
 the values of parameters in the context passed into the template
-rendering. The `mock_template` function in Zulip's testing library
+rendering. The `mock_template` function in Doer's testing library
 is designed to support this this.
 
 We use `mock_template` in our unit tests to verify that the JS code is
@@ -254,10 +254,10 @@ These instructions assume you're using the Vagrant development environment.
 2. In WebStorm, navigate to `Preferences -> Tools -> Vagrant` and
    configure the following:
 
-   - `Instance folder` should be the root of the `zulip` repository on
+   - `Instance folder` should be the root of the `doer` repository on
      your host (where the Vagrantfile is located).
    - `Provider` should be `virtualbox` on macOS and Docker on Linux
-   - In `Boxes`, choose the one used for Zulip (unless you use
+   - In `Boxes`, choose the one used for Doer (unless you use
      Virtualbox for other things, there should only be one option).
 
    You shouldn't need to set these additional settings:
@@ -277,9 +277,9 @@ These instructions assume you're using the Vagrant development environment.
          SSH URL, e.g., `ssh://vagrant@127.0.0.1:2222`.
       1. **Set the `Node.js interpreter path` to `/usr/local/bin/node`**
       1. Hit `OK` 2 times to get back to the `Run/Debug Configurations` window.
-   1. Under `Working Directory` select the root `zulip` directory.
+   1. Under `Working Directory` select the root `doer` directory.
    1. Under `JavaScript file`, enter `web/tests/lib/index.cjs`
-      -- this is the root script for Zulip's node unit tests.
+      -- this is the root script for Doer's node unit tests.
 
 Congratulations! You've now set up the integration.
 
@@ -290,7 +290,7 @@ To use Webstorm to debug a given node test file, do the following:
 1. Under `Application parameters` choose the node test file that you
    are trying to test (e.g., `web/tests/message_store.test.cjs`).
 1. Under `Path Mappings`, set `Project Root` to `/srv/zulip`
-   (i.e. where the `zulip` Git repository is mounted in the Vagrant guest).
+   (i.e. where the `doer` Git repository is mounted in the Vagrant guest).
 1. Use the WebStorm debugger; see [this overview][webstorm-debugging]
    for details on how to use it.
 

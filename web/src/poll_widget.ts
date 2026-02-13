@@ -12,7 +12,7 @@ import type {Message} from "./message_store.ts";
 import * as people from "./people.ts";
 import type {PollWidgetOutboundData} from "./poll_data.ts";
 import {PollData, new_option_schema, question_schema, vote_schema} from "./poll_data.ts";
-import {ZulipWidgetContext} from "./widget_context.ts";
+import {DoerWidgetContext} from "./widget_context.ts";
 import type {Event} from "./widget_data.ts";
 import type {AnyWidgetData} from "./widget_schema.ts";
 
@@ -29,7 +29,7 @@ export function activate({
 }): (events: Event[]) => void {
     assert(any_data.widget_type === "poll");
     const {extra_data} = any_data;
-    const widget_context = new ZulipWidgetContext(message);
+    const widget_context = new DoerWidgetContext(message);
     const container_is_hidden = widget_context.is_container_hidden();
     const is_my_poll = widget_context.is_my_poll();
     const poll_owner_user_id = widget_context.owner_user_id();

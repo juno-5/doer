@@ -1,21 +1,21 @@
 # Using the development environment
 
 This page describes the basic edit/refresh workflows for working with
-the Zulip development environment. Generally, the development
+the Doer development environment. Generally, the development
 environment will automatically update as soon as you save changes
 using your editor. Details for work on the [server](#server),
 [web app](#web), and [mobile apps](#mobile) are below.
 
-If you're working on authentication methods or need to use the [Zulip
+If you're working on authentication methods or need to use the [Doer
 REST API][rest-api], which requires an API key, see [authentication in
 the development environment][authentication-dev-server].
 
 ## Common
 
-- Zulip's `main` branch moves quickly, and you should rebase
+- Doer's `main` branch moves quickly, and you should rebase
   constantly with, for example,
   `git fetch upstream; git rebase upstream/main` to avoid developing
-  on an old version of the Zulip codebase (leading to unnecessary
+  on an old version of the Doer codebase (leading to unnecessary
   merge conflicts).
 - Remember to run `tools/provision` to update your development
   environment after switching branches; it will run in under a second
@@ -23,7 +23,7 @@ the development environment][authentication-dev-server].
 - After making changes, you'll often want to run the
   [linters](../testing/linters.md) and relevant [test
   suites](../testing/testing.md). Consider using our [Git pre-commit
-  hook](../git/zulip-tools.md#set-up-git-repo-script) to
+  hook](../git/doer-tools.md#set-up-git-repo-script) to
   automatically lint whenever you make a commit.
 - All of our test suites are designed to support quickly testing just
   a single file or test case, which you should take advantage of to
@@ -36,7 +36,7 @@ the development environment][authentication-dev-server].
 
 ## Server
 
-- For changes that don't affect the database model, the Zulip
+- For changes that don't affect the database model, the Doer
   development environment will automatically detect changes and
   restart:
   - The main Django/Tornado server processes are run on top of
@@ -53,9 +53,9 @@ the development environment][authentication-dev-server].
   feature tutorial][new-feature-tutorial] for an example.
 - While testing server changes, it's helpful to watch the `run-dev`
   console output, which will show tracebacks for any 500 errors your
-  Zulip development server encounters (which are probably caused by
+  Doer development server encounters (which are probably caused by
   bugs in your code).
-- To manually query Zulip's database interactively, use
+- To manually query Doer's database interactively, use
   `./manage.py shell` or `manage.py dbshell`.
 - The database(s) used for the automated tests are independent from
   the one you use for manual testing in the UI, so changes you make to
@@ -97,4 +97,4 @@ and contribute to the mobile app][mobile-development-guide].
 [django-runserver]: https://docs.djangoproject.com/en/5.0/ref/django-admin/#runserver
 [new-feature-tutorial]: ../tutorials/new-feature-tutorial.md
 [testing-docs]: ../testing/testing.md
-[mobile-development-guide]: https://github.com/zulip/zulip-flutter/blob/main/docs/setup.md
+[mobile-development-guide]: https://github.com/doer/doer-flutter/blob/main/docs/setup.md

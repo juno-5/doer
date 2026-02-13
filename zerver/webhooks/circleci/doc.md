@@ -1,6 +1,6 @@
-# Zulip CircleCI integration
+# Doer CircleCI integration
 
-Zulip supports integration with CircleCI and can notify you of your
+Doer supports integration with CircleCI and can notify you of your
 job and workflow statuses. This integration currently supports using
 CircleCI with GitHub, BitBucket and GitLab.
 

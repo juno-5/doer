@@ -21,12 +21,12 @@ from corporate.lib.stripe import (
 from corporate.models.customers import Customer
 from corporate.models.licenses import LicenseLedger
 from corporate.models.plans import CustomerPlan
-from scripts.lib.zulip_tools import TIMESTAMP_FORMAT
+from scripts.lib.doer_tools import TIMESTAMP_FORMAT
 from zerver.actions.create_realm import do_create_realm
 from zerver.actions.create_user import do_create_user
 from zerver.actions.streams import bulk_add_subscriptions
 from zerver.apps import flush_cache
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.remote_server import get_realms_info_for_push_bouncer
 from zerver.lib.streams import create_stream_if_needed
 from zerver.models import Realm, UserProfile
@@ -36,8 +36,8 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
 )
 from zilencer.views import update_remote_realm_data_for_server
 from zproject.config import get_secret
@@ -67,7 +67,7 @@ class CustomerProfile:
     remote_server_plan_start_date: str = "billing_cycle_end_date"
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = "Populate database with different types of realms that can exist."
 
     @override
@@ -423,13 +423,13 @@ def populate_remote_server(customer_profile: CustomerProfile) -> dict[str, str]:
         customer_profile.is_sponsored
         and customer_profile.tier == CustomerPlan.TIER_SELF_HOSTED_COMMUNITY
     ):
-        plan_type = RemoteZulipServer.PLAN_TYPE_COMMUNITY
+        plan_type = RemoteDoerServer.PLAN_TYPE_COMMUNITY
     elif customer_profile.tier == CustomerPlan.TIER_SELF_HOSTED_LEGACY:
-        plan_type = RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY
+        plan_type = RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY
     elif customer_profile.tier == CustomerPlan.TIER_SELF_HOSTED_BUSINESS:
-        plan_type = RemoteZulipServer.PLAN_TYPE_BUSINESS
+        plan_type = RemoteDoerServer.PLAN_TYPE_BUSINESS
     elif customer_profile.tier is CustomerPlan.TIER_SELF_HOSTED_BASE:
-        plan_type = RemoteZulipServer.PLAN_TYPE_SELF_MANAGED
+        plan_type = RemoteDoerServer.PLAN_TYPE_SELF_MANAGED
     else:
         raise AssertionError("Unexpected tier!")
 
@@ -438,10 +438,10 @@ def populate_remote_server(customer_profile: CustomerProfile) -> dict[str, str]:
     hostname = f"{unique_id}.example.com"
 
     # Delete existing remote server.
-    RemoteZulipServer.objects.filter(hostname=hostname).delete()
+    RemoteDoerServer.objects.filter(hostname=hostname).delete()
     flush_cache(None)
 
-    remote_server = RemoteZulipServer.objects.create(
+    remote_server = RemoteDoerServer.objects.create(
         uuid=server_uuid,
         api_key=api_key,
         hostname=f"{unique_id}.example.com",
@@ -451,7 +451,7 @@ def populate_remote_server(customer_profile: CustomerProfile) -> dict[str, str]:
         last_audit_log_update=timezone_now(),
     )
 
-    RemoteZulipServerAuditLog.objects.create(
+    RemoteDoerServerAuditLog.objects.create(
         event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
         server=remote_server,
         event_time=remote_server.last_updated,
@@ -531,9 +531,9 @@ def populate_remote_realms(customer_profile: CustomerProfile) -> dict[str, str]:
     local_realm = populate_realm(customer_profile)
     assert local_realm is not None
 
-    remote_server_uuid = settings.ZULIP_ORG_ID
+    remote_server_uuid = settings.DOER_ORG_ID
     assert remote_server_uuid is not None
-    remote_server = RemoteZulipServer.objects.filter(
+    remote_server = RemoteDoerServer.objects.filter(
         uuid=remote_server_uuid,
     ).first()
 

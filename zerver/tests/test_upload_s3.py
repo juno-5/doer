@@ -17,7 +17,7 @@ from zerver.actions.create_user import do_create_user
 from zerver.actions.user_settings import do_scrub_avatar_images
 from zerver.lib.avatar_hash import user_avatar_path
 from zerver.lib.create_user import copy_default_settings
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     create_s3_buckets,
     get_test_image_file,
@@ -50,25 +50,25 @@ from zerver.models.realms import get_realm
 from zerver.models.users import get_system_bot
 
 
-class S3Test(ZulipTestCase):
+class S3Test(DoerTestCase):
     @use_s3_backend
     def test_upload_message_attachment(self) -> None:
         bucket = create_s3_buckets(settings.S3_AUTH_UPLOADS_BUCKET)[0]
 
         user_profile = self.example_user("hamlet")
-        url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+        url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
 
         base = "/user_uploads/"
         self.assertEqual(base, url[: len(base)])
         path_id = re.sub(r"/user_uploads/", "", url)
         content = bucket.Object(path_id).get()["Body"].read()
-        self.assertEqual(b"zulip!", content)
+        self.assertEqual(b"doer!", content)
 
         uploaded_file = Attachment.objects.get(owner=user_profile, path_id=path_id)
-        self.assert_length(b"zulip!", uploaded_file.size)
+        self.assert_length(b"doer!", uploaded_file.size)
 
         self.subscribe(self.example_user("hamlet"), "Denmark")
-        body = f"First message ...[zulip.txt](http://{user_profile.realm.host}{url})"
+        body = f"First message ...[doer.txt](http://{user_profile.realm.host}{url})"
         self.send_stream_message(self.example_user("hamlet"), "Denmark", body, "test")
 
     @use_s3_backend
@@ -101,12 +101,12 @@ class S3Test(ZulipTestCase):
     def test_save_attachment_contents(self) -> None:
         create_s3_buckets(settings.S3_AUTH_UPLOADS_BUCKET)
         user_profile = self.example_user("hamlet")
-        url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+        url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
 
         path_id = re.sub(r"/user_uploads/", "", url)
         output = BytesIO()
         save_attachment_contents(path_id, output)
-        self.assertEqual(output.getvalue(), b"zulip!")
+        self.assertEqual(output.getvalue(), b"doer!")
 
     @use_s3_backend
     def test_attachment_source(self) -> None:
@@ -133,20 +133,20 @@ class S3Test(ZulipTestCase):
         bucket = create_s3_buckets(settings.S3_AUTH_UPLOADS_BUCKET)[0]
 
         internal_realm = get_realm(settings.SYSTEM_BOT_REALM)
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         user_profile = get_system_bot(settings.EMAIL_GATEWAY_BOT, internal_realm.id)
         self.assertEqual(user_profile.realm, internal_realm)
 
         url = upload_message_attachment(
-            "dummy.txt", "text/plain", b"zulip!", user_profile, zulip_realm
+            "dummy.txt", "text/plain", b"doer!", user_profile, doer_realm
         )[0]
         # Ensure the correct realm id of the target realm is used instead of the bot's realm.
-        self.assertTrue(url.startswith(f"/user_uploads/{zulip_realm.id}/"))
+        self.assertTrue(url.startswith(f"/user_uploads/{doer_realm.id}/"))
 
         path_id = re.sub(r"/user_uploads/", "", url)
         s3_obj = bucket.Object(path_id)
         s3_obj.load()
-        self.assertEqual(s3_obj.metadata["realm_id"], str(zulip_realm.id))
+        self.assertEqual(s3_obj.metadata["realm_id"], str(doer_realm.id))
 
     @use_s3_backend
     def test_delete_message_attachment(self) -> None:
@@ -185,7 +185,7 @@ class S3Test(ZulipTestCase):
         user_profile = self.example_user("hamlet")
         path_ids = []
         for n in range(1, 5):
-            url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+            url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
             path_id = re.sub(r"/user_uploads/", "", url)
             self.assertIsNotNone(bucket.Object(path_id).get())
             path_ids.append(path_id)
@@ -211,7 +211,7 @@ class S3Test(ZulipTestCase):
         user_profile = self.example_user("hamlet")
         path_ids = []
         for n in range(1, 5):
-            url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+            url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
             path_ids.append(re.sub(r"/user_uploads/", "", url))
 
         # Put an image in, which gets thumbnailed
@@ -249,8 +249,8 @@ class S3Test(ZulipTestCase):
         bucket = create_s3_buckets(settings.S3_AUTH_UPLOADS_BUCKET)[0]
 
         self.login("hamlet")
-        fp = StringIO("zulip!")
-        fp.name = "zulip with excitement!.txt"
+        fp = StringIO("doer!")
+        fp.name = "doer with excitement!.txt"
 
         result = self.client_post("/json/user_uploads", {"file": fp})
         response_dict = self.assert_json_success(result)
@@ -267,7 +267,7 @@ class S3Test(ZulipTestCase):
         path = urlsplit(redirect_url).path
         assert path.startswith("/")
         key = path.removeprefix("/")
-        self.assertEqual(b"zulip!", bucket.Object(key).get()["Body"].read())
+        self.assertEqual(b"doer!", bucket.Object(key).get()["Body"].read())
 
         prefix = f"/internal/s3/{settings.S3_AUTH_UPLOADS_BUCKET}.s3.amazonaws.com/"
         with self.settings(DEVELOPMENT=False):
@@ -276,7 +276,7 @@ class S3Test(ZulipTestCase):
         path = urlsplit(redirect_url).path
         assert path.startswith(prefix)
         key = path.removeprefix(prefix)
-        self.assertEqual(b"zulip!", bucket.Object(key).get()["Body"].read())
+        self.assertEqual(b"doer!", bucket.Object(key).get()["Body"].read())
 
         # Check the download endpoint
         download_url = url.replace("/user_uploads/", "/user_uploads/download/")
@@ -286,11 +286,11 @@ class S3Test(ZulipTestCase):
         path = urlsplit(redirect_url).path
         content_disposition = parse_qs(urlsplit(redirect_url).query)["response-content-disposition"]
         self.assertEqual(
-            content_disposition[0], 'attachment; filename="zulip with excitement!.txt"'
+            content_disposition[0], 'attachment; filename="doer with excitement!.txt"'
         )
         assert path.startswith(prefix)
         key = path.removeprefix(prefix)
-        self.assertEqual(b"zulip!", bucket.Object(key).get()["Body"].read())
+        self.assertEqual(b"doer!", bucket.Object(key).get()["Body"].read())
 
         # Now try the endpoint that's supposed to return a temporary URL for access
         # to the file.
@@ -300,7 +300,7 @@ class S3Test(ZulipTestCase):
 
         self.assertNotEqual(url_only_url, url)
         self.assertIn("user_uploads/temporary/", url_only_url)
-        self.assertTrue(url_only_url.endswith("zulip-with-excitement.txt"))
+        self.assertTrue(url_only_url.endswith("doer-with-excitement.txt"))
         # The generated URL has a token authorizing the requester to access the file
         # without being logged in.
         self.logout()
@@ -310,7 +310,7 @@ class S3Test(ZulipTestCase):
         path = urlsplit(redirect_url).path
         assert path.startswith(prefix)
         key = path.removeprefix(prefix)
-        self.assertEqual(b"zulip!", bucket.Object(key).get()["Body"].read())
+        self.assertEqual(b"doer!", bucket.Object(key).get()["Body"].read())
 
         # The original url shouldn't work when logged out:
         with self.settings(DEVELOPMENT=False):
@@ -320,7 +320,7 @@ class S3Test(ZulipTestCase):
 
         hamlet = self.example_user("hamlet")
         self.subscribe(hamlet, "Denmark")
-        body = f"First message ...[zulip.txt](http://{hamlet.realm.host}" + url + ")"
+        body = f"First message ...[doer.txt](http://{hamlet.realm.host}" + url + ")"
         self.send_stream_message(hamlet, "Denmark", body, "test")
 
     @use_s3_backend
@@ -354,7 +354,7 @@ class S3Test(ZulipTestCase):
 
         self.login("hamlet")
         fp = BytesIO("नाम में क्या रक्खा हे".encode())
-        fp.name = "zulip.txt"
+        fp.name = "doer.txt"
 
         result = self.client_post("/json/user_uploads", {"file": fp})
         response_dict = self.assert_json_success(result)
@@ -445,7 +445,7 @@ class S3Test(ZulipTestCase):
 
         source_user_profile = self.example_user("hamlet")
         target_user_profile = do_create_user(
-            "user@zulip.com", "password", get_realm("zulip"), "user", acting_user=None
+            "user@zulip.com", "password", get_realm("doer"), "user", acting_user=None
         )
 
         # 'visibility_policy_banner' is already marked as read for new users.

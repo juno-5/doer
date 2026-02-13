@@ -100,7 +100,7 @@ class _RateLimitFilter:
                 self.handling_exception.value = False
 
 
-class ZulipLimiter(_RateLimitFilter):
+class DoerLimiter(_RateLimitFilter):
     pass
 
 
@@ -141,7 +141,7 @@ def find_log_caller_module(record: logging.LogRecord) -> str | None:
 
 logger_nicknames = {
     "root": "",  # This one is more like undoing a nickname.
-    "zulip.requests": "zr",  # Super common.
+    "doer.requests": "zr",  # Super common.
 }
 
 
@@ -182,7 +182,7 @@ def abbrev_log_levelname(levelname: str) -> str:
     return log_level_abbrevs.get(levelname, levelname[:4])
 
 
-class ZulipFormatter(logging.Formatter):
+class DoerFormatter(logging.Formatter):
     # Used in the base implementation.  Default uses `,`.
     default_msec_format = "%s.%03d"
 
@@ -190,22 +190,22 @@ class ZulipFormatter(logging.Formatter):
         super().__init__(fmt=self._compute_fmt())
 
     def _compute_fmt(self) -> str:
-        pieces = ["%(asctime)s", "%(zulip_level_abbrev)-4s"]
+        pieces = ["%(asctime)s", "%(doer_level_abbrev)-4s"]
         if settings.LOGGING_SHOW_PID:
             pieces.append("pid:%(process)d")
-        pieces.extend(["[%(zulip_origin)s]", "%(message)s"])
+        pieces.extend(["[%(doer_origin)s]", "%(message)s"])
         return " ".join(pieces)
 
     @override
     def format(self, record: logging.LogRecord) -> str:
-        if not hasattr(record, "zulip_decorated"):
-            record.zulip_level_abbrev = abbrev_log_levelname(record.levelname)
-            record.zulip_origin = find_log_origin(record)
-            record.zulip_decorated = True
+        if not hasattr(record, "doer_decorated"):
+            record.doer_level_abbrev = abbrev_log_levelname(record.levelname)
+            record.doer_origin = find_log_origin(record)
+            record.doer_decorated = True
         return super().format(record)
 
 
-class ZulipWebhookFormatter(ZulipFormatter):
+class DoerWebhookFormatter(DoerFormatter):
     @override
     def _compute_fmt(self) -> str:
         basic = super()._compute_fmt()
@@ -268,7 +268,7 @@ def log_to_file(
     filename: str,
     log_format: str = "%(asctime)s %(levelname)-8s %(message)s",
 ) -> None:
-    """Note: `filename` should be declared in zproject/computed_settings.py with zulip_path."""
+    """Note: `filename` should be declared in zproject/computed_settings.py with doer_path."""
     formatter = logging.Formatter(log_format)
     handler = logging.FileHandler(filename)
     handler.setFormatter(formatter)

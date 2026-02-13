@@ -1,6 +1,6 @@
-# Zulip Semaphore integration
+# Doer Semaphore integration
 
-Get Zulip notifications for your Semaphore builds!
+Get Doer notifications for your Semaphore builds!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Zulip notifications for your Semaphore builds!
 1. In the **Configuration** section of the sidebar in Semaphore, select
    **Notifications**. Click on **Create New Notification**.
 
-1. Add a name for the notification, such as `Zulip`, and configure any
+1. Add a name for the notification, such as `Doer`, and configure any
    rules you'd like for the notifications. Add the URL generated above
    to the Webhook **Endpoint** field, and click **Save Changes**.
 

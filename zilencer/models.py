@@ -21,18 +21,21 @@ from zerver.models import (
 from zerver.models.realm_audit_logs import AuditLogEventType
 
 
-def get_remote_server_by_uuid(uuid: str) -> "RemoteZulipServer":
+def get_remote_server_by_uuid(uuid: str) -> "RemoteDoerServer":
     try:
-        return RemoteZulipServer.objects.get(uuid=uuid)
+        return RemoteDoerServer.objects.get(uuid=uuid)
     except ValidationError:
-        raise RemoteZulipServer.DoesNotExist
+        raise RemoteDoerServer.DoesNotExist
 
 
-class RemoteZulipServer(models.Model):
-    """Each object corresponds to a single remote Zulip server that is
+class RemoteDoerServer(models.Model):
+    """Each object corresponds to a single remote Doer server that is
     registered for the Mobile Push Notifications Service via
     `manage.py register_server`.
     """
+
+    class Meta:
+        db_table = "zilencer_remotezulipserver"
 
     UUID_LENGTH = 36
     API_KEY_LENGTH = 64
@@ -40,7 +43,7 @@ class RemoteZulipServer(models.Model):
     VERSION_MAX_LENGTH = 128
     MERGE_BASE_MAX_LENGTH = 128
 
-    # The unique UUID (`zulip_org_id`) and API key (`zulip_org_key`)
+    # The unique UUID (`doer_org_id`) and API key (`doer_org_key`)
     # for this remote server registration.
     uuid = models.UUIDField(unique=True)
     api_key = models.CharField(max_length=API_KEY_LENGTH)
@@ -91,7 +94,7 @@ class RemoteZulipServer(models.Model):
         return f"{self.hostname} {str(self.uuid)[0:12]}"
 
     def format_requester_for_logs(self) -> str:
-        return "zulip-server:" + str(self.uuid)
+        return "doer-server:" + str(self.uuid)
 
     def get_remote_server_billing_users(self) -> QuerySet["RemoteServerBillingUser"]:
         return RemoteServerBillingUser.objects.filter(
@@ -108,7 +111,7 @@ class RemotePushDeviceToken(AbstractPushDeviceToken):
     Like PushDeviceToken, but for a device connected to a remote server.
     """
 
-    server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
     # The user id on the remote server for this device
     user_id = models.BigIntegerField(null=True)
     user_uuid = models.UUIDField(null=True)
@@ -166,7 +169,7 @@ class RemoteRealm(models.Model):
     Mobile Push Notifications Service via `manage.py register_server`.
     """
 
-    server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
 
     # The unique UUID and secret for this realm.
     uuid = models.UUIDField(unique=True)
@@ -186,7 +189,7 @@ class RemoteRealm(models.Model):
         choices=[(t["id"], t["name"]) for t in Realm.ORG_TYPES.values()],
     )
 
-    # The fields below are analogical to RemoteZulipServer fields.
+    # The fields below are analogical to RemoteDoerServer fields.
 
     last_updated = models.DateTimeField("last updated", auto_now=True)
     last_request_datetime = models.DateTimeField(null=True)
@@ -276,7 +279,7 @@ class PreregistrationRemoteRealmBillingUser(AbstractRemoteRealmBillingUser):
 
 
 class AbstractRemoteServerBillingUser(models.Model):
-    remote_server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    remote_server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
 
     email = models.EmailField()
 
@@ -315,17 +318,20 @@ class PreregistrationRemoteServerBillingUser(AbstractRemoteServerBillingUser):
     created_user = models.ForeignKey(RemoteServerBillingUser, null=True, on_delete=models.SET_NULL)
 
 
-class RemoteZulipServerAuditLog(AbstractRealmAuditLog):
-    """Audit data associated with a remote Zulip server (not specific to a
+class RemoteDoerServerAuditLog(AbstractRealmAuditLog):
+    """Audit data associated with a remote Doer server (not specific to a
     realm).  Used primarily for tracking registration and billing
     changes for self-hosted customers.
 
     In contrast with RemoteRealmAuditLog, which has a copy of data
-    that is generated on the client Zulip server, this table is the
+    that is generated on the client Doer server, this table is the
     authoritative storage location for the server's history.
     """
 
-    server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    class Meta:
+        db_table = "zilencer_remotezulipserverauditlog"
+
+    server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
 
     acting_remote_user = models.ForeignKey(
         RemoteServerBillingUser, null=True, on_delete=models.SET_NULL
@@ -339,13 +345,13 @@ class RemoteZulipServerAuditLog(AbstractRealmAuditLog):
 
 
 class RemoteRealmAuditLog(AbstractRealmAuditLog):
-    """Synced audit data from a remote Zulip server, used primarily for
+    """Synced audit data from a remote Doer server, used primarily for
     billing.  See RealmAuditLog and AbstractRealmAuditLog for details.
     """
 
-    server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
 
-    # With modern Zulip servers, we can link to the RemoteRealm object.
+    # With modern Doer servers, we can link to the RemoteRealm object.
     remote_realm = models.ForeignKey(RemoteRealm, on_delete=models.CASCADE, null=True)
     # For pre-8.0 servers, we might only have the realm ID and thus no
     # RemoteRealm object yet. We will eventually be able to drop this
@@ -396,7 +402,7 @@ class RemoteRealmAuditLog(AbstractRealmAuditLog):
 
 
 class BaseRemoteCount(BaseCount):
-    server = models.ForeignKey(RemoteZulipServer, on_delete=models.CASCADE)
+    server = models.ForeignKey(RemoteDoerServer, on_delete=models.CASCADE)
     # The remote_id field is the id value of the corresponding *Count object
     # on the remote server.
     # It lets us deduplicate data from the remote server.
@@ -514,9 +520,9 @@ class RemoteRealmCount(BaseRemoteCount):
         return f"{self.server!r} {self.realm_id} {self.property} {self.subgroup} {self.value}"
 
 
-class RateLimitedRemoteZulipServer(RateLimitedObject):
+class RateLimitedRemoteDoerServer(RateLimitedObject):
     def __init__(
-        self, remote_server: RemoteZulipServer, domain: str = "api_by_remote_server"
+        self, remote_server: RemoteDoerServer, domain: str = "api_by_remote_server"
     ) -> None:
         # Remote servers can only make API requests regarding push notifications
         # which requires ZILENCER_ENABLED and of course can't happen on API endpoints
@@ -576,7 +582,7 @@ def get_remote_server_guest_and_non_guest_count(
         )
         # Important: extra_data is empty for some pre-2020 audit logs
         # prior to the introduction of realm_user_count_by_role
-        # logging. Meanwhile, modern Zulip servers using
+        # logging. Meanwhile, modern Doer servers using
         # bulk_create_users to create the users in the system bot
         # realm also generate such audit logs. Such audit logs should
         # never be the latest in a normal realm.
@@ -604,7 +610,7 @@ def get_remote_realm_guest_and_non_guest_count(
         )
         # Important: extra_data is empty for some pre-2020 audit logs
         # prior to the introduction of realm_user_count_by_role
-        # logging. Meanwhile, modern Zulip servers using
+        # logging. Meanwhile, modern Doer servers using
         # bulk_create_users to create the users in the system bot
         # realm also generate such audit logs. Such audit logs should
         # never be the latest in a normal realm.
@@ -620,7 +626,7 @@ def get_remote_realm_guest_and_non_guest_count(
     return user_count
 
 
-def has_stale_audit_log(server: RemoteZulipServer) -> bool:
+def has_stale_audit_log(server: RemoteDoerServer) -> bool:
     if server.last_audit_log_update is None:
         return True
 
@@ -648,7 +654,7 @@ class RemotePushDevice(AbstractPushDevice):
 
     # The token that uniquely identifies the app instance to the
     # FCM/APNs servers. There will be duplicates in this table when a
-    # device is logged into multiple Zulip realms.
+    # device is logged into multiple Doer realms.
     #
     # FCM and APNs don't specify a maximum token length, so we only enforce
     # that they're at most the maximum FCM / APNs payload size of 4096 bytes.

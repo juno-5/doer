@@ -693,15 +693,15 @@ function update_folder_filter_button(left_panel_params: LeftPanelParams): void {
     ) {
         $("#folder_filter_button").addClass("icon-button-neutral");
         $("#folder_filter_button").removeClass("icon-button-brand");
-        $("#folder_filter_button .zulip-icon")
-            .removeClass("zulip-icon-folder-search")
-            .addClass("zulip-icon-folder-chevron");
+        $("#folder_filter_button .doer-icon")
+            .removeClass("doer-icon-folder-search")
+            .addClass("doer-icon-folder-chevron");
     } else {
         $("#folder_filter_button").removeClass("icon-button-neutral");
         $("#folder_filter_button").addClass("icon-button-brand");
-        $("#folder_filter_button .zulip-icon")
-            .removeClass("zulip-icon-folder-chevron")
-            .addClass("zulip-icon-folder-search");
+        $("#folder_filter_button .doer-icon")
+            .removeClass("doer-icon-folder-chevron")
+            .addClass("doer-icon-folder-search");
     }
 }
 
@@ -1095,14 +1095,14 @@ function setup_page(callback: () => void): void {
             stream_topics_policy_values: settings_config.get_stream_topics_policy_values(),
             check_default_stream: false,
             history_public_to_subscribers: true,
-            zulip_plan_is_not_limited: realm.zulip_plan_is_not_limited,
+            doer_plan_is_not_limited: realm.doer_plan_is_not_limited,
             org_level_message_retention_setting:
                 stream_edit.get_display_text_for_realm_message_retention_setting(),
             upgrade_text_for_wide_organization_logo: realm.upgrade_text_for_wide_organization_logo,
             is_business_type_org:
                 realm.realm_org_type === settings_config.all_org_type_values.business.code,
             disable_message_retention_setting:
-                !realm.zulip_plan_is_not_limited || !current_user.is_owner,
+                !realm.doer_plan_is_not_limited || !current_user.is_owner,
             group_setting_labels: settings_config.all_group_setting_labels.stream,
             realm_has_archived_channels,
             has_billing_access: settings_data.user_has_billing_access(),

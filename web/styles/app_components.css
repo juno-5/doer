@@ -41,7 +41,7 @@ kbd {
     min-height: 1em;
     min-width: 1em;
 
-    .zulip-icon::before {
+    .doer-icon::before {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -282,7 +282,7 @@ input.settings_text_input {
         outline: none;
     }
 
-    .zulip-icon-close {
+    .doer-icon-close {
         align-self: center;
     }
 }
@@ -575,7 +575,7 @@ input.settings_text_input {
         transition-property: background-color, color;
     }
 
-    .zulip-icon,
+    .doer-icon,
     .color-animated-button-text {
         padding: 6px 3px;
     }
@@ -758,19 +758,19 @@ input.settings_text_input {
     padding-right: 1px;
     width: 12px;
 
-    &.zulip-icon-globe,
-    &.zulip-icon-archive,
-    &.zulip-icon-hashtag {
+    &.doer-icon-globe,
+    &.doer-icon-archive,
+    &.doer-icon-hashtag {
         font-size: 0.75em;
     }
 
-    &.zulip-icon-lock,
-    &.zulip-icon-users {
+    &.doer-icon-lock,
+    &.doer-icon-users {
         font-size: 0.8em;
     }
 }
 
-.zulip-icon-lock {
+.doer-icon-lock {
     /* The lock icon is bottom heavy, so to make it
        appear better aligned, we pull it up by a
        uniform margin throughout the UI. */
@@ -781,10 +781,10 @@ input.settings_text_input {
 .dropdown-list-container
     .dropdown-list
     .dropdown-list-item-common-styles
-    .zulip-icon-lock {
+    .doer-icon-lock {
     /* We do not need to pull up lock icons in dropdowns
        so we reset their margin-top to the original value
-       for a dropdown's .zulip-icon */
+       for a dropdown's .doer-icon */
     margin-top: 0 !important;
 }
 
@@ -1095,7 +1095,7 @@ div.overlay .flex.overlay-content > .overlay-container,
         padding: 3px 7px;
         color: var(--color-text-dropdown-menu);
 
-        & .zulip-icon {
+        & .doer-icon {
             /* Clear inherited position. */
             position: static;
             color: var(--color-icon-purple);
@@ -1236,18 +1236,18 @@ div.overlay .flex.overlay-content > .overlay-container,
     width: 100%;
     display: flex;
     padding: 7px 14px;
-    background-color: var(--color-background-zulip-button);
+    background-color: var(--color-background-doer-button);
     justify-content: flex-start;
     color: var(--color-dropdown-item);
     border: none;
-    border-top: 1px solid var(--color-border-zulip-button);
+    border-top: 1px solid var(--color-border-doer-button);
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
     &:hover {
         color: var(--color-dropdown-item);
         background-color: var(--background-color-active-dropdown-item);
-        border-color: var(--color-border-zulip-button-interactive);
+        border-color: var(--color-border-doer-button-interactive);
     }
 
     &:focus,
@@ -1340,7 +1340,7 @@ input.invalid-input {
                 opacity: 0.4;
             }
 
-            .zulip-icon {
+            .doer-icon {
                 display: flex;
                 align-items: center;
                 color: var(--color-info-density-button-icon);
@@ -1409,6 +1409,6 @@ input.invalid-input {
     }
 }
 
-.zulip-icon-loader-circle {
+.doer-icon-loader-circle {
     animation: spin 1s linear infinite;
 }

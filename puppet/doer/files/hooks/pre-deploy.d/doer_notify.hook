@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+
+source "$(dirname "$0")/../common/doer_notify.sh"
+
+echo "doer_notify: Sending notify of $from .. $to ($commit_count commits) for $deploy_environment to $doer_notify_server"
+
+doer_send "Starting ${deploy_environment} deploy of [${commit_count} new commits](https://github.com/doer/doer/compare/${from}...${to}) on $(hostname)"

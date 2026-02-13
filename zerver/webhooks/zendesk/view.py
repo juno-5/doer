@@ -27,7 +27,7 @@ def api_zendesk_webhook(
     """
     Zendesk uses triggers with message templates. This webhook uses the
     ticket_id and ticket_title to create a topic. And passes with zendesk
-    user's configured message to zulip.
+    user's configured message to doer.
     """
     topic_name = truncate(f"#{ticket_id}: {ticket_title}", 60)
     check_send_webhook_message(request, user_profile, topic_name, message)

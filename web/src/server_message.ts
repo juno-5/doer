@@ -23,7 +23,7 @@ const message_reaction_schema = z.array(
     z.object({
         emoji_name: z.string(),
         emoji_code: z.string(),
-        reaction_type: z.enum(["unicode_emoji", "realm_emoji", "zulip_extra_emoji"]),
+        reaction_type: z.enum(["unicode_emoji", "realm_emoji", "doer_extra_emoji"]),
         user_id: z.number(),
     }),
 );

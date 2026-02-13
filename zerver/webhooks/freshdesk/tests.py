@@ -112,7 +112,7 @@ Requester Bob <requester-bob@example.com> added a {} note to \
     def test_inline_image(self) -> None:
         """
         Freshdesk sends us descriptions as HTML, so we have to make the
-        descriptions Zulip Markdown-friendly while still doing our best to
+        descriptions Doer Markdown-friendly while still doing our best to
         preserve links and images.
         """
         expected_topic_name = "#12: Not enough ☃ guinea pigs"

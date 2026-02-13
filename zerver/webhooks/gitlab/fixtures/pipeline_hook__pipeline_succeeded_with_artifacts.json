@@ -2,7 +2,7 @@
     "object_kind": "pipeline",
     "object_attributes": {
         "id": 22668,
-        "ref": "test/links-in-zulip-pipeline-message",
+        "ref": "test/links-in-doer-pipeline-message",
         "tag": false,
         "sha": "fdf1367fcd3a3b18a465eeb719e397607c1b38dc",
         "before_sha": "3321a6c3aa5f6ef636ab46d39638d67bdf24074b",

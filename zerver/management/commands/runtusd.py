@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError, CommandParser
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import get_config, get_config_file
+from scripts.lib.doer_tools import get_config, get_config_file
 
 
 class Command(BaseCommand):

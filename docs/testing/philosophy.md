@@ -1,6 +1,6 @@
 # Testing philosophy
 
-Zulip's automated tests are a huge part of what makes the project able
+Doer's automated tests are a huge part of what makes the project able
 to make progress. This page records some of the key principles behind
 how we have designed our automated test suites.
 
@@ -10,10 +10,10 @@ is another fantastic resource, in video format.
 
 ## Effective testing allows us to move quickly
 
-Zulip's engineering strategy can be summarized as "move quickly
+Doer's engineering strategy can be summarized as "move quickly
 without breaking things". Despite reviewing many code submissions
 from new contributors without deep expertise in the code they are
-changing, Zulip's maintainers spend most of the time they spend
+changing, Doer's maintainers spend most of the time they spend
 integrating changes on product decisions and code
 structure/readability questions, not on correctness, style, or
 lower-level issues.
@@ -34,7 +34,7 @@ making it much easier now to refactor and improve this important part of
 the product than it was when you needed to set up an LDAP server and
 populate it with some test data in order to test LDAP authentication.
 
-While not every part of Zulip has a great test suite, many components
+While not every part of Doer has a great test suite, many components
 do, and for those components, the tests mean that new contributors can
 often make substantive changes and have them be
 more or less correct by the time they share the
@@ -53,7 +53,7 @@ development, problems in this area tend to accumulate as a codebase
 grows. As a result, barring focused effort to prevent this outcome,
 any large software project will eventually have its test suite rot
 into one that is slow, unreliable, untrustworthy, and hated. We aim
-for Zulip to avoid that fate.
+for Doer to avoid that fate.
 
 So we consider it essential to maintaining every automated test suite
 setup in a way where it is fast and reliable (tests pass both in CI
@@ -90,7 +90,7 @@ already promising people you'll keep stable. In other words,
 interfaces that you or other people are already counting on mostly not
 changing except in compatible ways.
 
-So writing tests for the Zulip server against Zulip's end-to-end API
+So writing tests for the Doer server against Doer's end-to-end API
 is a great example of that: the API is something that people have
 written lots of code against, which means all that code is counting on
 the API generally continuing to work for the ways they're using it.
@@ -145,29 +145,29 @@ Some examples of this philosophy:
   things like "should give an error at this line" or "should build and
   run, and produce this output".
 
-In the Zulip context:
+In the Doer context:
 
-- Zulip uses the same API for our web app as for our mobile clients and
+- Doer uses the same API for our web app as for our mobile clients and
   third-party API clients, and most of our server tests are written
-  against the Zulip API.
-- The tests for Zulip's incoming webhooks work by sending actual
+  against the Doer API.
+- The tests for Doer's incoming webhooks work by sending actual
   payloads captured from the real third-party service to the webhook
-  endpoints, and verifies that the webhook produces the expected Zulip
+  endpoints, and verifies that the webhook produces the expected Doer
   message as output, to test the actual interface.
 
 So, to summarize our approach to integration vs. unit testing:
 
 - While we aim to achieve test coverage of every significant code path
-  in the Zulip server, which is commonly associated with unit testing,
+  in the Doer server, which is commonly associated with unit testing,
   most of our tests are integration tests in the sense of sending a
-  complete HTTP API query to the Zulip server and checking that the
+  complete HTTP API query to the Doer server and checking that the
   HTTP response and the internal state of the server following the request
   are both correct.
 - Following the end-to-end principle in system design, where possible
   we write tests that execute a complete flow (e.g., registering a new
-  Zulip account) rather than testing the implementations of individual
+  Doer account) rather than testing the implementations of individual
   functions.
-- We invest in the performance of Zulip in part to give users a great
+- We invest in the performance of Doer in part to give users a great
   experience, but just as much to make our test suite fast enough
   that we can write our tests this way.
 
@@ -236,7 +236,7 @@ designed to be robust to future refactoring.
 But for some things, like documentation and CSS, the only way to test
 is to view the element in a browser and try things that might not
 work. What to test will vary with what is likely to break. For
-example, after a significant change to Zulip's Markdown documentation,
+example, after a significant change to Doer's Markdown documentation,
 if you haven't verified every special bit of formatting visually and
 clicked every new link, there's a good chance that you've introduced a
 bug.

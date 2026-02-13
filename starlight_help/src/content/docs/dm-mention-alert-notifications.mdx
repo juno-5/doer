@@ -6,9 +6,9 @@ import {Steps} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 
-import TrashIcon from "~icons/zulip-icon/trash";
+import TrashIcon from "~icons/doer-icon/trash";
 
 You can configure desktop, mobile, and email notifications for
 [direct messages (DMs)](/help/direct-messages),
@@ -40,10 +40,10 @@ You can configure which types of notifications you want to receive for wildcard
 mentions (**@all**, **@everyone**, **@channel**) and **@topic** mentions
 separately from personal @-mentions.
 
-<ZulipTip>
+<DoerTip>
   These mentions don't trigger notifications in muted channels or topics,
   unlike personal mentions.
-</ZulipTip>
+</DoerTip>
 
 <FlattenedSteps>
   <NavigationSteps target="settings/notifications" />
@@ -59,13 +59,13 @@ mentions](/help/restrict-wildcard-mentions) in large channels.
 
 ## Alert words
 
-Zulip lets you to specify **alert words or phrases** that send you a desktop
+Doer lets you to specify **alert words or phrases** that send you a desktop
 notification whenever the alert word is included in a message. Alert words are
 case-insensitive.
 
-<ZulipTip>
+<DoerTip>
   Alert words in messages you receive while the alert is enabled will be highlighted.
-</ZulipTip>
+</DoerTip>
 
 ### Add an alert word or phrase
 

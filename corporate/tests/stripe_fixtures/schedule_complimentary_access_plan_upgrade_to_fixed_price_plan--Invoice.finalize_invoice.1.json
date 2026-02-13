@@ -55,7 +55,7 @@
       {
         "amount": 120000,
         "currency": "usd",
-        "description": "Zulip Business - renewal",
+        "description": "Doer Business - renewal",
         "discount_amounts": [],
         "discountable": false,
         "discounts": [],
@@ -126,7 +126,7 @@
   "shipping_cost": null,
   "shipping_details": null,
   "starting_balance": 0,
-  "statement_descriptor": "Zulip Business",
+  "statement_descriptor": "Doer Business",
   "status": "open",
   "status_transitions": {
     "finalized_at": 1000000000,

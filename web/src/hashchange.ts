@@ -261,7 +261,7 @@ function do_hashchange_normal(from_reload: boolean, restore_selected_id: boolean
         case "#streams":
         case "#organization":
         case "#settings":
-        case "#about-zulip":
+        case "#about-doer":
         case "#scheduled":
         case "#reminders":
             blueslip.error("overlay logic skipped for: " + hash[0]);
@@ -321,7 +321,7 @@ function do_hashchange_overlay(old_hash: string | undefined): void {
         );
     }
 
-    // In 2024, stream was renamed to channel in the Zulip API and UI.
+    // In 2024, stream was renamed to channel in the Doer API and UI.
     // Because pre-change Welcome Bot and Notification Bot messages
     // included links to "/#streams/all" and "/#streams/new", we'll
     // need to support "streams" as an overlay hash as an alias for
@@ -513,7 +513,7 @@ function do_hashchange_overlay(old_hash: string | undefined): void {
         return;
     }
 
-    if (base === "about-zulip") {
+    if (base === "about-doer") {
         about_zulip.launch();
         return;
     }

@@ -5,7 +5,7 @@ from typing import Any
 
 import orjson
 
-from scripts.lib.zulip_tools import get_or_create_dev_uuid_var_path
+from scripts.lib.doer_tools import get_or_create_dev_uuid_var_path
 from zerver.lib.topic import RESOLVED_TOPIC_PREFIX
 
 

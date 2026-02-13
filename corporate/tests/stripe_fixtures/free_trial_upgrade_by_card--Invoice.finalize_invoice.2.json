@@ -55,7 +55,7 @@
       {
         "amount": 5172,
         "currency": "usd",
-        "description": "Additional Zulip Cloud Standard license",
+        "description": "Additional Doer Cloud Standard license",
         "discount_amounts": [],
         "discountable": false,
         "discounts": [],
@@ -126,7 +126,7 @@
   "shipping_cost": null,
   "shipping_details": null,
   "starting_balance": 0,
-  "statement_descriptor": "Zulip Cloud Standard",
+  "statement_descriptor": "Doer Cloud Standard",
   "status": "open",
   "status_transitions": {
     "finalized_at": 1000000000,

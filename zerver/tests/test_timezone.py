@@ -3,11 +3,11 @@ from datetime import datetime, timezone
 
 from django.utils.timezone import now as timezone_now
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timezone import canonicalize_timezone, common_timezones
 
 
-class TimeZoneTest(ZulipTestCase):
+class TimeZoneTest(DoerTestCase):
     def test_canonicalize_timezone(self) -> None:
         self.assertEqual(canonicalize_timezone("America/Los_Angeles"), "America/Los_Angeles")
         self.assertEqual(canonicalize_timezone("US/Pacific"), "America/Los_Angeles")

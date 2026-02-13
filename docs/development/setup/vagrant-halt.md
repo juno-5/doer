@@ -8,10 +8,10 @@ can halt Vagrant from another Terminal/Git BASH window.
 From the window where run-dev is running:
 
 ```console
-2016-05-04 18:33:13,330 INFO     127.0.0.1       GET     200  92ms /register/ (unauth@zulip via ?)
+2016-05-04 18:33:13,330 INFO     127.0.0.1       GET     200  92ms /register/ (unauth@doer via ?)
 ^C
 KeyboardInterrupt
-(zulip-server) vagrant@vagrant:/srv/zulip$ exit
+(doer-server) vagrant@vagrant:/srv/zulip$ exit
 logout
 Connection to 127.0.0.1 closed.
 $

@@ -189,7 +189,7 @@ export function update_dom_with_unread_counts(
 
     if (last_direct_message_count === undefined) {
         // We don't want to animate the DM header
-        // when Zulip first loads, but we must update
+        // when Doer first loads, but we must update
         // the last DM count to correctly animate
         // the arrival of new unread DMs.
         last_direct_message_count = new_direct_message_count;

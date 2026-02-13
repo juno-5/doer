@@ -5,18 +5,18 @@ title: LaTeX
 import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import LatexExamples from "../include/_LatexExamples.mdx";
 import LatexIntro from "../include/_LatexIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import MathIcon from "~icons/zulip-icon/math";
+import MathIcon from "~icons/doer-icon/math";
 
 <LatexIntro />
 
 ## Insert LaTeX formatting
 
-Zulip's compose box has a smart **Math (LaTeX)** (<MathIcon />) button, which inserts contextually appropriate LaTeX
+Doer's compose box has a smart **Math (LaTeX)** (<MathIcon />) button, which inserts contextually appropriate LaTeX
 formatting:
 
 * If no text is selected, the button inserts displayed LaTeX (` ```math `) formatting.
@@ -35,10 +35,10 @@ formatting:
          bottom of the compose box to insert LaTeX formatting.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use the **Math (LaTeX)** (<MathIcon />)
       icon to remove existing LaTeX formatting from the selected text.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via Markdown">
@@ -69,26 +69,26 @@ formatting:
 
 ## Copy and paste formatted LaTeX
 
-### Copy LateX from a message in Zulip
+### Copy LateX from a message in Doer
 
-Zulip supports [quoting](/help/quote-or-forward-a-message#quote-a-message),
+Doer supports [quoting](/help/quote-or-forward-a-message#quote-a-message),
 [forwarding](/help/quote-or-forward-a-message#forward-a-message), or copying
 math expressions, and pasting them into the compose box.
 
-<ZulipTip>
-  If you select part of a math expression to copy, Zulip will automatically
+<DoerTip>
+  If you select part of a math expression to copy, Doer will automatically
   expand your selection to copy the full expression.
-</ZulipTip>
+</DoerTip>
 
 ### Copy LaTeX from an external website
 
 You can copy LaTeX from many third-party sites that use KaTeX, and paste it into
-Zulip.
+Doer.
 
-<ZulipTip>
+<DoerTip>
   If copy-pasting math from a website isn't working, consider contacting the
   website's administrators with the information below, as it may be an easy fix.
-</ZulipTip>
+</DoerTip>
 
 This feature is powered by KaTeX's MathML annotations, which embed the original
 LaTeX source in the HTML for a math expression. For it to work, the website
@@ -97,8 +97,8 @@ needs to:
 * Generate math expressions using KaTeX in the default `htmlAndMathml` [output
   mode](https://katex.org/docs/options.html).
 * Allow MathML annotations to be included in HTML copied by the browser (for
-  Zulip, this was [a couple lines of
-  CSS](https://github.com/zulip/zulip/commit/353f57e518b88333615911f12a031177c46d7fbe)).
+  Doer, this was [a couple lines of
+  CSS](https://github.com/doer/doer/commit/353f57e518b88333615911f12a031177c46d7fbe)).
 
 ## Related articles
 

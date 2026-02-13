@@ -15,7 +15,7 @@ from zerver.lib.rate_limiter import (
     readable_expiry_string_for_html,
     readable_expiry_string_for_plaintext,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import ratelimit_rule
 
 RANDOM_KEY_PREFIX = secrets.token_hex(16)
@@ -39,7 +39,7 @@ class RateLimitedTestObject(RateLimitedObject):
         return self._rules
 
 
-class RateLimiterBackendBase(ZulipTestCase, ABC):
+class RateLimiterBackendBase(DoerTestCase, ABC):
     backend: type[RateLimiterBackend]
 
     @override
@@ -235,7 +235,7 @@ class TornadoInMemoryRateLimiterBackendTest(RateLimiterBackendBase):
             self.make_request(obj, expect_ratelimited=False, verify_api_calls_left=False)
 
 
-class RateLimitedObjectsTest(ZulipTestCase):
+class RateLimitedObjectsTest(DoerTestCase):
     def test_user_rate_limits(self) -> None:
         user_profile = self.example_user("hamlet")
         user_profile.rate_limits = "1:3,2:4"
@@ -343,7 +343,7 @@ class RateLimitedObjectsTest(ZulipTestCase):
         )
 
 
-class RateLimiterStringFormattingTest(ZulipTestCase):
+class RateLimiterStringFormattingTest(DoerTestCase):
     def test_formatting_for_html(self) -> None:
         self.assertEqual(readable_expiry_string_for_html(60), "60\xa0seconds")
         self.assertEqual(readable_expiry_string_for_html(61), "1\xa0minute")

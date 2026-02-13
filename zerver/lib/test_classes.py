@@ -125,7 +125,7 @@ if settings.ZILENCER_ENABLED:
         RemotePushDevice,
         RemotePushDeviceToken,
         RemoteRealm,
-        RemoteZulipServer,
+        RemoteDoerServer,
         get_remote_server_by_uuid,
     )
 
@@ -158,7 +158,7 @@ class UploadSerializeMixin(SerializeMixin):
         super().setUpClass()
 
 
-class ZulipClientHandler(ClientHandler):
+class DoerClientHandler(ClientHandler):
     @override
     def get_response(self, request: HttpRequest) -> HttpResponseBase:
         got_exception = False
@@ -195,20 +195,20 @@ class ZulipClientHandler(ClientHandler):
         return response
 
 
-class ZulipTestClient(TestClient):
+class DoerTestClient(TestClient):
     def __init__(self) -> None:
         super().__init__()
-        self.handler = ZulipClientHandler(enforce_csrf_checks=False)
+        self.handler = DoerClientHandler(enforce_csrf_checks=False)
 
 
-class ZulipTestCaseMixin(SimpleTestCase):
+class DoerTestCaseMixin(SimpleTestCase):
     # Ensure that the test system just shows us diffs
     maxDiff: int | None = None
     # This bypasses BAN_CONSOLE_OUTPUT for the test case when set.
     # Override this to verify if the given extra console output matches the
     # expectation.
     expected_console_output: str | None = None
-    client_class = ZulipTestClient
+    client_class = DoerTestClient
 
     @override
     def setUp(self) -> None:
@@ -294,7 +294,7 @@ Output:
     functions have to fake out the linter by using a local variable called
     django_client to fool the regex.
     """
-    DEFAULT_SUBDOMAIN = "zulip"
+    DEFAULT_SUBDOMAIN = "doer"
     TOKENIZED_NOREPLY_REGEX = settings.TOKENIZED_NOREPLY_EMAIL_ADDRESS.format(
         token=r"[a-z0-9_]{24}"
     )
@@ -322,7 +322,7 @@ Output:
         # set User-Agent
         if "HTTP_AUTHORIZATION" in extra:
             # An API request; use mobile as the default user agent
-            default_user_agent = "ZulipMobile/26.22.145 (iOS 10.3.1)"
+            default_user_agent = "DoerMobile/26.22.145 (iOS 10.3.1)"
         else:
             # A web app request; use a browser User-Agent string.
             default_user_agent = (
@@ -699,11 +699,11 @@ Output:
 
     def nonreg_user(self, name: str) -> UserProfile:
         email = self.nonreg_user_map[name]
-        return get_user_by_delivery_email(email, get_realm("zulip"))
+        return get_user_by_delivery_email(email, get_realm("doer"))
 
     def example_user(self, name: str) -> UserProfile:
         email = self.example_user_map[name]
-        return get_user_by_delivery_email(email, get_realm("zulip"))
+        return get_user_by_delivery_email(email, get_realm("doer"))
 
     def mit_user(self, name: str) -> UserProfile:
         email = self.mit_user_map[name]
@@ -736,7 +736,7 @@ Output:
         bot_info.update(extras)
         result = self.client_post("/json/bots", bot_info)
         self.assert_json_success(result)
-        bot_email = f"{short_name}-bot@zulip.testserver"
+        bot_email = f"{short_name}-bot@doer.testserver"
         bot_profile = self.get_user_from_email(bot_email, user_profile.realm)
         return bot_profile
 
@@ -822,7 +822,7 @@ Output:
         self.login_user(user)
 
     def login_by_email(self, email: str, password: str) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         request = HttpRequest()
         request.session = self.client.session
         self.assertTrue(
@@ -835,7 +835,7 @@ Output:
         )
 
     def assert_login_failure(self, email: str, password: str) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         request = HttpRequest()
         request.session = self.client.session
         self.assertFalse(
@@ -886,7 +886,7 @@ Output:
         self,
         email: str,
         password: str | None,
-        realm_name: str = "Zulip Test",
+        realm_name: str = "Doer Test",
         realm_subdomain: str = "zuliptest",
         from_confirmation: str = "",
         full_name: str | None = None,
@@ -925,8 +925,8 @@ Output:
             "default_stream_group": default_stream_groups,
             "source_realm_id": source_realm_id,
             "is_demo_organization": is_demo_organization,
-            "how_realm_creator_found_zulip": "other",
-            "how_realm_creator_found_zulip_other_text": "I found it on the internet.",
+            "how_realm_creator_found_doer": "other",
+            "how_realm_creator_found_doer_other_text": "I found it on the internet.",
         }
         if enable_marketing_emails is not None:
             payload["enable_marketing_emails"] = enable_marketing_emails
@@ -987,8 +987,8 @@ Output:
         payload = {
             "realm_type": org_type,
             "realm_default_language": language,
-            "how_realm_creator_found_zulip": "ai_chatbot",
-            "how_realm_creator_found_zulip_which_ai_chatbot": "I don't remember.",
+            "how_realm_creator_found_doer": "ai_chatbot",
+            "how_realm_creator_found_doer_which_ai_chatbot": "I don't remember.",
             "terms": True,
         }
         if captcha is not None:
@@ -1045,7 +1045,7 @@ Output:
         api_key = user.api_key
         return self.encode_credentials(email, api_key)
 
-    def encode_email(self, email: str, realm: str = "zulip") -> str:
+    def encode_email(self, email: str, realm: str = "doer") -> str:
         # TODO: use encode_user where possible
         assert "@" in email
         user = get_user_by_delivery_email(email, get_realm(realm))
@@ -1543,7 +1543,7 @@ Output:
         topics_policy: int = StreamTopicsPolicyEnum.inherit.value,
     ) -> Stream:
         if realm is None:
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
 
         history_public_to_subscribers = get_default_value_for_history_public_to_subscribers(
             invite_only, history_public_to_subscribers
@@ -1577,7 +1577,7 @@ Output:
 
     def get_stream_id(self, name: str, realm: Realm | None = None) -> int:
         if not realm:
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
         try:
             stream = get_realm_stream(name, realm.id)
         except Stream.DoesNotExist:
@@ -1868,7 +1868,7 @@ Output:
         the attribute only for the specific test function that calls this method,
         and is isolated from other tests.
         """
-        dn = f"uid={username},ou=users,dc=zulip,dc=com"
+        dn = f"uid={username},ou=users,dc=doer,dc=com"
         if binary:
             with open(attr_value, "rb") as f:
                 # attr_value should be a path to the file with the binary data
@@ -1884,12 +1884,12 @@ Output:
         directory. This changes the attribute only for the specific test function
         that calls this method, and is isolated from other tests.
         """
-        dn = f"uid={username},ou=users,dc=zulip,dc=com"
+        dn = f"uid={username},ou=users,dc=doer,dc=com"
         self.mock_ldap.directory[dn].pop(attr_name, None)
 
     def ldap_username(self, username: str) -> str:
         """
-        Maps Zulip username to the name of the corresponding LDAP user
+        Maps Doer username to the name of the corresponding LDAP user
         in our test directory at zerver/tests/fixtures/ldap/directory.json,
         if the LDAP user exists.
         """
@@ -2104,7 +2104,7 @@ Output:
         aaron = self.example_user("aaron")
         zoe = self.example_user("ZOE")
         shiva = self.example_user("shiva")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         # Polonius is subscribed to "Verona" by default, so we unsubscribe
         # it so that it becomes easier to test the restricted access.
         self.unsubscribe(polonius, "Verona")
@@ -2136,7 +2136,7 @@ Output:
         direct_subgroups: list[NamedUserGroup],
         existing_setting_group: UserGroup | None = None,
     ) -> UserGroup:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         if existing_setting_group is not None:
             existing_setting_group.direct_members.set(direct_members)
             existing_setting_group.direct_subgroups.set(direct_subgroups)
@@ -2174,7 +2174,7 @@ Output:
             yield
 
 
-class ZulipTestCase(ZulipTestCaseMixin, TestCase):
+class DoerTestCase(DoerTestCaseMixin, TestCase):
     @contextmanager
     def capture_send_event_calls(
         self, expected_num_events: int
@@ -2217,7 +2217,7 @@ class ZulipTestCase(ZulipTestCaseMixin, TestCase):
         skip_capture_on_commit_callbacks: bool = False,
     ) -> int:
         """This function is a wrapper on 'send_personal_message',
-        defined in 'ZulipTestCaseMixin' with an extra parameter
+        defined in 'DoerTestCaseMixin' with an extra parameter
         'skip_capture_on_commit_callbacks'.
 
         It should be set to 'True' when making a call with either
@@ -2257,7 +2257,7 @@ class ZulipTestCase(ZulipTestCaseMixin, TestCase):
         skip_capture_on_commit_callbacks: bool = False,
     ) -> int:
         """This function is a wrapper on 'send_group_direct_message',
-        defined in 'ZulipTestCaseMixin' with an extra parameter
+        defined in 'DoerTestCaseMixin' with an extra parameter
         'skip_capture_on_commit_callbacks'.
 
         It should be set to 'True' when making a call with either
@@ -2300,7 +2300,7 @@ class ZulipTestCase(ZulipTestCaseMixin, TestCase):
         skip_capture_on_commit_callbacks: bool = False,
     ) -> int:
         """This function is a wrapper on 'send_stream_message',
-        defined in 'ZulipTestCaseMixin' with an extra parameter
+        defined in 'DoerTestCaseMixin' with an extra parameter
         'skip_capture_on_commit_callbacks'.
 
         It should be set to 'True' when making a call with either
@@ -2409,7 +2409,7 @@ def get_row_pks_in_all_tables() -> Iterator[tuple[str, set[int]]]:
         yield table_name, set(pks)
 
 
-class ZulipTransactionTestCase(ZulipTestCaseMixin, TransactionTestCase):
+class DoerTransactionTestCase(DoerTestCaseMixin, TransactionTestCase):
     """The default Django TestCase wraps each test in a transaction. This
     is invaluable for being able to rollback the transaction and thus
     efficiently do many tests containing database changes, but it
@@ -2420,15 +2420,15 @@ class ZulipTransactionTestCase(ZulipTestCaseMixin, TransactionTestCase):
     need to verify transaction related behavior, like locking with
     select_for_update or transaction.atomic(durable=True).
 
-    Unlike ZulipTestCase, ZulipTransactionTestCase has the following traits:
+    Unlike DoerTestCase, DoerTransactionTestCase has the following traits:
     1. Does not offer isolation between tests by wrapping them inside an atomic transaction.
     2. Changes are committed to the current worker's test database, so side effects carry on.
 
-    All ZulipTransactionTestCase tests must be carefully written to
+    All DoerTransactionTestCase tests must be carefully written to
     avoid side effects on the database; while Django runs
     TransactionTestCase after all normal TestCase tests on a given
     test worker to avoid pollution, they can break other
-    ZulipTransactionTestCase tests if they leak state.
+    DoerTransactionTestCase tests if they leak state.
     """
 
     @override
@@ -2458,7 +2458,7 @@ class ZulipTransactionTestCase(ZulipTestCaseMixin, TransactionTestCase):
         """
 
 
-class WebhookTestCase(ZulipTestCase):
+class WebhookTestCase(DoerTestCase):
     """Shared test class for all incoming webhooks tests.
 
     Used by configuring the below class attributes, and calling
@@ -2491,7 +2491,7 @@ class WebhookTestCase(ZulipTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.test_user = self.get_user_from_email(self.TEST_USER_EMAIL, get_realm("zulip"))
+        self.test_user = self.get_user_from_email(self.TEST_USER_EMAIL, get_realm("doer"))
         self.webhook_dir_name = self.WEBHOOK_DIR_NAME or self.get_webhook_dir_name()
         self.channel_name = self.webhook_dir_name
         self.url_template = self.URL_TEMPLATE or self.DEFAULT_URL_TEMPLATE
@@ -2521,7 +2521,7 @@ class WebhookTestCase(ZulipTestCase):
                 raise Exception(
                     f"""
 Error: This test triggered a message using the event "{complete_event_type}", which was not properly
-registered via the @webhook_view(..., event_types=[...]). These registrations are important for Zulip
+registered via the @webhook_view(..., event_types=[...]). These registrations are important for Doer
 self-documenting the supported event types for this integration.
 
 You can fix this by adding "{complete_event_type}" to ALL_EVENT_TYPES for this webhook.
@@ -2568,7 +2568,7 @@ You can fix this by adding "{complete_event_type}" to ALL_EVENT_TYPES for this w
         """
         check_webhook is the main way to test "normal" webhooks that
         work by receiving a payload from a third party and then writing
-        some message to a Zulip stream.
+        some message to a Doer stream.
 
         We use `fixture_name` to find the payload data in of our test
         fixtures.  Then we verify that a message gets sent to a stream:
@@ -2708,7 +2708,7 @@ one or more new messages.
         return body
 
 
-class MigrationsTestCase(ZulipTransactionTestCase):  # nocoverage
+class MigrationsTestCase(DoerTransactionTestCase):  # nocoverage
     """
     Test class for database migrations inspired by this blog post:
        https://www.caktusgroup.com/blog/2016/02/02/writing-unit-tests-django-migrations/
@@ -2760,12 +2760,12 @@ def get_topic_messages(user_profile: UserProfile, stream: Stream, topic_name: st
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class BouncerTestCase(ZulipTestCase):
+class BouncerTestCase(DoerTestCase):
     @override
     def setUp(self) -> None:
         # Set a deterministic uuid and a nice hostname for convenience.
         self.server_uuid = "6cde5f7a-1f7e-4978-9716-49f69ebfc9fe"
-        self.server = RemoteZulipServer.objects.all().latest("id")
+        self.server = RemoteDoerServer.objects.all().latest("id")
 
         self.server.uuid = self.server_uuid
         self.server.hostname = "demo.example.com"
@@ -2775,7 +2775,7 @@ class BouncerTestCase(ZulipTestCase):
 
     @override
     def tearDown(self) -> None:
-        RemoteZulipServer.objects.filter(uuid=self.server_uuid).delete()
+        RemoteDoerServer.objects.filter(uuid=self.server_uuid).delete()
         super().tearDown()
 
     def request_callback(self, request: PreparedRequest) -> tuple[int, ResponseHeaders, bytes]:
@@ -2793,8 +2793,8 @@ class BouncerTestCase(ZulipTestCase):
             # we can safely pick the first value.
             data = {k: v[0] for k, v in params.items()}
         assert request.url is not None  # allow mypy to infer url is present.
-        assert settings.ZULIP_SERVICES_URL is not None
-        local_url = request.url.replace(settings.ZULIP_SERVICES_URL, "")
+        assert settings.DOER_SERVICES_URL is not None
+        local_url = request.url.replace(settings.DOER_SERVICES_URL, "")
         if request.method == "POST":
             result = self.uuid_post(self.server_uuid, local_url, data, subdomain="", **kwargs)
         elif request.method == "GET":
@@ -2802,9 +2802,9 @@ class BouncerTestCase(ZulipTestCase):
         return (result.status_code, result.headers, result.content)
 
     def add_mock_response(self) -> None:
-        # Match any endpoint with the ZULIP_SERVICES_URL.
-        assert settings.ZULIP_SERVICES_URL is not None
-        COMPILED_URL = re.compile(settings.ZULIP_SERVICES_URL + r".*")
+        # Match any endpoint with the DOER_SERVICES_URL.
+        assert settings.DOER_SERVICES_URL is not None
+        COMPILED_URL = re.compile(settings.DOER_SERVICES_URL + r".*")
         responses.add_callback(responses.POST, COMPILED_URL, callback=self.request_callback)
         responses.add_callback(responses.GET, COMPILED_URL, callback=self.request_callback)
 
@@ -2862,7 +2862,7 @@ class PushNotificationTestCase(BouncerTestCase):
             apns_context.loop.close()
 
     def setup_apns_tokens(self) -> None:
-        self.tokens = [("aAAa", "org.zulip.Zulip"), ("bBBb", "com.zulip.flutter")]
+        self.tokens = [("aAAa", "org.zulip.Doer"), ("bBBb", "com.zulip.flutter")]
         for token, appid in self.tokens:
             PushDeviceToken.objects.create(
                 kind=PushDeviceToken.APNS,
@@ -2872,7 +2872,7 @@ class PushNotificationTestCase(BouncerTestCase):
             )
 
         self.remote_tokens = [
-            ("cCCc", "dDDd", "org.zulip.Zulip"),
+            ("cCCc", "dDDd", "org.zulip.Doer"),
             ("eEEe", "fFFf", "com.zulip.flutter"),
         ]
         for id_token, uuid_token, appid in self.remote_tokens:

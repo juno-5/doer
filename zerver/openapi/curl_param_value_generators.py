@@ -1,8 +1,8 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
 # This file contains helper functions for generating cURL examples
-# based on Zulip's OpenAPI definitions, as well as test setup and
+# based on Doer's OpenAPI definitions, as well as test setup and
 # fetching of appropriate parameter values to use when running the
 # cURL examples as part of the tools/test-api test suite.
 import re
@@ -20,7 +20,7 @@ from zerver.actions.realm_linkifiers import do_add_linkifier
 from zerver.actions.realm_playgrounds import check_add_realm_playground
 from zerver.lib.events import do_events_register
 from zerver.lib.initial_password import initial_password
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.upload import upload_message_attachment
 from zerver.models import Client, Message, NamedUserGroup, UserPresence
 from zerver.models.channel_folders import ChannelFolder
@@ -35,7 +35,7 @@ CALLED_GENERATOR_FUNCTIONS: set[str] = set()
 # to write to it from another module.
 AUTHENTICATION_LINE: list[str] = [""]
 
-helpers = ZulipTestCase()
+helpers = DoerTestCase()
 
 
 def openapi_param_value_generator(
@@ -281,14 +281,14 @@ def create_user_group_data() -> dict[str, object]:
 def get_temp_user_group_id() -> dict[str, object]:
     user_group, _ = NamedUserGroup.objects.get_or_create(
         name="temp",
-        realm=get_realm("zulip"),
+        realm=get_realm("doer"),
         can_add_members_group_id=11,
         can_join_group_id=11,
         can_leave_group_id=15,
         can_manage_group_id=11,
         can_mention_group_id=11,
         can_remove_members_group_id=11,
-        realm_for_sharding=get_realm("zulip"),
+        realm_for_sharding=get_realm("doer"),
     )
     return {
         "user_group_id": user_group.id,
@@ -299,14 +299,14 @@ def get_temp_user_group_id() -> dict[str, object]:
 def get_temp_user_group_id_for_deactivation() -> dict[str, object]:
     user_group, _ = NamedUserGroup.objects.get_or_create(
         name="temp-deactivation",
-        realm=get_realm("zulip"),
+        realm=get_realm("doer"),
         can_add_members_group_id=11,
         can_join_group_id=11,
         can_leave_group_id=15,
         can_manage_group_id=11,
         can_mention_group_id=11,
         can_remove_members_group_id=11,
-        realm_for_sharding=get_realm("zulip"),
+        realm_for_sharding=get_realm("doer"),
     )
     return {
         "user_group_id": user_group.id,
@@ -316,9 +316,9 @@ def get_temp_user_group_id_for_deactivation() -> dict[str, object]:
 @openapi_param_value_generator(["/realm/filters/{filter_id}:delete"])
 def remove_realm_filters() -> dict[str, object]:
     filter_id = do_add_linkifier(
-        get_realm("zulip"),
+        get_realm("doer"),
         "#(?P<id>[0-9]{2,8})",
-        "https://github.com/zulip/zulip/pull/{id}",
+        "https://github.com/doer/doer/pull/{id}",
         acting_user=None,
     )
     return {
@@ -345,7 +345,7 @@ def add_realm_playground() -> dict[str, object]:
 @openapi_param_value_generator(["/realm/playgrounds/{playground_id}:delete"])
 def remove_realm_playground() -> dict[str, object]:
     playground_id = check_add_realm_playground(
-        get_realm("zulip"),
+        get_realm("doer"),
         acting_user=None,
         name="Python playground",
         pygments_language="Python",
@@ -362,7 +362,7 @@ def deactivate_user() -> dict[str, object]:
         email="testuser@zulip.com",
         password=None,
         full_name="test_user",
-        realm=get_realm("zulip"),
+        realm=get_realm("doer"),
         acting_user=None,
     )
     return {"user_id": user_profile.id}
@@ -374,12 +374,12 @@ def deactivate_own_user() -> dict[str, object]:
     deactivate_test_user = do_create_user(
         test_user_email,
         "secret",
-        get_realm("zulip"),
+        get_realm("doer"),
         "Mr. Delete",
         role=200,
         acting_user=None,
     )
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     test_user = get_user(test_user_email, realm)
     test_user_api_key = test_user.api_key
     # change authentication line to allow test_client to delete itself.
@@ -390,7 +390,7 @@ def deactivate_own_user() -> dict[str, object]:
 @openapi_param_value_generator(["/attachments/{attachment_id}:delete"])
 def remove_attachment() -> dict[str, object]:
     user_profile = helpers.example_user("iago")
-    url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+    url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
     attachment_id = url.replace("/user_uploads/", "").split("/")[0]
 
     return {"attachment_id": attachment_id}
@@ -423,7 +423,7 @@ def get_temporary_url_for_uploaded_file() -> dict[str, object]:
     realm_id = ""
     filename = ""
     user_profile = helpers.example_user("iago")
-    url = upload_message_attachment("dummy.txt", "text/plain", b"zulip!", user_profile)[0]
+    url = upload_message_attachment("dummy.txt", "text/plain", b"doer!", user_profile)[0]
     upload_path_parts = re.match(r"/user_uploads/(\d+)/(.*)", url)
     if upload_path_parts:
         realm_id = upload_path_parts[1]

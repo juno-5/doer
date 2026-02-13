@@ -1,6 +1,6 @@
-# Zulip Flock integration
+# Doer Flock integration
 
-Get Zulip notifications from your Flock channels.
+Get Doer notifications from your Flock channels.
 
 {start_tabs}
 
@@ -14,7 +14,7 @@ Get Zulip notifications from your Flock channels.
 
 1. Set **Send messages from a channel** to the Flock channel you'd like
    to be notified about. Set **Name that the webhook will post as** to a
-   name of your choice, such as `Zulip`. Finally, set **Callback URL**
+   name of your choice, such as `Doer`. Finally, set **Callback URL**
    to the URL generated above, and click **Save Settings**.
 
 {end_tabs}

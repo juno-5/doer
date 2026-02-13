@@ -103,7 +103,7 @@ from zerver.actions.realm_settings import (
     do_set_realm_property,
     do_set_realm_signup_announcements_stream,
     do_set_realm_user_default_setting,
-    do_set_realm_zulip_update_announcements_stream,
+    do_set_realm_doer_update_announcements_stream,
 )
 from zerver.actions.saved_snippets import (
     do_create_saved_snippet,
@@ -256,13 +256,13 @@ from zerver.lib.push_registration import (
     handle_register_push_device_to_bouncer,
 )
 from zerver.lib.streams import check_update_all_streams_active_status, user_has_metadata_access
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     create_dummy_file,
     get_subscription,
     get_test_image_file,
     read_test_image_file,
-    reset_email_visibility_to_everyone_in_zulip_realm,
+    reset_email_visibility_to_everyone_in_doer_realm,
     stdout_suppressed,
 )
 from zerver.lib.timestamp import convert_to_UTC, datetime_to_timestamp
@@ -324,7 +324,7 @@ from zerver.views.realm_playgrounds import access_playground_by_id
 from zerver.worker.thumbnail import ensure_thumbnails
 
 
-class BaseAction(ZulipTestCase):
+class BaseAction(DoerTestCase):
     """Core class for verifying the apply_event race handling logic as
     well as the event formatting logic of any function using send_event_rollback_unsafe.
 
@@ -422,7 +422,7 @@ class BaseAction(ZulipTestCase):
 
         # We want even those `send_event_rollback_unsafe` calls which have
         # been hooked to `transaction.on_commit` to execute in tests.
-        # See the comment in `ZulipTestCase.capture_send_event_calls`.
+        # See the comment in `DoerTestCase.capture_send_event_calls`.
         with self.captureOnCommitCallbacks(execute=True):
             yield events
 
@@ -1276,7 +1276,7 @@ class NormalActionsTest(BaseAction):
             )
 
     def test_events_for_message_from_inaccessible_sender(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
         self.set_up_db_for_testing_user_access()
         othello = self.example_user("othello")
         self.user_profile = self.example_user("polonius")
@@ -1292,7 +1292,7 @@ class NormalActionsTest(BaseAction):
         check_message("events[0]", events[0])
         message_obj = events[0]["message"]
         self.assertEqual(message_obj["sender_full_name"], "Unknown user")
-        self.assertEqual(message_obj["sender_email"], f"user{othello.id}@zulip.testserver")
+        self.assertEqual(message_obj["sender_email"], f"user{othello.id}@doer.testserver")
         self.assertTrue(message_obj["avatar_url"].endswith("images/unknown-user-avatar.png"))
 
         iago = self.example_user("iago")
@@ -1590,7 +1590,7 @@ class NormalActionsTest(BaseAction):
         check_invites_changed("events[0]", events[0])
 
     def test_invitation_accept_invite_event(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         self.user_profile = self.example_user("iago")
         streams = [
@@ -1891,7 +1891,7 @@ class NormalActionsTest(BaseAction):
         with self.verify_action(simplified_presence_events=True) as events:
             do_update_user_presence(
                 self.user_profile,
-                get_client("ZulipAndroid/1.0"),
+                get_client("DoerAndroid/1.0"),
                 timezone_now(),
                 UserPresence.LEGACY_STATUS_ACTIVE_INT,
             )
@@ -1911,7 +1911,7 @@ class NormalActionsTest(BaseAction):
             self.user_profile,
             "/api/v1/users/me/presence",
             {"status": "idle"},
-            HTTP_USER_AGENT="ZulipAndroid/1.0",
+            HTTP_USER_AGENT="DoerAndroid/1.0",
         )
         with self.verify_action():
             do_update_user_presence(
@@ -1923,14 +1923,14 @@ class NormalActionsTest(BaseAction):
         with self.verify_action(state_change_expected=False, num_events=0):
             do_update_user_presence(
                 self.user_profile,
-                get_client("ZulipAndroid/1.0"),
+                get_client("DoerAndroid/1.0"),
                 timezone_now(),
                 UserPresence.LEGACY_STATUS_IDLE_INT,
             )
         with self.verify_action() as events:
             do_update_user_presence(
                 self.user_profile,
-                get_client("ZulipAndroid/1.0"),
+                get_client("DoerAndroid/1.0"),
                 timezone_now() + timedelta(seconds=301),
                 UserPresence.LEGACY_STATUS_ACTIVE_INT,
             )
@@ -1987,7 +1987,7 @@ class NormalActionsTest(BaseAction):
         self.assert_length(events, 6)
         check_realm_user_add("events[0]", events[0])
         new_user_profile = get_user_by_delivery_email("test1@zulip.com", self.user_profile.realm)
-        self.assertEqual(new_user_profile.email, f"user{new_user_profile.id}@zulip.testserver")
+        self.assertEqual(new_user_profile.email, f"user{new_user_profile.id}@doer.testserver")
 
         check_subscription_peer_add("events[3]", events[3])
         check_subscription_peer_add("events[4]", events[4])
@@ -2060,7 +2060,7 @@ class NormalActionsTest(BaseAction):
                 self.user_profile,
                 "/api/v1/users/me/presence",
                 dict(status="active"),
-                HTTP_USER_AGENT="ZulipAndroid/1.0",
+                HTTP_USER_AGENT="DoerAndroid/1.0",
             )
             self.assert_json_success(result)
 
@@ -2702,7 +2702,7 @@ class NormalActionsTest(BaseAction):
                 "zproject.backends.EmailAuthBackend",
                 "zproject.backends.GitHubAuthBackend",
                 "zproject.backends.GoogleAuthBackend",
-                "zproject.backends.ZulipLDAPAuthBackend",
+                "zproject.backends.DoerLDAPAuthBackend",
             )
             return self.settings(AUTHENTICATION_BACKENDS=backends)
 
@@ -2865,21 +2865,21 @@ class NormalActionsTest(BaseAction):
                 )
             check_realm_update("events[0]", events[0], "signup_announcements_stream_id")
 
-    def test_change_realm_zulip_update_announcements_stream(self) -> None:
+    def test_change_realm_doer_update_announcements_stream(self) -> None:
         stream = get_stream("Rome", self.user_profile.realm)
 
-        for zulip_update_announcements_stream, zulip_update_announcements_stream_id in (
+        for doer_update_announcements_stream, doer_update_announcements_stream_id in (
             (stream, stream.id),
             (None, -1),
         ):
             with self.verify_action() as events:
-                do_set_realm_zulip_update_announcements_stream(
+                do_set_realm_doer_update_announcements_stream(
                     self.user_profile.realm,
-                    zulip_update_announcements_stream,
-                    zulip_update_announcements_stream_id,
+                    doer_update_announcements_stream,
+                    doer_update_announcements_stream_id,
                     acting_user=None,
                 )
-            check_realm_update("events[0]", events[0], "zulip_update_announcements_stream_id")
+            check_realm_update("events[0]", events[0], "doer_update_announcements_stream_id")
 
     def test_change_realm_moderation_request_channel(self) -> None:
         channel = self.make_stream("private_stream", invite_only=True)
@@ -2924,7 +2924,7 @@ class NormalActionsTest(BaseAction):
         self.set_user_role(self.user_profile, current_role)
 
     def test_change_is_admin(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Important: We need to refresh from the database here so that
         # we don't have a stale UserProfile object with an old value
@@ -2971,7 +2971,7 @@ class NormalActionsTest(BaseAction):
         )
 
     def test_change_is_owner(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Important: We need to refresh from the database here so that
         # we don't have a stale UserProfile object with an old value
@@ -3020,7 +3020,7 @@ class NormalActionsTest(BaseAction):
         )
 
     def test_change_is_moderator(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Important: We need to refresh from the database here so that
         # we don't have a stale UserProfile object with an old value
@@ -3050,7 +3050,7 @@ class NormalActionsTest(BaseAction):
         stream = Stream.objects.get(name="Denmark")
         do_add_default_stream(stream)
 
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Important: We need to refresh from the database here so that
         # we don't have a stale UserProfile object with an old value
@@ -3113,7 +3113,7 @@ class NormalActionsTest(BaseAction):
                 check_user_group_add_members("events[2]", events[2])
 
     def test_gain_access_through_metadata_groups(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         # Important: We need to refresh from the database here so that
         # we don't have a stale UserProfile object with an old value
@@ -3307,7 +3307,7 @@ class NormalActionsTest(BaseAction):
 
         state_data = fetch_initial_state_data(self.user_profile, realm=realm)
         self.assertEqual(state_data["realm_plan_type"], Realm.PLAN_TYPE_SELF_HOSTED)
-        self.assertEqual(state_data["zulip_plan_is_not_limited"], True)
+        self.assertEqual(state_data["doer_plan_is_not_limited"], True)
 
         with self.verify_action(num_events=3) as events:
             do_change_realm_plan_type(realm, Realm.PLAN_TYPE_LIMITED, acting_user=self.user_profile)
@@ -3317,7 +3317,7 @@ class NormalActionsTest(BaseAction):
 
         state_data = fetch_initial_state_data(self.user_profile, realm=realm)
         self.assertEqual(state_data["realm_plan_type"], Realm.PLAN_TYPE_LIMITED)
-        self.assertEqual(state_data["zulip_plan_is_not_limited"], False)
+        self.assertEqual(state_data["doer_plan_is_not_limited"], False)
 
     def test_realm_emoji_events(self) -> None:
         author = self.example_user("iago")
@@ -3386,25 +3386,25 @@ class NormalActionsTest(BaseAction):
 
     def test_realm_domain_events(self) -> None:
         with self.verify_action() as events:
-            do_add_realm_domain(self.user_profile.realm, "zulip.org", False, acting_user=None)
+            do_add_realm_domain(self.user_profile.realm, "doer.org", False, acting_user=None)
 
         check_realm_domains_add("events[0]", events[0])
-        self.assertEqual(events[0]["realm_domain"]["domain"], "zulip.org")
+        self.assertEqual(events[0]["realm_domain"]["domain"], "doer.org")
         self.assertEqual(events[0]["realm_domain"]["allow_subdomains"], False)
 
-        test_domain = RealmDomain.objects.get(realm=self.user_profile.realm, domain="zulip.org")
+        test_domain = RealmDomain.objects.get(realm=self.user_profile.realm, domain="doer.org")
         with self.verify_action() as events:
             do_change_realm_domain(test_domain, True, acting_user=None)
 
         check_realm_domains_change("events[0]", events[0])
-        self.assertEqual(events[0]["realm_domain"]["domain"], "zulip.org")
+        self.assertEqual(events[0]["realm_domain"]["domain"], "doer.org")
         self.assertEqual(events[0]["realm_domain"]["allow_subdomains"], True)
 
         with self.verify_action() as events:
             do_remove_realm_domain(test_domain, acting_user=None)
 
         check_realm_domains_remove("events[0]", events[0])
-        self.assertEqual(events[0]["domain"], "zulip.org")
+        self.assertEqual(events[0]["domain"], "doer.org")
 
     def test_realm_playground_events(self) -> None:
         with self.verify_action() as events:
@@ -3768,7 +3768,7 @@ class NormalActionsTest(BaseAction):
         do_deactivate_user(bot, acting_user=None)
         do_deactivate_user(self.example_user("hamlet"), acting_user=None)
 
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
         bot.refresh_from_db()
 
         self.user_profile = self.example_user("iago")
@@ -4166,8 +4166,8 @@ class NormalActionsTest(BaseAction):
 
     def test_add_attachment(self) -> None:
         self.login("hamlet")
-        fp = StringIO("zulip!")
-        fp.name = "zulip.txt"
+        fp = StringIO("doer!")
+        fp.name = "doer.txt"
         url = None
 
         def do_upload() -> None:
@@ -4189,13 +4189,13 @@ class NormalActionsTest(BaseAction):
         self.assertEqual(events[0]["upload_space_used"], 6)
 
         # Verify that the DB has the attachment marked as unclaimed
-        entry = Attachment.objects.get(file_name="zulip.txt")
+        entry = Attachment.objects.get(file_name="doer.txt")
         self.assertEqual(entry.is_claimed(), False)
 
         hamlet = self.example_user("hamlet")
         self.subscribe(hamlet, "Denmark")
         assert url is not None
-        body = f"First message ...[zulip.txt](http://{hamlet.realm.host}" + url + ")"
+        body = f"First message ...[doer.txt](http://{hamlet.realm.host}" + url + ")"
         with self.verify_action(num_events=2) as events:
             self.send_stream_message(
                 self.example_user("hamlet"),
@@ -4229,7 +4229,7 @@ class NormalActionsTest(BaseAction):
                 self.verify_action(state_change_expected=True, num_events=3) as events,
             ):
                 self.client_post("/json/export/realm")
-            self.assertTrue("INFO:root:Completed data export for zulip in" in info_logs.output[0])
+            self.assertTrue("INFO:root:Completed data export for doer in" in info_logs.output[0])
 
         # We get two realm_export events for this action, where the first
         # is missing the export_url (because it's pending).
@@ -4313,10 +4313,10 @@ class NormalActionsTest(BaseAction):
             ):
                 self.client_post("/json/export/realm")
 
-            # Log is of following format: "ERROR:root:Data export for zulip failed after 0.004499673843383789"
+            # Log is of following format: "ERROR:root:Data export for doer failed after 0.004499673843383789"
             # Where last floating number is time and will vary in each test hence the following assertion is
             # independent of time bit by not matching exact log but only part of it.
-            self.assertTrue("ERROR:root:Data export for zulip failed after" in error_log.output[0])
+            self.assertTrue("ERROR:root:Data export for doer failed after" in error_log.output[0])
             self.assertTrue("Some failure" in error_log.output[0])
 
         # We get two events for the export.
@@ -4392,7 +4392,7 @@ class RealmPropertyActionTest(BaseAction):
             digest_weekday=[0, 1, 2],
             message_edit_history_visibility_policy=Realm.MESSAGE_EDIT_HISTORY_VISIBILITY_POLICY_TYPES,
             message_retention_days=[10, 20],
-            name=["Zulip", "New Name"],
+            name=["Doer", "New Name"],
             waiting_period_threshold=[1000, 2000],
             video_chat_provider=[
                 Realm.VIDEO_CHAT_PROVIDERS["jitsi_meet"]["id"],
@@ -4723,7 +4723,7 @@ class RealmPropertyActionTest(BaseAction):
             web_animate_image_previews=["always", "on_hover", "never"],
             web_stream_unreads_count_display_policy=UserProfile.WEB_STREAM_UNREADS_COUNT_DISPLAY_POLICY_CHOICES,
             desktop_icon_count_display=UserProfile.DESKTOP_ICON_COUNT_DISPLAY_CHOICES,
-            notification_sound=["zulip", "ding"],
+            notification_sound=["doer", "ding"],
             email_notifications_batching_period_seconds=[120, 300],
             email_address_visibility=UserProfile.EMAIL_ADDRESS_VISIBILITY_TYPES,
             realm_name_in_email_notifications_policy=UserProfile.REALM_NAME_IN_EMAIL_NOTIFICATIONS_POLICY_CHOICES,

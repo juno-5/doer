@@ -38,7 +38,7 @@ $(() => {
     }
 
     // In case user presses `back` with menu open.
-    // See https://github.com/zulip/zulip/pull/24301#issuecomment-1418547337.
+    // See https://github.com/doer/doer/pull/24301#issuecomment-1418547337.
     update_submenu_height_if_visible();
 
     // Update the height again if window is resized.

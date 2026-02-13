@@ -169,7 +169,7 @@ export function process_new_message(opts: NewMessage): ProcessedMessage {
                 clean_reactions,
                 display_reply_to: undefined,
                 display_recipient: rest.display_recipient,
-                client: electron_bridge === undefined ? "website" : "ZulipElectron",
+                client: electron_bridge === undefined ? "website" : "DoerElectron",
                 submessages: [],
             };
             message_user_ids.add_user_id(local_message.sender_id);
@@ -221,7 +221,7 @@ export function process_new_message(opts: NewMessage): ProcessedMessage {
                 clean_reactions,
                 display_recipient: rest.display_recipient,
                 submessages: [],
-                client: electron_bridge === undefined ? "website" : "ZulipElectron",
+                client: electron_bridge === undefined ? "website" : "DoerElectron",
             };
             processed_message = {type: "local_message", message: local_message};
         }

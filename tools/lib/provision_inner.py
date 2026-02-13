@@ -15,13 +15,13 @@ import shutil
 import subprocess
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-sys.path.append(ZULIP_PATH)
+sys.path.append(DOER_PATH)
 import pygments
 
 from scripts.lib import clean_unused_caches
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     ENDC,
     OKBLUE,
     get_dev_uuid_var_path,
@@ -33,11 +33,11 @@ from scripts.lib.zulip_tools import (
 )
 from tools.setup.generate_bots_integrations_static_files import (
     generate_pythonapi_integrations_static_files,
-    generate_zulip_bots_static_files,
+    generate_doer_bots_static_files,
 )
 from version import PROVISION_VERSION
 
-VENV_PATH = os.path.join(ZULIP_PATH, ".venv")
+VENV_PATH = os.path.join(DOER_PATH, ".venv")
 UUID_VAR_PATH = get_dev_uuid_var_path()
 
 with get_tzdata_zi() as f:
@@ -48,7 +48,7 @@ with get_tzdata_zi() as f:
 
 def create_var_directories() -> None:
     # create var/coverage, var/log, etc.
-    var_dir = os.path.join(ZULIP_PATH, "var")
+    var_dir = os.path.join(DOER_PATH, "var")
     sub_dirs = [
         "coverage",
         "log",
@@ -128,9 +128,9 @@ def setup_shell_profile(shell_profile: str) -> None:
         code = ""
 
     # We want to activate the virtual environment for login shells only on virtualized systems.
-    zulip_code = ""
+    doer_code = ""
     if is_vagrant_or_digitalocean_instance() or is_wsl_instance():
-        zulip_code += (
+        doer_code += (
             "if [ -L /srv/zulip-py3-venv ]; then\n"  # For development environment downgrades
             "source /srv/zulip-py3-venv/bin/activate\n"  # Not indented so old versions recognize and avoid re-adding this
             "else\n"
@@ -138,14 +138,14 @@ def setup_shell_profile(shell_profile: str) -> None:
             "fi\n"
         )
     if os.path.exists("/srv/zulip"):
-        zulip_code += "cd /srv/zulip\n"
-    if zulip_code:
-        zulip_code = f"\n# begin Zulip setup\n{zulip_code}# end Zulip setup\n"
+        doer_code += "cd /srv/zulip\n"
+    if doer_code:
+        doer_code = f"\n# begin Doer setup\n{doer_code}# end Doer setup\n"
 
     def patch_code(code: str) -> str:
         return re.sub(
-            r"\n# begin Zulip setup\n(?s:.*)# end Zulip setup\n|(?:source /srv/zulip-py3-venv/bin/activate\n|cd /srv/zulip\n)+|\Z",
-            lambda m: zulip_code,
+            r"\n# begin Doer setup\n(?s:.*)# end Doer setup\n|(?:source /srv/zulip-py3-venv/bin/activate\n|cd /srv/zulip\n)+|\Z",
+            lambda m: doer_code,
             code,
             count=1,
         )
@@ -273,8 +273,8 @@ def main(options: argparse.Namespace) -> int:
     # packages.
     run(["tools/setup/emoji/build_emoji"])
 
-    # copy over static files from the zulip_bots and integrations packages
-    generate_zulip_bots_static_files()
+    # copy over static files from the doer_bots and integrations packages
+    generate_doer_bots_static_files()
     generate_pythonapi_integrations_static_files()
 
     run(["node", "tools/setup/build_supported_browser_regex.ts"])
@@ -380,7 +380,7 @@ def main(options: argparse.Namespace) -> int:
     clean_unused_caches.main(
         argparse.Namespace(
             threshold_days=6,
-            # The defaults here should match parse_cache_script_args in zulip_tools.py
+            # The defaults here should match parse_cache_script_args in doer_tools.py
             dry_run=False,
             verbose=False,
             no_headings=True,
@@ -416,7 +416,7 @@ def main(options: argparse.Namespace) -> int:
         f.write(".".join(map(str, PROVISION_VERSION)) + "\n")
 
     print()
-    print(OKBLUE + "Zulip development environment setup succeeded!" + ENDC)
+    print(OKBLUE + "Doer development environment setup succeeded!" + ENDC)
     return 0
 
 

@@ -4,15 +4,15 @@ import os
 import shutil
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if ZULIP_PATH not in sys.path:
-    sys.path.append(ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if DOER_PATH not in sys.path:
+    sys.path.append(DOER_PATH)
 from scripts.lib.setup_path import setup_path
 
 setup_path()
 
 import integrations
-from zulip_bots.lib import get_bots_directory_path
+from doer_bots.lib import get_bots_directory_path
 
 
 def generate_pythonapi_integrations_static_files() -> None:
@@ -25,7 +25,7 @@ def generate_pythonapi_integrations_static_files() -> None:
     package_integrations_dir = os.path.dirname(os.path.abspath(integrations.__file__))
 
     def copy_integrations_data(integration_names: list[str]) -> None:
-        # The integration name as used in zulip/python-zulip-api.
+        # The integration name as used in doer/python-doer-api.
         for name in integration_names:
             src_dir = os.path.join(package_integrations_dir, name)
             dst_dir = os.path.join(integrations_dir, name)
@@ -38,7 +38,7 @@ def generate_pythonapi_integrations_static_files() -> None:
     copy_integrations_data(os.listdir(package_integrations_dir))
 
 
-def generate_zulip_bots_static_files() -> None:
+def generate_doer_bots_static_files() -> None:
     bots_dir = "static/generated/bots"
     if os.path.isdir(bots_dir):
         # delete old static files, they could be outdated
@@ -74,4 +74,4 @@ def generate_zulip_bots_static_files() -> None:
 
 if __name__ == "__main__":
     generate_pythonapi_integrations_static_files()
-    generate_zulip_bots_static_files()
+    generate_doer_bots_static_files()

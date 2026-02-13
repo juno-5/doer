@@ -1,4 +1,4 @@
-# See the Zulip URL spec at https://zulip.com/api/zulip-urls
+# See the Doer URL spec at https://zulip.com/api/doer-urls
 
 from urllib.parse import unquote, urlsplit
 

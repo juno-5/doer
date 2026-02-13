@@ -6,7 +6,7 @@ class AirbyteHookTests(WebhookTestCase):
     FIXTURE_DIR_NAME = "airbyte"
 
     def test_airbyte_job_success(self) -> None:
-        expected_topic = "Zulip Airbyte Integration - Google Sheets → Postgres"
+        expected_topic = "Doer Airbyte Integration - Google Sheets → Postgres"
 
         expected_message = """:green_circle: Airbyte sync **succeeded** for [Google Sheets → Postgres](https://cloud.airbyte.com/workspaces/84d2dd6e-82aa-406e-91f3-bf8dbf176e69/connections/aa941643-07ea-48a2-9035-024575491720).
 
@@ -25,7 +25,7 @@ class AirbyteHookTests(WebhookTestCase):
         )
 
     def test_airbyte_job_failure(self) -> None:
-        expected_topic = "Zulip Airbyte Integration - Google Sheets → Postgres"
+        expected_topic = "Doer Airbyte Integration - Google Sheets → Postgres"
         expected_message = """:red_circle: Airbyte sync **failed** for [Google Sheets → Postgres](https://cloud.airbyte.com/workspaces/84d2dd6e-82aa-406e-91f3-bf8dbf176e69/connections/aa941643-07ea-48a2-9035-024575491720).
 
 

@@ -5,7 +5,7 @@ from django.db.models import Q
 from typing_extensions import override
 
 from zerver.actions.user_settings import bulk_regenerate_api_keys
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.sessions import (
     delete_all_deactivated_user_sessions,
     delete_all_user_sessions,
@@ -14,7 +14,7 @@ from zerver.lib.sessions import (
 from zerver.models import UserProfile
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """\
 Log out all users from active browser sessions.
 

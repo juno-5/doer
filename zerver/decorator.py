@@ -63,9 +63,9 @@ from zerver.models.users import get_user_profile_by_api_key
 if TYPE_CHECKING:
     from django.http.request import _ImmutableQueryDict
 
-webhook_logger = logging.getLogger("zulip.zerver.webhooks")
-webhook_unsupported_events_logger = logging.getLogger("zulip.zerver.webhooks.unsupported")
-webhook_anomalous_payloads_logger = logging.getLogger("zulip.zerver.webhooks.anomalous")
+webhook_logger = logging.getLogger("doer.zerver.webhooks")
+webhook_unsupported_events_logger = logging.getLogger("doer.zerver.webhooks.unsupported")
+webhook_anomalous_payloads_logger = logging.getLogger("doer.zerver.webhooks.anomalous")
 
 ParamT = ParamSpec("ParamT")
 ReturnT = TypeVar("ReturnT")
@@ -233,7 +233,7 @@ def process_client(
     created/updated to record this request.
 
     In particular, unauthenticate requests and those authenticated to
-    a non-user object like RemoteZulipServer should not pass the
+    a non-user object like RemoteDoerServer should not pass the
     `user` parameter.
     """
     request_notes = RequestNotes.get_notes(request)
@@ -245,9 +245,9 @@ def process_client(
     # We could check for a browser's name being "Mozilla", but
     # e.g. Opera and MobileSafari don't set that, and it seems
     # more robust to just key off whether it was a browser view
-    if is_browser_view and not client_name.startswith("Zulip"):
+    if is_browser_view and not client_name.startswith("Doer"):
         # Avoid changing the client string for browsers, but let
-        # the Zulip desktop apps be themselves.
+        # the Doer desktop apps be themselves.
         client_name = "website"
 
     request_notes.client = get_client(client_name)
@@ -364,7 +364,7 @@ def log_exception_to_webhook_logger(request: HttpRequest, err: Exception) -> Non
 def full_webhook_client_name(raw_client_name: str | None = None) -> str | None:
     if raw_client_name is None:
         return None
-    return f"Zulip{raw_client_name}Webhook"
+    return f"Doer{raw_client_name}Webhook"
 
 
 # Use this for webhook views that don't get an email passed in.
@@ -422,7 +422,7 @@ def webhook_view(
     return _wrapped_view_func
 
 
-def zulip_redirect_to_login(
+def doer_redirect_to_login(
     request: HttpRequest,
     login_url: str | None = None,
     redirect_field_name: str = REDIRECT_FIELD_NAME,
@@ -472,7 +472,7 @@ def user_passes_test(
         ) -> HttpResponse:
             if test_func(request):
                 return view_func(request, *args, **kwargs)
-            return zulip_redirect_to_login(request, login_url, redirect_field_name)
+            return doer_redirect_to_login(request, login_url, redirect_field_name)
 
         return _wrapped_view
 
@@ -576,13 +576,13 @@ def human_users_only(
 
 # Based on Django 1.8's @login_required
 @overload
-def zulip_login_required(
+def doer_login_required(
     function: Callable[Concatenate[HttpRequest, ParamT], HttpResponse],
     redirect_field_name: str = REDIRECT_FIELD_NAME,
     login_url: str = settings.HOME_NOT_LOGGED_IN,
 ) -> Callable[Concatenate[HttpRequest, ParamT], HttpResponse]: ...
 @overload
-def zulip_login_required(
+def doer_login_required(
     function: None,
     redirect_field_name: str = REDIRECT_FIELD_NAME,
     login_url: str = settings.HOME_NOT_LOGGED_IN,
@@ -590,7 +590,7 @@ def zulip_login_required(
     [Callable[Concatenate[HttpRequest, ParamT], HttpResponse]],
     Callable[Concatenate[HttpRequest, ParamT], HttpResponse],
 ]: ...
-def zulip_login_required(
+def doer_login_required(
     function: Callable[Concatenate[HttpRequest, ParamT], HttpResponse] | None = None,
     redirect_field_name: str = REDIRECT_FIELD_NAME,
     login_url: str = settings.HOME_NOT_LOGGED_IN,
@@ -606,7 +606,7 @@ def zulip_login_required(
         login_url=login_url,
         redirect_field_name=redirect_field_name,
     )(
-        zulip_otp_required_if_logged_in(
+        doer_otp_required_if_logged_in(
             redirect_field_name=redirect_field_name,
             login_url=login_url,
         )(add_logging_data(function))
@@ -626,7 +626,7 @@ def web_public_view(
     This wrapper adds client info for unauthenticated users but
     forces authenticated users to go through 2fa.
     """
-    actual_decorator = lambda view_func: zulip_otp_required_if_logged_in(
+    actual_decorator = lambda view_func: doer_otp_required_if_logged_in(
         redirect_field_name=redirect_field_name, login_url=login_url
     )(add_logging_data(view_func))
 
@@ -636,7 +636,7 @@ def web_public_view(
 def require_server_admin(
     view_func: Callable[Concatenate[HttpRequest, ParamT], HttpResponse],
 ) -> Callable[Concatenate[HttpRequest, ParamT], HttpResponse]:
-    @zulip_login_required
+    @doer_login_required
     @wraps(view_func)
     def _wrapped_view_func(
         request: HttpRequest, /, *args: ParamT.args, **kwargs: ParamT.kwargs
@@ -652,7 +652,7 @@ def require_server_admin(
 def require_server_admin_api(
     view_func: Callable[Concatenate[HttpRequest, ParamT], HttpResponse],
 ) -> Callable[Concatenate[HttpRequest, ParamT], HttpResponse]:
-    @zulip_login_required
+    @doer_login_required
     @wraps(view_func)
     def _wrapped_view_func(
         request: HttpRequest,
@@ -972,7 +972,7 @@ def internal_api_view(
     [Callable[Concatenate[HttpRequest, ParamT], HttpResponse]],
     Callable[Concatenate[HttpRequest, ParamT], HttpResponse],
 ]:
-    """Used for situations where something running on the Zulip server
+    """Used for situations where something running on the Doer server
     needs to make a request to the (other) Django/Tornado processes running on
     the server."""
 
@@ -1021,7 +1021,7 @@ def return_success_on_head_request(
     return _wrapped_view_func
 
 
-def zulip_otp_required_if_logged_in(
+def doer_otp_required_if_logged_in(
     redirect_field_name: str = "next",
     login_url: str = settings.HOME_NOT_LOGGED_IN,
 ) -> Callable[

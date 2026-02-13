@@ -20,7 +20,7 @@ from django.db.models.signals import post_delete
 from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import get_or_create_dev_uuid_var_path
+from scripts.lib.doer_tools import get_or_create_dev_uuid_var_path
 from zerver.actions.channel_folders import check_add_channel_folder
 from zerver.actions.create_realm import do_create_realm
 from zerver.actions.custom_profile_fields import (
@@ -43,7 +43,7 @@ from zerver.actions.users import do_change_user_role
 from zerver.lib.bulk_create import bulk_create_streams
 from zerver.lib.digest import DIGEST_CUTOFF
 from zerver.lib.generate_test_data import create_test_data, generate_topics
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.onboarding import create_if_missing_realm_internal_bots
 from zerver.lib.onboarding_steps import ALL_ONBOARDING_STEPS
 from zerver.lib.push_notifications import logger as push_notifications_logger
@@ -85,14 +85,14 @@ from zerver.models.realms import get_realm
 from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.streams import get_stream
 from zerver.models.users import get_user, get_user_by_delivery_email, get_user_profile_by_id
-from zilencer.models import RemoteRealm, RemoteZulipServer, RemoteZulipServerAuditLog
+from zilencer.models import RemoteRealm, RemoteDoerServer, RemoteDoerServerAuditLog
 from zilencer.views import update_remote_realm_data_for_server
 
 # Disable the push notifications bouncer to avoid enqueuing updates in
 # maybe_enqueue_audit_log_upload during early setup.
-settings.ZULIP_SERVICE_PUSH_NOTIFICATIONS = False
-settings.ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = False
-settings.ZULIP_SERVICE_SECURITY_ALERTS = False
+settings.DOER_SERVICE_PUSH_NOTIFICATIONS = False
+settings.DOER_SERVICE_SUBMIT_USAGE_STATISTICS = False
+settings.DOER_SERVICE_SECURITY_ALERTS = False
 settings.ANALYTICS_DATA_UPLOAD_LEVEL = AnalyticsDataUploadLevel.NONE
 settings.USING_TORNADO = False
 # Disable using memcached caches to avoid 'unsupported pickle
@@ -151,7 +151,7 @@ def clear_database() -> None:
         Client,
         DefaultStream,
         RemoteRealm,
-        RemoteZulipServer,
+        RemoteDoerServer,
     ]:
         model.objects.all().delete()
     Session.objects.all().delete()
@@ -228,7 +228,7 @@ def create_alert_words(realm_id: int) -> None:
     AlertWord.objects.bulk_create(recs)
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = "Populate a test database"
 
     @override
@@ -355,11 +355,11 @@ class Command(ZulipBaseCommand):
             # Could in theory be done via zerver.actions.create_realm.do_create_realm, but
             # welcome-bot (needed for do_create_realm) hasn't been created yet
             create_internal_realm()
-            zulip_realm = do_create_realm(
-                string_id="zulip",
-                name="Zulip Dev",
+            doer_realm = do_create_realm(
+                string_id="doer",
+                name="Doer Dev",
                 emails_restricted_to_domains=False,
-                description="The Zulip development environment default organization."
+                description="The Doer development environment default organization."
                 "  It's great for testing!",
                 invite_required=False,
                 plan_type=Realm.PLAN_TYPE_SELF_HOSTED,
@@ -367,13 +367,13 @@ class Command(ZulipBaseCommand):
                 enable_read_receipts=True,
                 enable_spectator_access=True,
             )
-            RealmDomain.objects.create(realm=zulip_realm, domain="zulip.com")
-            assert zulip_realm.new_stream_announcements_stream is not None
-            zulip_realm.new_stream_announcements_stream.name = "Verona"
-            zulip_realm.new_stream_announcements_stream.description = "A city in Italy"
-            zulip_realm.new_stream_announcements_stream.save(update_fields=["name", "description"])
+            RealmDomain.objects.create(realm=doer_realm, domain="zulip.com")
+            assert doer_realm.new_stream_announcements_stream is not None
+            doer_realm.new_stream_announcements_stream.name = "Verona"
+            doer_realm.new_stream_announcements_stream.description = "A city in Italy"
+            doer_realm.new_stream_announcements_stream.save(update_fields=["name", "description"])
 
-            realm_user_default = RealmUserDefault.objects.get(realm=zulip_realm)
+            realm_user_default = RealmUserDefault.objects.get(realm=doer_realm)
             realm_user_default.enter_sends = True
             realm_user_default.email_address_visibility = (
                 RealmUserDefault.EMAIL_ADDRESS_VISIBILITY_ADMINS
@@ -405,16 +405,16 @@ class Command(ZulipBaseCommand):
             # wanting to have missing registrations, or simulating legacy server scenarios,
             # should delete RemoteRealms to explicit set things up.
 
-            assert isinstance(settings.ZULIP_ORG_ID, str)
-            assert isinstance(settings.ZULIP_ORG_KEY, str)
-            server = RemoteZulipServer.objects.create(
-                uuid=settings.ZULIP_ORG_ID,
-                api_key=settings.ZULIP_ORG_KEY,
+            assert isinstance(settings.DOER_ORG_ID, str)
+            assert isinstance(settings.DOER_ORG_KEY, str)
+            server = RemoteDoerServer.objects.create(
+                uuid=settings.DOER_ORG_ID,
+                api_key=settings.DOER_ORG_KEY,
                 hostname=settings.EXTERNAL_HOST,
                 last_updated=timezone_now(),
                 contact_email="remotezulipserver@zulip.com",
             )
-            RemoteZulipServerAuditLog.objects.create(
+            RemoteDoerServerAuditLog.objects.create(
                 event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
                 server=server,
                 event_time=server.last_updated,
@@ -539,14 +539,14 @@ class Command(ZulipBaseCommand):
                 validate_email(email)
                 names.append((full_name, email))
 
-            create_users(zulip_realm, names, tos_version=settings.TERMS_OF_SERVICE_VERSION)
+            create_users(doer_realm, names, tos_version=settings.TERMS_OF_SERVICE_VERSION)
 
             # Add time zones to some users. Ideally, this would be
             # done in the initial create_users calls, but the
             # tuple-based interface for that function doesn't support
             # doing so.
             def assign_time_zone_by_delivery_email(delivery_email: str, new_time_zone: str) -> None:
-                u = get_user_by_delivery_email(delivery_email, zulip_realm)
+                u = get_user_by_delivery_email(delivery_email, doer_realm)
                 u.timezone = new_time_zone
                 u.save(update_fields=["timezone"])
 
@@ -560,7 +560,7 @@ class Command(ZulipBaseCommand):
             assign_time_zone_by_delivery_email("shiva@zulip.com", "Asia/Kolkata")  # India
             assign_time_zone_by_delivery_email("cordelia@zulip.com", "UTC")
 
-            iago = get_user_by_delivery_email("iago@zulip.com", zulip_realm)
+            iago = get_user_by_delivery_email("iago@zulip.com", doer_realm)
             do_change_user_role(
                 iago, UserProfile.ROLE_REALM_ADMINISTRATOR, acting_user=None, notify=False
             )
@@ -584,21 +584,21 @@ class Command(ZulipBaseCommand):
                 last_edit_time=timezone_now(),
             )
 
-            desdemona = get_user_by_delivery_email("desdemona@zulip.com", zulip_realm)
+            desdemona = get_user_by_delivery_email("desdemona@zulip.com", doer_realm)
             do_change_user_role(
                 desdemona, UserProfile.ROLE_REALM_OWNER, acting_user=None, notify=False
             )
 
-            shiva = get_user_by_delivery_email("shiva@zulip.com", zulip_realm)
+            shiva = get_user_by_delivery_email("shiva@zulip.com", doer_realm)
             do_change_user_role(shiva, UserProfile.ROLE_MODERATOR, acting_user=None, notify=False)
 
-            polonius = get_user_by_delivery_email("polonius@zulip.com", zulip_realm)
+            polonius = get_user_by_delivery_email("polonius@zulip.com", doer_realm)
             do_change_user_role(polonius, UserProfile.ROLE_GUEST, acting_user=None, notify=False)
 
             # These bots are directly referenced from code and thus
             # are needed for the test suite.
-            zulip_realm_bots = [
-                ("Zulip Default Bot", "default-bot@zulip.com"),
+            doer_realm_bots = [
+                ("Doer Default Bot", "default-bot@zulip.com"),
                 *(
                     (f"Extra Bot {i}", f"extrabot{i}@zulip.com")
                     for i in range(options["extra_bots"])
@@ -606,34 +606,34 @@ class Command(ZulipBaseCommand):
             ]
 
             create_users(
-                zulip_realm, zulip_realm_bots, bot_type=UserProfile.DEFAULT_BOT, bot_owner=desdemona
+                doer_realm, doer_realm_bots, bot_type=UserProfile.DEFAULT_BOT, bot_owner=desdemona
             )
 
-            zoe = get_user_by_delivery_email("zoe@zulip.com", zulip_realm)
-            zulip_webhook_bots = [
-                ("Zulip Webhook Bot", "webhook-bot@zulip.com"),
+            zoe = get_user_by_delivery_email("zoe@zulip.com", doer_realm)
+            doer_webhook_bots = [
+                ("Doer Webhook Bot", "webhook-bot@zulip.com"),
             ]
             # If a stream is not supplied in the webhook URL, the webhook
             # will (in some cases) send the notification as a PM to the
             # owner of the webhook bot, so bot_owner can't be None
             create_users(
-                zulip_realm,
-                zulip_webhook_bots,
+                doer_realm,
+                doer_webhook_bots,
                 bot_type=UserProfile.INCOMING_WEBHOOK_BOT,
                 bot_owner=zoe,
             )
-            aaron = get_user_by_delivery_email("AARON@zulip.com", zulip_realm)
+            aaron = get_user_by_delivery_email("AARON@zulip.com", doer_realm)
 
-            zulip_outgoing_bots = [
+            doer_outgoing_bots = [
                 ("Outgoing Webhook", "outgoing-webhook@zulip.com"),
             ]
             create_users(
-                zulip_realm,
-                zulip_outgoing_bots,
+                doer_realm,
+                doer_outgoing_bots,
                 bot_type=UserProfile.OUTGOING_WEBHOOK_BOT,
                 bot_owner=aaron,
             )
-            outgoing_webhook = get_user("outgoing-webhook@zulip.com", zulip_realm)
+            outgoing_webhook = get_user("outgoing-webhook@zulip.com", doer_realm)
             add_service(
                 "outgoing-webhook",
                 user_profile=outgoing_webhook,
@@ -646,8 +646,8 @@ class Command(ZulipBaseCommand):
             create_if_missing_realm_internal_bots()
 
             # Create streams.
-            zulip_discussion_channel_name = str(Realm.ZULIP_DISCUSSION_CHANNEL_NAME)
-            zulip_sandbox_channel_name = str(Realm.ZULIP_SANDBOX_CHANNEL_NAME)
+            doer_discussion_channel_name = str(Realm.DOER_DISCUSSION_CHANNEL_NAME)
+            doer_sandbox_channel_name = str(Realm.DOER_SANDBOX_CHANNEL_NAME)
 
             stream_list = [
                 "Verona",
@@ -656,8 +656,8 @@ class Command(ZulipBaseCommand):
                 "Venice",
                 "Rome",
                 "core team",
-                zulip_discussion_channel_name,
-                zulip_sandbox_channel_name,
+                doer_discussion_channel_name,
+                doer_sandbox_channel_name,
             ]
             stream_dict: dict[str, dict[str, Any]] = {
                 "Denmark": {"description": "A Scandinavian country"},
@@ -671,9 +671,9 @@ class Command(ZulipBaseCommand):
                 },
             }
 
-            bulk_create_streams(zulip_realm, stream_dict)
+            bulk_create_streams(doer_realm, stream_dict)
             recipient_streams: list[int] = [
-                Stream.objects.get(name=name, realm=zulip_realm).id for name in stream_list
+                Stream.objects.get(name=name, realm=doer_realm).id for name in stream_list
             ]
 
             # Create subscriptions to streams.  The following
@@ -696,16 +696,16 @@ class Command(ZulipBaseCommand):
                         "Verona",
                         "Denmark",
                         "core team",
-                        zulip_discussion_channel_name,
-                        zulip_sandbox_channel_name,
+                        doer_discussion_channel_name,
+                        doer_sandbox_channel_name,
                     ],
                     "iago@zulip.com": [
                         "Verona",
                         "Denmark",
                         "Scotland",
                         "core team",
-                        zulip_discussion_channel_name,
-                        zulip_sandbox_channel_name,
+                        doer_discussion_channel_name,
+                        doer_sandbox_channel_name,
                     ],
                     "othello@zulip.com": ["Verona", "Denmark", "Scotland"],
                     "prospero@zulip.com": ["Verona", "Denmark", "Scotland", "Venice"],
@@ -716,8 +716,8 @@ class Command(ZulipBaseCommand):
                         "Denmark",
                         "Venice",
                         "core team",
-                        zulip_discussion_channel_name,
-                        zulip_sandbox_channel_name,
+                        doer_discussion_channel_name,
+                        doer_sandbox_channel_name,
                     ],
                     "shiva@zulip.com": ["Verona", "Denmark", "Scotland"],
                 }
@@ -728,7 +728,7 @@ class Command(ZulipBaseCommand):
                         raise Exception(f"Subscriptions not listed for user {email}")
 
                     for stream_name in subscriptions_map[email]:
-                        stream = Stream.objects.get(name=stream_name, realm=zulip_realm)
+                        stream = Stream.objects.get(name=stream_name, realm=doer_realm)
                         r = Recipient.objects.get(type=Recipient.STREAM, type_id=stream.id)
                         subscriptions_list.append((profile, r))
             else:
@@ -780,16 +780,16 @@ class Command(ZulipBaseCommand):
 
             # Create custom profile field data
             phone_number = try_add_realm_custom_profile_field(
-                zulip_realm, "Phone number", CustomProfileField.SHORT_TEXT, hint=""
+                doer_realm, "Phone number", CustomProfileField.SHORT_TEXT, hint=""
             )
             biography = try_add_realm_custom_profile_field(
-                zulip_realm,
+                doer_realm,
                 "Biography",
                 CustomProfileField.LONG_TEXT,
                 hint="What are you known for?",
             )
             favorite_food = try_add_realm_custom_profile_field(
-                zulip_realm,
+                doer_realm,
                 "Favorite food",
                 CustomProfileField.SHORT_TEXT,
                 hint="Or drink, if you'd prefer",
@@ -799,30 +799,30 @@ class Command(ZulipBaseCommand):
                 "1": {"text": "Emacs", "order": "2"},
             }
             favorite_editor = try_add_realm_custom_profile_field(
-                zulip_realm, "Favorite editor", CustomProfileField.SELECT, field_data=field_data
+                doer_realm, "Favorite editor", CustomProfileField.SELECT, field_data=field_data
             )
             birthday = try_add_realm_custom_profile_field(
-                zulip_realm, "Birthday", CustomProfileField.DATE
+                doer_realm, "Birthday", CustomProfileField.DATE
             )
             favorite_website = try_add_realm_custom_profile_field(
-                zulip_realm,
+                doer_realm,
                 "Favorite website",
                 CustomProfileField.URL,
                 hint="Or your personal blog's URL",
             )
             mentor = try_add_realm_custom_profile_field(
-                zulip_realm, "Mentor", CustomProfileField.USER
+                doer_realm, "Mentor", CustomProfileField.USER
             )
-            github_profile = try_add_realm_default_custom_profile_field(zulip_realm, "github")
+            github_profile = try_add_realm_default_custom_profile_field(doer_realm, "github")
             pronouns = try_add_realm_custom_profile_field(
-                zulip_realm,
+                doer_realm,
                 "Pronouns",
                 CustomProfileField.PRONOUNS,
                 hint="What pronouns should people use to refer to you?",
             )
 
             # Fill in values for Iago and Hamlet
-            hamlet = get_user_by_delivery_email("hamlet@zulip.com", zulip_realm)
+            hamlet = get_user_by_delivery_email("hamlet@zulip.com", doer_realm)
             do_update_user_custom_profile_data_if_changed(
                 iago,
                 [
@@ -833,7 +833,7 @@ class Command(ZulipBaseCommand):
                     {"id": birthday.id, "value": "2000-01-01"},
                     {"id": favorite_website.id, "value": "https://zulip.readthedocs.io/en/latest/"},
                     {"id": mentor.id, "value": [hamlet.id]},
-                    {"id": github_profile.id, "value": "zulip"},
+                    {"id": github_profile.id, "value": "doer"},
                     {"id": pronouns.id, "value": "he/him"},
                 ],
                 None,
@@ -862,51 +862,51 @@ class Command(ZulipBaseCommand):
             # cURL example to delete an existing scheduled message.
             check_schedule_message(
                 sender=iago,
-                client=get_client("ZulipDataImport"),
+                client=get_client("DoerDataImport"),
                 recipient_type_name="stream",
-                message_to=[Stream.objects.get(name="Denmark", realm=zulip_realm).id],
+                message_to=[Stream.objects.get(name="Denmark", realm=doer_realm).id],
                 topic_name="test-api",
                 message_content="It's time to celebrate the anniversary of provisioning this development environment :tada:!",
                 deliver_at=timezone_now() + timedelta(days=365),
-                realm=zulip_realm,
+                realm=doer_realm,
             )
             check_schedule_message(
                 sender=iago,
-                client=get_client("ZulipDataImport"),
+                client=get_client("DoerDataImport"),
                 recipient_type_name="private",
                 message_to=[iago.id],
                 topic_name=None,
                 message_content="Note to self: It's been a while since you've provisioned this development environment.",
                 deliver_at=timezone_now() + timedelta(days=365),
-                realm=zulip_realm,
+                realm=doer_realm,
             )
             do_add_linkifier(
-                zulip_realm,
+                doer_realm,
                 "#D(?P<id>[0-9]{2,8})",
-                "https://github.com/zulip/zulip-desktop/pull/{id}",
+                "https://github.com/doer/doer-desktop/pull/{id}",
                 acting_user=None,
             )
             do_add_linkifier(
-                zulip_realm,
-                "zulip-mobile#(?P<id>[0-9]{2,8})",
-                "https://github.com/zulip/zulip-mobile/pull/{id}",
+                doer_realm,
+                "doer-mobile#(?P<id>[0-9]{2,8})",
+                "https://github.com/doer/doer-mobile/pull/{id}",
                 acting_user=None,
             )
             do_add_linkifier(
-                zulip_realm,
-                "zulip-(?P<repo>[a-zA-Z-_0-9]+)#(?P<id>[0-9]{2,8})",
-                "https://github.com/zulip/{repo}/pull/{id}",
+                doer_realm,
+                "doer-(?P<repo>[a-zA-Z-_0-9]+)#(?P<id>[0-9]{2,8})",
+                "https://github.com/doer/{repo}/pull/{id}",
                 acting_user=None,
             )
         else:
-            zulip_realm = get_realm("zulip")
+            doer_realm = get_realm("doer")
             recipient_streams = [
                 klass.type_id for klass in Recipient.objects.filter(type=Recipient.STREAM)
             ]
 
         # Extract a list of all users
         user_profiles: list[UserProfile] = list(
-            UserProfile.objects.filter(is_bot=False, realm=zulip_realm)
+            UserProfile.objects.filter(is_bot=False, realm=doer_realm)
         )
 
         if options["test_suite"]:
@@ -946,13 +946,13 @@ class Command(ZulipBaseCommand):
             # enabled in the development environment (so that we naturally test
             # them when doing manual testing) and unit tests (to preserve the old behaviour).
             do_set_realm_property(
-                zulip_realm, "send_channel_events_messages", True, acting_user=None
+                doer_realm, "send_channel_events_messages", True, acting_user=None
             )
         # Create a test realm emoji.
         IMAGE_FILE_PATH = static_path("images/test-images/checkbox.png")
         with open(IMAGE_FILE_PATH, "rb") as fp:
             check_add_realm_emoji(
-                zulip_realm, "green_tick", iago, File(fp, name="checkbox.png"), "image/png"
+                doer_realm, "green_tick", iago, File(fp, name="checkbox.png"), "image/png"
             )
 
         if not options["test_suite"]:
@@ -989,7 +989,7 @@ class Command(ZulipBaseCommand):
             random.sample(user_profiles_ids, 2) for i in range(options["num_personals"])
         ]
 
-        create_alert_words(zulip_realm.id)
+        create_alert_words(doer_realm.id)
 
         # Generate a new set of test data.
         create_test_data()
@@ -1044,9 +1044,9 @@ class Command(ZulipBaseCommand):
                     lear_realm, [core_team_stream], [lear_user], acting_user=None
                 )
 
-                core_team_stream = Stream.objects.get(name="core team", realm=zulip_realm)
+                core_team_stream = Stream.objects.get(name="core team", realm=doer_realm)
                 do_set_realm_moderation_request_channel(
-                    zulip_realm, core_team_stream, core_team_stream.id, acting_user=None
+                    doer_realm, core_team_stream, core_team_stream.id, acting_user=None
                 )
 
             if not options["test_suite"]:
@@ -1059,23 +1059,23 @@ class Command(ZulipBaseCommand):
 
                 admins_system_group = NamedUserGroup.objects.get(
                     name=SystemGroups.ADMINISTRATORS,
-                    realm_for_sharding=zulip_realm,
+                    realm_for_sharding=doer_realm,
                     is_system_group=True,
                 )
 
                 engineering_channel_folder = check_add_channel_folder(
-                    zulip_realm,
+                    doer_realm,
                     "Engineering",
                     "For convenient *channel folder* testing! :octopus:",
                     acting_user=iago,
                 )
                 information_channel_folder = check_add_channel_folder(
-                    zulip_realm,
+                    doer_realm,
                     "Information",
                     "For user-facing information and questions",
                     acting_user=iago,
                 )
-                zulip_stream_dict: dict[str, dict[str, Any]] = {
+                doer_stream_dict: dict[str, dict[str, Any]] = {
                     "devel": {
                         "description": "For developing",
                         "folder_id": engineering_channel_folder.id,
@@ -1149,31 +1149,31 @@ class Command(ZulipBaseCommand):
                     if random.random() <= 0.15:
                         extra_stream_name += random.choice(raw_emojis)
 
-                    zulip_stream_dict[extra_stream_name] = {
+                    doer_stream_dict[extra_stream_name] = {
                         "description": "Auto-generated extra stream.",
                     }
 
-                bulk_create_streams(zulip_realm, zulip_stream_dict)
+                bulk_create_streams(doer_realm, doer_stream_dict)
                 # Now that we've created the new_stream_announcements_stream, configure it properly.
-                # By default, 'New stream' & 'Zulip update' announcements are sent to the same stream.
-                announce_stream = get_stream("announce", zulip_realm)
-                zulip_realm.new_stream_announcements_stream = announce_stream
-                zulip_realm.zulip_update_announcements_stream = announce_stream
-                zulip_realm.save(
+                # By default, 'New stream' & 'Doer update' announcements are sent to the same stream.
+                announce_stream = get_stream("announce", doer_realm)
+                doer_realm.new_stream_announcements_stream = announce_stream
+                doer_realm.doer_update_announcements_stream = announce_stream
+                doer_realm.save(
                     update_fields=[
                         "new_stream_announcements_stream",
-                        "zulip_update_announcements_stream",
+                        "doer_update_announcements_stream",
                     ]
                 )
 
                 # Add a few default streams
                 for default_stream_name in ["design", "devel", "social", "support"]:
                     DefaultStream.objects.create(
-                        realm=zulip_realm, stream=get_stream(default_stream_name, zulip_realm)
+                        realm=doer_realm, stream=get_stream(default_stream_name, doer_realm)
                     )
 
                 # Now subscribe everyone to these streams
-                subscribe_users_to_streams(zulip_realm, zulip_stream_dict)
+                subscribe_users_to_streams(doer_realm, doer_stream_dict)
 
             create_user_groups()
 
@@ -1198,14 +1198,14 @@ class Command(ZulipBaseCommand):
                 # These bots are not needed by the test suite
                 # Also, we don't want interacting with each other
                 # in dev setup.
-                internal_zulip_users_nosubs = [
-                    ("Zulip Commit Bot", "commit-bot@zulip.com"),
-                    ("Zulip Trac Bot", "trac-bot@zulip.com"),
-                    ("Zulip Nagios Bot", "nagios-bot@zulip.com"),
+                internal_doer_users_nosubs = [
+                    ("Doer Commit Bot", "commit-bot@zulip.com"),
+                    ("Doer Trac Bot", "trac-bot@zulip.com"),
+                    ("Doer Nagios Bot", "nagios-bot@zulip.com"),
                 ]
                 create_users(
-                    zulip_realm,
-                    internal_zulip_users_nosubs,
+                    doer_realm,
+                    internal_doer_users_nosubs,
                     bot_type=UserProfile.DEFAULT_BOT,
                     bot_owner=desdemona,
                 )
@@ -1251,7 +1251,7 @@ def get_recipient_by_id(rid: int) -> Recipient:
 def generate_and_send_messages(
     data: tuple[int, Sequence[Sequence[int]], Mapping[str, Any], int],
 ) -> int:
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     (tot_messages, personals_pairs, options, random_seed) = data
     random.seed(random_seed)
 
@@ -1302,7 +1302,7 @@ def generate_and_send_messages(
     while num_messages < tot_messages:
         saved_data: dict[str, Any] = {}
         message = Message(realm=realm)
-        message.sending_client = get_client("ZulipDataImport")
+        message.sending_client = get_client("DoerDataImport")
 
         message.content = next(texts)
 
@@ -1480,12 +1480,12 @@ def choose_date_sent(
 
 
 def create_user_groups() -> None:
-    zulip = get_realm("zulip")
-    cordelia = get_user_by_delivery_email("cordelia@zulip.com", zulip)
+    doer = get_realm("doer")
+    cordelia = get_user_by_delivery_email("cordelia@zulip.com", doer)
     members = [
-        get_user_by_delivery_email("cordelia@zulip.com", zulip),
-        get_user_by_delivery_email("hamlet@zulip.com", zulip),
+        get_user_by_delivery_email("cordelia@zulip.com", doer),
+        get_user_by_delivery_email("hamlet@zulip.com", doer),
     ]
     create_user_group_in_database(
-        "hamletcharacters", members, zulip, description="Characters of Hamlet", acting_user=cordelia
+        "hamletcharacters", members, doer, description="Characters of Hamlet", acting_user=cordelia
     )

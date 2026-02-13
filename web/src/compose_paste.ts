@@ -30,13 +30,13 @@ function deduplicate_newlines(attribute: string): string {
     return attribute ? attribute.replaceAll(/(\n+\s*)+/g, "\n") : "";
 }
 
-function image_to_zulip_markdown(
+function image_to_doer_markdown(
     _content: string,
     node: Element | Document | DocumentFragment,
 ): string {
     assert(node instanceof Element);
     if (node.nodeName === "IMG" && node.classList.contains("emoji") && node.hasAttribute("alt")) {
-        // For Zulip's custom emoji
+        // For Doer's custom emoji
         return node.getAttribute("alt") ?? "";
     }
     // For inline images presented in Markdown syntax, we need
@@ -48,8 +48,8 @@ function image_to_zulip_markdown(
         node.getAttribute("href") ??
         "";
     // For the label, we prioritize the alt attribute, which will be
-    // present on both Zulip and third-party Markdown images, but use
-    // title as a fallback, since older-style Zulip image previews
+    // present on both Doer and third-party Markdown images, but use
+    // title as a fallback, since older-style Doer image previews
     // only set title.
     let alt = "";
     if (node.classList.contains("inline-image")) {
@@ -235,7 +235,7 @@ function get_code_block_language(
 ): string {
     let language = "";
     const parent_contains_lang_metadata =
-        pre_element.parentElement?.classList.contains("zulip-code-block");
+        pre_element.parentElement?.classList.contains("doer-code-block");
 
     if (parent_contains_lang_metadata) {
         const codehilite_element = pre_element.closest<HTMLElement>(".codehilite");
@@ -457,9 +457,9 @@ export function paste_handler_converter(
 
     turndownService.addRule("zulipImagePreview", {
         filter(node) {
-            // select image previews in Zulip messages; we continue to check for
+            // select image previews in Doer messages; we continue to check for
             // message_inline_image to handle content pasted in from older
-            // versions of Zulip
+            // versions of Doer
             return (
                 (node.classList.contains("message_inline_image") ||
                     node.classList.contains("message-media-preview-image")) &&
@@ -488,14 +488,14 @@ export function paste_handler_converter(
                 // double pasting the same link.
                 return "";
             }
-            return image_to_zulip_markdown(content, node.firstElementChild);
+            return image_to_doer_markdown(content, node.firstElementChild);
         },
     });
 
     turndownService.addRule("images", {
         filter: "img",
 
-        replacement: image_to_zulip_markdown,
+        replacement: image_to_doer_markdown,
     });
 
     // We override the original upstream implementation of this rule to make
@@ -503,9 +503,9 @@ export function paste_handler_converter(
     // - We turn any single line code blocks into inline markdown code, if they don't
     // have associated language metadata.
     // - We generalise the filter condition to allow a `pre` element with a
-    // `code` element as its only non-empty child, which applies to Zulip code
+    // `code` element as its only non-empty child, which applies to Doer code
     // blocks too.
-    // - For Zulip code blocks, we extract the language of the code block (if
+    // - For Doer code blocks, we extract the language of the code block (if
     // any) correctly.
     // - We don't do any conversion to code blocks if the user seems to already
     // be trying to create a codeblock (i.e. the cursor in the composebox is

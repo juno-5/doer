@@ -3,7 +3,7 @@ from unittest import mock
 
 from django.test import Client
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.url_redirects import (
     API_DOCUMENTATION_REDIRECTS,
     LANDING_PAGE_REDIRECTS,
@@ -12,7 +12,7 @@ from zerver.lib.url_redirects import (
 from zerver.models import Stream
 
 
-class PublicURLTest(ZulipTestCase):
+class PublicURLTest(DoerTestCase):
     """
     Account creation URLs are accessible even when not logged in. Authenticated
     URLs redirect to a page.
@@ -81,7 +81,7 @@ class PublicURLTest(ZulipTestCase):
                 "/en/accounts/login/",
                 "/ru/accounts/login/",
                 "/api/",
-                # Since web-public streams are enabled in this `zulip`
+                # Since web-public streams are enabled in this `doer`
                 # instance, the public access experience is loaded directly.
                 "/",
                 "/en/",
@@ -163,7 +163,7 @@ class PublicURLTest(ZulipTestCase):
                     )
 
 
-class ErrorPageTest(ZulipTestCase):
+class ErrorPageTest(DoerTestCase):
     def test_bogus_http_host(self) -> None:
         # This tests that we've successfully worked around a certain bug in
         # Django's exception handling.  The enforce_csrf_checks=True,
@@ -177,7 +177,7 @@ class ErrorPageTest(ZulipTestCase):
         self.assertEqual(result.status_code, 400)
 
 
-class RedirectURLTest(ZulipTestCase):
+class RedirectURLTest(DoerTestCase):
     def test_api_redirects(self) -> None:
         for redirect in API_DOCUMENTATION_REDIRECTS:
             if redirect.old_url not in [
@@ -186,7 +186,7 @@ class RedirectURLTest(ZulipTestCase):
             ]:
                 result = self.client_get(redirect.old_url, follow=True)
                 self.assert_in_success_response(
-                    ["Zulip homepage", "API documentation home"], result
+                    ["Doer homepage", "API documentation home"], result
                 )
 
             result = self.client_get(redirect.old_url)
@@ -200,7 +200,7 @@ class RedirectURLTest(ZulipTestCase):
 
     def test_landing_page_redirects(self) -> None:
         for redirect in LANDING_PAGE_REDIRECTS:
-            if redirect.old_url != "/try-zulip/":
+            if redirect.old_url != "/try-doer/":
                 result = self.client_get(redirect.old_url, follow=True)
                 self.assert_in_success_response(["Download"], result)
 

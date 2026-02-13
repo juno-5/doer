@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This test installs a Zulip production environment (from the release
+# This test installs a Doer production environment (from the release
 # tarball from production-build).
 set -e
 set -x
@@ -39,9 +39,9 @@ while true; do
     esac
 done
 
-ZULIP_PATH=/root/zulip-latest
-mkdir -p "$ZULIP_PATH"
-tar -xf /tmp/zulip-server-test.tar.gz -C "$ZULIP_PATH" --strip-components=1
+DOER_PATH=/root/doer-latest
+mkdir -p "$DOER_PATH"
+tar -xf /tmp/doer-server-test.tar.gz -C "$DOER_PATH" --strip-components=1
 
 # Do an apt upgrade to start with an up-to-date machine
 APT_OPTIONS=(-o 'Dpkg::Options::=--force-confdef' -o 'Dpkg::Options::=--force-confold')
@@ -69,18 +69,18 @@ fi
 # Install
 if [ -z "$TEST_CUSTOM_DB" ]; then
     echo "Testing production install with default database name and user."
-    "$ZULIP_PATH"/scripts/setup/install --self-signed-cert --hostname 127.0.0.1 --email ci@example.com
+    "$DOER_PATH"/scripts/setup/install --self-signed-cert --hostname 127.0.0.1 --email ci@example.com
 else
     echo "Testing production install with custom database name and user."
-    "$ZULIP_PATH"/scripts/setup/install --self-signed-cert --hostname 127.0.0.1 --email ci@example.com --postgresql-database-user zulipcustomuser --postgresql-database-name zulipcustomdb
+    "$DOER_PATH"/scripts/setup/install --self-signed-cert --hostname 127.0.0.1 --email ci@example.com --postgresql-database-user zulipcustomuser --postgresql-database-name zulipcustomdb
 fi
 
 if [ -n "${POSTGRESQL_VERSION:-}" ]; then
-    if [ "$(crudini --get /etc/zulip/zulip.conf postgresql version)" != "$POSTGRESQL_VERSION" ]; then
+    if [ "$(crudini --get /etc/zulip/doer.conf postgresql version)" != "$POSTGRESQL_VERSION" ]; then
         echo "Installer did not install the PostgreSQL $POSTGRESQL_VERSION that we asked for!"
         exit 1
     fi
-    if ! su - zulip -c "psql -tc 'select version()'" | grep -q "^ PostgreSQL $POSTGRESQL_VERSION\."; then
+    if ! su - doer -c "psql -tc 'select version()'" | grep -q "^ PostgreSQL $POSTGRESQL_VERSION\."; then
         echo "Installed PostgreSQL is not actually PostgreSQL $POSTGRESQL_VERSION!"
         exit 1
     fi

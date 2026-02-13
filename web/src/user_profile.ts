@@ -1641,7 +1641,7 @@ export function initialize(): void {
     });
 
     /* These click handlers are implemented as just deep links to the
-     * relevant part of the Zulip UI, so we don't want preventDefault,
+     * relevant part of the Doer UI, so we don't want preventDefault,
      * but we do want to close the modal when you click them. */
 
     $("body").on("click", "#user-profile-modal #name .user-profile-profile-settings-button", () => {

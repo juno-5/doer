@@ -53,14 +53,14 @@ from zerver.lib.message_cache import MessageDict
 from zerver.lib.per_request_cache import flush_per_request_caches
 from zerver.lib.stream_subscription import create_stream_subscription
 from zerver.lib.streams import create_stream_if_needed
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     get_user_messages,
     make_client,
     message_stream_count,
     most_recent_message,
     most_recent_usermessage,
-    reset_email_visibility_to_everyone_in_zulip_realm,
+    reset_email_visibility_to_everyone_in_doer_realm,
 )
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.types import UserGroupMembersData
@@ -89,7 +89,7 @@ from zerver.models.users import (
 from zerver.views.message_send import InvalidMirrorInputError
 
 
-class MessagePOSTTest(ZulipTestCase):
+class MessagePOSTTest(DoerTestCase):
     def _send_and_verify_message(
         self,
         user: UserProfile,
@@ -174,7 +174,7 @@ class MessagePOSTTest(ZulipTestCase):
 
         msg = self.get_last_message()
         expected = (
-            "Your bot `whatever-bot@zulip.testserver` tried to send a message to "
+            "Your bot `whatever-bot@doer.testserver` tried to send a message to "
             "channel ID 99999, but there is no channel with that ID."
         )
         self.assertEqual(msg.content, expected)
@@ -184,7 +184,7 @@ class MessagePOSTTest(ZulipTestCase):
         Sending a message to an empty stream succeeds, but sends a warning
         to the owner.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         bot = self.create_test_bot(
             short_name="whatever",
@@ -209,7 +209,7 @@ class MessagePOSTTest(ZulipTestCase):
 
         msg = self.get_second_to_last_message()
         expected = (
-            "Your bot `whatever-bot@zulip.testserver` tried to send a message to "
+            "Your bot `whatever-bot@doer.testserver` tried to send a message to "
             "channel #**Acropolis**. The channel exists but does not have any subscribers."
         )
         self.assertEqual(msg.content, expected)
@@ -219,7 +219,7 @@ class MessagePOSTTest(ZulipTestCase):
         Sending a message to an empty stream succeeds, but sends a warning
         to the owner.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         bot = self.create_test_bot(
             short_name="whatever",
@@ -244,7 +244,7 @@ class MessagePOSTTest(ZulipTestCase):
 
         msg = self.get_second_to_last_message()
         expected = (
-            "Your bot `whatever-bot@zulip.testserver` tried to send a message to "
+            "Your bot `whatever-bot@doer.testserver` tried to send a message to "
             "channel #**Acropolis**. The channel exists but does not have any subscribers."
         )
         self.assertEqual(msg.content, expected)
@@ -256,7 +256,7 @@ class MessagePOSTTest(ZulipTestCase):
         """
         recipient_type_name = ["stream", "channel"]
         self.login("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = get_stream("Verona", realm)
 
         for recipient_type in recipient_type_name:
@@ -275,7 +275,7 @@ class MessagePOSTTest(ZulipTestCase):
             self.assertEqual(sent_message.content, content)
 
     def test_can_send_message_group_permission(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         desdemona = self.example_user("desdemona")
         iago = self.example_user("iago")
@@ -307,7 +307,7 @@ class MessagePOSTTest(ZulipTestCase):
         notification_bot = get_system_bot("notification-bot@zulip.com", realm.id)
 
         bot_without_owner = do_create_user(
-            email="free-bot@zulip.testserver",
+            email="free-bot@doer.testserver",
             password="",
             realm=realm,
             full_name="freebot",
@@ -457,7 +457,7 @@ class MessagePOSTTest(ZulipTestCase):
         self.assertEqual(self.get_last_message().content, "Test message by notification bot")
 
     def test_can_send_message_group_permission_for_streams(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         othello = self.example_user("othello")
 
         stream_name = "private_stream"
@@ -543,7 +543,7 @@ class MessagePOSTTest(ZulipTestCase):
         )
 
     def test_can_create_topic_group_permission(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         desdemona = self.example_user("desdemona")
         iago = self.example_user("iago")
@@ -575,7 +575,7 @@ class MessagePOSTTest(ZulipTestCase):
         notification_bot = get_system_bot("notification-bot@zulip.com", realm.id)
 
         bot_without_owner = do_create_user(
-            email="free-bot@zulip.testserver",
+            email="free-bot@doer.testserver",
             password="",
             realm=realm,
             full_name="freebot",
@@ -1009,7 +1009,7 @@ class MessagePOSTTest(ZulipTestCase):
                 "to": orjson.dumps([othello.id]).decode(),
             },
         )
-        self.assert_json_error(result, f"'{othello.email}' is no longer using Zulip.")
+        self.assert_json_error(result, f"'{othello.email}' is no longer using Doer.")
 
         result = self.client_post(
             "/json/messages",
@@ -1019,7 +1019,7 @@ class MessagePOSTTest(ZulipTestCase):
                 "to": orjson.dumps([othello.id, cordelia.id]).decode(),
             },
         )
-        self.assert_json_error(result, f"'{othello.email}' is no longer using Zulip.")
+        self.assert_json_error(result, f"'{othello.email}' is no longer using Doer.")
 
     def test_personal_message_to_inaccessible_users(self) -> None:
         othello = self.example_user("othello")
@@ -1443,7 +1443,7 @@ class MessagePOSTTest(ZulipTestCase):
         self.assert_json_error(result, "Mirroring not allowed with recipient user IDs")
 
     def test_send_message_irc_mirror(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
         self.login("hamlet")
         bot_info = {
             "full_name": "IRC bot",
@@ -1452,11 +1452,11 @@ class MessagePOSTTest(ZulipTestCase):
         result = self.client_post("/json/bots", bot_info)
         self.assert_json_success(result)
 
-        email = "irc-bot@zulip.testserver"
-        user = get_user(email, get_realm("zulip"))
+        email = "irc-bot@doer.testserver"
+        user = get_user(email, get_realm("doer"))
         user.can_forge_sender = True
         user.save()
-        user = get_user(email, get_realm("zulip"))
+        user = get_user(email, get_realm("doer"))
         self.subscribe(user, "IRCland")
 
         # Simulate a mirrored message with a slightly old timestamp.
@@ -1534,7 +1534,7 @@ class MessagePOSTTest(ZulipTestCase):
         self.assert_json_error(result, f"Not authorized to send to channel '{stream.name}'")
 
     def test_unsubscribed_can_forge_sender(self) -> None:
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         cordelia = self.example_user("cordelia")
         stream_name = "private_stream"
@@ -1658,14 +1658,14 @@ class MessagePOSTTest(ZulipTestCase):
         self.assert_json_success(result)
 
 
-class StreamMessagesTest(ZulipTestCase):
+class StreamMessagesTest(DoerTestCase):
     def assert_stream_message(
         self, stream_name: str, topic_name: str = "test topic", content: str = "test content"
     ) -> None:
         """
         Check that messages sent to a stream reach all subscribers to that stream.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         subscribers = self.users_subscribed_to_stream(stream_name, realm)
 
         old_subscriber_messages = list(map(message_stream_count, subscribers))
@@ -1846,7 +1846,7 @@ class StreamMessagesTest(ZulipTestCase):
                 body=content,
             )
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         subscribers = self.users_subscribed_to_stream(stream_name, realm)
 
         for user in subscribers:
@@ -2633,7 +2633,7 @@ class StreamMessagesTest(ZulipTestCase):
 
         # Subscribe everyone to a stream with non-ASCII characters.
         non_ascii_stream_name = "hümbüǵ"
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = self.make_stream(non_ascii_stream_name)
         for user_profile in UserProfile.objects.filter(is_active=True, is_bot=False, realm=realm)[
             0:3
@@ -2720,7 +2720,7 @@ class StreamMessagesTest(ZulipTestCase):
         self.assertEqual(stream.is_recently_active, True)
 
 
-class PersonalMessageSendTest(ZulipTestCase):
+class PersonalMessageSendTest(DoerTestCase):
     def test_personal_to_self(self) -> None:
         """
         If you send a personal to yourself, only you see it.
@@ -3055,7 +3055,7 @@ class PersonalMessageSendTest(ZulipTestCase):
         )
 
 
-class ExtractTest(ZulipTestCase):
+class ExtractTest(DoerTestCase):
     def test_extract_stream_indicator(self) -> None:
         self.assertEqual(
             extract_stream_indicator("development"),
@@ -3161,7 +3161,7 @@ class ExtractTest(ZulipTestCase):
             extract_private_recipients(mixed)
 
 
-class InternalPrepTest(ZulipTestCase):
+class InternalPrepTest(DoerTestCase):
     def test_returns_for_internal_sends(self) -> None:
         # For our internal_send_* functions we return
         # if the prep stages fail.  This is mostly defensive
@@ -3169,7 +3169,7 @@ class InternalPrepTest(ZulipTestCase):
         # ourselves, but we want to make sure that the functions
         # won't actually explode if we give them bad content.
         bad_content = ""
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
         othello = self.example_user("othello")
@@ -3265,7 +3265,7 @@ class InternalPrepTest(ZulipTestCase):
         )
 
     def test_ensure_stream_gets_called(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         sender = self.example_user("cordelia")
         stream_name = "test_stream"
         topic_name = "whatever"
@@ -3359,7 +3359,7 @@ class InternalPrepTest(ZulipTestCase):
         self.assertEqual(msg.content, expected)
 
 
-class TestCrossRealmPMs(ZulipTestCase):
+class TestCrossRealmPMs(DoerTestCase):
     def make_realm(self, domain: str) -> Realm:
         realm = do_create_realm(
             string_id=domain, name=domain, org_type=Realm.ORG_TYPES["business"]["id"]
@@ -3448,7 +3448,7 @@ class TestCrossRealmPMs(ZulipTestCase):
             content="blabla",
         )
         assert_message_received(notification_bot, user2)
-        # Users can send a direct message to cross-realm bots on non-zulip
+        # Users can send a direct message to cross-realm bots on non-doer
         # realms.
         # (The support bot represents some theoretical bot that we may
         # create in the future that does not have zulip.com as its realm.)
@@ -3484,8 +3484,8 @@ class TestCrossRealmPMs(ZulipTestCase):
         with assert_invalid_user():
             self.send_personal_message(user1, user2)
 
-        # Users on non-zulip realms can't send direct messages to
-        # "ordinary" Zulip users.
+        # Users on non-doer realms can't send direct messages to
+        # "ordinary" Doer users.
         with assert_invalid_user():
             self.send_personal_message(user1, self.example_user("hamlet"))
 
@@ -3495,9 +3495,9 @@ class TestCrossRealmPMs(ZulipTestCase):
             self.send_group_direct_message(user1, [user2, user3])
 
 
-class TestAddressee(ZulipTestCase):
+class TestAddressee(DoerTestCase):
     def test_addressee_for_user_ids(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user_ids = [
             self.example_user("cordelia").id,
             self.example_user("hamlet").id,
@@ -3515,10 +3515,10 @@ class TestAddressee(ZulipTestCase):
             return self.assertRaisesRegex(JsonableError, "Invalid user ID ")
 
         with assert_invalid_user_id():
-            Addressee.for_user_ids(user_ids=[779], realm=get_realm("zulip"))
+            Addressee.for_user_ids(user_ids=[779], realm=get_realm("doer"))
 
     def test_addressee_legacy_build_for_user_ids(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login("hamlet")
         user_ids = [self.example_user("cordelia").id, self.example_user("othello").id]
 
@@ -3535,7 +3535,7 @@ class TestAddressee(ZulipTestCase):
         self.assertEqual(set(result_user_ids), set(user_ids))
 
     def test_addressee_legacy_build_for_stream_id(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         self.login("iago")
         sender = self.example_user("iago")
         self.subscribe(sender, "Denmark")
@@ -3553,7 +3553,7 @@ class TestAddressee(ZulipTestCase):
         self.assertEqual(stream.id, stream_id)
 
 
-class CheckMessageTest(ZulipTestCase):
+class CheckMessageTest(DoerTestCase):
     def test_basic_check_message_call(self) -> None:
         sender = self.example_user("othello")
         client = make_client(name="test suite")
@@ -3569,7 +3569,7 @@ class CheckMessageTest(ZulipTestCase):
         mit_user = self.mit_user("sipbtest")
 
         client = make_client(name="test suite")
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
         topic_name = "issue"
         message_content = "whatever"
         addressee = Addressee.for_stream(stream, topic_name)
@@ -3769,7 +3769,7 @@ class CheckMessageTest(ZulipTestCase):
         self.assertEqual(test_bot.last_reminder, None)
 
     def test_no_topic_message(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         sender = self.example_user("iago")
         client = make_client(name="test suite")
         stream = get_stream("Denmark", realm)
@@ -3825,7 +3825,7 @@ class CheckMessageTest(ZulipTestCase):
             check_message(sender, client, addressee, message_content, realm)
 
     def test_empty_topic_message(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         sender = self.example_user("iago")
         client = make_client(name="test suite")
         stream = get_stream("Denmark", realm)
@@ -3881,7 +3881,7 @@ class CheckMessageTest(ZulipTestCase):
             check_message(sender, client, addressee, message_content, realm)
 
     def test_message_send_in_channel_with_topics_disabled(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         sender = self.example_user("iago")
         client = make_client(name="test suite")
         stream = get_stream("Denmark", realm)
@@ -3914,7 +3914,7 @@ class CheckMessageTest(ZulipTestCase):
             check_message(sender, client, addressee_named_topic, message_content, realm)
 
 
-class SendToStrTest(ZulipTestCase):
+class SendToStrTest(DoerTestCase):
     """
     The OpenAPI documentation specifies that the `to` parameter for
     the send message endpoint has to be Json encoded, however to maintain compatibility

@@ -166,7 +166,7 @@ def block_internet() -> Iterator[None]:
     # Monkey-patching - responses library raises requests.ConnectionError when access to an unregistered URL
     # is attempted. We want to replace that with our own exception, so that it propagates all the way:
     with (
-        mock.patch.object(responses, "ConnectionError", new=ZulipInternetBlockedError),
+        mock.patch.object(responses, "ConnectionError", new=DoerInternetBlockedError),
         # We'll run all tests in this context manager. It'll cause an error to be raised (see above comment),
         # if any code attempts to access the internet.
         responses.RequestsMock(),
@@ -174,14 +174,14 @@ def block_internet() -> Iterator[None]:
         yield
 
 
-class ZulipInternetBlockedError(Exception):
+class DoerInternetBlockedError(Exception):
     def __init__(self, original_msg: str) -> None:
-        zulip_msg = (
-            "Outgoing network requests are not allowed in the Zulip tests. "
+        doer_msg = (
+            "Outgoing network requests are not allowed in the Doer tests. "
             "More details and advice are available here:"
             "https://zulip.readthedocs.io/en/latest/testing/testing.html#internet-access-inside-test-suites"
         )
-        msg = f"{zulip_msg}\nResponses library error message: {original_msg}"
+        msg = f"{doer_msg}\nResponses library error message: {original_msg}"
         super().__init__(msg)
 
 

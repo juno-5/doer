@@ -5,7 +5,7 @@
   "currency": "usd",
   "default_source": null,
   "delinquent": false,
-  "description": "zulip (Zulip Dev)",
+  "description": "doer (Doer Dev)",
   "discount": null,
   "email": "hamlet@zulip.com",
   "id": "attach_discount_to_realm--Customer.create.1.json",
@@ -19,7 +19,7 @@
   "livemode": false,
   "metadata": {
     "realm_id": "1",
-    "realm_str": "zulip"
+    "realm_str": "doer"
   },
   "name": null,
   "next_invoice_sequence": 2,

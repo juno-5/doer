@@ -2,12 +2,12 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ComposeAndSendMessage from "../include/_ComposeAndSendMessage.mdx";
 import MobileDirectMessages from "../include/_MobileDirectMessages.mdx";
 
-import SendIcon from "~icons/zulip-icon/send";
-import SquarePlusIcon from "~icons/zulip-icon/square-plus";
+import SendIcon from "~icons/doer-icon/send";
+import SquarePlusIcon from "~icons/doer-icon/square-plus";
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -27,11 +27,11 @@ import SquarePlusIcon from "~icons/zulip-icon/square-plus";
       message conversation.
     </KeyboardTip>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click on any user in the right sidebar to start composing
       a direct message to them. Or open their **user card** by clicking on
       their profile picture or name, and select **Send direct message**.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -48,9 +48,9 @@ import SquarePlusIcon from "~icons/zulip-icon/square-plus";
          bottom right corner of the app.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also tap on a user's profile picture or name, and tap the
       **Send direct message** button at the bottom of the app.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>

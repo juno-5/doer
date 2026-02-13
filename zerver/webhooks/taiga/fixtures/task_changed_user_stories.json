@@ -19,9 +19,9 @@
         "external_reference":null,
         "project":{
             "id":229096,
-            "name":"Zulip",
+            "name":"Doer",
             "logo_big_url":null,
-            "permalink":"https://tree.taiga.io/project/eeshangarg-zulip"
+            "permalink":"https://tree.taiga.io/project/eeshangarg-doer"
         },
         "owner":{
             "full_name":"Eeshan Garg",
@@ -76,9 +76,9 @@
             "team_requirement":false,
             "project":{
                 "id":229096,
-                "name":"Zulip",
+                "name":"Doer",
                 "logo_big_url":null,
-                "permalink":"https://tree.taiga.io/project/eeshangarg-zulip"
+                "permalink":"https://tree.taiga.io/project/eeshangarg-doer"
             },
             "blocked_note":"",
             "due_date":null,
@@ -91,9 +91,9 @@
                 "closed":false,
                 "project":{
                     "id":229096,
-                    "name":"Zulip",
+                    "name":"Doer",
                     "logo_big_url":null,
-                    "permalink":"https://tree.taiga.io/project/eeshangarg-zulip"
+                    "permalink":"https://tree.taiga.io/project/eeshangarg-doer"
                 },
                 "estimated_start":"2018-10-25",
                 "owner":{
@@ -145,9 +145,9 @@
             "closed":false,
             "project":{
                 "id":229096,
-                "name":"Zulip",
+                "name":"Doer",
                 "logo_big_url":null,
-                "permalink":"https://tree.taiga.io/project/eeshangarg-zulip"
+                "permalink":"https://tree.taiga.io/project/eeshangarg-doer"
             },
             "estimated_start":"2018-10-25",
             "owner":{

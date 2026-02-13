@@ -17,8 +17,8 @@ from zerver.actions.message_send import (
 )
 from zerver.lib.display_recipient import get_display_recipient
 from zerver.lib.email_mirror_helpers import (
-    ZulipEmailForwardError,
-    ZulipEmailForwardUserError,
+    DoerEmailForwardError,
+    DoerEmailForwardUserError,
     decode_email_address,
     get_email_gateway_message_string_from_address,
 )
@@ -64,7 +64,7 @@ def redact_email_address(error_message: str) -> str:
             try:
                 target_stream_id = decode_stream_email_address(email_address)[0].channel_id
                 annotation = f" <Address to stream id: {target_stream_id}>"
-            except ZulipEmailForwardError:
+            except DoerEmailForwardError:
                 annotation = " <Invalid address>"
 
         # Scrub the address from the message, to the form XXXXX@example.com:
@@ -93,7 +93,7 @@ def generate_missed_message_token() -> str:
 def is_missed_message_address(address: str) -> bool:
     try:
         msg_string = get_email_gateway_message_string_from_address(address)
-    except ZulipEmailForwardError:
+    except DoerEmailForwardError:
         return False
 
     return is_mm_32_format(msg_string)
@@ -111,7 +111,7 @@ def get_missed_message_token_from_address(address: str) -> str:
     msg_string = get_email_gateway_message_string_from_address(address)
 
     if not is_mm_32_format(msg_string):
-        raise ZulipEmailForwardError("Could not parse missed message address")
+        raise DoerEmailForwardError("Could not parse missed message address")
 
     return msg_string
 
@@ -128,7 +128,7 @@ def get_usable_missed_message_address(address: str) -> MissedMessageEmailAddress
             "message__sender__recipient",
         ).get(email_token=token)
     except MissedMessageEmailAddress.DoesNotExist:
-        raise ZulipEmailForwardError("Zulip notification reply address is invalid.")
+        raise DoerEmailForwardError("Doer notification reply address is invalid.")
 
     return mm_address
 
@@ -136,7 +136,7 @@ def get_usable_missed_message_address(address: str) -> MissedMessageEmailAddress
 def create_missed_message_address(user_profile: UserProfile, message: Message) -> str:
     # If the email gateway isn't configured, we specify a reply
     # address, since there's no useful way for the user to reply into
-    # Zulip.
+    # Doer.
     if settings.EMAIL_GATEWAY_PATTERN == "":
         return FromAddress.NOREPLY
 
@@ -148,7 +148,7 @@ def create_missed_message_address(user_profile: UserProfile, message: Message) -
     return str(mm_address)
 
 
-def construct_zulip_body(
+def construct_doer_body(
     message: EmailMessage,
     subject: str,
     realm: Realm,
@@ -161,7 +161,7 @@ def construct_zulip_body(
     subject_in_body: bool = False,
 ) -> str:
     body = extract_body(message, include_quotes, prefer_text)
-    # Remove null characters, since Zulip will reject
+    # Remove null characters, since Doer will reject
     body = body.replace("\x00", "")
     if not include_footer:
         body = filter_footer(body)
@@ -194,10 +194,10 @@ def construct_zulip_body(
     return preamble + body + postamble
 
 
-## Sending the Zulip ##
+## Sending the Doer ##
 
 
-def send_zulip(sender: UserProfile, stream: Stream, topic_name: str, content: str) -> None:
+def send_doer(sender: UserProfile, stream: Stream, topic_name: str, content: str) -> None:
     internal_send_stream_message(
         sender,
         stream,
@@ -262,9 +262,9 @@ def extract_body(
 
     if plaintext_content is None and html_content is None:
         logger.warning("Content types: %s", [part.get_content_type() for part in message.walk()])
-        raise ZulipEmailForwardUserError("Unable to find plaintext or HTML message body")
+        raise DoerEmailForwardUserError("Unable to find plaintext or HTML message body")
     if not plaintext_content and not html_content:
-        raise ZulipEmailForwardUserError("Email has no nonempty body sections; ignoring.")
+        raise DoerEmailForwardUserError("Email has no nonempty body sections; ignoring.")
 
     if prefer_text:
         if plaintext_content:
@@ -365,7 +365,7 @@ def decode_stream_email_address(email: str) -> tuple[ChannelEmailAddress, dict[s
             "channel", "sender", "creator", "realm"
         ).get(email_token=token)
     except ChannelEmailAddress.DoesNotExist:
-        raise ZulipEmailForwardError("Bad stream token from email recipient " + email)
+        raise DoerEmailForwardError("Bad stream token from email recipient " + email)
 
     return channel_email_address, options
 
@@ -398,7 +398,7 @@ def find_emailgateway_recipient(message: EmailMessage) -> str:
                 if match_email_re.match(email):
                     return email
 
-    raise ZulipEmailForwardError("Missing recipient in mirror email")
+    raise DoerEmailForwardError("Missing recipient in mirror email")
 
 
 def strip_from_subject(subject: str) -> str:
@@ -451,7 +451,7 @@ def process_stream_message(to: str, message: EmailMessage) -> None:
 
     subject = strip_from_subject(subject_header)
     # We don't want to reject email messages with disallowed characters in the Subject,
-    # so we just remove them to make it a valid Zulip topic name.
+    # so we just remove them to make it a valid Doer topic name.
     subject = "".join([char for char in subject if is_character_printable(char)])
     if channel.topics_policy == StreamTopicsPolicyEnum.empty_topic_only.value:
         options["subject_in_body"] = True
@@ -461,8 +461,8 @@ def process_stream_message(to: str, message: EmailMessage) -> None:
     else:
         topic = subject
 
-    body = construct_zulip_body(message, subject, realm, sender=sender, **options)
-    send_zulip(sender, channel, topic, body)
+    body = construct_doer_body(message, subject, realm, sender=sender, **options)
+    send_doer(sender, channel, topic, body)
     logger.info(
         "Successfully processed email to %s (%s)",
         channel.name,
@@ -492,7 +492,7 @@ def process_missed_message(to: str, message: EmailMessage) -> None:
         logger.warning("Sending user is not active. Ignoring this message notification email.")
         return
 
-    body = construct_zulip_body(message, topic_name, user_profile.realm, sender=user_profile)
+    body = construct_doer_body(message, topic_name, user_profile.realm, sender=user_profile)
 
     assert recipient is not None
     if recipient.type == Recipient.STREAM:
@@ -532,10 +532,10 @@ def process_message(message: EmailMessage, rcpt_to: str | None = None) -> None:
             process_missed_message(to, message)
         else:
             process_stream_message(to, message)
-    except ZulipEmailForwardUserError as e:
+    except DoerEmailForwardUserError as e:
         # TODO: notify sender of error, retry if appropriate.
         logger.info(e.args[0])
-    except ZulipEmailForwardError as e:
+    except DoerEmailForwardError as e:
         log_error(message, e.args[0], to)
 
 

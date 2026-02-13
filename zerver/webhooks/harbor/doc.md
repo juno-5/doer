@@ -1,6 +1,6 @@
-# Zulip Harbor integration
+# Doer Harbor integration
 
-Get Zulip notifications for your [Harbor](https://goharbor.io/) projects!
+Get Doer notifications for your [Harbor](https://goharbor.io/) projects!
 
 Harbor's webhooks feature is available in version 1.9 and later.
 

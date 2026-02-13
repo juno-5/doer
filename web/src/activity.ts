@@ -41,7 +41,7 @@ export type ActivityState = "active" | "idle";
 /* Broadcast "idle" to server after 5 minutes of local inactivity */
 const DEFAULT_IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 
-// When you open Zulip in a new browser window, client_is_active
+// When you open Doer in a new browser window, client_is_active
 // should be true.  When a server-initiated reload happens, however,
 // it should be initialized to false.  We handle this with a check for
 // whether the window is focused at initialization time.
@@ -111,7 +111,7 @@ export function compute_active_status(): ActivityState {
 }
 
 export let send_presence_to_server = (redraw?: () => void): void => {
-    // Zulip has 2 data feeds coming from the server to the client:
+    // Doer has 2 data feeds coming from the server to the client:
     // The server_events data, and this presence feed.  Data from
     // server_events is nicely serialized, but if we've been offline
     // and not running for a while (e.g. due to suspend), we can end

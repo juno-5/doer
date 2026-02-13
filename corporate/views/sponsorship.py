@@ -8,7 +8,7 @@ from corporate.lib.decorator import (
     authenticated_remote_realm_management_endpoint,
     authenticated_remote_server_management_endpoint,
 )
-from zerver.decorator import require_organization_member, zulip_login_required
+from zerver.decorator import require_organization_member, doer_login_required
 from zerver.lib.response import json_success
 from zerver.models import UserProfile
 
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from corporate.lib.stripe import RemoteRealmBillingSession, RemoteServerBillingSession
 
 
-@zulip_login_required
+@doer_login_required
 def sponsorship_page(request: HttpRequest) -> HttpResponse:
     from corporate.lib.stripe import RealmBillingSession
 

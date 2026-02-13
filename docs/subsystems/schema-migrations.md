@@ -1,6 +1,6 @@
 # Schema migrations
 
-Zulip uses the [standard Django system for doing schema
+Doer uses the [standard Django system for doing schema
 migrations](https://docs.djangoproject.com/en/5.0/topics/migrations/).
 There is some example usage in the [new feature
 tutorial](../tutorials/new-feature-tutorial.md).
@@ -82,7 +82,7 @@ migrations.
 - **Accessing code and models in RunPython migrations**. When writing
   a migration that includes custom python code (aka `RunPython`), you
   almost never want to import code from `zerver` or anywhere else in
-  the codebase. If you imagine the process of upgrading a Zulip
+  the codebase. If you imagine the process of upgrading a Doer
   server, it goes as follows: first a server admin checks out a recent
   version of the code, and then runs any migrations that were added
   between the last time they upgraded and the current check out. Note
@@ -116,7 +116,7 @@ migrations.
 
   PostgreSQL prohibits schema changes (e.g., `ALTER TABLE`)
   if there are deferred trigger events still pending.
-  Now most Zulip constraints are `DEFERRABLE INITIALLY DEFERRED` which means
+  Now most Doer constraints are `DEFERRABLE INITIALLY DEFERRED` which means
   the constraint will not be checked until the transaction is committed,
   and You are not allowed to update, insert, alter or any other query
   that will modify the table without executing all pending triggers which would be
@@ -139,7 +139,7 @@ migrations.
     to do lots of small batches, potentially with a brief sleep in
     between, so that we don't block other operations from finishing.
   - **Rerunnability/idempotency**. Good migrations are ones where if
-    operational concerns (e.g., it taking down the Zulip server for
+    operational concerns (e.g., it taking down the Doer server for
     users) interfere with it finishing, it's easy to restart the
     migration without doing a bunch of hand investigation. Ideally,
     the migration can even continue where it left off, without needing
@@ -162,7 +162,7 @@ migrations.
 
 ## Automated testing for migrations
 
-Zulip has support for writing automated tests for your database
+Doer has support for writing automated tests for your database
 migrations, using the `MigrationsTestCase` test class. This system is
 inspired by [a great blog post][django-migration-test-blog-post] on
 the subject.

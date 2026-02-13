@@ -32,7 +32,7 @@ type MessageViewHeaderContext = {
     stream_settings_link?: string;
 } & (
     | {
-          zulip_icon: string;
+          doer_icon: string;
       }
     | {
           icon: string | undefined;
@@ -44,7 +44,7 @@ function get_message_view_header_context(filter: Filter | undefined): MessageVie
         return {
             title: $t({defaultMessage: "Recent conversations"}),
             description: $t({defaultMessage: "Overview of ongoing conversations."}),
-            zulip_icon: "recent",
+            doer_icon: "recent",
             link: "/help/recent-conversations",
         };
     }
@@ -55,7 +55,7 @@ function get_message_view_header_context(filter: Filter | undefined): MessageVie
             description: $t({
                 defaultMessage: "Overview of your conversations with unread messages.",
             }),
-            zulip_icon: "inbox",
+            doer_icon: "inbox",
             link: "/help/inbox",
         };
     }
@@ -85,7 +85,7 @@ function get_message_view_header_context(filter: Filter | undefined): MessageVie
         return {
             title: $t({defaultMessage: "Combined feed"}),
             description,
-            zulip_icon: "all-messages",
+            doer_icon: "all-messages",
             link: "/help/combined-feed",
         };
     }
@@ -127,7 +127,7 @@ function get_message_view_header_context(filter: Filter | undefined): MessageVie
                 title_html: stream_name_with_privacy_symbol_html,
                 // We don't want to show an initial icon here.
                 icon: undefined,
-                zulip_icon: undefined,
+                doer_icon: undefined,
             };
         }
 

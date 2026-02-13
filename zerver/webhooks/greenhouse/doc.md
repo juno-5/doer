@@ -1,6 +1,6 @@
-# Zulip Greenhouse integration
+# Doer Greenhouse integration
 
-Receive Greenhouse notifications in Zulip!
+Receive Greenhouse notifications in Doer!
 
 {start_tabs}
 
@@ -14,10 +14,10 @@ Receive Greenhouse notifications in Zulip!
    Click on **Web Hooks** one more time.
 
 1. Set **Name this web hook** to a name of your choice, such as
-   `Zulip`. Set **When** to the event you'd like to be notified
+   `Doer`. Set **When** to the event you'd like to be notified
    about. Set **Endpoint URL** to the URL generated above.
 
-1. Greenhouse requires you to provide a **Secret key**, but Zulip
+1. Greenhouse requires you to provide a **Secret key**, but Doer
    doesn't expect any particular value. Set **Secret key** to any
    random value, and click **Create Web hook**.
 

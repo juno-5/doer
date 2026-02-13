@@ -1,10 +1,10 @@
-# Documentation for Zulip's authentication backends is split across a few places:
+# Documentation for Doer's authentication backends is split across a few places:
 #
 # * https://zulip.readthedocs.io/en/latest/production/authentication-methods.html and
 #   zproject/prod_settings_template.py have user-level configuration documentation.
 # * https://zulip.readthedocs.io/en/latest/development/authentication.html
 #   has developer-level documentation, especially on testing authentication backends
-#   in the Zulip development environment.
+#   in the Doer development environment.
 #
 # Django upstream's documentation for authentication backends is also
 # helpful background.  The most important detail to understand for
@@ -144,7 +144,7 @@ def all_default_backend_names() -> list[str]:
     ]
 
 
-# This first batch of methods is used by other code in Zulip to check
+# This first batch of methods is used by other code in Doer to check
 # whether a given authentication backend is enabled for a given realm.
 # In each case, we both needs to check at the server level (via
 # `settings.AUTHENTICATION_BACKENDS`, queried via
@@ -429,7 +429,7 @@ def log_auth_attempt(
     )
 
 
-class ZulipAuthMixin:
+class DoerAuthMixin:
     """This common mixin is used to override Django's default behavior for
     looking up a logged-in user by ID to use a version that fetches
     from memcached before checking the database (avoiding a database
@@ -447,7 +447,7 @@ class ZulipAuthMixin:
     @property
     def logger(self) -> logging.Logger:
         if self._logger is None:
-            self._logger = logging.getLogger(f"zulip.auth.{self.name}")
+            self._logger = logging.getLogger(f"doer.auth.{self.name}")
         return self._logger
 
     def get_user(self, user_profile_id: int) -> UserProfile | None:
@@ -459,7 +459,7 @@ class ZulipAuthMixin:
             return None
 
 
-class ZulipDummyBackend(ZulipAuthMixin):
+class DoerDummyBackend(DoerAuthMixin):
     """Used when we want to log you in without checking any
     authentication (i.e. new user registration or when otherwise
     authentication has already been checked earlier in the process).
@@ -507,7 +507,7 @@ def check_password_strength(password: str) -> bool:
     return True
 
 
-class EmailAuthBackend(ZulipAuthMixin):
+class EmailAuthBackend(DoerAuthMixin):
     """
     Email+Password authentication backend (the default).
 
@@ -630,7 +630,7 @@ def email_belongs_to_ldap(realm: Realm, email: str) -> bool:
         return False
 
 
-ldap_logger = logging.getLogger("zulip.ldap")
+ldap_logger = logging.getLogger("doer.ldap")
 
 
 class LDAPReverseEmailSearch(_LDAPUser):
@@ -674,12 +674,12 @@ class LDAPReverseEmailSearch(_LDAPUser):
         return ldap_users
 
 
-class ZulipLDAPError(_LDAPUser.AuthenticationFailed):
+class DoerLDAPError(_LDAPUser.AuthenticationFailed):
     """Since this inherits from _LDAPUser.AuthenticationFailed, these will
     be caught and logged at debug level inside django-auth-ldap's authenticate()"""
 
 
-class NoMatchingLDAPUserError(ZulipLDAPError):
+class NoMatchingLDAPUserError(DoerLDAPError):
     pass
 
 
@@ -687,7 +687,7 @@ class OutsideLDAPDomainError(NoMatchingLDAPUserError):
     pass
 
 
-class ZulipLDAPConfigurationError(Exception):
+class DoerLDAPConfigurationError(Exception):
     pass
 
 
@@ -707,7 +707,7 @@ def ldap_external_auth_id_sync_enabled() -> bool:
     return True
 
 
-class ZulipLDAPSettings(LDAPSettings):
+class DoerLDAPSettings(LDAPSettings):
     NON_SYNCABLE_ATTRS = [
         "unique_account_id",
         "avatar",
@@ -721,9 +721,9 @@ class ZulipLDAPSettings(LDAPSettings):
     ) -> None:
         """
         django-auth-ldap populate_user() codepath iterates through USER_ATTR_MAP dict, and calls
-        setattr(user, key, value) for each key, value pair. The challenge here is that Zulip adds some custom
+        setattr(user, key, value) for each key, value pair. The challenge here is that Doer adds some custom
         mappings in AUTH_LDAP_USER_ATTR_MAP - for which the keys are special keywords (e.g. "unique_account_id")
-        with a meaning understood by Zulip's code for handling them - and aren't actual UserProfile attributes
+        with a meaning understood by Doer's code for handling them - and aren't actual UserProfile attributes
         that can be set in a valid way.
 
         To avoid ending up with strange UserProfile objects, which have attributes set on them which shouldn't
@@ -741,9 +741,9 @@ class ZulipLDAPSettings(LDAPSettings):
         }
 
 
-class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
-    """Common code between LDAP authentication (ZulipLDAPAuthBackend) and
-    using LDAP just to sync user data (ZulipLDAPUserPopulator).
+class DoerLDAPAuthBackendBase(DoerAuthMixin, LDAPBackend):
+    """Common code between LDAP authentication (DoerLDAPAuthBackend) and
+    using LDAP just to sync user data (DoerLDAPUserPopulator).
 
     To fully understand our LDAP backend, you may want to skim
     django_auth_ldap/backend.py from the upstream django-auth-ldap
@@ -763,12 +763,12 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
         check_ldap_config()
 
     @property
-    def settings(self) -> ZulipLDAPSettings:
-        # See ZulipLDAPSettings for explanation of why we need to patch this
+    def settings(self) -> DoerLDAPSettings:
+        # See DoerLDAPSettings for explanation of why we need to patch this
         # to substitute our overridden LDAPSettings class.
-        self._settings: ZulipLDAPSettings | None
+        self._settings: DoerLDAPSettings | None
         if self._settings is None:
-            self._settings = ZulipLDAPSettings(self.settings_prefix, self.default_settings)
+            self._settings = DoerLDAPSettings(self.settings_prefix, self.default_settings)
 
         return self._settings
 
@@ -842,7 +842,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
         if settings.LDAP_EMAIL_ATTR is not None:
             # Get email from LDAP attributes.
             if settings.LDAP_EMAIL_ATTR not in ldap_user.attrs:
-                raise ZulipLDAPError(
+                raise DoerLDAPError(
                     f"LDAP user doesn't have the needed {settings.LDAP_EMAIL_ATTR} attribute"
                 )
             else:
@@ -853,7 +853,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
     def ldap_to_django_username(self, username: str) -> str:
         """
         This is called inside django_auth_ldap with only one role:
-        to convert _LDAPUser._username to django username (so in Zulip, the email)
+        to convert _LDAPUser._username to django username (so in Doer, the email)
         and pass that as "username" argument to get_or_build_user(username, ldapuser).
         In many cases, the email is stored in the _LDAPUser's attributes, so it can't be
         constructed just from the username. We choose to do nothing in this function,
@@ -901,7 +901,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
     def is_user_disabled_in_ldap(self, ldap_user: _LDAPUser) -> bool:
         """Implements checks for whether a user has been
         disabled in the LDAP server being integrated with
-        Zulip."""
+        Doer."""
         if "userAccountControl" in settings.AUTH_LDAP_USER_ATTR_MAP:
             account_control_value = ldap_user.attrs[
                 settings.AUTH_LDAP_USER_ATTR_MAP["userAccountControl"]
@@ -967,7 +967,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
 
     @classmethod
     def get_mapped_name(cls, ldap_user: _LDAPUser) -> str:
-        """Constructs the user's Zulip full_name from the LDAP data"""
+        """Constructs the user's Doer full_name from the LDAP data"""
         if "full_name" in settings.AUTH_LDAP_USER_ATTR_MAP:
             full_name_attr = settings.AUTH_LDAP_USER_ATTR_MAP["full_name"]
             full_name = ldap_user.attrs[full_name_attr][0]
@@ -978,7 +978,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
             last_name = ldap_user.attrs[last_name_attr][0]
             full_name = f"{first_name} {last_name}"
         else:
-            raise ZulipLDAPError("Missing required mapping for user's full name")
+            raise DoerLDAPError("Missing required mapping for user's full name")
 
         return full_name
 
@@ -992,7 +992,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
                     full_name_raw=full_name, user_profile=user_profile, realm=user_profile.realm
                 )
             except JsonableError as e:
-                raise ZulipLDAPError(e.msg)
+                raise DoerLDAPError(e.msg)
             do_change_full_name(user_profile, full_name, None, notify=True)
 
     def sync_custom_profile_fields_from_ldap(
@@ -1015,7 +1015,7 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
         try:
             sync_user_profile_custom_fields(user_profile, values_by_var_name)
         except SyncUserError as e:
-            raise ZulipLDAPError(str(e)) from e
+            raise DoerLDAPError(str(e)) from e
 
     def sync_groups_from_ldap(self, user_profile: UserProfile, ldap_user: _LDAPUser) -> None:
         if user_profile.realm.string_id not in settings.LDAP_SYNCHRONIZED_GROUPS_BY_REALM:
@@ -1040,10 +1040,10 @@ class ZulipLDAPAuthBackendBase(ZulipAuthMixin, LDAPBackend):
                 create_missing_groups=True,
             )
         except Exception as e:
-            raise ZulipLDAPError(str(e)) from e
+            raise DoerLDAPError(str(e)) from e
 
 
-class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
+class DoerLDAPAuthBackend(DoerLDAPAuthBackendBase):
     REALM_IS_NONE_ERROR = 1
 
     @rate_limit_auth
@@ -1082,7 +1082,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
 
         # Now we would want to run the django-auth-ldap authenticate
         # function. We're, however, forced to fork it here in order
-        # to use our own ZulipLDAPUser class instead of its _LDAPUser.
+        # to use our own DoerLDAPUser class instead of its _LDAPUser.
         #
         # This will check the username/password pair
         # against the LDAP database, and assuming those are correct,
@@ -1093,7 +1093,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
             self.logger.debug("Rejecting empty password for %s", username)
             return None
 
-        ldap_user = ZulipLDAPUser(self, username=username.strip(), request=request, realm=realm)
+        ldap_user = DoerLDAPUser(self, username=username.strip(), request=request, realm=realm)
         user = self.authenticate_ldap_user(ldap_user, password)
 
         return user
@@ -1132,10 +1132,10 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
         if user_profile is None:
             return None
 
-        # We need to ensure the email address of the Zulip account remains synced with what's in the ldap
+        # We need to ensure the email address of the Doer account remains synced with what's in the ldap
         # directory. That's the point of external_auth_id-based authentication.
         if user_profile.delivery_email != email:
-            # We intentionally do a case-sensitive comparison, despite emails in Zulip being
+            # We intentionally do a case-sensitive comparison, despite emails in Doer being
             # case-insensitive in auth contexts. We want to support the case of sync tweaking just
             # capitalization of the email address.
             self.logger.info(
@@ -1166,7 +1166,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
         return user_profile
 
     def get_or_build_user(
-        self, username: str, ldap_user: "ZulipLDAPUser"
+        self, username: str, ldap_user: "DoerLDAPUser"
     ) -> tuple[UserProfile, bool]:
         """The main function of our authentication backend extension of
         django-auth-ldap.  When this is called (from `authenticate`),
@@ -1175,10 +1175,10 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
 
         This function's responsibility is to check (1) whether the
         email address for this user obtained from LDAP has an active
-        account in this Zulip realm.  If so, it will log them in.
+        account in this Doer realm.  If so, it will log them in.
 
         Otherwise, to provide a seamless single sign-on experience
-        with LDAP, this function can automatically create a new Zulip
+        with LDAP, this function can automatically create a new Doer
         user account in the realm (assuming the realm is configured to
         allow that email address to sign up).
         """
@@ -1191,14 +1191,14 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
             external_auth_id = ldap_user.get_external_auth_id()
 
         if self.is_account_realm_access_forbidden(ldap_user, self._realm):
-            raise ZulipLDAPError("User not allowed to access realm")
+            raise DoerLDAPError("User not allowed to access realm")
 
         if ldap_should_sync_active_status():
             ldap_disabled = self.is_user_disabled_in_ldap(ldap_user)
             if ldap_disabled:
-                # Treat disabled users as deactivated in Zulip.
+                # Treat disabled users as deactivated in Doer.
                 return_data["inactive_user"] = True
-                raise ZulipLDAPError("User has been deactivated")
+                raise DoerLDAPError("User has been deactivated")
 
         if ldap_external_auth_id_sync_enabled() and external_auth_id:
             user_profile = self.get_and_sync_user_profile_by_external_auth_id(
@@ -1213,9 +1213,9 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
 
         if return_data.get("inactive_realm"):
             # This happens if there is a user account in a deactivated realm
-            raise ZulipLDAPError("Realm has been deactivated")
+            raise DoerLDAPError("Realm has been deactivated")
         if return_data.get("inactive_user"):
-            raise ZulipLDAPError("User has been deactivated")
+            raise DoerLDAPError("User has been deactivated")
         # An invalid_subdomain `return_data` value here is ignored,
         # since that just means we're trying to create an account in a
         # second realm on the server (`ldap_auth_enabled(realm)` would
@@ -1224,7 +1224,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
         if self._realm.deactivated:
             # This happens if no account exists, but the realm is
             # deactivated, so we shouldn't create a new user account
-            raise ZulipLDAPError("Realm has been deactivated")
+            raise DoerLDAPError("Realm has been deactivated")
 
         try:
             validate_email(email)
@@ -1234,7 +1234,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
             # or a malformed email value in the ldap directory,
             # so we should log a warning about this before failing.
             self.logger.warning(error_message)
-            raise ZulipLDAPError(error_message)
+            raise DoerLDAPError(error_message)
 
         # Makes sure that email domain hasn't be restricted for this
         # realm.  The main thing here is email_allowed_for_realm; but
@@ -1246,9 +1246,9 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
                 self._realm, email, allow_inactive_mirror_dummies=True
             )
         except DomainNotAllowedForRealmError:
-            raise ZulipLDAPError("This email domain isn't allowed in this organization.")
+            raise DoerLDAPError("This email domain isn't allowed in this organization.")
         except (DisposableEmailError, EmailContainsPlusError):
-            raise ZulipLDAPError("Email validation failed.")
+            raise DoerLDAPError("Email validation failed.")
 
         # We have valid LDAP credentials; time to create an account.
         full_name = self.get_mapped_name(ldap_user)
@@ -1257,7 +1257,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
                 full_name_raw=full_name, user_profile=None, realm=self._realm
             )
         except JsonableError as e:
-            raise ZulipLDAPError(e.msg)
+            raise DoerLDAPError(e.msg)
 
         opts: dict[str, Any] = {}
         if self._prereg_user:
@@ -1295,7 +1295,7 @@ class ZulipLDAPAuthBackend(ZulipLDAPAuthBackendBase):
         return user_profile, True
 
 
-class ZulipLDAPUser(_LDAPUser):
+class DoerLDAPUser(_LDAPUser):
     """
     This is an extension of the _LDAPUser class, with a realm attribute
     attached to it. It's purpose is to call its inherited method
@@ -1388,8 +1388,8 @@ class ZulipLDAPUser(_LDAPUser):
         return groups
 
 
-class ZulipLDAPUserPopulator(ZulipLDAPAuthBackendBase):
-    """Just like ZulipLDAPAuthBackend, but doesn't let you log in.  Used
+class DoerLDAPUserPopulator(DoerLDAPAuthBackendBase):
+    """Just like DoerLDAPAuthBackend, but doesn't let you log in.  Used
     for syncing data like names, avatars, and custom profile fields
     from LDAP in `manage.py sync_ldap_user_data` as well as in
     registration for organizations that use a different SSO solution
@@ -1408,7 +1408,7 @@ class ZulipLDAPUserPopulator(ZulipLDAPAuthBackendBase):
         return None
 
     def get_or_build_user(
-        self, username: str, ldap_user: ZulipLDAPUser
+        self, username: str, ldap_user: DoerLDAPUser
     ) -> tuple[UserProfile, bool]:
         """This is used only in non-authentication contexts such as:
         ./manage.py sync_ldap_user_data
@@ -1447,11 +1447,11 @@ class ZulipLDAPUserPopulator(ZulipLDAPAuthBackendBase):
         return (user, built)
 
 
-class PopulateUserLDAPError(ZulipLDAPError):
+class PopulateUserLDAPError(DoerLDAPError):
     pass
 
 
-@receiver(ldap_error, sender=ZulipLDAPUserPopulator)
+@receiver(ldap_error, sender=DoerLDAPUserPopulator)
 def catch_ldap_error(signal: Signal, **kwargs: Any) -> None:
     """
     Inside django_auth_ldap populate_user(), if LDAPError is raised,
@@ -1467,7 +1467,7 @@ def catch_ldap_error(signal: Signal, **kwargs: Any) -> None:
 
 
 def sync_user_from_ldap(user_profile: UserProfile, logger: logging.Logger) -> bool:
-    backend = ZulipLDAPUserPopulator()
+    backend = DoerLDAPUserPopulator()
     try:
         ldap_username = backend.django_to_ldap_username(user_profile.delivery_email)
     except NoMatchingLDAPUserError:
@@ -1487,7 +1487,7 @@ def sync_user_from_ldap(user_profile: UserProfile, logger: logging.Logger) -> bo
     # `backend.populate_user`, which in turn just creates the
     # `_LDAPUser` object and calls `ldap_user.populate_user()` on
     # that.  Unfortunately, that will produce incorrect results in the
-    # case that the server has multiple Zulip users in different
+    # case that the server has multiple Doer users in different
     # realms associated with a single LDAP user, because
     # `django-auth-ldap` isn't implemented with the possibility of
     # multiple realms on different subdomains in mind.
@@ -1498,7 +1498,7 @@ def sync_user_from_ldap(user_profile: UserProfile, logger: logging.Logger) -> bo
     #
     # Ideally, we'd contribute changes to `django-auth-ldap` upstream
     # making this flow possible in a more directly supported fashion.
-    updated_user = ZulipLDAPUser(backend, ldap_username, realm=user_profile.realm).populate_user()
+    updated_user = DoerLDAPUser(backend, ldap_username, realm=user_profile.realm).populate_user()
     if updated_user:
         logger.info("Updated %s.", user_profile.delivery_email)
         return True
@@ -1533,9 +1533,9 @@ def query_ldap(email: str) -> list[str]:
     return values
 
 
-class DevAuthBackend(ZulipAuthMixin):
+class DevAuthBackend(DoerAuthMixin):
     """Allow logging in as any user without a password.  This is used for
-    convenience when developing Zulip, and is disabled in production."""
+    convenience when developing Doer, and is disabled in production."""
 
     name = "dev"
 
@@ -1747,7 +1747,7 @@ def sync_user_profile_custom_fields(
 
 
 @external_auth_method
-class ZulipRemoteUserBackend(ZulipAuthMixin, RemoteUserBackend, ExternalAuthMethod):
+class DoerRemoteUserBackend(DoerAuthMixin, RemoteUserBackend, ExternalAuthMethod):
     """Authentication backend that reads the Apache REMOTE_USER variable.
     Used primarily in enterprise environments with an SSO solution
     that has an Apache REMOTE_USER integration.  For manual testing, see
@@ -1990,15 +1990,15 @@ def process_social_auth_group_sync_info(
     attrs_config: dict[str, Any],
     extra_attrs: dict[str, Any],
 ) -> SocialAuthGroupInfo | None:
-    # pop zulip_groups from extra_attrs, so that only user attribute sync
+    # pop doer_groups from extra_attrs, so that only user attribute sync
     # values remain there.
-    # zulip_groups being absent should be treated as if no group memberships
+    # doer_groups being absent should be treated as if no group memberships
     # are desired. That's because Okta doesn't send the SAML attribute at all
     # if the user has no group memberships. Thus we treat this absence as
     # an empty list.
-    all_received_group_names = extra_attrs.pop("zulip_groups", [])
+    all_received_group_names = extra_attrs.pop("doer_groups", [])
 
-    external_group_name_to_zulip_group_name: dict[str, str] = {}
+    external_group_name_to_doer_group_name: dict[str, str] = {}
     groups_config = cast(str | list[str | tuple[str, str]], attrs_config.get("groups", []))
     match groups_config:
         case []:
@@ -2007,26 +2007,26 @@ def process_social_auth_group_sync_info(
             for group_name in groups_config:
                 match group_name:
                     # the objects in the config are either straight-forward group names
-                    # or tuples (<saml group name>, <zulip group name>) indicating the
+                    # or tuples (<saml group name>, <doer group name>) indicating the
                     # obvious mapping.
                     case str():
-                        external_group_name_to_zulip_group_name[group_name] = group_name
-                    case (saml_group_name, zulip_group_name):
-                        external_group_name_to_zulip_group_name[saml_group_name] = zulip_group_name
+                        external_group_name_to_doer_group_name[group_name] = group_name
+                    case (saml_group_name, doer_group_name):
+                        external_group_name_to_doer_group_name[saml_group_name] = doer_group_name
                     case _:  # nocoverage
                         raise AssertionError(
                             f"Unsupported item in group sync config list: {group_name}"
                         )
         case "*":
             # When using this configuration, a user's full list of intended group memberships
-            # should be passed in zulip_groups.
+            # should be passed in doer_groups.
             all_realm_groups = NamedUserGroup.objects.filter(
                 realm=realm, deactivated=False, is_system_group=False
             )
-            external_group_name_to_zulip_group_name = (
+            external_group_name_to_doer_group_name = (
                 {g.name: g.name for g in all_realm_groups}
-                # If a group name is included in the user's zulip_groups, in sync-all-groups mode
-                # we want the user to be added to it - even if the group doesn't yet exist in Zulip.
+                # If a group name is included in the user's doer_groups, in sync-all-groups mode
+                # we want the user to be added to it - even if the group doesn't yet exist in Doer.
                 # Thus, any such group should be recorded here, to be plumbed through further down the
                 # group sync codepath where it will be created on the fly and the user added to it.
                 | {n: n for n in all_received_group_names}
@@ -2037,39 +2037,39 @@ def process_social_auth_group_sync_info(
     # Group sync is only supported for SAML for the foreseeable time.
     assert backend.name == "saml"
 
-    syncable_group_names = set(external_group_name_to_zulip_group_name.values())
+    syncable_group_names = set(external_group_name_to_doer_group_name.values())
 
     external_group_names = [
         name
         for name in all_received_group_names
         # Ignore group names which aren't configured.
-        if name in external_group_name_to_zulip_group_name
+        if name in external_group_name_to_doer_group_name
     ]
     intended_group_names = {
-        external_group_name_to_zulip_group_name[external_name]
+        external_group_name_to_doer_group_name[external_name]
         for external_name in external_group_names
     }
 
-    # It's important to log the information about what we received in the request and what Zulip groups
+    # It's important to log the information about what we received in the request and what Doer groups
     # that was translated to based on the configuration - otherwise debugging a misconfiguration would be
     # a very painful process.
     #
     # Notably, it's generally expected for the list of received groups to be shorter than the "translated"
-    # list of intended Zulip groups. The expected way for admins to configure what is sent in zulip_groups
+    # list of intended Doer groups. The expected way for admins to configure what is sent in doer_groups
     # is to send *all* the groups the user belongs to in their user directory. That is very likely to contain
-    # some groups that are irrelevant to their Zulip setup and thus shouldn't be translated into any
-    # Zulip group memberships.
+    # some groups that are irrelevant to their Doer setup and thus shouldn't be translated into any
+    # Doer group memberships.
     # For example, Okta sends the Everyone group, which is just a built-in group inside of Okta described
     # in their documentation as
     # "catch-all group where every single user in the Okta instance automatically lands".
-    # That obviously will be irrelevant to Zulip group memberships in almost all configurations.
+    # That obviously will be irrelevant to Doer group memberships in almost all configurations.
     user_string = f"<user:{user_profile.id}>" if user_profile is not None else "<new user signup>"
     backend.logger.info(
-        "social_auth_sync_user_attributes:%s: received group names: %s|intended Zulip groups: %s. group mapping used: %s",
+        "social_auth_sync_user_attributes:%s: received group names: %s|intended Doer groups: %s. group mapping used: %s",
         user_string,
         sorted(all_received_group_names),
         sorted(intended_group_names),
-        external_group_name_to_zulip_group_name,
+        external_group_name_to_doer_group_name,
     )
     return SocialAuthGroupInfo(
         syncable_group_names=syncable_group_names, intended_group_names=intended_group_names
@@ -2193,8 +2193,8 @@ def social_auth_sync_user_attributes(
 def social_associate_user_helper(
     backend: "SocialAuthMixin", return_data: dict[str, Any], *args: Any, **kwargs: Any
 ) -> HttpResponse | UserProfile | None:
-    """Responsible for doing the Zulip account lookup and validation parts
-    of the Zulip social auth pipeline (similar to the authenticate()
+    """Responsible for doing the Doer account lookup and validation parts
+    of the Doer social auth pipeline (similar to the authenticate()
     methods in most other auth backends in this file).
 
     Returns a UserProfile object for successful authentication, and None otherwise.
@@ -2455,7 +2455,7 @@ def social_auth_finish(
         # This call to authenticate() is just to get to invoke the custom_auth_decorator logic.
         # Social auth backends don't work via authenticate() in the same way as normal backends,
         # so we can't just wrap their authenticate() methods. But the decorator is applied on
-        # ZulipDummyBackend.authenticate(), so we can invoke it here to trigger the custom logic.
+        # DoerDummyBackend.authenticate(), so we can invoke it here to trigger the custom logic.
         #
         # Note: We're only doing in the case where we already have a user_profile, meaning the
         # account already exists and the user is just logging in. The new account registration case
@@ -2468,7 +2468,7 @@ def social_auth_finish(
         )
         if validated_user_profile is None or validated_user_profile != user_profile:
             # Log this as as a failure to authenticate via the social backend, since that's
-            # the correct way to think about this. ZulipDummyBackend is just an implementation
+            # the correct way to think about this. DoerDummyBackend is just an implementation
             # tool, not an actual backend a user could be authenticating through.
             log_auth_attempt(
                 backend.logger,
@@ -2528,7 +2528,7 @@ def social_auth_finish(
     if mobile_flow_otp or desktop_flow_otp:
         if user_profile is not None and not user_profile.is_mirror_dummy:
             # For mobile and desktop app authentication, login_or_register_remote_user
-            # will redirect to a special zulip:// URL that is handled by
+            # will redirect to a special doer:// URL that is handled by
             # the app after a successful authentication; so we can
             # redirect directly from here, saving a round trip over what
             # we need to do to create session cookies on the right domain
@@ -2540,17 +2540,17 @@ def social_auth_finish(
             pass
 
     # If this authentication code were executing on
-    # subdomain.zulip.example.com, we would just call
+    # subdomain.doer.example.com, we would just call
     # login_or_register_remote_user as in the mobile code path.
     # However, because third-party SSO providers generally don't allow
     # wildcard addresses in their redirect URLs, for multi-realm
     # servers, we will have just completed authentication on e.g.
-    # auth.zulip.example.com (depending on
+    # auth.doer.example.com (depending on
     # settings.SOCIAL_AUTH_SUBDOMAIN), which cannot store cookies on
-    # the subdomain.zulip.example.com domain.  So instead we serve a
+    # the subdomain.doer.example.com domain.  So instead we serve a
     # redirect (encoding the authentication result data in a
     # cryptographically signed token) to a route on
-    # subdomain.zulip.example.com that will verify the signature and
+    # subdomain.doer.example.com that will verify the signature and
     # then call login_or_register_remote_user.
     return redirect_and_log_into_subdomain(result)
 
@@ -2597,16 +2597,16 @@ def social_auth_exception_guard(logger: logging.Logger) -> Generator[AbortFlag, 
 DEFAULT_REDIS_EXPIRATION_SECONDS_FOR_TRANSIENT_STATE = 60 * 15
 
 
-class SocialAuthMixin(ZulipAuthMixin, ExternalAuthMethod, BaseAuth):
+class SocialAuthMixin(DoerAuthMixin, ExternalAuthMethod, BaseAuth):
     # Whether we expect that the full_name value obtained by the
     # social backend is definitely how the user should be referred to
-    # in Zulip, which in turn determines whether we should always show
+    # in Doer, which in turn determines whether we should always show
     # a registration form in the event with a default value of the
     # user's name when using this social backend so they can change
     # it.  For social backends like SAML that are expected to be a
     # central database, this should be True; for backends like GitHub
     # where the user might not have a name set or have it set to
-    # something other than the name they will prefer to use in Zulip,
+    # something other than the name they will prefer to use in Doer,
     # it should be False.
     full_name_validated = False
 
@@ -2732,7 +2732,7 @@ class GitHubAuthBackend(SocialAuthMixin, GithubOAuth2):
     @override
     def user_data(self, access_token: str, *args: Any, **kwargs: Any) -> dict[str, Any] | None:
         """This patched user_data function lets us combine together the 3
-        social auth backends into a single Zulip backend for GitHub OAuth2"""
+        social auth backends into a single Doer backend for GitHub OAuth2"""
         team_id = settings.SOCIAL_AUTH_GITHUB_TEAM_ID
         org_name = settings.SOCIAL_AUTH_GITHUB_ORG_NAME
 
@@ -3002,7 +3002,7 @@ class AppleAuthBackend(SocialAuthMixin, AppleIdAuth):
             return None
 
 
-class ZulipSAMLIdentityProvider(SAMLIdentityProvider):
+class DoerSAMLIdentityProvider(SAMLIdentityProvider):
     @override
     def get_user_details(self, attributes: dict[str, Any]) -> dict[str, Any]:
         """
@@ -3014,8 +3014,8 @@ class ZulipSAMLIdentityProvider(SAMLIdentityProvider):
         extra_attr_names = self.conf.get("extra_attrs", [])
         extra_attrs = {}
 
-        if (groups_list := attributes.get("zulip_groups")) is not None:
-            extra_attrs["zulip_groups"] = groups_list
+        if (groups_list := attributes.get("doer_groups")) is not None:
+            extra_attrs["doer_groups"] = groups_list
 
         for extra_attr_name in extra_attr_names:
             extra_attrs[extra_attr_name] = self.get_attr(
@@ -3189,7 +3189,7 @@ class SAMLAuthBackend(SocialAuthMixin, SAMLAuth):
 
     # The full_name provided by the IdP is very likely the standard
     # employee directory name for the user, and thus what they and
-    # their organization want to use in Zulip.  So don't unnecessarily
+    # their organization want to use in Doer.  So don't unnecessarily
     # provide a registration flow prompt for them to set their name.
     full_name_validated = True
 
@@ -3213,7 +3213,7 @@ class SAMLAuthBackend(SocialAuthMixin, SAMLAuth):
         super().__init__(*args, **kwargs)
 
     @override
-    def get_idp(self, idp_name: str | None) -> ZulipSAMLIdentityProvider:
+    def get_idp(self, idp_name: str | None) -> DoerSAMLIdentityProvider:
         """Given the name of an IdP, get a SAMLIdentityProvider instance
         Forked to use our subclass of SAMLIdentityProvider for more flexibility."""
         enabled_idps: dict[str, dict[str, str]] = self.setting("ENABLED_IDPS")
@@ -3224,7 +3224,7 @@ class SAMLAuthBackend(SocialAuthMixin, SAMLAuth):
             # Use the only configured IDP
             idp_name = next(iter(enabled_idps))
         idp_config = enabled_idps[idp_name]
-        return ZulipSAMLIdentityProvider(self, idp_name, **idp_config)
+        return DoerSAMLIdentityProvider(self, idp_name, **idp_config)
 
     @override
     def auth_url(self) -> str:
@@ -3376,7 +3376,7 @@ class SAMLAuthBackend(SocialAuthMixin, SAMLAuth):
            the user by the NameID, do some validation and then revoke all sessions.
 
         TODO: This does not return a LogoutResponse in case of failure, like the spec requires.
-        https://github.com/zulip/zulip/issues/20076 is the related issue with more detail
+        https://github.com/doer/doer/issues/20076 is the related issue with more detail
         on how to implement the desired behavior.
         """
         idp = self.get_idp(idp_name)
@@ -3797,7 +3797,7 @@ class GenericOpenIdConnectBackend(SocialAuthMixin, OpenIdConnectAuth):
             relayed_value = relayed_params.get(param)
             session_value = self.strategy.session_get(param)
             # A hardening measure. These params are automatically saved in the
-            # user's Zulip session by python-social-auth when auth is initiated.
+            # user's Doer session by python-social-auth when auth is initiated.
             # More robustly, we associate these values with the "state" token
             # generated for this OIDC authentication attempt and store that in
             # redis.
@@ -3989,7 +3989,7 @@ def get_external_method_dicts(realm: Realm | None = None) -> list[ExternalAuthMe
 AUTH_BACKEND_NAME_MAP: dict[str, Any] = {
     "Dev": DevAuthBackend,
     "Email": EmailAuthBackend,
-    "LDAP": ZulipLDAPAuthBackend,
+    "LDAP": DoerLDAPAuthBackend,
 }
 
 for external_method in EXTERNAL_AUTH_METHODS:

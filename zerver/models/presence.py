@@ -11,7 +11,7 @@ from zerver.models.users import UserProfile
 class UserPresence(models.Model):
     """A record from the last time we heard from a given user on a given client.
 
-    This is the core table for Zulip's presence API, which consists of two components:
+    This is the core table for Doer's presence API, which consists of two components:
     1) The update-presence endpoint, which is used for clients to update their presence
        status and fetch latest presence data the whole realm:
        https://zulip.com/api/update-presence
@@ -19,7 +19,7 @@ class UserPresence(models.Model):
        a user comes back online: https://zulip.com/api/get-events#presence
 
     NOTE: Users can disable updates to this table (see UserProfile.presence_enabled),
-    so this cannot be used to determine if a user was recently active on Zulip.
+    so this cannot be used to determine if a user was recently active on Doer.
     The UserActivity table is recommended for that purpose.
     """
 
@@ -40,11 +40,11 @@ class UserPresence(models.Model):
     # https://zulip.com/api/update-presence#parameter-last_update_id
     last_update_id = models.PositiveBigIntegerField(db_index=True, default=0)
 
-    # The last time the user had a client connected to Zulip,
+    # The last time the user had a client connected to Doer,
     # including idle clients where the user hasn't interacted with the
     # system recently (and thus might be AFK).
     last_connected_time = models.DateTimeField(default=timezone_now, db_index=True, null=True)
-    # The last time a client connected to Zulip reported that the user
+    # The last time a client connected to Doer reported that the user
     # was actually present (E.g. via focusing a browser window or
     # interacting with a computer running the desktop app)
     last_active_time = models.DateTimeField(default=timezone_now, db_index=True, null=True)

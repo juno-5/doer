@@ -1,19 +1,19 @@
-# Forward Slack messages into Zulip
+# Forward Slack messages into Doer
 
-Forward messages sent to your Slack workspace's public channels into Zulip!
+Forward messages sent to your Slack workspace's public channels into Doer!
 
-This integration lets you choose how to organize your Slack messages in Zulip.
+This integration lets you choose how to organize your Slack messages in Doer.
 You can:
 
-- Send messages from each Slack channel into a **matching Zulip channel**.
-- Send messages from each Slack channel into a **matching Zulip topic**.
-- Send all Slack messages into a **single Zulip topic**.
+- Send messages from each Slack channel into a **matching Doer channel**.
+- Send messages from each Slack channel into a **matching Doer topic**.
+- Send all Slack messages into a **single Doer topic**.
 
-If you'd like to forward messages in both directions (Slack to Zulip and Zulip
+If you'd like to forward messages in both directions (Slack to Doer and Doer
 to Slack), please see [separate instructions][6] for how to set this up.
 
-If you are looking to quickly move your Slack integrations to Zulip, check out
-[Zulip's Slack-compatible incoming webhook][1].
+If you are looking to quickly move your Slack integrations to Doer, check out
+[Doer's Slack-compatible incoming webhook][1].
 
 !!! warn ""
 
@@ -27,18 +27,18 @@ If you are looking to quickly move your Slack integrations to Zulip, check out
 
 1. {!generate-webhook-url-basic.md!}
 
-    To send messages from each Slack channel into a **matching Zulip channel**,
+    To send messages from each Slack channel into a **matching Doer channel**,
     open the **Where to send notifications** dropdown and select **Matching
-    Zulip channel**.
+    Doer channel**.
 
-    To send messages from each Slack channel into a **matching Zulip topic**,
+    To send messages from each Slack channel into a **matching Doer topic**,
     open the **Topics to use** dropdown, and select **Topics named after Slack
     channels**.
 
-    To send all Slack messages into a **single Zulip topic**, open the **Topics
+    To send all Slack messages into a **single Doer topic**, open the **Topics
     to use** dropdown, and select **Send all notifications to a single topic**.
 
-1. *(optional)* If you're setting up a [Slack bridge][6] to forward Zulip messages
+1. *(optional)* If you're setting up a [Slack bridge][6] to forward Doer messages
    into your Slack workspace, replace the value of the `?api_key=` parameter in
    the **integration URL** you generated with the API key of the **Generic bot**
    you're using for the Slack bridge.
@@ -82,7 +82,7 @@ If you are looking to quickly move your Slack integrations to Zulip, check out
 
 - `channels:history` is required by Slack's Event API's
   [message.channels](https://api.slack.com/events/message.channels) event. This
-  is used to send new messages from Slack to Zulip.
+  is used to send new messages from Slack to Doer.
 
 - `channels:read` is required for Slack's
   [conversations.info](https://api.slack.com/methods/conversations.info)
@@ -92,7 +92,7 @@ If you are looking to quickly move your Slack integrations to Zulip, check out
 - For a [bidirectional bridge][6] setup, the `chat:write` is also required for
   Slack's
   [chat.postMessage](https://docs.slack.dev/reference/methods/chat.postMessage/)
-  method. This is used to send new messages from Zulip to Slack.
+  method. This is used to send new messages from Doer to Slack.
 
 - `users:read` is required to call
   Slack's [users.info](https://api.slack.com/methods/users.info) endpoint. This
@@ -100,12 +100,12 @@ If you are looking to quickly move your Slack integrations to Zulip, check out
 
 ### Caveats
 
-- Mentions in messages are not converted to Zulip mentions.
+- Mentions in messages are not converted to Doer mentions.
 
 - Notifications will be delayed by a few seconds.
 
 - Some emojis exported from Slack will display as `:emojiname:`, if
-  the emoji name is not present in the emoji database used by Zulip.
+  the emoji name is not present in the emoji database used by Doer.
 
 - Threads will appear in the main topic instead of in separate topics.
 
@@ -121,13 +121,13 @@ The following data is not included:
 
 ### Related documentation
 
-- [Forward messages Slack <-> Zulip][6] (both directions)
+- [Forward messages Slack <-> Doer][6] (both directions)
 
 - [Slack Events API documentation][3]
 
 - [Slack Apps][4]
 
-- [Zulip's Slack-compatible incoming webhook][1]
+- [Doer's Slack-compatible incoming webhook][1]
 
 {!webhooks-url-specification.md!}
 
@@ -136,4 +136,4 @@ The following data is not included:
 [3]: https://api.slack.com/apis/events-api
 [4]: https://api.slack.com/apps
 [5]: https://api.slack.com/legacy/custom-integrations/outgoing-webhooks
-[6]: https://github.com/zulip/python-zulip-api/blob/main/zulip/integrations/bridge_with_slack/README.md
+[6]: https://github.com/doer/python-doer-api/blob/main/doer/integrations/bridge_with_slack/README.md

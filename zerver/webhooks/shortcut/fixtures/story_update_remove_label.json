@@ -11,7 +11,7 @@
             "action":"update",
             "name":"An epic story!",
             "story_type":"feature",
-            "app_url":"https://app.shortcut.com/zulip/story/23",
+            "app_url":"https://app.shortcut.com/doer/story/23",
             "changes":{
                 "label_ids":{
                     "removes":[

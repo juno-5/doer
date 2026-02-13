@@ -28,10 +28,10 @@ jobs:
         run: ./tools/check-feature-level-updated >> $GITHUB_OUTPUT
 
       - name: Report status to CZO
-        if: ${{ steps.run_check.outputs.fail == 'true' && github.repository == 'zulip/zulip'}}
-        uses: zulip/github-actions-zulip/send-message@v1
+        if: ${{ steps.run_check.outputs.fail == 'true' && github.repository == 'doer/doer'}}
+        uses: doer/github-actions-doer/send-message@v1
         with:
-          api-key: ${{ secrets.ZULIP_BOT_KEY }}
+          api-key: ${{ secrets.DOER_BOT_KEY }}
           email: "github-actions-bot@chat.zulip.org"
           organization-url: "https://chat.zulip.org"
           to: "automated testing"
@@ -68,10 +68,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Report status to CZO
-        if: ${{github.repository == 'zulip/zulip'}}
-        uses: zulip/github-actions-zulip/send-message@v1
+        if: ${{github.repository == 'doer/doer'}}
+        uses: doer/github-actions-doer/send-message@v1
         with:
-          api-key: ${{ secrets.ZULIP_BOT_KEY }}
+          api-key: ${{ secrets.DOER_BOT_KEY }}
           email: "github-actions-bot@chat.zulip.org"
           organization-url: "https://chat.zulip.org"
           to: "api documentation"

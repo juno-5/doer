@@ -531,7 +531,7 @@ export let cancel = (): void => {
     call_hooks(compose_cancel_hooks);
     compose_state.set_message_type(undefined);
     compose_pm_pill.clear();
-    $(document).trigger("compose_canceled.zulip");
+    $(document).trigger("compose_canceled.doer");
     reload.maybe_reset_pending_reload_timeout("compose_end");
 };
 

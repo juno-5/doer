@@ -52,7 +52,7 @@ from zerver.models.groups import NamedUserGroup
 from zerver.models.realms import get_realm
 from zerver.models.users import get_system_bot, get_user_by_delivery_email
 
-realm = get_realm("zulip")
+realm = get_realm("doer")
 realm.message_content_edit_limit_seconds = None
 realm.save()
 
@@ -254,7 +254,7 @@ options = parser.parse_args()
 prepare_puppeteer_run()
 
 try:
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     with open(options.thread[0]) as f:
         threads = json.load(f)
         for thread in threads:

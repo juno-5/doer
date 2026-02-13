@@ -15,7 +15,7 @@ method. If you want that, use [the Vagrant environment](setup-recommended.md),
 where you can just do `vagrant destroy` to clean up the development environment.
 :::
 
-One can install the Zulip development environment directly on a Linux
+One can install the Doer development environment directly on a Linux
 host by following these instructions. Currently supported platforms
 are:
 
@@ -30,13 +30,13 @@ If you are using a [remote server](remote.md), see
 the
 [section on creating appropriate user accounts](remote.md#setting-up-user-accounts).
 
-Start by [cloning your fork of the Zulip repository][zulip-rtd-git-cloning]
-and [connecting the Zulip upstream repository][zulip-rtd-git-connect]:
+Start by [cloning your fork of the Doer repository][doer-rtd-git-cloning]
+and [connecting the Doer upstream repository][doer-rtd-git-connect]:
 
 ```bash
-git clone --config pull.rebase git@github.com:YOURUSERNAME/zulip.git
-cd zulip
-git remote add -f upstream https://github.com/zulip/zulip.git
+git clone --config pull.rebase git@github.com:YOURUSERNAME/doer.git
+cd doer
+git remote add -f upstream https://github.com/doer/doer.git
 ```
 
 CentOS, Fedora, and RHEL users should ensure that python3 is installed on their
@@ -49,17 +49,17 @@ yum install python
 ```
 
 With python3 installed, change into the directory where you have cloned
-Zulip and run the following commands:
+Doer and run the following commands:
 
 ```bash
-# From inside a clone of zulip.git:
+# From inside a clone of doer.git:
 ./tools/provision
 source .venv/bin/activate
 ./tools/run-dev  # starts the development server
 ```
 
 Once you've done the above setup, you can pick up the [documentation
-on using the Zulip development
+on using the Doer development
 environment](setup-recommended.md#step-4-developing),
 ignoring the parts about `vagrant` (since you're not using it).
 
@@ -84,7 +84,7 @@ computer's BIOS.
 #### Running Git BASH as an administrator
 
 It is important that you **always run Git BASH with administrator
-privileges** when working on Zulip code, as not doing so will cause
+privileges** when working on Doer code, as not doing so will cause
 errors in the development environment (such as symlink creation). You
 might wish to configure your Git BASH shortcut to always run with
 these privileges enabled (see this [guide][bash-admin-setup] for how
@@ -92,9 +92,9 @@ to set this up).
 
 ##### Enable native symlinks
 
-The Zulip code includes symbolic links (symlinks). By default, native Windows
+The Doer code includes symbolic links (symlinks). By default, native Windows
 symlinks are not enabled in either Git BASH or Cygwin, so you need to do a bit
-of configuration. **You must do this before you clone the Zulip code.**
+of configuration. **You must do this before you clone the Doer code.**
 
 In **Git for BASH**:
 
@@ -111,7 +111,7 @@ $ git config core.symlinks
 true
 ```
 
-If you see `true`, you are ready for [Step 2: Get Zulip code](setup-recommended.md#step-2-get-zulip-code).
+If you see `true`, you are ready for [Step 2: Get Doer code](setup-recommended.md#step-2-get-doer-code).
 
 Otherwise, if the above command prints `false` or nothing at all, then symlinks
 have not been enabled.
@@ -134,11 +134,11 @@ $ echo $CYGWIN
 winsymlinks:native
 ```
 
-Now you are ready for [Step 2: Get Zulip code](setup-recommended.md#step-2-get-zulip-code).
+Now you are ready for [Step 2: Get Doer code](setup-recommended.md#step-2-get-doer-code).
 
 (Note: The **GitHub Desktop client** for Windows has a bug where it
 will automatically set `git config core.symlink false` on a repository
-if you use it to clone a repository, which will break the Zulip
+if you use it to clone a repository, which will break the Doer
 development environment, because we use symbolic links. For that
 reason, we recommend avoiding using GitHub Desktop client to clone
 projects and to instead follow these instructions exactly.)
@@ -159,13 +159,13 @@ expected.
 
 **NOTE**: Hyper-V is available only on Windows Enterprise, Pro, or Education.
 
-1. Start by [cloning your fork of the Zulip repository][zulip-rtd-git-cloning]
-   and [connecting the Zulip upstream repository][zulip-rtd-git-connect]:
+1. Start by [cloning your fork of the Doer repository][doer-rtd-git-cloning]
+   and [connecting the Doer upstream repository][doer-rtd-git-connect]:
 
    ```bash
-   git clone --config pull.rebase git@github.com:YOURUSERNAME/zulip.git
-   cd zulip
-   git remote add -f upstream https://github.com/zulip/zulip.git
+   git clone --config pull.rebase git@github.com:YOURUSERNAME/doer.git
+   cd doer
+   git remote add -f upstream https://github.com/doer/doer.git
    ```
 
 1. You will have to open up powershell with administrator rights in
@@ -206,14 +206,14 @@ expected.
    vagrant ssh
    ```
 
-   This will ssh you into the bash shell of the Zulip development environment
+   This will ssh you into the bash shell of the Doer development environment
    where you can execute bash commands.
 
 1. Set the `EXTERNAL_HOST` environment variable.
 
    ```console
-   (zulip-server) vagrant@ubuntu-18:/srv/zulip$ export EXTERNAL_HOST="$(hostname -I | xargs):9991"
-   (zulip-server) vagrant@ubuntu-18:/srv/zulip$ echo $EXTERNAL_HOST
+   (doer-server) vagrant@ubuntu-18:/srv/zulip$ export EXTERNAL_HOST="$(hostname -I | xargs):9991"
+   (doer-server) vagrant@ubuntu-18:/srv/zulip$ echo $EXTERNAL_HOST
    ```
 
    The output will be like:
@@ -222,7 +222,7 @@ expected.
    172.28.122.156:9991
    ```
 
-   Make sure you note down this down. This is where your zulip development web
+   Make sure you note down this down. This is where your doer development web
    server can be accessed.
 
    :::{important}
@@ -231,16 +231,16 @@ expected.
    This quirk is one reason this method is marked experimental.
    :::
 
-1. You should now be able to start the Zulip development server.
+1. You should now be able to start the Doer development server.
 
    ```console
-   (zulip-server) vagrant@ubuntu-18:/srv/zulip$ ./tools/run-dev
+   (doer-server) vagrant@ubuntu-18:/srv/zulip$ ./tools/run-dev
    ```
 
    The output will look like:
 
    ```console
-   Starting Zulip on:
+   Starting Doer on:
 
         http://172.30.24.235:9991/
 
@@ -269,7 +269,7 @@ expected.
 2. Be patient the first time you run `./tools/run-dev`.
 
 As with other installation methods, please visit [#provision
-help][provision-help] in the [Zulip development community
+help][provision-help] in the [Doer development community
 server](https://zulip.com/development-community/) if you need help.
 
 [provision-help]: https://chat.zulip.org/#narrow/channel/21-provision-help
@@ -278,7 +278,7 @@ server](https://zulip.com/development-community/) if you need help.
 
 You can use
 [our provisioning tool](#installing-directly-on-ubuntu-debian-centos-or-fedora)
-to set up the Zulip development environment on current versions of
+to set up the Doer development environment on current versions of
 these platforms reliably and easily, so we no longer maintain manual
 installation instructions for these platforms.
 
@@ -288,8 +288,8 @@ likely only a few lines of changes to `tools/lib/provision.py` and
 `scripts/lib/setup-apt-repo` if you'd like to do it yourself and
 submit a pull request, or you can ask for help in
 [#development help](https://chat.zulip.org/#narrow/channel/49-development-help)
-in [the Zulip development community](https://zulip.com/development-community/),
+in [the Doer development community](https://zulip.com/development-community/),
 and a core team member can help guide you through adding support for the platform.
 
-[zulip-rtd-git-cloning]: ../git/cloning.md#step-1b-clone-to-your-machine
-[zulip-rtd-git-connect]: ../git/cloning.md#step-1c-connect-your-fork-to-zulip-upstream
+[doer-rtd-git-cloning]: ../git/cloning.md#step-1b-clone-to-your-machine
+[doer-rtd-git-connect]: ../git/cloning.md#step-1c-connect-your-fork-to-doer-upstream

@@ -1,5 +1,5 @@
 class kandra::profile::base {
-  include zulip::profile::base
+  include doer::profile::base
   include kandra::ksplice_uptrack
   include kandra::firewall
   include kandra::teleport::node
@@ -35,7 +35,7 @@ class kandra::profile::base {
     'ripgrep',
     'bat',
   ]
-  zulip::safepackage { $org_base_packages: ensure => installed }
+  doer::safepackage { $org_base_packages: ensure => installed }
   file { '/usr/local/bin/bat':
     ensure => link,
     target => '/usr/bin/batcat',
@@ -58,10 +58,10 @@ class kandra::profile::base {
     mode   => '0644',
     source => 'puppet:///modules/kandra/apt/apt.conf.d/50unattended-upgrades',
   }
-  file { '/etc/needrestart/conf.d/zulip.conf':
+  file { '/etc/needrestart/conf.d/doer.conf':
     ensure => file,
     mode   => '0644',
-    source => 'puppet:///modules/kandra/needrestart/zulip.conf',
+    source => 'puppet:///modules/kandra/needrestart/doer.conf',
   }
 
   user { 'root': }
@@ -72,7 +72,7 @@ class kandra::profile::base {
     known_hosts     => ['github.com'],
   }
 
-  kandra::user_dotfiles { 'zulip':
+  kandra::user_dotfiles { 'doer':
     keys            => 'internal-read-only-deploy-key',
     authorized_keys => 'common',
     known_hosts     => ['github.com'],

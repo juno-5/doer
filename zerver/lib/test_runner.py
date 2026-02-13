@@ -16,7 +16,7 @@ from django.test.runner import DiscoverRunner
 from django.test.signals import template_rendered
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     TEMPLATE_DATABASE_DIR,
     get_dev_uuid_var_path,
     get_or_create_dev_uuid_var_path,
@@ -139,14 +139,14 @@ def destroy_test_databases(worker_id: int | None = None) -> None:
             # through the N=self.parallel child processes, and in the
             # parent process (which calls `destroy_test_databases`),
             # `settings_dict` remains unchanged, with the original
-            # template database name (zulip_test_template).  So to
-            # delete the database zulip_test_template_<number>, we
+            # template database name (doer_test_template).  So to
+            # delete the database doer_test_template_<number>, we
             # need to pass `number` to `destroy_test_db`.
             #
             # When we run in serial mode (self.parallel=1), we don't
             # fork and thus both creation and destruction occur in the
             # same process, which means `settings_dict` has been
-            # updated to have `zulip_test_template_<number>` as its
+            # updated to have `doer_test_template_<number>` as its
             # database name by the creation code.  As a result, to
             # delete that database, we need to not pass a number
             # argument to destroy_test_db.
@@ -315,9 +315,9 @@ class Runner(DiscoverRunner):
 
     @override
     def teardown_test_environment(self, *args: Any, **kwargs: Any) -> Any:
-        # The test environment setup clones the zulip_test_template
+        # The test environment setup clones the doer_test_template
         # database, creating databases with names:
-        #     'zulip_test_template_N_<worker_id>',
+        #     'doer_test_template_N_<worker_id>',
         # where N is `random_id_range_start`, and `worker_id` is a
         # value between <1, self.parallel>.
         #

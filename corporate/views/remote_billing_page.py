@@ -55,7 +55,7 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
+    RemoteDoerServer,
     get_remote_server_by_uuid,
 )
 from zilencer.views import handle_customer_migration_from_server_to_realm
@@ -78,7 +78,7 @@ LOGIN_CONFIRMATION_EMAIL_DURATION_HOURS = 24
 @typed_endpoint
 def remote_realm_billing_entry(
     request: HttpRequest,
-    remote_server: RemoteZulipServer,
+    remote_server: RemoteDoerServer,
     *,
     user: Json[UserDataForRemoteBilling],
     realm: Json[RealmDataForAnalytics],
@@ -532,12 +532,12 @@ def create_remote_billing_confirmation_link(
 def remote_billing_legacy_server_login(
     request: HttpRequest,
     *,
-    zulip_org_id: str | None = None,
-    zulip_org_key: str | None = None,
+    doer_org_id: str | None = None,
+    doer_org_key: str | None = None,
     next_page: VALID_NEXT_PAGES_TYPE = None,
 ) -> HttpResponse:
     context: dict[str, Any] = {"next_page": next_page}
-    if zulip_org_id is None or zulip_org_key is None:
+    if doer_org_id is None or doer_org_key is None:
         context.update({"error_message": False})
         return render(request, "corporate/billing/legacy_server_login.html", context)
 
@@ -545,19 +545,19 @@ def remote_billing_legacy_server_login(
         return HttpResponseNotAllowed(["POST"])
 
     try:
-        remote_server = get_remote_server_by_uuid(zulip_org_id)
-    except RemoteZulipServer.DoesNotExist:
+        remote_server = get_remote_server_by_uuid(doer_org_id)
+    except RemoteDoerServer.DoesNotExist:
         context.update(
             {
                 "error_message": _(
-                    "This zulip_org_id is not registered with Zulip's billing management system."
+                    "This doer_org_id is not registered with Doer's billing management system."
                 )
             }
         )
         return render(request, "corporate/billing/legacy_server_login.html", context)
 
-    if not constant_time_compare(zulip_org_key, remote_server.api_key):
-        context.update({"error_message": _("Invalid zulip_org_key for this zulip_org_id.")})
+    if not constant_time_compare(doer_org_key, remote_server.api_key):
+        context.update({"error_message": _("Invalid doer_org_key for this doer_org_id.")})
         return render(request, "corporate/billing/legacy_server_login.html", context)
 
     if remote_server.deactivated:
@@ -665,7 +665,7 @@ def remote_billing_legacy_server_confirm_login(
     )
 
 
-def has_live_plan_for_any_remote_realm_on_server(server: RemoteZulipServer) -> bool:
+def has_live_plan_for_any_remote_realm_on_server(server: RemoteDoerServer) -> bool:
     has_plan_with_status_lt_live_threshold = CustomerPlan.objects.filter(
         customer__remote_realm__server=server,
         status__lt=CustomerPlan.LIVE_STATUS_THRESHOLD,
@@ -797,8 +797,8 @@ def remote_billing_legacy_server_from_login_confirmation_link(
             reverse(f"remote_server_{next_page}_page", args=(remote_server_uuid,))
         )
     elif remote_server.plan_type in [
-        RemoteZulipServer.PLAN_TYPE_SELF_MANAGED,
-        RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY,
+        RemoteDoerServer.PLAN_TYPE_SELF_MANAGED,
+        RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY,
     ]:
         # If they have a scheduled upgrade while on a complimentary access plan,
         # redirect to billing page.
@@ -812,7 +812,7 @@ def remote_billing_legacy_server_from_login_confirmation_link(
                 reverse("remote_server_billing_page", args=(remote_server_uuid,))
             )
         return HttpResponseRedirect(reverse("remote_server_plans_page", args=(remote_server_uuid,)))
-    elif remote_server.plan_type == RemoteZulipServer.PLAN_TYPE_COMMUNITY:
+    elif remote_server.plan_type == RemoteDoerServer.PLAN_TYPE_COMMUNITY:
         return HttpResponseRedirect(
             reverse("remote_server_sponsorship_page", args=(remote_server_uuid,))
         )
@@ -823,7 +823,7 @@ def remote_billing_legacy_server_from_login_confirmation_link(
 
 
 def generate_confirmation_link_for_server_deactivation(
-    remote_server: RemoteZulipServer, validity_in_minutes: int
+    remote_server: RemoteDoerServer, validity_in_minutes: int
 ) -> str:
     obj = PreregistrationRemoteServerBillingUser.objects.create(
         email=remote_server.contact_email,
@@ -839,7 +839,7 @@ def generate_confirmation_link_for_server_deactivation(
 
 
 def check_rate_limits(
-    request: HttpRequest, remote_server: RemoteZulipServer
+    request: HttpRequest, remote_server: RemoteDoerServer
 ) -> HttpResponse | None:
     try:
         rate_limit_request_by_ip(request, domain="sends_email_by_ip")

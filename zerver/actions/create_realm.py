@@ -24,7 +24,7 @@ from zerver.lib.user_groups import (
     create_system_user_groups_for_realm,
     get_role_based_system_groups_dict,
 )
-from zerver.lib.zulip_update_announcements import get_latest_zulip_update_announcements_level
+from zerver.lib.doer_update_announcements import get_latest_doer_update_announcements_level
 from zerver.models import (
     DefaultStream,
     PreregistrationRealm,
@@ -201,8 +201,8 @@ def do_create_realm(
     enable_read_receipts: bool | None = None,
     enable_spectator_access: bool | None = None,
     prereg_realm: PreregistrationRealm | None = None,
-    how_realm_creator_found_zulip: str | None = None,
-    how_realm_creator_found_zulip_extra_context: str | None = None,
+    how_realm_creator_found_doer: str | None = None,
+    how_realm_creator_found_doer_extra_context: str | None = None,
 ) -> Realm:
     if string_id in [settings.SOCIAL_AUTH_SUBDOMAIN, settings.SELF_HOSTING_MANAGEMENT_SUBDOMAIN]:
         raise AssertionError(
@@ -285,8 +285,8 @@ def do_create_realm(
             event_type=AuditLogEventType.REALM_CREATED,
             event_time=realm.date_created,
             extra_data={
-                "how_realm_creator_found_zulip": how_realm_creator_found_zulip,
-                "how_realm_creator_found_zulip_extra_context": how_realm_creator_found_zulip_extra_context,
+                "how_realm_creator_found_doer": how_realm_creator_found_doer,
+                "how_realm_creator_found_doer_extra_context": how_realm_creator_found_doer_extra_context,
             },
         )
 
@@ -336,16 +336,16 @@ def do_create_realm(
 
     # Create channels once Realm object has been saved
     with override_language(realm.default_language):
-        zulip_discussion_channel = ensure_stream(
+        doer_discussion_channel = ensure_stream(
             realm,
-            str(Realm.ZULIP_DISCUSSION_CHANNEL_NAME),
-            stream_description=_("Questions and discussion about using Zulip."),
+            str(Realm.DOER_DISCUSSION_CHANNEL_NAME),
+            stream_description=_("Questions and discussion about using Doer."),
             acting_user=None,
         )
-        zulip_sandbox_channel = ensure_stream(
+        doer_sandbox_channel = ensure_stream(
             realm,
-            str(Realm.ZULIP_SANDBOX_CHANNEL_NAME),
-            stream_description=_("Experiment with Zulip here. :test_tube:"),
+            str(Realm.DOER_SANDBOX_CHANNEL_NAME),
+            stream_description=_("Experiment with Doer here. :test_tube:"),
             acting_user=None,
         )
         new_stream_announcements_stream = ensure_stream(
@@ -355,28 +355,28 @@ def do_create_realm(
             acting_user=None,
         )
 
-    # By default, 'New stream' & 'Zulip update' announcements are sent to the same stream.
+    # By default, 'New stream' & 'Doer update' announcements are sent to the same stream.
     realm.new_stream_announcements_stream = new_stream_announcements_stream
-    realm.zulip_update_announcements_stream = new_stream_announcements_stream
+    realm.doer_update_announcements_stream = new_stream_announcements_stream
 
     # With the current initial streams situation, the public channels are
-    # 'zulip_discussion_channel', 'zulip_sandbox_channel', 'new_stream_announcements_stream'.
+    # 'doer_discussion_channel', 'doer_sandbox_channel', 'new_stream_announcements_stream'.
     public_channels = [
-        DefaultStream(stream=zulip_discussion_channel, realm=realm),
-        DefaultStream(stream=zulip_sandbox_channel, realm=realm),
+        DefaultStream(stream=doer_discussion_channel, realm=realm),
+        DefaultStream(stream=doer_sandbox_channel, realm=realm),
         DefaultStream(stream=new_stream_announcements_stream, realm=realm),
     ]
     DefaultStream.objects.bulk_create(public_channels)
 
-    # New realm is initialized with the latest zulip update announcements
+    # New realm is initialized with the latest doer update announcements
     # level as it shouldn't receive a bunch of old updates.
-    realm.zulip_update_announcements_level = get_latest_zulip_update_announcements_level()
+    realm.doer_update_announcements_level = get_latest_doer_update_announcements_level()
 
     realm.save(
         update_fields=[
             "new_stream_announcements_stream",
-            "zulip_update_announcements_stream",
-            "zulip_update_announcements_level",
+            "doer_update_announcements_stream",
+            "doer_update_announcements_level",
         ]
     )
 

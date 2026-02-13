@@ -8,10 +8,10 @@ from nacl.encoding import Base64Encoder
 from nacl.public import PrivateKey
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 Add or remove a key pair from the `push_registration_encryption_keys` map.
 
@@ -42,7 +42,7 @@ Usage:
         if settings.DEVELOPMENT:
             SECRETS_FILENAME = "zproject/dev-secrets.conf"
         else:
-            SECRETS_FILENAME = "/etc/zulip/zulip-secrets.conf"
+            SECRETS_FILENAME = "/etc/zulip/doer-secrets.conf"
 
         config = configparser.ConfigParser()
         config.read(SECRETS_FILENAME)

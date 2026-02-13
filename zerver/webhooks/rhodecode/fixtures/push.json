@@ -1,11 +1,11 @@
 {
     "event": {
       "repo": {
-        "repo_name": "u/yuroitaki/zulip-testing",
+        "repo_name": "u/yuroitaki/doer-testing",
         "permalink_url": "https://code.rhodecode.com/_1936",
         "repo_type": "git",
         "extra_fields": {},
-        "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing",
+        "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing",
         "repo_id": 1936
       },
       "actor_ip": "14.192.208.163",
@@ -33,7 +33,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/2b8c0ebf50710bc2e1cdb6a33071dd2435ad667c",
             "message_html": "Modify README\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/2b8c0ebf50710bc2e1cdb6a33071dd2435ad667c",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/2b8c0ebf50710bc2e1cdb6a33071dd2435ad667c",
             "message": "Modify README\n",
             "issues": [],
             "refs": {
@@ -49,7 +49,7 @@
         ],
         "branches": [
           {
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changelog?branch=master",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changelog?branch=master",
             "name": "master"
           }
         ],

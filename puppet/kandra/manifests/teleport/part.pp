@@ -3,7 +3,7 @@
 define kandra::teleport::part() {
   $part = $name
 
-  include zulip::systemd_daemon_reload
+  include doer::systemd_daemon_reload
   file { "/etc/systemd/system/teleport_${part}.service":
     require => [
       Package[teleport],

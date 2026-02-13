@@ -1,6 +1,6 @@
-# Zulip Ansible Tower integration
+# Doer Ansible Tower integration
 
-Get Ansible Tower notifications in Zulip!
+Get Ansible Tower notifications in Doer!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Ansible Tower notifications in Zulip!
 1. Go to **Notifications** in your Ansible Tower or AWX Admin Portal,
    and select **Add**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Select the
+1. Set **Name** to a name of your choice, such as `Doer`. Select the
    organization you'd like to be notified about, and set **Type** to
    **Webhook**. Set **Target URL** to the URL generated above, and
    click **Save**.

@@ -4,20 +4,20 @@ import assert from "node:assert";
 import {CORPORATE_ENABLED, SHOW_RELATIVE_LINKS} from "astro:env/client";
 
 /* eslint-disable import/extensions */
-import RawBarChartIcon from "~icons/zulip-icon/bar-chart?raw";
-import RawBuildingIcon from "~icons/zulip-icon/building?raw";
-import RawCreditCardIcon from "~icons/zulip-icon/credit-card?raw";
-import RawEditIcon from "~icons/zulip-icon/edit?raw";
-import RawGearIcon from "~icons/zulip-icon/gear?raw";
-import RawGitPullRequestIcon from "~icons/zulip-icon/git-pull-request?raw";
-import RawHashIcon from "~icons/zulip-icon/hash?raw";
-import RawHelpIcon from "~icons/zulip-icon/help?raw";
-import RawInfoIcon from "~icons/zulip-icon/info?raw";
-import RawKeyboardIcon from "~icons/zulip-icon/keyboard?raw";
-import RawManageSearchIcon from "~icons/zulip-icon/manage-search?raw";
-import RawRocketIcon from "~icons/zulip-icon/rocket?raw";
-import RawToolIcon from "~icons/zulip-icon/tool?raw";
-import RawUserGroupCogIcon from "~icons/zulip-icon/user-group-cog?raw";
+import RawBarChartIcon from "~icons/doer-icon/bar-chart?raw";
+import RawBuildingIcon from "~icons/doer-icon/building?raw";
+import RawCreditCardIcon from "~icons/doer-icon/credit-card?raw";
+import RawEditIcon from "~icons/doer-icon/edit?raw";
+import RawGearIcon from "~icons/doer-icon/gear?raw";
+import RawGitPullRequestIcon from "~icons/doer-icon/git-pull-request?raw";
+import RawHashIcon from "~icons/doer-icon/hash?raw";
+import RawHelpIcon from "~icons/doer-icon/help?raw";
+import RawInfoIcon from "~icons/doer-icon/info?raw";
+import RawKeyboardIcon from "~icons/doer-icon/keyboard?raw";
+import RawManageSearchIcon from "~icons/doer-icon/manage-search?raw";
+import RawRocketIcon from "~icons/doer-icon/rocket?raw";
+import RawToolIcon from "~icons/doer-icon/tool?raw";
+import RawUserGroupCogIcon from "~icons/doer-icon/user-group-cog?raw";
 /* eslint-enable import/extensions */
 
 const PERSONAL_SETTINGS_TYPE = "Personal settings";
@@ -219,9 +219,9 @@ const relative_link_mapping: Record<
                 relative_link: "/integrations/",
                 icon: `${RawGitPullRequestIcon}`,
             },
-            "about-zulip": {
-                label: "About Zulip",
-                relative_link: "/#about-zulip",
+            "about-doer": {
+                label: "About Doer",
+                relative_link: "/#about-doer",
             },
         },
         template: default_template_for_relative_links,
@@ -260,9 +260,9 @@ const relative_link_mapping: Record<
                 relative_link: "/#search-operators",
                 icon: `${RawManageSearchIcon}`,
             },
-            "about-zulip": {
-                label: "About Zulip",
-                relative_link: "/#about-zulip",
+            "about-doer": {
+                label: "About Doer",
+                relative_link: "/#about-doer",
                 icon: `${RawInfoIcon}`,
             },
         },

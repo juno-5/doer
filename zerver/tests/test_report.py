@@ -1,7 +1,7 @@
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class TestReport(ZulipTestCase):
+class TestReport(DoerTestCase):
     def test_report_csp_violations(self) -> None:
         fixture_data = self.fixture_data("csp_report.json")
         with self.assertLogs(level="WARNING") as warn_logs:

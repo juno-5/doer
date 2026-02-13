@@ -1,15 +1,15 @@
 # Version history
 
-This page contains the release history for the Zulip server. See also
-the [Zulip release lifecycle](../overview/release-lifecycle.md).
+This page contains the release history for the Doer server. See also
+the [Doer release lifecycle](../overview/release-lifecycle.md).
 
-## Zulip Server 12.x series (development)
+## Doer Server 12.x series (development)
 
 This section is an incomplete draft of the release notes for the next
 major release, and is only updated occasionally. See the [commit
 log][commit-log] for an up-to-date list of all changes.
 
-## Zulip Server 12.0
+## Doer Server 12.0
 
 _Unreleased_
 
@@ -17,13 +17,13 @@ _Unreleased_
 
 - The `LDAP_SYNCHRONIZED_GROUPS_BY_REALM` setting for LDAP group
   synchronization no longer ignores groups that are configured to be
-  synced but don't exist in the Zulip organization. Starting in 12.0,
+  synced but don't exist in the Doer organization. Starting in 12.0,
   such groups will be created automatically when syncing the groups
   for a user who should be a member of that group.
 
-## Zulip Server 11.x series
+## Doer Server 11.x series
 
-### Zulip Server 11.5
+### Doer Server 11.5
 
 _Released 2026-02-05_
 
@@ -33,7 +33,7 @@ _Released 2026-02-05_
   problematic object.
 - Start offering a button, when pasting, to upload large pastes as a text file
   attachment.
-- Changed the camo `User-Agent` to report itself as Zulip Server, along with its
+- Changed the camo `User-Agent` to report itself as Doer Server, along with its
   version.
 - Fixed channel links for reminders in private channels.
 - Worked around a bug in Safari 17 with certain Unicode characters in user
@@ -48,11 +48,11 @@ _Released 2026-02-05_
 - Improved Mattermost import tooling.
 - Updated Slack export instructions.
 - Fixed broken emoji in channel descriptions of imported organizations.
-- Fixed imports from Zulip exports, which lacked some avatar thumbnails.
+- Fixed imports from Doer exports, which lacked some avatar thumbnails.
 - Improved the initial installation experience when configuring proxies.
-- Added a `postfix.uninstall` setting in `zulip.conf` to leave `postfix`
+- Added a `postfix.uninstall` setting in `doer.conf` to leave `postfix`
   installed, for sites which use Postfix as an outgoing mailserver.
-- Added a `application_server.custom_ca_path` setting in `zulip.conf` to
+- Added a `application_server.custom_ca_path` setting in `doer.conf` to
   specifying a custom CA to trust (e.g., for OIDC servers with custom
   certificates).
 - Replaced `./manage.py checkconfig` with `./manage.py check`, and added more
@@ -76,20 +76,20 @@ _Released 2026-02-05_
   attempting to guess their content-type.
 - Added per-message incoming email server logging, and adjusted log levels of
   other email server processes.
-- Added an `application_server.nginx_worker_processes` setting in `zulip.conf`
+- Added an `application_server.nginx_worker_processes` setting in `doer.conf`
   to adjust the number of nginx `worker_processes`.
 - Improved Tornado resharding tooling.
 - Renamed GIF picker integrations to be generic.
 - Updated translations from Weblate.
 
-### Zulip Server 11.4
+### Doer Server 11.4
 
 _Released 2025-10-23_
 
 - Fixed a bug that could cause the incoming email server to crash on
   startup.
 
-### Zulip Server 11.3
+### Doer Server 11.3
 
 _Released 2025-10-22_
 
@@ -121,7 +121,7 @@ _Released 2025-10-22_
 - Updated and reorganized security documentation.
 - Updated Python dependencies.
 
-### Zulip Server 11.2
+### Doer Server 11.2
 
 _Released 2025-09-16_
 
@@ -130,7 +130,7 @@ _Released 2025-09-16_
 - Updated dependency for the new help center, to prevent potential
   crashes when building.
 
-### Zulip Server 11.1
+### Doer Server 11.1
 
 _Released 2025-09-11_
 
@@ -154,13 +154,13 @@ _Released 2025-09-11_
   properly.
 - Fixed a performance regression when loading the web app.
 - Fixed internals of message reminder body construction.
-- Fixed multiple minor issues generating Zulip internal links.
+- Fixed multiple minor issues generating Doer internal links.
 - Fixed a buggy interaction with Smokescreen preventing client reload
   requests from being sent.
 - Fixed broken deep links when serving redirects for a moved realm.
 - Fixed a broken lightbox keyboard shortcut.
 - Fixed hooks failing when upgrading the OS without having previously
-  upgraded Zulip.
+  upgraded Doer.
 - Fixed the copy keyboard shortcut not working for logged-out access.
 - Fixed a bug introduced in 11.0 that could cause Notification Bot to
   fail to notify about newly created channels (in the announcement
@@ -175,7 +175,7 @@ _Released 2025-09-11_
   local-network IP addresses.
 - Updated translations.
 
-### Zulip Server 11.0
+### Doer Server 11.0
 
 _Released 2025-08-13_
 
@@ -261,7 +261,7 @@ _Released 2025-08-13_
 - Added a new warning banner when moving a topic to a channel where
   some participants are not subscribers.
 - Added a warning banner to desktop notification settings when the
-  user has not granted Zulip permission to send them.
+  user has not granted Doer permission to send them.
 - Added support for moving messages to a channel the acting user is
   not currently subscribed to, but has access to post in.
 - Added new webhook integration for OpenProject and
@@ -274,7 +274,7 @@ _Released 2025-08-13_
   messages.
 - Redesigned most filter/search inputs across the UI.
 - Redesigned dozens of buttons with legacy styling to consistently use
-  Zulip's current generation button designs.
+  Doer's current generation button designs.
 - Redesigned most settings banners with a more modern visual design.
 - Redesigned how unreads are displayed with collapsed VIEWS.
 - Redesigned animation for new unread mentions.
@@ -332,7 +332,7 @@ _Released 2025-08-13_
 - Fixed several issues with markup translation in both Slack import
   and handling Slack-compatible webhook events.
 - Fixed several subtle issues with compose box tooltips.
-- Fixed drafts to automatically save when defocusing the Zulip window.
+- Fixed drafts to automatically save when defocusing the Doer window.
 - Fixed several issues with URL previews with variant font sizes.
 - Fixed several bugs in handling of Dropbox links.
 - Fixed several subtle bugs in the core message feed experience.
@@ -374,7 +374,7 @@ _Released 2025-08-13_
 
 - PostgreSQL 13 is no longer supported; if you are currently using it, you will
   need to [upgrade PostgreSQL](../production/upgrade.md#upgrading-postgresql)
-  before upgrading Zulip.
+  before upgrading Doer.
 - Installations using LDAP authentication will want to consider
   enabling the new `unique_account_id` setting for automatically
   handling [email address
@@ -391,9 +391,9 @@ _Released 2025-08-13_
   in mind: it will only redact message content for mobile clients
   using the legacy non-E2EE protocol.
 
-- Zulip's incoming email integration was simplified to no longer use
+- Doer's incoming email integration was simplified to no longer use
   `postfix`. Installations using the integration will automatically
-  uninstall `postfix` when upgraded. If your Zulip server was using
+  uninstall `postfix` when upgraded. If your Doer server was using
   `postfix` for another purpose as well, you'll need to manually
   preserve and update your `postfix` configuration.
 - The `SOCIAL_AUTH_SYNC_CUSTOM_ATTRS_DICT` setting has been removed.
@@ -402,17 +402,17 @@ _Released 2025-08-13_
   `CAN_CREATE_REALM_LINK_VALIDITY_DAYS`.
 - Installations that previously upgraded to `11.0-beta2` can run
   ```console
-  ./manage.py send_zulip_update_announcements --reset-level 19
+  ./manage.py send_doer_update_announcements --reset-level 19
   ```
-  to get the latest version of a [Zulip
-  updates notice](https://zulip.com/help/configure-automated-notices#zulip-update-announcements)
-  that was [expanded][edited-zulip-update-notice-20] after 11.0-beta2.
+  to get the latest version of a [Doer
+  updates notice](https://zulip.com/help/configure-automated-notices#doer-update-announcements)
+  that was [expanded][edited-doer-update-notice-20] after 11.0-beta2.
 
-[edited-zulip-update-notice-20]: https://chat.zulip.org/#narrow/channel/1-announce/topic/Zulip.20updates/near/2242634
+[edited-doer-update-notice-20]: https://chat.zulip.org/#narrow/channel/1-announce/topic/Doer.20updates/near/2242634
 
-## Zulip Server 10.x series
+## Doer Server 10.x series
 
-### Zulip Server 10.4
+### Doer Server 10.4
 
 _Released 2025-07-02_
 
@@ -437,7 +437,7 @@ _Released 2025-07-02_
   AWS that do not have AWS credentials configured.
 - Updated dependencies.
 
-### Zulip Server 10.3
+### Doer Server 10.3
 
 _Released 2025-05-15_
 
@@ -461,24 +461,24 @@ _Released 2025-05-15_
   settings, and updated visual design.
 - Added the `manage.py thumbnail` management command. This management
   command supports generating thumbnails for legacy images that were
-  uploaded prior to the introduction of thumbnailing in Zulip
+  uploaded prior to the introduction of thumbnailing in Doer
   9.0. This tools shares its queue with thumbnailing of newly sent
   images, so be careful when enqueuing large numbers of images at
   once.
 - Updated translations.
 
-### Zulip Server 10.2
+### Doer Server 10.2
 
 _Released 2025-04-15_
 
-- CVE-2025-31478: Authentication backend configuration bypass in Zulip Server.
+- CVE-2025-31478: Authentication backend configuration bypass in Doer Server.
 - Fixed several compatibility issues between the new `tusd`-based file upload
   support and some S3-compatible storage services. In particular:
   - The new `S3_SKIP_CHECKSUM`
     [setting](../production/upload-backends.md#s3-backend-configuration)
     is required to prevent AWS’s S3 client libraries from refusing to make
     requests to some third-party S3 implementations — specifically, those that
-    don’t yet support AWS’s new checksum algorithm. (Zulip 9.x used older
+    don’t yet support AWS’s new checksum algorithm. (Doer 9.x used older
     versions of these libraries that did not attempt to enforce AWS's new
     checksum algorithm).
   - Google Cloud Storage requires some additional configuration; see the
@@ -486,7 +486,7 @@ _Released 2025-04-15_
   - Fixed support for automatically accessing S3 secrets from EC2 instance
     profiles.
 - Fixed compatibility issues between the new `tusd` -based file upload backend
-  and using a non-default port for the Zulip server.
+  and using a non-default port for the Doer server.
 - Added support for PostgreSQL 17. See the [PostgreSQL upgrade
   documentation](../production/upgrade.md#upgrading-postgresql) if
   you’re interested in upgrading an existing server to newer
@@ -502,12 +502,12 @@ _Released 2025-04-15_
 - Fixed a bug that prevented new hardening of content access from being
   enforced.
 - Fixed a bug preventing showing archived channels that remain marked as
-  web-public channels in the public access option. (Prior to Zulip 10.0,
+  web-public channels in the public access option. (Prior to Doer 10.0,
   archiving a channel irreversibly made it private, so this bug only impacted
-  channels archived after the upgrade to Zulip 10.0).
+  channels archived after the upgrade to Doer 10.0).
 - Fixed a subtle issue involving file upload error handling with `tusd`.
 - Moved the Prometheus metrics port for Smokescreen to 4760, to not conflict
-  with the ports Zulip uses with more than 10 Tornado processes.
+  with the ports Doer uses with more than 10 Tornado processes.
 - Improved scroll position when selecting a very tall message using the `Up`
   keyboard shortcut.
 - Improved integration URL construction interface for Git integrations.
@@ -517,7 +517,7 @@ _Released 2025-04-15_
 - Upgraded Python dependencies.
 - Updated translations.
 
-### Zulip Server 10.1
+### Doer Server 10.1
 
 _Released 2025-03-28_
 
@@ -536,7 +536,7 @@ _Released 2025-03-28_
 - Fixed Python virtual environments being incorrectly created
   referencing `/root/`, which could cause the upgrade tool or
   installer to fail.
-- Fixed instructions for upgrading to Ubuntu 24.04 on Zulip 10.x.
+- Fixed instructions for upgrading to Ubuntu 24.04 on Doer 10.x.
 - Fixed an exception upgrading to 10.x on servers that had previously
   hand-deleted users or realms from the database (not using the
   official management commands) in a way that leaked
@@ -558,14 +558,14 @@ _Released 2025-03-28_
 - Extended `nginx` configuration override support.
 - Updated translations.
 
-### Zulip Server 10.0
+### Doer Server 10.0
 
 _Released 2025-03-20_
 
 #### Highlights
 
 - Replaced the compact mode setting with flexible options for font
-  size and line spacing in the Zulip web app.
+  size and line spacing in the Doer web app.
 - Redesigned how channel messages without a topic work to be much
   nicer, displayed as a special _general chat_ topic.
 - Redesigned the left sidebar visually, adding convenient "New topic"
@@ -581,11 +581,11 @@ _Released 2025-03-20_
   it, or edit its membership. Permission for creating new groups is
   now separate from permission to administer all groups.
 - Invitation links and emails can now encode initial groups for a user.
-- Most permissions settings in Zulip have been reimplemented with a
+- Most permissions settings in Doer have been reimplemented with a
   new flexible system based on groups, and can have a value of any
   combination of roles, groups, and individual users. Groups can be
   nested as subgroups of other groups. Groups are now deactivated,
-  rather than being fully deleted, so Zulip's audit logs still
+  rather than being fully deleted, so Doer's audit logs still
   maintain a complete history of permissions changes.
 - Group settings were redesigned, with many new administration
   permissions, support for viewing deactivated groups, and a new
@@ -614,7 +614,7 @@ _Released 2025-03-20_
 - Significantly improved the performance of rendering message feeds in
   the web application, and improved client-side caching to allow
   instantly rendering most recently visited views.
-- When you link to a topic in Zulip, that link will now continue to
+- When you link to a topic in Doer, that link will now continue to
   work even when the topic is renamed, move to another channel, or
   resolved. The URL format references a specific message ID, allowing
   it to usually point to the correct location when a topic is split
@@ -644,7 +644,7 @@ _Released 2025-03-20_
 - Added new typing indicators for when someone is editing a message
   that you're viewing in the message feed.
 - Added a new 2-minute onboarding video focused on the basics of
-  navigating the Zulip interface. The feature comes with a setting
+  navigating the Doer interface. The feature comes with a setting
   allowing installations to self-host the video (or extend or replace
   it with their own site-specific content).
 
@@ -703,11 +703,11 @@ _Released 2025-03-20_
 - Added a new warning banner when mentioning a group, none of whose
   members will see the message being drafted.
 - Added a new warning banner for situations where a user has 50K+
-  unread messages and that caused Zulip to take them to the oldest
+  unread messages and that caused Doer to take them to the oldest
   recent unread, not the very oldest unread message, after someone
   replied to a months-old conversation.
 - Added informative new error output when attempting to load a data
-  export into a Zulip server running a different server version.
+  export into a Doer server running a different server version.
 - Added support for scheduling deletion of all data when deactivating
   an organization.
 - Added support for generating high resolution thumbnails of HEIC and
@@ -742,7 +742,7 @@ _Released 2025-03-20_
 - The GitHub webhook now has a flag to filter activity from private
   repositories. Fixed several bugs as well.
 - The `ignore_pull_requests` flag for the Travis CI integration was
-  removed in favor of Zulip's generic event-filtering support.
+  removed in favor of Doer's generic event-filtering support.
 - System bot avatars are now shipped with the server, instead of
   relying on Gravatar, and have been redesigned.
 - Removing the last subscriber from a channel no longer automatically
@@ -803,7 +803,7 @@ _Released 2025-03-20_
   been idle in recent months would be created with very few messages
   in their combined feed.
 - Fixed a nasty bug where messages could be marked as read when they
-  arrived onscreen at an unattended computer with Zulip focused.
+  arrived onscreen at an unattended computer with Doer focused.
 - Fixed several bugs involving clicking on message feed elements like
   mentions in drafts, scheduled messages, and preview send components.
 - Fixed a line-wrapping bug where punctuation could weirdly wrap to
@@ -870,8 +870,8 @@ _Released 2025-03-20_
 
 - This release contains many new features and usability improvements
   that you'll want to highlight for your users, especially if you've
-  disabled [Zulip
-  updates](https://zulip.com/help/configure-automated-notices#zulip-update-announcements)
+  disabled [Doer
+  updates](https://zulip.com/help/configure-automated-notices#doer-update-announcements)
   or pointed it at a private channel.
 - This release adds support for uploading arbitrarily large
   files. Because prior releases wrote the old default value of 25 (MB)
@@ -879,31 +879,31 @@ _Released 2025-03-20_
   during installation, you'll want to consider increasing that. The
   default value for new installations is 100. Since there is no
   technical limit, we recommend considering how much storage you
-  allocated to your Zulip instance and the policy question of how you
+  allocated to your Doer instance and the policy question of how you
   want to encourage your users to share videos or other very large
   files.
 - Installations using S3-compatible block storage services to store
-  Zulip's file uploads may require the new `S3_SKIP_CHECKSUM` setting,
-  added in Zulip Server 10.2. See [the
+  Doer's file uploads may require the new `S3_SKIP_CHECKSUM` setting,
+  added in Doer Server 10.2. See [the
   documentation](../production/upload-backends.md) for details.
 - The `SOCIAL_AUTH_SYNC_CUSTOM_ATTRS_DICT` setting is deprecated in favor of the
   more general `SOCIAL_AUTH_SYNC_ATTRS_DICT` setting structure, but still works in
   this release for a smooth upgrade experience. The new setting supports
-  synchronizing role, and otherwise functions like the old one, except Zulip
+  synchronizing role, and otherwise functions like the old one, except Doer
   custom profile fields are referred to with the prefix `custom__`. See the updated
   comment documentation in `/etc/zulip/settings.py` for details.
 - PostgreSQL 12 is no longer supported; if you are currently using it,
   you will need to [upgrade
   PostgreSQL](../production/upgrade.md#upgrading-postgresql) before
-  upgrading Zulip.
+  upgrading Doer.
 - This release contains about 120 database migrations, largely related
-  to the transition of all of Zulip's permissions to the new
+  to the transition of all of Doer's permissions to the new
   groups-based system. We expect all of them to go smoothly, but
   expect a relatively long upgrade.
 
-## Zulip Server 9.x series
+## Doer Server 9.x series
 
-### Zulip Server 9.4
+### Doer Server 9.4
 
 _Released 2025-01-16_
 
@@ -926,7 +926,7 @@ _Released 2025-01-16_
 - Updated python dependencies.
 - Updated translations.
 
-### Zulip Server 9.3
+### Doer Server 9.3
 
 _Released 2024-11-22_
 
@@ -959,7 +959,7 @@ _Released 2024-11-22_
 - Fixed certain Unicode characters being improperly escaped in email
   notifications.
 - Fixed performance when deleting thousands of messages at once.
-- Fixed previously-imported users who are invited to join Zulip using
+- Fixed previously-imported users who are invited to join Doer using
   the imported role rather than invitation's role.
 - Improved hardening of desktop app against hypothetical DOM
   clobbering attacks.
@@ -967,15 +967,15 @@ _Released 2024-11-22_
 - Updated Python dependencies.
 - Updated translations.
 
-### Zulip Server 9.2
+### Doer Server 9.2
 
 _Released 2024-09-12_
 
-- Fixed a bug where images uploaded before the upgrade to Zulip 9.x
+- Fixed a bug where images uploaded before the upgrade to Doer 9.x
   would not be previewed properly if linked in a new message. This
   change involves a database migration,
   `0576_backfill_imageattachment.py`, that may take a long time to run
-  on systems with many uploaded files. The Zulip server can be safely
+  on systems with many uploaded files. The Doer server can be safely
   started using `scripts/restart-server` while this migration is
   running.
 - Fixed size of EDITED/MOVED indicators when not using compact mode.
@@ -994,7 +994,7 @@ _Released 2024-09-12_
 - Added new `change_auth_backends` management command to recover after
   locking oneself out by disabling authentication methods.
 - Removed the `presence` queue worker, reducing memory requirements.
-- Improved rendering performance for the main Zulip message feed.
+- Improved rendering performance for the main Doer message feed.
 - Improved formatting for Jira integration comment notifications.
 - Improved layout for image loading indicators.
 - Updated AzureAD authentication backend to use the v2.0 API, which
@@ -1002,21 +1002,21 @@ _Released 2024-09-12_
 - Updated documentation for several webhook integrations.
 - Updated translations.
 
-### Zulip Server 9.1
+### Doer Server 9.1
 
 _Released 2024-08-02_
 
 - Clarified upgrade notes and installer error messages. Improved
   documentation to smooth the process of upgrading Ubuntu 20.04 to
-  22.04 before upgrading to Zulip 9.x. Installations currently running
-  Ubuntu 20.04 should first upgrade to the latest Zulip 8.x release,
-  and then follow the [Zulip host OS upgrade
+  22.04 before upgrading to Doer 9.x. Installations currently running
+  Ubuntu 20.04 should first upgrade to the latest Doer 8.x release,
+  and then follow the [Doer host OS upgrade
   instructions](../production/upgrade.md#upgrading-the-operating-system)
-  in preparation for upgrading to Zulip 9.x.
+  in preparation for upgrading to Doer 9.x.
 - Improved web and mobile app loading times and bandwidth usage by
   tuning API response compression and removing some unnecessary
   entropy in user object payloads.
-- Fixed how Zulip handles a GitHub quirk, to avoid duplicate
+- Fixed how Doer handles a GitHub quirk, to avoid duplicate
   notifications when pull request reviews are submitted.
 - Fixed a rare race condition that could cause uploaded images to be
   displayed as a perpetual loading spinner.
@@ -1030,15 +1030,15 @@ _Released 2024-08-02_
 - Updated documentation for a couple of integrations.
 - Updated translations.
 
-### Zulip Server 9.0
+### Doer Server 9.0
 
 _Released 2024-07-25_
 
 #### Highlights
 
 - Added support for Ubuntu 24.04, and dropped support for Ubuntu 20.04.
-- To make it easier to discover what’s new in Zulip, important product changes
-  are now announced via automated messages, which are shipped with the Zulip
+- To make it easier to discover what’s new in Doer, important product changes
+  are now announced via automated messages, which are shipped with the Doer
   server version that includes the new feature. See the upgrade notes for
   details.
 - To better match terminology familiar from other apps, “streams” have been
@@ -1048,12 +1048,12 @@ _Released 2024-07-25_
 - For clarity and consistency, three key message views that show multiple
   conversations at once are now labeled “Combined feed” (previously “All
   messages”), “Channel feed”, and “Direct message feed”.
-- To make reading more comfortable, Zulip has been redesigned with a larger font
+- To make reading more comfortable, Doer has been redesigned with a larger font
   size and line spacing. Because personal preferences vary, the previous design
   remains available via the compact mode setting.
 - Redesigned the main search with pills for search filters, making it easier to
   use.
-- When you paste content into the compose box, Zulip will now do its best to
+- When you paste content into the compose box, Doer will now do its best to
   preserve the formatting, including links, bulleted lists, bold, italics, and
   more. If you don’t need the formatting, you can undo it with `Ctrl+Z`, or
   paste as plain text.
@@ -1080,7 +1080,7 @@ _Released 2024-07-25_
   with a user setting to control the animation. (Previously uploaded
   images, and image previews of third-party links, continue to
   directly use the original image).
-- The onboarding experience has been redesigned to introduce core Zulip concepts
+- The onboarding experience has been redesigned to introduce core Doer concepts
   when they first become relevant.
 - Redesigned all popovers with a cleaner look, better icons, and improved screen
   reader accessibility.
@@ -1163,7 +1163,7 @@ _Released 2024-07-25_
 - Improved new-organization defaults for various permissions settings.
 - Improved how users are displayed in settings to use clickable user
   pills.
-- Improved the efficiency of Zulip's internal statistics system, both
+- Improved the efficiency of Doer's internal statistics system, both
   in terms of CPU and storage usage.
 - Improved topics used by the incoming email system for emails with an
   empty subject line.
@@ -1174,7 +1174,7 @@ _Released 2024-07-25_
   to the personal tab if one doesn't have channel admin permissions.
 - The left sidebar now displays the current conversation even when it
   contains no messages.
-- Improved performance/scalability of the Zulip server, including more
+- Improved performance/scalability of the Doer server, including more
   efficient algorithms for fetching message history and presence.
 - New incoming webhook integrations for Patreon and GitHub Sponsors,
   and reimplemented the Grafana integration. Removed integrations for
@@ -1188,7 +1188,7 @@ _Released 2024-07-25_
   real-time events documentation much more convenient.
 - Added new API endpoint to fetch an individual user's status.
 - Added support for showing the beta Flutter app in statistics.
-- Greatly improved the experience restarting a Zulip server under heavy load.
+- Greatly improved the experience restarting a Doer server under heavy load.
 - Fixed timeout/slowness issues rendering messages with dozens of
   LaTeX blocks.
 - Fixed several subtle bugs involving message feed scroll position.
@@ -1216,24 +1216,24 @@ _Released 2024-07-25_
 - ID fields on most database tables were converted from 32-bit to
   64-bit integers to future-proof the project.
 - Upgraded dependencies, including Django 5.0.
-- The great majority of the Zulip web application has been converted
+- The great majority of the Doer web application has been converted
   to TypeScript, fixing many subtle bugs.
 
 #### Upgrade notes for 9.0
 
 - Servers running Ubuntu 20.04 must [upgrade their operating system to Ubuntu
   22.04](../production/upgrade.md#upgrading-the-operating-system)
-  before upgrading to Zulip 9.0.
-- This release introduces a new [Zulip updates](https://zulip.com/help/configure-automated-notices#zulip-update-announcements) feature, which
+  before upgrading to Doer 9.0.
+- This release introduces a new [Doer updates](https://zulip.com/help/configure-automated-notices#doer-update-announcements) feature, which
   announces significant product changes and new features via automated
   messages to a configurable channel. Generally, these announcements will
   be sent automatically when upgrading to the new release. However, when
   you first upgrade to the 9.x series, they will be sent with a delay
   (explained in an automated direct message to organization administrators)
   to give time to potentially reconfigure which channel to use. You can
-  override the delay by running `./manage.py send_zulip_update_announcements --skip-delay`
+  override the delay by running `./manage.py send_doer_update_announcements --skip-delay`
   once you've done any necessary configuration updates.
-- We've reworked how Zulip's mobile push notifications service is
+- We've reworked how Doer's mobile push notifications service is
   configured to be easier to understand, more extensible, and avoid
   hardcoding URLs unnecessarily. The old settings names are fully
   supported with identical behavior, so no action is required before
@@ -1243,20 +1243,20 @@ _Released 2024-07-25_
   documentation][update-settings-docs], we recommend updating
   `/etc/zulip/settings.py` to use the modern settings names: Replacing
   `PUSH_NOTIFICATIONS_BOUNCER_URL = "https://push.zulipchat.com"` with
-  `ZULIP_SERVICE_PUSH_NOTIFICATIONS = True` and renaming
+  `DOER_SERVICE_PUSH_NOTIFICATIONS = True` and renaming
   `SUBMIT_USAGE_STATISTICS` to
-  `ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS`, if you have either of those
+  `DOER_SERVICE_SUBMIT_USAGE_STATISTICS`, if you have either of those
   settings enabled. It's important not to set both the old and new
   settings: The legacy settings will be ignored if the modern ones are
   present.
 
   The one minor functional change in this restructuring is that it is
-  now possible to configure sharing usage statistics with the Zulip
+  now possible to configure sharing usage statistics with the Doer
   developers without attempting to send mobile push notifications via
-  the service, by setting `ZULIP_SERVICE_PUSH_NOTIFICATIONS = False`
-  and `ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS=True`.
+  the service, by setting `DOER_SERVICE_PUSH_NOTIFICATIONS = False`
+  and `DOER_SERVICE_SUBMIT_USAGE_STATISTICS=True`.
 
-- The Zulip server now thumbnails uploaded images for faster loading
+- The Doer server now thumbnails uploaded images for faster loading
   and reduced bandwidth usage; note that only images uploaded after
   upgrading to 9.0 benefit from this feature at present. Previews of
   linked images/websites continue to use the original third-party
@@ -1267,18 +1267,18 @@ _Released 2024-07-25_
   setting was enabled, due to incompatibilities between its approach
   and the new thumbnailing system. The `THUMBNAIL_IMAGES` setting was
   part of the experimental Thumbor-based thumbnailing system, which
-  was offered as an option starting with Zulip 1.9.0 but removed 3
-  years ago in Zulip 4.0. We recommend using [this chat.zulip.org
+  was offered as an option starting with Doer 1.9.0 but removed 3
+  years ago in Doer 4.0. We recommend using [this chat.zulip.org
   thread][thumbor-remediation-topic] to discuss remediation options
   for this issue before upgrading to 9.0 if you believe your
   installation may have used this setting.
 - We're aware of a slow memory leak in the new image thumbnailing
   queue worker. The leak is slow enough that for most installations,
-  this is managed fully by the weekly server restart that Zulip does
+  this is managed fully by the weekly server restart that Doer does
   to manage memory leak risk. Installations with very little free
   memory that use a lot of images should consider adding a couple
   gigabytes of swap before upgrading to avoid memory pressure.
-- The Zulip server now contains a KaTeX server worker, designed to
+- The Doer server now contains a KaTeX server worker, designed to
   make bulk-rendering LaTeX efficient. It has minimal memory
   footprint, but can be disabled using the `katex_server` [deployment
   option](../production/system-configuration.md) on very low memory
@@ -1286,13 +1286,13 @@ _Released 2024-07-25_
 - This release contains some potentially slow database migrations for
   installations with thousands of users, especially
   `0544_copy_avatar_images`, which re-thumbnails every uploaded avatar
-  using Zulip's new image-processing pipeline.
+  using Doer's new image-processing pipeline.
 
 [thumbor-remediation-topic]: https://chat.zulip.org/#narrow/channel/31-production-help/topic/THUMBNAIL_IMAGES.20remediation
 
-## Zulip Server 8.x series
+## Doer Server 8.x series
 
-### Zulip Server 8.5
+### Doer Server 8.5
 
 _Released 2024-07-31_
 
@@ -1301,8 +1301,8 @@ _Released 2024-07-31_
   annual problem with expired GPG signatures.
 - Improved documentation for upgrading the Ubuntu version.
 - Fixed `manage.py register_server --rotate-key` crashing without
-  having written its secrets if the `zulip` user had permission to write
-  to `/etc/zulip/zulip-secrets.conf`, but not its parent directory.
+  having written its secrets if the `doer` user had permission to write
+  to `/etc/zulip/doer-secrets.conf`, but not its parent directory.
 - Fixed client-provided HTTP authentication headers being incorrectly
   forwarded in S3 requests, causing authentication errors.
 - Removed the Gitter data import tool (Gitter no longer exports data
@@ -1310,7 +1310,7 @@ _Released 2024-07-31_
 - Upgraded Python dependencies.
 - Updated translations.
 
-### Zulip Server 8.4
+### Doer Server 8.4
 
 _Released 2024-05-09_
 
@@ -1338,7 +1338,7 @@ _Released 2024-05-09_
 - Notices indicating that “push notifications are not working” are now
   considerably more robust to temporary networking failures reaching the mobile
   push notifications service.
-- Improved startup time of Zulip services by only performing configuration
+- Improved startup time of Doer services by only performing configuration
   checks once, rather than in every service at startup.
 - Improved how timeouts function in potentially long-running requests.
 - Added checks that `./manage.py register_server --rotate-key` can edit the
@@ -1351,7 +1351,7 @@ _Released 2024-05-09_
 - Upgraded Python dependencies.
 - Updated translations.
 
-### Zulip Server 8.3
+### Doer Server 8.3
 
 _Released 2024-03-19_
 
@@ -1368,7 +1368,7 @@ _Released 2024-03-19_
 - Added the ability to store
   [incremental database backups](../production/system-configuration.md#backups_incremental).
 - Improved performance of bulk-moving messages between streams by ~2x.
-- Streamlined documentation for the Zulip server installer.
+- Streamlined documentation for the Doer server installer.
 - Fixed the “Topics are required for this organization” pop-up incorrectly
   closing on some keypresses.
 - Fixed the analytics cron job leaking its lock if unexpectedly interrupted
@@ -1376,12 +1376,12 @@ _Released 2024-03-19_
 - Fixed sorting by expiration date in the “Invites” settings panel.
 - Fixed the gear menu staying open after clicking on “plan management”.
 - Fixed a small visual issue with bot icons in the left sidebar DM section.
-- Fixed installation with an existent but empty `zulip` database.
+- Fixed installation with an existent but empty `doer` database.
 - Backported various developer tooling improvements.
 - Upgraded dependencies.
 - Updated translations, including new translations for Gujarati and Greek.
 
-### Zulip Server 8.2
+### Doer Server 8.2
 
 _Released 2024-02-16_
 
@@ -1404,11 +1404,11 @@ _Released 2024-02-16_
 - Upgraded dependencies.
 - Updated translations.
 
-### Zulip Server 8.1
+### Doer Server 8.1
 
 _Released 2024-01-24_
 
-- CVE-2024-21630: Zulip version 8.0 and its betas had a bug affecting
+- CVE-2024-21630: Doer version 8.0 and its betas had a bug affecting
   an unlikely permissions configuration where some user roles had
   permission to create reusable invitation links to join the
   organization, but lacked the permission to subscribe other users to
@@ -1418,7 +1418,7 @@ _Released 2024-01-24_
   invitations, not single-user invites.
 - Fixed a fault-tolerance bug, where failing outgoing email
   authentication could cause other queue workers to not progress
-  properly on low-memory Zulip servers.
+  properly on low-memory Doer servers.
 - Added support for using PostgreSQL 16 as the database. See the
   [PostgreSQL upgrade
   documentation](../production/upgrade.md#upgrading-postgresql) if
@@ -1443,7 +1443,7 @@ _Released 2024-01-24_
 - Fixed minor UI bugs with the new compose box buttons.
 - Fixed minor UI bugs with limiting guest user access to other users.
 - Fixed incorrect alert words color in the dark theme.
-- Fixed a few subtle bugs with the Zulip plan management login flow.
+- Fixed a few subtle bugs with the Doer plan management login flow.
 - Fixed a live-update bug involving user statuses enabled via the API.
 - Fixed a configuration problem preventing the logrotate service from
   starting.
@@ -1457,7 +1457,7 @@ _Released 2024-01-24_
 - Improved in-app documentation for following topics.
 - Backported several documentation improvements.
 
-### Zulip Server 8.0
+### Doer Server 8.0
 
 _Released 2023-12-15_
 
@@ -1491,7 +1491,7 @@ _Released 2023-12-15_
   new redesigned menus: A help menu, a personal/avatar menu, and a
   more focused gear menu.
 - Added thumbnails and lightbox player support for video links and
-  video files uploaded directly in Zulip. Previously, Zulip only
+  video files uploaded directly in Doer. Previously, Doer only
   supported this for videos hosted by third-party platforms that
   provide an embedded player, like YouTube and Vimeo.
 - The compose area was redesigned, with new formatting buttons for
@@ -1582,7 +1582,7 @@ _Released 2023-12-15_
   processing requests that match the format for an integration but
   where the specific event type is not implemented.
 - New /health health check endpoint designed for reverse proxies in
-  front of the Zulip server.
+  front of the Doer server.
 - Rewrote all popovers, fixing many bugs involving positioning, mobile
   web UI, and keyboard navigation.
 - Rewrote message feed layout using CSS grid, fixing many subtle
@@ -1627,7 +1627,7 @@ _Released 2023-12-15_
   `0485_alter_usermessage_flags_and_add_index.py`, and
   `0486_clear_old_data_for_unused_usermessage_flags.py`. Migration
   `0486`, in particular, cleans up stale that should only be present
-  on Zulip servers that were originally installed with Zulip 1.3.x or
+  on Doer servers that were originally installed with Doer 1.3.x or
   older. If your server has millions of messages, plan for the
   migrations in this release to take 15 minutes or more to complete.
 - Minor: User group names starting with `@`, `role:`, `user:`, and
@@ -1643,26 +1643,26 @@ _Released 2023-12-15_
 
 [mobile-push-metadata]: ../production/mobile-push-notifications.md#uploading-usage-statistics
 
-## Zulip Server 7.x series
+## Doer Server 7.x series
 
-### Zulip Server 7.5
+### Doer Server 7.5
 
 _Released 2023-11-16_
 
 - CVE-2023-47642: Invalid metadata access for formerly subscribed streams.
-  It was discovered by the Zulip development team that active users who had
+  It was discovered by the Doer development team that active users who had
   previously been subscribed to a stream incorrectly continued being able to use
-  the Zulip API to access metadata for that stream. As a result, users who had
+  the Doer API to access metadata for that stream. As a result, users who had
   been removed from a stream, but still had an account in the organization,
   could still view metadata for that stream (including the stream name,
   description, settings, and an email address used to send emails into the
   stream via the incoming email integration). This potentially allowed users to
   see changes to a stream’s metadata after they had lost access to the stream.
-  This bug was present in all Zulip releases prior to Zulip Server 7.5.
+  This bug was present in all Doer releases prior to Doer Server 7.5.
 - Fixed a bug where [backups](../production/export-and-import.md#backups) might
   be written using `postgresql-client-16`, which could not be straightforwardly
-  restored into a Zulip instance, as the format is not backwards-compatible, and
-  Zulip does not yet support PostgreSQL 16.
+  restored into a Doer instance, as the format is not backwards-compatible, and
+  Doer does not yet support PostgreSQL 16.
 - Renamed the `reactivate_stream` management command to `unarchive_stream`, to
   match terminology in the app, and [documented
   it](https://zulip.com/help/archive-a-channel#unarchiving-archived-channels).
@@ -1673,7 +1673,7 @@ _Released 2023-11-16_
 - Improved error messages for subdomains being reserved versus being in use.
 - Upgraded Python dependencies.
 
-### Zulip Server 7.4
+### Doer Server 7.4
 
 _Released 2023-09-15_
 
@@ -1683,14 +1683,14 @@ _Released 2023-09-15_
 - Fixed a bug in the reverse proxy misconfiguration warnings
   introduced in 7.2.
 - Fixed a bug causing some exception report emails generated by the
-  Zulip server to be unpleasantly verbose.
+  Doer server to be unpleasantly verbose.
 - Fixed the compose area “Enter sends” configuration incorrectly
   advertising “Enter” instead of “Return” on macOS systems.
 - Fixed a CSS bug in the password reset form introduced in 7.3.
 - Improved troubleshooting guide discussion of restarting services.
 - Upgrade dependencies.
 
-### Zulip Server 7.3
+### Doer Server 7.3
 
 _Released 2023-08-25_
 
@@ -1700,15 +1700,15 @@ _Released 2023-08-25_
   organization permissions allowed these actions. For example, a user may have
   still been able to edit or delete their old messages they had posted in such a
   private stream.
-- Fixed a bug, introduced in Zulip Server 7.0, which would cause uploaded files
+- Fixed a bug, introduced in Doer Server 7.0, which would cause uploaded files
   attached to some messages to be mistakenly deleted after some, but not all,
   messages linking to the uploaded file were deleted by the user. See our
   [blog post](https://blog.zulip.com/2023/08/25/uploaded-file-data-loss-incident/) for more details.
-- Fixed a bug, introduced in Zulip Server 7.2 in the
+- Fixed a bug, introduced in Doer Server 7.2 in the
   [operating system upgrade process](../production/upgrade.md#upgrading-the-operating-system),
   which would cause errors of the form
   `venv was not set up for this Python version`.
-- Fixed a bug, introduced in Zulip Server 7.2, when the
+- Fixed a bug, introduced in Doer Server 7.2, when the
   [email gateway](../production/email-gateway.md)
   was used in conjunction with a
   [reverse proxy](../production/reverse-proxies.md).
@@ -1717,7 +1717,7 @@ _Released 2023-08-25_
   [moving](https://zulip.com/help/move-content-to-another-topic) long topics.
 - Fixed bad rendering of stream links in
   [stream descriptions](https://zulip.com/help/change-the-channel-description).
-- Fixed broken and misaligned images in Zulip welcome emails.
+- Fixed broken and misaligned images in Doer welcome emails.
 - Fixed YouTube video previews to be ordered in the order they are linked, not
   reverse order.
 - Upgraded Python requirements.
@@ -1732,19 +1732,19 @@ _Released 2023-08-25_
   [Sentry integration](../subsystems/logging.md#sentry-error-logging).
 - Updated the
   [data export tool](../production/export-and-import.md#data-export)
-  to handle bots created in very early versions of Zulip Server.
+  to handle bots created in very early versions of Doer Server.
 - Fixed a bug with the
   [data export tool](../production/export-and-import.md#data-export)
   and deleted users in group DMs.
 - Added a `./manage.py reactivate-stream` command to reactivate archived
   streams.
 - Fixed links in the documentation to
-  [Modify Zulip](../production/modify.md)
+  [Modify Doer](../production/modify.md)
   and
-  [Upgrade Zulip](../production/upgrade.md)
+  [Upgrade Doer](../production/upgrade.md)
   pages.
 - Linked the documentation on how to
-  [host multiple Zulip](../production/multiple-organizations.md)
+  [host multiple Doer](../production/multiple-organizations.md)
   organizations on one server.
 - Fixed missing images in documentation for the
   [“XKCD” bot](https://zulip.com/integrations/xkcd).
@@ -1759,7 +1759,7 @@ _Released 2023-08-25_
   section, and explain how to do that.
 - Reformatted Changelog.
 
-### Zulip Server 7.2
+### Doer Server 7.2
 
 _Released 2023-07-05_
 
@@ -1791,13 +1791,13 @@ _Released 2023-07-05_
   [nameservers in the nginx configuration](../production/system-configuration.md#nameserver).
 - Updated translations.
 
-[proxies]: ../production/reverse-proxies.md#configuring-zulip-to-trust-proxies
+[proxies]: ../production/reverse-proxies.md#configuring-doer-to-trust-proxies
 
-### Zulip Server 7.1
+### Doer Server 7.1
 
 _Released 2023-06-13_
 
-- Added checks to check that Zulip is being installed on a
+- Added checks to check that Doer is being installed on a
   [supported CPU and OS architecture](../production/requirements.md).
 - Improved error-handling around the
   [`upgrade-postgresql`](../production/upgrade.md#upgrading-postgresql)
@@ -1819,13 +1819,13 @@ _Released 2023-06-13_
 - Updated translations, including new translations for Luri (Bakhtiari),
   Brazilian Portuguese, and Tagalog.
 
-### Zulip Server 7.0
+### Doer Server 7.0
 
 _Released 2023-05-31_
 
 #### Highlights
 
-- Many significant visual changes as part of Zulip's ongoing redesign
+- Many significant visual changes as part of Doer's ongoing redesign
   project, including message feed headers, background color, mention
   colors, dates and times, compose box banners, icons, and
   tooltips. Many further improvements are planned for future releases.
@@ -1837,7 +1837,7 @@ _Released 2023-05-31_
   nicer stream picker, and the ability to switch between stream and
   private messages.
 - Numerous improvements to the help center, including documentation
-  for how to complete many common tasks in the Zulip mobile apps.
+  for how to complete many common tasks in the Doer mobile apps.
 - Redesigned the interface and permissions model for moving topics to
   be independent from message content editing, providing a cleaner
   experience and better configurability.
@@ -1854,9 +1854,9 @@ _Released 2023-05-31_
 
 #### Full feature changelog
 
-- Added full support for using JWT authentication to integrate Zulip
+- Added full support for using JWT authentication to integrate Doer
   with another application.
-- Added support for SAML Single-Logout initiated by the Zulip server
+- Added support for SAML Single-Logout initiated by the Doer server
   (SP-initiated Single Logout).
 - Added new stream setting controlling which users can remove other
   subscribers from the stream.
@@ -1906,7 +1906,7 @@ _Released 2023-05-31_
 - Improved the web application's main loading indicator.
 - Improved the visuals of todo and poll widgets.
 - Improved the content of onboarding emails.
-- Improved default for whether to include the Zulip realm name in
+- Improved default for whether to include the Doer realm name in
   the subject line of email notifications.
 - Improved rendering format for emoji inside headings.
 - Improved performance of rendering message views.
@@ -1929,11 +1929,11 @@ _Released 2023-05-31_
 - Fixed several error handling issues with the data export process.
 - Fixed several subtle issues affecting certain container runtimes.
 - Added support for configurable hooks to be run when upgrading the
-  Zulip server.
+  Doer server.
 - Added support for using TLS to secure the RabbitMQ connection.
-- The Zulip API now includes a `ignored_parameters_unsupported` field
+- The Doer API now includes a `ignored_parameters_unsupported` field
   to help client developers debug when they are attempting to use a
-  parameter that the Zulip server does not support.
+  parameter that the Doer server does not support.
 - Migrated web application error reporting to use Sentry.
 - Significant portions of the original Bootstrap CSS framework have
   been deleted. This is an ongoing project.
@@ -1951,7 +1951,7 @@ _Released 2023-05-31_
   size of the server's cache if they have a large deploy; see the
   [documentation](../production/upload-backends.md#s3-local-caching).
 - Removed the `application_server.no_serve_uploads` setting in
-  `/etc/zulip/zulip.conf`, as all uploads requests go through Zulip now.
+  `/etc/zulip/doer.conf`, as all uploads requests go through Doer now.
 - Installations using the previously undocumented [JWT authentication
   feature](../production/authentication-methods.md#json-web-tokens-jwt) will
   need to make minor adjustments in the format of JWT requests; see the
@@ -1971,29 +1971,29 @@ _Released 2023-05-31_
   following this upgrade.
 - PostgreSQL 11 is no longer supported; if you are currently using it, you will
   need to [upgrade PostgreSQL](../production/upgrade.md#upgrading-postgresql)
-  before upgrading Zulip.
-- Installations that deploy Zulip behind a [reverse proxy][reverse-proxy-docs]
+  before upgrading Doer.
+- Installations that deploy Doer behind a [reverse proxy][reverse-proxy-docs]
   should make sure the proxy is configured to set the `X-Forwarded-Proto` HTTP
   header, and that [`loadbalancer.ips` is accurate][loadbalancer-ips] for the
   reverse proxy's IP; the documentation has updated its example configurations.
-- Zulip's Twitter preview integration has been disabled due to Twitter
+- Doer's Twitter preview integration has been disabled due to Twitter
   desupporting the API that it relied on.
 
 [reverse-proxy-docs]: ../production/reverse-proxies.md
-[loadbalancer-ips]: ../production/reverse-proxies.md#configuring-zulip-to-trust-proxies
+[loadbalancer-ips]: ../production/reverse-proxies.md#configuring-doer-to-trust-proxies
 
-## Zulip Server 6.x series
+## Doer Server 6.x series
 
-### Zulip Server 6.2
+### Doer Server 6.2
 
 _Released 2023-05-19_
 
 - CVE-2023-28623: Fixed a vulnerability that would allow users to sign up for a
-  Zulip Server account with an unauthorized email address, despite the server
+  Doer Server account with an unauthorized email address, despite the server
   being configured to require that email addresses be in LDAP. Specifically, if
   the organization permissions don't require invitations to join, and the only
-  configured authentication backends were `ZulipLDAPAuthBackend` and some other
-  external authentication backend (any aside from `ZulipLDAPAuthBackend` and
+  configured authentication backends were `DoerLDAPAuthBackend` and some other
+  external authentication backend (any aside from `DoerLDAPAuthBackend` and
   `EmailAuthBackend`), then an unprivileged remote attacker could have created a
   new account in the organization with an arbitrary email address in their
   control that was not in the organization's LDAP directory.
@@ -2008,7 +2008,7 @@ _Released 2023-05-19_
   [stream invitation policy](https://zulip.com/help/configure-who-can-invite-to-channels).
 - Fixed a bug that could cause duplicate push notifications when using the
   mobile push notifications service.
-- Fixed several bugs in the Zulip server and PostgreSQL version upgrade
+- Fixed several bugs in the Doer server and PostgreSQL version upgrade
   processes.
 - Fixed multiple Recent conversations display bugs for private message
   conversations.
@@ -2024,18 +2024,18 @@ _Released 2023-05-19_
 - Fixed GPG check error handling for PGroonga apt repository.
 - Documented how to manage email address changes when using the LDAP backend.
 - Documented how to use SMTP without authentication.
-- Documented that the Zulip mobile/desktop apps now only support Zulip Server
+- Documented that the Doer mobile/desktop apps now only support Doer Server
   4.0 and newer (released 22 months ago), following our 18-month support policy.
-- Extracted the documentation on modifying Zulip to a dedicated page.
+- Extracted the documentation on modifying Doer to a dedicated page.
 - Added a new `send_welcome_bot_message` management command, to allow the
   sysadmin to send Welcome Bot messages manually after a data import.
 - Added new `RABBITMQ_USE_TLS` and `RABBITMQ_PORT` settings for installations
   wanting to configure the RabbitMQ connection with a remote RabbitMQ host.
 - Added a new `timesync` deployment option to allow installations to override
-  Zulip’s default of `chrony` for time synchronization.
+  Doer’s default of `chrony` for time synchronization.
 - Upgraded dependencies for security and bug fixes.
 
-### Zulip Server 6.1
+### Doer Server 6.1
 
 _Released 2023-01-23_
 
@@ -2053,7 +2053,7 @@ _Released 2023-01-23_
 - Fixed an unhandled exception when displaying user cards if the current user
   has an invalid timezone configured.
 - Fixed a subtle interaction bug with the compose box preview widget.
-- Added a workaround for a bug in Chromium affecting older versions of the Zulip
+- Added a workaround for a bug in Chromium affecting older versions of the Doer
   desktop app that would cause horizontal lines to appear between messages.
 - Stopped clipping the tops of tall characters in stream and topic names.
 - Use internationalized form of “at” in message timestamps.
@@ -2069,7 +2069,7 @@ _Released 2023-01-23_
 - Updated the Intercom integration to return success on `HEAD`
   requests, which it uses to verify its configuration.
 - Documented how each [rate
-  limit](../production/securing-your-zulip-server.md#6-understand-zulips-rate-limiting-system)
+  limit](../production/securing-your-doer-server.md#6-understand-zulips-rate-limiting-system)
   category is used.
 - Documented the `reset_authentication_attempt_count` command for when users
   lock themselves out.
@@ -2092,7 +2092,7 @@ _Released 2023-01-23_
   server error, if an invalid “invite as” value was given.
 - Renamed internal exceptions to end with `Error`.
 
-### Zulip Server 6.0
+### Doer Server 6.0
 
 _Released 2022-11-17_
 
@@ -2132,8 +2132,8 @@ _Released 2022-11-17_
   skip the login page by default, support switching themes and
   languages, and add many other UI improvements.
 - Incoming webhook integrations now support filtering which classes of events
-  are sent into Zulip; this can be invaluable when the third-party service
-  doesn't support configuring which events to send to Zulip.
+  are sent into Doer; this can be invaluable when the third-party service
+  doesn't support configuring which events to send to Doer.
 - Added support for Ubuntu 22.04.
 - Removed support for Debian 10 and PostgreSQL 10 due to their
   approaching end-of-life upstream.
@@ -2152,19 +2152,19 @@ _Released 2022-11-17_
   display user IDs, which can be important when using the API. Users
   can now administer bot stream subscriptions from the bot's full
   profile.
-- Redesigned the gear menu to display basic details about the Zulip
+- Redesigned the gear menu to display basic details about the Doer
   organization, server, and its version.
 - Redesigned several organization settings pages to have more
   consistent design.
-- Redesigned the footer for self-hosted Zulip servers. The footer now has just a
+- Redesigned the footer for self-hosted Doer servers. The footer now has just a
   few key links, rather than being almost identical to the footer for the
   zulip.com website.
-- Redesigned the 500 error pages for self-hosted Zulip servers to be
-  clearer and link to the Zulip server troubleshooting guide.
+- Redesigned the 500 error pages for self-hosted Doer servers to be
+  clearer and link to the Doer server troubleshooting guide.
 - Redesigned the interface for configuring message editing and
   deletion permissions to be easier to understand.
 - Added support for emoji added in unicode versions since 2017, which
-  had previously been unavailable in Zulip. Users using the deprecated
+  had previously been unavailable in Doer. Users using the deprecated
   "Google blobs" emoji set are automatically migrated to the modern
   "Google" emoji set. The "Google blobs" emoji set remains available
   for users who prefer it, with any new emoji that were added to the
@@ -2176,15 +2176,15 @@ _Released 2022-11-17_
 - Added new summary statistics on the organization analytics
   page. Fixed several bugs with the display of analytics graphs.
 - Added support for administrators sending a final email to a user as
-  part of deactivating their Zulip account.
+  part of deactivating their Doer account.
 - Added API endpoint to get a single stream by ID.
 - Added beta support for user groups to have subgroups, and for some
   permissions settings to be managed using user groups. Over the
-  coming releases, we plan to migrate all Zulip permissions settings
+  coming releases, we plan to migrate all Doer permissions settings
   to be based on this more flexible groups-based system. We currently
   expect this migration to be fully backwards-compatible.
 - Added a new compliance export management command.
-- Zulip's automated emails use the `X-Auto-Response-Suppress` header
+- Doer's automated emails use the `X-Auto-Response-Suppress` header
   to reduce auto-responder replies.
 - Changed various icons to be more intuitive. The bell-based icon for
   muted topics has been replaced by a more standard muted speaker icon.
@@ -2234,7 +2234,7 @@ _Released 2022-11-17_
 - Reordered the organization settings panels to be more intuitive.
 - Increased timeout for processing slow requests from 20s to 60s.
 - Removed the "user list in left sidebar in narrow windows" setting.
-- Removed limits that prevented replying to Zulip email notifications multiple
+- Removed limits that prevented replying to Doer email notifications multiple
   times or, several days after receiving them.
 - Fixed numerous bugs and performance issues with the Rocket.Chat data
   import tool. Improved importing emoji from Slack.
@@ -2246,7 +2246,7 @@ _Released 2022-11-17_
   with requests after the computer wakes up from suspend.
 - Fixed a bug where public streams imported from other chat systems
   could incorrectly be configured as public streams without shared
-  history, a configuration not otherwise possible in Zulip.
+  history, a configuration not otherwise possible in Doer.
 - Fixed several subtle bugs involving editing custom profile field
   configuration.
 - Fixed several bugs involving compose box keyboard shortcuts.
@@ -2257,7 +2257,7 @@ _Released 2022-11-17_
 - Fixed entering an emoji in the mobile web app using an emoji
   keyboard.
 - Fixed Enter being processed incorrectly when inputting a character
-  into Zulip phonetically via an IME composing session.
+  into Doer phonetically via an IME composing session.
 - Fixed several subtle bugs with confirmation links.
 - Fixed a subtle performance issue for full-text search for uncommon words.
 - Fixed the estimator for the size of public data exports.
@@ -2273,12 +2273,12 @@ _Released 2022-11-17_
 
 #### Upgrade notes for 6.0
 
-- Installations using [docker-zulip][docker-zulip] will need to [upgrade
-  PostgreSQL][docker-zulip-upgrade-database] before upgrading to Zulip
+- Installations using [docker-doer][docker-doer] will need to [upgrade
+  PostgreSQL][docker-doer-upgrade-database] before upgrading to Doer
   6.0, because the previous default of PostgreSQL 10 is no longer
   supported by this release.
 - Installations using the AzureAD authentication backend will need to
-  update `/etc/zulip/zulip-secrets.conf` after upgrading. The
+  update `/etc/zulip/doer-secrets.conf` after upgrading. The
   `azure_oauth2_secret` secret was renamed to
   `social_auth_azuread_oauth2_secret`, to match our other external
   authentication methods.
@@ -2291,22 +2291,22 @@ _Released 2022-11-17_
 - Custom profile fields with "Pronouns" in their name and the "short
   text" field type were converted to the new "Pronouns" field type.
 
-[docker-zulip-upgrade-database]: https://github.com/zulip/docker-zulip/#upgrading-zulipzulip-postgresql-to-14
+[docker-doer-upgrade-database]: https://github.com/doer/docker-doer/#upgrading-zulipzulip-postgresql-to-14
 
-## Zulip Server 5.x series
+## Doer Server 5.x series
 
-### Zulip Server 5.7
+### Doer Server 5.7
 
 _Released 2022-11-16_
 
 - CVE-2022-41914: Fixed the verification of the SCIM account
-  management bearer tokens to use a constant-time comparator. Zulip
+  management bearer tokens to use a constant-time comparator. Doer
   Server 5.0 through 5.6 checked SCIM bearer tokens using a comparator
   that did not run in constant time. For organizations with SCIM
   account management enabled, this bug theoretically allowed an
   attacker to steal the SCIM bearer token, and use it to read and
-  update the Zulip organization’s user accounts. In practice, this
-  vulnerability may not have been practical or exploitable. Zulip
+  update the Doer organization’s user accounts. In practice, this
+  vulnerability may not have been practical or exploitable. Doer
   Server installations which have not explicitly enabled SCIM are not
   affected.
 - Fixed an error with deactivating users with `manage.py sync_ldap_user_data`
@@ -2319,25 +2319,25 @@ _Released 2022-11-16_
   notifications service fails.
 - Upgraded Python requirements.
 
-### Zulip Server 5.6
+### Doer Server 5.6
 
 _Released 2022-08-24_
 
 - CVE-2022-36048: Change the Markdown renderer to only rewrite known
   local links as relative links, rather than rewriting all local
-  links. This fix also protects against a vulnerability in the Zulip
+  links. This fix also protects against a vulnerability in the Doer
   mobile app (CVE-2022-35962).
 - Added hardening against timing attacks to an internal authentication check.
 - Improved documentation for hosting multiple organizations on a server.
 - Updated dependencies.
 - Updated translations.
 
-### Zulip Server 5.5
+### Doer Server 5.5
 
 _Released 2022-07-21_
 
 - CVE-2022-31168: Fix authorization check for changing bot roles. Due
-  to an incorrect authorization check in Zulip Server 5.4 and all prior
+  to an incorrect authorization check in Doer Server 5.4 and all prior
   releases, a member of an organization could craft an API call that
   would grant organization administrator privileges to one of their bots.
 - Added new options to the `restore-backup` tool to simplify restoring
@@ -2345,7 +2345,7 @@ _Released 2022-07-21_
 - Updated translations, including major updates to the Mongolian and
   Serbian translations.
 
-### Zulip Server 5.4
+### Doer Server 5.4
 
 _Released 2022-07-11_
 
@@ -2357,9 +2357,9 @@ _Released 2022-07-11_
   ranges.
 - Documented an explicit list of supported CPU architectures.
 - Switched `html2text` to run as a subprocess, rather than a Python
-  module, as its GPL license is not compatible with Zulip’s.
+  module, as its GPL license is not compatible with Doer’s.
 - Replaced `markdown-include` python module with a reimplementation,
-  as its GPL license is not compatible with Zulip’s.
+  as its GPL license is not compatible with Doer’s.
 - Relicensed as GPL the `tools/check-thirdparty` developer tool which
   verifies third-party licenses, due to a GPL dependency by way of
   `python-debian`.
@@ -2367,16 +2367,16 @@ _Released 2022-07-11_
   arriving at exactly the same time as request causing server errors.
 - Added a tool to help automate more of the release process.
 
-### Zulip Server 5.3
+### Doer Server 5.3
 
 _Released 2022-06-21_
 
 - CVE-2022-31017: Fixed message edit event exposure in
   protected-history streams.
-  Zulip allows a stream to be configured as [private with protected
+  Doer allows a stream to be configured as [private with protected
   history](https://zulip.com/help/channel-permissions#private-channels),
   which means that new subscribers should only see messages sent after
-  they join. However, due to a logic bug in Zulip Server 2.1.0 through
+  they join. However, due to a logic bug in Doer Server 2.1.0 through
   5.2, when a message was edited, the server would incorrectly send an
   API event that included both the edited and old content of the
   message to all of the stream’s current subscribers, regardless of
@@ -2390,9 +2390,9 @@ _Released 2022-06-21_
 - Upgraded the asynchronous request handling to use Tornado 6.
 - Fixed a crash when displaying the error message for a failed attempt
   to create a stream.
-- Optimized the steps during `upgrade-zulip`, to reduce the amount of
+- Optimized the steps during `upgrade-doer`, to reduce the amount of
   server downtime.
-- Added a `--skip-restart` flag to `upgrade-zulip` which prepares the
+- Added a `--skip-restart` flag to `upgrade-doer` which prepares the
   new version, but does not restart the server into it.
 - Stopped mirroring the entire remote Git repository directly into
   `/srv/zulip.git`. This mirroring removed local branches and confused
@@ -2406,19 +2406,19 @@ _Released 2022-06-21_
 - Fixed the nginx configuration to include the default system-level
   nginx modules.
 - Only attempt to fix the `certbot` SSL renewal configuration if HTTPS
-  is enabled; this addresses a regression in Zulip Server 5.2, where
+  is enabled; this addresses a regression in Doer Server 5.2, where
   the upgrade would fail if an improperly configured certificate
   existed, but was both expired and not in use.
 - Improved proxy and database backup documentation.
 
-### Zulip Server 5.2
+### Doer Server 5.2
 
 _Released 2022-05-03_
 
 - Fixed a performance regression in the UI, introduced in 5.0, when
   opening the compose box.
 - Fixed a bug which could intermittently cause URL previews to fail,
-  if Zulip was being run in Docker or in low-memory environments.
+  if Doer was being run in Docker or in low-memory environments.
 - Fixed an issue which would cause PostgreSQL 10 and PostgreSQL 11 to
   attempt to write each WAL log to S3, even if S3 WAL
   backups/replication were not configured.
@@ -2433,7 +2433,7 @@ _Released 2022-05-03_
   explicitly set to empty.
 - Fixed incomplete tracebacks when timeouts happen during Markdown
   rendering.
-- Fixed some older versions of Zulip Server not being considered when
+- Fixed some older versions of Doer Server not being considered when
   comparing for the likely original version of `settings.py`.
 - Stopped using the `database_password` if it is set but
   `database_user` is not.
@@ -2445,17 +2445,17 @@ _Released 2022-05-03_
   `zerver/actions/`. This non-functional change was backported to
   ensure it remains easy to backport other changes.
 - Updated documentation to reflect that current mobile apps are only
-  guaranteed to be compatible with Zulip Server 3.0 and later; they
+  guaranteed to be compatible with Doer Server 3.0 and later; they
   may also work with earlier versions, with a degraded experience.
 
-### Zulip Server 5.1
+### Doer Server 5.1
 
 _Released 2022-04-01_
 
 - Fixed upgrade bug where preexisting animated emoji would still
   always animate in statuses.
 - Improved check that prevents servers from accidentally downgrading,
-  to not block upgrading servers that originally installed Zulip
+  to not block upgrading servers that originally installed Doer
   Server prior to mid-2017.
 - Fixed email address de-duplication in Slack imports.
 - Prevented an extraneous scrollbar when a notification banner was
@@ -2470,7 +2470,7 @@ _Released 2022-04-01_
   but would immediately be logged out.
 - Updated translations.
 
-### Zulip Server 5.0
+### Doer Server 5.0
 
 _Released 2022-03-29_
 
@@ -2493,7 +2493,7 @@ _Released 2022-03-29_
   inserting global times into your message.
 - Redesigned "Stream settings" to be much more usable, with separate
   tabs for personal settings, global settings, and membership, and
-  more consistent style with the rest of Zulip's settings.
+  more consistent style with the rest of Doer's settings.
 - Stream creation was redesigned with a much cleaner interface,
   especially for selecting initial subscribers.
 - Redesigned "Full user profile" widget to show the user's stream and
@@ -2521,7 +2521,7 @@ _Released 2022-03-29_
   user database.
 - Added support for installation on ARM platforms (including Mac M1).
 - Removed support for Ubuntu 18.04, which no longer receives upstream
-  security support for key Zulip dependencies.
+  security support for key Doer dependencies.
 
 #### Upgrade notes for 5.0
 
@@ -2535,14 +2535,14 @@ _Released 2022-03-29_
 
 #### Full feature changelog
 
-- Timestamps in Zulip messages are now permanent links to the message
+- Timestamps in Doer messages are now permanent links to the message
   in its thread.
 - Added support for invitation links with configurable expiry,
   including links that never expire. Deactivating a user now disables
   all invitations that the user had sent.
 - Added support for expanding the compose box to be full-screen.
 - Added support for filtering events in webhooks.
-- Added support for overriding Zulip's defaults for new users in your
+- Added support for overriding Doer's defaults for new users in your
   organization.
 - Added support for referring to a user group with a silent mention.
 - Added new personal privacy setting controlling whether typing
@@ -2584,9 +2584,9 @@ _Released 2022-03-29_
   and many more.
 - Improved various interaction and performance details in "Recent topics".
 - Improved styling for poll and todo list widgets.
-- Zulip now supports configuring the database name and username when
+- Doer now supports configuring the database name and username when
   using a remote PostgreSQL server. Previously, these were hardcoded
-  to "zulip".
+  to "doer".
 - Migrated many tooltips to prettier tooltips powered by TippyJS.
 - Autocomplete is now available when editing topics.
 - Typeahead for choosing a topic now consistently fetches the full set
@@ -2624,14 +2624,14 @@ _Released 2022-03-29_
 - Fixed exceptions in races involving messages being deleted while
   processing a request to add emoji reactions, mark messages as read,
   or sending notifications.
-- Fixed most remaining 500 errors seen in Zulip Cloud (these were
+- Fixed most remaining 500 errors seen in Doer Cloud (these were
   already quite rare, so this process involved debugging several rare
   races, timeouts, and error handling bugs.).
 - Fixed subtle bugs involving composing messages to deactivated users.
 - Fixed subtle bugs with reloading the page while viewing settings
   with "Recent topics" as the default view.
 - Fixed bug where pending email notifications could be lost when restarting
-  the Zulip server.
+  the Doer server.
 - Fixed "require topics" setting not being enforced for API clients.
 - Fixed several subtle Markdown rendering bugs.
 - Fixed several bugs with message edit history and stream/topic moves.
@@ -2660,7 +2660,7 @@ _Released 2022-03-29_
 - Added `RealmAuditLog` logging for most administrative actions that
   were previously not tracked.
 - Added automated testing of the upgrade process from previous releases,
-  to reduce the likelihood of problems upgrading Zulip.
+  to reduce the likelihood of problems upgrading Doer.
 - Attempting to "upgrade" to an older version now gives a clear error
   message.
 - Optimized critical parts of the message sending code path for large
@@ -2669,11 +2669,11 @@ _Released 2022-03-29_
 - Certain unprintable Unicode characters are no longer permitted in
   topic names.
 - Added IP-based rate limiting for unauthenticated requests.
-- Added documentation for Zulip's rate-limiting rules.
+- Added documentation for Doer's rate-limiting rules.
 - Merged the API endpoints for a user's personal settings into the
   /settings endpoint with a cleaner interface.
 - The server API now supports marking messages as unread, allowing
-  this upcoming mobile app feature to work with Zulip 5.0.
+  this upcoming mobile app feature to work with Doer 5.0.
 - Added to the API most page-load parameters used by the web app
   application that were missing from the `/register` API.
 - Simplified the infrastructure for rendering API documentation so
@@ -2681,18 +2681,18 @@ _Released 2022-03-29_
   OpenAPI specification file.
 - Corrected many minor issues with the API documentation.
 - Major improvements to both the infrastructure and content for
-  Zulip's ReadTheDocs documentation for contributors and sysadmins.
+  Doer's ReadTheDocs documentation for contributors and sysadmins.
 - Major improvements to the mypy type-checking, discovered via
   using the django-stubs project to get Django stubs.
 - Renamed main branch from `master` to `main`.
 
-## Zulip Server 4.x series
+## Doer Server 4.x series
 
-### Zulip Server 4.11
+### Doer Server 4.11
 
 _Released 2022-03-15_
 
-- CVE-2022-24751: Zulip Server 4.0 and above were susceptible to a
+- CVE-2022-24751: Doer Server 4.0 and above were susceptible to a
   race condition during user deactivation, where a simultaneous access
   by the user being deactivated may, in rare cases, allow continued
   access by the deactivated user. This access could theoretically
@@ -2703,7 +2703,7 @@ _Released 2022-03-15_
   - The server is upgraded, which clears the cache.
 - Updated translations.
 
-### Zulip Server 4.10
+### Doer Server 4.10
 
 _Released 2022-02-25_
 
@@ -2720,9 +2720,9 @@ _Released 2022-02-25_
   unpredictably fail database queries with the error
   `variable not found in subplan target list`.
 - Fix ARM64 support; however, the wal-g binary is not yet supported on
-  ARM64 (zulip/zulip#21070).
+  ARM64 (doer/doer#21070).
 
-### Zulip Server 4.9
+### Doer Server 4.9
 
 _Released 2022-01-24_
 
@@ -2730,10 +2730,10 @@ _Released 2022-01-24_
 - Closed access to RabbitMQ port 25672; initial installs tried to
   close this port, but failed to restart RabbitMQ for the
   configuration.
-- Removed the `rabbitmq.nodename` configuration in `zulip.conf`; all
+- Removed the `rabbitmq.nodename` configuration in `doer.conf`; all
   RabbitMQ instances will be reconfigured to have a nodename of
   `zulip@localhost`. You can remove this setting from your
-  `zulip.conf` configuration file, if it exists.
+  `doer.conf` configuration file, if it exists.
 - Added missing support for the Camo image proxy in the Docker
   image. This resolves a longstanding issue with image previews, if
   enabled, appearing as broken images for Docker-based installs.
@@ -2743,7 +2743,7 @@ _Released 2022-01-24_
 - Fixed a bug in the tool that corrects database corruption caused by
   updating the operating system hosting PostgreSQL, which previously
   omitted some indexes from its verification. If you updated the
-  operating system of your Zulip instance from Ubuntu 18.04 to 20.04,
+  operating system of your Doer instance from Ubuntu 18.04 to 20.04,
   or from Debian 9 to 10, you should run the tool,
   even if you did so previously; full details and instructions are
   available in the previous blog post.
@@ -2752,29 +2752,29 @@ _Released 2022-01-24_
   logic to deny access to private subnets, routing its requests
   through Smokescreen is generally not necessary.
 - Fixed a bug where changing the Camo secret required running
-  `zulip-puppet-apply`.
+  `doer-puppet-apply`.
 - Fixed `scripts/setup/compare-settings-to-template` to be able to run
   from any directory.
 - Switched Let's Encrypt renewal to use its own timer, rather than our
   custom cron job. This fixes a bug where occasionally `nginx` would
   not reload after getting an updated certificate.
 - Updated documentation and tooling to note that installs using
-  `upgrade-zulip-from-git` require 3 GB of RAM, or 2 GB and at least 1
+  `upgrade-doer-from-git` require 3 GB of RAM, or 2 GB and at least 1
   GB of swap.
 
-### Zulip Server 4.8
+### Doer Server 4.8
 
 _Released 2021-12-01_
 
-- CVE-2021-43791: Zulip could fail to enforce expiration dates
+- CVE-2021-43791: Doer could fail to enforce expiration dates
   on confirmation keys, allowing users to potentially use expired
   invitations, self-registrations, or realm creation links.
-- Began installing Smokescreen to harden Zulip against SSRF attacks by
-  default. Zulip has offered Smokescreen as an option since Zulip
+- Began installing Smokescreen to harden Doer against SSRF attacks by
+  default. Doer has offered Smokescreen as an option since Doer
   4.0. Existing installs which configured an outgoing proxy which is
   not on `localhost:4750` will continue to use that; all other
   installations will begin having a Smokescreen installation listening
-  on 127.0.0.1, which Zulip will proxy traffic through. The version of
+  on 127.0.0.1, which Doer will proxy traffic through. The version of
   Smokescreen was also upgraded.
 - Replaced the camo image proxy with go-camo, a maintained
   reimplementation that also protects against SSRF attacks. This
@@ -2783,10 +2783,10 @@ _Released 2021-12-01_
 - Began using camo for images displayed in URL previews. This improves
   privacy and also resolves an issue where an image link to a third
   party server with an expired or otherwise invalid SSL certificate
-  would trigger a confusing pop-up window for Zulip Desktop users.
+  would trigger a confusing pop-up window for Doer Desktop users.
 - Fixed a bug which could cause Tornado to shut down improperly
   (causing an immediate full-page reload for their clients) when
-  restarting a heavily loaded Zulip server.
+  restarting a heavily loaded Doer server.
 - Updated Python dependencies.
 - Truncated large “remove” mobile notification events so that marking
   hundreds of private messages or other notifiable messages as read at
@@ -2800,7 +2800,7 @@ _Released 2021-12-01_
   - Added support for non-ASCII Unicode folder names on Windows.
 - Add support for V3 Pagerduty webhook.
 - Updated documentation for Apache SSO, which now requires additional
-  configuration now that Zulip uses a C extension (the `re2` module).
+  configuration now that Doer uses a C extension (the `re2` module).
 - Fixed a bug where an empty name in a SAML response would raise an
   error.
 - Ensured that `deliver_scheduled_emails` and
@@ -2812,7 +2812,7 @@ _Released 2021-12-01_
   entries for a single user and single stream in the audit log.
 - Updated translations, including adding a Sinhala translation.
 
-### Zulip Server 4.7
+### Doer Server 4.7
 
 _Released 2021-10-04_
 
@@ -2820,7 +2820,7 @@ _Released 2021-10-04_
   the server with a regular expression denial-of-service attack
   through linkifier patterns.
 
-### Zulip Server 4.6
+### Doer Server 4.6
 
 _Released 2021-09-23_
 
@@ -2829,24 +2829,24 @@ _Released 2021-09-23_
 - Fixed installation on Debian 10 Buster. Upstream infrastructure had
   broken the Python `virtualenv` tool on this platform, which we've
   worked around for this release.
-- Zulip releases are now distributed from https://download.zulip.com/server/,
-  replacing the old `www.zulip.org` server.
+- Doer releases are now distributed from https://download.zulip.com/server/,
+  replacing the old `www.doer.org` server.
 - Added support for LDAP synchronization of the `is_realm_owner` and
   `is_moderator` flags.
-- `upgrade-zulip-from-git` now uses `git fetch --prune`; this ensures
-  `upgrade-zulip-from-git master` with return an error rather than
+- `upgrade-doer-from-git` now uses `git fetch --prune`; this ensures
+  `upgrade-doer-from-git master` with return an error rather than
   using a stale cached version of the `master` branch, which was
   renamed to `main` this month.
 - Added a new `reset_authentication_attempt_count` management command
   to allow sysadmins to manually reset authentication rate limits.
 - Fixed a bug that caused the `upgrade-postgresql` tool to
   incorrectly remove `supervisord` configuration for `process-fts-updates`.
-- Fixed a rare migration bug when upgrading from Zulip versions 2.1 and older.
+- Fixed a rare migration bug when upgrading from Doer versions 2.1 and older.
 - Fixed a subtle bug where the left sidebar would show both old and
   new names for some topics that had been renamed.
 - Fixed incoming email gateway support for configurations
   with the `http_only` setting enabled.
-- Fixed issues where Zulip's outgoing webhook, with the
+- Fixed issues where Doer's outgoing webhook, with the
   Slack-compatible interface, had a different format from Slack's
   documented interface.
 - The installation and upgrade documentations now show the latest
@@ -2854,14 +2854,14 @@ _Released 2021-09-23_
 - Backported many improvements to the ReadTheDocs documentation.
 - Updated translation data from Transifex.
 
-### Zulip Server 4.5
+### Doer Server 4.5
 
 _Released 2021-07-25_
 
 - Added a tool to fix potential database corruption caused by host OS
   upgrades (was listed in 4.4 release notes, but accidentally omitted).
 
-### Zulip Server 4.4
+### Doer Server 4.4
 
 _Released 2021-07-22_
 
@@ -2876,7 +2876,7 @@ _Released 2021-07-22_
   read into widgets (e.g., polls).
 - Fixed a bug where emoji and avatar image requests were sent through
   Camo; doing so does not add any security benefit, and broke custom
-  emoji that had been imported from Slack in Zulip 1.8.1 or earlier.
+  emoji that had been imported from Slack in Doer 1.8.1 or earlier.
 - Changed to log just a warning, instead of an exception, in the case
   that the `embed_links` worker cannot fetch previews for all links in
   a message within the 30-second timeout. Each preview request within
@@ -2889,7 +2889,7 @@ _Released 2021-07-22_
   restarted, the process.
 - Modified upgrade scripts to better handle failure, and suggest next
   steps and point to logs.
-- Zulip now hides the “show password” eye icon that IE and Edge
+- Doer now hides the “show password” eye icon that IE and Edge
   browsers place in password inputs; this duplicated the
   already-present JavaScript-based functionality.
 - Fixed “OR” glitch on login page if SAML authentication is enabled
@@ -2898,16 +2898,16 @@ _Released 2021-07-22_
   conversation on failure.
 - Provided a `change_password` management command which takes a
   `--realm` option.
-- Fixed `upgrade-zulip-from-git` crashing in CSS source map generation
+- Fixed `upgrade-doer-from-git` crashing in CSS source map generation
   on 1-CPU systems.
 - Added an `auto_signup` field in SAML configuration to auto-create
   accounts upon first login attempt by users which are authenticated
   by SAML.
-- Provided better error messages when `puppet_classes` in `zulip.conf`
+- Provided better error messages when `puppet_classes` in `doer.conf`
   are mistakenly space-separated instead of comma-separated.
 - Updated translations for many languages.
 
-### Zulip Server 4.3
+### Doer Server 4.3
 
 _Released 2021-06-02_
 
@@ -2924,7 +2924,7 @@ _Released 2021-06-02_
 - Tagged user status strings for translation.
 - Updated translation data from Transifex.
 
-### Zulip Server 4.2
+### Doer Server 4.2
 
 _Released 2021-05-13_
 
@@ -2932,13 +2932,13 @@ _Released 2021-05-13_
   a system that has never upgraded using Git.
 - Fixed installation from a directory readable only by root.
 
-### Zulip Server 4.1
+### Doer Server 4.1
 
 _Released 2021-05-13_
 
 - Fixed exception upgrading to the 4.x series from older releases.
 
-### Zulip Server 4.0
+### Doer Server 4.0
 
 _Released 2021-05-13_
 
@@ -2946,7 +2946,7 @@ _Released 2021-05-13_
 
 - Code blocks now have a copy-to-clipboard button and can be
   integrated with external code playgrounds, making it convenient to
-  work with code while discussing it in Zulip.
+  work with code while discussing it in Doer.
 - Added a new organization [Moderator role][user-roles].
   Many permissions settings for sensitive features now support only
   allowing moderators and above to use the feature.
@@ -2956,15 +2956,15 @@ _Released 2021-05-13_
   composing messages, and is now the default view. The previous
   default view, "All messages", is still available, and the default
   view can now be configured via "Display settings".
-- Completed API documentation for Zulip's real-time events system. It
-  is now possible to write a decent Zulip client with minimal
-  interaction with the Zulip server development team.
+- Completed API documentation for Doer's real-time events system. It
+  is now possible to write a decent Doer client with minimal
+  interaction with the Doer server development team.
 - Added new organization settings: wildcard mention policy.
 - Integrated [Smokescreen][smokescreen], an outgoing proxy designed to
   help protect against SSRF attacks; outgoing HTTP requests that can
   be triggered by end users are routed through this service.
   We recommend that self-hosted installations configure it.
-- This release contains more than 30 independent changes to the [Zulip
+- This release contains more than 30 independent changes to the [Doer
   API](https://zulip.com/api/changelog), largely to support new
   features or make the API (and thus its documentation) clearer and
   easier for clients to implement. Other new API features support
@@ -2985,15 +2985,15 @@ _Released 2021-05-13_
   for multiple Tornado processes. Since Tornado only listens on
   localhost, this change should have no visible effect unless another
   service is using port 9800.
-- Zulip's top-level puppet classes have been renamed, largely from
-  `zulip::foo` to `zulip::profile::foo`. Configuration referencing
-  these `/etc/zulip/zulip.conf` will be automatically updated during
+- Doer's top-level puppet classes have been renamed, largely from
+  `doer::foo` to `doer::profile::foo`. Configuration referencing
+  these `/etc/zulip/doer.conf` will be automatically updated during
   the upgrade process, but if you have a complex deployment or you
-  maintain `zulip.conf` is another system (e.g., with the [manual
-  configuration][docker-zulip-manual] option for
-  [docker-zulip][docker-zulip]), you'll want to manually update the
+  maintain `doer.conf` is another system (e.g., with the [manual
+  configuration][docker-doer-manual] option for
+  [docker-doer][docker-doer]), you'll want to manually update the
   `puppet_classes` variable.
-- Zulip's supervisord configuration now lives in `/etc/supervisor/conf.d/zulip/`
+- Doer's supervisord configuration now lives in `/etc/supervisor/conf.d/doer/`
 - Consider enabling [Smokescreen][smokescreen]
 - Private streams can no longer be default streams (i.e. the ones new
   users are automatically added to).
@@ -3003,21 +3003,21 @@ _Released 2021-05-13_
   inline documentation in your
   `/etc/zulip/settings.py`][update-settings-docs]. Notably, we rewrote the
   template to be better organized and more readable in this release.
-- The web app will now display a warning in the UI if the Zulip server
+- The web app will now display a warning in the UI if the Doer server
   has not been upgraded in more than 18 months.
   template to be better organized and more readable.
-- The next time users log in to Zulip with their password after
+- The next time users log in to Doer with their password after
   upgrading to this release, they will be logged out of all active
   browser sessions (i.e. the web and desktop apps). This is a side
   effect of improved security settings (increasing the minimum entropy
   used when salting passwords from 71 bits to 128 bits).
-- We've removed the partial Thumbor integration from Zulip. The
+- We've removed the partial Thumbor integration from Doer. The
   Thumbor project appears to be dead upstream, and we no longer feel
-  comfortable including it in Zulip from a security perspective. We
+  comfortable including it in Doer from a security perspective. We
   hope to introduce a fully supported thumbnailing integration in our next
   major release.
 
-[docker-zulip-manual]: https://github.com/zulip/docker-zulip#manual-configuration
+[docker-doer-manual]: https://github.com/doer/docker-doer#manual-configuration
 [smokescreen]: ../production/deployment.md#customizing-the-outgoing-http-proxy
 [update-settings-docs]: ../production/upgrade.md#updating-settingspy-inline-documentation
 
@@ -3025,7 +3025,7 @@ _Released 2021-05-13_
 
 - Added new [release lifecycle documentation](release-lifecycle.md).
 - Added support for subscribing another stream's membership to a stream.
-- Added RealmAuditLog for most settings state changes in Zulip; this
+- Added RealmAuditLog for most settings state changes in Doer; this
   data will facilitate future features showing a log of activity by
   a given user or changes to an organization's settings.
 - Added support for using Sentry for processing backend exceptions.
@@ -3033,7 +3033,7 @@ _Released 2021-05-13_
 - Added loading spinners for message editing widgets.
 - Added live update of compose placeholder text when recipients change.
 - Added keyboard navigation for popover menus that were missing it.
-- Added documentation for all [zulip.conf settings][zulip-conf-settings].
+- Added documentation for all [doer.conf settings][doer-conf-settings].
 - Added dozens of new notification sound options.
 - Added menu option to unstar all messages in a topic.
 - Added confirmation dialog before unsubscribing from a private stream.
@@ -3043,7 +3043,7 @@ _Released 2021-05-13_
 - Added API endpoint to fetch presence details by user ID.
 - Added new LDAP configuration options for servers hosting multiple organizations.
 - Added new `@**|user_id**` mention syntax intended for use in bots.
-- Added preliminary support for Zulip on Debian 11; this
+- Added preliminary support for Doer on Debian 11; this
   release is expected to support Debian 11 without any further changes.
 - Added several useful new management commands, including
   `change_realm_subdomain` and `delete_user`.
@@ -3062,18 +3062,18 @@ _Released 2021-05-13_
 - Redesigned the left sidebar menu icons (now `\vdots`, not a chevron).
 - The Zoom integration is now stable (no longer beta).
 - Favicon unread counts are more attractive and support large numbers.
-- Zulip now displays the total number of starred messages in the left
+- Doer now displays the total number of starred messages in the left
   sidebar by default; over 20% of users had enabled this setting manually.
 - Presence circles for users are now shown in mention typeahead.
 - Email notifications for new messages are now referred to as a
   "Message notification email", not a "Missed message email".
-- Zulip now sets List-Unsubscribe headers in outgoing emails with
+- Doer now sets List-Unsubscribe headers in outgoing emails with
   unsubscribe links.
 - Password forms now have a "Show password" widget.
 - Fixed performance issues when creating hundreds of new users in
   quick succession (e.g., at the start of a conference or event).
 - Fixed performance issues in organizations with thousands of online users.
-- Fixed numerous rare exceptions when running Zulip at scale.
+- Fixed numerous rare exceptions when running Doer at scale.
 - Fixed several subtle installer bugs.
 - Fixed various UI and accessibility issues in the registration and new
   user invitation flows.
@@ -3095,7 +3095,7 @@ _Released 2021-05-13_
 - Typeahead now always ranks exact string matches first.
 - Tooltips have been migrated from Bootstrap to TippyJS, and added
   in many places that previously just had `title` attributes.
-- Zulip now consistently uses the Source Code Pro font for code
+- Doer now consistently uses the Source Code Pro font for code
   blocks, rather than varying by operating system.
 - Redesigned "Alert words" settings UI.
 - Linkifiers can now be edited in their settings page.
@@ -3106,7 +3106,7 @@ _Released 2021-05-13_
 - Switched to `orjson` for JSON serialization, resulting in better
   performance and more standards-compliant validation.
 - Outgoing webhooks now enforce a 10 second timeout.
-- Image previews in a Zulip message are now unconditionally proxied by
+- Image previews in a Doer message are now unconditionally proxied by
   Camo to improve privacy, rather than only when the URL was not HTTPS.
 - Replaced the old CasperJS frontend test suite with Puppeteer.
 - Split the previous `api_super_user` permission into
@@ -3126,23 +3126,23 @@ _Released 2021-05-13_
   removing the last forked dependencies from the codebase.
 - Upgraded Django to 3.1 (as well as essentially every other dependency).
 - Updated web app codebase to use many modern ES6 patterns.
-- Upgraded Zulip's core font to Source Sans 3, which supports more languages.
+- Upgraded Doer's core font to Source Sans 3, which supports more languages.
 - Relabeled :smile: and :stuck_out_tongue: emoji to use better codepoints.
-- Reduced the size of Zulip's main JavaScript bundle by removing `moment.js`.
-- Server logs now display the version number for Zulip clients.
+- Reduced the size of Doer's main JavaScript bundle by removing `moment.js`.
+- Server logs now display the version number for Doer clients.
 - Simplified logic for responsive UI with different browser sizes.
 - Fixed several subtle bugs in the compose and message-edit UIs.
-- Reduced the steady-state load for an idle Zulip server.
+- Reduced the steady-state load for an idle Doer server.
 - Removed HipChat import tool, because HipChat has been long EOL.
 - Reformatted the Python codebase with Black, and the frontend
   codebase with Prettier.
 - Migrated testing from CircleCI to GitHub Actions.
 
-[zulip-conf-settings]: ../production/system-configuration.md
+[doer-conf-settings]: ../production/system-configuration.md
 
-## Zulip Server 3.x series
+## Doer Server 3.x series
 
-### Zulip Server 3.4
+### Doer Server 3.4
 
 _Released 2021-04-14_
 
@@ -3166,15 +3166,15 @@ _Released 2021-04-14_
 - Upgraded minor python dependencies.
 - Minor documentation fixes.
 
-### Zulip Server 3.3
+### Doer Server 3.3
 
 _Released 2020-12-01_
 
 - Guest users should not be allowed to post to streams marked “Only
   organization full members can post.” This flaw has existed since
-  the feature was added in Zulip Server 3.0.
+  the feature was added in Doer Server 3.0.
 - Permit outgoing mail from postfix; this resolves a bug introduced in
-  Zulip Server 3.2 which prevented Zulip from sending outgoing mail if
+  Doer Server 3.2 which prevented Doer from sending outgoing mail if
   the local mail server (used mostly for incoming mail) was also used
   for outgoing email (`MAIL_HOST='localhost'`).
 - Ensure that the `upgrade-postgres` tool upgrades the cluster’s data
@@ -3186,7 +3186,7 @@ _Released 2020-12-01_
   “Organization owner” roles.
 - Handle realm emojis that have been manually deleted more gracefully.
 
-### Zulip Server 3.2
+### Doer Server 3.2
 
 _Released 2020-09-15_
 
@@ -3194,7 +3194,7 @@ _Released 2020-09-15_
   pure-Python implementation; this should eliminate memcached
   connection problems affecting some installations.
 - Removed unnecessary `django-cookies-samesite` dependency, which had
-  its latest release removed from PyPI (breaking installation of Zulip
+  its latest release removed from PyPI (breaking installation of Doer
   3.1).
 - Limited which local email addresses Postfix accepts when the
   incoming email integration is enabled; this prevents the enumeration
@@ -3206,11 +3206,11 @@ _Released 2020-09-15_
 - Fixed display of "Permission [to post] will be granted in n days"
   for n > 365.
 - Support providing `nginx_listen_port` setting in conjunction with
-  `http_only` in `zulip.conf`.
+  `http_only` in `doer.conf`.
 - Improved upgrade documentation.
 - Removed internal ID lists which could leak into the events API.
 
-### Zulip Server 3.1
+### Doer Server 3.1
 
 _Released 2020-07-30_
 
@@ -3232,7 +3232,7 @@ _Released 2020-07-30_
   included in this maintenance release to ensure backporting patches
   from `main` remains easy.
 
-### Zulip Server 3.0
+### Doer Server 3.0
 
 _Released 2020-07-16_
 
@@ -3245,19 +3245,19 @@ _Released 2020-07-16_
   default views.
 - Added a new "Recent topics" widget, which lets one browse recent
   and ongoing conversations at a glance. We expect this widget to
-  replace "All messages" as the default view in Zulip in the
+  replace "All messages" as the default view in Doer in the
   next major release.
 - Redesigned "Notification settings" to have an intuitive table
   format and display any individual streams with non-default settings.
 - Added support for moving topics between streams. This was by far
-  Zulip's most-requested feature.
+  Doer's most-requested feature.
 - Added automatic theme detection using prefers-color-scheme.
 - Added support for GitLab and Sign in with Apple authentication.
 - Added an organization setting controlling who can use private messages.
 - Added support for default stream groups, which allow organizations
   to offer options of sets of streams when new users sign up.
-  Currently can only be managed via the Zulip API.
-- The Zulip server now sets badge counts for the iOS mobile app.
+  Currently can only be managed via the Doer API.
+- The Doer server now sets badge counts for the iOS mobile app.
 - Quote-and-reply now generates a handy link to the quoted message.
 - Upgraded Django from 1.11.x to the latest LTS series, 2.2.x.
 - Added integrations for ErrBit, Grafana, Thinkst Canary, and Alertmanager.
@@ -3268,10 +3268,10 @@ _Released 2020-07-16_
   global/default policy and policies for specific streams.
 - Added a new incoming webhook API that accepts messages in the format
   used by Slack's incoming webhooks API.
-- Introduced the Zulip API feature level, a concept that will greatly
+- Introduced the Doer API feature level, a concept that will greatly
   simplify the implementation of mobile, terminal, and desktop clients
-  that need to talk to a wide range of supported Zulip server
-  versions, as well as the [Zulip API
+  that need to talk to a wide range of supported Doer server
+  versions, as well as the [Doer API
   changelog](https://zulip.com/api/changelog).
 - Our primary official domain is now zulip.com, not zulipchat.com.
 
@@ -3294,14 +3294,14 @@ _Released 2020-07-16_
       .values('realm_id', 'email_lower').annotate(Count('id')).filter(id__count__gte=2)
   ```
   If the command returns any accounts, you need to address the
-  duplicate accounts before upgrading. Zulip Cloud only had two
+  duplicate accounts before upgrading. Doer Cloud only had two
   accounts affected by this bug, so we expect the vast majority of
   installations will have none.
-- This release switches Zulip to install PostgreSQL 12 from the upstream
+- This release switches Doer to install PostgreSQL 12 from the upstream
   PostgreSQL repository by default, rather than using the default
-  PostgreSQL version included with the operating system. Existing Zulip
+  PostgreSQL version included with the operating system. Existing Doer
   installations will continue to work with PostgreSQL 10; this detail is
-  configured in `/etc/zulip/zulip.conf`. We have no concrete plans to
+  configured in `/etc/zulip/doer.conf`. We have no concrete plans to
   start requiring PostgreSQL 12, though we do expect it to improve
   performance. Installations that would like to upgrade can follow
   [our new PostgreSQL upgrade guide][postgresql-upgrade].
@@ -3327,7 +3327,7 @@ _Released 2020-07-16_
 - Added new options to control whether the incoming email integration
   prefers converting the plain text or HTML content of an email.
 - Added server support for creating an account from mobile/terminal apps.
-- The Zulip desktop apps now do social authentication (Google, GitHub,
+- The Doer desktop apps now do social authentication (Google, GitHub,
   etc.) via an external browser.
 - Added support for BigBlueButton as video chat provider.
 - Added support for setting an organization-wide default language for
@@ -3337,7 +3337,7 @@ _Released 2020-07-16_
 - Added data export/import support for organization logo and icon.
 - Added documentation for several more API endpoints.
 - Added new email address visibility option hiding real email
-  addresses from organization administrators in the Zulip UI.
+  addresses from organization administrators in the Doer UI.
 - Added new "Mention time" Markdown feature to communicate about times
   in a time-zone-aware fashion.
 - Added new "Spoiler" Markdown feature to hide text until interaction.
@@ -3350,7 +3350,7 @@ _Released 2020-07-16_
   with other users.
 - Added support for IdP-initiated SSO in the SAML authentication backend.
 - Added new "messages sent over time" graph on /stats.
-- Added support for restricting SAML authentication to only some Zulip
+- Added support for restricting SAML authentication to only some Doer
   organizations.
 - Added `List-Id` header to outgoing emails for simpler client filtering.
 - Changed how avatar URLs are sent to clients to dramatically improve
@@ -3359,8 +3359,8 @@ _Released 2020-07-16_
   simpler interface.
 - Normal users can now see invitations they sent via organization settings.
 - Rewrote the Zoom video call integration.
-- Polished numerous subtle elements of Zulip's visual design.
-- Dramatically improved the scalability of Zulip's server-to-client
+- Polished numerous subtle elements of Doer's visual design.
+- Dramatically improved the scalability of Doer's server-to-client
   push system, improving throughput by a factor of ~4.
 - Improved handling of GitHub accounts with several email addresses.
 - Improved "Manage streams" UI to clearly identify personal settings
@@ -3369,7 +3369,7 @@ _Released 2020-07-16_
 - Improved "Muted topics" UI to show when a topic was muted.
 - Improved the UI for "Drafts" and "Message edit history" widgets.
 - Improved left sidebar popovers to clearly identify administrative actions.
-- Rewrote substantial parts of the Zulip installer to be more robust.
+- Rewrote substantial parts of the Doer installer to be more robust.
 - Replaced the chevron menu indicators in sidebars with vertical ellipses.
 - Removed the right sidebar "Group PMs" widget. It's functionality is
   available in the left sidebar "Private messages" widget.
@@ -3377,12 +3377,12 @@ _Released 2020-07-16_
   it being discontinued.
 - Removed a limitation on editing topics of messages more than a week old.
 - The Gitter data import tool now supports importing multiple Gitter
-  rooms into a single Zulip organization.
+  rooms into a single Doer organization.
 - Missed-message emails and various onboarding content are now tagged
   for translation.
 - Redesigned the notice about large numbers of unread messages to be
   a banner (no longer a modal) and to use a better trigger.
-- Cleaned up dozens of irregularities in how the Zulip API formats
+- Cleaned up dozens of irregularities in how the Doer API formats
   data when returning it to clients.
 - Extended stream-level settings for who can post to a stream.
 - Extended GET /messages API to support a more intuitive way to
@@ -3391,11 +3391,11 @@ _Released 2020-07-16_
 - Improved UI for picking which streams to invite new users to.
 - Improved UI for reviewing one's muted topics.
 - Improved UI for message edit history.
-- Fixed many minor issues with Zulip's Markdown processors.
+- Fixed many minor issues with Doer's Markdown processors.
 - Fixed many subtle issues with the message editing UI.
 - Fixed several subtle issues with the default nginx configuration.
 - Fixed minor issues with various keyboard shortcuts.
-- Fixed UI bugs with Zulip's image lightbox.
+- Fixed UI bugs with Doer's image lightbox.
 - Specifying `latex` or `text` as the language for a code block now
   does LaTeX syntax highlighting (`math` remains the recommended code
   block language to render LaTeX syntax into display math).
@@ -3421,12 +3421,12 @@ _Released 2020-07-16_
   with extensive validation to ensure its accuracy as we modify the API.
 - Removed New User Bot and Feedback Bot. Messages they had sent are
   migrated to have been sent by Notification Bot.
-- Removed the "pointer" message ID from Zulip, a legacy concept dating
-  to 2012 that predated tracking unread messages in Zulip and has
+- Removed the "pointer" message ID from Doer, a legacy concept dating
+  to 2012 that predated tracking unread messages in Doer and has
   largely resulted in unexpected behavior for the last few years.
 - Reduced visual size of emoji in message bodies for a cleaner look.
 - Replaced file upload frontend with one supporting chunked upload.
-  We expect this to enable uploading much larger files using Zulip in
+  We expect this to enable uploading much larger files using Doer in
   future releases.
 - Improved error messages when trying to invite a user with an
   existing, deactivated, account.
@@ -3445,7 +3445,7 @@ _Released 2020-07-16_
   linter rules to use its Python syntax-aware parser.
 - Added tooling to automatically generate all screenshots in
   integration docs.
-- Restructured the backend for Zulip's system administrator level
+- Restructured the backend for Doer's system administrator level
   settings system to be more maintainable.
 - This release largely completes the SCSS refactoring of the codebase.
 - Replaced our CasperJS frontend integration test system with Puppeteer.
@@ -3455,32 +3455,32 @@ _Released 2020-07-16_
   system was always a hack, was only ever used for one endpoint, and
   did not provide a measurable latency benefit over HTTP/2.
 
-## Zulip Server 2.1.x series
+## Doer Server 2.1.x series
 
-### Zulip Server 2.1.8
+### Doer Server 2.1.8
 
 _Released 2021-08-11_
 
 - Fixed possible `0257_fix_has_link_attribute.py` database migration
   failure, which would cause errors during the upgrade process.
 
-### Zulip Server 2.1.7
+### Doer Server 2.1.7
 
 _Released 2020-06-25_
 
 - CVE-2020-15070: Fix privilege escalation vulnerability with custom
-  profile fields and direct write access to Zulip's PostgreSQL database.
+  profile fields and direct write access to Doer's PostgreSQL database.
 - Changed default memcached authentication username to zulip@localhost,
   fixing authentication problems when servers change their hostname.
 
-### Zulip Server 2.1.6
+### Doer Server 2.1.6
 
 _Released 2020-06-17_
 
 - Fixed use of Python 3.6+ syntax in 2.1.5 release that prevented
   installation on Ubuntu 16.04.
 
-### Zulip Server 2.1.5
+### Doer Server 2.1.5
 
 _Released 2020-06-16_
 
@@ -3495,8 +3495,8 @@ _Released 2020-06-16_
   any invitation objects already corrupted by the buggy version of the
   `0198_preregistrationuser_invited_as` migration.
 - Fixed missing quoting of certain attributes in HTML templates.
-- Allow /etc/zulip to be a symlink (for [docker-zulip][docker-zulip]).
-- Disabled access from insecure Zulip Desktop releases below version 5.2.0.
+- Allow /etc/zulip to be a symlink (for [docker-doer][docker-doer]).
+- Disabled access from insecure Doer Desktop releases below version 5.2.0.
 - Adjusted Slack import documentation to help administrators avoid OOM
   kills when doing Slack import on low-RAM systems.
 - Fixed a race condition fetching users' personal API keys.
@@ -3504,7 +3504,7 @@ _Released 2020-06-16_
 
 #### Upgrade notes for 2.1.5
 
-Administrators of servers originally installed with Zulip 1.9 or older
+Administrators of servers originally installed with Doer 1.9 or older
 should audit for unexpected [organization
 administrators][audit-org-admin] following this upgrade, as it is
 possible CVE-2020-14215 caused a user to incorrectly join as an
@@ -3513,28 +3513,28 @@ details.
 
 [audit-org-admin]: https://zulip.com/help/user-roles
 
-### Zulip Server 2.1.4
+### Doer Server 2.1.4
 
 _Released 2020-04-16_
 
 - Fixed a regression in 2.1.3 that impacted creating the very first
   organization via our data import tools.
 - Remove the old `tsearch_extras` PostgreSQL extension, which was causing
-  an exception restoring backups on fresh Zulip servers that had been
-  generated on systems that had been upgraded from older Zulip releases.
+  an exception restoring backups on fresh Doer servers that had been
+  generated on systems that had been upgraded from older Doer releases.
 - Removed fetching GitHub contributor data from static asset build
-  process. This makes `upgrade-zulip-from-git` much more reliable.
+  process. This makes `upgrade-doer-from-git` much more reliable.
 - Updated translation data from Transifex.
 - Support for Ubuntu 16.04 Xenial and Debian 9 Stretch is now deprecated.
 
-### Zulip Server 2.1.3
+### Doer Server 2.1.3
 
 _Released 2020-04-01_
 
 - CVE-2020-9444: Prevent reverse tabnapping attacks.
 - CVE-2020-9445: Remove unused and insecure modal_link feature.
 - CVE-2020-10935: Fix XSS vulnerability in local link rewriting.
-- Blocked access from Zulip Desktop versions below 5.0.0. This
+- Blocked access from Doer Desktop versions below 5.0.0. This
   behavior can be adjusted by editing `DESKTOP_*_VERSION`
   in `/home/zulip/deployments/current/version.py`.
 - Restructured server initialization to simplify initialization of
@@ -3563,7 +3563,7 @@ _Released 2020-04-01_
 - Changed the SAML default signature algorithm to SHA-256, overriding
   the SHA-1 default used by python3-saml.
 
-### Zulip Server 2.1.2
+### Doer Server 2.1.2
 
 _Released 2020-01-16_
 
@@ -3573,7 +3573,7 @@ _Released 2020-01-16_
   semi-persistent Redis to the fully persistent database.
 - Added authentication for Redis and memcached even in configurations
   where these are running on localhost, for add hardening against
-  attacks from malicious processes running on the Zulip server.
+  attacks from malicious processes running on the Doer server.
 - Improved logging for misconfigurations of LDAP authentication.
 - Improved error handling for invalid LDAP configurations.
 - Improved error tracebacks for invalid memcached keys.
@@ -3585,7 +3585,7 @@ _Released 2020-01-16_
 - Fixed error handling bug preventing rerunning the installer.
 - Fixed a few minor issues with migrations for upgrading from 2.0.x.
 
-### Zulip Server 2.1.1
+### Doer Server 2.1.1
 
 _Released 2019-12-13_
 
@@ -3596,7 +3596,7 @@ _Released 2019-12-13_
   used with our new support for a DBaaS managed database.
 - Improved documentation for `AUTH_LDAP_REVERSE_EMAIL_SEARCH`.
 
-### Zulip Server 2.1.0
+### Doer Server 2.1.0
 
 _Released 2019-12-12_
 
@@ -3605,11 +3605,11 @@ _Released 2019-12-12_
 - Added support for Debian 10. Removed support for EOL Ubuntu 14.04.
 - Added support for SAML authentication.
 - Removed our dependency on `tsearch_extras`, making it possible to
-  run a production Zulip server against any PostgreSQL database
+  run a production Doer server against any PostgreSQL database
   (including those where one cannot install extensions, like Amazon RDS).
-- Significantly improved the email->Zulip gateway, and added [nice
+- Significantly improved the email->Doer gateway, and added [nice
   setup documentation](../production/email-gateway.md). It now
-  should be possible to subscribe a Zulip stream to an email list and
+  should be possible to subscribe a Doer stream to an email list and
   have a good experience.
 - Added an option for hiding access to user email addresses from
   other users. While counterproductive for most corporate
@@ -3629,9 +3629,9 @@ _Released 2019-12-12_
   readable style inspired by GitHub's email notifications.
 - We merged significant preparatory work for supporting RHEL/CentOS in
   production. We're now interested in beta testers for this feature.
-- Reorganized Zulip's documentation for sysadmins, and added [new
+- Reorganized Doer's documentation for sysadmins, and added [new
   documentation](../production/modify.md)
-  on maintaining a fork of Zulip.
+  on maintaining a fork of Doer.
 - Added new `streams:public` search operator that searches the public
   history of all streams in the organization (even before you joined).
 - Added support for sending email and mobile push notifications for
@@ -3640,7 +3640,7 @@ _Released 2019-12-12_
 
 #### Upgrade notes for 2.1.0
 
-- The defaults for Zulip's now beta inline URL preview setting have changed.
+- The defaults for Doer's now beta inline URL preview setting have changed.
   Previously, the server-level `INLINE_URL_EMBED_PREVIEW` setting was
   disabled, and organization-level setting was enabled. Now, the
   server-level setting is enabled by default, and the organization-level
@@ -3655,47 +3655,47 @@ _Released 2019-12-12_
   still work, but users should update the following setting names in
   their configuration as we will desupport the old names in a future
   release:
-  - In `/etc/zulip/zulip-secrets.conf`, `google_oauth2_client_secret`
+  - In `/etc/zulip/doer-secrets.conf`, `google_oauth2_client_secret`
     is now called with `social_auth_google_secret`.
   - In `/etc/zulip/settings.py`, `GOOGLE_OAUTH2_CLIENT_ID` should be
     replaced with `SOCIAL_AUTH_GOOGLE_KEY`.
   - In `/etc/zulip/settings.py`, `GoogleMobileOauth2Backend` should
     be replaced with called `GoogleAuthBackend`.
-- Installations using Zulip's LDAP integration without
+- Installations using Doer's LDAP integration without
   `LDAP_APPEND_DOMAIN` will need to configure two new settings telling
-  Zulip how to look up a user in LDAP given their email address:
+  Doer how to look up a user in LDAP given their email address:
   `AUTH_LDAP_REVERSE_EMAIL_SEARCH` and `AUTH_LDAP_USERNAME_ATTR`. See
   the [LDAP configuration
   instructions](../production/authentication-methods.md#ldap-including-active-directory)
   for details. You can use the usual `manage.py query_ldap` method to
   verify whether your configuration is working correctly.
-- The Zulip web and desktop apps have been converted to directly count
+- The Doer web and desktop apps have been converted to directly count
   all unread messages, replacing an old system that just counted the
   (recent) messages fully fetched by the web app. This one-time
   transition may cause some users to notice old messages that were
   sent months or years ago "just became unread". What actually
-  happened is the user never read these messages, and the Zulip web app
+  happened is the user never read these messages, and the Doer web app
   was not displaying that. Generally, the fix is for users to simply
   mark those messages as read as usual.
-- Previous versions of Zulip's installer would generate the secrets
+- Previous versions of Doer's installer would generate the secrets
   `local_database_password` and `initial_password_salt`. These
-  secrets don't do anything, as they only modify behavior of a Zulip
+  secrets don't do anything, as they only modify behavior of a Doer
   development environment. We recommend deleting those lines from
-  `/etc/zulip/zulip-secrets.conf` when you upgrade to avoid confusion.
+  `/etc/zulip/doer-secrets.conf` when you upgrade to avoid confusion.
 - This release has a particularly expensive database migration,
   changing the `UserMessage.id` field from an `int` to a `bigint` to
-  support more than 2 billion message deliveries on a Zulip server.
+  support more than 2 billion message deliveries on a Doer server.
   It runs in 2 phases: A first migration that doesn't require the
   server to be down (which took about 4 hours to process the 250M rows
   on chat.zulip.org, and a second migration that does require downtime
   (which took about 60 seconds for chat.zulip.org). You can check the
   number of rows for your server with `UserMessage.objects.count()`.
 
-  We expect that most Zulip servers can happily just use the normal
-  upgrade process with a few minutes of downtime. Zulip servers with
+  We expect that most Doer servers can happily just use the normal
+  upgrade process with a few minutes of downtime. Doer servers with
   over 1M messages may want to first upgrade to [this
-  commit](https://github.com/zulip/zulip/commit/b008515d63841e1c0a16ad868d3d67be3bfc20ca)
-  using `upgrade-zulip-from-git`, following the instructions to avoid
+  commit](https://github.com/doer/doer/commit/b008515d63841e1c0a16ad868d3d67be3bfc20ca)
+  using `upgrade-doer-from-git`, following the instructions to avoid
   downtime, and then upgrade to the new release.
 
 #### Full feature changelog
@@ -3711,7 +3711,7 @@ _Released 2019-12-12_
 - Added more expansive moderation settings for who can create streams,
   edit user groups, or invite other users to join streams.
 - Added new Bitbucket Server, Buildbot, Harbor, Gitea and Redmine integrations.
-- Added proper open graph tags for linking to a Zulip organization.
+- Added proper open graph tags for linking to a Doer organization.
 - Added organization setting to disable users uploading new avatars
   (for use with LDAP synchronization).
 - Added support for completely disabling the file upload feature.
@@ -3740,7 +3740,7 @@ _Released 2019-12-12_
 - Redesigned the in-app "keyboard shortcuts" popover to be more usable.
 - Redesigned the interactions on several settings pages.
 - Significantly improved the visual spacing around bulleted lists,
-  blockquotes, and code blocks in Zulip's message feed.
+  blockquotes, and code blocks in Doer's message feed.
 - Extended buttons to visit links in topics to all URLs, not just
   URLs added by a linkifier.
 - Extended several integrations to cover more events and fix bugs, and
@@ -3772,7 +3772,7 @@ _Released 2019-12-12_
   code blocks.
 - Replaced title attributes with nice tooltips in the message feed and
   buddy list.
-- Fixed incorrect caching settings for the Zulip API, which could result
+- Fixed incorrect caching settings for the Doer API, which could result
   in browsers appearing to display old content or remark messages unread.
 - Fixed a bug that prevented sending mobile push notifications when the
   user was recently online via the mobile app.
@@ -3815,38 +3815,38 @@ _Released 2019-12-12_
 - Fixed several issues with click handlers incorrectly closing compose.
 - Fixed buggy behavior of /me messages not ending with a paragraph.
 - Fixed several major UI issues with the mobile web app.
-- Fixed HTML styling when copy-pasting content out of Zulip's night theme.
+- Fixed HTML styling when copy-pasting content out of Doer's night theme.
 - Fixed obscure traceback with Virtualenv 16.0.0 unexpectedly installed.
 - Added a new visual tool for testing webhook integrations.
 - Rewrote the Google authentication backend to use python-social-auth,
-  removing Zulip's original 2013-era SSO authentication backend.
+  removing Doer's original 2013-era SSO authentication backend.
 - The `/server_settings` API now advertises supported authentication
   methods alongside details on how to render login/registration buttons.
 - Rewrote HTML/CSS markup for various core components to be more
   easily modified.
 - Removed the legacy static asset pipeline; everything now uses webpack.
-- Renamed the system bot Zulip realm to "zulipinternal" (was "zulip").
+- Renamed the system bot Doer realm to "zulipinternal" (was "doer").
 - Switched our scrollbars to use simplebar, fixing many subtle
   scrollbar-related bugs in the process.
 - Enabled webpack code splitting and deduplication.
 - Started migrating our frontend codebase to TypeScript.
 
-## Zulip Server 2.0.x series
+## Doer Server 2.0.x series
 
-### Zulip Server 2.0.8
+### Doer Server 2.0.8
 
 _Released 2019-12-12_
 
 - CVE-2019-19775: Close open redirect in thumbnail view.
 
-### Zulip Server 2.0.7
+### Doer Server 2.0.7
 
 _Released 2019-11-21_
 
 - CVE-2019-18933: Fix insecure account creation via social authentication.
 - Added backend enforcement of zxcvbn password strength checks.
 
-### Zulip Server 2.0.6
+### Doer Server 2.0.6
 
 _Released 2019-09-23_
 
@@ -3855,7 +3855,7 @@ _Released 2019-09-23_
 - Fixed a subtle bug that could cause the message list to suddenly
   scroll up in certain rare race conditions.
 
-### Zulip Server 2.0.5
+### Doer Server 2.0.5
 
 _Released 2019-09-11_
 
@@ -3865,7 +3865,7 @@ _Released 2019-09-11_
 - Fixed support for hidden_by_limit messages in Slack import.
 - Fixed confusing output from the `knight` management command.
 
-### Zulip Server 2.0.4
+### Doer Server 2.0.4
 
 _Released 2019-06-29_
 
@@ -3877,22 +3877,22 @@ _Released 2019-06-29_
 - Fixed a bug enabling the PGRoonga search backend with older PostgreSQL.
 - Fixed getting personal API key when passwords are disabled.
 
-### Zulip Server 2.0.3
+### Doer Server 2.0.3
 
 _Released 2019-04-23_
 
 - Added documentation for upgrading the underlying OS version.
 - Made uwsgi buffer size configurable (relevant for sites putting
-  Zulip behind a proxy that adds many HTTP headers).
+  Doer behind a proxy that adds many HTTP headers).
 - Fixed loss of LaTeX syntax inside quote-and-reply.
-- Fixed virtualenv-related bug when upgrading Zulip when the system
+- Fixed virtualenv-related bug when upgrading Doer when the system
   virtualenv package is 16.0.0 or newer (no supported platform has
   such a version by default, but one can install it manually).
 - Fixed `manage.py query_ldap` test tool (broken in 2.0.2).
 - Fixed several bugs in new backup and restore tools.
 - Fixed minor bugs with YouTube previews.
 
-### Zulip Server 2.0.2
+### Doer Server 2.0.2
 
 _Released 2019-03-15_
 
@@ -3905,7 +3905,7 @@ _Released 2019-03-15_
 - Fixed a confusing "Subscribe" button appearing for guest users.
 - Updated translations, including a new Italian translation.
 
-### Zulip Server 2.0.1
+### Doer Server 2.0.1
 
 _Released 2019-03-04_
 
@@ -3920,7 +3920,7 @@ _Released 2019-03-04_
 - Added support for using multiple organizations with same LDAP
   backend configuration.
 
-### Zulip Server 2.0.0
+### Doer Server 2.0.0
 
 _Released 2019-03-01_
 
@@ -3935,19 +3935,19 @@ _Released 2019-03-01_
   provider. We now support Jitsi, Google Hangouts, and Zoom.
 - Added support for branding the top-left corner of the logged in app
   with an organization's logo.
-- Zulip's "Guest users" feature is no longer experimental.
+- Doer's "Guest users" feature is no longer experimental.
 - The HipChat/Stride data import tool is no longer experimental.
   Our HipChat and Slack import tools are now well-tested with millions
   of messages, 10,000s of users, and 100,000s of uploaded files.
 - Added a built-in tool for backups and restoration.
-- Deprecated support for Ubuntu 14.04. Zulip 2.0.x will continue to
-  support Ubuntu 14.04, but Zulip 2.1.0 will remove support for
+- Deprecated support for Ubuntu 14.04. Doer 2.0.x will continue to
+  support Ubuntu 14.04, but Doer 2.1.0 will remove support for
   installing on Ubuntu 14.04.
 
 #### Upgrade notes for 2.0.0
 
 - This release adds support for submitting basic usage statistics to
-  help the Zulip core team. This feature can be enabled only if a server
+  help the Doer core team. This feature can be enabled only if a server
   is using the [Mobile Push Notification Service][mobile-push],
   and is enabled by default in that case. To disable it, set
   `SUBMIT_USAGE_STATISTICS = False` in `/etc/zulip/settings.py`.
@@ -3979,7 +3979,7 @@ _Released 2019-03-01_
 - Added a tool for migrating from S3 to the local file uploads backend.
 - Added protocol for communicating version incompatibility to mobile apps.
 - Added support for copying avatar and other profile data when
-  creating a second account on a Zulip server with a given email address.
+  creating a second account on a Doer server with a given email address.
 - Added /digest endpoint for viewing the current digest email on the web.
 - Added alert for when a user sends a message when scrolled too far up.
 - Added internationalization for outgoing emails.
@@ -4005,7 +4005,7 @@ _Released 2019-03-01_
 - Expanded production documentation for more unusual deployment options.
 - Expanded set of characters allowed in custom linkifiers.
 - Optimized development provisioning; now takes 2s in the no-op case.
-- Zulip's help center now has nicely generated open graph tags.
+- Doer's help center now has nicely generated open graph tags.
 - Fixed missing API authentication headers for mobile file access.
 - Fixed various select and copy-paste issues.
 - Fixed various back button bugs in settings UI.
@@ -4014,20 +4014,20 @@ _Released 2019-03-01_
 - Fixed several performance issues for organizations with 1000s of streams.
 - Fixed various error handling bugs sending push notifications.
 - Fixed handling of diacritics in user-mention typeahead.
-- Fixed several bugs with importing data into Zulip's S3 backend.
+- Fixed several bugs with importing data into Doer's S3 backend.
 - Fixed display of full recipients list in "private messages" hover.
 - Fixed bugs involving muting and renamed streams.
 - Fixed soft-deactivation performance issues with many thousands of users.
-- Countless behind-the-scenes improvements to Zulip's codebase,
+- Countless behind-the-scenes improvements to Doer's codebase,
   tooling, automated tests, error handling, and APIs.
 
-## Zulip Server 1.9.x series
+## Doer Server 1.9.x series
 
-### Zulip Server 1.9.2
+### Doer Server 1.9.2
 
 _Released 2019-01-29_
 
-This release migrates Zulip off a deprecated Google+ API (necessary
+This release migrates Doer off a deprecated Google+ API (necessary
 for Google authentication to continue working past March 7), and
 contains a few bug fixes for the installer and Slack import. It has
 minimal changes for existing servers not using Google authentication.
@@ -4040,12 +4040,12 @@ minimal changes for existing servers not using Google authentication.
 - Optimized performance of Slack import for organizations with
   thousands of users.
 
-### Zulip Server 1.9.1
+### Doer Server 1.9.1
 
 _Released 2018-11-30_
 
 This release is primarily intended to improve the experience for new
-Zulip installations; it has minimal changes for existing servers.
+Doer installations; it has minimal changes for existing servers.
 
 - Added support for getting multi-domain certificates with setup-certbot.
 - Improved various installer error messages and sections of the
@@ -4055,7 +4055,7 @@ Zulip installations; it has minimal changes for existing servers.
 - Fixed nginx configuration for mobile API authentication to access uploads.
 - Updated translation data, including significant new Italian strings.
 
-### Zulip Server 1.9.0
+### Doer Server 1.9.0
 
 _Released 2018-11-07_
 
@@ -4063,17 +4063,17 @@ _Released 2018-11-07_
 
 - Support for Ubuntu 18.04 and Debian 9 (our first non-Ubuntu
   platform!). We expect to deprecate support for installing a new
-  Zulip server on Ubuntu 14.04 in the coming months, in preparation
+  Doer server on Ubuntu 14.04 in the coming months, in preparation
   for Ubuntu 14.04’s end-of-life in April 2019.
 - New data import tools for HipChat and Gitter. The Slack importer
   is now out of beta.
-- Zulip Python process startup time is about 30% faster; this effort
+- Doer Python process startup time is about 30% faster; this effort
   resulted in upstream contributions to fix significant performance
   bugs in django-bitfield, libthumbor, and pika.
 - You can now configure custom (organization-specific) fields for user
-  profiles; Zulip can now serve as your organization’s employee
+  profiles; Doer can now serve as your organization’s employee
   directory.
-- Zulip now supports using Google Hangouts instead of Jitsi as the
+- Doer now supports using Google Hangouts instead of Jitsi as the
   video chat provider.
 - Users can now configure email and mobile push notifications for
   all messages in a stream (useful for low-traffic
@@ -4082,14 +4082,14 @@ _Released 2018-11-07_
   control whether private stream subscribers can access history
   from before they joined, and allow configuring streams to only
   allow administrators to post.
-- Zulip now has experimental support for guest users (intended
+- Doer now has experimental support for guest users (intended
   for use cases like contractors who the organization only wants
   to have access to a few streams).
 - New native integrations for Ansible Tower, Appveyor, Clubhouse,
-  Netlify, and Zabbix; Zulip now has over 100 native integrations (in
+  Netlify, and Zabbix; Doer now has over 100 native integrations (in
   addition to hundreds more available via Zapier and IFTTT).
 - New translations for Ukrainian, Portuguese, Indonesian, Dutch, and
-  Finnish. Zulip now has complete or nearly-complete translations
+  Finnish. Doer now has complete or nearly-complete translations
   for German, Spanish, French, Portuguese, Russian, Ukrainian,
   Czech, Finnish, and Turkish. Partial translations for Chinese,
   Dutch, Korean, Polish, Japanese, and Indonesian cover the majority
@@ -4097,7 +4097,7 @@ _Released 2018-11-07_
 
 #### Upgrade notes for 1.9.0
 
-- Zulip 1.9 contains a significant database migration that can take
+- Doer 1.9 contains a significant database migration that can take
   several minutes to run. The upgrade process automatically minimizes
   disruption by running this migration first, before beginning the
   user-facing downtime. However, if you'd like to watch the downtime
@@ -4113,7 +4113,7 @@ _Released 2018-11-07_
   works even when you're inside compose).
 - Renamed the hotkey for starring a message to Ctrl+S.
 - Added the new `SOCIAL_AUTH_SUBDOMAIN` setting, which all servers using
-  both GitHub authentication and hosting multiple Zulip organizations
+  both GitHub authentication and hosting multiple Doer organizations
   should set (see [the docs for details](../production/multiple-organizations.md#authentication)).
 - Added automatic thumbnailing of images, powered by thumbor. The new
   THUMBOR_URL setting controls this feature; it is disabled by default
@@ -4127,7 +4127,7 @@ _Released 2018-11-07_
 - Added a fast database index supporting the "Private messages" narrow.
 - Added a notification setting for whether to send "new login" emails.
 - Dramatically expanded our API documentation to cover many more endpoints.
-- Optimized the performance of loading Zulip in an organization with
+- Optimized the performance of loading Doer in an organization with
   thousands of users and hundreds of bot users.
 - Optimized production release tarballs to save about 40MB of size.
 - Dropped support for the EmojiOne and Apple emoji sets, and added
@@ -4142,7 +4142,7 @@ _Released 2018-11-07_
   narrowing to the first unread message.
 - Fixed confusing intermediate states of group PMs online indicators.
 - Fixed several subtle unread count corner case bugs.
-- Fixed several installer issues to make it easier to Dockerize Zulip.
+- Fixed several installer issues to make it easier to Dockerize Doer.
 - Fixed several subtle issues with both the LDAP/Active Directory
   integration and its documentation, making it much easier to set up.
 - Fixed several minor bugs and otherwise optimized search typeahead.
@@ -4150,7 +4150,7 @@ _Released 2018-11-07_
   misconfigured IPv6.
 - Fixed most of the caveats on the Slack data import tool.
 - Fixed memcached cache size issues for organizations over 10,000 users.
-- Zulip's data export system has full support for all features, and
+- Doer's data export system has full support for all features, and
   tests to ensure that it stays that way.
 - Rewrote user documentation for dozens of integrations.
 - Rewrote the GitHub authentication backend (and more generally our
@@ -4163,8 +4163,8 @@ _Released 2018-11-07_
 - Made major improvements to the help center.
 - Improved system for configuring the S3 file uploads backend.
 - Improved emoji typeahead sorting.
-- Improved Zulip's layout for windows with a width around 1024px.
-- Improved Zulip's generic error handling behavior for webhooks.
+- Improved Doer's layout for windows with a width around 1024px.
+- Improved Doer's generic error handling behavior for webhooks.
 - Improved keyboard navigation of settings and popovers.
 - Renamed "realm filters" to "linkifiers", at least in the UI.
 - Converted several layered-checkbox settings to clearer dropdowns.
@@ -4174,17 +4174,17 @@ _Released 2018-11-07_
   user accounts on a server.
 - Emails and several other onboarding strings are now tagged for
   translation.
-- Optimized the performance of importing Zulip by about 30%. This
-  significantly decreases the load spike when restarting a Zulip server.
+- Optimized the performance of importing Doer by about 30%. This
+  significantly decreases the load spike when restarting a Doer server.
 - Optimized the performance of development provisioning; a no-op
   provision now completes in about 3.5s.
 - Migrated our static asset pipeline to webpack.
 - Our steady work on codebase quality and our automated test suite
   continues. Backend test coverage is now an incredible 98%.
 
-## Zulip Server 1.8.x series
+## Doer Server 1.8.x series
 
-### Zulip Server 1.8.1
+### Doer Server 1.8.1
 
 _Released 2018-05-07_
 
@@ -4201,14 +4201,14 @@ _Released 2018-05-07_
   between OUs.
 - Fixed a couple subtle bugs with muting.
 
-### Zulip Server 1.8.0
+### Doer Server 1.8.0
 
 _Released 2018-04-17_
 
 #### Highlights
 
 - Dramatically simplified the server installation process; it's now possible
-  to install Zulip without first setting up outgoing email.
+  to install Doer without first setting up outgoing email.
 - Added experimental support for importing an organization's history
   from Slack.
 - Added a new "night mode" theme for dark environments.
@@ -4222,7 +4222,7 @@ _Released 2018-04-17_
   already in 1.7.1 and 1.7.2.
 - The security model for private streams has changed. Now
   organization administrators can remove users, edit descriptions, and
-  rename private streams they are not subscribed to. See Zulip's
+  rename private streams they are not subscribed to. See Doer's
   security model documentation for details.
 - On Ubuntu 16.04, the local uploads backend now does the same security
   checks that the S3 backend did before serving files to users.
@@ -4237,7 +4237,7 @@ _Released 2018-04-17_
 **Visual and UI:**
 
 - Added a user setting to translate emoticons/smileys to emoji.
-- Added a user setting to choose the emoji set used in Zulip: Google,
+- Added a user setting to choose the emoji set used in Doer: Google,
   Twitter, Apple, or Emoji One.
 - Expanded setting for displaying emoji as text to cover all display
   settings (previously only affected reactions).
@@ -4271,7 +4271,7 @@ _Released 2018-04-17_
 - Redesigned the API for emoji reactions to support the full range of
   how emoji reactions are used.
 - Fixed most of the known (mostly obscure) bugs in how messages are
-  formatted in Zulip.
+  formatted in Doer.
 - Fixed "more topics" to correctly display all historical topics for
   public streams, even though from before a user subscribed.
 - Added a menu item to mark all messages as read.
@@ -4295,19 +4295,19 @@ _Released 2018-04-17_
   message being condensed ([More] appearing on every message).
 - Improved typeahead's handling of editing an already-completed mention.
 - Improved syntax for inline LaTeX to be more convenient.
-- Improved syntax for permanent links to streams in Zulip.
+- Improved syntax for permanent links to streams in Doer.
 - Improved behavior of copy-pasting a large number of messages.
 - Improved handling of browser undo in compose.
 - Improved saved drafts system to garbage-collect old drafts and sort
   by last modification, not creation.
-- Removed the legacy "Zulip labs" autoscroll_forever setting. It was
+- Removed the legacy "Doer labs" autoscroll_forever setting. It was
   enabled mostly by accident.
 - Removed some long-deprecated Markdown syntax for mentions.
 - Added support for clicking on a mention to see a user's profile.
-- Links to logged-in content in Zulip now take the user to the
+- Links to logged-in content in Doer now take the user to the
   appropriate upload or view after a user logs in.
 - Renamed "Home" to "All messages", to avoid users clicking on it too
-  early in using Zulip.
+  early in using Doer.
 - Added a user setting to control whether the organization's name is
   included in email subject lines.
 - Fixed uploading user avatars encoded using the CMYK mode.
@@ -4378,7 +4378,7 @@ _Released 2018-04-17_
 - Added certbot support to the installer for getting certificates.
 - Added support for hosting multiple domains, not all as subdomains of
   the same base domain.
-- Added a new nagios check for the Zulip analytics state.
+- Added a new nagios check for the Doer analytics state.
 - Fixed buggy APNs logic that could cause extra exception emails.
 - Fixed a missing dependency for the localhost_sso auth backend.
 - Fixed subtle bugs in garbage-collection of old node_modules versions.
@@ -4387,7 +4387,7 @@ _Released 2018-04-17_
 - Improved Tornado retry logic for connecting to RabbitMQ.
 - Added a server setting to control whether digest emails are sent.
 
-**For Zulip developers:**
+**For Doer developers:**
 
 - Migrated the codebase to use the nice Python 3 typing syntax.
 - Added a new /team/ page explaining the team, with a nice
@@ -4399,14 +4399,14 @@ _Released 2018-04-17_
 
 This major release has no special upgrade notes.
 
-## Zulip Server 1.7.x series
+## Doer Server 1.7.x series
 
-### Zulip Server 1.7.2
+### Doer Server 1.7.2
 
 _Released 2018-04-12_
 
 This is a security release, with a handful of cherry-picked changes
-since 1.7.1. All Zulip server admins are encouraged to upgrade
+since 1.7.1. All Doer server admins are encouraged to upgrade
 promptly.
 
 - CVE-2018-9986: Fix XSS issues with frontend Markdown processor.
@@ -4419,12 +4419,12 @@ promptly.
 Thanks to Suhas Sunil Gaikwad for reporting CVE-2018-9987 and w2w for
 reporting CVE-2018-9986 and CVE-2018-9990.
 
-### Zulip Server 1.7.1
+### Doer Server 1.7.1
 
 _Released 2017-11-21_
 
 This is a security release, with a handful of cherry-picked changes
-since 1.7.0. All Zulip server admins are encouraged to upgrade
+since 1.7.0. All Doer server admins are encouraged to upgrade
 promptly.
 
 This release includes fixes for the upgrade process, so server admins
@@ -4438,12 +4438,12 @@ running a version from before 1.7 should upgrade directly to 1.7.1.
   and several other languages have smaller updates.
 - The installer now sets LC_ALL to a known locale, working around an
   issue where some dependencies fail to install in some locales.
-- We fixed a bug in the script that runs after upgrading Zulip (so
+- We fixed a bug in the script that runs after upgrading Doer (so
   the fix applies when upgrading to this version), where the
   garbage-collection of old deployments sometimes wouldn't preserve
   the immediate last deployment.
 
-### Zulip Server 1.7.0
+### Doer Server 1.7.0
 
 _Released 2017-10-25_
 
@@ -4451,12 +4451,12 @@ _Released 2017-10-25_
 
 **Web**
 
-- We’ve completely redesigned our onboarding process to explain Zulip,
+- We’ve completely redesigned our onboarding process to explain Doer,
   and especially topics, to new users.
 - We’ve built a beautiful new emoji picker with categories, a
   showcase, and much better data. Note the clean, underscore-free
   display!
-- The emails sent by Zulip are more consistent, readable, and visually
+- The emails sent by Doer are more consistent, readable, and visually
   interesting.
 - Chinese (Simplified) and Japanese join Spanish, German, and Czech in
   having the user interface fully translated, in addition to partial
@@ -4468,13 +4468,13 @@ _Released 2017-10-25_
 
 **Mobile and Desktop support**
 
-- Zulip Server 1.7 adds several new APIs that are critical for mobile
+- Doer Server 1.7 adds several new APIs that are critical for mobile
   app performance and that let the app track unread messages. If
   you’re using the mobile apps at all (iOS or Android), you will
-  definitely want to upgrade to Zulip 1.7.
+  definitely want to upgrade to Doer 1.7.
 - The iOS and Android apps can receive push notifications
   (configurable, naturally) for events like PMs and @-mentions. While
-  Zulip Server 1.6 has basic support for these, 1.7 brings a new,
+  Doer Server 1.6 has basic support for these, 1.7 brings a new,
   clearer format to notifications, and gives each user more options
   for finer-grained control.
 - The new Electron desktop app is out of beta and replaces our legacy
@@ -4482,13 +4482,13 @@ _Released 2017-10-25_
 
 **Backend and scaling**
 
-- Zulip now runs exclusively on Python 3. This is the culmination of
+- Doer now runs exclusively on Python 3. This is the culmination of
   an 18-month migration effort. We are very excited about this!
 - We’ve added an automatic "soft deactivation" process, which
   dramatically improves performance for organizations with a large
   number of inactive users, without any impact on those users’
   experience if they later come back.
-- Zulip's performance at scale has improved significantly. Performance
+- Doer's performance at scale has improved significantly. Performance
   now scales primarily with number of active users (not total
   users). As an example, chat.zulip.org serves 400 monthly active
   users and about 3500 total users, on one VM with just 8GB of RAM and
@@ -4496,7 +4496,7 @@ _Released 2017-10-25_
 
 #### Upgrade notes for 1.7.0
 
-- Zulip 1.7 contains some significant database migrations that can
+- Doer 1.7 contains some significant database migrations that can
   take several minutes to run. The upgrade process automatically
   minimizes disruption by running these first, before beginning the
   user-facing downtime. However, if you'd like to watch the downtime
@@ -4505,11 +4505,11 @@ _Released 2017-10-25_
   as well as the usual trick of doing an apt upgrade first.
 
 - We've removed support for an uncommon legacy deployment model where
-  a Zulip server served multiple organizations on the same domain.
+  a Doer server served multiple organizations on the same domain.
   Installs with multiple organizations now require each organization
   to have its own subdomain.
 
-  This change should have no effect for the vast majority of Zulip
+  This change should have no effect for the vast majority of Doer
   servers that only have one organization. If you manage a server
   that hosts multiple organizations, you'll want to read [our guide on
   multiple organizations](../production/multiple-organizations.md).
@@ -4517,15 +4517,15 @@ _Released 2017-10-25_
 - We simplified the configuration for our password strength checker to
   be much more intuitive. If you were using the
   `PASSWORD_MIN_ZXCVBN_QUALITY` setting,
-  [it has been replaced](https://github.com/zulip/zulip/commit/a116303604e362796afa54b5d923ea5312b2ea23) by
+  [it has been replaced](https://github.com/doer/doer/commit/a116303604e362796afa54b5d923ea5312b2ea23) by
   the more intuitive `PASSWORD_MIN_GUESSES`.
 
 #### Full feature changelog
 
-- Simplified the process for installing a new Zulip server, as well as
+- Simplified the process for installing a new Doer server, as well as
   fixing the most common road bumps and confusing error messages.
 - Added a new "incoming webhook" bot type, limited to only sending
-  messages into Zulip, for better security.
+  messages into Doer, for better security.
 - Added experimental support for outgoing webhooks.
 - Added support for changing the notifications stream.
 - Added 'u' hotkey to show a user's profile.
@@ -4535,7 +4535,7 @@ _Released 2017-10-25_
 - Added a confirmation dialogue when inviting many users to a new stream.
 - Added new notification setting to always get push notifications on a stream.
 - Added new "getting started" guides to the user documentation.
-- Added support for installing a Zulip server from a Git checkout.
+- Added support for installing a Doer server from a Git checkout.
 - Added support for mentioning a user when editing a message.
 - Added Opsgenie, Google Code-In, Google Search, and xkcd integrations.
 - Added support for organization administrators deleting private streams.
@@ -4564,22 +4564,22 @@ _Released 2017-10-25_
 - Significantly improved sort ordering for the emoji picker.
 - Fixed most accessibility errors detected by major accessibility
   checker tools.
-- Extracted Zulip's Python API and bots ecosystem into its own
-  repository, zulip/python-zulip-api.
+- Extracted Doer's Python API and bots ecosystem into its own
+  repository, doer/python-doer-api.
 - Enter hotkey now opens compose in empty narrows.
 - Significantly improved performance of "starred messages" and
   "mentions" database queries through new indexes.
 - Upgraded to Django 1.11.x.
 - Upgraded to a more modern version of the SourceSansPro font.
 - Redesigned several settings subpages to be visually cleaner.
-- Redesigned Zulip's error pages to feature cute illustrations.
+- Redesigned Doer's error pages to feature cute illustrations.
 - Dramatically improved the user typeahead algorithm to suggest
   relevant users even in large organizations with 1000s of accounts.
 - Fixed log rotation structural issues which wasted a lot of disk.
 - Updated notification settings to not require a "save changes" button.
 - Rewrote the documentation for almost all of our integrations to be
   much clearer and more consistent through use of Markdown and macros.
-- Restructured Zulip's management commands to use a common system for
+- Restructured Doer's management commands to use a common system for
   accessing realms and users.
 - Made starting editing a message you just sent not require a round trip.
 - Dramatically increased test coverage of the frontend codebase.
@@ -4594,7 +4594,7 @@ _Released 2017-10-25_
 - Fixed rendering of emoji in tweet previews.
 - Fixed buggy translation caching which filled local storage.
 - Fixed handling of desktop and mobile apps in new-login emails.
-- Fixed caching of source repository in upgrade-zulip-from-git.
+- Fixed caching of source repository in upgrade-doer-from-git.
 - Fixed numerous minor internationalization bugs.
 - Fixed several bugs with the LDAP authentication backend.
 - Fixed several corner case bugs with push notification.
@@ -4609,8 +4609,8 @@ _Released 2017-10-25_
 - Fixed a subtle bug involving timestamps of locally echoed messages.
 - Fixed the behavior of key combinations like Ctrl+Enter in the compose box.
 - Worked around Google Compute Engine's default boto configuration,
-  which broke Zulip (and any other app using boto).
-- Zulip now will gracefully handle the PostgreSQL server being restarted.
+  which broke Doer (and any other app using boto).
+- Doer now will gracefully handle the PostgreSQL server being restarted.
 - Optimized marking an entire topic as read.
 - Switched from npm to yarn for downloading JS packages.
 - Switched the function of the 'q' and 'w' search hotkeys.
@@ -4628,9 +4628,9 @@ _Released 2017-10-25_
 - Removed several obsolete settings.
 - Partially completed migration to webpack as our static asset bundler.
 
-## Zulip Server 1.6.x and older
+## Doer Server 1.6.x and older
 
-### Zulip Server 1.6.0
+### Doer Server 1.6.0
 
 _Released 2017-06-06_
 
@@ -4640,7 +4640,7 @@ _Released 2017-06-06_
   registration, integrations, etc.
 - New visual designs for numerous UI elements, including the emoji
   picker, user profile popovers, sidebars, compose, and many more.
-- A complete redesign of the Zulip settings interfaces to look a lot
+- A complete redesign of the Doer settings interfaces to look a lot
   nicer and be easier to navigate.
 - Organization admins can now configure the login and registration
   pages to show visitors a nice organization profile with custom text
@@ -4655,7 +4655,7 @@ _Released 2017-06-06_
 - The server can now run on a machine with as little as 2GB of RAM.
 - The new [Electron desktop app][electron-app] and new
   [React Native mobile app for iOS][ios-app] are now the recommended
-  Zulip apps.
+  Doer apps.
 - Mobile web now works much better, especially on iOS.
 - Support for sending mobile push notifications via
   [a new forwarding service][mobile-push]
@@ -4665,8 +4665,8 @@ _Released 2017-06-06_
   Serbian, Malayalam, Korean, and Italian).
 
 [mobile-push]: ../production/mobile-push-notifications.md
-[electron-app]: https://github.com/zulip/zulip-desktop/releases
-[ios-app]: https://itunes.apple.com/us/app/zulip/id1203036395
+[electron-app]: https://github.com/doer/doer-desktop/releases
+[ios-app]: https://itunes.apple.com/us/app/doer/id1203036395
 
 #### Full feature changelog
 
@@ -4688,7 +4688,7 @@ _Released 2017-06-06_
 - Added new endpoint for fetching presence data, useful in employee directories.
 - Added typeahead for language for syntax highlighting in code blocks.
 - Added support for basic Markdown in stream descriptions.
-- Added email notifications on new Zulip logins.
+- Added email notifications on new Doer logins.
 - Added security hardening before serving uploaded files.
 - Added new PRIVACY_POLICY setting to provide a Markdown privacy policy.
 - Added an icon to distinguish bot users as message senders.
@@ -4730,7 +4730,7 @@ _Released 2017-06-06_
 - Fixed various left sidebar ordering and live-updated bugs.
 - Fixed numerous bugs with the message editing widget.
 - Fixed missing logging / rate limiting on browser endpoints.
-- Fixed regressions in Zulip's browser state preservation on reload logic.
+- Fixed regressions in Doer's browser state preservation on reload logic.
 - Fixed support for Unicode characters in the email mirror system.
 - Fixed load spikes when email mirror is receiving a lot of traffic.
 - Fixed the ugly grey flicker when scrolling fast on Macs.
@@ -4745,7 +4745,7 @@ _Released 2017-06-06_
 - Most API payloads now refer to users primarily by user ID, with
   email available for backwards-compatibility. In the future, we may
   remove email support.
-- Cleaned up Zulip's supervisord configuration. A side effect is the
+- Cleaned up Doer's supervisord configuration. A side effect is the
   names of the log files have changed for all the queue workers.
 - Refactored various endpoints to use a single code path for security
   hardening.
@@ -4756,21 +4756,21 @@ _Released 2017-06-06_
 - Disabled the web tutorial on mobile.
 - Backend test coverage is now 93%, with 100% in views code.
 
-### Zulip Server 1.5.2
+### Doer Server 1.5.2
 
 _Released 2017-06-01_
 
 - CVE-2017-0896: Restricting inviting new users to admins was broken.
 - CVE-2015-8861: Insecure old version of Handlebars templating engine.
 
-### Zulip Server 1.5.1
+### Doer Server 1.5.1
 
 _Released 2017-02-07_
 
 - Fix exception trying to copy node_modules during upgrade process.
 - Improved styling of /stats page to remove useless login/register links.
 
-### Zulip Server 1.5.0
+### Doer Server 1.5.0
 
 _Released 2017-02-06_
 
@@ -4799,9 +4799,9 @@ _Released 2017-02-06_
 - Added support for setting a stream description on creation.
 - Added support for copying subscribers from existing streams on creation.
 - Added several new search/filtering UI elements.
-- Added UI for deactivating your own Zulip account.
+- Added UI for deactivating your own Doer account.
 - Added support for viewing the raw Markdown content of a message.
-- Added support for deploying Zulip with subdomains for each realm.
+- Added support for deploying Doer with subdomains for each realm.
   This entailed numerous changes to ensure a consistent experience.
 - Added support for (optionally) using PGRoonga to support full-text
   search in all languages (not just English).
@@ -4810,10 +4810,10 @@ _Released 2017-02-06_
   Labs, Stripe and Zapier integrations.
 - Added a webhook integration for GitHub, replacing the deprecated
   github-services hook.
-- Normalized the message formatting for all the Zulip Git integrations.
+- Normalized the message formatting for all the Doer Git integrations.
 - Added support for VMware Fusion Vagrant provider for faster OSX
   development.
-- Added a shields.io style badge for joining a Zulip server.
+- Added a shields.io style badge for joining a Doer server.
 - Added admin setting for which email domains can join a realm.
 - Added admin setting for controlling who can create streams.
 - Added admin setting to limit stream creation to older users.
@@ -4821,10 +4821,10 @@ _Released 2017-02-06_
 - Added a new hotkey for muting/unmuting topics.
 - Added support for testing websockets to the Nagios plugins.
 - Added a configuration option to disable websockets.
-- Added support for removing one's own Zulip account.
+- Added support for removing one's own Doer account.
 - Added support for realm admins which auth backends are supported.
 - Added new organization type concept. This will be used to control
-  whether Zulip is optimized around protecting user privacy
+  whether Doer is optimized around protecting user privacy
   vs. administrative control.
 - Added #**streamName** syntax for linking to a stream.
 - Added support for viewing Markdown source of messages.
@@ -4835,23 +4835,23 @@ _Released 2017-02-06_
 - Added italics and strikethrough support in Markdown implementation.
 - Added errors for common installations mistakes (e.g., too little RAM).
 - Added a new /authors page showing the contributors to the current
-  Zulip version.
+  Doer version.
 - Added illustrations to the 404 and 500 pages.
 - Upgraded all Python dependencies to modern versions, including
-  Django 1.10 (all of Zulip's patches have been merged into mainline).
+  Django 1.10 (all of Doer's patches have been merged into mainline).
 - Increased backend test coverage of Python codebase to 90%.
 - Increased mypy static type coverage of Python code to 100%.
 - Added several new linters (eslint, pep8) and cleaned the codebase.
-- Optimized the speed of the Zulip upgrade process, especially with Git.
+- Optimized the speed of the Doer upgrade process, especially with Git.
 - Have peer_add events send user_id, not email.
-- Fixed problems with RabbitMQ when installing Zulip.
+- Fixed problems with RabbitMQ when installing Doer.
 - Fixed JavaScript not being gzip-compressed properly.
 - Fixed a major performance bug in the Tornado service.
 - Fixed a frontend performance bug creating streams in very large realms.
 - Fixed numerous bugs where strings were not properly tagged for translation.
 - Fixed several real-time sync bugs, and removed several AJAX calls.
-  Zulip should be more performant than ever before.
-- Fixed Zulip Tornado service not working with http_proxy set in environment.
+  Doer should be more performant than ever before.
+- Fixed Doer Tornado service not working with http_proxy set in environment.
 - Fixed text overflow in stream subscriptions.
 - Fixed CSS issues with message topic editing.
 - Fixed several transactionality bugs (e.g., in Huddle creation).
@@ -4860,7 +4860,7 @@ _Released 2017-02-06_
 - Fixed various mismatches between frontend and backend Markdown
   implementations.
 - Fixed various popover-related UI bugs.
-- Fixed duplicate notifications with multiple open Zulip tabs.
+- Fixed duplicate notifications with multiple open Doer tabs.
 - Fixed support for emailing the server administrator about backend exceptions.
 - Cleaned up the "edit message" form.
 - Eliminated most of the legacy API endpoints.
@@ -4880,24 +4880,24 @@ _Released 2017-02-06_
   streams.
 - Documented preliminary design for interactive bot system.
 
-### Zulip Server 1.4.3
+### Doer Server 1.4.3
 
 _Released 2017-01-29_
 
 - CVE-2017-0881: Users could subscribe to invite-only streams.
 
-### Zulip Server 1.4.2
+### Doer Server 1.4.2
 
 _Released 2016-09-27_
 
-- Upgraded Django to version 1.8.15 (with the Zulip patches applied),
+- Upgraded Django to version 1.8.15 (with the Doer patches applied),
   fixing a CSRF vulnerability in Django (see
   https://www.djangoproject.com/weblog/2016/sep/26/security-releases/),
   and a number of other Django bugs from past Django stable releases
-  that largely affects parts of Django that are not used by Zulip.
+  that largely affects parts of Django that are not used by Doer.
 - Fixed buggy logrotate configuration.
 
-### Zulip Server 1.4.1
+### Doer Server 1.4.1
 
 _Released 2016-09-03_
 
@@ -4905,16 +4905,16 @@ _Released 2016-09-03_
 - Fixed local file uploads integration being broken for new 1.4.0
   installations.
 
-### Zulip Server 1.4.0
+### Doer Server 1.4.0
 
 _Released 2016-08-25_
 
-- Migrated Zulip's python dependencies to be installed via a virtualenv,
-  instead of the via apt. This is a major change to how Zulip
+- Migrated Doer's python dependencies to be installed via a virtualenv,
+  instead of the via apt. This is a major change to how Doer
   is installed that we expect will simplify upgrades in the future.
 - Fixed unnecessary loading of zxcvbn password strength checker. This
   saves a huge fraction of the uncached network transfer for loading
-  Zulip.
+  Doer.
 - Added support for using Ubuntu 16.04 in production.
 - Added a powerful and complete realm import/export tool.
 - Added nice UI for selecting a default language to display settings.
@@ -4935,14 +4935,14 @@ _Released 2016-08-25_
 - Added GitHub authentication (and integrated python-social-auth, so it's
   easy to add additional social authentication methods).
 - Added TERMS_OF_SERVICE setting using Markdown formatting to configure
-  the terms of service for a Zulip server.
+  the terms of service for a Doer server.
 - Added numerous hooks to Puppet modules to enable more configurations.
 - Moved several useful Puppet components into the main Puppet
   manifests (setting a Redis password, etc.).
 - Added automatic configuration of PostgreSQL/memcached settings based
   on the server's available RAM.
-- Added scripts/upgrade-zulip-from-git for upgrading Zulip from a Git repo.
-- Added preliminary support for Python 3. All of Zulip's test suites now
+- Added scripts/upgrade-doer-from-git for upgrading Doer from a Git repo.
+- Added preliminary support for Python 3. All of Doer's test suites now
   pass using Python 3.4.
 - Added support for `Name <email@example.com>` format when inviting users.
 - Added numerous special-purpose settings options.
@@ -4967,7 +4967,7 @@ _Released 2016-08-25_
 - Fixed Casper tests hanging while development server is running.
 - Fixed browser autocomplete issue when adding new stream members.
 - Fixed broken create_stream and rename_stream management commands.
-- Fixed zulip-puppet-apply exit code when puppet throws errors.
+- Fixed doer-puppet-apply exit code when puppet throws errors.
 - Fixed EPMD restart being attempted on every puppet apply.
 - Fixed message cache filling; should improve perf after server restart.
 - Fixed caching race condition when changing user objects.
@@ -4983,7 +4983,7 @@ _Released 2016-08-25_
 - Fixed old deployment directories leaking indefinitely.
 - Fixed need to manually add localhost in ALLOWED_HOSTS.
 - Fixed display positioning for the color picker on subscriptions page.
-- Fixed escaping of Zulip extensions to Markdown.
+- Fixed escaping of Doer extensions to Markdown.
 - Fixed requiring a reload to see newly uploaded avatars.
 - Fixed @all warning firing even for `@all`.
 - Restyled password reset form to look nice.
@@ -5007,14 +5007,14 @@ _Released 2016-08-25_
 - Removed old prototype data export tool.
 - Disabled insecure RC4 cipher in nginx configuration.
 - Enabled shared SSL session cache in nginx configuration.
-- Updated header for Zulip static assets to reflect Zulip being
+- Updated header for Doer static assets to reflect Doer being
   open source.
 
-### Zulip Server 1.3.13
+### Doer Server 1.3.13
 
 _Released 2016-06-21_
 
-- Added nearly complete internationalization of the Zulip UI.
+- Added nearly complete internationalization of the Doer UI.
 - Added warning when using @all/@everyone.
 - Added button offering to subscribe at bottom of narrows to streams
   the user is not subscribed to.
@@ -5023,34 +5023,34 @@ _Released 2016-06-21_
 - Added menu option to mark all messages in a stream or topic as read.
 - Added new Attachment model to keep track of uploaded files.
 - Added caching of virtualenvs in development.
-- Added mypy static type annotations to about 85% of the Zulip Python codebase.
+- Added mypy static type annotations to about 85% of the Doer Python codebase.
 - Added automated test of backend templates to test for regressions.
-- Added lots of detailed documentation on the Zulip development environment.
+- Added lots of detailed documentation on the Doer development environment.
 - Added setting allowing only administrators to create new streams.
-- Added button to exit the Zulip tutorial early.
+- Added button to exit the Doer tutorial early.
 - Added web UI for configuring default streams.
 - Added new OPEN_REALM_CREATION setting (default off), providing a UI
-  for creating additional realms on a Zulip server.
+  for creating additional realms on a Doer server.
 - Fixed email_gateway_password secret not working properly.
 - Fixed missing helper scripts for RabbitMQ Nagios plugins.
 - Fixed skipping forward to latest messages ("More messages below" button).
-- Fixed netcat issue causing Zulip installation to hang on Scaleway machines.
+- Fixed netcat issue causing Doer installation to hang on Scaleway machines.
 - Fixed rendering of /me status messages after message editing.
 - Fixed case sensitivity of right sidebar fading when compose is open.
 - Fixed error messages when composing to invalid PM recipients.
-- Fixed LDAP auth backend not working with Zulip mobile apps.
+- Fixed LDAP auth backend not working with Doer mobile apps.
 - Fixed erroneous WWW-Authenticate headers with expired sessions.
-- Changed "coworkers" to "users" in the Zulip UI.
+- Changed "coworkers" to "users" in the Doer UI.
 - Changed add_default_stream REST API to correctly use PUT rather than PATCH.
-- Updated the Zulip emoji set (the Android emoji) to a modern version.
-- Made numerous small improvements to the Zulip development experience.
+- Updated the Doer emoji set (the Android emoji) to a modern version.
+- Made numerous small improvements to the Doer development experience.
 - Migrated backend templates to the faster Jinja2 templating system.
 - Migrated development environment setup scripts to tools/setup/.
 - Expanded test coverage for several areas of the product.
 - Simplified the API for writing new webhook integrations.
 - Removed most of the remaining JavaScript global variables.
 
-### Zulip Server 1.3.12
+### Doer Server 1.3.12
 
 _Released 2016-05-10_
 
@@ -5060,26 +5060,26 @@ _Released 2016-05-10_
 - Added expansive test suite for authentication backends and decorators.
 - Added an option to logout_all_users to delete only sessions for deactivated users.
 
-### Zulip Server 1.3.11
+### Doer Server 1.3.11
 
 _Released 2016-05-02_
 
-- Moved email digest support into the default Zulip production configuration.
+- Moved email digest support into the default Doer production configuration.
 - Added options for configuring PostgreSQL, RabbitMQ, Redis, and memcached
   in settings.py.
 - Added documentation on using Hubot to integrate with useful services
-  not yet integrated with Zulip directly (e.g., Google Hangouts).
-- Added new management command to test sending email from Zulip.
+  not yet integrated with Doer directly (e.g., Google Hangouts).
+- Added new management command to test sending email from Doer.
 - Added Codeship, Pingdom, Taiga, TeamCity, and Yo integrations.
 - Added Nagios plugins to the main distribution.
 - Added ability for realm administrators to manage custom emoji.
 - Added guide to writing new integrations.
 - Enabled camo image proxy to fix mixed-content warnings for http images.
-- Refactored the Zulip Puppet modules to be more modular.
+- Refactored the Doer Puppet modules to be more modular.
 - Refactored the Tornado event system, fixing old memory leaks.
 - Removed many old-style /json API endpoints
 - Implemented running queue processors multithreaded in development,
-  decreasing RAM requirements for a Zulip development environment from
+  decreasing RAM requirements for a Doer development environment from
   ~1GB to ~300MB.
 - Fixed rerendering the complete buddy list whenever a user came back from
   idle, which was a significant performance issue in larger realms.
@@ -5091,13 +5091,13 @@ _Released 2016-05-02_
 - Fixed 500 errors when uploading a non-image file as an avatar.
 - Fixed Jira integration incorrectly not @-mentioning assignee.
 
-### Zulip Server 1.3.10
+### Doer Server 1.3.10
 
 _Released 2016-01-21_
 
 - Added new integration for Travis CI.
 - Added settings option to control maximum file upload size.
-- Added support for running Zulip development environment in Docker.
+- Added support for running Doer development environment in Docker.
 - Added easy configuration support for a remote PostgreSQL database.
 - Added extensive documentation on scalability, backups, and security.
 - Recent private message threads are now displayed expanded similar to
@@ -5110,37 +5110,37 @@ _Released 2016-01-21_
 - Changed the page title in narrowed views to include the current narrow.
 - Fixed several backend performance issues affecting very large realms.
 - Fixed bugs where draft compose content might be lost when reloading site.
-- Fixed support for disabling the "zulip" notifications stream.
+- Fixed support for disabling the "doer" notifications stream.
 - Fixed missing step in postfix_localmail installation instructions.
 - Fixed several bugs/inconveniences in the production upgrade process.
 - Fixed realm restrictions for servers with a unique, open realm.
 - Substantially cleaned up console logging from run-dev.
 
-### Zulip Server 1.3.9
+### Doer Server 1.3.9
 
 _Released 2015-11-16_
 
 - Fixed buggy #! lines in upgrade scripts.
 
-### Zulip Server 1.3.8
+### Doer Server 1.3.8
 
 _Released 2015-11-15_
 
 - Added options to the Python API for working with untrusted server certificates.
 - Added a lot of documentation on the development environment and testing.
-- Added partial support for translating the Zulip UI.
+- Added partial support for translating the Doer UI.
 - Migrated installing Node dependencies to use npm.
 - Fixed LDAP integration breaking autocomplete of @-mentions.
 - Fixed admin panel reactivation/deactivation of bots.
 - Fixed inaccurate documentation for downloading the desktop apps.
 - Fixed various minor bugs in production installation process.
 - Fixed security issue where recent history on private streams might
-  be visible to new users (to the Zulip team) who were invited with that
+  be visible to new users (to the Doer team) who were invited with that
   private stream as one of their initial streams
-  (https://github.com/zulip/zulip/issues/230).
+  (https://github.com/doer/doer/issues/230).
 - Major preliminary progress towards supporting Python 3.
 
-### Zulip Server 1.3.7
+### Doer Server 1.3.7
 
 _Released 2015-10-19_
 
@@ -5173,6 +5173,6 @@ easily read them all when upgrading across multiple releases.
 - [Upgrade notes for 1.8.0](#upgrade-notes-for-180)
 - [Upgrade notes for 1.7.0](#upgrade-notes-for-170)
 
-[docker-zulip]: https://github.com/zulip/docker-zulip
-[commit-log]: https://github.com/zulip/zulip/commits/main
+[docker-doer]: https://github.com/doer/docker-doer
+[commit-log]: https://github.com/doer/doer/commits/main
 [latest-changelog]: https://zulip.readthedocs.io/en/latest/overview/changelog.html

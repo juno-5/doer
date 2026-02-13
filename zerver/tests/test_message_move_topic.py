@@ -24,7 +24,7 @@ from zerver.actions.user_groups import check_add_user_group
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.user_topics import do_set_user_topic_visibility_policy
 from zerver.lib.message import truncate_topic
-from zerver.lib.test_classes import ZulipTestCase, get_topic_messages
+from zerver.lib.test_classes import DoerTestCase, get_topic_messages
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import RESOLVED_TOPIC_PREFIX
 from zerver.lib.types import StreamMessageEditRequest, UserGroupMembersData
@@ -42,7 +42,7 @@ from zerver.models.streams import Stream, StreamTopicsPolicyEnum, get_stream
 from zerver.models.users import ResolvedTopicNoticeAutoReadPolicyEnum
 
 
-class MessageMoveTopicTest(ZulipTestCase):
+class MessageMoveTopicTest(DoerTestCase):
     def check_topic(self, msg_id: int, topic_name: str) -> None:
         msg = Message.objects.get(id=msg_id)
         self.assertEqual(msg.topic_name(), topic_name)

@@ -13,7 +13,7 @@ AppMigrations: TypeAlias = dict[str, list[str]]
 
 class MigrationStatusJson(TypedDict):
     migrations_by_app: AppMigrations
-    zulip_version: str
+    doer_version: str
 
 
 STALE_MIGRATIONS = [

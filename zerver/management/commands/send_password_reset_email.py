@@ -6,11 +6,11 @@ from django.db.models import QuerySet
 from typing_extensions import override
 
 from zerver.actions.users import do_send_password_reset_email
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import UserProfile
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Send email to specified email address."""
 
     @override

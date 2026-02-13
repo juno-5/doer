@@ -1,8 +1,8 @@
 # Mobile notifications
 
-Zulip Server 11.0+ supports end-to-end encryption (E2EE) for mobile
-push notifications. Mobile push notifications sent by all Zulip
-servers go through Zulip's mobile push notifications service, which
+Doer Server 11.0+ supports end-to-end encryption (E2EE) for mobile
+push notifications. Mobile push notifications sent by all Doer
+servers go through Doer's mobile push notifications service, which
 then delivers the notifications through the appropriate
 platform-specific push notification service (Google's FCM or Apple's
 APNs). E2EE push notifications ensure that mobile notification message
@@ -10,7 +10,7 @@ content and metadata is not visible to intermediaries.
 
 Mobile clients that have [registered an E2EE push
 device](/api/register-push-device) will receive mobile notifications
-end-to-end encrypted by their Zulip server.
+end-to-end encrypted by their Doer server.
 
 This page documents the format of the encrypted JSON-format payloads
 that the client will receive through this protocol. The same encrypted
@@ -30,8 +30,8 @@ Sample JSON data that gets encrypted:
   "mentioned_user_group_id": 41,
   "mentioned_user_group_name": "test_user_group",
   "message_id": 45,
-  "realm_name": "Zulip Dev",
-  "realm_url": "http://zulip.testserver",
+  "realm_name": "Doer Dev",
+  "realm_url": "http://doer.testserver",
   "recipient_type": "channel",
   "sender_avatar_url": "https://secure.gravatar.com/avatar/818c212b9f8830dfef491b3f7da99a14?d=identicon&version=1",
   "sender_full_name": "aaron",
@@ -50,7 +50,7 @@ Sample JSON data that gets encrypted:
   directly and a group containing the user, these fields will not be
   present in the payload, because the direct mention has precedence.
 
-**Changes**: New in Zulip 11.0 (feature level 413).
+**Changes**: New in Doer 11.0 (feature level 413).
 
 ### New direct message
 
@@ -59,8 +59,8 @@ Sample JSON data that gets encrypted:
 {
   "content": "test content",
   "message_id": 46,
-  "realm_name": "Zulip Dev",
-  "realm_url": "http://zulip.testserver",
+  "realm_name": "Doer Dev",
+  "realm_url": "http://doer.testserver",
   "recipient_type": "direct",
   "recipient_user_ids": [6,10,12,15],
   "sender_avatar_url": "https://secure.gravatar.com/avatar/818c212b9f8830dfef491b3f7da99a14?d=identicon&version=1",
@@ -76,12 +76,12 @@ Sample JSON data that gets encrypted:
 the direct message conversation, including both `user_id` and
 `sender_id`.
 
-**Changes**: In Zulip 12.0 (feature level 429), replaced the
+**Changes**: In Doer 12.0 (feature level 429), replaced the
 `pm_users` field with `recipient_user_ids`. The old `pm_users` field
 was only present for group DMs, and was a string containing a
 comma-separated list of sorted user IDs.
 
-New in Zulip 11.0 (feature level 413).
+New in Doer 11.0 (feature level 413).
 
 ### Remove notifications
 
@@ -97,16 +97,16 @@ Sample JSON data that gets encrypted:
     31,
     32
   ],
-  "realm_name": "Zulip Dev",
-  "realm_url": "http://zulip.testserver",
+  "realm_name": "Doer Dev",
+  "realm_url": "http://doer.testserver",
   "type": "remove",
   "user_id": 10
 }
 ```
 
-[zulip-bouncer]: https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html#mobile-push-notification-service
+[doer-bouncer]: https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html#mobile-push-notification-service
 
-**Changes**: New in Zulip 11.0 (feature level 413).
+**Changes**: New in Doer 11.0 (feature level 413).
 
 ### Test push notification
 
@@ -116,19 +116,19 @@ to the user's selected mobile device or all of their mobile devices.
 Sample JSON data that gets encrypted:
 ```json
 {
-  "realm_name": "Zulip Dev",
-  "realm_url": "http://zulip.testserver",
+  "realm_name": "Doer Dev",
+  "realm_url": "http://doer.testserver",
   "time": 1754577820,
   "type": "test",
   "user_id": 10
 }
 ```
 
-**Changes**: New in Zulip 11.0 (feature level 420).
+**Changes**: New in Doer 11.0 (feature level 420).
 
-### Data sent to Zulip's push notifications service
+### Data sent to Doer's push notifications service
 
-Sample JSON data sent by a self-hosted server to the Zulip's push notifications service:
+Sample JSON data sent by a self-hosted server to the Doer's push notifications service:
 ```json
 {
   "realm_uuid": "e502dde1-74fc-44b3-9e3a-114c41ed3ea4",
@@ -162,11 +162,11 @@ Sample JSON data sent by a self-hosted server to the Zulip's push notifications 
 }
 ```
 
-**Changes**: New in Zulip 11.0 (feature level 413).
+**Changes**: New in Doer 11.0 (feature level 413).
 
 ### Data sent to FCM
 
-Zulip's push notifications service uses [Firebase Admin Python SDK](https://github.com/firebase/firebase-admin-python)
+Doer's push notifications service uses [Firebase Admin Python SDK](https://github.com/firebase/firebase-admin-python)
 to access FCM.
 
 A sample `messages` argument, which is internally used by the SDK to prepare payload for FCM,
@@ -184,11 +184,11 @@ passed to [`firebase_admin.messaging.send_each`](https://firebase.google.com/doc
 ]
 ```
 
-**Changes**: New in Zulip 11.0 (feature level 413).
+**Changes**: New in Doer 11.0 (feature level 413).
 
 ### Data sent to APNs
 
-Zulip's push notifications service uses [aioapns](https://github.com/Fatal1ty/aioapns) to access APNs.
+Doer's push notifications service uses [aioapns](https://github.com/Fatal1ty/aioapns) to access APNs.
 
 A sample `request` argument, which is internally used by the library to prepare payload for APNs,
 passed to [`aioapns.APNs.send_notification`](https://github.com/Fatal1ty/aioapns/blob/96831003ec5a8986206cde77e59fdb4b5a3c4b24/aioapns/client.py):
@@ -209,4 +209,4 @@ aioapns.NotificationRequest(
 )
 ```
 
-**Changes**: New in Zulip 11.0 (feature level 413).
+**Changes**: New in Doer 11.0 (feature level 413).

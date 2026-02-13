@@ -91,24 +91,24 @@ def send_initial_direct_messages_to_user(
     with override_language(user.default_language):
         if education_organization:
             getting_started_string = _("""
-To learn more, check out our [using Zulip for a class guide]({getting_started_url})!
-""").format(getting_started_url="/help/using-zulip-for-a-class")
+To learn more, check out our [using Doer for a class guide]({getting_started_url})!
+""").format(getting_started_url="/help/using-doer-for-a-class")
         else:
             getting_started_string = _("""
 To learn more, check out our [getting started guide]({getting_started_url})!
-""").format(getting_started_url="/help/getting-started-with-zulip")
+""").format(getting_started_url="/help/getting-started-with-doer")
 
         organization_setup_string = ""
         # Add extra content on setting up a new organization for administrators.
         if user.is_realm_admin:
             if education_organization:
                 organization_setup_string = _("""
-We also have a guide for [setting up Zulip for a class]({organization_setup_url}).
-""").format(organization_setup_url="/help/setting-up-zulip-for-a-class")
+We also have a guide for [setting up Doer for a class]({organization_setup_url}).
+""").format(organization_setup_url="/help/setting-up-doer-for-a-class")
             else:
                 organization_setup_string = _("""
-We also have a guide for [moving your organization to Zulip]({organization_setup_url}).
-""").format(organization_setup_url="/help/moving-to-zulip")
+We also have a guide for [moving your organization to Doer]({organization_setup_url}).
+""").format(organization_setup_url="/help/moving-to-doer")
 
         demo_organization_warning_string = ""
         # Add extra content about automatic deletion for demo organization creators.
@@ -135,7 +135,7 @@ them in your [Inbox](/#inbox).
 """)
 
         navigation_tour_video_string = _("""
-You can always come back to the [Welcome to Zulip video]({navigation_tour_video_url}) for a quick app overview.
+You can always come back to the [Welcome to Doer video]({navigation_tour_video_url}) for a quick app overview.
 """).format(navigation_tour_video_url=settings.NAVIGATION_TOUR_VIDEO_URL)
 
         welcome_bot_custom_message_string = ""
@@ -146,7 +146,7 @@ You can always come back to the [Welcome to Zulip video]({navigation_tour_video_
             )
 
         content = _("""
-Hello, and welcome to Zulip!👋 {inform_about_tracked_onboarding_messages_text}
+Hello, and welcome to Doer!👋 {inform_about_tracked_onboarding_messages_text}
 
 {getting_started_text} {organization_setup_text}
 
@@ -217,7 +217,7 @@ def select_welcome_bot_response(human_response_lower: str) -> str:
     if human_response_lower in ["app", "apps"]:
         return _("""
 You can [download](/apps/) the [mobile and desktop apps](/apps/).
-Zulip also works great in a browser.
+Doer also works great in a browser.
 """)
     elif human_response_lower == "profile":
         return _("""
@@ -228,7 +228,7 @@ and edit your [profile information](/help/edit-your-profile).
         return _("""
 You can switch between [light and dark theme](/help/dark-theme), [pick your
 favorite emoji set](/help/emoji-and-emoticons#change-your-emoji-set), [change
-your language](/help/change-your-language), and otherwise customize your Zulip
+your language](/help/change-your-language), and otherwise customize your Doer
 experience in your [Preferences](#settings/preferences).
 """)
     elif human_response_lower in ["stream", "streams", "channel", "channels"]:
@@ -240,8 +240,8 @@ it's common to have a channel for each team in an organization.
 """).format(help_link="/help/introduction-to-channels", settings_link="#channels/all")
     elif human_response_lower in ["topic", "topics"]:
         return _("""
-[Topics](/help/introduction-to-topics) summarize what each conversation in Zulip
-is about. You can read Zulip one topic at a time, seeing each message in
+[Topics](/help/introduction-to-topics) summarize what each conversation in Doer
+is about. You can read Doer one topic at a time, seeing each message in
 context, no matter how many other conversations are going on.
 
 When you start a conversation, label it with a new topic. For a good topic name,
@@ -252,7 +252,7 @@ discussed.
 """)
     elif human_response_lower in ["keyboard", "shortcuts", "keyboard shortcuts"]:
         return _("""
-Zulip's [keyboard shortcuts](#keyboard-shortcuts) let you navigate the app
+Doer's [keyboard shortcuts](#keyboard-shortcuts) let you navigate the app
 quickly and efficiently.
 
 Press `?` any time to see a [cheat sheet](#keyboard-shortcuts).
@@ -269,7 +269,7 @@ times, and more.
         return _("""
 Here are a few messages I understand: {bot_commands}
 
-Check out our [Getting started guide](/help/getting-started-with-zulip),
+Check out our [Getting started guide](/help/getting-started-with-doer),
 or browse the [help center](/help/) to learn more!
 """).format(bot_commands=bot_commands(no_help_command=True))
     else:
@@ -320,7 +320,7 @@ def send_welcome_bot_response(send_request: SendMessageRequest) -> None:
 
 class OnboardingMessageTypeEnum(Enum):
     moving_messages = 1
-    welcome_to_zulip = 2
+    welcome_to_doer = 2
     start_conversation = 3
     experiments = 4
     greetings = 5
@@ -344,10 +344,10 @@ def send_initial_realm_messages(
         channel_name_map = override_channel_name_map
     else:
         channel_name_map = {
-            OnboardingMessageTypeEnum.moving_messages: str(Realm.ZULIP_DISCUSSION_CHANNEL_NAME),
-            OnboardingMessageTypeEnum.welcome_to_zulip: str(Realm.ZULIP_DISCUSSION_CHANNEL_NAME),
-            OnboardingMessageTypeEnum.start_conversation: str(Realm.ZULIP_SANDBOX_CHANNEL_NAME),
-            OnboardingMessageTypeEnum.experiments: str(Realm.ZULIP_SANDBOX_CHANNEL_NAME),
+            OnboardingMessageTypeEnum.moving_messages: str(Realm.DOER_DISCUSSION_CHANNEL_NAME),
+            OnboardingMessageTypeEnum.welcome_to_doer: str(Realm.DOER_DISCUSSION_CHANNEL_NAME),
+            OnboardingMessageTypeEnum.start_conversation: str(Realm.DOER_SANDBOX_CHANNEL_NAME),
+            OnboardingMessageTypeEnum.experiments: str(Realm.DOER_SANDBOX_CHANNEL_NAME),
             OnboardingMessageTypeEnum.greetings: str(Realm.DEFAULT_NOTIFICATION_STREAM_NAME),
         }
     assert set(channel_name_map.keys()) == set(OnboardingMessageTypeEnum)
@@ -380,24 +380,24 @@ or even move a topic [to a different channel]({move_content_another_channel_help
 :point_right: Try moving this message to another topic and back.
 """)
 
-    content1_of_welcome_to_zulip_topic_name = _("""
-Zulip is organized to help you communicate more efficiently. Conversations are
+    content1_of_welcome_to_doer_topic_name = _("""
+Doer is organized to help you communicate more efficiently. Conversations are
 labeled with topics, which summarize what the conversation is about.
 
 For example, this message is in the “{topic_name}” topic in the
-#**{zulip_discussion_channel_name}** channel, as you can see in the left sidebar
+#**{doer_discussion_channel_name}** channel, as you can see in the left sidebar
 and above.
 """).format(
-        zulip_discussion_channel_name=channel_name_map[OnboardingMessageTypeEnum.welcome_to_zulip],
-        topic_name=_("welcome to Zulip!"),
+        doer_discussion_channel_name=channel_name_map[OnboardingMessageTypeEnum.welcome_to_doer],
+        topic_name=_("welcome to Doer!"),
     )
 
-    content2_of_welcome_to_zulip_topic_name = _("""
-You can read Zulip one conversation at a time, seeing each message in context,
+    content2_of_welcome_to_doer_topic_name = _("""
+You can read Doer one conversation at a time, seeing each message in context,
 no matter how many other conversations are going on.
 """)
 
-    content3_of_welcome_to_zulip_topic_name = _("""
+    content3_of_welcome_to_doer_topic_name = _("""
 :point_right: When you're ready, check out your [Inbox](/#inbox) for other
 conversations with unread messages.
 """)
@@ -418,7 +418,7 @@ can we chat about…?”
 
     content1_of_experiments_topic_name = (
         _("""
-:point_right:  Use this topic to try out [Zulip's messaging features]({format_message_help_url}).
+:point_right:  Use this topic to try out [Doer's messaging features]({format_message_help_url}).
 """)
     ).format(format_message_help_url="/help/format-your-message-using-markdown")
 
@@ -435,13 +435,13 @@ print("code blocks")
 - bulleted
 - lists
 
-Link to a conversation: #**{zulip_discussion_channel_name}>{topic_name}**
+Link to a conversation: #**{doer_discussion_channel_name}>{topic_name}**
 
 ```
 """)
     ).format(
-        zulip_discussion_channel_name=channel_name_map[OnboardingMessageTypeEnum.welcome_to_zulip],
-        topic_name=_("welcome to Zulip!"),
+        doer_discussion_channel_name=channel_name_map[OnboardingMessageTypeEnum.welcome_to_doer],
+        topic_name=_("welcome to Doer!"),
     )
 
     content1_of_greetings_topic_name = _("""
@@ -524,21 +524,21 @@ This **greetings** topic is a great place to say “hi” :wave: to your teammat
         ]
 
     if (
-        welcome_to_zulip_channel_name := channel_name_map[
-            OnboardingMessageTypeEnum.welcome_to_zulip
+        welcome_to_doer_channel_name := channel_name_map[
+            OnboardingMessageTypeEnum.welcome_to_doer
         ]
     ) is not None:
         # Main welcome message, this should be last.
         welcome_messages += [
             {
-                "channel_name": welcome_to_zulip_channel_name,
-                "topic_name": _("welcome to Zulip!"),
+                "channel_name": welcome_to_doer_channel_name,
+                "topic_name": _("welcome to Doer!"),
                 "content": content,
             }
             for content in [
-                content1_of_welcome_to_zulip_topic_name,
-                content2_of_welcome_to_zulip_topic_name,
-                content3_of_welcome_to_zulip_topic_name,
+                content1_of_welcome_to_doer_topic_name,
+                content2_of_welcome_to_doer_topic_name,
+                content3_of_welcome_to_doer_topic_name,
             ]
         ]
 

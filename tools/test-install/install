@@ -41,14 +41,14 @@ set -x
 
 THIS_DIR="$(dirname "$(readlink -f "$0")")"
 
-BASE_CONTAINER_NAME=zulip-install-"$RELEASE"-base
+BASE_CONTAINER_NAME=doer-install-"$RELEASE"-base
 if ! lxc-info -n "$BASE_CONTAINER_NAME" >/dev/null 2>&1; then
     "$THIS_DIR"/prepare-base "$RELEASE"
 fi
 
 while [ -z "$CONTAINER_NAME" ] || lxc-info -n "$CONTAINER_NAME" >/dev/null 2>&1; do
     shared_dir="$(mktemp -d --tmpdir "$RELEASE"-XXXXX)"
-    CONTAINER_NAME=zulip-install-"$(basename "$shared_dir")"
+    CONTAINER_NAME=doer-install-"$(basename "$shared_dir")"
 done
 
 message="$(
@@ -58,7 +58,7 @@ Container:
   sudo lxc-attach --clear-env -n $CONTAINER_NAME
 
 Unpacked tree:
-  sudo ls $shared_dir/mnt/zulip-server
+  sudo ls $shared_dir/mnt/doer-server
 EOF
 )"
 trap 'set +x; echo "$message"' EXIT
@@ -66,8 +66,8 @@ trap 'set +x; echo "$message"' EXIT
 if [ -d "$INSTALLER" ]; then
     installer_dir="$(readlink -f "$INSTALLER")"
 else
-    installer_dir="$(mktemp -d --tmpdir zulip-server-XXXXX)"
-    tar -xf "$INSTALLER" -C "$installer_dir" --transform='s,^[^/]*,zulip-server,'
+    installer_dir="$(mktemp -d --tmpdir doer-server-XXXXX)"
+    tar -xf "$INSTALLER" -C "$installer_dir" --transform='s,^[^/]*,doer-server,'
 fi
 
 mkdir -p /srv/zulip/test-install/pip-cache
@@ -86,6 +86,6 @@ run() {
     lxc-attach --clear-env -n "$CONTAINER_NAME" -- "$@"
 }
 
-run eatmydata -- /mnt/src/zulip-server/scripts/setup/install --self-signed-cert "${INSTALLER_ARGS[@]}"
+run eatmydata -- /mnt/src/doer-server/scripts/setup/install --self-signed-cert "${INSTALLER_ARGS[@]}"
 
 # TODO settings.py, initialize-database, create realm

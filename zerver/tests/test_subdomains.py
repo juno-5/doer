@@ -6,12 +6,12 @@ from django.conf import settings
 
 import zerver.lib.upload
 from zerver.lib.subdomains import get_subdomain, is_static_or_current_realm_url
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import create_s3_buckets, use_s3_backend
 from zerver.models import Realm
 
 
-class SubdomainsTest(ZulipTestCase):
+class SubdomainsTest(DoerTestCase):
     def test_get_subdomain(self) -> None:
         def request_mock(host: str) -> Any:
             request = mock.Mock(spec=["get_host"])
@@ -69,7 +69,7 @@ class SubdomainsTest(ZulipTestCase):
         def test(url: str) -> bool:
             return is_static_or_current_realm_url(url, realm)
 
-        self.assertTrue(test("/static/images/logo/zulip-org-logo.svg"))
+        self.assertTrue(test("/static/images/logo/doer-org-logo.svg"))
         self.assertTrue(test("/anything"))
         self.assertFalse(test("https://zulip.com"))
         self.assertFalse(test("http://zulip.com"))
@@ -86,7 +86,7 @@ class SubdomainsTest(ZulipTestCase):
             self.assertFalse(test(evil_url))
             self.assertFalse(test(f"{evil_url}/x"))
             self.assertTrue(test(f"{realm.url}"))
-            self.assertTrue(test("/static/images/logo/zulip-org-logo.svg"))
+            self.assertTrue(test("/static/images/logo/doer-org-logo.svg"))
             self.assertTrue(test("/anything"))
 
     @use_s3_backend

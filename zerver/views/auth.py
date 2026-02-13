@@ -36,15 +36,15 @@ from confirmation.models import (
     get_object_from_key,
     render_confirmation_key_error,
 )
-from version import API_FEATURE_LEVEL, ZULIP_MERGE_BASE, ZULIP_VERSION
-from zerver.context_processors import get_realm_from_request, login_context, zulip_default_context
+from version import API_FEATURE_LEVEL, DOER_MERGE_BASE, DOER_VERSION
+from zerver.context_processors import get_realm_from_request, login_context, doer_default_context
 from zerver.decorator import do_login, log_view_func, process_client, require_post
 from zerver.forms import (
     DEACTIVATED_ACCOUNT_ERROR,
     AuthenticationTokenForm,
     HomepageForm,
     OurAuthenticationForm,
-    ZulipPasswordResetForm,
+    DoerPasswordResetForm,
 )
 from zerver.lib.exceptions import (
     AuthenticationFailedError,
@@ -96,9 +96,9 @@ from zproject.backends import (
     GenericOpenIdConnectBackend,
     SAMLAuthBackend,
     SAMLSPInitiatedLogout,
-    ZulipLDAPAuthBackend,
-    ZulipLDAPConfigurationError,
-    ZulipRemoteUserBackend,
+    DoerLDAPAuthBackend,
+    DoerLDAPConfigurationError,
+    DoerRemoteUserBackend,
     auth_enabled_helper,
     dev_auth_enabled,
     ldap_auth_enabled,
@@ -181,7 +181,7 @@ def maybe_send_to_registration(
 ) -> HttpResponse:
     """Given a successful authentication for an email address (i.e. we've
     confirmed the user controls the email address) that does not
-    currently have a Zulip account in the target realm, send them to
+    currently have a Doer account in the target realm, send them to
     the registration flow or the "continue to registration" flow,
     depending on is_signup, whether the email address can join the
     organization (checked in HomepageForm), and similar details.
@@ -197,7 +197,7 @@ def maybe_send_to_registration(
     # happens in the browser so the user can use their
     # already-logged-in social accounts.  Then at the end, with the
     # user account created, we pass the appropriate data to the app
-    # via e.g. a `zulip://` redirect.  We store the OTP keys for the
+    # via e.g. a `doer://` redirect.  We store the OTP keys for the
     # mobile/desktop flow in the session with 1-hour expiry, because
     # we want this configuration of having a successful authentication
     # result in being logged into the app to persist if the user makes
@@ -361,7 +361,7 @@ def maybe_send_to_registration(
 
 def register_remote_user(request: HttpRequest, result: ExternalAuthResult) -> HttpResponse:
     # We have verified the user controls an email address, but
-    # there's no associated Zulip user account.  Consider sending
+    # there's no associated Doer user account.  Consider sending
     # the request to registration.
     kwargs: dict[str, Any] = dict(result.data_dict)
     # maybe_send_to_registration doesn't take these arguments, so delete them.
@@ -390,20 +390,20 @@ def register_remote_user(request: HttpRequest, result: ExternalAuthResult) -> Ht
 def login_or_register_remote_user(request: HttpRequest, result: ExternalAuthResult) -> HttpResponse:
     """Given a successful authentication showing the user controls given
     email address (email) and potentially a UserProfile
-    object (if the user already has a Zulip account), redirect the
+    object (if the user already has a Doer account), redirect the
     browser to the appropriate place:
 
-    * The logged-in app if the user already has a Zulip account and is
+    * The logged-in app if the user already has a Doer account and is
       trying to log in, potentially to an initial narrow or page that had been
       saved in the `redirect_to` parameter.
     * The registration form if is_signup was set (i.e. the user is
-      trying to create a Zulip account)
+      trying to create a Doer account)
     * A special `confirm_continue_registration.html` "do you want to
       register or try another account" if the user doesn't have a
-      Zulip account but is_signup is False (i.e. the user tried to log in
+      Doer account but is_signup is False (i.e. the user tried to log in
       and then did social authentication selecting an email address that does
-      not have a Zulip account in this organization).
-    * A zulip:// URL to send control back to the mobile or desktop apps if they
+      not have a Doer account in this organization).
+    * A doer:// URL to send control back to the mobile or desktop apps if they
       are doing authentication using the mobile_flow_otp or desktop_flow_otp flow.
     """
 
@@ -483,7 +483,7 @@ def finish_desktop_flow(
 
 def finish_mobile_flow(request: HttpRequest, user_profile: UserProfile, otp: str) -> HttpResponse:
     # For the mobile OAuth flow, we send the API key and other
-    # necessary details in a redirect to a zulip:// URL scheme.
+    # necessary details in a redirect to a doer:// URL scheme.
     api_key = user_profile.api_key
     response = create_response_for_otp_flow(
         api_key, otp, user_profile, encrypted_key_field_name="otp_encrypted_api_key"
@@ -525,7 +525,7 @@ def create_response_for_otp_flow(
     }
     # We can't use HttpResponseRedirect, since it only allows HTTP(S) URLs
     response = HttpResponse(status=302)
-    response["Location"] = append_url_query_string("zulip://login", urlencode(params))
+    response["Location"] = append_url_query_string("doer://login", urlencode(params))
 
     return response
 
@@ -545,7 +545,7 @@ def remote_user_sso(
     except Realm.DoesNotExist:
         realm = None
 
-    if not auth_enabled_helper([ZulipRemoteUserBackend.auth_backend_name], realm):
+    if not auth_enabled_helper([DoerRemoteUserBackend.auth_backend_name], realm):
         return config_error(request, "remote_user_backend_disabled")
 
     try:
@@ -691,7 +691,7 @@ def handle_desktop_flow(
         request: HttpRequest, /, *args: ParamT.args, **kwargs: ParamT.kwargs
     ) -> HttpResponse:
         user_agent = parse_user_agent(request.headers.get("User-Agent", "Missing User-Agent"))
-        if user_agent["name"] == "ZulipElectron":
+        if user_agent["name"] == "DoerElectron":
             return render(request, "zerver/desktop_login.html")
 
         return func(request, *args, **kwargs)
@@ -790,7 +790,7 @@ _subdomain_token_salt = "zerver.views.auth.log_into_subdomain"
 @log_view_func
 def log_into_subdomain(request: HttpRequest, token: str) -> HttpResponse:
     """Given a valid authentication token (generated by
-    redirect_and_log_into_subdomain called on auth.zulip.example.com),
+    redirect_and_log_into_subdomain called on auth.doer.example.com),
     call login_or_register_remote_user, passing all the authentication
     result data that has been stored in Redis, associated with this token.
     """
@@ -820,7 +820,7 @@ def redirect_and_log_into_subdomain(result: ExternalAuthResult) -> HttpResponse:
 
 
 def redirect_to_misconfigured_ldap_notice(request: HttpRequest, error_type: int) -> HttpResponse:
-    if error_type == ZulipLDAPAuthBackend.REALM_IS_NONE_ERROR:
+    if error_type == DoerLDAPAuthBackend.REALM_IS_NONE_ERROR:
         return config_error(request, "ldap")
     else:
         raise AssertionError("Invalid error type")
@@ -935,7 +935,7 @@ def login_page(
         }
         return render(request, "zerver/invalid_realm.html", status=404, context=context)
 
-    # To support previewing the Zulip login pages, we have a special option
+    # To support previewing the Doer login pages, we have a special option
     # that disables the default behavior of redirecting logged-in users to the
     # logged-in app.
     is_preview = "preview" in request.GET
@@ -983,7 +983,7 @@ def login_page(
         template_response = DjangoLoginView.as_view(
             authentication_form=OurAuthenticationForm, extra_context=extra_context, **kwargs
         )(request)
-    except ZulipLDAPConfigurationError as e:
+    except DoerLDAPConfigurationError as e:
         assert len(e.args) > 1
         return redirect_to_misconfigured_ldap_notice(request, e.args[1])
 
@@ -1186,7 +1186,7 @@ def get_auth_backends_data(request: HttpRequest) -> dict[str, Any]:
 
 def check_server_incompatibility(request: HttpRequest) -> bool:
     user_agent = parse_user_agent(request.headers.get("User-Agent", "Missing User-Agent"))
-    return user_agent["name"] == "ZulipInvalid"
+    return user_agent["name"] == "DoerInvalid"
 
 
 @require_safe
@@ -1196,13 +1196,13 @@ def api_get_server_settings(request: HttpRequest) -> HttpResponse:
     process_client(request)
     result = dict(
         authentication_methods=get_auth_backends_data(request),
-        zulip_version=ZULIP_VERSION,
-        zulip_merge_base=ZULIP_MERGE_BASE,
-        zulip_feature_level=API_FEATURE_LEVEL,
+        doer_version=DOER_VERSION,
+        doer_merge_base=DOER_MERGE_BASE,
+        doer_feature_level=API_FEATURE_LEVEL,
         push_notifications_enabled=push_notifications_configured(),
         is_incompatible=check_server_incompatibility(request),
     )
-    context = zulip_default_context(request)
+    context = doer_default_context(request)
     context.update(login_context(request))
     # IMPORTANT NOTE:
     # realm_name, realm_icon, etc. are not guaranteed to appear in the response.
@@ -1284,7 +1284,7 @@ def password_reset(request: HttpRequest) -> HttpResponse:
     try:
         response = DjangoPasswordResetView.as_view(
             template_name="zerver/reset.html",
-            form_class=ZulipPasswordResetForm,
+            form_class=DoerPasswordResetForm,
             success_url="/accounts/password/reset/done/",
         )(request)
     except RateLimitedError as e:

@@ -8,13 +8,13 @@ from urllib.request import urlopen
 
 import yaml
 
-from .zulip_tools import run
+from .doer_tools import run
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ZULIP_SRV_PATH = "/srv"
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_SRV_PATH = "/srv"
 
-PUPPET_MODULES_CACHE_PATH = os.path.join(ZULIP_SRV_PATH, "zulip-puppet-cache")
-PUPPET_DEPS_FILE_PATH = os.path.join(ZULIP_PATH, "puppet/deps.yaml")
+PUPPET_MODULES_CACHE_PATH = os.path.join(DOER_SRV_PATH, "doer-puppet-cache")
+PUPPET_DEPS_FILE_PATH = os.path.join(DOER_PATH, "puppet/deps.yaml")
 PUPPET_THIRDPARTY = os.path.join(PUPPET_MODULES_CACHE_PATH, "current")
 
 
@@ -75,7 +75,7 @@ def install_puppet_module(
         )
 
     with tempfile.NamedTemporaryFile(
-        prefix=f"zulip-puppet-{module}-{version}-",
+        prefix=f"doer-puppet-{module}-{version}-",
         suffix=".tar.gz",
     ) as tarball:
         with urlopen("https://forgeapi.puppet.com" + forge_data["file_uri"]) as tarball_resp:

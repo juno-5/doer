@@ -8,11 +8,11 @@ labels: ["bug"]
 
 <!-- Check the box for the version of Zulip you are using (see https://zulip.com/help/view-zulip-version).-->
 
-**Zulip Server and web app version:**
+**Doer Server and web app version:**
 
 - [ ] Zulip Cloud (`*.zulipchat.com`)
-- [ ] Zulip Server 11.x
-- [ ] Zulip Server 10.x
-- [ ] Zulip Server 9.x
-- [ ] Zulip Server 8.x or older
+- [ ] Doer Server 11.x
+- [ ] Doer Server 10.x
+- [ ] Doer Server 9.x
+- [ ] Doer Server 8.x or older
 - [ ] Other or not sure

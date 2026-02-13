@@ -388,13 +388,13 @@ input.text-error {
         flex: 1 0 auto;
     }
 
-    .if-zulip-electron {
+    .if-doer-electron {
         display: none;
     }
 }
 
 /* detect if the platform is `ZulipDesktop` and if so, hide this tag! */
-.portico-container[data-platform="ZulipElectron"] .if-zulip-electron {
+.portico-container[data-platform="ZulipElectron"] .if-doer-electron {
     display: block;
 }
 

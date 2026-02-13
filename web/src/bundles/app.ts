@@ -9,7 +9,7 @@ import "jquery-validation";
 import "../setup.ts";
 import "../reload.ts";
 import "../templates.ts";
-import "../zulip_test.ts";
+import "../doer_test.ts";
 import "../inputs.ts";
 
 // Import styles
@@ -31,7 +31,7 @@ import "../../styles/banners.css";
 import "../../styles/components.css";
 import "../../styles/app_components.css";
 import "../../styles/rendered_markdown.css";
-import "../../styles/zulip.css";
+import "../../styles/doer.css";
 import "../../styles/message_view_header.css";
 import "../../styles/message_header.css";
 import "../../styles/message_row.css";

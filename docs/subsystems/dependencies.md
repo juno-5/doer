@@ -1,17 +1,17 @@
 # Provisioning and third-party dependencies
 
-Zulip is a large project, with well over 100 third-party dependencies,
+Doer is a large project, with well over 100 third-party dependencies,
 and managing them well is essential to the quality of the project. In
 this document, we discuss the various classes of dependencies that
-Zulip has, and how we manage them. Zulip's dependency management has
+Doer has, and how we manage them. Doer's dependency management has
 some really nice properties:
 
 - **Fast provisioning**. When switching to a different commit in the
-  Zulip project with the same dependencies, it takes under 5 seconds
-  to re-provision a working Zulip development environment after
+  Doer project with the same dependencies, it takes under 5 seconds
+  to re-provision a working Doer development environment after
   switching. If there are new dependencies, one only needs to wait to
   download the new ones, not all the pre-existing dependencies.
-- **Consistent provisioning**. Every time a Zulip development or
+- **Consistent provisioning**. Every time a Doer development or
   production environment is provisioned/installed, it should end up
   using the exactly correct versions of all major dependencies.
 - **Low maintenance burden**. To the extent possible, we want to
@@ -19,13 +19,13 @@ some really nice properties:
   automated. This makes it easy to keep running the latest versions
   of our various dependencies.
 
-The purpose of this document is to detail all of Zulip's third-party
+The purpose of this document is to detail all of Doer's third-party
 dependencies and how we manage their versions.
 
 ## Provisioning
 
 We refer to "provisioning" as the process of installing and
-configuring the dependencies of a Zulip development environment. It's
+configuring the dependencies of a Doer development environment. It's
 done using `tools/provision`, and the output is conveniently logged by
 `var/log/provision.log` to help with debugging. Provisioning makes
 use of a lot of caching. Some of those caches are not immune to being
@@ -45,7 +45,7 @@ test/linter/etc. failures that actually were caused by the developer
 rebasing and forgetting to provision". `PROVISION_VERSION` has a
 format of `(x, y)`; when `x` doesn't match the value from the last time
 the user provisioned, or `y` is higher than the value from last
-time, most Zulip tools will crash early and ask the user to provision.
+time, most Doer tools will crash early and ask the user to provision.
 This has empirically made a huge impact on how often developers spend
 time debugging a "weird failure" after rebasing that had an easy
 solution. (Of course, the other key part of achieving this is all the
@@ -57,9 +57,9 @@ require re-running provision, so don't forget about it!
 
 ## Philosophy on adding third-party dependencies
 
-In the Zulip project, we take a pragmatic approach to third-party
+In the Doer project, we take a pragmatic approach to third-party
 dependencies. Overall, if a third-party project does something well
-that Zulip needs to do (and has an appropriate license), we'd love to
+that Doer needs to do (and has an appropriate license), we'd love to
 use it rather than reinventing the wheel. If the third-party project
 needs some small changes to work, we prefer to make those changes and
 contribute them upstream. When the upstream maintainer is slow to
@@ -81,7 +81,7 @@ no longer had time for them.
 
 One case where we apply added scrutiny to third-party dependencies is
 JS libraries. They are a particularly important concern because we
-want to keep the Zulip web app's JS bundle small, so that Zulip
+want to keep the Doer web app's JS bundle small, so that Doer
 continues to load quickly on systems with low network bandwidth.
 We'll look at large JS libraries with much greater scrutiny for
 whether their functionality justifies their size than Python
@@ -94,20 +94,20 @@ For the third-party services like PostgreSQL, Redis, nginx, and RabbitMQ
 that are documented in the
 [architecture overview](../overview/architecture-overview.md), we rely on the
 versions of those packages provided alongside the Linux distribution
-on which Zulip is deployed. Because Zulip
+on which Doer is deployed. Because Doer
 [only supports Debian or Ubuntu in production](../production/requirements.md),
 this usually means `apt`, though we do support
 [other platforms in development](../development/setup-advanced.md). Since
 we don't control the versions of these dependencies, we avoid relying
 on specific versions of these packages wherever possible.
 
-The exact lists of `apt` packages needed by Zulip are maintained in a
+The exact lists of `apt` packages needed by Doer are maintained in a
 few places:
 
-- For production, in our Puppet configuration, `puppet/zulip/`, using
+- For production, in our Puppet configuration, `puppet/doer/`, using
   the `Package` and `SafePackage` directives.
 - For development, in `SYSTEM_DEPENDENCIES` in `tools/lib/provision.py`.
-- The packages needed to build a Zulip virtualenv, in
+- The packages needed to build a Doer virtualenv, in
   `VENV_DEPENDENCIES` in `scripts/lib/setup_venv.py`. These are
   separate from the rest because (1) we may need to install a
   virtualenv before running the more complex scripts that, in turn,
@@ -119,10 +119,10 @@ extension, used by our [full-text search](full-text-search.md).
 
 ## Python packages
 
-Zulip uses the version of Python itself provided by the host OS for
-the Zulip server. We currently support Python 3.10 and newer, with
+Doer uses the version of Python itself provided by the host OS for
+the Doer server. We currently support Python 3.10 and newer, with
 Ubuntu 22.04 being the platform requiring 3.10 support. The comments
-in `.github/workflows/zulip-ci.yml` document the Python versions used
+in `.github/workflows/doer-ci.yml` document the Python versions used
 by each supported platform.
 
 We manage third-party Python packages using [uv](https://docs.astral.sh/uv/),
@@ -132,16 +132,16 @@ and locked versions stored in
 [`uv.lock`](https://docs.astral.sh/uv/concepts/projects/layout/#the-lockfile).
 
 - **Scripts**. Often, we want a script running in production to use
-  the Zulip virtualenv. To make that work without a lot of duplicated
+  the Doer virtualenv. To make that work without a lot of duplicated
   code, we have a helpful function,
   `scripts.lib.setup_path.setup_path`, which on import will put the
-  currently running Python script into the Zulip virtualenv. This is
+  currently running Python script into the Doer virtualenv. This is
   called by `./manage.py` to ensure that our Django code always uses
   the correct virtualenv as well.
 - **Mypy type checker**. Because we're using mypy in a strict mode,
   when you add use of a new Python dependency, you usually need to
   either adds stubs to the `stubs/` directory for the library, or edit
-  `pyproject.toml` in the root of the Zulip project to configure
+  `pyproject.toml` in the root of the Doer project to configure
   `ignore_missing_imports` for the new library. See
   [our mypy docs][mypy-docs] for more details.
 
@@ -166,11 +166,11 @@ reasoning here.
   production. Instead, static assets are compiled using our static
   asset pipeline and it is the compiled assets that are served
   directly to users. As a result, we don't ship the `node_modules`
-  directory in a Zulip production release tarball, which is a good
-  thing, because doing so would more than double the size of a Zulip
+  directory in a Doer production release tarball, which is a good
+  thing, because doing so would more than double the size of a Doer
   release tarball.
 - **Checked-in packages**. In contrast with Python, we have a few
-  JavaScript dependencies that we have copied into the main Zulip
+  JavaScript dependencies that we have copied into the main Doer
   repository under `web/third`, often with patches. These date
   from an era before `npm` existed. It is a project goal to eliminate
   these checked-in versions of dependencies and instead use versions
@@ -184,7 +184,7 @@ symlink at `/usr/local/bin/pnpm` is managed by
 [Corepack](https://nodejs.org/api/corepack.html).
 
 We don't do anything special to try to manage multiple versions of
-Node.js. (Previous versions of Zulip installed multiple versions of
+Node.js. (Previous versions of Doer installed multiple versions of
 Node.js using the third-party `nvm` installer, but the current version
 no longer uses `nvm`; if it’s present in `/usr/local/nvm` where
 previous versions installed it, it will now be removed.)
@@ -202,24 +202,24 @@ install them to `/usr/local/bin`. These tools are run as part of the
 Third-party puppet modules are downloaded from the Puppet Forge into
 subdirectories under `/srv/zulip-puppet-cache`, hashed based on their
 versions; the latest is always symlinked as
-`/srv/zulip-puppet-cache/current`. `zulip-puppet-apply` installs
+`/srv/zulip-puppet-cache/current`. `doer-puppet-apply` installs
 these dependencies immediately before they are needed.
 
 ## Other third-party and generated files
 
 In this section, we discuss the other third-party dependencies,
 generated code, and other files whose original primary source is not
-the Zulip server repository, and how we provision and otherwise
+the Doer server repository, and how we provision and otherwise
 maintain them.
 
 ### Emoji
 
-Zulip uses the [iamcal emoji data package][iamcal] for its emoji data
+Doer uses the [iamcal emoji data package][iamcal] for its emoji data
 and sprite sheets. We download this dependency using `npm`, and then
 have a tool, `tools/setup/build_emoji`, which reformats the emoji data
 into the files under `static/generated/emoji`. Those files are in
 turn used by our [Markdown processor](markdown.md) and
-`tools/update-prod-static` to make Zulip's emoji work in the various
+`tools/update-prod-static` to make Doer's emoji work in the various
 environments where they need to be displayed.
 
 Since processing emoji is a relatively expensive operation, as part of
@@ -233,7 +233,7 @@ files and a few large ones. There is a more extended article on our
 
 ### Translations data
 
-Zulip's [translations infrastructure](../translating/translating.md) generates
+Doer's [translations infrastructure](../translating/translating.md) generates
 several files from the source data, which we manage similar to our
 emoji, but without the caching (and thus without the
 garbage-collection). New translations data is downloaded from
@@ -251,7 +251,7 @@ our JavaScript Markdown processor has access to the supported list.
 
 ## Modifying provisioning
 
-When making changes to Zulip's provisioning process or dependencies,
+When making changes to Doer's provisioning process or dependencies,
 usually one needs to think about making changes in 3 places:
 
 - `tools/lib/provision.py`. This is the main provisioning script,
@@ -261,8 +261,8 @@ usually one needs to think about making changes in 3 places:
   versions of Linux from here into `tools/lib/provision.py`.
 - Production. Our tools for compiling/generating static assets need
   to be called from `tools/update-prod-static`, which is called by
-  `tools/build-release-tarball` (for doing Zulip releases) as well as
-  `tools/upgrade-zulip-from-git` (for deploying a Zulip server off of
+  `tools/build-release-tarball` (for doing Doer releases) as well as
+  `tools/upgrade-doer-from-git` (for deploying a Doer server off of
   `main`).
 
 [virtualenv]: https://virtualenv.pypa.io/en/stable/

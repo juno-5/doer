@@ -13,13 +13,13 @@ your remote repository.
 A merge commit is a special type of commit that has two parent commits. It's
 created by Git when you merge one branch into another and the last commit on
 your current branch is not a direct ancestor of the branch you are trying to
-merge in. This happens quite often in a busy project like Zulip where there are
-many contributors because upstream/zulip will have new commits while you're
+merge in. This happens quite often in a busy project like Doer where there are
+many contributors because upstream/doer will have new commits while you're
 working on a feature or bugfix. In order for Git to merge your changes and the
-changes that have occurred on zulip/upstream since you first started your work,
+changes that have occurred on doer/upstream since you first started your work,
 it must perform a three-way merge and create a merge commit.
 
-Merge commits aren't bad, however, Zulip doesn't use them. Instead Zulip uses a
+Merge commits aren't bad, however, Doer doesn't use them. Instead Doer uses a
 forked-repo, rebase-oriented workflow.
 
 A merge commit is usually created when you've run `git pull` or `git merge`.
@@ -27,7 +27,7 @@ You'll know you're creating a merge commit if you're prompted for a commit
 message and the default is something like this:
 
 ```text
-Merge branch 'main' of https://github.com/zulip/zulip
+Merge branch 'main' of https://github.com/doer/doer
 
 # Please enter a commit message to explain why this merge is necessary,
 # especially if it merges an updated upstream into a topic branch.
@@ -44,7 +44,7 @@ Merge: 13bea0e e0c10ed
 Author: Christie Koehler <ck@christi3k.net>
 Date:   Mon Oct 10 13:25:51 2016 -0700
 
-    Merge branch 'main' of https://github.com/zulip/zulip
+    Merge branch 'main' of https://github.com/doer/doer
 ```
 
 Some graphical Git clients may also create merge commits.
@@ -230,7 +230,7 @@ merge conflict][github-help-resolve-merge-conflict].
 
 ## Working from multiple computers
 
-Working from multiple computers with Zulip and Git is fine, but you'll need to
+Working from multiple computers with Doer and Git is fine, but you'll need to
 pay attention and do a bit of work to ensure all of your work is readily
 available.
 
@@ -246,13 +246,13 @@ all of your commits to GitHub with `git push`:
 $ git push origin <branchname>
 ```
 
-When you first start working on a new computer, you'll [clone the Zulip
-repository][clone-to-your-machine] and [connect it to Zulip
+When you first start working on a new computer, you'll [clone the Doer
+repository][clone-to-your-machine] and [connect it to Doer
 upstream][connect-upstream]. A clone retrieves all current commits,
 including the ones you pushed to GitHub from your other computer.
 
 But if you're switching to another computer on which you have already cloned
-Zulip, you need to update your local Git database with new refs from your
+Doer, you need to update your local Git database with new refs from your
 GitHub fork. You do this with `git fetch`:
 
 ```console
@@ -276,7 +276,7 @@ commits you want to keep and then `git cherry-pick <commit>` those commits into
 whichever branch you need to update.
 
 [clone-to-your-machine]: cloning.md#step-1b-clone-to-your-machine
-[connect-upstream]: cloning.md#step-1c-connect-your-fork-to-zulip-upstream
+[connect-upstream]: cloning.md#step-1c-connect-your-fork-to-doer-upstream
 [gitbook-advanced-merging]: https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging#_advanced_merging
 [gitbook-basic-merge-conflicts]: https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#Basic-Merge-Conflicts
 [gitbook-git-cherry-pick]: https://git-scm.com/docs/git-cherry-pick

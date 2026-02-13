@@ -89,7 +89,7 @@ const alert_banners: Record<string, AlertBanner> = {
     "email-server": {
         process: "email-server",
         intent: "warning",
-        label: "Zulip needs to send email to confirm users' addresses and send notifications.",
+        label: "Doer needs to send email to confirm users' addresses and send notifications.",
         buttons: [
             {
                 variant: "subtle",
@@ -130,7 +130,7 @@ const alert_banners: Record<string, AlertBanner> = {
         label: new Handlebars.SafeString(
             $t_html({
                 defaultMessage:
-                    "Zulip needs your permission to enable desktop notifications for important messages.",
+                    "Doer needs your permission to enable desktop notifications for important messages.",
             }),
         ),
         buttons: [
@@ -170,7 +170,7 @@ const alert_banners: Record<string, AlertBanner> = {
     "insecure-desktop-app": {
         process: "insecure-desktop-app",
         intent: "warning",
-        label: "Zulip Desktop is not updating automatically. Please upgrade for security updates and other improvements.",
+        label: "Doer Desktop is not updating automatically. Please upgrade for security updates and other improvements.",
         buttons: [
             {
                 variant: "subtle",
@@ -184,7 +184,7 @@ const alert_banners: Record<string, AlertBanner> = {
     "unsupported-browser": {
         process: "unsupported-browser",
         intent: "warning",
-        label: "Because you're using an unsupported or very old browser, Zulip may not work as expected.",
+        label: "Because you're using an unsupported or very old browser, Doer may not work as expected.",
         buttons: [
             {
                 variant: "text",
@@ -212,7 +212,7 @@ const alert_banners: Record<string, AlertBanner> = {
     "server-needs-upgrade": {
         process: "server-needs-upgrade",
         intent: "danger",
-        label: "This Zulip server is running an old version and should be upgraded.",
+        label: "This Doer server is running an old version and should be upgraded.",
         buttons: [
             {
                 variant: "subtle",
@@ -316,9 +316,9 @@ $(window).on("load", () => {
 
     $("input[name='button-icon-select']").on("change", (e) => {
         if ($(e.target).attr("id") === "enable_button_icon") {
-            $(".action-button .zulip-icon").removeClass("hidden");
+            $(".action-button .doer-icon").removeClass("hidden");
         } else {
-            $(".action-button .zulip-icon").addClass("hidden");
+            $(".action-button .doer-icon").addClass("hidden");
         }
     });
 
@@ -334,10 +334,10 @@ $(window).on("load", () => {
 
     $<HTMLSelectOneElement>("select:not([multiple])#button_select_icon").on("change", function () {
         const icon_name = this.value;
-        $(".action-button .zulip-icon, .icon-button .zulip-icon").attr(
+        $(".action-button .doer-icon, .icon-button .doer-icon").attr(
             "class",
             (_index, className) =>
-                className.replaceAll(/zulip-icon-[^\s]+/g, `zulip-icon-${icon_name}`),
+                className.replaceAll(/doer-icon-[^\s]+/g, `doer-icon-${icon_name}`),
         );
     });
 

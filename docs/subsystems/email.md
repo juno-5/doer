@@ -1,6 +1,6 @@
 # Email
 
-This page has developer documentation on the Zulip email system. If you're
+This page has developer documentation on the Doer email system. If you're
 trying to configure your server to send email, you might be looking for our
 guide to [sending outgoing email](../production/email.md). If you're trying to
 configure an email integration to receive incoming email (e.g., so that users
@@ -8,7 +8,7 @@ can reply to message notification emails via email), you might be interested in
 our instructions for
 [setting up an email integration](https://zulip.com/integrations/email).
 
-On to the documentation. Zulip's email system is fairly straightforward,
+On to the documentation. Doer's email system is fairly straightforward,
 with only a few things you need to know to get started.
 
 - All email templates are in `templates/zerver/emails/`. Each email has three
@@ -38,7 +38,7 @@ is figuring out how to schedule it. There are 3 ways to schedule email.
   email.
 - Add it to a queue. An example is the `invitation` email.
 - Send it (approximately) at a specified time in the future, using
-  `send_future_email`. An example is the `onboarding_zulip_topics` email.
+  `send_future_email`. An example is the `onboarding_doer_topics` email.
 
 Email takes about a quarter second per email to process and send. Generally
 speaking, if you're sending just one email, doing it in the current process
@@ -56,7 +56,7 @@ custom backend, `EmailLogBackEnd`. It does the following:
 
 - Logs any sent emails to `var/log/email_content.log`. This log is
   displayed by the `/emails` endpoint
-  (e.g., http://zulip.zulipdev.com:9991/emails).
+  (e.g., http://doer.zulipdev.com:9991/emails).
 - Print a friendly message on console advertising `/emails` to make
   this nice and discoverable.
 
@@ -119,7 +119,7 @@ email_password = gmail_password
 
 ## Email templates
 
-Zulip's email templates live under `templates/zerver/emails`. Email
+Doer's email templates live under `templates/zerver/emails`. Email
 templates are a messy problem, because on the one hand, you want nice,
 readable markup and styling, but on the other, email clients have very
 limited CSS support and generally require us to inject any CSS we're

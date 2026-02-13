@@ -1,14 +1,14 @@
-# Zulip Stripe integration
+# Doer Stripe integration
 
-Get Zulip notifications for Stripe events!
+Get Doer notifications for Stripe events!
 
 {% if 'http:' in external_url_scheme %}
 
 !!! tip ""
 
-    Stripe will only send webhook payloads over HTTPS, but your Zulip
+    Stripe will only send webhook payloads over HTTPS, but your Doer
     server is configured to only accept HTTP. To use the Stripe
-    webhook with this Zulip server, you will need to use a tunneling
+    webhook with this Doer server, you will need to use a tunneling
     service like ngrok or Ultrahook.
 
 {% endif %}
@@ -26,10 +26,10 @@ Get Zulip notifications for Stripe events!
    [event types](#filtering-incoming-events) you would like to be notified
    about, and click **Add endpoint**.
 
-1. [Add a new linkifier](/help/add-a-custom-linkifier) in your Zulip
+1. [Add a new linkifier](/help/add-a-custom-linkifier) in your Doer
    organization. Set the pattern to `(?P<id>cus_[0-9a-zA-Z]+)` and the URL
    template to `https://dashboard.stripe.com/customers/{id}`. This step
-   creates links to Stripe customers in Zulip messages and topics.
+   creates links to Stripe customers in Doer messages and topics.
 
 {end_tabs}
 

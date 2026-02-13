@@ -113,7 +113,7 @@ link_mapping = {
 }
 
 settings_markdown = """
-1. Click on the **gear** (<i class="zulip-icon zulip-icon-gear"></i>) icon in the upper
+1. Click on the **gear** (<i class="doer-icon doer-icon-gear"></i>) icon in the upper
    right corner of the web or desktop app.
 
 1. Select **{setting_type_name}**.

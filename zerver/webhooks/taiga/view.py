@@ -1,4 +1,4 @@
-"""Taiga integration for Zulip.
+"""Taiga integration for Doer.
 
 Tips for notification output:
 

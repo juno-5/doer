@@ -4,13 +4,13 @@ title: Change organization URL
 
 import {Steps} from "@astrojs/starlight/components";
 
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import CloudPlusOnly from "../include/_CloudPlusOnly.mdx";
 import OwnerOnly from "../include/_OwnerOnly.mdx";
 
 <OwnerOnly />
 
-Zulip supports changing the URL for an organization. Users who navigate to the
+Doer supports changing the URL for an organization. Users who navigate to the
 old URL in the browser will see a notice about the organization being moved,
 prior to being redirected to the new URL. [Links to channels, topics and
 messages](/help/link-to-a-message-or-conversation) will thus continue to work.
@@ -21,15 +21,15 @@ When you change the URL:
 * Any [API clients](/api/) or [integrations](/integrations/) will need
   to be updated to point to the new organization URL.
 
-<ZulipTip>
+<DoerTip>
   Consider using a [wildcard
   mention](/help/mention-a-user-or-group#mention-everyone-on-a-channel)
   in an announcement channel to let users know about an upcoming change.
-</ZulipTip>
+</DoerTip>
 
-## Change your Zulip Cloud subdomain
+## Change your Doer Cloud subdomain
 
-Zulip Cloud organizations are generally hosted at `<subdomain>.zulipchat.com`,
+Doer Cloud organizations are generally hosted at `<subdomain>.zulipchat.com`,
 with the subdomain chosen when the organization was created. Organization
 [owners](/help/user-roles) can request to change the subdomain.
 
@@ -44,12 +44,12 @@ information:
      reuse after 3 months.
 </Steps>
 
-## Move to a custom URL on Zulip Cloud
+## Move to a custom URL on Doer Cloud
 
 <CloudPlusOnly />
 
 Because maintaining custom URLs requires effort from our operational team,
-this feature is available only for organizations with 25+ [Zulip Cloud
+this feature is available only for organizations with 25+ [Doer Cloud
 Plus](https://zulip.com/plans/#cloud) licenses.
 
 Please email [support@zulip.com](mailto:support@zulip.com) with the following
@@ -62,19 +62,19 @@ information:
 
 ## Change the URL for your self-hosted server
 
-If you're self-hosting, you can change the root domain of your Zulip
-server by changing the `EXTERNAL_HOST` [setting][zulip-settings].  If
-you're [hosting multiple organizations][zulip-multiple-organizations]
+If you're self-hosting, you can change the root domain of your Doer
+server by changing the `EXTERNAL_HOST` [setting][doer-settings].  If
+you're [hosting multiple organizations][doer-multiple-organizations]
 and want to change the subdomain for one of them, you can do this
 using the `change_realm_subdomain` [management command][management-commands].
 
-In addition to configuring Zulip as detailed here, you also need to
+In addition to configuring Doer as detailed here, you also need to
 generate [SSL certificates][ssl-certificates] for your new domain.
 
 [ssl-certificates]: https://zulip.readthedocs.io/en/stable/production/ssl-certificates.html
 
-[zulip-settings]: https://zulip.readthedocs.io/en/stable/production/settings.html
+[doer-settings]: https://zulip.readthedocs.io/en/stable/production/settings.html
 
-[zulip-multiple-organizations]: https://zulip.readthedocs.io/en/stable/production/multiple-organizations.html
+[doer-multiple-organizations]: https://zulip.readthedocs.io/en/stable/production/multiple-organizations.html
 
 [management-commands]: https://zulip.readthedocs.io/en/stable/production/management-commands.html#other-useful-manage-py-commands

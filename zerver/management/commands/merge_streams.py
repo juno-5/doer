@@ -4,11 +4,11 @@ from typing import Any
 from typing_extensions import override
 
 from zerver.actions.streams import merge_streams
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models.streams import get_stream
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Merge two streams."""
 
     @override

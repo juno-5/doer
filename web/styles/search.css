@@ -390,7 +390,7 @@
 
     .typeahead-menu .simplebar-content > li > a {
         padding: 3px var(--search-left-padding);
-        /* Override white-space: nowrap from zulip.css */
+        /* Override white-space: nowrap from doer.css */
         white-space: normal;
 
         .search_list_item {

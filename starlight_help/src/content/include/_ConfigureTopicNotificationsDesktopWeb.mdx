@@ -1,11 +1,11 @@
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import TopicActions from "../include/_TopicActions.mdx";
 
-import FollowIcon from "~icons/zulip-icon/follow";
-import InheritIcon from "~icons/zulip-icon/inherit";
-import MuteIcon from "~icons/zulip-icon/mute";
-import UnmuteIcon from "~icons/zulip-icon/unmute";
+import FollowIcon from "~icons/doer-icon/follow";
+import InheritIcon from "~icons/doer-icon/inherit";
+import MuteIcon from "~icons/doer-icon/mute";
+import UnmuteIcon from "~icons/doer-icon/unmute";
 
 <FlattenedSteps>
   <TopicActions />
@@ -13,10 +13,10 @@ import UnmuteIcon from "~icons/zulip-icon/unmute";
   1. Configure topic notifications using the row of icons at the top of the menu.
 </FlattenedSteps>
 
-<ZulipTip>
+<DoerTip>
   You can also configure notifications by clicking the topic notifications
   status icon (<MuteIcon />,
   <InheritIcon />,
   <UnmuteIcon />, or
   <FollowIcon />) wherever it appears.
-</ZulipTip>
+</DoerTip>

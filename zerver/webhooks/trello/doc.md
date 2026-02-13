@@ -1,11 +1,11 @@
-# Zulip Trello integration
+# Doer Trello integration
 
-Get Zulip notifications from your Trello boards!
+Get Doer notifications from your Trello boards!
 
 !!! tip ""
 
     [Zapier](./zapier) is usually a simpler way to integrate Trello
-    with Zulip.
+    with Doer.
 
 {start_tabs}
 
@@ -39,14 +39,14 @@ Get Zulip notifications from your Trello boards!
         You do not need the latest version of Python; anything 2.7 or
         higher will do.
 
-1. Download [zulip-trello.py][2].
+1. Download [doer-trello.py][2].
 
     !!! tip ""
 
         <kbd>Ctrl</kbd> + <kbd>s</kbd> or <kbd>Cmd</kbd> + <kbd>s</kbd>
         on that page should work in most browsers.
 
-1. Run the `zulip-trello` script in a terminal, after replacing the all
+1. Run the `doer-trello` script in a terminal, after replacing the all
    caps arguments with the values collected above and the generated URL
    above.
 
@@ -55,7 +55,7 @@ Get Zulip notifications from your Trello boards!
                            --trello-board-id  TRELLO_BOARD_ID \
                            --trello-api-key  TRELLO_API_KEY \
                            --trello-token  TRELLO_TOKEN \
-                           --zulip-webhook-url  "GENERATED_WEBHOOK_URL"
+                           --doer-webhook-url  "GENERATED_WEBHOOK_URL"
     ```
 
     !!! warn ""
@@ -79,4 +79,4 @@ Get Zulip notifications from your Trello boards!
 {!webhooks-url-specification.md!}
 
 [1]: https://realpython.com/installing-python/
-[2]: https://raw.githubusercontent.com/zulip/python-zulip-api/main/zulip/integrations/trello/zulip_trello.py
+[2]: https://raw.githubusercontent.com/doer/python-doer-api/main/doer/integrations/trello/zulip_trello.py

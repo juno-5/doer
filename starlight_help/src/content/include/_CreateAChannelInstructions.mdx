@@ -2,9 +2,9 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 
-import SquarePlusIcon from "~icons/zulip-icon/square-plus";
+import SquarePlusIcon from "~icons/doer-icon/square-plus";
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -21,10 +21,10 @@ import SquarePlusIcon from "~icons/zulip-icon/square-plus";
       1. Add users who will be subscribed to the channel, and click **Create**.
     </FlattenedSteps>
 
-    <ZulipNote>
+    <DoerNote>
       **Note**: You will only see the **Create channel** button if you have
       permission to create channels.
-    </ZulipNote>
+    </DoerNote>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -32,7 +32,7 @@ import SquarePlusIcon from "~icons/zulip-icon/square-plus";
     mobile device browser.
 
     Implementation of this feature in the mobile app is tracked [on
-    GitHub](https://github.com/zulip/zulip-flutter/issues/1572). If
+    GitHub](https://github.com/doer/doer-flutter/issues/1572). If
     you're interested in this feature, please react to the issue's
     description with 👍.
   </TabItem>

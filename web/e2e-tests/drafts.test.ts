@@ -155,7 +155,7 @@ async function test_restore_message_draft_via_draft_overlay(page: Page): Promise
     });
     assert.strictEqual(
         await common.get_text_from_selector(page, "title"),
-        "#Denmark > tests - Zulip Dev - Zulip",
+        "#Denmark > tests - Doer Dev - Doer",
         "Didn't narrow to the right topic.",
     );
 }
@@ -215,7 +215,7 @@ async function test_restore_private_message_draft_via_draft_overlay(page: Page):
     await common.pm_recipient.expect(page, `${cordelia_internal_email},${hamlet_internal_email}`);
     assert.strictEqual(
         await common.get_text_from_selector(page, "title"),
-        "Cordelia, Lear's daughter and King Hamlet - Zulip Dev - Zulip",
+        "Cordelia, Lear's daughter and King Hamlet - Doer Dev - Doer",
         "Didn't narrow to the direct messages with cordelia and hamlet",
     );
     await page.click("#compose_close");

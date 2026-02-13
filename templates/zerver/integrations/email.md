@@ -2,19 +2,19 @@
      starlight_help/src/content/docs/using-zulip-via-email.mdx
      and vice versa. This file used to be a symlink to that file
      before we converted it to mdx. -->
-# Using Zulip via email
+# Using Doer via email
 
-With Zulip, it is possible for some members of your organization to participate
-from their email client, without opening the Zulip app after the initial
+With Doer, it is possible for some members of your organization to participate
+from their email client, without opening the Doer app after the initial
 setup is complete.
 
-## Subscribe a Zulip channel to a mailing list
+## Subscribe a Doer channel to a mailing list
 
 {start_tabs}
 
-1. Create a mailing list to use with Zulip, or use an existing one.
+1. Create a mailing list to use with Doer, or use an existing one.
 
-1. Create a Zulip channel that will receive mailing list traffic, or
+1. Create a Doer channel that will receive mailing list traffic, or
    use an existing one.
 
 1. [Generate an email
@@ -29,7 +29,7 @@ New emails sent to the email list will now be mirrored to the channel.
 
 ## Setup instructions for email users
 
-If you want to interact with Zulip primarily (or entirely) via your email client:
+If you want to interact with Doer primarily (or entirely) via your email client:
 
 {start_tabs}
 
@@ -41,15 +41,15 @@ If you want to interact with Zulip primarily (or entirely) via your email client
 1.  In the **Notification triggers** table, make sure both of the checkboxes
     under **Email** are checked.
 
-1. Close the Zulip window. Zulip does not send email notifications
+1. Close the Doer window. Doer does not send email notifications
    while you are actively engaging with the web application.
 
 {end_tabs}
 
-New Zulip messages will now be delivered to your email account. You
-can reply directly to the emails coming from Zulip, and your replies
+New Doer messages will now be delivered to your email account. You
+can reply directly to the emails coming from Doer, and your replies
 will be posted in the appropriate topic or direct message
-conversation on Zulip.
+conversation on Doer.
 
 ## Related articles
 

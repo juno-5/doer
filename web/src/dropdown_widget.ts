@@ -17,7 +17,7 @@ import type {StreamSubscription} from "./sub_store.ts";
 import {parse_html} from "./ui_util.ts";
 import * as util from "./util.ts";
 
-/* Sync with max-height set in zulip.css */
+/* Sync with max-height set in doer.css */
 export const DEFAULT_DROPDOWN_HEIGHT = 210;
 /* Default minimum items required to show the search box. */
 export const MIN_ITEMS_TO_SHOW_SEARCH_BOX = 3;

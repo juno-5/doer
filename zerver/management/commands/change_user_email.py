@@ -4,10 +4,10 @@ from typing import Any
 from typing_extensions import override
 
 from zerver.actions.user_settings import do_change_user_delivery_email
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Change the email address for a user."""
 
     @override

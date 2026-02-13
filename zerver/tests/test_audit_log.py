@@ -52,7 +52,7 @@ from zerver.actions.realm_settings import (
     do_set_realm_new_stream_announcements_stream,
     do_set_realm_property,
     do_set_realm_signup_announcements_stream,
-    do_set_realm_zulip_update_announcements_stream,
+    do_set_realm_doer_update_announcements_stream,
 )
 from zerver.actions.streams import (
     bulk_add_subscriptions,
@@ -87,7 +87,7 @@ from zerver.lib.emoji import get_emoji_file_name, get_emoji_url
 from zerver.lib.message import get_last_message_id
 from zerver.lib.stream_traffic import get_streams_traffic
 from zerver.lib.streams import create_stream_if_needed
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_test_image_file
 from zerver.lib.types import LinkifierDict, RealmPlaygroundDict
 from zerver.lib.user_groups import get_group_setting_value_for_api
@@ -111,7 +111,7 @@ from zerver.models.streams import get_stream
 from zerver.models.users import ResolvedTopicNoticeAutoReadPolicyEnum
 
 
-class TestRealmAuditLog(ZulipTestCase):
+class TestRealmAuditLog(DoerTestCase):
     def check_role_count_schema(self, role_counts: dict[str, Any]) -> None:
         for key in [
             UserProfile.ROLE_REALM_ADMINISTRATOR,
@@ -125,7 +125,7 @@ class TestRealmAuditLog(ZulipTestCase):
         self.assertTrue(isinstance(role_counts[RealmAuditLog.ROLE_COUNT_BOTS], int))
 
     def test_user_activation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         now = timezone_now()
         user = do_create_user("email", "password", realm, "full_name", acting_user=None)
         do_deactivate_user(user, acting_user=user)
@@ -186,7 +186,7 @@ class TestRealmAuditLog(ZulipTestCase):
         )
 
     def test_change_role(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         now = timezone_now()
         user_profile = self.example_user("hamlet")
         acting_user = self.example_user("iago")
@@ -412,7 +412,7 @@ class TestRealmAuditLog(ZulipTestCase):
         self.assertTrue(user.api_key)
 
     def test_get_streams_traffic(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = self.make_stream("whatever", realm)
         stream_2 = self.make_stream("whatever_2", realm)
 
@@ -476,7 +476,7 @@ class TestRealmAuditLog(ZulipTestCase):
         self.assertEqual(subscription_deactivation_logs[0].modified_user, user)
 
     def test_realm_activation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("desdemona")
         do_deactivate_realm(
             realm, acting_user=user, deactivation_reason="owner_request", email_owners=False
@@ -500,7 +500,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_create_stream_if_needed(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         stream = create_stream_if_needed(
             realm,
@@ -522,7 +522,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_deactivate_stream(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         stream_name = "test"
         stream = self.make_stream(stream_name, realm)
@@ -541,7 +541,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_set_realm_authentication_methods(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         expected_old_value = realm.authentication_methods_dict()
         auth_method_dict = {
@@ -581,7 +581,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_set_realm_message_editing(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         value_expected = {
             RealmAuditLog.OLD_VALUE: realm.message_content_edit_limit_seconds,
@@ -633,7 +633,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_set_realm_new_stream_announcements_stream(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         old_value = realm.new_stream_announcements_stream_id
         stream_name = "test"
@@ -657,7 +657,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_set_realm_signup_announcements_stream(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         old_value = realm.signup_announcements_stream_id
         stream_name = "test"
@@ -679,15 +679,15 @@ class TestRealmAuditLog(ZulipTestCase):
             1,
         )
 
-    def test_set_realm_zulip_update_announcements_stream(self) -> None:
+    def test_set_realm_doer_update_announcements_stream(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
-        old_value = realm.zulip_update_announcements_stream_id
+        old_value = realm.doer_update_announcements_stream_id
         stream_name = "test"
         stream = self.make_stream(stream_name, realm)
 
-        do_set_realm_zulip_update_announcements_stream(realm, stream, stream.id, acting_user=user)
+        do_set_realm_doer_update_announcements_stream(realm, stream, stream.id, acting_user=user)
         self.assertEqual(
             RealmAuditLog.objects.filter(
                 realm=realm,
@@ -697,7 +697,7 @@ class TestRealmAuditLog(ZulipTestCase):
                 extra_data={
                     RealmAuditLog.OLD_VALUE: old_value,
                     RealmAuditLog.NEW_VALUE: stream.id,
-                    "property": "zulip_update_announcements_stream",
+                    "property": "doer_update_announcements_stream",
                 },
             ).count(),
             1,
@@ -705,7 +705,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_set_realm_moderation_request_channel(self) -> None:
         now = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         old_value = realm.moderation_request_channel
         stream = self.make_stream("private_stream", invite_only=True)
@@ -731,7 +731,7 @@ class TestRealmAuditLog(ZulipTestCase):
 
     def test_change_icon_source(self) -> None:
         test_start = timezone_now()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user = self.example_user("hamlet")
         icon_source = "G"
         do_change_icon_source(realm, icon_source, acting_user=user)
@@ -971,9 +971,9 @@ class TestRealmAuditLog(ZulipTestCase):
         initial_domains = get_realm_domains(user.realm)
 
         now = timezone_now()
-        realm_domain = do_add_realm_domain(user.realm, "zulip.org", False, acting_user=user)
+        realm_domain = do_add_realm_domain(user.realm, "doer.org", False, acting_user=user)
         added_domain = RealmDomainDict(
-            domain="zulip.org",
+            domain="doer.org",
             allow_subdomains=False,
         )
         expected_extra_data = {
@@ -994,7 +994,7 @@ class TestRealmAuditLog(ZulipTestCase):
         now = timezone_now()
         do_change_realm_domain(realm_domain, True, acting_user=user)
         changed_domain = RealmDomainDict(
-            domain="zulip.org",
+            domain="doer.org",
             allow_subdomains=True,
         )
         expected_extra_data = {
@@ -1015,7 +1015,7 @@ class TestRealmAuditLog(ZulipTestCase):
         now = timezone_now()
         do_remove_realm_domain(realm_domain, acting_user=user)
         removed_domain = RealmDomainDict(
-            domain="zulip.org",
+            domain="doer.org",
             allow_subdomains=True,
         )
         expected_extra_data = {

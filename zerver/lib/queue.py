@@ -39,7 +39,7 @@ class QueueClient(ABC, Generic[ChannelT]):
         rabbitmq_heartbeat: int | None = 0,
         prefetch: int = 0,
     ) -> None:
-        self.log = logging.getLogger("zulip.queue")
+        self.log = logging.getLogger("doer.queue")
         self.queues: set[str] = set()
         self.channel: ChannelT | None = None
         self.prefetch = prefetch

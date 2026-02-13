@@ -61,7 +61,7 @@ populate_billing_realms` to populate different billing states, both
   - Select the realm from the `Realms` dropdown you wist to test.
   - Login as the only available user.
   - Go to `/billing`.
-- Populated `RemoteZulipServer` customers can be accessed by going to
+- Populated `RemoteDoerServer` customers can be accessed by going to
   `http://selfhosting.localhost:9991/serverlogin/` and providing the
   credentials in the login form for the server state you wish to
   test. The credentials are printed in the terminal by `./manage.py
@@ -90,9 +90,9 @@ a few things to keep in mind while conducting these tests manually:
 2024-04-30T08:12:53` -- this will run invoicing, including
   end-of-cycle updates, as though the current date is as specified.
 
-#### Upgrading a Zulip Cloud organization
+#### Upgrading a Doer Cloud organization
 
-Here are some flows to test when upgrading a Zulip Cloud organization:
+Here are some flows to test when upgrading a Doer Cloud organization:
 
 - When free trials are not enabled, i.e. `CLOUD_FREE_TRIAL_DAYS` is not set
   to any value in `dev_settings.py` (aka the default). You can
@@ -119,9 +119,9 @@ Here are some flows to test when upgrading a Zulip Cloud organization:
       go to the organization.
   - By manually going to the `/billing` page and upgrading the organization.
 
-#### Upgrading a remote Zulip organization
+#### Upgrading a remote Doer organization
 
-Here are some flows to test when upgrading a remote Zulip organization:
+Here are some flows to test when upgrading a remote Doer organization:
 
 - Free trial for remote organizations is enabled by default by setting
   `SELF_HOSTING_FREE_TRIAL_DAYS` to `30` days. You can change this
@@ -138,7 +138,7 @@ Here are some flows to test when upgrading a remote Zulip organization:
       link.
     - Retry the upgrade from scratch.
 
-- Try upgrading to Zulip Business using `Pay by card` as described above or
+- Try upgrading to Doer Business using `Pay by card` as described above or
   `Pay by Invoice`.
 
 #### Changing the card
@@ -170,7 +170,7 @@ our code is:
 - Update the value of `STRIPE_API_VERSION` in `corporate/lib/stripe.py`.
 - Commit the changes, and open a PR.
 - Ask Tim Abbott to upgrade the API version on the
-  [Stripe Dashboard](https://dashboard.stripe.com/developers) for Zulip's official
+  [Stripe Dashboard](https://dashboard.stripe.com/developers) for Doer's official
   Stripe account.
 
 We currently aren't set up to do version upgrades where there are breaking
@@ -193,7 +193,7 @@ fixtures along with your code changes.
 
 Regenerating the fixtures for all of our existing billing tests is
 expensive, in that it creates extremely large diffs from editing
-dates/IDs that grow the zulip/zulip Git repository and make PRs harder
+dates/IDs that grow the doer/doer Git repository and make PRs harder
 to read, both visually and by making the GitHub UI very slow.
 
 So you should generally aim to only (re)generate fixtures where it's

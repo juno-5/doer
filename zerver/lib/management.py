@@ -15,7 +15,7 @@ from django.core.management.base import BaseCommand, CommandError, CommandParser
 from django.db.models import Q, QuerySet
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import LOCK_DIR as DEPLOYMENT_LOCK_DIR
+from scripts.lib.doer_tools import LOCK_DIR as DEPLOYMENT_LOCK_DIR
 from zerver.lib.context_managers import lockfile_nonblocking
 from zerver.lib.initial_password import initial_password
 from zerver.models import Client, Realm, UserProfile
@@ -40,8 +40,8 @@ def abort_unless_locked(handle_func: HandleMethod) -> HandleMethod:
         os.makedirs(settings.LOCKFILE_DIRECTORY, exist_ok=True)
         # Trim out just the last part of the module name, which is the
         # command name, to use as the lockfile name;
-        # `zerver.management.commands.send_zulip_update_announcements`
-        # becomes `/srv/zulip-locks/send_zulip_update_announcements.lock`
+        # `zerver.management.commands.send_doer_update_announcements`
+        # becomes `/srv/zulip-locks/send_doer_update_announcements.lock`
         lockfile_name = handle_func.__module__.split(".")[-1]
         lockfile_path = settings.LOCKFILE_DIRECTORY + "/" + lockfile_name + ".lock"
         with lockfile_nonblocking(lockfile_path) as lock_acquired:
@@ -82,7 +82,7 @@ class CreateUserParameters:
     password: str | None
 
 
-class ZulipBaseCommand(BaseCommand):
+class DoerBaseCommand(BaseCommand):
     # Fix support for multi-line usage
     @override
     def create_parser(self, prog_name: str, subcommand: str, **kwargs: Any) -> CommandParser:
@@ -109,7 +109,7 @@ class ZulipBaseCommand(BaseCommand):
         self, parser: _ActionsContainer, *, required: bool = False, help: str | None = None
     ) -> None:
         if help is None:
-            help = """The numeric or string ID (subdomain) of the Zulip organization to modify.
+            help = """The numeric or string ID (subdomain) of the Doer organization to modify.
 You can use the command list_realms to find ID of the realms in this server."""
 
         parser.add_argument("-r", "--realm", dest="realm_id", required=required, help=help)
@@ -236,15 +236,15 @@ server via `ps -ef` or reading bash history. Prefer
             )
         except MultipleObjectsReturned:
             raise CommandError(
-                "This Zulip server contains multiple users with that email (in different realms);"
+                "This Doer server contains multiple users with that email (in different realms);"
                 " please pass `--realm` to specify which one to modify."
             )
         except UserProfile.DoesNotExist:
-            raise CommandError(f"This Zulip server does not contain a user with email '{email}'")
+            raise CommandError(f"This Doer server does not contain a user with email '{email}'")
 
     def get_client(self) -> Client:
-        """Returns a Zulip Client object to be used for things done in management commands"""
-        return get_client("ZulipServer")
+        """Returns a Doer Client object to be used for things done in management commands"""
+        return get_client("DoerServer")
 
     def get_create_user_params(self, options: dict[str, Any]) -> CreateUserParameters:  # nocoverage
         """

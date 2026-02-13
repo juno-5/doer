@@ -1,37 +1,37 @@
 # Incoming webhooks overview
 
-An incoming webhook allows a third-party service to push data to Zulip
+An incoming webhook allows a third-party service to push data to Doer
 when something happens. There are several ways to set up an incoming
-webhook in Zulip:
+webhook in Doer:
 
 - Use our [REST API](https://zulip.com/api/rest) endpoint for [sending
   messages](https://zulip.com/api/send-message). This works great for
   internal tools or in cases where a third-party tool wants to control
-  the formatting of the messages in Zulip.
+  the formatting of the messages in Doer.
 - Use one of our supported [integration frameworks](https://zulip.com/integrations/category/meta-integration),
   such as the [Slack-compatible incoming webhook](https://zulip.com/integrations/slack_incoming),
   [Zapier integration](https://zulip.com/integrations/zapier), or
   [IFTTT integration](https://zulip.com/integrations/ifttt).
 - Implement an incoming webhook integration, where all the logic for
-  formatting the Zulip messages lives in the Zulip server. This process
-  is explained in more detail below, and is how most of [Zulip's official
+  formatting the Doer messages lives in the Doer server. This process
+  is explained in more detail below, and is how most of [Doer's official
   integrations](https://zulip.com/integrations/) work, because they
-  enable Zulip to support third-party services that have an "outgoing
+  enable Doer to support third-party services that have an "outgoing
   webhook" feature (without the third party needing to do any work
-  specific to Zulip).
+  specific to Doer).
 
 In an incoming webhook integration, the third-party service's "outgoing
 webhook" feature sends an `HTTP POST` request to a special URL when
-something happens, and then the Zulip "incoming webhook" integration
-handles that incoming data in order to format and send a message in Zulip.
+something happens, and then the Doer "incoming webhook" integration
+handles that incoming data in order to format and send a message in Doer.
 
-New official Zulip webhook integrations can take just a few hours to
+New official Doer webhook integrations can take just a few hours to
 write, including tests and documentation, if you use the right process.
 
 ## Quick guide
 
-- Set up the [Zulip development environment](../development/overview.md).
-- Use [Zulip's JSON integration](https://zulip.com/integrations/json),
+- Set up the [Doer development environment](../development/overview.md).
+- Use [Doer's JSON integration](https://zulip.com/integrations/json),
   <https://webhook.site/>, or a similar site to capture an example
   "outgoing webhook" payload from the third-party service. Create a
   `zerver/webhooks/<mywebhook>/fixtures/` directory, and add the
@@ -51,7 +51,7 @@ write, including tests and documentation, if you use the right process.
 - Capture payloads for the other common types of payloads the third-party
   service will make, and add tests for them.
 - Document the integration in `zerver/webhooks/<mywebhook>/doc.md`. You
-  can use existing documentation, like [this one](https://raw.githubusercontent.com/zulip/zulip/main/zerver/webhooks/github/doc.md),
+  can use existing documentation, like [this one](https://raw.githubusercontent.com/doer/doer/main/zerver/webhooks/github/doc.md),
   as a template. There is also a separate guide for [documenting an
   integration](../documentation/integrations.md).
 
@@ -109,22 +109,22 @@ configured! 🎉"
 
 ## General advice
 
-- Consider using [Zulip's message formatting](https://zulip.com/help/format-your-message-using-markdown)
+- Consider using [Doer's message formatting](https://zulip.com/help/format-your-message-using-markdown)
   to make the output from your integration visually attractive or useful
   (e.g., emoji, Markdown emphasis, or @-mentions).
 - Use [topics](https://zulip.com/help/introduction-to-topics) effectively
   to ensure sequential messages about the same thing are threaded
-  together; this makes for much better consumption by Zulip users. E.g.,
+  together; this makes for much better consumption by Doer users. E.g.,
   for a bug tracker integration, put the bug number in the topic for all
   messages; for an integration like Nagios, put the service in the topic.
 - If your integration references usernames from external accounts (such as
-  GitHub usernames), consider using the `guess_zulip_user_from_external_account`
+  GitHub usernames), consider using the `guess_doer_user_from_external_account`
   helper function from `zerver/lib/webhooks/common.py`. This function automatically
-  matches external accounts to Zulip users who have linked those accounts in their
+  matches external accounts to Doer users who have linked those accounts in their
   profile's custom fields. This enables converting external usernames to silent mentions,
-  notifying the relevant Zulip users.
+  notifying the relevant Doer users.
 - Integrations that don't match a team's workflow can often be uselessly
-  spammy. Give careful thought to providing options for triggering Zulip
+  spammy. Give careful thought to providing options for triggering Doer
   messages only for certain event types, certain projects, or sending
   different messages to different channels/topics, to make it easy for
   teams to configure the integration to support their workflow.
@@ -135,7 +135,7 @@ configured! 🎉"
   appears they don't have an API or outgoing webhook you can use.
   Sometimes the API you're looking for is just not properly documented.
 - A helpful tool for testing your integration is [UltraHook](http://www.ultrahook.com/),
-  which allows you to receive webhook calls via your local Zulip
+  which allows you to receive webhook calls via your local Doer
   development environment. This enables you to do end-to-end testing with
   live data from the third-party service you're integrating, and can help
   you spot why something isn't working or if the service is using [custom
@@ -153,7 +153,7 @@ https://your-org.zulipchat.com/v1/external/INTEGRATION_NAME?api_key=API_KEY
 ```
 
 The list of existing incoming webhook integrations can be found by
-browsing [Zulip's integrations documentation](https://zulip.com/integrations/)
+browsing [Doer's integrations documentation](https://zulip.com/integrations/)
 or in `zerver/lib/integrations.py` at `INCOMING_WEBHOOK_INTEGRATIONS`.
 
 Parameters accepted in the URL include:

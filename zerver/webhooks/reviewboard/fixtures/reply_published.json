@@ -6,29 +6,29 @@
             "num_lines":1,
             "links":{
                 "self":{
-                    "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
+                    "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
                     "method":"GET"
                 },
                 "update":{
-                    "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
+                    "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
                     "method":"PUT"
                 },
                 "user":{
-                    "href":"https://rbcommons.com/s/zulip/api/users/drsbgarg/",
+                    "href":"https://rbcommons.com/s/doer/api/users/drsbgarg/",
                     "method":"GET",
                     "title":"drsbgarg"
                 },
                 "reply_to":{
-                    "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/diff-comments/778500/",
+                    "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/diff-comments/778500/",
                     "method":"GET",
                     "title":"I think we should get rid of this extra whitespace here"
                 },
                 "delete":{
-                    "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
+                    "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/diff-comments/778505/",
                     "method":"DELETE"
                 },
                 "filediff":{
-                    "href":"https://rbcommons.com/s/zulip/api/review-requests/1/diffs/1/files/6128836/",
+                    "href":"https://rbcommons.com/s/doer/api/review-requests/1/diffs/1/files/6128836/",
                     "method":"GET",
                     "title":"AddSpaces.java (PRE-CREATION) -> AddSpaces.java (dc54788b2bf0324a3228faa7224c3c523582d9f6)"
                 }
@@ -61,36 +61,36 @@
         },
         "links":{
             "diff_comments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/diff-comments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/diff-comments/",
                 "method":"GET"
             },
             "file_attachment_comments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/file-attachment-comments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/file-attachment-comments/",
                 "method":"GET"
             },
             "self":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/",
                 "method":"GET"
             },
             "update":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/",
                 "method":"PUT"
             },
             "general_comments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/general-comments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/general-comments/",
                 "method":"GET"
             },
             "screenshot_comments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/screenshot-comments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/screenshot-comments/",
                 "method":"GET"
             },
             "user":{
-                "href":"https://rbcommons.com/s/zulip/api/users/drsbgarg/",
+                "href":"https://rbcommons.com/s/doer/api/users/drsbgarg/",
                 "method":"GET",
                 "title":"drsbgarg"
             },
             "delete":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/651728/replies/651732/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/651728/replies/651732/",
                 "method":"DELETE"
             }
         },
@@ -107,7 +107,7 @@
         "last_updated":"2018-10-26T15:57:39Z",
         "target_people":[
             {
-                "href":"https://rbcommons.com/s/zulip/api/users/drsbgarg/",
+                "href":"https://rbcommons.com/s/doer/api/users/drsbgarg/",
                 "method":"GET",
                 "title":"drsbgarg"
             }
@@ -123,65 +123,65 @@
         "id":1,
         "links":{
             "diffs":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/diffs/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/diffs/",
                 "method":"GET"
             },
             "latest_diff":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/diffs/1/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/diffs/1/",
                 "method":"GET"
             },
             "repository":{
-                "href":"https://rbcommons.com/s/zulip/api/repositories/2147/",
+                "href":"https://rbcommons.com/s/doer/api/repositories/2147/",
                 "method":"GET",
                 "title":"Scheduler"
             },
             "screenshots":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/screenshots/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/screenshots/",
                 "method":"GET"
             },
             "self":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/",
                 "method":"GET"
             },
             "status_updates":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/status-updates/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/status-updates/",
                 "method":"GET"
             },
             "update":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/",
                 "method":"PUT"
             },
             "last_update":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/last-update/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/last-update/",
                 "method":"GET"
             },
             "reviews":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/reviews/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/reviews/",
                 "method":"GET"
             },
             "file_attachments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/file-attachments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/file-attachments/",
                 "method":"GET"
             },
             "draft":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/draft/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/draft/",
                 "method":"GET"
             },
             "diff_context":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/diff-context/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/diff-context/",
                 "method":"GET"
             },
             "submitter":{
-                "href":"https://rbcommons.com/s/zulip/api/users/eeshangarg/",
+                "href":"https://rbcommons.com/s/doer/api/users/eeshangarg/",
                 "method":"GET",
                 "title":"eeshangarg"
             },
             "changes":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/changes/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/changes/",
                 "method":"GET"
             },
             "delete":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/1/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/1/",
                 "method":"DELETE"
             }
         },
@@ -206,8 +206,8 @@
         "testing_done_text_type":"markdown",
         "issue_open_count":0,
         "approved":false,
-        "url":"/s/zulip/r/1/",
-        "absolute_url":"https://rbcommons.com/s/zulip/r/1/",
+        "url":"/s/doer/r/1/",
+        "absolute_url":"https://rbcommons.com/s/doer/r/1/",
         "target_groups":[
 
         ],

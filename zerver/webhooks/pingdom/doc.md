@@ -1,6 +1,6 @@
-# Zulip Pingdom integration
+# Doer Pingdom integration
 
-Zulip supports integration with Pingdom and can notify you of
+Doer supports integration with Pingdom and can notify you of
 uptime status changes from your Pingdom dashboard.
 
 {start_tabs}
@@ -13,7 +13,7 @@ uptime status changes from your Pingdom dashboard.
    **Add integration**.
 
 1. For **Type**, select **Webhook**. Set **Name** to a name of your
-   choice, like `Zulip`, and set **URL** to the URL generated above.
+   choice, like `Doer`, and set **URL** to the URL generated above.
    Make sure **Active** is toggle, and click **Save integration**.
 
 1. Finally, when creating a new check or editing an existing check,

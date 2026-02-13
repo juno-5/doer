@@ -1,11 +1,11 @@
 {
     "event": {
       "repo": {
-        "repo_name": "u/yuroitaki/zulip-testing",
+        "repo_name": "u/yuroitaki/doer-testing",
         "permalink_url": "https://code.rhodecode.com/_1936",
         "repo_type": "git",
         "extra_fields": {},
-        "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing",
+        "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing",
         "repo_id": 1936
       },
       "actor_ip": "14.192.212.32",
@@ -33,7 +33,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
             "message_html": "Add test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
             "message": "Add test.py\n",
             "issues": [],
             "refs": {
@@ -59,7 +59,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message_html": "Modify test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message": "Modify test.py\n",
             "issues": [],
             "refs": {
@@ -87,7 +87,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message_html": "Modify test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message": "Modify test.py\n",
             "issues": [],
             "refs": {
@@ -115,7 +115,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message_html": "Modify test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message": "Modify test.py\n",
             "issues": [],
             "refs": {
@@ -143,7 +143,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message_html": "Modify test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/6dbae5f842f80ccb05508a1de7aace9d0f327473",
             "message": "Modify test.py\n",
             "issues": [],
             "refs": {
@@ -171,7 +171,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
             "message_html": "Add test.py\n",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/b0d892e1cdd4236b1f74debca1772ea330ff5acd",
             "message": "Add test.py\n",
             "issues": [],
             "refs": {
@@ -185,7 +185,7 @@
         ],
         "branches": [
           {
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changelog?branch=master",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changelog?branch=master",
             "name": "master"
           }
         ],

@@ -20,7 +20,7 @@ Use semi-formal Urdu for translation:
 
 Some terms are very tricky to translate, so be sure to communicate
 with other Urdu speakers in the community. It's all about making
-Zulip friendly and usable.
+Doer friendly and usable.
 
 ## Terms(اصطلاحات)
 

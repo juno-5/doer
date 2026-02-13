@@ -25,7 +25,7 @@ Handlebars.Utils.escapeExpression = (value: unknown): string => {
         value !== undefined &&
         !(typeof value === "object" && value !== null && "toHTML" in value)
     ) {
-        blueslip.error(`Cannot use a value of type ${typeof value} in a Zulip Handlebars template`);
+        blueslip.error(`Cannot use a value of type ${typeof value} in a Doer Handlebars template`);
     }
     // Upstream type annotation incorrectly requires string
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
@@ -42,7 +42,7 @@ Handlebars.Utils.isEmpty = (value: unknown): boolean => {
         (typeof value !== "object" || Array.isArray(value))
     ) {
         blueslip.error(
-            `Cannot test a value of type ${typeof value} in a Zulip Handlebars template`,
+            `Cannot test a value of type ${typeof value} in a Doer Handlebars template`,
         );
     }
     return orig_is_empty(value);
@@ -52,7 +52,7 @@ Handlebars.helpers["each"] = function (context, options): unknown {
     /* istanbul ignore if */
     if (!Array.isArray(context)) {
         blueslip.error(
-            `Cannot loop over a value of type ${Object.prototype.toString.call(context)} in a Zulip Handlebars template`,
+            `Cannot loop over a value of type ${Object.prototype.toString.call(context)} in a Doer Handlebars template`,
         );
     }
     return orig_each.call(this, context, options);
@@ -62,7 +62,7 @@ Handlebars.helpers["if"] = function (conditional, options): unknown {
     /* istanbul ignore if */
     if (typeof conditional === "number") {
         blueslip.error(
-            `Cannot test a value of type ${typeof conditional} in a Zulip Handlebars template`,
+            `Cannot test a value of type ${typeof conditional} in a Doer Handlebars template`,
         );
     }
     return orig_if.call(this, conditional, options);
@@ -72,13 +72,13 @@ Handlebars.helpers["unless"] = function (conditional, options): unknown {
     /* istanbul ignore if */
     if (typeof conditional === "number") {
         blueslip.error(
-            `Cannot test a value of type ${typeof conditional} in a Zulip Handlebars template`,
+            `Cannot test a value of type ${typeof conditional} in a Doer Handlebars template`,
         );
     }
     return orig_unless.call(this, conditional, options);
 };
 
-// Below, we register Zulip-specific extensions to the Handlebars API.
+// Below, we register Doer-specific extensions to the Handlebars API.
 //
 // IMPORTANT: When adding a new Handlebars helper, update the
 // knownHelpers array in the webpack config so that webpack knows your
@@ -266,7 +266,7 @@ Handlebars.registerHelper("popover_hotkey_hints", (...args) => {
     for (const hotkey of hotkeys) {
         // The ⌘ symbol isn't vertically centered, so we use an icon.
         if (hotkey === "⌘") {
-            hotkey_hints += `<span class="popover-menu-hotkey-hint"><i class="zulip-icon zulip-icon-mac-command" aria-hidden="true"></i></span>`;
+            hotkey_hints += `<span class="popover-menu-hotkey-hint"><i class="doer-icon doer-icon-mac-command" aria-hidden="true"></i></span>`;
         } else {
             hotkey_hints += `<span class="popover-menu-hotkey-hint">${hotkey}</span>`;
         }

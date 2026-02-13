@@ -17,7 +17,7 @@ from lxml.etree import Element, SubElement, XPath, _Element
 from markupsafe import Markup
 from typing_extensions import override
 
-from zerver.context_processors import zulip_default_context
+from zerver.context_processors import doer_default_context
 from zerver.decorator import add_google_analytics_context
 from zerver.lib.html_to_text import get_content_description
 from zerver.lib.integrations import (
@@ -48,10 +48,10 @@ class DocumentationArticle:
 def add_api_url_context(
     context: dict[str, Any], request: HttpRequest, is_zilencer_endpoint: bool = False
 ) -> None:
-    context.update(zulip_default_context(request))
+    context.update(doer_default_context(request))
 
     if is_zilencer_endpoint:
-        context["api_url"] = (settings.ZULIP_SERVICES_URL or "https://push.zulipchat.com") + "/api"
+        context["api_url"] = (settings.DOER_SERVICES_URL or "https://push.zulipchat.com") + "/api"
         return
 
     subdomain = get_subdomain(request)
@@ -65,14 +65,14 @@ def add_api_url_context(
     display_host = Realm.host_for_subdomain(display_subdomain)
     api_url_scheme_relative = display_host + "/api"
     api_url = settings.EXTERNAL_URI_SCHEME + api_url_scheme_relative
-    zulip_url = settings.EXTERNAL_URI_SCHEME + display_host
+    doer_url = settings.EXTERNAL_URI_SCHEME + display_host
 
     context["display_subdomain"] = display_subdomain
     context["display_host"] = display_host
     context["external_url_scheme"] = settings.EXTERNAL_URI_SCHEME
     context["api_url"] = api_url
     context["api_url_scheme_relative"] = api_url_scheme_relative
-    context["zulip_url"] = zulip_url
+    context["doer_url"] = doer_url
 
     context["html_settings_links"] = html_settings_links
 
@@ -156,7 +156,7 @@ class MarkdownDirectoryView(ApiURLView):
         if not os.path.exists(path):
             if self.api_doc_view:
                 try:
-                    # API endpoints documented in zerver/openapi/zulip.yaml
+                    # API endpoints documented in zerver/openapi/doer.yaml
                     endpoint_name, endpoint_method = get_endpoint_from_operationid(article)
                     path = self.path_template % ("api-doc-template",)
                 except AssertionError:
@@ -209,7 +209,7 @@ class MarkdownDirectoryView(ApiURLView):
                 sidebar_index = sidebar_article.article_path
             else:
                 sidebar_index = None
-            title_base = "Zulip terms and policies"
+            title_base = "Doer terms and policies"
             # We don't add a rel-canonical link to self-hosted server policies docs.
             if settings.CORPORATE_ENABLED:
                 add_canonical_link_context(context, self.request)
@@ -219,7 +219,7 @@ class MarkdownDirectoryView(ApiURLView):
             context["doc_root_title"] = "API documentation"
             sidebar_article = self.get_path("sidebar_index")
             sidebar_index = sidebar_article.article_path
-            title_base = "Zulip API documentation"
+            title_base = "Doer API documentation"
             add_canonical_link_context(context, self.request)
         else:
             raise AssertionError("Invalid documentation view type")
@@ -335,26 +335,26 @@ class MarkdownDirectoryView(ApiURLView):
 def add_integrations_open_graph_context(context: dict[str, Any], request: HttpRequest) -> None:
     path_name = request.path.rstrip("/").split("/")[-1]
     description = (
-        "Zulip comes with over a hundred native integrations out of the box, "
+        "Doer comes with over a hundred native integrations out of the box, "
         "and integrates with Zapier and IFTTT to provide hundreds more. "
-        "Connect the apps you use every day to Zulip."
+        "Connect the apps you use every day to Doer."
     )
 
     if path_name in INTEGRATIONS:
         integration = INTEGRATIONS[path_name]
-        context["PAGE_TITLE"] = f"{integration.display_name} | Zulip integrations"
+        context["PAGE_TITLE"] = f"{integration.display_name} | Doer integrations"
         context["PAGE_DESCRIPTION"] = description
 
     elif path_name in CATEGORIES:
         category = CATEGORIES[path_name]
         if path_name in META_CATEGORY:
-            context["PAGE_TITLE"] = f"{category} | Zulip integrations"
+            context["PAGE_TITLE"] = f"{category} | Doer integrations"
         else:
-            context["PAGE_TITLE"] = f"{category} tools | Zulip integrations"
+            context["PAGE_TITLE"] = f"{category} tools | Doer integrations"
         context["PAGE_DESCRIPTION"] = description
 
     elif path_name == "integrations":
-        context["PAGE_TITLE"] = "Zulip integrations"
+        context["PAGE_TITLE"] = "Doer integrations"
         context["PAGE_DESCRIPTION"] = description
 
 
@@ -374,10 +374,10 @@ def build_integration_doc_html(integration: Integration, request: HttpRequest) -
         context["hubot_docs_url"] = integration.hubot_docs_url
     elif isinstance(integration, PythonAPIIntegration):
         context["config_file_path"] = (
-            f"/usr/local/share/zulip/integrations/{integration.directory_name}/zulip_{integration.directory_name}_config.py"
+            f"/usr/local/share/doer/integrations/{integration.directory_name}/doer_{integration.directory_name}_config.py"
         )
         context["integration_path"] = (
-            f"/usr/local/share/zulip/integrations/{integration.directory_name}"
+            f"/usr/local/share/doer/integrations/{integration.directory_name}"
         )
 
     return render_markdown_path(integration.doc, context, integration_doc=True)

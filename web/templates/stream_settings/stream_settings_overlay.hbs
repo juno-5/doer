@@ -14,8 +14,8 @@
                         <div class="list-toggler-container">
                             <div id="add_new_subscription">
                                 {{#if can_create_streams}}
-                                <button class="create_stream_button two-pane-settings-plus-button tippy-zulip-delayed-tooltip" data-tooltip-template-id="create-new-stream-tooltip-template" data-tippy-placement="bottom">
-                                    <i class="create_button_plus_sign zulip-icon zulip-icon-square-plus" aria-hidden="true"></i>
+                                <button class="create_stream_button two-pane-settings-plus-button tippy-doer-delayed-tooltip" data-tooltip-template-id="create-new-stream-tooltip-template" data-tippy-placement="bottom">
+                                    <i class="create_button_plus_sign doer-icon doer-icon-square-plus" aria-hidden="true"></i>
                                 </button>
                                 {{/if}}
                                 <div class="float-clear"></div>
@@ -26,13 +26,13 @@
                         <div class="input-append stream_name_search_section two-pane-settings-search" id="stream_filter">
                             <div id="folder_filter_container">
                                 <button type="button" id="folder_filter_button" class="filter-folders-dropdown-widget-button icon-button icon-button-neutral" tabindex="0" aria-label="{{t 'Filter channels' }}">
-                                    <i class="zulip-icon zulip-icon-folder-chevron" aria-hidden="true"></i>
+                                    <i class="doer-icon doer-icon-folder-chevron" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <input type="text" name="stream_name" id="search_stream_name" class="filter_text_input" autocomplete="off"
                               placeholder="{{t 'Filter' }}" value=""/>
                             <button type="button" class="clear_search_button" id="clear_search_stream_name">
-                                <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                                <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                             </button>
                             <div class="stream_settings_filter_container {{#unless realm_has_archived_channels}}hide_filter{{/unless}}">
                                 {{> ../dropdown_widget widget_name="stream_settings_filter"}}

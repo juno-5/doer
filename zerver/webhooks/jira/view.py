@@ -29,9 +29,9 @@ IGNORED_EVENTS = [
 ]
 
 
-def guess_zulip_user_from_jira(jira_username: str, realm: Realm) -> UserProfile | None:
+def guess_doer_user_from_jira(jira_username: str, realm: Realm) -> UserProfile | None:
     try:
-        # Try to find a matching user in Zulip
+        # Try to find a matching user in Doer
         # We search a user's full name, short name,
         # and beginning of email address
         user = UserProfile.objects.filter(
@@ -46,7 +46,7 @@ def guess_zulip_user_from_jira(jira_username: str, realm: Realm) -> UserProfile 
 
 def convert_jira_markup(content: str, realm: Realm) -> str:
     # Attempt to do some simplistic conversion of Jira
-    # formatting to Markdown, for consumption in Zulip
+    # formatting to Markdown, for consumption in Doer
 
     # Jira uses *word* for bold, we use **word**
     content = re.sub(r"\*([^\*]+)\*", r"**\1**", content)
@@ -79,12 +79,12 @@ def convert_jira_markup(content: str, realm: Realm) -> str:
     content = re.sub(full_link_re, r"[\g<title>](\g<url>)", content)
 
     # Try to convert a Jira user mention of format [~username] into a
-    # Zulip user mention. We don't know the email, just the Jira username,
-    # so we naively guess at their Zulip account using this
+    # Doer user mention. We don't know the email, just the Jira username,
+    # so we naively guess at their Doer account using this
     mention_re = re.compile(r"\[~(.*?)\]")
     for username in mention_re.findall(content):
         # Try to look up username
-        user_profile = guess_zulip_user_from_jira(username, realm)
+        user_profile = guess_doer_user_from_jira(username, realm)
         if user_profile:
             replacement = f"**{user_profile.full_name}**"
         else:

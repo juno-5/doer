@@ -55,11 +55,11 @@ from zerver.lib.remote_server import (
 )
 from zerver.lib.response import json_response_from_error
 from zerver.lib.send_email import FromAddress
-from zerver.lib.test_classes import BouncerTestCase, PushNotificationTestCase, ZulipTestCase
+from zerver.lib.test_classes import BouncerTestCase, PushNotificationTestCase, DoerTestCase
 from zerver.lib.test_helpers import (
     activate_push_notification_service,
     mock_queue_publish,
-    reset_email_visibility_to_everyone_in_zulip_realm,
+    reset_email_visibility_to_everyone_in_doer_realm,
 )
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.models import (
@@ -82,7 +82,7 @@ from zilencer.auth import (
     REMOTE_SERVER_TAKEOVER_TOKEN_VALIDITY_SECONDS,
     generate_registration_transfer_verification_secret,
 )
-from zilencer.models import RemoteZulipServerAuditLog
+from zilencer.models import RemoteDoerServerAuditLog
 from zilencer.views import DevicesToCleanUpDict, get_deleted_devices
 
 if settings.ZILENCER_ENABLED:
@@ -90,7 +90,7 @@ if settings.ZILENCER_ENABLED:
         RemotePushDeviceToken,
         RemoteRealm,
         RemoteRealmAuditLog,
-        RemoteZulipServer,
+        RemoteDoerServer,
     )
     from zilencer.views import update_remote_realm_data_for_server
 
@@ -103,7 +103,7 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
         # and makes a request to this API:
         user = self.example_user("cordelia")
         result = self.api_post(
-            user, "/api/v1/mobile_push/test_notification", {"token": "invalid"}, subdomain="zulip"
+            user, "/api/v1/mobile_push/test_notification", {"token": "invalid"}, subdomain="doer"
         )
         self.assert_json_error(result, "Device not recognized")
         self.assertEqual(orjson.loads(result.content)["code"], "INVALID_PUSH_DEVICE_TOKEN")
@@ -142,13 +142,13 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
         error_response = json_response_from_error(InvalidRemotePushDeviceTokenError())
         responses.add(
             responses.POST,
-            f"{settings.ZULIP_SERVICES_URL}/api/v1/remotes/push/test_notification",
+            f"{settings.DOER_SERVICES_URL}/api/v1/remotes/push/test_notification",
             body=error_response.content,
             status=error_response.status_code,
         )
 
         result = self.api_post(
-            user, "/api/v1/mobile_push/test_notification", {"token": token}, subdomain="zulip"
+            user, "/api/v1/mobile_push/test_notification", {"token": token}, subdomain="doer"
         )
         self.assert_json_error(result, "Device not recognized by the push bouncer")
         self.assertEqual(orjson.loads(result.content)["code"], "INVALID_REMOTE_PUSH_DEVICE_TOKEN")
@@ -185,14 +185,14 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
             ) as mock_send_android_push_notification,
             time_machine.travel(time_now, tick=False),
         ):
-            result = self.api_post(user, endpoint, {"token": android_token}, subdomain="zulip")
+            result = self.api_post(user, endpoint, {"token": android_token}, subdomain="doer")
 
         expected_android_payload = {
             "server": "testserver",
             "realm_id": user.realm_id,
-            "realm_name": "Zulip Dev",
-            "realm_uri": "http://zulip.testserver",
-            "realm_url": "http://zulip.testserver",
+            "realm_name": "Doer Dev",
+            "realm_uri": "http://doer.testserver",
+            "realm_url": "http://doer.testserver",
             "user_id": user.id,
             "event": "test",
             "time": datetime_to_timestamp(time_now),
@@ -213,21 +213,21 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
             ) as mock_send_apple_push_notification,
             time_machine.travel(time_now, tick=False),
         ):
-            result = self.api_post(user, endpoint, {"token": apple_token}, subdomain="zulip")
+            result = self.api_post(user, endpoint, {"token": apple_token}, subdomain="doer")
 
         expected_apple_payload = {
             "alert": {
                 "title": "Test notification",
-                "body": "This is a test notification from Zulip Dev (http://zulip.testserver).",
+                "body": "This is a test notification from Doer Dev (http://doer.testserver).",
             },
             "sound": "default",
             "custom": {
-                "zulip": {
+                "doer": {
                     "server": "testserver",
                     "realm_id": user.realm_id,
-                    "realm_name": "Zulip Dev",
-                    "realm_uri": "http://zulip.testserver",
-                    "realm_url": "http://zulip.testserver",
+                    "realm_name": "Doer Dev",
+                    "realm_uri": "http://doer.testserver",
+                    "realm_url": "http://doer.testserver",
                     "user_id": user.id,
                     "event": "test",
                 }
@@ -251,7 +251,7 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
             ) as mock_send_android_push_notification,
             time_machine.travel(time_now, tick=False),
         ):
-            result = self.api_post(user, endpoint, subdomain="zulip")
+            result = self.api_post(user, endpoint, subdomain="doer")
 
         mock_send_android_push_notification.assert_called_once_with(
             UserPushIdentityCompat(user_id=user.id, user_uuid=str(user.uuid)),
@@ -304,13 +304,13 @@ class SendTestPushNotificationEndpointTest(BouncerTestCase):
             ) as mock_send_android_push_notification,
             time_machine.travel(time_now, tick=False),
         ):
-            result = self.api_post(user, endpoint, {"token": token}, subdomain="zulip")
+            result = self.api_post(user, endpoint, {"token": token}, subdomain="doer")
         expected_payload = {
             "server": "testserver",
             "realm_id": user.realm_id,
-            "realm_name": "Zulip Dev",
-            "realm_uri": "http://zulip.testserver",
-            "realm_url": "http://zulip.testserver",
+            "realm_name": "Doer Dev",
+            "realm_uri": "http://doer.testserver",
+            "realm_url": "http://doer.testserver",
             "user_id": user.id,
             "event": "test",
             "time": datetime_to_timestamp(time_now),
@@ -346,7 +346,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         # We need the root ('') subdomain to be in use for this next
         # test, since the push bouncer API is only available there:
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.string_id = ""
         realm.save()
 
@@ -356,7 +356,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             dict(user_id=15, token=token, token_kind=token_kind),
             subdomain="",
         )
-        self.assert_json_error(result, "Must validate with valid Zulip server API key")
+        self.assert_json_error(result, "Must validate with valid Doer server API key")
 
         # Try with deactivated remote servers
         self.server.deactivated = True
@@ -394,7 +394,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
 
         # We need the root ('') subdomain to be in use for this next
         # test, since the push bouncer API is only available there:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.string_id = ""
         realm.save()
 
@@ -403,13 +403,13 @@ class PushBouncerNotificationTest(BouncerTestCase):
             endpoint,
             dict(user_id=user_id, token_kind=token_kind, token=token),
         )
-        self.assert_json_error(result, "Must validate with valid Zulip server API key")
+        self.assert_json_error(result, "Must validate with valid Doer server API key")
 
         result = self.uuid_post(
             self.server_uuid,
             endpoint,
             dict(user_id=user_id, token_kind=token_kind, token=token),
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(
             result, "Invalid subdomain for push notifications bouncer", status_code=401
@@ -423,7 +423,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         )
         self.assert_json_error(
             result,
-            "Zulip server auth failure: key does not match role 6cde5f7a-1f7e-4978-9716-49f69ebfc9fe",
+            "Doer server auth failure: key does not match role 6cde5f7a-1f7e-4978-9716-49f69ebfc9fe",
             status_code=401,
         )
 
@@ -434,11 +434,11 @@ class PushBouncerNotificationTest(BouncerTestCase):
             "invalid_uuid",
             endpoint,
             dict(user_id=user_id, token_kind=token_kind, token=token),
-            subdomain="zulip",
+            subdomain="doer",
         )
         self.assert_json_error(
             result,
-            "Zulip server auth failure: invalid_uuid is not registered -- did you run `manage.py register_server`?",
+            "Doer server auth failure: invalid_uuid is not registered -- did you run `manage.py register_server`?",
             status_code=401,
         )
         del self.API_KEYS["invalid_uuid"]
@@ -453,7 +453,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         )
         self.assert_json_error(
             result,
-            f"Zulip server auth failure: {credentials_uuid} is not registered -- did you run `manage.py register_server`?",
+            f"Doer server auth failure: {credentials_uuid} is not registered -- did you run `manage.py register_server`?",
             status_code=401,
         )
 
@@ -655,10 +655,10 @@ class PushBouncerNotificationTest(BouncerTestCase):
             "user_id": hamlet.id,
             "user_uuid": str(hamlet.uuid),
             "realm_uuid": str(hamlet.realm.uuid),
-            "gcm_payload": {"event": "remove", "zulip_message_ids": many_ids},
+            "gcm_payload": {"event": "remove", "doer_message_ids": many_ids},
             "apns_payload": {
                 "badge": 0,
-                "custom": {"zulip": {"event": "remove", "zulip_message_ids": many_ids}},
+                "custom": {"doer": {"event": "remove", "doer_message_ids": many_ids}},
             },
             "gcm_options": {},
         }
@@ -712,9 +712,9 @@ class PushBouncerNotificationTest(BouncerTestCase):
             {
                 "badge": 0,
                 "custom": {
-                    "zulip": {
+                    "doer": {
                         "event": "remove",
-                        "zulip_message_ids": ",".join(str(i) for i in range(50, 250)),
+                        "doer_message_ids": ",".join(str(i) for i in range(50, 250)),
                     }
                 },
             },
@@ -723,7 +723,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         android_push.assert_called_once_with(
             user_identity,
             uuid_android_tokens,
-            {"event": "remove", "zulip_message_ids": ",".join(str(i) for i in range(50, 250))},
+            {"event": "remove", "doer_message_ids": ",".join(str(i) for i in range(50, 250))},
             {},
             remote=server,
         )
@@ -756,7 +756,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         )
         message.save()
 
-        # Test old zulip server case.
+        # Test old doer server case.
         self.assertIsNone(remote_server.last_api_feature_level)
         old_apns_payload = {
             "alert": {
@@ -767,7 +767,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             "badge": 0,
             "sound": "default",
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "private",
                     "sender_email": hamlet.email,
@@ -784,7 +784,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             "user_id": self.example_user("othello").id,
             "event": "message",
             "alert": "New private message from King Hamlet",
-            "zulip_message_id": message.id,
+            "doer_message_id": message.id,
             "time": datetime_to_timestamp(message.date_sent),
             "content": message.content,
             "server": settings.EXTERNAL_HOST,
@@ -810,7 +810,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             payload,
             content_type="application/json",
         )
-        self.assertEqual(orjson.loads(result.content)["code"], "INVALID_ZULIP_SERVER")
+        self.assertEqual(orjson.loads(result.content)["code"], "INVALID_DOER_SERVER")
 
         remote_server.last_api_feature_level = 235
         remote_server.save()
@@ -973,7 +973,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         self.assert_json_error(result, "Invalid APNS token")
 
     def test_initialize_push_notifications(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.push_notifications_enabled = False
         realm.save()
 
@@ -984,7 +984,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         ):
             initialize_push_notifications()
 
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
             self.assertTrue(realm.push_notifications_enabled)
 
         with (
@@ -1000,7 +1000,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
                 "Mobile push notifications are not configured.\n  "
                 "See https://zulip.readthedocs.io/en/latest/production/mobile-push-notifications.html"
             )
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
             self.assertFalse(realm.push_notifications_enabled)
             self.assertEqual(
                 warn_log.output[0],
@@ -1029,7 +1029,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
 
             initialize_push_notifications()
 
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
             self.assertTrue(realm.push_notifications_enabled)
             self.assertEqual(realm.push_notifications_enabled_end_timestamp, None)
 
@@ -1047,7 +1047,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         # different server than the one making the request (self.server).
         # This will make it log a warning, raise an exception when trying to get
         # remote realm via get_remote_realm_helper and thus, not register the token.
-        second_server = RemoteZulipServer.objects.create(
+        second_server = RemoteDoerServer.objects.create(
             uuid=uuid.uuid4(),
             api_key="magic_secret_api_key2",
             hostname="demo2.example.com",
@@ -1062,11 +1062,11 @@ class PushBouncerNotificationTest(BouncerTestCase):
         token = "c0ffee"
         with self.assertLogs("zilencer.views", level="WARN") as warn_log:
             result = self.client_post(
-                endpoint, {"token": token, "appid": "org.zulip.Zulip"}, subdomain="zulip"
+                endpoint, {"token": token, "appid": "org.zulip.Doer"}, subdomain="doer"
             )
             self.assert_json_error_contains(
                 result,
-                "Your organization is registered to a different Zulip server. Please contact Zulip support",
+                "Your organization is registered to a different Doer server. Please contact Doer support",
             )
         self.assertEqual(
             warn_log.output,
@@ -1094,7 +1094,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
                 "/json/users/me/apns_device_token",
                 "c0fFeE",
                 RemotePushDeviceToken.APNS,
-                {"appid": "org.zulip.Zulip"},
+                {"appid": "org.zulip.Doer"},
             ),
             ("/json/users/me/android_gcm_reg_id", "android-token", RemotePushDeviceToken.FCM, {}),
         ]
@@ -1103,35 +1103,35 @@ class PushBouncerNotificationTest(BouncerTestCase):
         for endpoint, token, kind, appid in endpoints:
             # Try adding/removing tokens that are too big...
             broken_token = "a" * 5000  # too big
-            result = self.client_post(endpoint, {"token": broken_token, **appid}, subdomain="zulip")
+            result = self.client_post(endpoint, {"token": broken_token, **appid}, subdomain="doer")
             self.assert_json_error(result, "Empty or invalid length token")
 
-            result = self.client_delete(endpoint, {"token": broken_token}, subdomain="zulip")
+            result = self.client_delete(endpoint, {"token": broken_token}, subdomain="doer")
             self.assert_json_error(result, "Empty or invalid length token")
 
             # Try adding with missing or invalid appid...
             if appid:
-                result = self.client_post(endpoint, {"token": token}, subdomain="zulip")
+                result = self.client_post(endpoint, {"token": token}, subdomain="doer")
                 self.assert_json_error(result, "Missing 'appid' argument")
 
                 result = self.client_post(
-                    endpoint, {"token": token, "appid": "'; tables --"}, subdomain="zulip"
+                    endpoint, {"token": token, "appid": "'; tables --"}, subdomain="doer"
                 )
                 self.assert_json_error(result, "appid has invalid format")
 
             # Try to remove a non-existent token...
-            result = self.client_delete(endpoint, {"token": "abcd1234"}, subdomain="zulip")
+            result = self.client_delete(endpoint, {"token": "abcd1234"}, subdomain="doer")
             self.assert_json_error(result, "Token does not exist")
 
-            assert settings.ZULIP_SERVICES_URL is not None
-            URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/push/register"
+            assert settings.DOER_SERVICES_URL is not None
+            URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/push/register"
             with responses.RequestsMock() as resp, self.assertLogs(level="ERROR") as error_log:
                 resp.add(responses.POST, URL, body=ConnectionError(), status=502)
                 with self.assertRaisesRegex(
                     PushNotificationBouncerRetryLaterError,
                     r"^ConnectionError while trying to connect to push notification bouncer$",
                 ):
-                    self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+                    self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
                 self.assertIn(
                     f"ERROR:django.request:Bad Gateway: {endpoint}\nTraceback",
                     error_log.output[0],
@@ -1143,7 +1143,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
                     PushNotificationBouncerServerError,
                     r"Received 500 from push notification bouncer$",
                 ):
-                    self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+                    self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
                 self.assertEqual(
                     warn_log.output[0],
                     "WARNING:root:Received 500 from push notification bouncer",
@@ -1157,7 +1157,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             # First register a token without having a RemoteRealm registration:
             RemoteRealm.objects.all().delete()
             with self.assertLogs("zilencer.views", level="INFO") as info_log:
-                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
             self.assert_json_success(result)
             self.assertIn(
                 "INFO:zilencer.views:/api/v1/remotes/push/register: Received request for "
@@ -1186,11 +1186,11 @@ class PushBouncerNotificationTest(BouncerTestCase):
 
             time_sent = now()
             with time_machine.travel(time_sent, tick=False):
-                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
                 self.assert_json_success(result)
 
                 # Test that we can push more times
-                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+                result = self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
                 self.assert_json_success(result)
 
             tokens = list(
@@ -1206,7 +1206,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
             self.assertEqual(remote_realm.uuid, user.realm.uuid)
             self.assertEqual(tokens[0].ios_app_id, appid.get("appid"))
 
-            # Both RemoteRealm and RemoteZulipServer should have last_request_datetime
+            # Both RemoteRealm and RemoteDoerServer should have last_request_datetime
             # updated.
             self.assertEqual(remote_realm.last_request_datetime, time_sent)
             server.refresh_from_db()
@@ -1220,7 +1220,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
         time_sent += timedelta(minutes=1)
         for endpoint, token, kind, appid in endpoints:
             with time_machine.travel(time_sent, tick=False):
-                result = self.client_delete(endpoint, {"token": token}, subdomain="zulip")
+                result = self.client_delete(endpoint, {"token": token}, subdomain="doer")
             self.assert_json_success(result)
             tokens = list(
                 RemotePushDeviceToken.objects.filter(
@@ -1234,7 +1234,7 @@ class PushBouncerNotificationTest(BouncerTestCase):
 
         # Re-add copies of those tokens
         for endpoint, token, kind, appid in endpoints:
-            result = self.client_post(endpoint, {"token": token, **appid}, subdomain="zulip")
+            result = self.client_post(endpoint, {"token": token, **appid}, subdomain="doer")
             self.assert_json_success(result)
         tokens = list(RemotePushDeviceToken.objects.filter(user_uuid=user.uuid, server=server))
         self.assert_length(tokens, 2)
@@ -1323,7 +1323,7 @@ class TestAPNs(PushNotificationTestCase):
             notification_drop_log = (
                 "DEBUG:zerver.lib.push_notifications:"
                 "APNs: Dropping a notification because nothing configured.  "
-                "Set ZULIP_SERVICES_URL (or APNS_CERT_FILE)."
+                "Set DOER_SERVICES_URL (or APNS_CERT_FILE)."
             )
 
             from zerver.lib.push_notifications import initialize_push_notifications
@@ -1496,7 +1496,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "badge": 0,
             "sound": "default",
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "private",
                     "sender_email": self.sender.email,
@@ -1537,7 +1537,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "badge": 0,
             "sound": "default",
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "private",
                     "sender_email": self.sender.email,
@@ -1576,7 +1576,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "private",
                     "pm_users": ",".join(
@@ -1620,7 +1620,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "stream",
                     "sender_email": self.sender.email,
@@ -1664,7 +1664,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "stream",
                     "sender_email": self.sender.email,
@@ -1684,7 +1684,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
     def test_get_message_payload_apns_user_group_mention(self) -> None:
         user_profile = self.example_user("othello")
         user_group = check_add_user_group(
-            get_realm("zulip"), "test_user_group", [user_profile], acting_user=user_profile
+            get_realm("doer"), "test_user_group", [user_profile], acting_user=user_profile
         )
         stream = Stream.objects.filter(name="Verona").get()
         message = self.get_message(Recipient.STREAM, stream.id, stream.realm_id)
@@ -1700,7 +1700,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "stream",
                     "sender_email": self.sender.email,
@@ -1737,7 +1737,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "stream",
                     "sender_email": self.sender.email,
@@ -1782,7 +1782,7 @@ class TestGetAPNsPayload(PushNotificationTestCase):
 
         # Reset email visibility to everyone so that we can make sure
         # that sender_email field is not set to real email.
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         hamlet = self.example_user("hamlet")
         polonius = self.example_user("polonius")
@@ -1805,10 +1805,10 @@ class TestGetAPNsPayload(PushNotificationTestCase):
             "sound": "default",
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "message_ids": [message.id],
                     "recipient_type": "stream",
-                    "sender_email": f"user{hamlet.id}@zulip.testserver",
+                    "sender_email": f"user{hamlet.id}@doer.testserver",
                     "sender_id": hamlet.id,
                     "stream": stream.name,
                     "stream_id": stream.id,
@@ -1874,7 +1874,7 @@ class TestGetGCMPayload(PushNotificationTestCase):
         expected_payload = {
             "user_id": hamlet.id,
             "event": "message",
-            "zulip_message_id": message.id,
+            "doer_message_id": message.id,
             "time": datetime_to_timestamp(message.date_sent),
             "content": content,
             "server": settings.EXTERNAL_HOST,
@@ -1936,7 +1936,7 @@ class TestGetGCMPayload(PushNotificationTestCase):
             {
                 "user_id": hamlet.id,
                 "event": "message",
-                "zulip_message_id": message.id,
+                "doer_message_id": message.id,
                 "time": datetime_to_timestamp(message.date_sent),
                 "content": message.content,
                 "server": settings.EXTERNAL_HOST,
@@ -1966,7 +1966,7 @@ class TestGetGCMPayload(PushNotificationTestCase):
 
         # Reset email visibility to everyone so that we can make sure
         # that sender_email field is not set to real email.
-        reset_email_visibility_to_everyone_in_zulip_realm()
+        reset_email_visibility_to_everyone_in_doer_realm()
 
         hamlet = self.example_user("hamlet")
         polonius = self.example_user("polonius")
@@ -1985,7 +1985,7 @@ class TestGetGCMPayload(PushNotificationTestCase):
             {
                 "user_id": polonius.id,
                 "event": "message",
-                "zulip_message_id": message.id,
+                "doer_message_id": message.id,
                 "time": datetime_to_timestamp(message.date_sent),
                 "content": message.content,
                 "server": settings.EXTERNAL_HOST,
@@ -1994,7 +1994,7 @@ class TestGetGCMPayload(PushNotificationTestCase):
                 "realm_uri": hamlet.realm.url,
                 "realm_url": hamlet.realm.url,
                 "sender_id": hamlet.id,
-                "sender_email": f"user{hamlet.id}@zulip.testserver",
+                "sender_email": f"user{hamlet.id}@doer.testserver",
                 "sender_full_name": "Unknown user",
                 "sender_avatar_url": get_avatar_for_inaccessible_user(),
                 "recipient_type": "stream",
@@ -2098,7 +2098,7 @@ class TestSendNotificationsToBouncer(PushNotificationTestCase):
     def test_payload_both_android_apple_registered(self) -> None:
         hamlet = self.example_user("hamlet")
         aaron = self.example_user("aaron")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         user_group = check_add_user_group(realm, "test_user_group", [hamlet], acting_user=hamlet)
 
         time_now = now()
@@ -2126,7 +2126,7 @@ class TestSendNotificationsToBouncer(PushNotificationTestCase):
             },
             "badge": 0,
             "custom": {
-                "zulip": {
+                "doer": {
                     "mentioned_user_group_id": user_group.id,
                     "mentioned_user_group_name": user_group.name,
                     "message_ids": [message_id],
@@ -2164,7 +2164,7 @@ class TestSendNotificationsToBouncer(PushNotificationTestCase):
             "time": datetime_to_timestamp(time_now),
             "topic": "test",
             "user_id": hamlet.id,
-            "zulip_message_id": message_id,
+            "doer_message_id": message_id,
         }
         with mock.patch("zerver.lib.push_notifications.send_push_notifications_legacy") as m:
             handle_push_notification(hamlet.id, missed_message)
@@ -2174,12 +2174,12 @@ class TestSendNotificationsToBouncer(PushNotificationTestCase):
 
 
 @activate_push_notification_service()
-class TestSendToPushBouncer(ZulipTestCase):
+class TestSendToPushBouncer(DoerTestCase):
     def add_mock_response(
         self, body: bytes = orjson.dumps({"msg": "error"}), status: int = 200
     ) -> None:
-        assert settings.ZULIP_SERVICES_URL is not None
-        URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/register"
+        assert settings.DOER_SERVICES_URL is not None
+        URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/register"
         responses.add(responses.POST, URL, body=body, status=status)
 
     @responses.activate
@@ -2199,17 +2199,17 @@ class TestSendToPushBouncer(ZulipTestCase):
 
     @responses.activate
     def test_400_error_invalid_server_key(self) -> None:
-        from zilencer.auth import InvalidZulipServerError
+        from zilencer.auth import InvalidDoerServerError
 
-        # This is the exception our decorator uses for an invalid Zulip server
-        error_response = json_response_from_error(InvalidZulipServerError("testRole"))
+        # This is the exception our decorator uses for an invalid Doer server
+        error_response = json_response_from_error(InvalidDoerServerError("testRole"))
         self.add_mock_response(body=error_response.content, status=error_response.status_code)
         with self.assertRaises(PushNotificationBouncerError) as exc:
             send_to_push_bouncer("POST", "register", {"msg": "true"})
         self.assertEqual(
             str(exc.exception),
             "Push notifications bouncer error: "
-            "Zulip server auth failure: testRole is not registered -- did you run `manage.py register_server`?",
+            "Doer server auth failure: testRole is not registered -- did you run `manage.py register_server`?",
         )
 
     @responses.activate
@@ -2235,7 +2235,7 @@ class TestAddRemoveDeviceTokenAPI(BouncerTestCase):
         self.login_user(user)
 
         endpoints: list[tuple[str, str, Mapping[str, str]]] = [
-            ("/json/users/me/apns_device_token", "c0ffee", {"appid": "org.zulip.Zulip"}),
+            ("/json/users/me/apns_device_token", "c0ffee", {"appid": "org.zulip.Doer"}),
             ("/json/users/me/android_gcm_reg_id", "android-token", {}),
         ]
 
@@ -2272,8 +2272,8 @@ class TestAddRemoveDeviceTokenAPI(BouncerTestCase):
                 activate_push_notification_service(),
                 responses.RequestsMock() as resp,
             ):
-                assert settings.ZULIP_SERVICES_URL is not None
-                URL = settings.ZULIP_SERVICES_URL + "/api/v1/remotes/push/unregister"
+                assert settings.DOER_SERVICES_URL is not None
+                URL = settings.DOER_SERVICES_URL + "/api/v1/remotes/push/unregister"
                 resp.add_callback(responses.POST, URL, callback=self.request_callback)
                 result = self.client_delete(endpoint, {"token": "abcd1234"})
                 self.assert_json_error(result, "Token does not exist")
@@ -2285,12 +2285,12 @@ class TestAddRemoveDeviceTokenAPI(BouncerTestCase):
         self.login_user(user)
 
         no_bouncer_requests: list[tuple[str, str, Mapping[str, str]]] = [
-            ("/json/users/me/apns_device_token", "c0ffee01", {"appid": "org.zulip.Zulip"}),
+            ("/json/users/me/apns_device_token", "c0ffee01", {"appid": "org.zulip.Doer"}),
             ("/json/users/me/android_gcm_reg_id", "android-token-1", {}),
         ]
 
         bouncer_requests: list[tuple[str, str, Mapping[str, str]]] = [
-            ("/json/users/me/apns_device_token", "c0ffee02", {"appid": "org.zulip.Zulip"}),
+            ("/json/users/me/apns_device_token", "c0ffee02", {"appid": "org.zulip.Doer"}),
             ("/json/users/me/android_gcm_reg_id", "android-token-2", {}),
         ]
 
@@ -2364,7 +2364,7 @@ class TestAddRemoveDeviceTokenAPI(BouncerTestCase):
         self.assertEqual(PushDeviceToken.objects.all().count(), 0)
 
 
-class GCMParseOptionsTest(ZulipTestCase):
+class GCMParseOptionsTest(DoerTestCase):
     def test_invalid_option(self) -> None:
         with self.assertRaises(JsonableError):
             parse_fcm_options({"invalid": True}, {})
@@ -2405,7 +2405,7 @@ class FCMSendTest(PushNotificationTestCase):
             send_android_push_notification_to_user(self.user_profile, {}, {})
             self.assertEqual(
                 "DEBUG:zerver.lib.push_notifications:"
-                "Skipping sending a FCM push notification since ZULIP_SERVICE_PUSH_NOTIFICATIONS "
+                "Skipping sending a FCM push notification since DOER_SERVICE_PUSH_NOTIFICATIONS "
                 "and ANDROID_FCM_CREDENTIALS_PATH are both unset",
                 logger.output[0],
             )
@@ -2486,7 +2486,7 @@ class FCMSendTest(PushNotificationTestCase):
             self.assertEqual(msg, logger.output[0])
 
 
-class TestClearOnRead(ZulipTestCase):
+class TestClearOnRead(DoerTestCase):
     def test_mark_stream_as_read(self) -> None:
         n_msgs = 3
 
@@ -2516,7 +2516,7 @@ class TestClearOnRead(ZulipTestCase):
         self.assertEqual({id for g in groups for id in g}, set(message_ids))
 
 
-class TestPushNotificationsContent(ZulipTestCase):
+class TestPushNotificationsContent(DoerTestCase):
     def test_fixtures(self) -> None:
         fixtures = orjson.loads(self.fixture_data("markdown_test_cases.json"))
         tests = fixtures["regular_tests"]
@@ -2527,7 +2527,7 @@ class TestPushNotificationsContent(ZulipTestCase):
                     self.assertEqual(output, test["text_content"])
 
     def test_backend_only_fixtures(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         stream = get_stream("Verona", realm)
 
@@ -2555,7 +2555,7 @@ class TestPushNotificationsContent(ZulipTestCase):
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class PushBouncerSignupTest(ZulipTestCase):
+class PushBouncerSignupTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -2573,25 +2573,25 @@ class PushBouncerSignupTest(ZulipTestCase):
         self.dns_resolver_patcher.stop()
 
     def test_deactivate_remote_server(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(64)
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
         self.assertEqual(server.hostname, "example.com")
         self.assertEqual(server.contact_email, "server-admin@zulip.com")
 
-        result = self.uuid_post(zulip_org_id, "/api/v1/remotes/server/deactivate", subdomain="")
+        result = self.uuid_post(doer_org_id, "/api/v1/remotes/server/deactivate", subdomain="")
         self.assert_json_success(result)
 
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
-        remote_realm_audit_log = RemoteZulipServerAuditLog.objects.filter(
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
+        remote_realm_audit_log = RemoteDoerServerAuditLog.objects.filter(
             event_type=AuditLogEventType.REMOTE_SERVER_DEACTIVATED
         ).last()
         assert remote_realm_audit_log is not None
@@ -2599,7 +2599,7 @@ class PushBouncerSignupTest(ZulipTestCase):
 
         # Now test that trying to deactivate again reports the right error.
         result = self.uuid_post(
-            zulip_org_id, "/api/v1/remotes/server/deactivate", request, subdomain=""
+            doer_org_id, "/api/v1/remotes/server/deactivate", request, subdomain=""
         )
         self.assert_json_error(
             result,
@@ -2618,11 +2618,11 @@ class PushBouncerSignupTest(ZulipTestCase):
         )
 
     def test_push_signup_invalid_host(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(64)
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="invalid-host",
             contact_email="server-admin@zulip.com",
         )
@@ -2635,12 +2635,12 @@ class PushBouncerSignupTest(ZulipTestCase):
             result, "example.com/path contains invalid components (e.g., path, query, fragment)."
         )
 
-    def test_push_signup_invalid_zulip_org_id(self) -> None:
-        zulip_org_id = "x" * RemoteZulipServer.UUID_LENGTH
-        zulip_org_key = get_random_string(64)
+    def test_push_signup_invalid_doer_org_id(self) -> None:
+        doer_org_id = "x" * RemoteDoerServer.UUID_LENGTH
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
@@ -2650,35 +2650,35 @@ class PushBouncerSignupTest(ZulipTestCase):
         # This looks mostly like a proper UUID, but isn't actually a valid UUIDv4,
         # which makes it slip past a basic validation via initializing uuid.UUID with it.
         # Thus we should test this scenario separately.
-        zulip_org_id = "18cedb98-5222-5f34-50a9-fc418e1ba972"
-        request["zulip_org_id"] = zulip_org_id
+        doer_org_id = "18cedb98-5222-5f34-50a9-fc418e1ba972"
+        request["doer_org_id"] = doer_org_id
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_error(result, "Invalid UUID")
 
-        # check if zulip org id is of allowed length
-        zulip_org_id = "18cedb98"
-        request["zulip_org_id"] = zulip_org_id
+        # check if doer org id is of allowed length
+        doer_org_id = "18cedb98"
+        request["doer_org_id"] = doer_org_id
         result = self.client_post("/api/v1/remotes/server/register", request)
-        self.assert_json_error(result, "zulip_org_id is not length 36")
+        self.assert_json_error(result, "doer_org_id is not length 36")
 
-    def test_push_signup_invalid_zulip_org_key(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(63)
+    def test_push_signup_invalid_doer_org_key(self) -> None:
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(63)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="invalid-host",
             contact_email="server-admin@zulip.com",
         )
         result = self.client_post("/api/v1/remotes/server/register", request)
-        self.assert_json_error(result, "zulip_org_key is not length 64")
+        self.assert_json_error(result, "doer_org_key is not length 64")
 
     def test_push_signup_success(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(64)
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
@@ -2688,88 +2688,88 @@ class PushBouncerSignupTest(ZulipTestCase):
         with time_machine.travel(time_sent, tick=False):
             result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
         self.assertEqual(server.hostname, "example.com")
         self.assertEqual(server.contact_email, "server-admin@zulip.com")
         self.assertEqual(server.last_request_datetime, time_sent)
 
         # Update our hostname
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
-            hostname="zulip.example.com",
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
+            hostname="doer.example.com",
             contact_email="server-admin@zulip.com",
         )
 
         with time_machine.travel(time_sent + timedelta(minutes=1), tick=False):
             result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
-        self.assertEqual(server.hostname, "zulip.example.com")
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
+        self.assertEqual(server.hostname, "doer.example.com")
         self.assertEqual(server.contact_email, "server-admin@zulip.com")
         self.assertEqual(server.last_request_datetime, time_sent + timedelta(minutes=1))
 
         # Now test rotating our key
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
             new_org_key=get_random_string(64),
         )
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
         self.assertEqual(server.hostname, "example.com")
         self.assertEqual(server.contact_email, "server-admin@zulip.com")
-        zulip_org_key = request["new_org_key"]
-        self.assertEqual(server.api_key, zulip_org_key)
+        doer_org_key = request["new_org_key"]
+        self.assertEqual(server.api_key, doer_org_key)
 
         # Update contact_email
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
-            hostname="zulip.example.com",
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
+            hostname="doer.example.com",
             contact_email="new-server-admin@zulip.com",
         )
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
-        self.assertEqual(server.hostname, "zulip.example.com")
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
+        self.assertEqual(server.hostname, "doer.example.com")
         self.assertEqual(server.contact_email, "new-server-admin@zulip.com")
 
         # Now test trying to double-create with a new random key fails
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=get_random_string(64),
+            doer_org_id=doer_org_id,
+            doer_org_key=get_random_string(64),
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_error(
-            result, f"Zulip server auth failure: key does not match role {zulip_org_id}"
+            result, f"Doer server auth failure: key does not match role {doer_org_id}"
         )
 
     def test_register_duplicate_hostname(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(64)
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
 
         result = self.client_post("/api/v1/remotes/server/register", request)
         self.assert_json_success(result)
-        server = RemoteZulipServer.objects.get(uuid=zulip_org_id)
+        server = RemoteDoerServer.objects.get(uuid=doer_org_id)
         self.assertEqual(server.hostname, "example.com")
 
-        new_zulip_org_id = str(uuid.uuid4())
-        new_zulip_org_key = get_random_string(64)
+        new_doer_org_id = str(uuid.uuid4())
+        new_doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=new_zulip_org_id,
-            zulip_org_key=new_zulip_org_key,
+            doer_org_id=new_doer_org_id,
+            doer_org_key=new_doer_org_key,
             hostname="example.com",
             contact_email="server-admin@zulip.com",
         )
@@ -2778,11 +2778,11 @@ class PushBouncerSignupTest(ZulipTestCase):
         self.assertEqual(result.json()["code"], "HOSTNAME_ALREADY_IN_USE_BOUNCER_ERROR")
 
     def test_register_contact_email_validation_rules(self) -> None:
-        zulip_org_id = str(uuid.uuid4())
-        zulip_org_key = get_random_string(64)
+        doer_org_id = str(uuid.uuid4())
+        doer_org_key = get_random_string(64)
         request = dict(
-            zulip_org_id=zulip_org_id,
-            zulip_org_key=zulip_org_key,
+            doer_org_id=doer_org_id,
+            doer_org_key=doer_org_key,
             hostname="example.com",
         )
 
@@ -2841,17 +2841,17 @@ class PushBouncerSignupTest(ZulipTestCase):
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class RegistrationTakeoverFlowTest(ZulipTestCase):
+class RegistrationTakeoverFlowTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
 
-        self.zulip_org_id = str(uuid.uuid4())
-        self.zulip_org_key = get_random_string(64)
+        self.doer_org_id = str(uuid.uuid4())
+        self.doer_org_key = get_random_string(64)
         self.hostname = "example.com"
         request = dict(
-            zulip_org_id=self.zulip_org_id,
-            zulip_org_key=self.zulip_org_key,
+            doer_org_id=self.doer_org_id,
+            doer_org_key=self.doer_org_key,
             hostname=self.hostname,
             contact_email="server-admin@zulip.com",
         )
@@ -2860,7 +2860,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
 
     @responses.activate
     def test_flow_end_to_end(self) -> None:
-        server = RemoteZulipServer.objects.get(uuid=self.zulip_org_id)
+        server = RemoteDoerServer.objects.get(uuid=self.doer_org_id)
 
         result = self.client_post(
             "/api/v1/remotes/server/register/transfer", {"hostname": self.hostname}
@@ -2871,7 +2871,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
 
         access_token = prepare_for_registration_transfer_challenge(verification_secret)
         # First we query the host's endpoint for serving the verification_secret.
-        result = self.client_post(f"/api/v1/zulip-services/verify/{access_token}/")
+        result = self.client_post(f"/api/v1/doer-services/verify/{access_token}/")
         self.assert_json_success(result)
         data = result.json()
         served_verification_secret = data["verification_secret"]
@@ -2881,7 +2881,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         # admin will once the host is ready to serve the verification_secret.
         responses.add(
             responses.GET,
-            f"https://example.com/api/v1/zulip-services/verify/{access_token}/",
+            f"https://example.com/api/v1/doer-services/verify/{access_token}/",
             json={"verification_secret": verification_secret},
             status=200,
         )
@@ -2891,12 +2891,12 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
                 {"hostname": self.hostname, "access_token": access_token},
             )
         self.assert_json_success(result)
-        new_uuid = result.json()["zulip_org_id"]
-        new_key = result.json()["zulip_org_key"]
+        new_uuid = result.json()["doer_org_id"]
+        new_key = result.json()["doer_org_key"]
         # The uuid of the registration is preserved and delivered in this final response,
         # but the secret key is rotated.
-        self.assertEqual(new_uuid, self.zulip_org_id)
-        self.assertNotEqual(new_key, self.zulip_org_key)
+        self.assertEqual(new_uuid, self.doer_org_id)
+        self.assertNotEqual(new_key, self.doer_org_key)
         self.assertEqual(
             mock_log.output,
             ["INFO:zilencer.views:verify_registration_transfer:host:example.com|success"],
@@ -2907,7 +2907,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         self.assertEqual(str(server.uuid), new_uuid)
         self.assertEqual(server.api_key, new_key)
 
-        audit_log = RemoteZulipServerAuditLog.objects.filter(server=server).latest("id")
+        audit_log = RemoteDoerServerAuditLog.objects.filter(server=server).latest("id")
         self.assertEqual(
             audit_log.event_type, AuditLogEventType.REMOTE_SERVER_REGISTRATION_TRANSFERRED
         )
@@ -2921,7 +2921,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
     @responses.activate
     def test_rate_limiting(self) -> None:
         responses.get(
-            "https://example.com/api/v1/zulip-services/verify/sometoken/",
+            "https://example.com/api/v1/doer-services/verify/sometoken/",
             json={"verification_secret": "foo"},
             status=200,
         )
@@ -2966,7 +2966,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         self.assert_json_error(result, "Registration not found for this hostname")
 
         responses.get(
-            "https://example.com/api/v1/zulip-services/verify/sometoken/",
+            "https://example.com/api/v1/doer-services/verify/sometoken/",
             json={"verification_secret": "foo"},
             status=200,
         )
@@ -2980,7 +2980,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         with time_machine.travel(time_now, tick=False):
             verification_secret = generate_registration_transfer_verification_secret(self.hostname)
         responses.get(
-            "https://example.com/api/v1/zulip-services/verify/sometoken/",
+            "https://example.com/api/v1/doer-services/verify/sometoken/",
             json={"verification_secret": verification_secret},
             status=200,
         )
@@ -3000,7 +3000,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         ):
             verification_secret = generate_registration_transfer_verification_secret(self.hostname)
         responses.get(
-            "https://example.com/api/v1/zulip-services/verify/sometoken/",
+            "https://example.com/api/v1/doer-services/verify/sometoken/",
             json={"verification_secret": verification_secret},
             status=200,
         )
@@ -3016,7 +3016,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
                 "different.example.com"
             )
             responses.get(
-                "https://example.com/api/v1/zulip-services/verify/sometoken/",
+                "https://example.com/api/v1/doer-services/verify/sometoken/",
                 json={"verification_secret": verification_secret},
                 status=200,
             )
@@ -3029,7 +3029,7 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
     @responses.activate
     def test_outgoing_verification_request_errors(self) -> None:
         access_token = "sometoken"
-        base_url = f"https://{self.hostname}/api/v1/zulip-services/verify/{access_token}/"
+        base_url = f"https://{self.hostname}/api/v1/doer-services/verify/{access_token}/"
 
         responses.add(
             method=responses.GET,
@@ -3163,13 +3163,13 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
 
     def test_serve_verification_secret_endpoint(self) -> None:
         result = self.client_get(
-            "/api/v1/zulip-services/verify/sometoken/",
+            "/api/v1/doer-services/verify/sometoken/",
         )
         self.assert_json_error(result, "Verification secret not prepared")
 
         valid_access_token = prepare_for_registration_transfer_challenge(verification_secret="foo")
         result = self.client_get(
-            f"/api/v1/zulip-services/verify/{valid_access_token}/",
+            f"/api/v1/doer-services/verify/{valid_access_token}/",
         )
         self.assert_json_success(result)
         self.assertEqual(result.json()["verification_secret"], "foo")
@@ -3178,12 +3178,12 @@ class RegistrationTakeoverFlowTest(ZulipTestCase):
         # in a way indistinguishable from the case where the host is not prepared to serve
         # a verification secret at all.
         result = self.client_get(
-            "/api/v1/zulip-services/verify/wrongtoken/",
+            "/api/v1/doer-services/verify/wrongtoken/",
         )
         self.assert_json_error(result, "Verification secret not prepared")
 
 
-class TestUserPushIdentityCompat(ZulipTestCase):
+class TestUserPushIdentityCompat(DoerTestCase):
     def test_filter_q(self) -> None:
         user_identity_id = UserPushIdentityCompat(user_id=1)
         user_identity_uuid = UserPushIdentityCompat(user_uuid="aaaa")

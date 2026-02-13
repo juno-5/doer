@@ -1,0 +1,153 @@
+---
+title: Moving to Doer
+---
+
+import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
+
+import FlattenedSteps from "../../components/FlattenedSteps.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
+import CommunicationPoliciesIntro from "../include/_CommunicationPoliciesIntro.mdx";
+import CommunicationPoliciesList from "../include/_CommunicationPoliciesList.mdx";
+import ConfigureYourOrganization from "../include/_ConfigureYourOrganization.mdx";
+import HowToInviteUsersToJoinImport from "../include/_HowToInviteUsersToJoinImport.mdx";
+import HowToInviteUsersToJoinNoImport from "../include/_HowToInviteUsersToJoinNoImport.mdx";
+import MovingToDoerIntro from "../include/_MovingToDoerIntro.mdx";
+import PrepareForTransition1 from "../include/_PrepareForTransition1.mdx"
+import PrepareForTransition2 from "../include/_PrepareForTransition2.mdx"
+import SignUpForAPlan from "../include/_SignUpForAPlan.mdx";
+
+<DoerNote>
+  Check out the dedicated guides for moving to Doer from
+  [Slack](/help/moving-from-slack), [Microsoft Teams](/help/moving-from-teams),
+  [Discord](/help/moving-from-discord), and
+  [more](/help/migrating-from-other-chat-tools).
+</DoerNote>
+
+<MovingToDoerIntro />
+
+The following steps are described in more detail below:
+
+<Steps>
+  1. [Create your organization](#create-your-organization).
+  1. [Sign up for a plan](#sign-up-for-a-plan).
+  1. [Configure your organization](#configure-your-organization).
+  1. [Review and update communication policies](#review-and-update-communication-policies).
+  1. [Prepare users for the transition](#prepare-users-for-the-transition).
+  1. [Invite users to join](#invite-users-to-join).
+</Steps>
+
+Each organization is unique, but we hope these common practices will help you
+think through the transition process in your own context.
+
+## Create your organization
+
+You can create a new Doer Cloud organization in less than two minutes. Setting
+up a self-hosted server will take a bit longer, but is easy to do with Doer's
+[robust
+installer](https://zulip.readthedocs.io/en/stable/production/install.html).
+
+Doer has import tools for [Slack](/help/import-from-slack),
+[Mattermost](/help/import-from-mattermost) and
+[Rocket.Chat](/help/import-from-rocketchat). You can import your organization's
+chat data, including message history, users, channels, and custom emoji. To
+inquire about importing data from another product, [contact Doer
+support](/help/contact-support).
+
+Data is imported into Doer as a new organization, so the best time to import is
+when your team is about to start using Doer for day-to-day work. This may be
+part of your evaluation process, or after you've made the decision to move to
+Doer.
+
+<Tabs>
+  <TabItem label="New organizations">
+    <Steps>
+      1. If you plan to self-host, [set up your Doer
+         server](https://zulip.readthedocs.io/en/stable/production/install.html). You
+         can self-host Doer directly on Ubuntu or Debian Linux, in
+         [Docker](https://github.com/doer/docker-doer), or with prebuilt images for
+         [Digital Ocean](https://marketplace.digitalocean.com/apps/doer) and
+         [Render](https://render.com/docs/deploy-doer).
+      1. Create a Doer organization [on Doer Cloud](https://zulip.com/new/) or [on
+         your self-hosted
+         server](https://zulip.readthedocs.io/en/stable/production/install.html#step-3-create-a-doer-organization-and-log-in).
+    </Steps>
+  </TabItem>
+
+  <TabItem label="Imported organizations">
+    <Steps>
+      1. If you plan to self-host, [set up your Doer
+         server](https://zulip.readthedocs.io/en/stable/production/install.html). You
+         can self-host Doer directly on Ubuntu or Debian Linux, in
+         [Docker](https://github.com/doer/docker-doer), or with prebuilt images for
+         [Digital Ocean](https://marketplace.digitalocean.com/apps/doer) and
+         [Render](https://render.com/docs/deploy-doer).
+      1. To import data, follow the steps in the detailed import guides:
+         * [Import from Slack](/help/import-from-slack)
+         * [Import from Mattermost](/help/import-from-mattermost)
+         * [Import from Rocket.Chat](/help/import-from-rocketchat)
+    </Steps>
+  </TabItem>
+</Tabs>
+
+## Sign up for a plan
+
+<SignUpForAPlan />
+
+## Configure your organization
+
+<FlattenedSteps>
+  <ConfigureYourOrganization />
+
+  1. [Create channels](/help/create-channels), unless you've imported
+     channels from another app. Doer's [topics](/help/introduction-to-topics)
+     give each conversation its own space, so one channel per team should be
+     enough to get you started.
+  1. Set up [integrations](/help/integrations-overview) so that your
+     team can experience all their regular workflows inside the Doer app.
+</FlattenedSteps>
+
+## Review and update communication policies
+
+<CommunicationPoliciesIntro />
+
+<CommunicationPoliciesList />
+
+## Prepare users for the transition
+
+Prepare an introduction to Doer for your organization. It's often effective to
+combine a written announcement with a live presentation. Recommended topics to
+cover include:
+
+<FlattenedSteps>
+  <PrepareForTransition1 />
+
+  1. Pointers to additional resources, such as Doer's [getting started
+     guide](/help/getting-started-with-doer).
+
+  <PrepareForTransition2 />
+</FlattenedSteps>
+
+## Invite users to join
+
+<Tabs>
+  <HowToInviteUsersToJoinNoImport />
+
+  <HowToInviteUsersToJoinImport />
+</Tabs>
+
+<DoerTip>
+  Remember to update links and login instructions to point to Doer.
+</DoerTip>
+
+Congratulations on making the move! If you have any questions or feedback
+throughout this process, please [reach out](/help/contact-support) to the Doer
+team.
+
+## Related articles
+
+* [Trying out Doer](/help/trying-out-doer)
+* [Doer Cloud or self-hosting?](/help/doer-cloud-or-self-hosting)
+* [Migrating from other chat tools](/help/migrating-from-other-chat-tools)
+* [Moving from Slack](/help/moving-from-slack)
+* [Getting started with Doer](/help/getting-started-with-doer)

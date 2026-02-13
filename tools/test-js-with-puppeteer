@@ -8,10 +8,10 @@ import sys
 import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from scripts.lib.zulip_tools import ENDC, FAIL, OKGREEN
+from scripts.lib.doer_tools import ENDC, FAIL, OKGREEN
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-from zerver.lib.test_fixtures import reset_zulip_test_database
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from zerver.lib.test_fixtures import reset_doer_test_database
 
 # Request the special webpack setup for frontend integration tests,
 # where webpack assets are compiled up front rather than running in
@@ -32,7 +32,7 @@ usage = """test-js-with-puppeteer [options]
     test-js-with-puppeteer login.test.ts compose.test.ts # Run a few test files
     test-js-with-puppeteer login compose # Run a few test files, login.test.ts and compose.test.ts here"""
 
-sys.path.insert(0, ZULIP_PATH)
+sys.path.insert(0, DOER_PATH)
 
 # check for the venv
 from tools.lib import sanity_check
@@ -75,17 +75,17 @@ def run_single_test(test_file: str, test_number: int, total_tests: int) -> int:
     ret = subprocess.call(cmd)
 
     # Resetting test environment.
-    reset_zulip_test_database()
+    reset_doer_test_database()
 
     # We are calling to /flush_caches to remove all the server-side caches.
-    response = requests.post("http://zulip.zulipdev.com:9981/flush_caches")
+    response = requests.post("http://doer.zulipdev.com:9981/flush_caches")
     assert response.status_code == 200
 
     return ret
 
 
 def run_tests(files: Iterable[str], external_host: str, loop: int = 1) -> None:
-    test_dir = os.path.join(ZULIP_PATH, "web/e2e-tests")
+    test_dir = os.path.join(DOER_PATH, "web/e2e-tests")
     test_files = find_js_test_files(test_dir, files)
     total_tests = len(test_files)
 

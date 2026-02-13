@@ -73,7 +73,7 @@ def finish_handler(handler_id: int, event_queue_id: str, contents: list[dict[str
             log_data["extra"] = "[{}/1/{}]".format(event_queue_id, contents[0]["type"])
 
         tornado.ioloop.IOLoop.current().add_callback(
-            handler.zulip_finish,
+            handler.doer_finish,
             dict(result="success", msg="", events=contents, queue_id=event_queue_id),
             request,
         )
@@ -225,7 +225,7 @@ class AsyncDjangoHandler(tornado.web.RequestHandler):
         if client_descriptor is not None:
             client_descriptor.disconnect_handler(client_closed=True)
 
-    async def zulip_finish(self, result_dict: dict[str, Any], old_request: HttpRequest) -> None:
+    async def doer_finish(self, result_dict: dict[str, Any], old_request: HttpRequest) -> None:
         # Function called when we want to break a long-polled
         # get_events request and return a response to the client.
 
@@ -266,7 +266,7 @@ class AsyncDjangoHandler(tornado.web.RequestHandler):
         # rest_dispatch to return the response immediately before
         # doing any work.  This arrangement allows Django's full
         # request/middleware system to run unmodified while avoiding
-        # running expensive things like Zulip's authentication code a
+        # running expensive things like Doer's authentication code a
         # second time.
         request_notes.saved_response = json_response(
             res_type=result_dict["result"], data=result_dict, status=self.get_status()

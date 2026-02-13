@@ -1,12 +1,12 @@
-# Zulip GitHub integration
+# Doer GitHub integration
 
-Get GitHub notifications in Zulip!
+Get GitHub notifications in Doer!
 
 !!! tip ""
 
     If you also configure a [custom profile
     field](/help/custom-profile-fields) for GitHub accounts, this
-    integration will refer to GitHub users using [Zulip silent
+    integration will refer to GitHub users using [Doer silent
     mentions](/help/mention-a-user-or-group#silently-mention-a-user),
     rather than their GitHub username.
 
@@ -39,7 +39,7 @@ Get GitHub notifications in Zulip!
 
 - [GitHub's webhook events documentation][github-webhook-events]
 
-- [Zulip GitHub Actions integration](/integrations/github-actions)
+- [Doer GitHub Actions integration](/integrations/github-actions)
 
 {!webhooks-url-specification.md!}
 

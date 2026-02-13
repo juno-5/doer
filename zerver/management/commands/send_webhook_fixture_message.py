@@ -7,17 +7,17 @@ from django.core.management.base import CommandError, CommandParser
 from django.test import Client
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.webhooks.common import standardize_headers
 from zerver.models.realms import get_realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 Create webhook message based on given fixture
 Example:
 ./manage.py send_webhook_fixture_message \
-    [--realm=zulip] \
+    [--realm=doer] \
     --fixture=zerver/webhooks/integration/fixtures/name.json \
     '--url=/api/v1/external/integration?stream=stream_name&api_key=api_key'
 
@@ -34,21 +34,21 @@ approach shown above.
     @override
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument(
-            "-f", "--fixture", help="The path to the fixture you'd like to send into Zulip"
+            "-f", "--fixture", help="The path to the fixture you'd like to send into Doer"
         )
 
         parser.add_argument(
-            "-u", "--url", help="The URL on your Zulip server that you want to post the fixture to"
+            "-u", "--url", help="The URL on your Doer server that you want to post the fixture to"
         )
 
         parser.add_argument(
             "-H",
             "--custom-headers",
-            help="The headers you want to provide along with your mock request to Zulip.",
+            help="The headers you want to provide along with your mock request to Doer.",
         )
 
         self.add_realm_args(
-            parser, help="Specify which realm/subdomain to connect to; default is zulip"
+            parser, help="Specify which realm/subdomain to connect to; default is doer"
         )
 
     def parse_headers(self, custom_headers: None | str) -> None | dict[str, str]:
@@ -78,7 +78,7 @@ approach shown above.
         json = self._get_fixture_as_json(full_fixture_path)
         realm = self.get_realm(options)
         if realm is None:
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
 
         client = Client()
         if headers:

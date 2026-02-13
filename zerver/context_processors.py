@@ -13,7 +13,7 @@ from version import (
     LATEST_MAJOR_VERSION,
     LATEST_RELEASE_ANNOUNCEMENT,
     LATEST_RELEASE_VERSION,
-    ZULIP_VERSION,
+    DOER_VERSION,
 )
 from zerver.lib.exceptions import InvalidSubdomainError
 from zerver.lib.i18n import get_language_list
@@ -96,7 +96,7 @@ def is_isolated_page(request: HttpRequest) -> bool:
     return request.GET.get("nav") == "no"
 
 
-def zulip_default_corporate_context(request: HttpRequest) -> dict[str, Any]:
+def doer_default_corporate_context(request: HttpRequest) -> dict[str, Any]:
     from corporate.lib.decorator import is_self_hosting_management_subdomain
 
     # Check if view function is in corporate app.
@@ -113,8 +113,8 @@ def zulip_default_corporate_context(request: HttpRequest) -> dict[str, Any]:
     }
 
 
-def zulip_default_context(request: HttpRequest) -> dict[str, Any]:
-    """Context available to all Zulip Jinja2 templates that have a request
+def doer_default_context(request: HttpRequest) -> dict[str, Any]:
+    """Context available to all Doer Jinja2 templates that have a request
     passed in.  Designed to provide the long list of variables at the
     bottom of this function in a wide range of situations: logged-in
     or logged-out, subdomains or not, etc.
@@ -157,11 +157,11 @@ def zulip_default_context(request: HttpRequest) -> dict[str, Any]:
         settings_path = "zproject/dev_settings.py"
         settings_comments_path = "zproject/prod_settings_template.py"
     else:
-        secrets_path = "/etc/zulip/zulip-secrets.conf"
+        secrets_path = "/etc/zulip/doer-secrets.conf"
         settings_path = "/etc/zulip/settings.py"
         settings_comments_path = "/etc/zulip/settings.py"
 
-    # Used to remove links to Zulip docs and landing page from footer of self-hosted pages.
+    # Used to remove links to Doer docs and landing page from footer of self-hosted pages.
     corporate_enabled = settings.CORPORATE_ENABLED
 
     support_email = FromAddress.SUPPORT
@@ -197,7 +197,7 @@ def zulip_default_context(request: HttpRequest) -> dict[str, Any]:
         "password_min_length": settings.PASSWORD_MIN_LENGTH,
         "password_max_length": settings.PASSWORD_MAX_LENGTH,
         "password_min_guesses": settings.PASSWORD_MIN_GUESSES,
-        "zulip_version": ZULIP_VERSION,
+        "doer_version": DOER_VERSION,
         "user_is_authenticated": request.user.is_authenticated,
         "settings_path": settings_path,
         "secrets_path": secrets_path,
@@ -218,7 +218,7 @@ def zulip_default_context(request: HttpRequest) -> dict[str, Any]:
             "environment": get_config("machine", "deploy_type", "development"),
             "realm_key": "www" if realm is None else realm.string_id or "(root)",
             "sample_rate": settings.SENTRY_FRONTEND_SAMPLE_RATE,
-            "server_version": ZULIP_VERSION,
+            "server_version": DOER_VERSION,
             "trace_rate": settings.SENTRY_FRONTEND_TRACE_RATE,
         }
         if request.user.is_authenticated:

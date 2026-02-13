@@ -55,7 +55,7 @@ export const pm_recipient = {
 
     async expect(page: Page, expected: string): Promise<void> {
         const actual_recipients = await page.evaluate(() =>
-            zulip_test.private_message_recipient_emails(),
+            doer_test.private_message_recipient_emails(),
         );
         assert.equal(actual_recipients, expected);
     },
@@ -239,13 +239,13 @@ export function has_class_x(class_name: string): string {
 
 export async function get_stream_id(page: Page, stream_name: string): Promise<number | undefined> {
     return await page.evaluate(
-        (stream_name: string) => zulip_test.get_stream_id(stream_name),
+        (stream_name: string) => doer_test.get_stream_id(stream_name),
         stream_name,
     );
 }
 
 export async function get_user_id_from_name(page: Page, name: string): Promise<number | undefined> {
-    return await page.evaluate((name: string) => zulip_test.get_user_id_from_name(name), name);
+    return await page.evaluate((name: string) => doer_test.get_user_id_from_name(name), name);
 }
 
 export async function get_internal_email_from_name(
@@ -253,8 +253,8 @@ export async function get_internal_email_from_name(
     name: string,
 ): Promise<string | undefined> {
     return await page.evaluate((fullname: string) => {
-        const user_id = zulip_test.get_user_id_from_name(fullname);
-        return user_id === undefined ? undefined : zulip_test.get_person_by_user_id(user_id).email;
+        const user_id = doer_test.get_user_id_from_name(fullname);
+        return user_id === undefined ? undefined : doer_test.get_person_by_user_id(user_id).email;
     }, name);
 }
 
@@ -359,7 +359,7 @@ export async function wait_for_fully_processed_message(page: Page, content: stri
                     - does it look to have been
                       re-rendered based on server info?
             */
-            const last_msg = zulip_test.current_msg_list?.last();
+            const last_msg = doer_test.current_msg_list?.last();
             if (last_msg === undefined) {
                 return false;
             }
@@ -372,8 +372,8 @@ export async function wait_for_fully_processed_message(page: Page, content: stri
                 return false;
             }
 
-            const $row = zulip_test.last_visible_row();
-            if (zulip_test.row_id($row) !== last_msg.id) {
+            const $row = doer_test.last_visible_row();
+            if (doer_test.row_id($row) !== last_msg.id) {
                 return false;
             }
 
@@ -463,7 +463,7 @@ export async function send_message(
 
     // Close the compose box after sending the message.
     await page.evaluate(() => {
-        zulip_test.cancel_compose();
+        doer_test.cancel_compose();
     });
     // Make sure the compose box is closed.
     await page.waitForSelector("#compose-textarea", {hidden: true});
@@ -741,7 +741,7 @@ export async function get_current_msg_list_id(
         // so, make sure to have a call to this function before changing to the narrow that you want to check.
         await page.waitForFunction(
             (last_current_msg_list_id) => {
-                const current_msg_list = zulip_test.current_msg_list;
+                const current_msg_list = doer_test.current_msg_list;
                 return (
                     current_msg_list !== undefined &&
                     current_msg_list.id !== last_current_msg_list_id
@@ -751,7 +751,7 @@ export async function get_current_msg_list_id(
             last_current_msg_list_id,
         );
     }
-    last_current_msg_list_id = await page.evaluate(() => zulip_test.current_msg_list?.id);
+    last_current_msg_list_id = await page.evaluate(() => doer_test.current_msg_list?.id);
     assert.ok(last_current_msg_list_id !== undefined);
     return last_current_msg_list_id;
 }

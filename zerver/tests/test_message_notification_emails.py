@@ -32,7 +32,7 @@ from zerver.lib.email_notifications import (
 )
 from zerver.lib.emoji import get_emoji_file_name
 from zerver.lib.send_email import FromAddress
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, UserMessage, UserProfile, UserTopic
 from zerver.models.realm_emoji import get_name_keyed_dict_for_active_realm_emoji
 from zerver.models.realms import get_realm
@@ -41,7 +41,7 @@ from zerver.models.scheduled_jobs import NotificationTriggers
 from zerver.models.streams import get_stream
 
 
-class TestMessageNotificationEmails(ZulipTestCase):
+class TestMessageNotificationEmails(DoerTestCase):
     def test_read_message(self) -> None:
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
@@ -60,7 +60,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         # The message is marked as read for the sender (Cordelia) by the message send codepath.
         # We obviously should not send notifications to someone for messages they sent themselves.
         with mock.patch(
-            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_zulip"
+            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_doer"
         ) as m:
             handle_missedmessage_emails(
                 cordelia.id,
@@ -70,7 +70,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
 
         # If the notification is processed before Hamlet reads the message, he should get the email.
         with mock.patch(
-            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_zulip"
+            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_doer"
         ) as m:
             handle_missedmessage_emails(
                 hamlet.id,
@@ -87,7 +87,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         usermessage.flags.read = True
         usermessage.save()
         with mock.patch(
-            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_zulip"
+            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_doer"
         ) as m:
             handle_missedmessage_emails(
                 hamlet.id,
@@ -96,7 +96,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         m.assert_not_called()
 
     def test_demo_organization_owner_email_not_set(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.demo_organization_scheduled_deletion_date = timezone_now() + timedelta(days=30)
         realm.save()
 
@@ -116,7 +116,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         self.assertEqual(message.content, "Notification bot message")
 
         with mock.patch(
-            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_zulip"
+            "zerver.lib.email_notifications.do_send_missedmessage_events_reply_in_doer"
         ) as m:
             handle_missedmessage_emails(
                 desdemona.id,
@@ -156,7 +156,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         if settings.EMAIL_GATEWAY_PATTERN != "":
             reply_to_addresses = [settings.EMAIL_GATEWAY_PATTERN % (t,) for t in tokens]
             reply_to_emails = [
-                str(Address(display_name="Zulip", addr_spec=address))
+                str(Address(display_name="Doer", addr_spec=address))
                 for address in reply_to_addresses
             ]
         else:
@@ -183,7 +183,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         for text in verify_body_does_not_include:
             self.assertNotIn(text, self.normalize_string(msg.body))
 
-        self.assertEqual(msg.extra_headers["List-Id"], "Zulip Dev <zulip.testserver>")
+        self.assertEqual(msg.extra_headers["List-Id"], "Doer Dev <doer.testserver>")
 
     def _realm_name_in_missed_message_email_subject(
         self, realm_name_in_notifications: bool
@@ -197,7 +197,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         email_subject = "DMs with Othello, the Moor of Venice"
 
         if realm_name_in_notifications:
-            email_subject = "DMs with Othello, the Moor of Venice [Zulip Dev]"
+            email_subject = "DMs with Othello, the Moor of Venice [Doer Dev]"
         self._test_cases(msg_id, verify_body_include, email_subject)
 
     def _extra_context_in_missed_stream_messages_mention(
@@ -226,9 +226,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
             # Test in case if message content in missed email message are disabled.
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
 
             email_subject = "New messages"
@@ -238,7 +238,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "1 2 3 4 5 6 7 8 9 10 @**King Hamlet**",
                 "private",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -286,9 +286,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
             # Test in case if message content in missed email message are disabled.
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -296,7 +296,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "1 2 3 4 5 @**topic**",
                 "private",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -326,9 +326,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
             # Test in case if message content in missed email message are disabled.
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -337,7 +337,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "1 2 3 4 5 @**all**",
                 "private",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -385,9 +385,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
             # Test in case if message content in missed email message are disabled.
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -395,7 +395,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "1 2 3 4 5 @**topic**",
                 "private",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -425,9 +425,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
             # Test in case if message content in missed email message are disabled.
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -436,7 +436,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "1 2 3 4 5 @**all**",
                 "private",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -533,16 +533,16 @@ class TestMessageNotificationEmails(ZulipTestCase):
             if message_content_disabled_by_realm:
                 verify_body_include = [
                     "This email does not include message content because your organization",
-                    "http://zulip.testserver/help/hide-message-content-in-emails",
-                    "View or reply in Zulip Dev Zulip",
-                    " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                    "http://doer.testserver/help/hide-message-content-in-emails",
+                    "View or reply in Doer Dev Doer",
+                    " Manage email preferences: http://doer.testserver/#settings/notifications",
                 ]
             elif message_content_disabled_by_user:
                 verify_body_include = [
                     "This email does not include message content because you have chosen to ",
-                    "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                    "View or reply in Zulip Dev Zulip",
-                    " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                    "http://doer.testserver/help/email-notifications#hide-message-content ",
+                    "View or reply in Doer Dev Doer",
+                    " Manage email preferences: http://doer.testserver/#settings/notifications",
                 ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -550,7 +550,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "Extremely personal message!",
                 "mentioned",
                 "group",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -566,7 +566,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
             self.example_user("hamlet"),
             "Extremely personal message!",
         )
-        verify_body_include = ["Reply to this email directly, or view it in Zulip Dev Zulip"]
+        verify_body_include = ["Reply to this email directly, or view it in Doer Dev Doer"]
         email_subject = "DMs with Othello, the Moor of Venice"
         self._test_cases(msg_id, verify_body_include, email_subject)
 
@@ -601,9 +601,9 @@ class TestMessageNotificationEmails(ZulipTestCase):
         else:
             verify_body_include = [
                 "This email does not include message content because you have chosen to ",
-                "http://zulip.testserver/help/email-notifications#hide-message-content ",
-                "View or reply in Zulip Dev Zulip",
-                " Manage email preferences: http://zulip.testserver/#settings/notifications",
+                "http://doer.testserver/help/email-notifications#hide-message-content ",
+                "View or reply in Doer Dev Doer",
+                " Manage email preferences: http://doer.testserver/#settings/notifications",
             ]
             email_subject = "New messages"
             verify_body_does_not_include = [
@@ -611,7 +611,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
                 "Othello, the Moor of Venice Othello, the Moor of Venice",
                 "Group personal message!",
                 "mentioned",
-                "Reply to this email directly, or view it in Zulip Dev Zulip",
+                "Reply to this email directly, or view it in Doer Dev Doer",
             ]
         self._test_cases(
             msg_id,
@@ -714,10 +714,10 @@ class TestMessageNotificationEmails(ZulipTestCase):
         cordelia = self.example_user("cordelia")
 
         hamlet_only = check_add_user_group(
-            get_realm("zulip"), "hamlet_only", [hamlet], acting_user=hamlet
+            get_realm("doer"), "hamlet_only", [hamlet], acting_user=hamlet
         )
         hamlet_and_cordelia = check_add_user_group(
-            get_realm("zulip"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
+            get_realm("doer"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
         )
 
         hamlet_only_message_id = self.send_stream_message(othello, "Denmark", "@*hamlet_only*")
@@ -752,7 +752,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         othello = self.example_user("othello")
 
         hamlet_and_cordelia = check_add_user_group(
-            get_realm("zulip"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
+            get_realm("doer"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
         )
 
         user_group_mentioned_message_id = self.send_stream_message(
@@ -789,7 +789,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         othello = self.example_user("othello")
 
         hamlet_and_cordelia = check_add_user_group(
-            get_realm("zulip"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
+            get_realm("doer"), "hamlet_and_cordelia", [hamlet, cordelia], acting_user=hamlet
         )
 
         topic_wildcard_mentioned_in_followed_topic_message_id = self.send_stream_message(
@@ -1158,7 +1158,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         user = self.example_user("hamlet")
 
         # When message content is allowed at realm level
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.message_content_allowed_in_email_notifications = True
         realm.save(update_fields=["message_content_allowed_in_email_notifications"])
 
@@ -1176,7 +1176,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
 
         # When message content is not allowed at realm level
         # Emails don't have message content irrespective of message content setting of the user
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.message_content_allowed_in_email_notifications = False
         realm.save(update_fields=["message_content_allowed_in_email_notifications"])
 
@@ -1195,7 +1195,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         )
 
     def test_realm_emoji_in_missed_message(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         msg_id = self.send_personal_message(
             self.example_user("othello"),
@@ -1207,7 +1207,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
             "image/png", int(realm_emoji_dict["green_tick"]["id"])
         )
         realm_emoji_url = (
-            f"http://zulip.testserver/user_avatars/{realm.id}/emoji/images/{realm_emoji_file_name}"
+            f"http://doer.testserver/user_avatars/{realm.id}/emoji/images/{realm_emoji_file_name}"
         )
         verify_body_include = [
             f'<img alt=":green_tick:" src="{realm_emoji_url}" title="green tick" height="20" width="20">'
@@ -1246,8 +1246,8 @@ class TestMessageNotificationEmails(ZulipTestCase):
             self.example_user("hamlet"),
             "Come and join us in #**Verona**.",
         )
-        stream_id = get_stream("Verona", get_realm("zulip")).id
-        href = f"http://zulip.testserver/#narrow/channel/{stream_id}-Verona"
+        stream_id = get_stream("Verona", get_realm("doer")).id
+        href = f"http://doer.testserver/#narrow/channel/{stream_id}-Verona"
         verify_body_include = [
             f'<a class="stream" href="{href}" data-stream-id="{stream_id}">#Verona</a'
         ]
@@ -1269,7 +1269,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
 
         encoded_name = "Cordelia,-Lear's-daughter"
         verify_body_include = [
-            f"view it in Zulip Dev Zulip: http://zulip.testserver/#narrow/dm/{cordelia.id}-{encoded_name}"
+            f"view it in Doer Dev Doer: http://doer.testserver/#narrow/dm/{cordelia.id}-{encoded_name}"
         ]
         email_subject = "DMs with Cordelia, Lear's daughter"
         self._test_cases(msg_id, verify_body_include, email_subject)
@@ -1306,7 +1306,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
 
         encoded_name = "Cordelia,-Lear's-daughter"
         verify_body_include = [
-            f"view it in Zulip Dev Zulip: http://zulip.testserver/#narrow/dm/{cordelia.id}-{encoded_name}"
+            f"view it in Doer Dev Doer: http://doer.testserver/#narrow/dm/{cordelia.id}-{encoded_name}"
         ]
         email_subject = "DMs with Cordelia, Lear's daughter"
         self._test_cases(msg_id, verify_body_include, email_subject)
@@ -1325,7 +1325,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         other_users = sorted([aaron, cordelia], key=lambda user: user.id)
         encoded_user_ids = ",".join([str(user.id) for user in other_users])
         verify_body_include = [
-            f"view it in Zulip Dev Zulip: http://zulip.testserver/#narrow/dm/{encoded_user_ids}-group"
+            f"view it in Doer Dev Doer: http://doer.testserver/#narrow/dm/{encoded_user_ids}-group"
         ]
         group_display_name = " and ".join([user.full_name for user in other_users])
         email_subject = "Group DMs with " + group_display_name
@@ -1625,7 +1625,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
             relative_to_full_url(fragment, "http://example.com")
             return lxml.html.tostring(fragment, encoding="unicode")
 
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
         zephyr_realm = get_realm("zephyr")
         # Run `relative_to_full_url()` function over test fixtures present in
         # 'markdown_test_cases.json' and check that it converts all the relative
@@ -1695,14 +1695,14 @@ class TestMessageNotificationEmails(ZulipTestCase):
             ' target="_blank" title="avatar_103.jpeg"><img'
             ' src="/user_uploads/{realm_id}/52/fG7GM9e3afz_qsiUcSce2tl_/avatar_103.jpeg"></a></div>'
         )
-        test_data = test_data.format(realm_id=zulip_realm.id)
+        test_data = test_data.format(realm_id=doer_realm.id)
         actual_output = convert(test_data)
         expected_output = (
             "<div><p>See this <a"
             ' href="http://example.com/user_uploads/{realm_id}/52/fG7GM9e3afz_qsiUcSce2tl_/avatar_103.jpeg"'
             ' target="_blank" title="avatar_103.jpeg">avatar_103.jpeg</a>.</p></div>'
         )
-        expected_output = expected_output.format(realm_id=zulip_realm.id)
+        expected_output = expected_output.format(realm_id=doer_realm.id)
         self.assertEqual(actual_output, expected_output)
 
         # A message containing only an inline image URL preview, we do
@@ -1727,7 +1727,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         fragment = lxml.html.fromstring(test_data)
         fix_spoilers_in_html(fragment, "en")
         actual_output = lxml.html.tostring(fragment, encoding="unicode")
-        expected_output = '<div><div class="spoiler-block">\n\n<p><a>header</a> text <span class="spoiler-title" title="Open Zulip to see the spoiler content">(Open Zulip to see the spoiler content)</span></p>\n</div>\n\n<p>outside spoiler</p></div>'
+        expected_output = '<div><div class="spoiler-block">\n\n<p><a>header</a> text <span class="spoiler-title" title="Open Doer to see the spoiler content">(Open Doer to see the spoiler content)</span></p>\n</div>\n\n<p>outside spoiler</p></div>'
         self.assertEqual(actual_output, expected_output)
 
         # test against our markdown_test_cases so these features do not get out of sync.
@@ -1748,7 +1748,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
     def test_spoilers_in_text_emails(self) -> None:
         content = "@**King Hamlet**\n\n```spoiler header text\nsecret-text\n```"
         msg_id = self.send_stream_message(self.example_user("othello"), "Denmark", content)
-        verify_body_include = ["header text", "Open Zulip to see the spoiler content"]
+        verify_body_include = ["header text", "Open Doer to see the spoiler content"]
         verify_body_does_not_include = ["secret-text"]
         email_subject = "#Denmark > test"
         self._test_cases(
@@ -1796,7 +1796,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
             self.example_user("hamlet"),
             "```\n```",
         )
-        verify_body_include = ["view it in Zulip Dev Zulip"]
+        verify_body_include = ["view it in Doer Dev Doer"]
         email_subject = "DMs with Othello, the Moor of Venice"
         self._test_cases(msg_id, verify_body_include, email_subject, verify_html_body=True)
 
@@ -1805,19 +1805,19 @@ class TestMessageNotificationEmails(ZulipTestCase):
         hamlet = self.example_user("hamlet")
         othello = self.example_user("othello")
         cordelia = self.example_user("cordelia")
-        zulip_realm = get_realm("zulip")
+        doer_realm = get_realm("doer")
 
         # user groups having upto 'MAX_GROUP_SIZE_FOR_MENTION_REACTIVATION'
         # members are small user groups.
         small_user_group = check_add_user_group(
-            zulip_realm, "small_user_group", [hamlet, othello], acting_user=hamlet
+            doer_realm, "small_user_group", [hamlet, othello], acting_user=hamlet
         )
 
         large_user_group = check_add_user_group(
-            zulip_realm, "large_user_group", [hamlet], acting_user=hamlet
+            doer_realm, "large_user_group", [hamlet], acting_user=hamlet
         )
         subgroup = check_add_user_group(
-            zulip_realm, "subgroup", [othello, cordelia], acting_user=hamlet
+            doer_realm, "subgroup", [othello, cordelia], acting_user=hamlet
         )
         add_subgroups_to_user_group(large_user_group, [subgroup], acting_user=None)
 
@@ -2076,7 +2076,7 @@ class TestMessageNotificationEmails(ZulipTestCase):
         self.assertEqual(synthetic_root_message_id, expected_synthetic_root_message_id)
 
         # Verify only Printable US-ASCII, exactly one '@', no spaces.
-        topic_name = "中文 @ zulip 🐙"
+        topic_name = "中文 @ doer 🐙"
         message_id = self.send_stream_message(othello, "Denmark", topic_name=topic_name)
         recipient_id = Message.objects.get(id=message_id).recipient_id
         synthetic_root_message_id = prepare_synthetic_root_message_id(

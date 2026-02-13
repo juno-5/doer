@@ -138,7 +138,7 @@
                 margin: 0;
             }
 
-            .zulip-icon-user {
+            .doer-icon-user {
                 position: relative;
                 top: -1px;
                 margin-right: 4px;
@@ -151,7 +151,7 @@
                     cursor: pointer;
                 }
 
-                .zulip-icon-chevron-down {
+                .doer-icon-chevron-down {
                     padding: 0.3125em 0.25em; /* 5px 4px at 16px em */
                     transform: rotate(180deg);
                 }
@@ -169,7 +169,7 @@
                 text-align: center;
             }
 
-            .zulip-icon-bot,
+            .doer-icon-bot,
             .conversation-partners-icon {
                 opacity: 0.7;
                 /* Required to align DM fullnames in user circle icon */
@@ -177,7 +177,7 @@
                 margin-left: 0.125em;
             }
 
-            .user_block .zulip-icon {
+            .user_block .doer-icon {
                 /* 0 5px at 16px/1em */
                 padding: 0 0.3125em;
 
@@ -251,7 +251,7 @@
                 margin-right: 4px;
                 margin-left: 17px;
 
-                .zulip-icon {
+                .doer-icon {
                     line-height: 0.875em; /* 14px at 16px em */
                     height: 1em;
                     width: 1em;
@@ -441,7 +441,7 @@
 
         &:hover {
             .inbox-header-name-text,
-            .collapsible-button .zulip-icon,
+            .collapsible-button .doer-icon,
             .unread_mention_info,
             .unread_count {
                 opacity: 1;
@@ -463,7 +463,7 @@
         margin: 2px 2px 2px 1px;
         color: var(--color-vdots-visible);
 
-        i.zulip-icon {
+        i.doer-icon {
             font-size: 1.0625em;
         }
 
@@ -537,8 +537,8 @@
     text-align: left;
 }
 
-#recent-view-filter_widget .zulip-icon-chevron-down,
-#inbox-filter_widget .zulip-icon-chevron-down {
+#recent-view-filter_widget .doer-icon-chevron-down,
+#inbox-filter_widget .doer-icon-chevron-down {
     color: var(--color-icons-inbox);
     opacity: 0.4;
 }
@@ -629,7 +629,7 @@
 #inbox-pane #inbox-list .inbox-collapsed-state .collapsible-button {
     visibility: visible;
 
-    .zulip-icon-chevron-down {
+    .doer-icon-chevron-down {
         transform: rotate(0deg);
     }
 }
@@ -719,7 +719,7 @@
                 border-color: var(--color-outline-focus);
             }
 
-            .collapsible-button > .zulip-icon {
+            .collapsible-button > .doer-icon {
                 opacity: 1;
             }
 
@@ -777,7 +777,7 @@
     .inbox-folder {
         &:focus-visible {
             .inbox-header-name-text,
-            .collapsible-button .zulip-icon,
+            .collapsible-button .doer-icon,
             .unread_mention_info,
             .unread_count {
                 opacity: 1;

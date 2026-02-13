@@ -9,7 +9,7 @@ server {
     listen [::]:443 ssl http2;
 
     ssl_certificate /etc/ssl/certs/zulip.combined-chain.crt;
-    ssl_certificate_key /etc/ssl/private/zulip.key;
+    ssl_certificate_key /etc/ssl/private/doer.key;
 
     location / {
         proxy_set_header Connection "";

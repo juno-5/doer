@@ -2,16 +2,16 @@
 #
 class kandra::prometheus::postgresql {
   include kandra::prometheus::base
-  include zulip::supervisor
-  include zulip::golang
+  include doer::supervisor
+  include doer::golang
 
-  $version = $zulip::common::versions['postgres_exporter-src']['version']
+  $version = $doer::common::versions['postgres_exporter-src']['version']
   $dir = "/srv/zulip-postgres_exporter-src-${version}"
-  $bin = "/usr/local/bin/postgres_exporter-${version}-go-${zulip::golang::version}"
+  $bin = "/usr/local/bin/postgres_exporter-${version}-go-${doer::golang::version}"
 
-  # Binary builds: https://github.com/prometheus-community/postgres_exporter/releases/download/v${version}/postgres_exporter-${version}.linux-${zulip::common::goarch}.tar.gz
+  # Binary builds: https://github.com/prometheus-community/postgres_exporter/releases/download/v${version}/postgres_exporter-${version}.linux-${doer::common::goarch}.tar.gz
 
-  zulip::external_dep { 'postgres_exporter-src':
+  doer::external_dep { 'postgres_exporter-src':
     version        => $version,
     url            => "https://github.com/alexmv/postgres_exporter/archive/${version}.tar.gz",
     tarball_prefix => "postgres_exporter-${version}",
@@ -23,15 +23,15 @@ class kandra::prometheus::postgresql {
     # GOCACHE is required; nothing is written to GOPATH, but it is required to be set
     environment => ['GOCACHE=/tmp/gocache', 'GOPATH=/root/go'],
     path        => [
-      "${zulip::golang::dir}/bin",
+      "${doer::golang::dir}/bin",
       '/usr/local/bin',
       '/usr/bin',
       '/bin',
     ],
     creates     => $bin,
     require     => [
-      Zulip::External_Dep['golang'],
-      Zulip::External_Dep['postgres_exporter-src'],
+      Doer::External_Dep['golang'],
+      Doer::External_Dep['postgres_exporter-src'],
     ],
     notify      => Exec['Cleanup postgres_exporter'],
   }
@@ -56,18 +56,18 @@ class kandra::prometheus::postgresql {
     # database is in place.  Given that it has been run once, we do
     # not expect to ever need it to run again; it is left here for
     # completeness.
-    include zulip::postgresql_client
+    include doer::postgresql_client
     exec { 'create prometheus postgres user':
-      require => Class['zulip::postgresql_client'],
+      require => Class['doer::postgresql_client'],
       command => '/usr/bin/createuser -g pg_monitor prometheus',
       unless  => 'test -f /usr/bin/psql && /usr/bin/psql -tAc "select usename from pg_user" | /bin/grep -xq prometheus)',
       user    => 'postgres',
-      before  => File["${zulip::common::supervisor_conf_dir}/prometheus_postgres_exporter.conf"],
+      before  => File["${doer::common::supervisor_conf_dir}/prometheus_postgres_exporter.conf"],
     }
   }
 
   kandra::firewall_allow { 'postgres_exporter': port => '9187' }
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_postgres_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_postgres_exporter.conf":
     ensure  => file,
     require => [
       User[prometheus],

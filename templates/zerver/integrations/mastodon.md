@@ -1,12 +1,12 @@
-# Zulip Mastodon integration
+# Doer Mastodon integration
 
 Fetch public posts (sometimes called “toots”) of individual accounts or
-federated hashtags from Mastodon in Zulip!
+federated hashtags from Mastodon in Doer!
 
-While Zulip doesn't integrate directly with ActivityPub or the overall
+While Doer doesn't integrate directly with ActivityPub or the overall
 Fediverse, some ActivityPub servers, like
 [Mastodon](https://joinmastodon.org/), publish RSS feeds that can be
-followed in Zulip using the [Zapier][1] or [RSS][2] integrations.
+followed in Doer using the [Zapier][1] or [RSS][2] integrations.
 
 !!! warn ""
 
@@ -22,7 +22,7 @@ followed in Zulip using the [Zapier][1] or [RSS][2] integrations.
 1. Find the RSS feed for the account or hashtag you'd like to follow. Usually,
    this means appending `.rss` to its Mastodon URL. For example:
 
-    - To follow Zulip's Mastodon account at `https://fosstodon.org/@zulip`,
+    - To follow Doer's Mastodon account at `https://fosstodon.org/@zulip`,
     you would use `https://fosstodon.org/@zulip.rss`.
     - To follow the **#zulip** hashtag at `https://fosstodon.org/tags/zulip`,
     you would use `https://fosstodon.org/tags/zulip.rss`.
@@ -34,7 +34,7 @@ followed in Zulip using the [Zapier][1] or [RSS][2] integrations.
 
 {!congrats.md!}
 
-![Mastodon posts in Zulip via Zapier](/static/images/integrations/mastodon/001.png)
+![Mastodon posts in Doer via Zapier](/static/images/integrations/mastodon/001.png)
 
 [1]: ./zapier
 [2]: ./rss

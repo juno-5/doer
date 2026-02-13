@@ -41,7 +41,7 @@
         <span class="user-status-settings">
             {{#if (and is_bot show_download_zuliprc_button)}}
             <a type="submit" download="zuliprc" data-user-id="{{user_id}}" class="hidden-zuliprc-download" hidden></a>
-            <span class="tippy-zulip-delayed-tooltip" data-tippy-content="{{t 'Download zuliprc'}}">
+            <span class="tippy-doer-delayed-tooltip" data-tippy-content="{{t 'Download zuliprc'}}">
                 {{> ../components/icon_button
                   icon="download"
                   intent="neutral"
@@ -50,7 +50,7 @@
             </span>
             {{/if}}
             {{#if (and is_bot show_generate_integration_url_button)}}
-            <span class="tippy-zulip-delayed-tooltip" data-tippy-content="{{t 'Generate URL for integration'}}">
+            <span class="tippy-doer-delayed-tooltip" data-tippy-content="{{t 'Generate URL for integration'}}">
                 {{> ../components/icon_button
                   icon="link-2"
                   intent="neutral"
@@ -58,7 +58,7 @@
                   }}
             </span>
             {{/if}}
-            <span class="{{#if (and is_bot cannot_edit)}}tippy-zulip-tooltip{{else}}tippy-zulip-delayed-tooltip{{/if}}"
+            <span class="{{#if (and is_bot cannot_edit)}}tippy-doer-tooltip{{else}}tippy-doer-delayed-tooltip{{/if}}"
               {{#if (and is_bot cannot_edit)}}
               data-tippy-content="{{t 'This bot cannot be managed.'}}"
               {{else}}
@@ -72,7 +72,7 @@
                   }}
             </span>
             {{#if is_active}}
-            <span class="{{#if is_bot}}deactivate-bot-tooltip{{else}}deactivate-user-tooltip{{/if}} {{#if cannot_deactivate}}tippy-zulip-tooltip{{/if}}"
+            <span class="{{#if is_bot}}deactivate-bot-tooltip{{else}}deactivate-user-tooltip{{/if}} {{#if cannot_deactivate}}tippy-doer-tooltip{{/if}}"
               {{#if (and is_bot cannot_deactivate)}}data-tippy-content="{{t 'This bot cannot be deactivated.'}}"{{else if cannot_deactivate}}data-tippy-content="{{t 'This user cannot be deactivated.'}}"{{/if}}>
                 {{> ../components/icon_button
                   icon="user-x"

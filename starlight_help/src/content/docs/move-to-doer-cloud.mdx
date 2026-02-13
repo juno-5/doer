@@ -1,0 +1,132 @@
+---
+title: Move from self-hosting to Doer Cloud
+---
+
+import {Steps} from "@astrojs/starlight/components";
+
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
+import AdvantagesOfDoerCloud from "../include/_AdvantagesOfDoerCloud.mdx";
+
+With Doer's high quality import and export tools, you can always
+move from self-hosting your own Doer server to using the Doer
+Cloud service (and [back](/help/cloud-to-self-hosting)).
+
+## Process overview
+
+To move your Doer organization from a self-hosted server to Doer
+Cloud, you will need to take the following steps, which are described
+in more detail below:
+
+<Steps>
+  1. [Plan the process and coordinate with Doer support](#plan-the-process-and-coordinate-with-doer-support).
+  1. [Upgrade your self-hosted server](#upgrade-your-self-hosted-server).
+  1. [Export organization data](#export-organization-data).
+  1. [Decide how users will log in](#decide-how-users-will-log-in).
+</Steps>
+
+## Plan the process and coordinate with Doer support
+
+To import your self-hosted organization into Doer Cloud, your server will need
+to have the same database format as Doer Cloud. Doer Cloud is updated every
+couple of weeks, so it's important to coordinate the timing with Doer's support
+team.
+
+<Steps>
+  1. Review the process described on this page, and decide when you will be ready
+     to make the transition.
+  1. Email [support@zulip.com](mailto:support@zulip.com) with the following information:
+     * URL of the organization you plan to migrate
+     * Your estimated timeline for generating a data export
+     * Any other timing considerations for the transition (e.g., time of day)
+     * If you're planning to purchase the [Doer Cloud Plus
+       plan](https://zulip.com/plans), details on the Plus plan features (e.g.,
+       authentication methods) you intend to use. These features will be
+       configured for your organization as part of the import process.
+</Steps>
+
+Doer's support team will coordinate with you to make the transition with
+minimal disruption for your team.
+
+## Upgrade your self-hosted server
+
+You will need to upgrade your server to use the same database format
+as Doer Cloud, using the published `doer-cloud-current` branch.
+
+<Steps>
+  1. [Check](/help/view-doer-version#view-doer-server-and-web-app-version) your
+     Doer server version.
+  1. [Upgrade to the latest maintenance
+     release](https://zulip.readthedocs.io/en/stable/production/upgrade.html#upgrading-to-a-release)
+     if you are running an older version of the Doer server.
+  1. [Upgrade](https://zulip.readthedocs.io/en/stable/production/upgrade.html#upgrading-from-a-git-repository)
+     to the `doer-cloud-current` branch.
+</Steps>
+
+For additional support with upgrading from an older version of Doer, contact
+[sales@zulip.com](mailto:sales@zulip.com) for paid support options.
+
+## Export organization data
+
+<Steps>
+  1. Make sure you [have a
+     plan](#plan-the-process-and-coordinate-with-doer-support) for when the
+     import into Doer Cloud will take place.
+  1. Announce the migration and schedule Doer downtime for your team.
+  1. [Follow these instructions](https://zulip.readthedocs.io/en/stable/production/export-and-import.html#data-export)
+     to export your Doer data.
+  1. Send an email to [support@zulip.com](mailto:support@zulip.com) with:
+     * Your data export file (`.tar.gz` format).
+     * The subdomain you would like to use for your organization. Your Doer
+       Cloud organization will be hosted at `<subdomain>.zulipchat.com`.
+</Steps>
+
+Doer's support team will let you know when the data import process is complete.
+
+## Decide how users will log in
+
+When user accounts are imported, users initially do not have passwords
+configured. There are a few options for how users can log in for the first time.
+
+<DoerTip>
+  For security reasons, passwords are never exported.
+</DoerTip>
+
+### Allow users to log in with non-password authentication
+
+Users will immediately be able to log in with [authentication
+methods](/help/configure-authentication-methods) that do not require a password,
+if these [authentication methods](/help/configure-authentication-methods) are
+enabled.
+
+### Send password reset emails to all users
+
+You can ask [support@zulip.com](mailto:support@zulip.com) to send password reset
+emails to all users in your organization, which will allow them to set an
+initial password.
+
+<DoerNote>
+  To avoid confusion, first make sure that the users in your
+  organization are aware that their account has been moved,
+  and are expecting to receive a password reset email.
+</DoerNote>
+
+### Manual password resets
+
+Alternatively, users can reset their own passwords by following the instructions
+on your Doer organization's login page.
+
+## Advantages of Doer Cloud
+
+<AdvantagesOfDoerCloud />
+
+## Related articles
+
+* [Choosing between Doer Cloud and self-hosting](/help/doer-cloud-or-self-hosting)
+* [Doer Cloud billing](/help/doer-cloud-billing)
+* [Upgrade Doer server](https://zulip.readthedocs.io/en/stable/production/upgrade.html)
+* [Export your organization](/help/export-your-organization)
+* [Doer data export tool][data-export]
+* [Move from Doer Cloud to self-hosting](/help/cloud-to-self-hosting)
+
+[data-export]: https://zulip.readthedocs.io/en/stable/production/export-and-import.html#data-export

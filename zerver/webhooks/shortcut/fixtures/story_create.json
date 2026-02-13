@@ -11,7 +11,7 @@
             "action":"create",
             "name":"Add cool feature!",
             "story_type":"feature",
-            "app_url":"https://app.shortcut.com/zulip/story/11",
+            "app_url":"https://app.shortcut.com/doer/story/11",
             "project_id":6,
             "description":"We should probably add this cool feature!",
             "workflow_state_id":500000008,

@@ -3,11 +3,11 @@ import time
 import traceback
 from unittest import skipIf
 
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timeout import TimeoutExpiredError, unsafe_timeout
 
 
-class TimeoutTestCase(ZulipTestCase):
+class TimeoutTestCase(DoerTestCase):
     # We can't use assertRaises because that doesn't store the
     # traceback, which we want to verify
 

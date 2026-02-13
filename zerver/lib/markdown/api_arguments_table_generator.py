@@ -188,7 +188,7 @@ class APIArgumentsTablePreprocessor(Preprocessor):
 
             object_block = ""
             # TODO: There are some endpoint parameters with object properties
-            # that are not defined in `zerver/openapi/zulip.yaml`
+            # that are not defined in `zerver/openapi/doer.yaml`
             if "object" in data_type:
                 object_schema = parameter.value_schema
 

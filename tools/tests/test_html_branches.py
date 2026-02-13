@@ -4,7 +4,7 @@ import unittest
 import tools.lib.template_parser
 from tools.lib.html_branches import build_id_dict, get_tag_info, split_for_id_and_class
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEST_TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_template_data")
 
 
@@ -33,21 +33,21 @@ class TestHtmlBranches(unittest.TestCase):
         self.assertEqual(
             template_id_dict["hello_{{ message }}"],
             [
-                f"Line 12:{ZULIP_PATH}/tools/tests/test_template_data/test_template1.html",
-                f"Line 12:{ZULIP_PATH}/tools/tests/test_template_data/test_template2.html",
+                f"Line 12:{DOER_PATH}/tools/tests/test_template_data/test_template1.html",
+                f"Line 12:{DOER_PATH}/tools/tests/test_template_data/test_template2.html",
             ],
         )
         self.assertEqual(
             template_id_dict["intro"],
             [
-                f"Line 10:{ZULIP_PATH}/tools/tests/test_template_data/test_template1.html",
-                f"Line 11:{ZULIP_PATH}/tools/tests/test_template_data/test_template1.html",
-                f"Line 11:{ZULIP_PATH}/tools/tests/test_template_data/test_template2.html",
+                f"Line 10:{DOER_PATH}/tools/tests/test_template_data/test_template1.html",
+                f"Line 11:{DOER_PATH}/tools/tests/test_template_data/test_template1.html",
+                f"Line 11:{DOER_PATH}/tools/tests/test_template_data/test_template2.html",
             ],
         )
         self.assertEqual(
             template_id_dict["below_navbar"],
-            [f"Line 10:{ZULIP_PATH}/tools/tests/test_template_data/test_template2.html"],
+            [f"Line 10:{DOER_PATH}/tools/tests/test_template_data/test_template2.html"],
         )
 
     def test_split_for_id_and_class(self) -> None:

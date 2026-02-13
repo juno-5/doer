@@ -33,19 +33,19 @@ class GitHubWebhookTest(WebhookTestCase):
 
     def test_ping_organization_event(self) -> None:
         expected_message = "GitHub webhook has been successfully configured by eeshangarg."
-        self.check_webhook("ping__organization", "zulip-test-org", expected_message)
+        self.check_webhook("ping__organization", "doer-test-org", expected_message)
 
     def test_push_delete_branch(self) -> None:
         expected_message = "eeshangarg [deleted](https://github.com/eeshangarg/public-repo/compare/2e8cf535fb38...000000000000) the branch feature."
         self.check_webhook("push__delete_branch", "public-repo / feature", expected_message)
 
     def test_push_force_1_commit(self) -> None:
-        expected_message = "sbansal1999 [force pushed](https://github.com/sbansal1999/zulip/compare/b6de8891fc10...971d76ca3094) 1 commit to branch temp.\n\n* log: Add important.txt which is useful for logging errors. ([971d76ca309](https://github.com/sbansal1999/zulip/commit/971d76ca309446a9c20381f6271cea8a59b4e40a))"
-        self.check_webhook("push__force_1_commit", "zulip / temp", expected_message)
+        expected_message = "sbansal1999 [force pushed](https://github.com/sbansal1999/doer/compare/b6de8891fc10...971d76ca3094) 1 commit to branch temp.\n\n* log: Add important.txt which is useful for logging errors. ([971d76ca309](https://github.com/sbansal1999/doer/commit/971d76ca309446a9c20381f6271cea8a59b4e40a))"
+        self.check_webhook("push__force_1_commit", "doer / temp", expected_message)
 
     def test_push__force_remove_commits(self) -> None:
-        expected_message = "sbansal1999 [force pushed](https://github.com/sbansal1999/zulip/compare/2084a91af9ca...9a8749ea8fe7) the branch temp."
-        self.check_webhook("push__force_remove_commits", "zulip / temp", expected_message)
+        expected_message = "sbansal1999 [force pushed](https://github.com/sbansal1999/doer/compare/2084a91af9ca...9a8749ea8fe7) the branch temp."
+        self.check_webhook("push__force_remove_commits", "doer / temp", expected_message)
 
     def test_push_local_branch_without_commits(self) -> None:
         expected_message = "eeshangarg [pushed](https://github.com/eeshangarg/public-repo/compare/feature) the branch feature."
@@ -158,7 +158,7 @@ class GitHubWebhookTest(WebhookTestCase):
         self.check_webhook("issues__edited_body", expected_topic_name, expected_message)
 
     def test_issues_edited_title(self) -> None:
-        long_title = "This is a very long issue title used to exceed Zulip's maximum topic length so that truncation logic is exercised when the issue title is edited via the GitHub webhook"
+        long_title = "This is a very long issue title used to exceed Doer's maximum topic length so that truncation logic is exercised when the issue title is edited via the GitHub webhook"
         expected_topic_name = truncate_topic(f"test-repo / issue #6 {long_title}")
         expected_message = "Pritesh-30 edited [issue #6](https://github.com/Pritesh-30/test-repo/issues/6):\n\n~~~ quote\nThe body of the issue is edited.\n~~~"
         self.check_webhook("issues__edited_title", expected_topic_name, expected_message)
@@ -468,14 +468,14 @@ class GitHubWebhookTest(WebhookTestCase):
         self.check_webhook("pull_request__assigned", expected_topic_name, expected_message)
 
     def test_pull_request_unassigned_msg(self) -> None:
-        expected_message = "eeshangarg unassigned eeshangarg from [PR #1](https://github.com/zulip-test-org/helloworld/pull/1)."
-        expected_topic_name = "helloworld / PR #1 Mention that Zulip rocks!"
+        expected_message = "eeshangarg unassigned eeshangarg from [PR #1](https://github.com/doer-test-org/helloworld/pull/1)."
+        expected_topic_name = "helloworld / PR #1 Mention that Doer rocks!"
         self.check_webhook("pull_request__unassigned", expected_topic_name, expected_message)
 
     def test_pull_request_unassigned_msg_with_custom_topic_in_url(self) -> None:
         self.url = self.build_webhook_url(topic="notifications")
         expected_topic_name = "notifications"
-        expected_message = "eeshangarg unassigned eeshangarg from [PR #1 Mention that Zulip rocks!](https://github.com/zulip-test-org/helloworld/pull/1)"
+        expected_message = "eeshangarg unassigned eeshangarg from [PR #1 Mention that Doer rocks!](https://github.com/doer-test-org/helloworld/pull/1)"
         self.check_webhook("pull_request__unassigned", expected_topic_name, expected_message)
 
     def test_pull_request_ready_for_review_msg(self) -> None:
@@ -795,7 +795,7 @@ A temporary team so that I can get some webhook fixtures!
         )
 
     def test_issue_comment_silent_mention(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         github_field = CustomProfileField.objects.get(
             realm=realm,
             name="GitHub username",
@@ -808,7 +808,7 @@ A temporary team so that I can get some webhook fixtures!
         self.check_webhook("issue_comment", TOPIC_ISSUE, expected_message)
 
     def test_issue_comment_silent_mention_with_multiple_matches(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         github_field = CustomProfileField.objects.get(
             realm=realm,
             name="GitHub username",

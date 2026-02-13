@@ -250,7 +250,7 @@ def convert_channel_data(
 
         if channel_dict["display_name"] == MATTERMOST_DEFAULT_ANNOUNCEMENTS_CHANNEL_NAME:
             zerver_realm[0]["new_stream_announcements_stream"] = stream["id"]
-            zerver_realm[0]["zulip_update_announcements_stream"] = stream["id"]
+            zerver_realm[0]["doer_update_announcements_stream"] = stream["id"]
 
         streams.append(stream)
     return streams
@@ -436,8 +436,8 @@ def process_raw_message_batch(
         for user_id in mention_user_ids:
             user = user_handler.get_user(user_id=user_id)
             mattermost_mention = "@{short_name}".format(**user)
-            zulip_mention = "@**{full_name}**".format(**user)
-            content = content.replace(mattermost_mention, zulip_mention)
+            doer_mention = "@**{full_name}**".format(**user)
+            content = content.replace(mattermost_mention, doer_mention)
 
         content = content.replace("@channel", "@**all**")
         content = content.replace("@all", "@**all**")
@@ -771,7 +771,7 @@ def write_emoticon_data(
             exported_emoji/7u7x8ytgp78q8jir81o9ejwwnr/image
             exported_emoji/h15ni7kf1bnj7jeua4qhmctsdo/image
 
-    We move all the relevant files to Zulip's more nested
+    We move all the relevant files to Doer's more nested
     directory structure.
     """
 

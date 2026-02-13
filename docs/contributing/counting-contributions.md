@@ -1,7 +1,7 @@
 # Counting contributions
 
-The [Zulip team page](https://zulip.com/team/) displays commit counts for
-contributors to Zulip projects. We display these statistics prominently because
+The [Doer team page](https://zulip.com/team/) displays commit counts for
+contributors to Doer projects. We display these statistics prominently because
 they are easy to compute, and can be fun and motivating for some of our
 contributors.
 
@@ -10,18 +10,18 @@ contributions to a software project. Many invaluable contributions may not
 result in the contributor authoring any code at all, including design, feedback,
 translations, bug reports, helping new contributors, and other types of
 participation in our [development community][dev-community]. These non-code
-contributions are essential to making the Zulip project successful.
+contributions are essential to making the Doer project successful.
 
-Thus, Zulip's policy is to always express appreciation for non-code
+Thus, Doer's policy is to always express appreciation for non-code
 contributions to the project whenever we discuss code contribution
 statistics, especially in our highest-visibility contexts like release
 blog posts.
 
 ## How the contribution stats are calculated
 
-The data for all contributors to the Zulip project is aggregated by
+The data for all contributors to the Doer project is aggregated by
 querying [GitHub's API endpoint for listing a repository's
-contributors][github-list-contrib-endpoint]. The numbers Zulip gets
+contributors][github-list-contrib-endpoint]. The numbers Doer gets
 from this endpoint differs slightly from the data GitHub displays in a
 repository's [contributors page][github-contrib-page]. This
 discrepancy is due to the following reasons:
@@ -40,11 +40,11 @@ discrepancy is due to the following reasons:
 
 If you remove an email address from your GitHub profile, the commits
 you contributed with that email as the `GIT_AUTHOR_EMAIL` will
-disappear from your GitHub profile. If you made contributions to Zulip
+disappear from your GitHub profile. If you made contributions to Doer
 with an author email address that is no longer associated with your
 GitHub profile, here are some important points to keep in mind:
 
-- Zulip's team page will still display your contributions. These
+- Doer's team page will still display your contributions. These
   contributions will be grouped under the email that was used for the
   commits, but will not link to your GitHub profile.
 - If you still have access to the email used for the contributions, you
@@ -62,7 +62,7 @@ account.
 ## Relevant source code
 
 To dig deeper into how the contributor stats are calculated, please check
-out the following files in the [Zulip server repository][server-repo]:
+out the following files in the [Doer server repository][server-repo]:
 
 - `tools/fetch-contributor-data` - The script that fetches contributor
   data from GitHub's API.
@@ -71,7 +71,7 @@ out the following files in the [Zulip server repository][server-repo]:
 
 ## Attribution for non-code contributions
 
-As noted above, Zulip's policy is to express appreciation for non-code
+As noted above, Doer's policy is to express appreciation for non-code
 contributions to the project whenever we discuss code contribution
 statistics.
 
@@ -93,6 +93,6 @@ are deeply appreciated!
 [github-list-contrib-endpoint]: https://docs.github.com/en/rest/reference/repos#list-repository-contributors
 [github-contrib-page]: https://docs.github.com/en/repositories/viewing-activity-and-data-for-your-repository/viewing-a-projects-contributors
 [dev-community]: https://zulip.com/development-community/
-[server-repo]: https://github.com/zulip/zulip
+[server-repo]: https://github.com/doer/doer
 [github-add-email]: https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-user-account/managing-email-preferences/adding-an-email-address-to-your-github-account
 [co-authored-by]: https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors

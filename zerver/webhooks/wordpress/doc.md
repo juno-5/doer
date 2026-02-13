@@ -1,6 +1,6 @@
-# Zulip WordPress integration
+# Doer WordPress integration
 
-Get WordPress notifications in Zulip!
+Get WordPress notifications in Doer!
 
 {start_tabs}
 

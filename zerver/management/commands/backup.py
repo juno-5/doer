@@ -12,13 +12,13 @@ from django.db import connection
 from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import TIMESTAMP_FORMAT, run
-from version import ZULIP_VERSION
-from zerver.lib.management import ZulipBaseCommand
+from scripts.lib.doer_tools import TIMESTAMP_FORMAT, run
+from version import DOER_VERSION
+from zerver.lib.management import DoerBaseCommand
 from zerver.logging_handlers import try_git_describe
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     # Fix support for multi-line usage strings
     @override
     def create_parser(self, prog_name: str, subcommand: str, **kwargs: Any) -> CommandParser:
@@ -37,31 +37,31 @@ class Command(ZulipBaseCommand):
         timestamp = timezone_now().strftime(TIMESTAMP_FORMAT)
         with ExitStack() as stack:
             tmp = stack.enter_context(
-                tempfile.TemporaryDirectory(prefix=f"zulip-backup-{timestamp}-")
+                tempfile.TemporaryDirectory(prefix=f"doer-backup-{timestamp}-")
             )
-            os.mkdir(os.path.join(tmp, "zulip-backup"))
+            os.mkdir(os.path.join(tmp, "doer-backup"))
             members = []
             paths = []
 
-            with open(os.path.join(tmp, "zulip-backup", "zulip-version"), "w") as f:
-                print(ZULIP_VERSION, file=f)
+            with open(os.path.join(tmp, "doer-backup", "doer-version"), "w") as f:
+                print(DOER_VERSION, file=f)
                 git = try_git_describe()
                 if git:
                     print(git, file=f)
-            members.append("zulip-backup/zulip-version")
+            members.append("doer-backup/doer-version")
 
-            with open(os.path.join(tmp, "zulip-backup", "os-version"), "w") as f:
+            with open(os.path.join(tmp, "doer-backup", "os-version"), "w") as f:
                 print(
                     "{ID} {VERSION_ID}".format(**platform.freedesktop_os_release()),
                     file=f,
                 )
-            members.append("zulip-backup/os-version")
+            members.append("doer-backup/os-version")
 
-            with open(os.path.join(tmp, "zulip-backup", "postgres-version"), "w") as f:
+            with open(os.path.join(tmp, "doer-backup", "postgres-version"), "w") as f:
                 pg_server_version = connection.cursor().connection.server_version
                 major_pg_version = pg_server_version // 10000
                 print(pg_server_version, file=f)
-            members.append("zulip-backup/postgres-version")
+            members.append("doer-backup/postgres-version")
 
             if settings.DEVELOPMENT:
                 members.append(
@@ -78,7 +78,7 @@ class Command(ZulipBaseCommand):
                 pg_dump_command = [
                     f"/usr/lib/postgresql/{major_pg_version}/bin/pg_dump",
                     "--format=directory",
-                    "--file=" + os.path.join(tmp, "zulip-backup", "database"),
+                    "--file=" + os.path.join(tmp, "doer-backup", "database"),
                     "--username=" + settings.DATABASES["default"]["USER"],
                     "--dbname=" + settings.DATABASES["default"]["NAME"],
                     "--no-password",
@@ -94,7 +94,7 @@ class Command(ZulipBaseCommand):
                     pg_dump_command,
                     cwd=tmp,
                 )
-                members.append("zulip-backup/database")
+                members.append("doer-backup/database")
 
             if (
                 not options["skip_uploads"]
@@ -115,7 +115,7 @@ class Command(ZulipBaseCommand):
 
             assert not any("|" in name or "|" in path for name, path in paths)
             transform_args = [
-                r"--transform=s|^{}(/.*)?$|zulip-backup/{}\1|x".format(
+                r"--transform=s|^{}(/.*)?$|doer-backup/{}\1|x".format(
                     re.escape(path),
                     name.replace("\\", r"\\"),
                 )
@@ -126,7 +126,7 @@ class Command(ZulipBaseCommand):
                 if options["output"] is None:
                     tarball_path = stack.enter_context(
                         tempfile.NamedTemporaryFile(
-                            prefix=f"zulip-backup-{timestamp}-",
+                            prefix=f"doer-backup-{timestamp}-",
                             suffix=".tar.gz",
                             delete=False,
                         )

@@ -220,7 +220,7 @@
         display: none;
     }
 
-    .zulip-loading-logo {
+    .doer-loading-logo {
         margin: 0 auto;
         width: 30px;
         /* Adjusting height moves the loading spinner vertically.
@@ -228,12 +228,12 @@
         height: 23px;
     }
 
-    .zulip-loading-logo svg circle {
+    .doer-loading-logo svg circle {
         fill: hsl(0deg 0% 27%);
         stroke: hsl(0deg 0% 27%);
     }
 
-    .zulip-loading-logo svg path {
+    .doer-loading-logo svg path {
         fill: hsl(0deg 0% 100%);
         stroke: hsl(0deg 0% 100%);
     }

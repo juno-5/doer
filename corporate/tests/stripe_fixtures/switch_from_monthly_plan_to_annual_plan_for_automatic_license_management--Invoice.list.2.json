@@ -57,7 +57,7 @@
           {
             "amount": 40000,
             "currency": "usd",
-            "description": "Additional Zulip Cloud Standard license",
+            "description": "Additional Doer Cloud Standard license",
             "discount_amounts": [],
             "discountable": false,
             "discounts": [],
@@ -97,7 +97,7 @@
           {
             "amount": 160000,
             "currency": "usd",
-            "description": "Zulip Cloud Standard - renewal",
+            "description": "Doer Cloud Standard - renewal",
             "discount_amounts": [],
             "discountable": false,
             "discounts": [],
@@ -168,7 +168,7 @@
       "shipping_cost": null,
       "shipping_details": null,
       "starting_balance": 0,
-      "statement_descriptor": "Zulip Cloud Standard",
+      "statement_descriptor": "Doer Cloud Standard",
       "status": "open",
       "status_transitions": {
         "finalized_at": 1000000000,
@@ -243,7 +243,7 @@
           {
             "amount": 11200,
             "currency": "usd",
-            "description": "Additional Zulip Cloud Standard license",
+            "description": "Additional Doer Cloud Standard license",
             "discount_amounts": [],
             "discountable": false,
             "discounts": [],
@@ -314,7 +314,7 @@
       "shipping_cost": null,
       "shipping_details": null,
       "starting_balance": 0,
-      "statement_descriptor": "Zulip Cloud Standard",
+      "statement_descriptor": "Doer Cloud Standard",
       "status": "open",
       "status_transitions": {
         "finalized_at": 1000000000,
@@ -389,7 +389,7 @@
           {
             "amount": 4800,
             "currency": "usd",
-            "description": "Zulip Cloud Standard",
+            "description": "Doer Cloud Standard",
             "discount_amounts": [],
             "discountable": false,
             "discounts": [],
@@ -468,7 +468,7 @@
       "shipping_cost": null,
       "shipping_details": null,
       "starting_balance": 0,
-      "statement_descriptor": "Zulip Cloud Standard",
+      "statement_descriptor": "Doer Cloud Standard",
       "status": "paid",
       "status_transitions": {
         "finalized_at": 1000000000,

@@ -13,12 +13,12 @@ if TYPE_CHECKING:
 
 
 class Recipient(models.Model):
-    """Represents an audience that can potentially receive messages in Zulip.
+    """Represents an audience that can potentially receive messages in Doer.
 
     This table essentially functions as a generic foreign key that
     allows Message.recipient_id to be a simple ForeignKey representing
     the audience for a message, while supporting the different types
-    of audiences Zulip supports for a message.
+    of audiences Doer supports for a message.
 
     Recipient has just two attributes: The enum type, and a type_id,
     which is the ID of the UserProfile/Stream/DirectMessageGroup object
@@ -29,7 +29,7 @@ class Recipient(models.Model):
        who will receive any message to this Recipient. The sender
        of such a message is represented separately.
     2. Stream message: The type_id is the ID of the associated Stream.
-    3. Group direct message: In Zulip, group direct messages are
+    3. Group direct message: In Doer, group direct messages are
        represented by DirectMessageGroup objects, which encode the set of
        users in the conversation. The type_id is the ID of the associated
        DirectMessageGroup object; the set of users is usually retrieved

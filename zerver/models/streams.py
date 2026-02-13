@@ -259,7 +259,7 @@ class Stream(models.Model):
         return self.history_public_to_subscribers
 
     # Stream fields included whenever a Stream object is provided to
-    # Zulip clients via the API.  A few details worth noting:
+    # Doer clients via the API.  A few details worth noting:
     # * "id" is represented as "stream_id" in most API interfaces.
     # * "deactivated" streams are filtered from the API entirely.
     # * "realm" and "recipient" are not exposed to clients via the API.
@@ -417,14 +417,14 @@ class Subscription(models.Model):
         return f"{self.user_profile!r} -> {self.recipient!r}"
 
     # Subscription fields included whenever a Subscription object is provided to
-    # Zulip clients via the API.  A few details worth noting:
+    # Doer clients via the API.  A few details worth noting:
     # * These fields will generally be merged with Stream.API_FIELDS
     #   data about the stream.
     # * "user_profile" is usually implied as full API access to Subscription
     #   is primarily done for the current user; API access to other users'
     #   subscriptions is generally limited to boolean yes/no.
     # * "id" and "recipient_id" are not included as they are not used
-    #   in the Zulip API; it's an internal implementation detail.
+    #   in the Doer API; it's an internal implementation detail.
     #   Subscription objects are always looked up in the API via
     #   (user_profile, stream) pairs.
     # * "active" is often excluded in API use cases where it is implied.

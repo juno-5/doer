@@ -6,7 +6,7 @@ argument-hint: "[test_module_or_file]"
 
 # Fix Backend Coverage
 
-Fix backend test coverage gaps for Zulip's enforced 100% coverage files.
+Fix backend test coverage gaps for Doer's enforced 100% coverage files.
 
 Use this skill when:
 

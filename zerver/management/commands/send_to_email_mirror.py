@@ -12,7 +12,7 @@ from typing_extensions import override
 
 from zerver.lib.email_mirror import validate_to_address
 from zerver.lib.email_mirror_helpers import encode_email_address, get_channel_email_token
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.queue import queue_json_publish_rollback_unsafe
 from zerver.models import Realm, UserProfile
 from zerver.models.realms import get_realm
@@ -33,7 +33,7 @@ from zerver.models.users import get_system_bot, get_user_profile_by_email, get_u
 # by the command in order for the email to be sent to the correct stream.
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 Send specified email from a fixture file to the email mirror
 Example:
@@ -63,7 +63,7 @@ Example:
             "Default: ID of Email gateway bot",
         )
 
-        self.add_realm_args(parser, help="Specify which realm to connect to; default is zulip")
+        self.add_realm_args(parser, help="Specify which realm to connect to; default is doer")
 
     @override
     def handle(self, *args: Any, **options: Any) -> None:
@@ -78,7 +78,7 @@ Example:
 
         realm = self.get_realm(options)
         if realm is None:
-            realm = get_realm("zulip")
+            realm = get_realm("doer")
 
         email_gateway_bot = get_system_bot(settings.EMAIL_GATEWAY_BOT, realm.id)
         if options["sender_id"] is None:

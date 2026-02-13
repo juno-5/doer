@@ -10,7 +10,7 @@ from django.utils.cache import patch_cache_control
 from zerver.actions.user_settings import do_change_tos_version, do_change_user_setting
 from zerver.actions.users import do_change_is_imported_stub
 from zerver.context_processors import get_realm_from_request, get_valid_realm_from_request
-from zerver.decorator import web_public_view, zulip_login_required
+from zerver.decorator import web_public_view, doer_login_required
 from zerver.forms import ToSForm
 from zerver.lib.compatibility import is_banned_browser, is_outdated_desktop_app
 from zerver.lib.home import build_page_params_for_home_page_load, get_user_permission_info
@@ -34,7 +34,7 @@ def need_accept_tos(user_profile: UserProfile | None) -> bool:
     return int(settings.TERMS_OF_SERVICE_VERSION.split(".")[0]) > user_profile.major_tos_version()
 
 
-@zulip_login_required
+@doer_login_required
 def accounts_accept_terms(request: HttpRequest) -> HttpResponse:
     assert request.user.is_authenticated
 
@@ -119,7 +119,7 @@ def accounts_accept_terms(request: HttpRequest) -> HttpResponse:
 def detect_narrowed_window(
     request: HttpRequest, user_profile: UserProfile | None
 ) -> tuple[list[NeverNegatedNarrowTerm], Stream | None, str | None]:
-    """This function implements Zulip's support for a mini Zulip window
+    """This function implements Doer's support for a mini Doer window
     that just handles messages from a single narrow"""
     if user_profile is None:
         return [], None, None
@@ -182,7 +182,7 @@ def home(request: HttpRequest) -> HttpResponse:
         return render(request, "zerver/invalid_realm.html", status=404, context=context)
     if realm.allow_web_public_streams_access():
         return web_public_view(home_real)(request)
-    return zulip_login_required(home_real)(request)
+    return doer_login_required(home_real)(request)
 
 
 def home_real(request: HttpRequest) -> HttpResponse:
@@ -270,7 +270,7 @@ def home_real(request: HttpRequest) -> HttpResponse:
     return response
 
 
-@zulip_login_required
+@doer_login_required
 def desktop_home(request: HttpRequest) -> HttpResponse:
     return redirect(home)
 

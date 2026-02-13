@@ -1,4 +1,4 @@
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.topic_link_util import (
     get_message_link_syntax,
     get_stream_link_syntax,
@@ -6,7 +6,7 @@ from zerver.lib.topic_link_util import (
 )
 
 
-class TestTopicLinkUtil(ZulipTestCase):
+class TestTopicLinkUtil(DoerTestCase):
     def test_stream_link_syntax(self) -> None:
         sweden_id = self.make_stream("Sweden").id
         money_id = self.make_stream("$$MONEY$$").id

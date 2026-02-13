@@ -7,7 +7,7 @@ from django.utils.timezone import now as timezone_now
 from zerver.actions.streams import do_change_stream_permission
 from zerver.actions.user_topics import do_set_user_topic_visibility_policy
 from zerver.lib.events import ClientCapabilities, do_events_register
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.user_topics import set_topic_visibility_policy, topic_has_visibility_policy
 from zerver.models import Message, UserMessage, UserTopic
 from zerver.models.clients import get_client
@@ -16,7 +16,7 @@ from zerver.models.streams import get_stream
 from zerver.tornado.event_queue import allocate_client_descriptor
 
 
-class TopicHistoryTest(ZulipTestCase):
+class TopicHistoryTest(DoerTestCase):
     def test_topics_history(self) -> None:
         # verified: int(UserMessage.flags.read) == 1
         user_profile = self.example_user("iago")
@@ -201,7 +201,7 @@ class TopicHistoryTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid channel ID", 400)
 
 
-class TopicDeleteTest(ZulipTestCase):
+class TopicDeleteTest(DoerTestCase):
     def test_topic_delete(self) -> None:
         initial_last_msg_id = self.get_last_message().id
         stream_name = "new_stream"
@@ -351,7 +351,7 @@ class TopicDeleteTest(ZulipTestCase):
             self.assertFalse(result_dict["complete"])
 
 
-class EmptyTopicNameTest(ZulipTestCase):
+class EmptyTopicNameTest(DoerTestCase):
     def test_client_supports_empty_topic_name(self) -> None:
         iago = self.example_user("iago")
         hamlet = self.example_user("hamlet")
@@ -488,7 +488,7 @@ class EmptyTopicNameTest(ZulipTestCase):
         queue_data = dict(
             all_public_streams=True,
             apply_markdown=True,
-            client_type_name="zulip-mobile",
+            client_type_name="doer-mobile",
             empty_topic_name=False,
             event_types=[
                 "message",

@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#
+# This script serves only to verify that the OS is a supported
+# version, before we attempt to rely on that version in
+# upgrade-doer-stage-3
+
+set -eu
+
+DOER_PATH="$(readlink -f "$(dirname "$0")"/../..)"
+if ! "$DOER_PATH/scripts/lib/supported-os"; then
+    echo "Unsupported platform!"
+    echo
+    echo "Sorry! The support for your OS has been discontinued."
+    echo "Please upgrade your OS to a supported release first,"
+    echo "by following these instructions:"
+    echo
+    echo "https://zulip.readthedocs.io/en/latest/production/upgrade.html#upgrading-the-operating-system"
+    echo
+    exit 1
+fi
+
+exec "$DOER_PATH/scripts/lib/upgrade-doer-stage-3" "$@"

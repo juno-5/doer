@@ -1,6 +1,6 @@
-# Zulip OpenProject integration
+# Doer OpenProject integration
 
-Get Zulip notifications for your OpenProject work packages and projects!
+Get Doer notifications for your OpenProject work packages and projects!
 
 {start_tabs}
 
@@ -13,7 +13,7 @@ Get Zulip notifications for your OpenProject work packages and projects!
    **API and Webhooks**. Select the **Webhooks** tab from the left panel,
    and click on **+ Webhook**.
 
-1. Enter a name of your choice for the webhook, such as `Zulip`. Set
+1. Enter a name of your choice for the webhook, such as `Doer`. Set
    **Payload URL** to the URL generated above, and ensure the webhook is
    enabled.
 

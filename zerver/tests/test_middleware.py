@@ -6,15 +6,15 @@ from django.http import HttpResponse
 
 from zerver.lib.realm_icon import get_realm_icon_url
 from zerver.lib.request import RequestNotes
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.lib.utils import assert_is_not_none
 from zerver.middleware import LogRequests, is_slow_query, write_log_line
 from zerver.models.realms import get_realm
-from zilencer.models import RemoteZulipServer
+from zilencer.models import RemoteDoerServer
 
 
-class SlowQueryTest(ZulipTestCase):
+class SlowQueryTest(DoerTestCase):
     SLOW_QUERY_TIME = 10
     log_data = {
         "extra": "[transport=websocket]",
@@ -36,8 +36,8 @@ class SlowQueryTest(ZulipTestCase):
     def test_slow_query_log(self) -> None:
         self.log_data["time_started"] = time.time() - self.SLOW_QUERY_TIME
         with (
-            self.assertLogs("zulip.slow_queries", level="INFO") as slow_query_logger,
-            self.assertLogs("zulip.requests", level="INFO") as middleware_normal_logger,
+            self.assertLogs("doer.slow_queries", level="INFO") as slow_query_logger,
+            self.assertLogs("doer.requests", level="INFO") as middleware_normal_logger,
         ):
             write_log_line(
                 self.log_data,
@@ -56,7 +56,7 @@ class SlowQueryTest(ZulipTestCase):
             )
 
 
-class OpenGraphTest(ZulipTestCase):
+class OpenGraphTest(DoerTestCase):
     def check_title_and_description(
         self,
         path: str,
@@ -85,10 +85,10 @@ class OpenGraphTest(ZulipTestCase):
     def test_index_pages(self) -> None:
         self.check_title_and_description(
             "/api/",
-            "Zulip API documentation",
+            "Doer API documentation",
             [
                 (
-                    "Zulip's APIs allow you to integrate other services with Zulip. This "
+                    "Doer's APIs allow you to integrate other services with Doer. This "
                     "guide should help you find the API you need:"
                 )
             ],
@@ -100,11 +100,11 @@ class OpenGraphTest(ZulipTestCase):
     def test_nonexistent_page(self) -> None:
         self.check_title_and_description(
             "/api/not-a-real-page",
-            # Probably we should make this "Zulip help center"
-            "No such article. | Zulip API documentation",
+            # Probably we should make this "Doer help center"
+            "No such article. | Doer API documentation",
             [
                 "No such article.",
-                "Your feedback helps us make Zulip better for everyone! Please contact us",
+                "Your feedback helps us make Doer better for everyone! Please contact us",
             ],
             [],
             # Test that our open graph logic doesn't throw a 500
@@ -112,17 +112,17 @@ class OpenGraphTest(ZulipTestCase):
         )
 
     def test_login_page_simple_description(self) -> None:
-        name = "Zulip Dev"
+        name = "Doer Dev"
         description = (
-            "The Zulip development environment default organization. It's great for testing!"
+            "The Doer development environment default organization. It's great for testing!"
         )
 
         self.check_title_and_description("/login/", name, [description], [])
 
     def test_login_page_markdown_description(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         description = (
-            "Welcome to **Clojurians Zulip** - the place where the Clojure community meets.\n\n"
+            "Welcome to **Clojurians Doer** - the place where the Clojure community meets.\n\n"
             "Before you signup/login:\n\n"
             "* note-1\n"
             "* note-2\n"
@@ -134,16 +134,16 @@ class OpenGraphTest(ZulipTestCase):
 
         self.check_title_and_description(
             "/login/",
-            "Zulip Dev",
+            "Doer Dev",
             [
-                "Welcome to Clojurians Zulip - the place where the Clojure community meets",
+                "Welcome to Clojurians Doer - the place where the Clojure community meets",
                 "* note-1 * note-2 * note-3 | Enjoy!",
             ],
             [],
         )
 
     def test_login_page_realm_icon(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.icon_source = "U"
         realm.save(update_fields=["icon_source"])
         realm_icon = get_realm_icon_url(realm)
@@ -158,7 +158,7 @@ class OpenGraphTest(ZulipTestCase):
         self.assertEqual(open_graph_image, f"{realm.url}{realm_icon}")
 
     def test_login_page_realm_icon_absolute_url(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.icon_source = "U"
         realm.save(update_fields=["icon_source"])
         icon_url = f"https://foo.s3.amazonaws.com/{realm.id}/realm/icon.png?version={1}"
@@ -185,7 +185,7 @@ class OpenGraphTest(ZulipTestCase):
         self.assertTrue(open_graph_url.endswith("/api/"))
 
 
-class LogRequestsTest(ZulipTestCase):
+class LogRequestsTest(DoerTestCase):
     meta_data = {"REMOTE_ADDR": "127.0.0.1"}
 
     def test_requester_for_logs_as_user(self) -> None:
@@ -193,16 +193,16 @@ class LogRequestsTest(ZulipTestCase):
         request = HostRequestMock(user_profile=hamlet, meta_data=self.meta_data)
         RequestNotes.get_notes(request).log_data = None
 
-        with self.assertLogs("zulip.requests", level="INFO") as m:
+        with self.assertLogs("doer.requests", level="INFO") as m:
             LogRequests(lambda _: HttpResponse())(request)
             self.assertIn(hamlet.format_requester_for_logs(), m.output[0])
 
     def test_requester_for_logs_as_remote_server(self) -> None:
-        remote_server = RemoteZulipServer()
+        remote_server = RemoteDoerServer()
         request = HostRequestMock(remote_server=remote_server, meta_data=self.meta_data)
         RequestNotes.get_notes(request).log_data = None
 
-        with self.assertLogs("zulip.requests", level="INFO") as m:
+        with self.assertLogs("doer.requests", level="INFO") as m:
             LogRequests(lambda _: HttpResponse())(request)
             self.assertIn(remote_server.format_requester_for_logs(), m.output[0])
 
@@ -211,6 +211,6 @@ class LogRequestsTest(ZulipTestCase):
         RequestNotes.get_notes(request).log_data = None
 
         expected_requester = "unauth@root"
-        with self.assertLogs("zulip.requests", level="INFO") as m:
+        with self.assertLogs("doer.requests", level="INFO") as m:
             LogRequests(lambda _: HttpResponse())(request)
             self.assertIn(expected_requester, m.output[0])

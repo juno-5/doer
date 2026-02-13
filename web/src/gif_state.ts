@@ -39,8 +39,8 @@ export function update_gif_icon_visibility(): void {
     // to `disabled`.
     // It won't change the GIF provider without a server restart as of now.
     if (realm.realm_gif_rating_policy === realm.gif_rating_policy_options.disabled.id) {
-        $(".zulip-icon-gif").hide();
+        $(".doer-icon-gif").hide();
     } else {
-        $(".zulip-icon-gif").show();
+        $(".doer-icon-gif").show();
     }
 }

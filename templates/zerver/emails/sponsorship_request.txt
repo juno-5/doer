@@ -7,8 +7,8 @@ Organization type: {{ organization_type }}
 Description:
 {{ description }}
 
-How do you plan to use Zulip?
-{{ plan_to_use_zulip }}
+How do you plan to use Doer?
+{{ plan_to_use_doer }}
 
 Expected users:
 - Total: {{ expected_total_users }}

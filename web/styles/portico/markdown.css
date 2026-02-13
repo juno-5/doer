@@ -70,7 +70,7 @@
             }
         }
 
-        &#zulip-administration {
+        &#doer-administration {
             font-size: 1.75em;
             padding: 10px 0;
             margin-bottom: 0;
@@ -241,12 +241,12 @@
         }
     }
 
-    & i.zulip-icon {
+    & i.doer-icon {
         margin: 0 2px 2px;
         vertical-align: middle;
     }
 
-    & i.zulip-icon.mobile-help {
+    & i.doer-icon.mobile-help {
         color: hsl(244deg 69% 62%);
     }
 
@@ -371,7 +371,7 @@
     }
 
     & code {
-        /* Same font-family as zulip.css */
+        /* Same font-family as doer.css */
         font-family: "Source Code Pro", monospace;
         /* Same as base rules for code elements in rendered_markdown.css */
         font-size: 0.825em;

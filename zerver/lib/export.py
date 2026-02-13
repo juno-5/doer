@@ -3,7 +3,7 @@
 #
 # Most developers will interact with this primarily when they add a
 # new table to the schema, in which case they likely need to (1) add
-# it the lists in `ALL_ZULIP_TABLES` and similar data structures and
+# it the lists in `ALL_DOER_TABLES` and similar data structures and
 # (2) if it doesn't belong in EXCLUDED_TABLES, add a Config object for
 # it to get_realm_config.
 import glob
@@ -36,7 +36,7 @@ from psycopg2 import sql
 
 import zerver.lib.upload
 from analytics.models import RealmCount, StreamCount, UserCount
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.lib.avatar_hash import user_avatar_base_path_from_ids
 from zerver.lib.display_recipient import get_display_recipient
 from zerver.lib.migration_status import MigrationStatusJson, parse_migration_status
@@ -124,7 +124,7 @@ class MessagePartial(TypedDict):
 ORJSON_ITERABLE_BATCH_SIZE = 1000
 MESSAGE_BATCH_CHUNK_SIZE = 1000
 
-ALL_ZULIP_TABLES = {
+ALL_DOER_TABLES = {
     "analytics_fillstate",
     "analytics_installationcount",
     "analytics_realmcount",
@@ -392,8 +392,8 @@ def sanity_check_output(data: TableData) -> None:
     all_tables_db = {model._meta.db_table for model in target_models}
 
     # These assertion statements will fire when we add a new database
-    # table that is not included in Zulip's data exports.  Generally,
-    # you can add your new table to `ALL_ZULIP_TABLES` and
+    # table that is not included in Doer's data exports.  Generally,
+    # you can add your new table to `ALL_DOER_TABLES` and
     # `NON_EXPORTED_TABLES` during early work on a new feature so that
     # CI passes.
     #
@@ -402,17 +402,17 @@ def sanity_check_output(data: TableData) -> None:
     # expertise on this export system.
     error_message = f"""
     It appears you've added a new database table, but haven't yet
-    registered it in ALL_ZULIP_TABLES and the related declarations
+    registered it in ALL_DOER_TABLES and the related declarations
     in {__file__} for what to include in data exports.
     """
 
-    assert all_tables_db == ALL_ZULIP_TABLES, error_message
-    assert NON_EXPORTED_TABLES.issubset(ALL_ZULIP_TABLES), error_message
-    assert IMPLICIT_TABLES.issubset(ALL_ZULIP_TABLES), error_message
-    assert ATTACHMENT_TABLES.issubset(ALL_ZULIP_TABLES), error_message
-    assert ANALYTICS_TABLES.issubset(ALL_ZULIP_TABLES), error_message
+    assert all_tables_db == ALL_DOER_TABLES, error_message
+    assert NON_EXPORTED_TABLES.issubset(ALL_DOER_TABLES), error_message
+    assert IMPLICIT_TABLES.issubset(ALL_DOER_TABLES), error_message
+    assert ATTACHMENT_TABLES.issubset(ALL_DOER_TABLES), error_message
+    assert ANALYTICS_TABLES.issubset(ALL_DOER_TABLES), error_message
 
-    tables = set(ALL_ZULIP_TABLES)
+    tables = set(ALL_DOER_TABLES)
     tables -= NON_EXPORTED_TABLES
     tables -= IMPLICIT_TABLES
     tables -= MESSAGE_TABLES
@@ -909,7 +909,7 @@ def export_from_config(
 
 def get_realm_config() -> Config:
     # This function generates the main Config object that defines how
-    # to do a full-realm export of a single realm from a Zulip server.
+    # to do a full-realm export of a single realm from a Doer server.
 
     realm_config = Config(
         table="zerver_realm",
@@ -1378,7 +1378,7 @@ def custom_fetch_user_profile(response: TableData, context: Context) -> None:
         exportable_user_ids = set()
 
     query = UserProfile.objects.filter(realm_id=realm.id).exclude(
-        # These were, in some early versions of Zulip, inserted into
+        # These were, in some early versions of Doer, inserted into
         # the first realm that was created.  In those cases, rather
         # than include them here, we will include them in the
         # crossrealm user list, below.
@@ -1612,7 +1612,7 @@ def custom_fetch_direct_message_groups(response: TableData, context: Context) ->
     # users from this realm), at the cost of losing any true
     # cross-realm messages. (As of 2025, true cross-realm messages,
     # not involving system bots cannot exist without a bug or fork of
-    # Zulip).
+    # Doer).
     direct_message_group_subs = [
         sub
         for sub in realm_direct_message_group_subs
@@ -1792,7 +1792,7 @@ def export_partial_message_files(
     output_dir: Path | None = None,
 ) -> set[int]:
     if output_dir is None:
-        output_dir = tempfile.mkdtemp(prefix="zulip-export")
+        output_dir = tempfile.mkdtemp(prefix="doer-export")
 
     def get_ids(records: Iterable[Mapping[str, Any]]) -> set[int]:
         return {x["id"] for x in records}
@@ -1812,7 +1812,7 @@ def export_partial_message_files(
     # TODO: In theory, you should be able to export messages in
     # cross-realm direct message threads; currently, this only
     # exports cross-realm messages received by your realm that
-    # were sent by Zulip system bots (e.g. emailgateway,
+    # were sent by Doer system bots (e.g. emailgateway,
     # notification-bot).
 
     # Here, "we" and "us" refers to the inner circle of users who
@@ -2586,7 +2586,7 @@ def do_export_realm(
         assert isinstance(response["zerver_realm"], list)
         response["zerver_realm"][0]["deactivated"] = not export_as_active
 
-    response["import_source"] = "zulip"  # type: ignore[assignment]  # this is an extra info field, not TableData
+    response["import_source"] = "doer"  # type: ignore[assignment]  # this is an extra info field, not TableData
 
     # Write realm data
     export_file = os.path.join(output_dir, "realm.json")
@@ -2720,7 +2720,7 @@ def export_single_user(user_profile: UserProfile, response: TableData) -> None:
 
 def get_single_user_config() -> Config:
     # This function defines the limited configuration for what data to
-    # export when exporting all data that a single Zulip user has
+    # export when exporting all data that a single Doer user has
     # access to in an organization.
 
     # zerver_userprofile
@@ -2995,10 +2995,10 @@ def get_consented_user_ids(realm: Realm) -> set[int]:
     # 4) It is a mirror dummy. This is a special case that requires some
     #    explanation. There are two cases where an account will be a mirror dummy:
     #    a) It comes from a 3rd party export (e.g. from Slack) - in some cases,
-    #       certain limited accounts are turned into Zulip mirror dummy accounts.
+    #       certain limited accounts are turned into Doer mirror dummy accounts.
     #       For such an account, the admins already have access to all the original data,
     #       so we can freely consider the user as consenting and export everything.
-    #    b) It was imported from another Zulip export; and it was a non-consented user
+    #    b) It was imported from another Doer export; and it was a non-consented user
     #       in it. Thus, only public data of the user was exported->imported.
     #       Therefore, again we can consider the user as consenting and export
     #       everything - all this data is public by construction.
@@ -3178,7 +3178,7 @@ def get_realm_exports_serialized(realm: Realm) -> list[dict[str, Any]]:
 def export_migration_status(output_dir: str) -> None:
     migration_status_json = MigrationStatusJson(
         migrations_by_app=parse_migration_status(),
-        zulip_version=ZULIP_VERSION,
+        doer_version=DOER_VERSION,
     )
     output_file = os.path.join(output_dir, "migration_status.json")
     with open(output_file, "wb") as f:
@@ -3186,7 +3186,7 @@ def export_migration_status(output_dir: str) -> None:
 
 
 def do_common_export_processes(output_dir: str) -> None:
-    # Performs common task(s) necessary for preparing Zulip data exports.
+    # Performs common task(s) necessary for preparing Doer data exports.
     # This function is typically shared with migration tools in the
     # `zerver/data_import` directory.
 

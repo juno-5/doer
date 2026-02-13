@@ -274,8 +274,8 @@ python_rules = RuleList(
         },
         {
             "pattern": r"^[\t ]*(?!#)@login_required",
-            "description": "@login_required is unsupported; use @zulip_login_required",
-            "good_lines": ["@zulip_login_required", "# foo @login_required"],
+            "description": "@login_required is unsupported; use @doer_login_required",
+            "good_lines": ["@doer_login_required", "# foo @login_required"],
             "bad_lines": ["@login_required", " @login_required"],
         },
         {
@@ -337,7 +337,7 @@ python_rules = RuleList(
             "include_only": {"scripts/"},
             "exclude": {"scripts/lib/setup_venv.py"},
             "exclude_line": {
-                ("scripts/lib/zulip_tools.py", 'args = ["sudo", *sudo_args, "--", *args]'),
+                ("scripts/lib/doer_tools.py", 'args = ["sudo", *sudo_args, "--", *args]'),
             },
             "description": "Most scripts are intended to run on systems without sudo.",
             "good_lines": ['subprocess.check_call(["ls"])'],
@@ -563,7 +563,7 @@ html_rules: list["Rule"] = [
             "templates/zerver/email.html",
             "zerver/tests/fixtures/email",
             "templates/corporate/jobs.html",
-            "templates/corporate/zulip-cloud.html",
+            "templates/corporate/doer-cloud.html",
             "templates/corporate/for/business.html",
             "templates/corporate/support/support_request.html",
             "templates/corporate/support/support_request_thanks.html",
@@ -873,9 +873,9 @@ markdown_rules = RuleList(
             "description": "Use relative links (../foo/bar.html) to other documents in docs/",
         },
         {
-            "pattern": "su zulip -c [^']",
+            "pattern": "su doer -c [^']",
             "include_only": {"docs/"},
-            "description": "Always quote arguments using `su zulip -c '` to avoid confusion about how su works.",
+            "description": "Always quote arguments using `su doer -c '` to avoid confusion about how su works.",
         },
         {
             "pattern": r"\][(][^#h]",
@@ -902,7 +902,7 @@ help_markdown_rules = RuleList(
             "pattern": "[a-z][.][A-Z]",
             "description": "Likely missing space after end of sentence",
             "include_only": {"starlight_help/src/content/docs/"},
-            "exclude_pattern": "Rocket.Chat|org.zulip.Zulip|Directory.Read.All|RoleManagement.Read.Directory|User.Read.All",
+            "exclude_pattern": "Rocket.Chat|org.zulip.Doer|Directory.Read.All|RoleManagement.Read.Directory|User.Read.All",
         },
         {
             "pattern": r"\b[rR]ealm[s]?\b",
@@ -923,18 +923,18 @@ puppet_rules = RuleList(
     rules=[
         *whitespace_rules,
         {
-            "pattern": r"(include[\t ]+|\$)zulip::(profile|base)\b",
+            "pattern": r"(include[\t ]+|\$)doer::(profile|base)\b",
             "exclude": {
-                "puppet/zulip/manifests/profile/",
+                "puppet/doer/manifests/profile/",
                 "puppet/kandra/manifests/",
-                "puppet/zulip/manifests/dockervoyager.pp",
+                "puppet/doer/manifests/dockervoyager.pp",
             },
-            "description": "Abstraction layering violation; only profiles should reference profiles or zulip::base",
+            "description": "Abstraction layering violation; only profiles should reference profiles or doer::base",
         },
         {
             "pattern": r"(include[\t ]+|\$)kandra::(profile|base)\b",
             "exclude": {
-                "puppet/zulip/manifests/",
+                "puppet/doer/manifests/",
                 "puppet/kandra/manifests/profile/",
             },
             "description": "Abstraction layering violation; only profiles should reference profiles or kandra::base",

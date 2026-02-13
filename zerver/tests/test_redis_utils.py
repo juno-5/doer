@@ -5,16 +5,16 @@ from typing_extensions import override
 
 from zerver.lib.redis_utils import (
     MAX_KEY_LENGTH,
-    ZulipRedisKeyOfWrongFormatError,
-    ZulipRedisKeyTooLongError,
+    DoerRedisKeyOfWrongFormatError,
+    DoerRedisKeyTooLongError,
     get_dict_from_redis,
     get_redis_client,
     put_dict_in_redis,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class RedisUtilsTest(ZulipTestCase):
+class RedisUtilsTest(DoerTestCase):
     key_format = "test_redis_utils_{token}"
     expiration_seconds = 60
     redis_client: "StrictRedis[bytes]"
@@ -56,7 +56,7 @@ class RedisUtilsTest(ZulipTestCase):
         # Trying to put data under an overly long key should get stopped before even
         # generating the random token.
         with mock.patch("secrets.token_hex") as mock_generate:
-            with self.assertRaises(ZulipRedisKeyTooLongError):
+            with self.assertRaises(DoerRedisKeyTooLongError):
                 put_dict_in_redis(
                     self.redis_client,
                     self.key_format,
@@ -67,11 +67,11 @@ class RedisUtilsTest(ZulipTestCase):
             mock_generate.assert_not_called()
 
     def test_get_data_key_length_check(self) -> None:
-        with self.assertRaises(ZulipRedisKeyTooLongError):
+        with self.assertRaises(DoerRedisKeyTooLongError):
             get_dict_from_redis(
                 self.redis_client, key_format="{token}", key="A" * (MAX_KEY_LENGTH + 1)
             )
 
     def test_get_data_key_format_validation(self) -> None:
-        with self.assertRaises(ZulipRedisKeyOfWrongFormatError):
+        with self.assertRaises(DoerRedisKeyOfWrongFormatError):
             get_dict_from_redis(self.redis_client, self.key_format, "nonmatching_format_1111")

@@ -15,7 +15,7 @@ from zerver.actions.create_user import do_create_user
 from zerver.forms import check_subdomain_available
 from zerver.lib.streams import create_stream_if_needed
 from zerver.lib.subdomains import is_root_domain_available
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import find_key_by_email, ratelimit_rule
 from zerver.models import (
     Message,
@@ -34,7 +34,7 @@ from zerver.models.streams import get_stream
 from zerver.models.users import get_system_bot, get_user
 
 
-class DemoCreationTest(ZulipTestCase):
+class DemoCreationTest(DoerTestCase):
     @override_settings(OPEN_REALM_CREATION=True, DEMO_ORG_DEADLINE_DAYS=30)
     def test_create_demo_organization(self) -> None:
         internal_realm = get_realm(settings.SYSTEM_BOT_REALM)
@@ -81,9 +81,9 @@ class DemoCreationTest(ZulipTestCase):
             sender__email="welcome-bot@zulip.com",
             recipient__type=Recipient.PERSONAL,
         ).latest("id")
-        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Zulip!"))
+        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Doer!"))
         self.assertIn("getting started guide", welcome_msg.content)
-        self.assertNotIn("using Zulip for a class guide", welcome_msg.content)
+        self.assertNotIn("using Doer for a class guide", welcome_msg.content)
         self.assertIn("demo organization", welcome_msg.content)
 
         # Confirm we have the expected audit log data.
@@ -94,11 +94,11 @@ class DemoCreationTest(ZulipTestCase):
         self.assertEqual(realm_creation_audit_log.event_time, realm.date_created)
         audit_log_extra_data = realm_creation_audit_log.extra_data
         self.assertEqual(
-            audit_log_extra_data["how_realm_creator_found_zulip"],
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["ai_chatbot"],
+            audit_log_extra_data["how_realm_creator_found_doer"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["ai_chatbot"],
         )
         self.assertEqual(
-            audit_log_extra_data["how_realm_creator_found_zulip_extra_context"],
+            audit_log_extra_data["how_realm_creator_found_doer_extra_context"],
             "I don't remember.",
         )
 
@@ -217,7 +217,7 @@ class DemoCreationTest(ZulipTestCase):
             self.assert_in_response("Demo organizations are not enabled on this server.", result)
 
 
-class RealmCreationTest(ZulipTestCase):
+class RealmCreationTest(DoerTestCase):
     @override_settings(OPEN_REALM_CREATION=True)
     def check_able_to_create_realm(self, email: str, password: str = "test") -> None:
         internal_realm = get_realm(settings.SYSTEM_BOT_REALM)
@@ -225,7 +225,7 @@ class RealmCreationTest(ZulipTestCase):
         signups_stream, _ = create_stream_if_needed(notification_bot.realm, "signups")
 
         string_id = "custom-test"
-        org_name = "Zulip Test"
+        org_name = "Doer Test"
         # Make sure the realm does not exist
         with self.assertRaises(Realm.DoesNotExist):
             get_realm(string_id)
@@ -244,7 +244,7 @@ class RealmCreationTest(ZulipTestCase):
         result = self.client_get(result["Location"])
         self.assert_in_response("check your email", result)
         prereg_realm = PreregistrationRealm.objects.get(email=email)
-        self.assertEqual(prereg_realm.name, "Zulip Test")
+        self.assertEqual(prereg_realm.name, "Doer Test")
         self.assertEqual(prereg_realm.org_type, Realm.ORG_TYPES["business"]["id"])
         self.assertEqual(prereg_realm.default_language, "en")
         self.assertEqual(prereg_realm.string_id, string_id)
@@ -253,8 +253,8 @@ class RealmCreationTest(ZulipTestCase):
         # confirmation link and visit it
         confirmation_url = self.get_confirmation_url_from_outbox(
             email,
-            email_subject_contains="Create your Zulip organization",
-            email_body_contains="You have requested a new Zulip organization",
+            email_subject_contains="Create your Doer organization",
+            email_body_contains="You have requested a new Doer organization",
         )
         result = self.client_get(confirmation_url)
         self.assertEqual(result.status_code, 200)
@@ -300,7 +300,7 @@ class RealmCreationTest(ZulipTestCase):
                 2,
             ),
             (
-                str(Realm.ZULIP_SANDBOX_CHANNEL_NAME),
+                str(Realm.DOER_SANDBOX_CHANNEL_NAME),
                 "experiments",
                 experiments_message_content,
                 5,
@@ -322,7 +322,7 @@ class RealmCreationTest(ZulipTestCase):
         )
         self.assert_length(messages, 1)
         # Check organization name, subdomain and organization type are in message content
-        self.assertIn("Zulip Test", messages[0].content)
+        self.assertIn("Doer Test", messages[0].content)
         self.assertIn("custom-test", messages[0].content)
         self.assertEqual("business signups", messages[0].topic_name())
 
@@ -333,11 +333,11 @@ class RealmCreationTest(ZulipTestCase):
         self.assertEqual(realm_creation_audit_log.event_time, realm.date_created)
         audit_log_extra_data = realm_creation_audit_log.extra_data
         self.assertEqual(
-            audit_log_extra_data["how_realm_creator_found_zulip"],
-            RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS["other"],
+            audit_log_extra_data["how_realm_creator_found_doer"],
+            RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS["other"],
         )
         self.assertEqual(
-            audit_log_extra_data["how_realm_creator_found_zulip_extra_context"],
+            audit_log_extra_data["how_realm_creator_found_doer_extra_context"],
             "I found it on the internet.",
         )
 
@@ -352,7 +352,7 @@ class RealmCreationTest(ZulipTestCase):
     def test_create_realm_existing_email(self) -> None:
         self.check_able_to_create_realm("hamlet@zulip.com")
 
-    @override_settings(AUTHENTICATION_BACKENDS=("zproject.backends.ZulipLDAPAuthBackend",))
+    @override_settings(AUTHENTICATION_BACKENDS=("zproject.backends.DoerLDAPAuthBackend",))
     def test_create_realm_ldap_email(self) -> None:
         self.init_default_ldap_database()
 
@@ -365,7 +365,7 @@ class RealmCreationTest(ZulipTestCase):
         result = self.submit_realm_creation_form(
             email="notification-bot@zulip.com",
             realm_subdomain="custom-test",
-            realm_name="Zulip test",
+            realm_name="Doer test",
         )
         self.assertEqual(result.status_code, 200)
         self.assert_in_response("notification-bot@zulip.com is reserved for system bots", result)
@@ -380,7 +380,7 @@ class RealmCreationTest(ZulipTestCase):
         with self.settings(OPEN_REALM_CREATION=False):
             # Create new realm with the email, but no creation key.
             result = self.submit_realm_creation_form(
-                email, realm_subdomain="custom-test", realm_name="Zulip test"
+                email, realm_subdomain="custom-test", realm_name="Doer test"
             )
             self.assertEqual(result.status_code, 200)
             self.assert_in_response("Organization creation link required", result)
@@ -391,11 +391,11 @@ class RealmCreationTest(ZulipTestCase):
         with self.settings(
             AUTHENTICATION_BACKENDS=(
                 "zproject.backends.SAMLAuthBackend",
-                "zproject.backends.ZulipDummyBackend",
+                "zproject.backends.DoerDummyBackend",
             )
         ):
             result = self.submit_realm_creation_form(
-                email, realm_subdomain="custom-test", realm_name="Zulip test"
+                email, realm_subdomain="custom-test", realm_name="Doer test"
             )
             self.assertEqual(result.status_code, 200)
             self.assert_in_response("Organization creation link required", result)
@@ -562,7 +562,7 @@ class RealmCreationTest(ZulipTestCase):
         password = "test"
         string_id = "custom-test"
         email = "user1@test.com"
-        realm_name = "Zulip test"
+        realm_name = "Doer test"
 
         # Make sure the realm does not exist
         with self.assertRaises(Realm.DoesNotExist):
@@ -647,12 +647,12 @@ class RealmCreationTest(ZulipTestCase):
             sender__email="welcome-bot@zulip.com",
             recipient__type=Recipient.PERSONAL,
         ).latest("id")
-        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Zulip!"))
+        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Doer!"))
 
         # Organization type is not education or education_nonprofit,
         # and organization is not a demo organization.
         self.assertIn("getting started guide", welcome_msg.content)
-        self.assertNotIn("using Zulip for a class guide", welcome_msg.content)
+        self.assertNotIn("using Doer for a class guide", welcome_msg.content)
         self.assertNotIn("demo organization", welcome_msg.content)
 
         # Organization has tracked onboarding messages.
@@ -668,7 +668,7 @@ class RealmCreationTest(ZulipTestCase):
             sender__email="welcome-bot@zulip.com",
             recipient__type=Recipient.PERSONAL,
         ).latest("id")
-        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Zulip!"))
+        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Doer!"))
         self.assertNotIn("I've kicked off some conversations", welcome_msg.content)
 
     @override_settings(OPEN_REALM_CREATION=True)
@@ -715,18 +715,18 @@ class RealmCreationTest(ZulipTestCase):
             sender__email="welcome-bot@zulip.com",
             recipient__type=Recipient.PERSONAL,
         ).latest("id")
-        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Zulip!"))
+        self.assertTrue(welcome_msg.content.startswith("Hello, and welcome to Doer!"))
 
         # Organization type is education.
         self.assertNotIn("getting started guide", welcome_msg.content)
-        self.assertIn("using Zulip for a class guide", welcome_msg.content)
+        self.assertIn("using Doer for a class guide", welcome_msg.content)
 
     @override_settings(OPEN_REALM_CREATION=True)
     def test_create_realm_with_custom_language(self) -> None:
         email = "user1@test.com"
         password = "test"
         string_id = "custom-test"
-        realm_name = "Zulip Test"
+        realm_name = "Doer Test"
         realm_language = "de"
 
         # Make sure the realm does not exist
@@ -939,13 +939,13 @@ class RealmCreationTest(ZulipTestCase):
     @override_settings(OPEN_REALM_CREATION=True)
     def test_invalid_email_signup(self) -> None:
         result = self.submit_realm_creation_form(
-            email="<foo", realm_subdomain="custom-test", realm_name="Zulip test"
+            email="<foo", realm_subdomain="custom-test", realm_name="Doer test"
         )
         self.assert_in_response("Please use your real email address.", result)
         self.assert_in_response("Enter a valid email address.", result)
 
         result = self.submit_realm_creation_form(
-            email="foo\x00bar", realm_subdomain="custom-test", realm_name="Zulip test"
+            email="foo\x00bar", realm_subdomain="custom-test", realm_name="Doer test"
         )
         self.assert_in_response("Please use your real email address.", result)
         self.assert_in_response("Null characters are not allowed.", result)
@@ -997,7 +997,7 @@ class RealmCreationTest(ZulipTestCase):
 
     @override_settings(OPEN_REALM_CREATION=True)
     def test_create_realm_using_old_subdomain_of_a_realm(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         do_change_realm_subdomain(realm, "new-name", acting_user=None)
 
         email = "user1@test.com"
@@ -1070,13 +1070,13 @@ class RealmCreationTest(ZulipTestCase):
         self.assertTrue(is_root_domain_available())
         with self.settings(ROOT_DOMAIN_LANDING_PAGE=True):
             self.assertFalse(is_root_domain_available())
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.string_id = Realm.SUBDOMAIN_FOR_ROOT_DOMAIN
         realm.save()
         self.assertFalse(is_root_domain_available())
 
     def test_subdomain_check_api(self) -> None:
-        result = self.client_get("/json/realm/subdomain/zulip")
+        result = self.client_get("/json/realm/subdomain/doer")
         self.assert_in_success_response(
             ["Subdomain is already in use. Please choose a different one."], result
         )
@@ -1119,22 +1119,22 @@ class RealmCreationTest(ZulipTestCase):
         with patch("zerver.lib.name_restrictions.is_reserved_subdomain", return_value=False):
             # Existing realms should never work even if they are not reserved keywords
             with self.assertRaises(ValidationError):
-                check_subdomain_available("zulip")
+                check_subdomain_available("doer")
             with self.assertRaises(ValidationError):
-                check_subdomain_available("zulip", allow_reserved_subdomain=True)
+                check_subdomain_available("doer", allow_reserved_subdomain=True)
 
         # Reserved ones should only work with the flag
         with self.assertRaises(ValidationError):
             check_subdomain_available("stream")
         check_subdomain_available("stream", allow_reserved_subdomain=True)
 
-        # "zulip" and "kandra" are allowed if not CORPORATE_ENABLED or with the flag
+        # "doer" and "kandra" are allowed if not CORPORATE_ENABLED or with the flag
         with self.settings(CORPORATE_ENABLED=False):
-            check_subdomain_available("we-are-zulip-team")
+            check_subdomain_available("we-are-doer-team")
         with self.settings(CORPORATE_ENABLED=True):
             with self.assertRaises(ValidationError):
-                check_subdomain_available("we-are-zulip-team")
-            check_subdomain_available("we-are-zulip-team", allow_reserved_subdomain=True)
+                check_subdomain_available("we-are-doer-team")
+            check_subdomain_available("we-are-doer-team", allow_reserved_subdomain=True)
 
     @override_settings(OPEN_REALM_CREATION=True, USING_CAPTCHA=True, ALTCHA_HMAC_KEY="secret")
     def test_create_realm_with_captcha(self) -> None:

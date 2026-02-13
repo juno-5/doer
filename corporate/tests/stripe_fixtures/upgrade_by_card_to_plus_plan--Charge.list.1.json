@@ -22,7 +22,7 @@
         "phone": null,
         "tax_id": null
       },
-      "calculated_statement_descriptor": "ZULIP CLOUD PLUS",
+      "calculated_statement_descriptor": "DOER CLOUD PLUS",
       "captured": true,
       "created": 1000000000,
       "currency": "usd",
@@ -106,7 +106,7 @@
       "shipping": null,
       "source": null,
       "source_transfer": null,
-      "statement_descriptor": "Zulip Cloud Plus",
+      "statement_descriptor": "Doer Cloud Plus",
       "statement_descriptor_suffix": null,
       "status": "succeeded",
       "transfer_data": null,

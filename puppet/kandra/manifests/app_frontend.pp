@@ -1,10 +1,10 @@
 class kandra::app_frontend {
-  include zulip::snakeoil
-  include zulip::app_frontend_base
-  include zulip::profile::memcached
-  include zulip::profile::rabbitmq
-  include zulip::local_mailserver
-  include zulip::hooks::sentry
+  include doer::snakeoil
+  include doer::app_frontend_base
+  include doer::profile::memcached
+  include doer::profile::rabbitmq
+  include doer::local_mailserver
+  include doer::hooks::sentry
   include kandra::app_frontend_monitoring
   include kandra::app_frontend_tmpfs
 
@@ -21,7 +21,7 @@ class kandra::app_frontend {
     ensure     => present,
     uid        => '1080',
     gid        => '1080',
-    groups     => ['zulip'],
+    groups     => ['doer'],
     shell      => '/bin/true',
     home       => '/home/redistunnel',
     managehome => true,
@@ -31,7 +31,7 @@ class kandra::app_frontend {
     known_hosts => [$redis_hostname],
   }
   package { 'autossh': ensure => installed }
-  file { "${zulip::common::supervisor_conf_dir}/redis_tunnel.conf":
+  file { "${doer::common::supervisor_conf_dir}/redis_tunnel.conf":
     ensure  => file,
     require => [
       Package['supervisor', 'autossh'],
@@ -53,28 +53,28 @@ class kandra::app_frontend {
   }
 
   # Mount /etc/zulip/well-known/ as /.well-known/
-  file { '/etc/nginx/zulip-include/app.d/well-known.conf':
-    require => File['/etc/nginx/zulip-include/app.d'],
+  file { '/etc/nginx/doer-include/app.d/well-known.conf':
+    require => File['/etc/nginx/doer-include/app.d'],
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => 'puppet:///modules/kandra/nginx/zulip-include-app.d/well-known.conf',
+    source  => 'puppet:///modules/kandra/nginx/doer-include-app.d/well-known.conf',
     notify  => Service['nginx'],
   }
 
   # Serve /static/navigation-tour-video/
-  file { '/etc/nginx/zulip-include/app.d/navigation-tour-video.conf':
-    require => File['/etc/nginx/zulip-include/app.d'],
+  file { '/etc/nginx/doer-include/app.d/navigation-tour-video.conf':
+    require => File['/etc/nginx/doer-include/app.d'],
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    source  => 'puppet:///modules/kandra/nginx/zulip-include-app.d/navigation-tour-video.conf',
+    source  => 'puppet:///modules/kandra/nginx/doer-include-app.d/navigation-tour-video.conf',
     notify  => Service['nginx'],
   }
 
   # Each server does its own fetching of contributor data, since
   # we don't have a way to synchronize that among several servers.
-  zulip::cron { 'fetch-contributor-data':
+  doer::cron { 'fetch-contributor-data':
     hour    => '8',
     minute  => '0',
     command => '/home/zulip/deployments/current/tools/fetch-contributor-data',

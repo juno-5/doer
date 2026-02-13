@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Delete the "guest" default user and replace it with a Zulip user
+# Delete the "guest" default user and replace it with a Doer user
 # with a real password
 set -eu
 
@@ -20,7 +20,7 @@ done
 rabbitmqctl await_startup
 
 rabbitmqctl delete_user "$RABBITMQ_USERNAME" || true
-rabbitmqctl delete_user zulip || true
+rabbitmqctl delete_user doer || true
 rabbitmqctl delete_user guest || true
 rabbitmqctl add_user "$RABBITMQ_USERNAME" "$RABBITMQ_PASSWORD"
 rabbitmqctl set_user_tags "$RABBITMQ_USERNAME" administrator

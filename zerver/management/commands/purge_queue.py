@@ -4,12 +4,12 @@ from typing import Any
 from django.core.management import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.queue import SimpleQueueClient
 from zerver.worker.queue_processors import get_active_worker_queues
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     @override
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(dest="queue_name", nargs="?", help="queue to purge")

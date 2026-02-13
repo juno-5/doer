@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 # usage:
-# git clone --bare git@git.zulip.net:eng/zulip.git
-# cd zulip.git
-# git fast-export --export-marks=../zulip.em --progress=1000 --all > ../zulip.fe
-# git init --bare ../zulip-zanitized.git
-# cd ../zulip-zanitized.git
-# zanitizer ../zulip.fe ../zulip.em | git fast-import --quiet
+# git clone --bare git@git.doer.net:eng/doer.git
+# cd doer.git
+# git fast-export --export-marks=../doer.em --progress=1000 --all > ../doer.fe
+# git init --bare ../doer-zanitized.git
+# cd ../doer-zanitized.git
+# zanitizer ../doer.fe ../doer.em | git fast-import --quiet
 
 use strict;
 use warnings;

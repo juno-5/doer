@@ -49,12 +49,12 @@ def get_furthest_read_time(user_profile: UserProfile | None) -> float | None:
     return calendar.timegm(user_activity.last_visit.utctimetuple())
 
 
-def promote_sponsoring_zulip_in_realm(realm: Realm) -> bool:
-    if not settings.PROMOTE_SPONSORING_ZULIP:
+def promote_sponsoring_doer_in_realm(realm: Realm) -> bool:
+    if not settings.PROMOTE_SPONSORING_DOER:
         return False
 
-    # If PROMOTE_SPONSORING_ZULIP is enabled, advertise sponsoring
-    # Zulip in the gear menu of non-paying organizations.
+    # If PROMOTE_SPONSORING_DOER is enabled, advertise sponsoring
+    # Doer in the gear menu of non-paying organizations.
     return realm.plan_type in [Realm.PLAN_TYPE_STANDARD_FREE, Realm.PLAN_TYPE_SELF_HOSTED]
 
 
@@ -132,16 +132,16 @@ def build_page_params_for_home_page_load(
     if user_profile is None:
         request_language = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME, default_language)
         split_url = urlsplit(request.build_absolute_uri())
-        show_try_zulip_modal = (
+        show_try_doer_modal = (
             settings.DEVELOPMENT or split_url.hostname == "chat.zulip.org"
-        ) and split_url.query == "show_try_zulip_modal"
+        ) and split_url.query == "show_try_doer_modal"
     else:
         request_language = get_and_set_request_language(
             request,
             default_language,
             translation.get_language_from_path(request.path_info),
         )
-        show_try_zulip_modal = False
+        show_try_doer_modal = False
 
     furthest_read_time = get_furthest_read_time(user_profile)
     two_fa_enabled = settings.TWO_FACTOR_AUTHENTICATION_ENABLED and user_profile is not None
@@ -157,7 +157,7 @@ def build_page_params_for_home_page_load(
         insecure_desktop_app=insecure_desktop_app,
         login_page=settings.HOME_NOT_LOGGED_IN,
         warn_no_email=settings.WARN_NO_EMAIL,
-        # Only show marketing email settings if on Zulip Cloud
+        # Only show marketing email settings if on Doer Cloud
         corporate_enabled=settings.CORPORATE_ENABLED,
         ## Misc. extra data.
         language_list=get_language_list(),
@@ -165,7 +165,7 @@ def build_page_params_for_home_page_load(
         embedded_bots_enabled=settings.EMBEDDED_BOTS_ENABLED,
         two_fa_enabled=two_fa_enabled,
         apps_page_url=get_apps_page_url(),
-        promote_sponsoring_zulip=promote_sponsoring_zulip_in_realm(realm),
+        promote_sponsoring_doer=promote_sponsoring_doer_in_realm(realm),
         # Adding two_fa_enabled as condition saves us 3 queries when
         # 2FA is not enabled.
         two_fa_enabled_user=two_fa_enabled and bool(default_device(user_profile)),
@@ -174,7 +174,7 @@ def build_page_params_for_home_page_load(
         # There is no event queue for spectators since
         # events support for spectators is not implemented yet.
         no_event_queue=user_profile is None,
-        show_try_zulip_modal=show_try_zulip_modal,
+        show_try_doer_modal=show_try_doer_modal,
     )
 
     page_params["state_data"] = state_data

@@ -32,7 +32,7 @@ def notify_reaction_update(
         "user_id": user_profile.id,
         # TODO: We plan to remove this redundant user_dict object once
         # clients are updated to support accessing use user_id.  See
-        # https://github.com/zulip/zulip/pull/14711 for details.
+        # https://github.com/doer/doer/pull/14711 for details.
         "user": user_dict,
         "message_id": message.id,
         "emoji_name": reaction.emoji_name,

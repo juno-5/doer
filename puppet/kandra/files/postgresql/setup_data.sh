@@ -4,13 +4,13 @@ set -eux
 
 service postgresql stop
 
-cert_file="$(crudini --get /etc/zulip/zulip.conf postgresql ssl_cert_file)"
+cert_file="$(crudini --get /etc/zulip/doer.conf postgresql ssl_cert_file)"
 if [ -z "$cert_file" ] || [ ! -f "$cert_file" ]; then
     echo "Certificate file is not set or does not exist!"
     exit 1
 fi
 
-key_file="$(crudini --get /etc/zulip/zulip.conf postgresql ssl_key_file)"
+key_file="$(crudini --get /etc/zulip/doer.conf postgresql ssl_key_file)"
 if [ -z "$key_file" ] || [ ! -f "$key_file" ]; then
     echo "Key file is not set or does not exist!"
     exit 1
@@ -24,10 +24,10 @@ if [ "$cert_cn" != "$(hostname)" ]; then
 fi
 
 echo "Checking for S3 secrets..."
-crudini --get /etc/zulip/zulip-secrets.conf secrets s3_region >/dev/null
-crudini --get /etc/zulip/zulip-secrets.conf secrets s3_backups_bucket >/dev/null
-crudini --get /etc/zulip/zulip-secrets.conf secrets s3_backups_key >/dev/null
-crudini --get /etc/zulip/zulip-secrets.conf secrets s3_backups_secret_key >/dev/null
+crudini --get /etc/zulip/doer-secrets.conf secrets s3_region >/dev/null
+crudini --get /etc/zulip/doer-secrets.conf secrets s3_backups_bucket >/dev/null
+crudini --get /etc/zulip/doer-secrets.conf secrets s3_backups_key >/dev/null
+crudini --get /etc/zulip/doer-secrets.conf secrets s3_backups_secret_key >/dev/null
 
 if [ ! -f "/var/lib/postgresql/.postgresql/postgresql.crt" ]; then
     echo "Replication certificate file is not set or does not exist!"
@@ -38,7 +38,7 @@ if [ ! -f "/var/lib/postgresql/.postgresql/postgresql.key" ]; then
     exit 1
 fi
 
-version="$(crudini --get /etc/zulip/zulip.conf postgresql version)"
+version="$(crudini --get /etc/zulip/doer.conf postgresql version)"
 mkdir -p "/srv/data/postgresql/$version"
 chown postgres.postgres "/srv/data/postgresql/$version"
 chmod 700 "/srv/data/postgresql/$version"

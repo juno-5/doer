@@ -23,10 +23,10 @@ from zerver.lib.integrations import (
     get_image_path,
     split_fixture_path,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class IntegrationsTestCase(ZulipTestCase):
+class IntegrationsTestCase(DoerTestCase):
     def test_split_fixture_path(self) -> None:
         path = "zerver/webhooks/semaphore/fixtures/push.json"
         integration_name, fixture_name = split_fixture_path(path)
@@ -53,12 +53,12 @@ class IntegrationsTestCase(ZulipTestCase):
         self.assertEqual(integration.get_logo_path(), "images/integrations/logos/onyx.png")
 
         # Test the fallback logo with an embedded integration without a logo
-        ZULIP_LOGO_STATIC_PATH_PNG = "images/logo/zulip-icon-128x128.png"
+        DOER_LOGO_STATIC_PATH_PNG = "images/logo/doer-icon-128x128.png"
         integration = EMBEDDED_BOTS[0]
         with self.assertRaises(AssertionError):
             integration.get_logo_path()
         self.assertEqual(
-            integration.get_logo_path(ZULIP_LOGO_STATIC_PATH_PNG), ZULIP_LOGO_STATIC_PATH_PNG
+            integration.get_logo_path(DOER_LOGO_STATIC_PATH_PNG), DOER_LOGO_STATIC_PATH_PNG
         )
 
         # Test with a bot integration that has a logo

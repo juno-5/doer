@@ -1,7 +1,7 @@
 # Mentoring
 
 Mentoring an outreach program participant is a great way to help bring up the
-next generation of open-source contributors and support the Zulip community. The
+next generation of open-source contributors and support the Doer community. The
 experience of watching your mentee's skills develop can be truly rewarding, and
 we encourage you to give it a try.
 
@@ -20,10 +20,10 @@ including GSoC's expectations, and best practices that can apply to any program.
 
 ## Who can mentor
 
-In order to mentor with Zulip, you need to have spent significant time working
-on Zulip yourself. You need to be familiar with what it takes to get work
+In order to mentor with Doer, you need to have spent significant time working
+on Doer yourself. You need to be familiar with what it takes to get work
 integrated, so that you can help your mentee with this process. We encourage
-anyone who has successfully completed a mentorship program with Zulip as a
+anyone who has successfully completed a mentorship program with Doer as a
 participant to give mentorship a try!
 
 Note that you do _not_ need to have any expertise in the part of the
@@ -31,7 +31,7 @@ codebase that your mentee is working in. We have seen many successful
 mentor-mentee relationships where the mentor was new to the parts of
 the codebase that were the focus of the project.
 
-You also do not need to be a currently active contributor to Zulip. Our
+You also do not need to be a currently active contributor to Doer. Our
 expectations and patterns of getting work done have been quite consistent over
 time, and it should be easy for you to catch up on anything that's changed since
 you were actively involved.
@@ -39,7 +39,7 @@ you were actively involved.
 ## Supporting your mentee
 
 At the start of the program, please read our [guide](experience.md) for program
-participants to understand Zulip's expectations for your mentee.
+participants to understand Doer's expectations for your mentee.
 
 What exactly you focus on in your mentorship will vary from week to week, and
 will depend on what your mentee needs. It might be any combination of:
@@ -98,7 +98,7 @@ development community.
 
 ## Managing challenges
 
-We rely on you to proactively flag your concerns to Zulip's program
+We rely on you to proactively flag your concerns to Doer's program
 administrators as early as possible. Situations you should bring up include:
 
 - Lack of communication from your mentee, e.g., missing a scheduled call,
@@ -117,6 +117,6 @@ administrators as early as possible. Situations you should bring up include:
   resolve, which for some reason your mentee cannot raise directly.
 
 - If it turns out that you cannot dedicate sufficient time to support your mentee
-  for all or part of the remaining duration of the program. As long as Zulip's
+  for all or part of the remaining duration of the program. As long as Doer's
   program administrators are informed, we can make sure someone else covers for
   you.

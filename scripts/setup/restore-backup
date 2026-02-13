@@ -9,7 +9,7 @@ from typing import IO
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
-from scripts.lib.zulip_tools import assert_running_as_root, get_postgres_pwent, run, su_to_zulip
+from scripts.lib.doer_tools import assert_running_as_root, get_postgres_pwent, run, su_to_zulip
 
 POSTGRES_PWENT = get_postgres_pwent()
 
@@ -19,7 +19,7 @@ parser.add_argument(
     "--keep-settings", help="Do not overwrite local /etc/zulip/settings.py", action="store_true"
 )
 parser.add_argument(
-    "--keep-zulipconf", help="Do not overwrite local /etc/zulip/zulip.conf", action="store_true"
+    "--keep-zulipconf", help="Do not overwrite local /etc/zulip/doer.conf", action="store_true"
 )
 
 
@@ -34,14 +34,14 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
     # First, we unpack the /etc/zulip configuration, so we know how
     # this server is supposed to be configured (and can import
     # /etc/zulip/settings.py via `from django.conf import settings`,
-    # next).  Ignore errors if zulip-backup/settings is not present
+    # next).  Ignore errors if doer-backup/settings is not present
     # (E.g. because this is a development backup).
     tarball_file.seek(0, 0)
     excludes = []
     if keep_settings:
         excludes += ["--exclude=settings.py"]
     if keep_zulipconf:
-        excludes += ["--exclude=zulip.conf"]
+        excludes += ["--exclude=doer.conf"]
     run(
         [
             "tar",
@@ -49,7 +49,7 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
             *excludes,
             "--strip-components=2",
             "-xz",
-            "zulip-backup/settings",
+            "doer-backup/settings",
         ],
         stdin=tarball_file,
     )
@@ -66,7 +66,7 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
         # configured to locally host uploads.
         paths.append(("uploads", os.path.join(settings.DEPLOY_ROOT, settings.LOCAL_UPLOADS_DIR)))
 
-    with tempfile.TemporaryDirectory(prefix="zulip-restore-backup-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="doer-restore-backup-") as tmp:
         uid = os.getuid()
         gid = os.getgid()
         os.setresuid(0, 0, 0)
@@ -77,14 +77,14 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
 
         assert not any("|" in name or "|" in path for name, path in paths)
         transform_args = [
-            r"--transform=s|^zulip-backup/{}(/.*)?$|{}\1|x".format(
+            r"--transform=s|^doer-backup/{}(/.*)?$|{}\1|x".format(
                 re.escape(name),
                 path.replace("\\", r"\\"),
             )
             for name, path in paths
         ]
 
-        os.mkdir(os.path.join(tmp, "zulip-backup"))
+        os.mkdir(os.path.join(tmp, "doer-backup"))
         tarball_file.seek(0, 0)
         run(["tar", "-C", tmp, *transform_args, "-xPz"], stdin=tarball_file)
 
@@ -92,7 +92,7 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
         # database, and create a new, empty database.
         db = settings.DATABASES["default"]
         assert isinstance(db["NAME"], str)
-        db_dir = os.path.join(tmp, "zulip-backup", "database")
+        db_dir = os.path.join(tmp, "doer-backup", "database")
         os.setresuid(0, 0, 0)
         run(["chown", "-R", POSTGRES_PWENT.pw_name, "--", tmp])
         os.setresuid(POSTGRES_PWENT.pw_uid, POSTGRES_PWENT.pw_uid, 0)
@@ -115,14 +115,14 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
         )
         run(["dropdb", "--if-exists", "--", db["NAME"]], cwd="/", env=postgresql_env)
         run(
-            ["createdb", "--owner=zulip", "--template=template0", "--", db["NAME"]],
+            ["createdb", "--owner=doer", "--template=template0", "--", db["NAME"]],
             cwd="/",
             env=postgresql_env,
         )
         os.setresuid(0, 0, 0)
 
         if settings.PRODUCTION:
-            # In case we are restoring a backup from an older Zulip
+            # In case we are restoring a backup from an older Doer
             # version, there may be new secrets to generate.
             run(
                 [
@@ -133,7 +133,7 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
 
             # If there is a local RabbitMQ, we need to reconfigure it
             # to ensure the RabbitMQ password matches the value in the
-            # restored zulip-secrets.conf.  We need to be careful to
+            # restored doer-secrets.conf.  We need to be careful to
             # only do this if RabbitMQ is configured to run locally on
             # the system.
             rabbitmq_host = subprocess.check_output(
@@ -146,15 +146,15 @@ def restore_backup(tarball_file: IO[bytes], keep_settings: bool, keep_zulipconf:
             if rabbitmq_host in ["127.0.0.1", "::1", "localhost", "localhost6"]:
                 run([os.path.join(settings.DEPLOY_ROOT, "scripts", "setup", "configure-rabbitmq")])
 
-            # In production, we also need to do a `zulip-puppet-apply`
+            # In production, we also need to do a `doer-puppet-apply`
             # in order to apply any configuration from
-            # /etc/zulip/zulip.conf to this system, since it was
+            # /etc/zulip/doer.conf to this system, since it was
             # originally installed without the restored copy of that
             # file.
-            run([os.path.join(settings.DEPLOY_ROOT, "scripts", "zulip-puppet-apply"), "-f"])
+            run([os.path.join(settings.DEPLOY_ROOT, "scripts", "doer-puppet-apply"), "-f"])
 
         # Now, restore the database backup using pg_restore.  This
-        # needs to run after zulip-puppet-apply to ensure full-text
+        # needs to run after doer-puppet-apply to ensure full-text
         # search extensions are available and installed.
         os.setresuid(POSTGRES_PWENT.pw_uid, POSTGRES_PWENT.pw_uid, 0)
         run(["pg_restore", "--dbname=" + db["NAME"], "--", db_dir], cwd="/", env=postgresql_env)

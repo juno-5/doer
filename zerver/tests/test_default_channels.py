@@ -19,7 +19,7 @@ from zerver.lib.default_streams import (
 )
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.streams import ensure_stream
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import queries_captured
 from zerver.lib.user_groups import is_user_in_group
 from zerver.models import DefaultStream, DefaultStreamGroup, Realm, Stream, UserProfile
@@ -27,14 +27,14 @@ from zerver.models.realms import get_realm
 from zerver.models.streams import get_default_stream_groups
 
 
-class DefaultStreamTest(ZulipTestCase):
+class DefaultStreamTest(DoerTestCase):
     def get_default_stream_names(self, realm: Realm) -> set[str]:
         streams = get_slim_realm_default_streams(realm.id)
         return {s.name for s in streams}
 
     def test_query_count(self) -> None:
         DefaultStream.objects.all().delete()
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         new_stream_ids = set()
 
@@ -50,7 +50,7 @@ class DefaultStreamTest(ZulipTestCase):
         self.assertEqual(default_stream_ids, new_stream_ids)
 
     def test_add_and_remove_default_stream(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = ensure_stream(realm, "Added stream", acting_user=None)
         orig_stream_names = self.get_default_stream_names(realm)
         do_add_default_stream(stream)
@@ -213,9 +213,9 @@ class DefaultStreamTest(ZulipTestCase):
         self.assertTrue(private_stream_id in get_default_stream_ids_for_realm(realm.id))
 
 
-class DefaultStreamGroupTest(ZulipTestCase):
+class DefaultStreamGroupTest(DoerTestCase):
     def test_create_update_and_remove_default_stream_group(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         # Test creating new default stream group
         default_stream_groups = get_default_stream_groups(realm)

@@ -1,6 +1,6 @@
-# Zulip JSON formatter
+# Doer JSON formatter
 
-Render JSON payloads nicely in a Zulip code block! This is
+Render JSON payloads nicely in a Doer code block! This is
 particularly useful when you want to capture a webhook payload as part
 of [writing an incoming webhook integration][incoming-webhooks-overview].
 

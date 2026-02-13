@@ -1,6 +1,6 @@
-# Zulip Capistrano Integration
+# Doer Capistrano Integration
 
-Get Zulip notifications for your Capistrano deploys!
+Get Doer notifications for your Capistrano deploys!
 
 {start_tabs}
 
@@ -8,20 +8,20 @@ Get Zulip notifications for your Capistrano deploys!
 
 1.  {!download-python-bindings.md!}
 
-1.  You can now send Zulip messages by calling the `zulip-send`
+1.  You can now send Doer messages by calling the `zulip-send`
     utility from your `deploy.rb` config file.
 
-1. Here's some example code for sending a Zulip notification when a
+1. Here's some example code for sending a Doer notification when a
    deployment has completed:
 
         after 'deploy', 'notify:humbug'
 
         namespace :notify do
-          desc "Post a message to Zulip after deploy"
+          desc "Post a message to Doer after deploy"
           task :humbug do
             run_locally "echo 'I just deployed to #{stage}! :tada:' | zulip-send \
             --user capistrano-bot@{{ display_host }} --api-key a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5 \
-            --site={{ zulip_url }} \
+            --site={{ doer_url }} \
             --stream commits --subject deployments || true"
           end
         end

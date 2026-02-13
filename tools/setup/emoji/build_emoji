@@ -12,10 +12,10 @@ from typing import Any
 
 import orjson
 
-ZULIP_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
-sys.path.append(ZULIP_PATH)
+DOER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
+sys.path.append(DOER_PATH)
 
-from scripts.lib.zulip_tools import generate_sha1sum_emoji, run_as_root
+from scripts.lib.doer_tools import generate_sha1sum_emoji, run_as_root
 from tools.setup.emoji.emoji_names import EMOJI_NAME_MAPS
 from tools.setup.emoji.emoji_setup_utils import (
     EMOTICON_CONVERSIONS,
@@ -30,8 +30,8 @@ from tools.setup.emoji.emoji_setup_utils import (
 )
 
 EMOJI_CACHE_BASE_PATH = "/srv/zulip-emoji-cache"
-EMOJI_SCRIPT_DIR_PATH = os.path.join(ZULIP_PATH, "tools", "setup", "emoji")
-NODE_MODULES_PATH = os.path.join(ZULIP_PATH, "node_modules")
+EMOJI_SCRIPT_DIR_PATH = os.path.join(DOER_PATH, "tools", "setup", "emoji")
+NODE_MODULES_PATH = os.path.join(DOER_PATH, "node_modules")
 
 
 # The CSS for emoji spritesheet has somewhat tricky requirements.  One
@@ -98,7 +98,7 @@ def main() -> None:
         run_as_root(["mkdir", "-p", EMOJI_CACHE_BASE_PATH])
         run_as_root(["chown", f"{os.getuid()}:{os.getgid()}", EMOJI_CACHE_BASE_PATH])
 
-    sha1_hexdigest = generate_sha1sum_emoji(ZULIP_PATH)
+    sha1_hexdigest = generate_sha1sum_emoji(DOER_PATH)
     emoji_cache_path = os.path.join(EMOJI_CACHE_BASE_PATH, sha1_hexdigest)
     success_stamp = os.path.join(emoji_cache_path, ".success-stamp")
 
@@ -110,16 +110,16 @@ def main() -> None:
 
     print(f"build_emoji: Using cached emojis from {emoji_cache_path}")
 
-    # /srv/zulip-emoji-cache/*/static gets symlinked to ZULIP_PATH/static/generated/emoji
-    TARGET_STATIC_EMOJI = os.path.join(ZULIP_PATH, "static", "generated", "emoji")
+    # /srv/zulip-emoji-cache/*/static gets symlinked to DOER_PATH/static/generated/emoji
+    TARGET_STATIC_EMOJI = os.path.join(DOER_PATH, "static", "generated", "emoji")
     if os.path.lexists(TARGET_STATIC_EMOJI):
         os.remove(TARGET_STATIC_EMOJI)
     os.symlink(os.path.join(emoji_cache_path, "static"), TARGET_STATIC_EMOJI)
 
-    # /srv/zulip-emoji-cache/*/web gets copied to ZULIP_PATH/web/generated
+    # /srv/zulip-emoji-cache/*/web gets copied to DOER_PATH/web/generated
     # These must not be symlinked so webpack can resolve module references.
     for subdir in ("emoji", "emoji-styles"):
-        target_dir = os.path.join(ZULIP_PATH, "web", "generated", subdir)
+        target_dir = os.path.join(DOER_PATH, "web", "generated", subdir)
         os.makedirs(target_dir, exist_ok=True)
         to_remove = set(os.listdir(target_dir))
         source_emoji_dump = os.path.join(emoji_cache_path, "web", subdir)
@@ -291,10 +291,10 @@ def setup_emoji_farms(cache_path: str, emoji_data: list[dict[str, Any]]) -> None
                     if img_info["has_img_" + emojiset]:
                         ensure_emoji_image(img_info, src_emoji_farm, target_emoji_farm)
 
-        # Copy zulip.png to the emoji farm.
-        zulip_image = os.path.join(ZULIP_PATH, "web", "images", "zulip-emoji")
-        for f in os.listdir(zulip_image):
-            shutil.copy2(os.path.join(zulip_image, f), target_emoji_farm, follow_symlinks=False)
+        # Copy doer.png to the emoji farm.
+        doer_image = os.path.join(DOER_PATH, "web", "images", "doer-emoji")
+        for f in os.listdir(doer_image):
+            shutil.copy2(os.path.join(doer_image, f), target_emoji_farm, follow_symlinks=False)
 
         # We hardcode octopus emoji image to Google emoji set's old
         # "cute octopus" image. Copy it to the emoji farms.
@@ -348,12 +348,12 @@ def setup_old_emoji_farm(
     os.makedirs(emoji_cache_path, exist_ok=True)
     os.makedirs(unicode_emoji_cache_path, exist_ok=True)
 
-    # Symlink zulip.png image file.
-    image_file_path = os.path.join(google_emoji_cache_path, "zulip.png")
-    symlink_path = os.path.join(emoji_cache_path, "zulip.png")
+    # Symlink doer.png image file.
+    image_file_path = os.path.join(google_emoji_cache_path, "doer.png")
+    symlink_path = os.path.join(emoji_cache_path, "doer.png")
     os.symlink(image_file_path, symlink_path)
 
-    unicode_symlink_path = os.path.join(unicode_emoji_cache_path, "zulip.png")
+    unicode_symlink_path = os.path.join(unicode_emoji_cache_path, "doer.png")
     os.symlink(image_file_path, unicode_symlink_path)
 
     for name, codepoint in emoji_map.items():

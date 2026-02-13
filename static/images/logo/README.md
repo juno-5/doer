@@ -8,5 +8,5 @@ the `.svg` files in this directory.
 On Linux, you can generate a PNG of a given height using the following:
 
 ```
-rsvg-convert -h 512 static/images/logo/zulip-org-logo.svg -o /tmp/zulip-org-logo-512.png
+rsvg-convert -h 512 static/images/logo/doer-org-logo.svg -o /tmp/doer-org-logo-512.png
 ```

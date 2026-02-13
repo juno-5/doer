@@ -6,15 +6,15 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import GoToScheduledMessages from "../include/_GoToScheduledMessages.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
-import SendIcon from "~icons/zulip-icon/send";
-import TrashIcon from "~icons/zulip-icon/trash";
+import MoreVerticalIcon from "~icons/doer-icon/more-vertical";
+import SendIcon from "~icons/doer-icon/send";
+import TrashIcon from "~icons/doer-icon/trash";
 
-Zulip lets you schedule a message to be sent at a later time. For example, if
+Doer lets you schedule a message to be sent at a later time. For example, if
 you are working outside of regular business hours for your organization, you can
 schedule a message for next morning to avoid disturbing others. You can also
 [schedule a message reminder](/help/schedule-a-reminder) for yourself.
@@ -55,10 +55,10 @@ schedule a message for next morning to avoid disturbing others. You can also
          new time.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also click **Undo** in the confirmation banner shown immediately
       after a message is scheduled.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -107,12 +107,12 @@ schedule a message for next morning to avoid disturbing others. You can also
       <GoToScheduledMessages />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also view scheduled messages by clicking on the **ellipsis**
       (<MoreVerticalIcon />) next to the **Send**
       (<SendIcon />) button in the compose
       box, and selecting **View scheduled messages**.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 

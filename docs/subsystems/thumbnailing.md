@@ -2,7 +2,7 @@
 
 ## libvips
 
-Zulip uses the [`libvips`](https://www.libvips.org/) image processing toolkit
+Doer uses the [`libvips`](https://www.libvips.org/) image processing toolkit
 for thumbnailing, as a low-memory and high-performance image processing
 library. Some smaller images are thumbnailed synchronously inside the Django
 process, but the majority of the work is offloaded to one or more `thumbnail`
@@ -11,7 +11,7 @@ worker processes.
 Thumbnailing is a notoriously high-risk surface from a security standpoint,
 since it parses arbitrary binary user input with often complex grammars. On
 versions of `libvips` which support it (>= 8.13, on or after Ubuntu 24.04 or
-Debian 12), Zulip limits `libvips` to only the image parsers and libraries whose
+Debian 12), Doer limits `libvips` to only the image parsers and libraries whose
 image formats we expect to parse, all of which are fuzz-tested by
 [`oss-fuzz`](https://google.github.io/oss-fuzz/).
 
@@ -21,7 +21,7 @@ Avatar images are served at two of potential resolutions (100x100 and 500x500,
 the latter of which is called "medium"), and always as PNGs. These are served
 from a "dumb" endpoint -- that is, if S3 is used, we provide a direct link to
 the content in the S3 bucket (or a Cloudfront distribution in front of it), and
-the request does not pass through the Zulip server. This is because avatars are
+the request does not pass through the Doer server. This is because avatars are
 referenced in emails, and thus their URLs need to be permanent and
 publicly-accessible. This also means that any choice of resolution and file
 format needs to be entirely done by the client.
@@ -56,7 +56,7 @@ anything with sufficient entropy to not be enumerable or have collisions.
 For animated emoji, a separate "still" version of the emoji is generated from
 the first frame, as a 64x64 PNG image. This is currently mostly unused, but is
 intended to be part of a user preference to disable emoji animations (see
-[#13434](https://github.com/zulip/zulip/issues/13434)). Current use is limited
+[#13434](https://github.com/doer/doer/issues/13434)). Current use is limited
 to [user status](https://zulip.com/help/status-and-availability) display in
 the the buddy list. When a user uses an animated emoji as their status, the
 "still" version is used.

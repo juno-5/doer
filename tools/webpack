@@ -11,8 +11,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 os.chdir(os.path.join(os.path.dirname(__file__), "../web"))
 
 
-from scripts.lib.zulip_tools import get_config, get_config_file
-from version import ZULIP_VERSION
+from scripts.lib.doer_tools import get_config, get_config_file
+from version import DOER_VERSION
 
 webpack_command = ["node", "../node_modules/webpack-cli/bin/cli.js"]
 
@@ -28,7 +28,7 @@ def build_for_prod_or_puppeteer(quiet: bool, config_name: str | None = None) -> 
         "build",
         "--disable-interpret",
         "--mode=production",
-        f"--env=ZULIP_VERSION={ZULIP_VERSION}",
+        f"--env=DOER_VERSION={DOER_VERSION}",
     ]
     if quiet:
         webpack_args += ["--stats=errors-only"]
@@ -105,7 +105,7 @@ def build_for_dev_server(host: str, port: str, minify: bool, disable_host_check:
 
         watch_manager = pyinotify.WatchManager()
         event_notifier = pyinotify.Notifier(watch_manager, WebpackConfigFileChangeHandler())
-        # We did a chdir to the root of the Zulip checkout above.
+        # We did a chdir to the root of the Doer checkout above.
         for filepath in [
             "webpack.config.ts",
             "webpack.assets.json",

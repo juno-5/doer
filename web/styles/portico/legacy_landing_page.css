@@ -960,11 +960,11 @@ button {
     margin-top: 20px;
 }
 
-.portico-landing.hello .call-to-action-bottom .zulip-octopus {
+.portico-landing.hello .call-to-action-bottom .doer-octopus {
     margin: 15px auto 50px;
     width: 32px;
     height: 30px;
-    background-image: url("../../images/landing-page/zulip-octopus.png");
+    background-image: url("../../images/landing-page/doer-octopus.png");
     background-size: cover;
 
     filter: invert(0.9);
@@ -1258,8 +1258,8 @@ button {
     background-image: url("../../images/landing-page/security.jpg");
 }
 
-.portico-landing.why-page .bg-pycon.why-zulip {
-    background-image: url("../../images/landing-page/why-zulip/why-zulip-threads.jpg");
+.portico-landing.why-page .bg-pycon.why-doer {
+    background-image: url("../../images/landing-page/why-doer/why-doer-threads.jpg");
 }
 
 .portico-landing.why-page .bg-pycon.partners {
@@ -1972,7 +1972,7 @@ button {
         color: hsl(0deg 0% 27%);
 
         background-size: 40px auto;
-        background-image: url("../../images/zulip-logo.svg");
+        background-image: url("../../images/doer-logo.svg");
         background-repeat: no-repeat;
     }
 
@@ -2629,7 +2629,7 @@ button {
     transform: scaleX(-1);
 }
 
-.why-zulip {
+.why-doer {
     .discounts-section {
         margin: 30px;
 
@@ -2640,7 +2640,7 @@ button {
     }
 }
 
-.portico-landing.why-page .hero.why-zulip {
+.portico-landing.why-page .hero.why-doer {
     padding-bottom: 120px;
 
     .bg-dimmer {
@@ -2667,7 +2667,7 @@ button {
     }
 }
 
-.why-zulip,
+.why-doer,
 .hello {
     .register-buttons {
         max-width: 800px;
@@ -2892,7 +2892,7 @@ button {
     color: hsl(0deg 0% 100%);
 }
 
-.zulip-cloud-page .hero-description {
+.doer-cloud-page .hero-description {
     font-size: 1.3em !important;
 
     @media (width <= 768px) {
@@ -2900,15 +2900,15 @@ button {
     }
 }
 
-.zulip-cloud-page .man-mobile-image {
+.doer-cloud-page .man-mobile-image {
     width: auto;
     height: 300px;
 }
 
-#engineers-love-zulip-page .grey-border {
+#engineers-love-doer-page .grey-border {
     border: 1px solid hsl(0deg 0% 80%);
 }
 
-#engineers-love-zulip-page .intro_quote blockquote {
+#engineers-love-doer-page .intro_quote blockquote {
     max-width: 750px;
 }

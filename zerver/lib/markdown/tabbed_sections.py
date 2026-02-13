@@ -47,7 +47,7 @@ TAB_SECTION_LABELS = {
     "python": "Python",
     "js": "JavaScript",
     "curl": "curl",
-    "zulip-send": "zulip-send",
+    "doer-send": "doer-send",
     "instructions-for-all-platforms": "Instructions for all platforms",
     "for-a-bot": "For a bot",
     "for-yourself": "For yourself",

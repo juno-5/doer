@@ -13,13 +13,13 @@ from typing_extensions import override
 
 from zerver.forms import OverridableValidationError, check_subdomain_available
 from zerver.lib.import_realm import do_import_realm
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
-    help = """Import extracted Zulip database dump directories into a fresh Zulip instance.
+class Command(DoerBaseCommand):
+    help = """Import extracted Doer database dump directories into a fresh Doer instance.
 
-This command should be used only on a newly created, empty Zulip instance to
+This command should be used only on a newly created, empty Doer instance to
 import a database dump from one or more JSON files."""
 
     @override

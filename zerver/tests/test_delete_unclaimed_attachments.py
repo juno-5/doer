@@ -12,14 +12,14 @@ from zerver.actions.message_delete import do_delete_messages
 from zerver.actions.scheduled_messages import check_schedule_message, delete_scheduled_message
 from zerver.actions.uploads import do_delete_old_unclaimed_attachments
 from zerver.lib.retention import clean_archived_data
-from zerver.lib.test_classes import UploadSerializeMixin, ZulipTestCase
+from zerver.lib.test_classes import UploadSerializeMixin, DoerTestCase
 from zerver.lib.test_helpers import get_test_image_file
 from zerver.lib.thumbnail import ThumbnailFormat
 from zerver.models import ArchivedAttachment, Attachment, ImageAttachment, Message, UserProfile
 from zerver.models.clients import get_client
 
 
-class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
+class UnclaimedAttachmentTest(UploadSerializeMixin, DoerTestCase):
     def make_attachment(
         self, filename: str, when: datetime | None = None, uploader: UserProfile | None = None
     ) -> Attachment:
@@ -165,7 +165,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Send message referencing that message
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         self.send_stream_message(hamlet, "Denmark", body, "test")
 
         # Because the message is claimed, it is not removed
@@ -180,7 +180,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Send message referencing that message
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         message_id = self.send_stream_message(hamlet, "Denmark", body, "test")
 
         # Delete that message; this moves it to ArchivedAttachment but leaves the file on disk
@@ -217,7 +217,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Send message referencing that message
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         first_message_id = self.send_stream_message(hamlet, "Denmark", body, "test")
         second_message_id = self.send_stream_message(hamlet, "Denmark", body, "test")
 
@@ -277,7 +277,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Schedule a future send with the attachment
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         scheduled_message_id = check_schedule_message(
             hamlet,
             get_client("website"),
@@ -316,7 +316,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Schedule a message, and also send one now
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         scheduled_message_id = check_schedule_message(
             hamlet,
             get_client("website"),
@@ -382,7 +382,7 @@ class UnclaimedAttachmentTest(UploadSerializeMixin, ZulipTestCase):
 
         # Schedule a message, and also send one now
         self.subscribe(hamlet, "Denmark")
-        body = f"Some files here ...[zulip.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
+        body = f"Some files here ...[doer.txt](http://{hamlet.realm.host}/user_uploads/{attachment.path_id})"
         scheduled_message_id = check_schedule_message(
             hamlet,
             get_client("website"),

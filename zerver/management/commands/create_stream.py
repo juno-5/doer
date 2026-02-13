@@ -3,11 +3,11 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.streams import create_stream_if_needed
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Create a stream, and subscribe all active users (excluding bots).
 
 This should be used for TESTING only, unless you understand the limitations of

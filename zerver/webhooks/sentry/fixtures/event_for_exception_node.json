@@ -405,7 +405,7 @@
             "title": "Error: Sample error from node.",
             "type": "error",
             "version": "7",
-            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/f9cb0f2afff74a5aa92e766fb7ac3fe3/",
+            "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/f9cb0f2afff74a5aa92e766fb7ac3fe3/",
             "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1638852747/events/f9cb0f2afff74a5aa92e766fb7ac3fe3/",
             "issue_url": "https://sentry.io/api/0/issues/1638852747/"
         },

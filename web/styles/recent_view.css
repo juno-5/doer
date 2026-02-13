@@ -51,7 +51,7 @@
         align-items: center;
 
         .recent-view-table-link,
-        & > .zulip-icon {
+        & > .doer-icon {
             outline: 0;
         }
 
@@ -116,7 +116,7 @@
         padding-left: 0.1428em; /* Legacy 2px size at 14px/1em. */
     }
 
-    .zulip-icon-user {
+    .doer-icon-user {
         /* Legacy 11.2px size at 14px/1em. */
         font-size: 0.8em;
         text-align: center;
@@ -178,8 +178,8 @@
 
     .button-recent-filters {
         color: var(--color-text-default);
-        background-color: var(--color-background-zulip-button);
-        border: 1px solid var(--color-border-zulip-button);
+        background-color: var(--color-background-doer-button);
+        border: 1px solid var(--color-border-doer-button);
         border-radius: 40px;
         /* Matching to the height of the filter search box. */
         height: var(--recent-topics-filters-height);
@@ -191,11 +191,11 @@
         align-items: center;
 
         &:hover {
-            background-color: var(--color-background-zulip-button-hover);
+            background-color: var(--color-background-doer-button-hover);
         }
 
         &:active {
-            background-color: var(--color-background-zulip-button-active);
+            background-color: var(--color-background-doer-button-active);
         }
 
         &:focus {
@@ -571,8 +571,8 @@
             justify-content: center;
             align-items: center;
 
-            .zulip-icon.conversation-partners-icon,
-            .zulip-icon.zulip-icon-bot {
+            .doer-icon.conversation-partners-icon,
+            .doer-icon.doer-icon-bot {
                 opacity: 0.6;
             }
 
@@ -600,7 +600,7 @@
         }
     }
 
-    .stream-privacy .zulip-icon {
+    .stream-privacy .doer-icon {
         /* Let flexbox handle vertical alignment by
            pushing back against inline-block display. */
         display: block;

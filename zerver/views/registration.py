@@ -57,7 +57,7 @@ from zerver.context_processors import (
 )
 from zerver.decorator import add_google_analytics, do_login, require_post
 from zerver.forms import (
-    HOW_FOUND_ZULIP_EXTRA_CONTEXT,
+    HOW_FOUND_DOER_EXTRA_CONTEXT,
     CaptchaDemoRegistrationForm,
     CaptchaRealmCreationForm,
     DemoRegistrationForm,
@@ -143,7 +143,7 @@ from zerver.views.errors import config_error
 from zproject.backends import (
     ExternalAuthResult,
     NoMatchingLDAPUserError,
-    ZulipLDAPAuthBackend,
+    DoerLDAPAuthBackend,
     email_auth_enabled,
     email_belongs_to_ldap,
     get_external_method_dicts,
@@ -151,8 +151,8 @@ from zproject.backends import (
     password_auth_enabled,
 )
 
-ldap_logger = logging.getLogger("zulip.ldap")
-logger = logging.getLogger("zulip.registration")
+ldap_logger = logging.getLogger("doer.ldap")
+logger = logging.getLogger("doer.registration")
 
 
 @typed_endpoint
@@ -554,7 +554,7 @@ def registration_helper(
                         break
 
                     # Note that this `ldap_user` object is not a
-                    # `ZulipLDAPUser` with a `Realm` attached, so
+                    # `DoerLDAPUser` with a `Realm` attached, so
                     # calling `.populate_user()` on it will crash.
                     # This is OK, since we're just accessing this user
                     # to extract its name.
@@ -572,12 +572,12 @@ def registration_helper(
                     except TypeError:
                         break
 
-                    # Check whether this is ZulipLDAPAuthBackend,
+                    # Check whether this is DoerLDAPAuthBackend,
                     # which is responsible for authentication and
                     # requires that LDAP accounts enter their LDAP
-                    # password to register, or ZulipLDAPUserPopulator,
+                    # password to register, or DoerLDAPUserPopulator,
                     # which just populates UserProfile fields (no auth).
-                    require_ldap_password = isinstance(backend, ZulipLDAPAuthBackend)
+                    require_ldap_password = isinstance(backend, DoerLDAPAuthBackend)
                     break
 
         initial_data = {}
@@ -664,11 +664,11 @@ def registration_helper(
             realm_name = form.cleaned_data["realm_name"]
             realm_type = form.cleaned_data["realm_type"]
             realm_default_language = form.cleaned_data["realm_default_language"]
-            how_found_zulip = form.cleaned_data["how_realm_creator_found_zulip"]
-            how_found_zulip_extra_context = ""
-            if how_found_zulip in HOW_FOUND_ZULIP_EXTRA_CONTEXT:
-                extra_context_field = HOW_FOUND_ZULIP_EXTRA_CONTEXT[how_found_zulip]
-                how_found_zulip_extra_context = form.cleaned_data[extra_context_field]
+            how_found_doer = form.cleaned_data["how_realm_creator_found_doer"]
+            how_found_doer_extra_context = ""
+            if how_found_doer in HOW_FOUND_DOER_EXTRA_CONTEXT:
+                extra_context_field = HOW_FOUND_DOER_EXTRA_CONTEXT[how_found_doer]
+                how_found_doer_extra_context = form.cleaned_data[extra_context_field]
 
             realm = do_create_realm(
                 string_id,
@@ -676,10 +676,10 @@ def registration_helper(
                 org_type=realm_type,
                 default_language=realm_default_language,
                 prereg_realm=prereg_realm,
-                how_realm_creator_found_zulip=RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS[
-                    how_found_zulip
+                how_realm_creator_found_doer=RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS[
+                    how_found_doer
                 ],
-                how_realm_creator_found_zulip_extra_context=how_found_zulip_extra_context,
+                how_realm_creator_found_doer_extra_context=how_found_doer_extra_context,
             )
         assert realm is not None
 
@@ -769,7 +769,7 @@ def registration_helper(
                     # enabled, and there's no matching user in the LDAP
                     # directory then the intent is to create a user in the
                     # realm with their email outside the LDAP organization
-                    # (with e.g. a password stored in the Zulip database,
+                    # (with e.g. a password stored in the Doer database,
                     # not LDAP).  So we fall through and create the new
                     # account.
                     pass
@@ -920,7 +920,7 @@ def registration_helper(
         "email_address_visibility_moderators": RealmUserDefault.EMAIL_ADDRESS_VISIBILITY_MODERATORS,
         "email_address_visibility_nobody": RealmUserDefault.EMAIL_ADDRESS_VISIBILITY_NOBODY,
         "email_address_visibility_options_dict": UserProfile.EMAIL_ADDRESS_VISIBILITY_ID_TO_NAME_MAP,
-        "how_realm_creator_found_zulip_options": RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS.items(),
+        "how_realm_creator_found_doer_options": RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS.items(),
     }
 
     if realm_creation:
@@ -1488,8 +1488,8 @@ def create_demo_helper(
     *,
     realm_type: int,
     realm_default_language: str,
-    how_realm_creator_found_zulip: str,
-    how_realm_creator_found_zulip_extra_context: str,
+    how_realm_creator_found_doer: str,
+    how_realm_creator_found_doer_extra_context: str,
     timezone: str,
 ) -> UserProfile:
     demo_organization_identifiers = generate_demo_name_and_subdomain()
@@ -1499,8 +1499,8 @@ def create_demo_helper(
         org_type=realm_type,
         default_language=realm_default_language,
         is_demo_organization=True,
-        how_realm_creator_found_zulip=how_realm_creator_found_zulip,
-        how_realm_creator_found_zulip_extra_context=how_realm_creator_found_zulip_extra_context,
+        how_realm_creator_found_doer=how_realm_creator_found_doer,
+        how_realm_creator_found_doer_extra_context=how_realm_creator_found_doer_extra_context,
     )
     assert realm is not None
 
@@ -1574,20 +1574,20 @@ def create_demo_organization(
 
             realm_type = form.cleaned_data["realm_type"]
             realm_default_language = form.cleaned_data["realm_default_language"]
-            how_found_zulip = form.cleaned_data["how_realm_creator_found_zulip"]
-            how_found_zulip_extra_context = ""
-            if how_found_zulip in HOW_FOUND_ZULIP_EXTRA_CONTEXT:
-                extra_context_field = HOW_FOUND_ZULIP_EXTRA_CONTEXT[how_found_zulip]
-                how_found_zulip_extra_context = form.cleaned_data[extra_context_field]
+            how_found_doer = form.cleaned_data["how_realm_creator_found_doer"]
+            how_found_doer_extra_context = ""
+            if how_found_doer in HOW_FOUND_DOER_EXTRA_CONTEXT:
+                extra_context_field = HOW_FOUND_DOER_EXTRA_CONTEXT[how_found_doer]
+                how_found_doer_extra_context = form.cleaned_data[extra_context_field]
 
             user_profile = create_demo_helper(
                 request,
                 realm_type=realm_type,
                 realm_default_language=realm_default_language,
-                how_realm_creator_found_zulip=RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS[
-                    how_found_zulip
+                how_realm_creator_found_doer=RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS[
+                    how_found_doer
                 ],
-                how_realm_creator_found_zulip_extra_context=how_found_zulip_extra_context,
+                how_realm_creator_found_doer_extra_context=how_found_doer_extra_context,
                 timezone=timezone,
             )
 
@@ -1615,7 +1615,7 @@ def create_demo_organization(
             "has_captcha": settings.USING_CAPTCHA,
             "form": form,
             "current_url": request.get_full_path,
-            "how_realm_creator_found_zulip_options": RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS.items(),
+            "how_realm_creator_found_doer_options": RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS.items(),
         }
     )
     return TemplateResponse(
@@ -1663,7 +1663,7 @@ def new_realm_send_confirm(
         context={
             "email": email,
             # Using "new_realm_name" key here since "realm_name" key is already present in
-            # the context provided by zulip_default_context and it is "None" during realm
+            # the context provided by doer_default_context and it is "None" during realm
             # creation.
             "new_realm_name": realm_name,
             "realm_type": realm_type,
@@ -1798,7 +1798,7 @@ def find_account(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Note: Show all the emails in the POST request response
             # otherwise this feature can be used to ascertain which
-            # email addresses are associated with Zulip.
+            # email addresses are associated with Doer.
             emails = form.cleaned_data["emails"]
             for i in range(len(emails)):
                 try:
@@ -1826,7 +1826,7 @@ def find_account(request: HttpRequest) -> HttpResponse:
             # We organize the data in preparation for sending exactly
             # one outgoing email per provided email address, with each
             # email listing all of the accounts that email address has
-            # with the current Zulip server.
+            # with the current Doer server.
             emails_account_found: set[str] = set()
             context: dict[str, dict[str, Any]] = {}
             for user in user_profiles:
@@ -1853,7 +1853,7 @@ def find_account(request: HttpRequest) -> HttpResponse:
             help_reset_password_link = (
                 f"{help_base_url}/change-your-password#if-youve-forgotten-or-never-had-a-password"
             )
-            help_logging_in_link = f"{help_base_url}/logging-in#find-the-zulip-log-in-url"
+            help_logging_in_link = f"{help_base_url}/logging-in#find-the-doer-log-in-url"
             find_accounts_link = f"{external_host_base_url}/accounts/find/"
 
             for delivery_email, realm_context in context.items():

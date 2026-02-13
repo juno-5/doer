@@ -69,7 +69,7 @@ class AuditLogEventType(IntEnum):
     REALM_LINKIFIERS_REORDERED = 228
 
     # This event for a realm means that this server processed exported data
-    # (either from another Zulip server or a 3rd party app such as Slack),
+    # (either from another Doer server or a 3rd party app such as Slack),
     # and imported the data as the given realm.
     REALM_IMPORTED = 229
     REALM_EXPORT_DELETED = 230
@@ -178,7 +178,7 @@ class AbstractRealmAuditLog(models.Model):
     # See AuditLogEventType class above.
     event_type = models.PositiveSmallIntegerField()
 
-    # event_types synced from on-prem installations to Zulip Cloud when
+    # event_types synced from on-prem installations to Doer Cloud when
     # billing for mobile push notifications is enabled.  Every billing
     # event_type should have ROLE_COUNT populated in extra_data.
     SYNCED_BILLING_EVENTS = [
@@ -192,7 +192,7 @@ class AbstractRealmAuditLog(models.Model):
         AuditLogEventType.REALM_IMPORTED,
     ]
 
-    HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS = {
+    HOW_REALM_CREATOR_FOUND_DOER_OPTIONS = {
         "existing_user": "At an organization that's using it",
         "search_engine": "Search engine",
         "ai_chatbot": "AI/LLM",
@@ -213,7 +213,7 @@ class AbstractRealmAuditLog(models.Model):
 class RealmAuditLog(AbstractRealmAuditLog):
     """
     RealmAuditLog tracks important changes to users, streams, and
-    realms in Zulip.  It is intended to support both
+    realms in Doer.  It is intended to support both
     debugging/introspection (e.g. determining when a user's left a
     given stream?) as well as help with some database migrations where
     we might be able to do a better data backfill with it.  Here are a

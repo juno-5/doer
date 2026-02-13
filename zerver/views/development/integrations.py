@@ -20,7 +20,7 @@ from zerver.models.realms import get_realm
 if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
-ZULIP_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
+DOER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../")
 
 
 def get_webhook_integrations() -> list[str]:
@@ -50,7 +50,7 @@ def send_webhook_fixture_message(
     url: str, body: str, is_json: bool, custom_headers: dict[str, Any]
 ) -> "TestHttpResponse":
     client = Client()
-    realm = get_realm("zulip")
+    realm = get_realm("doer")
     standardized_headers = standardize_headers(custom_headers)
     http_host = standardized_headers.pop("HTTP_HOST", realm.host)
     if is_json:
@@ -77,7 +77,7 @@ def get_fixtures(request: HttpRequest, *, integration_name: PathOnly[str]) -> Ht
         raise ResourceNotFoundError(f'"{integration_name}" is not a valid webhook integration.')
 
     fixtures = {}
-    fixtures_dir = os.path.join(ZULIP_PATH, f"zerver/webhooks/{valid_integration_name}/fixtures")
+    fixtures_dir = os.path.join(DOER_PATH, f"zerver/webhooks/{valid_integration_name}/fixtures")
     if not os.path.exists(fixtures_dir):
         msg = f'The integration "{valid_integration_name}" does not have fixtures.'
         raise ResourceNotFoundError(msg)
@@ -133,7 +133,7 @@ def send_all_webhook_fixture_messages(
     if not valid_integration_name:  # nocoverage
         raise ResourceNotFoundError(f'"{integration_name}" is not a valid webhook integration.')
 
-    fixtures_dir = os.path.join(ZULIP_PATH, f"zerver/webhooks/{valid_integration_name}/fixtures")
+    fixtures_dir = os.path.join(DOER_PATH, f"zerver/webhooks/{valid_integration_name}/fixtures")
     if not os.path.exists(fixtures_dir):
         msg = f'The integration "{valid_integration_name}" does not have fixtures.'
         raise ResourceNotFoundError(msg)

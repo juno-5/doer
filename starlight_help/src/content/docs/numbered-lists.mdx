@@ -5,12 +5,12 @@ title: Numbered lists
 import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import NumberedListsExamples from "../include/_NumberedListsExamples.mdx";
 import NumberedListsIntro from "../include/_NumberedListsIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import OrderedListIcon from "~icons/zulip-icon/ordered-list";
+import OrderedListIcon from "~icons/doer-icon/ordered-list";
 
 <NumberedListsIntro />
 
@@ -30,11 +30,11 @@ import OrderedListIcon from "~icons/zulip-icon/ordered-list";
          number.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use the **Numbered list**
       (<OrderedListIcon />) icon
       to remove existing list formatting from the current line or selected text.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via Markdown">

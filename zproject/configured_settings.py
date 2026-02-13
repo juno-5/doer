@@ -13,7 +13,7 @@ from .default_settings import *  # noqa: F403 isort: skip
 # Import prod_settings after determining the deployment/machine type
 from .config import PRODUCTION
 
-TEST_SUITE = os.getenv("ZULIP_TEST_SUITE") == "true"
+TEST_SUITE = os.getenv("DOER_TEST_SUITE") == "true"
 CUSTOM_DEVELOPMENT_SETTINGS = False
 
 if PRODUCTION:  # nocoverage

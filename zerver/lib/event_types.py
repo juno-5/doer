@@ -371,7 +371,7 @@ class EventReactionAdd(BaseEvent):
     message_id: int
     emoji_name: str
     emoji_code: str
-    reaction_type: Literal["realm_emoji", "unicode_emoji", "zulip_extra_emoji"]
+    reaction_type: Literal["realm_emoji", "unicode_emoji", "doer_extra_emoji"]
     user_id: int
     user: ReactionLegacyUserType
 
@@ -382,7 +382,7 @@ class EventReactionRemove(BaseEvent):
     message_id: int
     emoji_name: str
     emoji_code: str
-    reaction_type: Literal["realm_emoji", "unicode_emoji", "zulip_extra_emoji"]
+    reaction_type: Literal["realm_emoji", "unicode_emoji", "doer_extra_emoji"]
     user_id: int
     user: ReactionLegacyUserType
 
@@ -777,9 +777,9 @@ class EventRealmUserUpdate(BaseEvent):
 
 class EventRestart(BaseEvent):
     type: Literal["restart"]
-    zulip_version: str
-    zulip_merge_base: str
-    zulip_feature_level: int
+    doer_version: str
+    doer_merge_base: str
+    doer_feature_level: int
     server_generation: int
 
 
@@ -1236,7 +1236,7 @@ class EventUserStatus(EventUserStatusCore):
     status_text: str | None = None
     emoji_name: str | None = None
     emoji_code: str | None = None
-    reaction_type: Literal["realm_emoji", "unicode_emoji", "zulip_extra_emoji"] | None = None
+    reaction_type: Literal["realm_emoji", "unicode_emoji", "doer_extra_emoji"] | None = None
 
 
 class EventUserTopic(BaseEvent):

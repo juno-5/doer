@@ -40,7 +40,7 @@ from zerver.actions.realm_settings import (
     do_send_realm_reactivation_email,
 )
 from zerver.actions.users import do_delete_user_preserving_messages
-from zerver.decorator import require_server_admin, zulip_login_required
+from zerver.decorator import require_server_admin, doer_login_required
 from zerver.forms import check_subdomain_available
 from zerver.lib.rate_limiter import rate_limit_request_by_ip
 from zerver.lib.realm_icon import realm_icon_url
@@ -72,7 +72,7 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
+    RemoteDoerServer,
 )
 
 
@@ -90,7 +90,7 @@ class DemoRequestForm(forms.Form):
         ([org_type["name"] for org_type in Realm.ORG_TYPES.values() if not org_type["hidden"]]),
     )
     TYPE_OF_HOSTING_OPTIONS = [
-        "Zulip Cloud",
+        "Doer Cloud",
         "Self-hosting",
         "Both / not sure",
     ]
@@ -112,7 +112,7 @@ class SalesRequestForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea)
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint_without_parameters
 def support_request(request: HttpRequest) -> HttpResponse:
     from corporate.lib.stripe import build_support_url
@@ -143,7 +143,7 @@ def support_request(request: HttpRequest) -> HttpResponse:
             send_email(
                 "zerver/emails/support_request",
                 to_emails=[FromAddress.SUPPORT],
-                from_name="Zulip support request",
+                from_name="Doer support request",
                 from_address=FromAddress.tokenized_no_reply_address(),
                 reply_to_email=user.delivery_email,
                 context=email_context,
@@ -190,7 +190,7 @@ def demo_request(request: HttpRequest) -> HttpResponse:
             send_email(
                 "zerver/emails/demo_request",
                 to_emails=[BILLING_SUPPORT_EMAIL],
-                from_name="Zulip demo request",
+                from_name="Doer demo request",
                 from_address=FromAddress.tokenized_no_reply_address(),
                 reply_to_email=email_context["email"],
                 context=email_context,
@@ -205,7 +205,7 @@ def demo_request(request: HttpRequest) -> HttpResponse:
     return response
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint_without_parameters
 def sales_support_request(request: HttpRequest) -> HttpResponse:
     from corporate.lib.stripe import BILLING_SUPPORT_EMAIL
@@ -265,14 +265,14 @@ def get_plan_type_string(plan_type: int) -> str:
         Realm.PLAN_TYPE_STANDARD: "Standard",
         Realm.PLAN_TYPE_STANDARD_FREE: "Standard free",
         Realm.PLAN_TYPE_PLUS: "Plus",
-        RemoteZulipServer.PLAN_TYPE_SELF_MANAGED: "Free",
-        RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY: CustomerPlan.name_from_tier(
+        RemoteDoerServer.PLAN_TYPE_SELF_MANAGED: "Free",
+        RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY: CustomerPlan.name_from_tier(
             CustomerPlan.TIER_SELF_HOSTED_LEGACY
         ),
-        RemoteZulipServer.PLAN_TYPE_COMMUNITY: "Community",
-        RemoteZulipServer.PLAN_TYPE_BASIC: "Basic",
-        RemoteZulipServer.PLAN_TYPE_BUSINESS: "Business",
-        RemoteZulipServer.PLAN_TYPE_ENTERPRISE: "Enterprise",
+        RemoteDoerServer.PLAN_TYPE_COMMUNITY: "Community",
+        RemoteDoerServer.PLAN_TYPE_BASIC: "Basic",
+        RemoteDoerServer.PLAN_TYPE_BUSINESS: "Business",
+        RemoteDoerServer.PLAN_TYPE_ENTERPRISE: "Enterprise",
     }[plan_type]
 
 
@@ -714,8 +714,8 @@ def support(
 
 def get_remote_servers_for_support(
     email_to_search: str | None, uuid_to_search: str | None, hostname_to_search: str | None
-) -> list["RemoteZulipServer"]:
-    remote_servers_query = RemoteZulipServer.objects.order_by("id")
+) -> list["RemoteDoerServer"]:
+    remote_servers_query = RemoteDoerServer.objects.order_by("id")
 
     if email_to_search:
         remote_servers_set = {
@@ -817,7 +817,7 @@ def remote_servers_support(
         else:
             assert remote_server_id is not None
             remote_realm_support_request = False
-            remote_server = RemoteZulipServer.objects.get(id=remote_server_id)
+            remote_server = RemoteDoerServer.objects.get(id=remote_server_id)
 
         support_view_request = None
 
@@ -965,7 +965,7 @@ def remote_servers_support(
                 "Recent analytics data missing"
             )
 
-    def get_remote_server_billing_user_emails_as_string(remote_server: RemoteZulipServer) -> str:
+    def get_remote_server_billing_user_emails_as_string(remote_server: RemoteDoerServer) -> str:
         return ", ".join(
             remote_server.get_remote_server_billing_users()
             .order_by("email")
@@ -991,7 +991,7 @@ def remote_servers_support(
         get_remote_server_billing_user_emails_as_string
     )
     context["get_remote_realm_billing_user_emails"] = get_remote_realm_billing_user_emails_as_string
-    context["SPONSORED_PLAN_TYPE"] = RemoteZulipServer.PLAN_TYPE_COMMUNITY
+    context["SPONSORED_PLAN_TYPE"] = RemoteDoerServer.PLAN_TYPE_COMMUNITY
     context["remote_support_view"] = True
 
     return render(

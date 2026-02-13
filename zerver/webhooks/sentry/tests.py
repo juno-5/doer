@@ -240,9 +240,9 @@ Traceback:
         self.check_webhook("issue_resolved", expected_topic_name, expected_message)
 
     def test_deprecated_exception_message(self) -> None:
-        expected_topic_name = "zulip"
+        expected_topic_name = "doer"
         expected_message = """\
-:orange_circle: New [issue](https://sentry.io/zulip/zulip/issues/156699934/) (level: ERROR):
+:orange_circle: New [issue](https://sentry.io/doer/doer/issues/156699934/) (level: ERROR):
 
 ``` quote
 This is an example python exception

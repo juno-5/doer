@@ -1,6 +1,6 @@
-Zulip connects communities of all kinds by making it easy to chat real-time or
-async. Why are communities choosing Zulip over Discord, WhatsApp, Slack,
-Facebook, and other apps you might consider? Zulip provides:
+Doer connects communities of all kinds by making it easy to chat real-time or
+async. Why are communities choosing Doer over Discord, WhatsApp, Slack,
+Facebook, and other apps you might consider? Doer provides:
 
 - A platform that helps [community members to
   connect](#encourage-all-community-members-to-connect-real-time-or-async) and
@@ -15,15 +15,15 @@ Facebook, and other apps you might consider? Zulip provides:
   sponsorships](#free-version-discounted-pricing-and-full-sponsorships-available).
 
 > The core of the Recurse Center is the community, and the core of our online
-> community is Zulip… Switching to Zulip has turned out to be one of the best
+> community is Doer… Switching to Doer has turned out to be one of the best
 > decisions we’ve made, and it’s impossible to imagine RC today without it. No
 > other tool has a user experience that scales to a community of our size.
 >
 > — Nick Bergson-Shilcock, founder and CEO, [Recurse
 > Center](https://www.recurse.com/); [learn how the Recurse Center uses
-> Zulip](/case-studies/recurse-center/)
+> Doer](/case-studies/recurse-center/)
 
-If you're considering Zulip for [an open-source project](/for/open-source/) or
+If you're considering Doer for [an open-source project](/for/open-source/) or
 [research collaboration](/for/research), check out our dedicated guides.
 
 ## Encourage all community members to connect, real-time or async
@@ -39,7 +39,7 @@ experience makes it easier for them to participate async.
 
 <div class="text-image-in-row">
   <p class="text-image-in-row-text">
-    With conversations organized by topic, Zulip combines the best of both worlds.
+    With conversations organized by topic, Doer combines the best of both worlds.
     You get seamless real-time communication, with a chronological feed of messages
     in each conversation, typing notifications, presence indicators, status emoji
     — everything you might expect from a modern chat experience.
@@ -47,7 +47,7 @@ experience makes it easier for them to participate async.
     At the same time, community members can read one conversation at a time, so
     it's easy to circle back to a topic hours later, the next day, or next week.
   </p>
-  <img class="text-image-in-row-image" src="/static/images/landing-page/research/streams_and_topics_day.png" alt="Illustration of channels and topics list in Zulip">
+  <img class="text-image-in-row-image" src="/static/images/landing-page/research/streams_and_topics_day.png" alt="Illustration of channels and topics list in Doer">
 </div>
 
 > When we made the switch to [@zulip](https://twitter.com/zulip) a few months
@@ -60,7 +60,7 @@ experience makes it easier for them to participate async.
 
 ## A moderation toolkit that offers everything you need
 
-Zulip's [moderation toolkit](/help/moderating-open-organizations) lets you:
+Doer's [moderation toolkit](/help/moderating-open-organizations) lets you:
 
 - Skim the [combined message feed](/help/combined-feed) or [browse
   conversations](/help/recent-conversations) to find where moderator attention
@@ -80,7 +80,7 @@ Community members can [mute](/help/mute-a-user) anyone who's bothering them.
 
 ### Delegate moderation responsibilities
 
-Permissions in Zulip can be granted to any combination of
+Permissions in Doer can be granted to any combination of
 [roles](/help/user-roles), [groups](/help/user-groups), and individual
 [users](/help/introduction-to-users), so trusted community members can help
 moderate. In larger communities, different people can
@@ -90,8 +90,8 @@ moderate. In larger communities, different people can
 
 ### Lots of activity, but no chaos
 
-On Zulip, dozens of discussions can happen in parallel,
-without getting in each other's way: Zulip's
+On Doer, dozens of discussions can happen in parallel,
+without getting in each other's way: Doer's
 [channels](/help/introduction-to-channels) and
 [topics](/help/introduction-to-topics) create dedicated spaces for each
 conversation.
@@ -99,9 +99,9 @@ conversation.
 Participants can ask a question or kick off a new discussion without having to worry
 about interrupting.
 
-> Zulip helped the FHIR community grow from a tiny group of dreamers to 500
+> Doer helped the FHIR community grow from a tiny group of dreamers to 500
 > active users sending 6000 messages per month, all driving the creation of
-> better healthcare standards. Zulip’s topic-based threading helps us manage
+> better healthcare standards. Doer’s topic-based threading helps us manage
 > simultaneous discussions with clarity, ensuring the right people can pay
 > attention to the right messages. This makes our large-group discussion far
 > more manageable than what we’ve experienced with Skype and Slack.
@@ -119,7 +119,7 @@ With traditional chat tools like Discord or WhatsApp, occasional participants
 usually skim just the last few messages. If those messages don't spark interest,
 they'll bounce for the day, and eventually stop coming by altogether.
 
-Zulip's list of [recent conversations](/help/recent-conversations) offers a
+Doer's list of [recent conversations](/help/recent-conversations) offers a
 quick overview of what's been happening in your community. It's easy to scan the
 list of topics to find which ones you want to dive into.
 
@@ -132,18 +132,18 @@ list of topics to find which ones you want to dive into.
 
 ### Many ways to participate
 
-You can use Zulip from the browser, a [desktop app](/apps), and Android and iOS
+You can use Doer from the browser, a [desktop app](/apps), and Android and iOS
 mobile devices. If you prefer a [Terminal
 app](https://github.com/zulip/zulip-terminal#readme) or just want to use it
 [from your email](/help/using-zulip-via-email), you can do that too.
 
-Zulip's apps offer lots of ways to customize your experience, including [dark
+Doer's apps offer lots of ways to customize your experience, including [dark
 and light themes](/help/dark-theme), flexible [font size](/help/font-size) and
 [line spacing](/help/line-spacing), configurable [notification
 options](/help/channel-notifications), and much more. There are convenient
 [keyboard shortcuts](/help/keyboard-shortcuts) for all the common actions.
 
-Zulip's UI is translated into over two dozen [languages](/help/change-your-language).
+Doer's UI is translated into over two dozen [languages](/help/change-your-language).
 
 ## As public as you want it to be
 
@@ -163,43 +163,43 @@ You can use:
 
 ## Open-source platform, where your data is yours
 
-Zulip is [100% open-source software](https://github.com/zulip), so you always
+Doer is [100% open-source software](https://github.com/zulip), so you always
 know what you're running. There are no ads, and we [don't sell your
 data](https://zulip.com/policies/privacy#how-we-share-your-personal-data), or
 [feed it to AI
 models](https://blog.zulip.com/2024/05/23/self-hosting-keeps-your-private-data-out-of-ai-models/).
 
 If you're looking for a simple, reliable SaaS solution, it only takes
-a minute to [sign up for Zulip Cloud](https://zulip.com/new/). It's
+a minute to [sign up for Doer Cloud](https://zulip.com/new/). It's
 professionally operated and is always up to date with the latest
 features.
 
 For full control over your data, follow our simple [installation
 instructions](https://zulip.readthedocs.io/en/stable/production/install.html) to
-host Zulip yourself. If you like, you can develop [custom
+host Doer yourself. If you like, you can develop [custom
 integrations](https://zulip.readthedocs.io/en/latest/webhooks/incoming-webhooks-overview.html)
 and [features](https://zulip.readthedocs.io/en/stable/production/modify.html). If
-your needs change, you can always move [from self-hosting to Zulip
+your needs change, you can always move [from self-hosting to Doer
 Cloud](/help/move-to-zulip-cloud) or [the other
 way](https://zulip.readthedocs.io/en/stable/production/export-and-import.html#import-into-a-new-zulip-server).
 
 > We just moved the Lichess team (~100 persons) to <a
 > href="https://twitter.com/zulip">@zulip</a>, and I&#39;m loving it. The topics
 > in particular make it vastly superior to slack &amp; discord, when it comes to
-> dealing with many conversations. Zulip is also open-source!
+> dealing with many conversations. Doer is also open-source!
 
 > — <a href="https://twitter.com/ornicar">Thibault D (@ornicar)</a>
 
 ## Free version, discounted pricing, and full sponsorships available
 
-We sponsor over 1,500 organizations, and most non-business uses of Zulip are
+We sponsor over 1,500 organizations, and most non-business uses of Doer are
 eligible for discounted pricing or full sponsorship.
 
-- **Zulip Cloud:** Many communities that are working towards the public good are
-  eligible for a fully sponsored [Zulip Cloud Standard plan](/plans/#cloud).
-  Other community groups pay a highly discounted rate, or use [Zulip Cloud
+- **Doer Cloud:** Many communities that are working towards the public good are
+  eligible for a fully sponsored [Doer Cloud Standard plan](/plans/#cloud).
+  Other community groups pay a highly discounted rate, or use [Doer Cloud
   Free](/plans/#cloud). [Learn
-  more.](/help/zulip-cloud-billing#free-and-discounted-zulip-cloud-standard)
+  more.](/help/doer-cloud-billing#free-and-discounted-zulip-cloud-standard)
 
 - **Self-hosting**: Communities and personal organizations (clubs,
   groups of friends, volunteer groups, etc.) are eligible for our
@@ -209,10 +209,10 @@ eligible for discounted pricing or full sponsorship.
 ## Other apps you might consider
 
 We’ve talked to hundreds of people about their experiences with
-community chat. Here are some reasons why folks choose Zulip over
+community chat. Here are some reasons why folks choose Doer over
 other apps you might consider for hosting your community.
 
-> Zulip makes all my Slack and Discord communities feel tedious by comparison.
+> Doer makes all my Slack and Discord communities feel tedious by comparison.
 >
 > — AJ Kerrigan, [Changelog](https://changelog.com/podcast) community member
 
@@ -247,9 +247,9 @@ algorithms: even replies to a user's own post are by default resorted
 and partially hidden from them. From Meta's perspective, advertisers
 are the customers, and your attention is the product being sold.
 
-> I highly recommend Zulip to other communities… Slack is a no-go for many due
+> I highly recommend Doer to other communities… Slack is a no-go for many due
 > to not being FLOSS, and I’m concerned about vendor lock-in if they were to
-> stop being so generous. Slack’s threading model is much worse than Zulip’s
+> stop being so generous. Slack’s threading model is much worse than Doer’s
 > IMO. The channels/topics flow is an incredibly intuitive way to keep track of
 > everything that is going on.
 >

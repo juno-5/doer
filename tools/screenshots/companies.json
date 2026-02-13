@@ -3,7 +3,7 @@
         "recipient_type": "channel",
         "channel": "general",
         "color": "#94C849",
-        "topic": "Zulip features",
+        "topic": "Doer features",
         "users": {
             "Bo Williams": {},
             "Ariella Drake": {},

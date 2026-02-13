@@ -12,7 +12,7 @@ from django.db import DEFAULT_DB_ALIAS, ProgrammingError, connection, connection
 from django.db.utils import OperationalError
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     TEMPLATE_DATABASE_DIR,
     get_dev_uuid_var_path,
     is_digest_obsolete,
@@ -20,7 +20,7 @@ from scripts.lib.zulip_tools import (
     write_new_digest,
 )
 
-BACKEND_DATABASE_TEMPLATE = "zulip_test_template"
+BACKEND_DATABASE_TEMPLATE = "doer_test_template"
 UUID_VAR_DIR = get_dev_uuid_var_path()
 
 IMPORTANT_FILES = [
@@ -90,12 +90,12 @@ class Database:
         # the command line rather than just calling the migration
         # functions, because Django doesn't support changing settings like
         # what the database is as runtime.
-        # Also we export ZULIP_DB_NAME which is ignored by dev platform but
+        # Also we export DOER_DB_NAME which is ignored by dev platform but
         # recognised by test platform and used to migrate correct db.
         manage_py = [
             "env",
             "DJANGO_SETTINGS_MODULE=" + self.settings,
-            "ZULIP_DB_NAME=" + self.database_name,
+            "DOER_DB_NAME=" + self.database_name,
             "./manage.py",
         ]
 
@@ -247,19 +247,19 @@ class Database:
 
 DEV_DATABASE = Database(
     platform="dev",
-    database_name="zulip",
+    database_name="doer",
     settings="zproject.settings",
 )
 
 TEST_DATABASE = Database(
     platform="test",
-    database_name="zulip_test_template",
+    database_name="doer_test_template",
     settings="zproject.test_settings",
 )
 
 
 def update_test_databases_if_required(rebuild_test_database: bool = False) -> None:
-    """Checks whether the zulip_test_template database template, is
+    """Checks whether the doer_test_template database template, is
     consistent with our database migrations; if not, it updates it
     in the fastest way possible:
 
@@ -272,7 +272,7 @@ def update_test_databases_if_required(rebuild_test_database: bool = False) -> No
     template database.
 
     The `rebuild_test_database` option (used by our frontend and API
-    tests) asks us to drop and re-cloning the zulip_test database from
+    tests) asks us to drop and re-cloning the doer_test database from
     the template so those test suites can run with a fresh copy.
 
     """
@@ -304,7 +304,7 @@ def destroy_leaked_test_databases(expiry_time: int = 60 * 60) -> int:
     is a catch-all function designed to delete any that might have
     been leaked due to crashes (etc.).  The high-level algorithm is to:
 
-    * Delete every database with a name like zulip_test_template_*
+    * Delete every database with a name like doer_test_template_*
     * Unless it is registered in a file under TEMPLATE_DATABASE_DIR as
       part of a currently running test-backend invocation
     * And that file is less expiry_time old.
@@ -319,7 +319,7 @@ def destroy_leaked_test_databases(expiry_time: int = 60 * 60) -> int:
             cursor.execute("SELECT datname FROM pg_database;")
             rows = cursor.fetchall()
             for row in rows:
-                if "zulip_test_template_" in row[0]:
+                if "doer_test_template_" in row[0]:
                     test_databases.add(row[0])
     except ProgrammingError:
         pass
@@ -328,7 +328,7 @@ def destroy_leaked_test_databases(expiry_time: int = 60 * 60) -> int:
     for file in files:
         if round(time.time()) - os.path.getmtime(file) < expiry_time:
             with open(file) as f:
-                databases_in_use.update(f"zulip_test_template_{line}".rstrip() for line in f)
+                databases_in_use.update(f"doer_test_template_{line}".rstrip() for line in f)
         else:
             # Any test-backend run older than expiry_time can be
             # cleaned up, both the database and the file listing its
@@ -342,7 +342,7 @@ def destroy_leaked_test_databases(expiry_time: int = 60 * 60) -> int:
 
     commands = "\n".join(f"DROP DATABASE IF EXISTS {db};" for db in databases_to_drop)
     subprocess.run(
-        ["psql", "-q", "-v", "ON_ERROR_STOP=1", "-h", "localhost", "postgres", "zulip_test"],
+        ["psql", "-q", "-v", "ON_ERROR_STOP=1", "-h", "localhost", "postgres", "doer_test"],
         input=commands,
         check=True,
         text=True,
@@ -363,26 +363,26 @@ def remove_test_run_directories(expiry_time: int = 60 * 60) -> int:
     return removed
 
 
-def reset_zulip_test_database() -> None:
+def reset_doer_test_database() -> None:
     """
-    This function is used to reset the zulip_test database fastest way possible,
-    i.e. First, it deletes the database and then clones it from zulip_test_template.
+    This function is used to reset the doer_test database fastest way possible,
+    i.e. First, it deletes the database and then clones it from doer_test_template.
     This function is used with puppeteer tests, so it can quickly reset the test
     database after each run.
     """
     from zerver.lib.test_runner import destroy_test_databases
 
-    # Make sure default database is 'zulip_test'.
-    assert connections["default"].settings_dict["NAME"] == "zulip_test"
+    # Make sure default database is 'doer_test'.
+    assert connections["default"].settings_dict["NAME"] == "doer_test"
 
-    # Clearing all the active PSQL sessions with 'zulip_test'.
+    # Clearing all the active PSQL sessions with 'doer_test'.
     run(
         [
             "env",
             "PGHOST=localhost",
-            "PGUSER=zulip_test",
+            "PGUSER=doer_test",
             "scripts/setup/terminate-psql-sessions",
-            "zulip_test",
+            "doer_test",
         ]
     )
 
@@ -395,12 +395,12 @@ def reset_zulip_test_database() -> None:
         suffix=clone_database_suffix,
     )
     settings_dict = connection.creation.get_test_db_clone_settings(clone_database_suffix)
-    # We manually rename the clone database to 'zulip_test' because when cloning it,
+    # We manually rename the clone database to 'doer_test' because when cloning it,
     # its name is set to original database name + some suffix.
-    # Also, we need it to be 'zulip_test' so that our running server can recognize it.
+    # Also, we need it to be 'doer_test' so that our running server can recognize it.
     with connection.cursor() as cursor:
-        cursor.execute("ALTER DATABASE zulip_test_template_clone RENAME TO zulip_test;")
-    settings_dict["NAME"] = "zulip_test"
+        cursor.execute("ALTER DATABASE doer_test_template_clone RENAME TO doer_test;")
+    settings_dict["NAME"] = "doer_test"
     # connection.settings_dict must be updated in place for changes to be
     # reflected in django.db.connections. If the following line assigned
     # connection.settings_dict = settings_dict, new threads would connect

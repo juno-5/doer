@@ -10,7 +10,7 @@ from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 from sentry_sdk.integrations.tornado import TornadoIntegration
 from sentry_sdk.utils import capture_internal_exceptions
 
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zproject.config import DEPLOY_ROOT
 
 if TYPE_CHECKING:
@@ -70,7 +70,7 @@ def setup_sentry(dsn: str | None, environment: str) -> None:
     if not dsn:
         return
 
-    sentry_release = ZULIP_VERSION
+    sentry_release = DOER_VERSION
     if os.path.exists(os.path.join(DEPLOY_ROOT, "sentry-release")):
         with open(os.path.join(DEPLOY_ROOT, "sentry-release")) as sentry_release_file:
             sentry_release = sentry_release_file.readline().strip()

@@ -17,7 +17,7 @@ async function expect_home(page: Page): Promise<void> {
     });
     // Assert that there is only one message list.
     assert.equal((await page.$$(".message-list")).length, 1);
-    assert.strictEqual(await page.title(), "Combined feed - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "Combined feed - Doer Dev - Doer");
     await common.check_messages_sent(page, message_list_id, [
         ["Verona > test", ["verona test a", "verona test b"]],
         ["Verona > other topic", ["verona other topic c"]],
@@ -41,7 +41,7 @@ async function expect_verona_stream_top_topic(page: Page): Promise<void> {
     await common.check_messages_sent(page, message_list_id, [
         ["Verona > test", ["verona test a", "verona test b", "verona test d"]],
     ]);
-    assert.strictEqual(await page.title(), "#Verona > test - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "#Verona > test - Doer Dev - Doer");
 }
 
 async function expect_verona_stream(page: Page): Promise<void> {
@@ -54,7 +54,7 @@ async function expect_verona_stream(page: Page): Promise<void> {
         ["Verona > other topic", ["verona other topic c"]],
         ["Verona > test", ["verona test d"]],
     ]);
-    assert.strictEqual(await page.title(), "#Verona - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "#Verona - Doer Dev - Doer");
 }
 
 async function expect_verona_stream_test_topic(page: Page): Promise<void> {
@@ -106,7 +106,7 @@ async function expect_group_direct_messages(page: Page): Promise<void> {
     ]);
     assert.strictEqual(
         await page.title(),
-        "Cordelia, Lear's daughter, King Hamlet - Zulip Dev - Zulip",
+        "Cordelia, Lear's daughter, King Hamlet - Doer Dev - Doer",
     );
 }
 
@@ -133,7 +133,7 @@ async function un_narrow_by_clicking_org_icon(page: Page): Promise<void> {
 
 async function expect_recent_view(page: Page): Promise<void> {
     await page.waitForSelector("#recent_view_table", {visible: true});
-    assert.strictEqual(await page.title(), "Recent conversations - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "Recent conversations - Doer Dev - Doer");
 }
 
 async function test_navigations_from_home(page: Page): Promise<void> {
@@ -142,7 +142,7 @@ async function test_navigations_from_home(page: Page): Promise<void> {
     await page.click(`.focused-message-list [title='Narrow to stream "Verona"']`);
     await expect_verona_stream(page);
 
-    assert.strictEqual(await page.title(), "#Verona - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "#Verona - Doer Dev - Doer");
     await un_narrow(page);
     await expect_home(page);
 
@@ -211,7 +211,7 @@ async function search_tests(page: Page): Promise<void> {
         "Verona",
         "#Verona",
         expect_verona_stream,
-        "#Verona - Zulip Dev - Zulip",
+        "#Verona - Doer Dev - Doer",
     );
 
     await search_and_check(
@@ -219,7 +219,7 @@ async function search_tests(page: Page): Promise<void> {
         "Cordelia",
         "dm:",
         expect_cordelia_direct_messages,
-        "Cordelia, Lear's daughter - Zulip Dev - Zulip",
+        "Cordelia, Lear's daughter - Doer Dev - Doer",
     );
 
     await search_and_check(
@@ -227,7 +227,7 @@ async function search_tests(page: Page): Promise<void> {
         "stream:Verona",
         "",
         expect_verona_stream,
-        "#Verona - Zulip Dev - Zulip",
+        "#Verona - Doer Dev - Doer",
     );
 
     await search_and_check(
@@ -235,7 +235,7 @@ async function search_tests(page: Page): Promise<void> {
         "stream:Verona topic:test",
         "",
         expect_verona_stream_test_topic,
-        "#Verona > test - Zulip Dev - Zulip",
+        "#Verona > test - Doer Dev - Doer",
     );
 
     await search_and_check(
@@ -243,7 +243,7 @@ async function search_tests(page: Page): Promise<void> {
         "stream:Verona topic:other+topic",
         "",
         expect_verona_other_topic,
-        "#Verona > other topic - Zulip Dev - Zulip",
+        "#Verona > other topic - Doer Dev - Doer",
     );
 
     await search_and_check(
@@ -251,7 +251,7 @@ async function search_tests(page: Page): Promise<void> {
         "topic:test",
         "",
         expect_test_topic,
-        "Search results - Zulip Dev - Zulip",
+        "Search results - Doer Dev - Doer",
     );
 
     await search_silent_user(page, "sender:emailgateway@zulip.com", "");
@@ -275,7 +275,7 @@ async function expect_all_direct_messages(page: Page): Promise<void> {
         await common.get_text_from_selector(page, "#new_conversation_button"),
         "Start new conversation",
     );
-    assert.strictEqual(await page.title(), "Direct message feed - Zulip Dev - Zulip");
+    assert.strictEqual(await page.title(), "Direct message feed - Doer Dev - Doer");
 }
 
 async function test_narrow_by_clicking_the_left_sidebar(page: Page): Promise<void> {
@@ -366,7 +366,7 @@ async function test_stream_search_filters_stream_list(page: Page): Promise<void>
     await page.waitForSelector((await get_stream_li(page, "Venice")) + " .highlighted_row", {
         hidden: true,
     });
-    await page.waitForSelector((await get_stream_li(page, "Zulip")) + " .highlighted_row", {
+    await page.waitForSelector((await get_stream_li(page, "Doer")) + " .highlighted_row", {
         hidden: true,
     });
     await test_search_venice(page);

@@ -11,7 +11,7 @@ from pydantic import TypeAdapter
 
 from zerver.lib.request import arguments_map
 from zerver.lib.rest import rest_dispatch
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.typed_endpoint import parse_view_func_signature
 from zerver.lib.utils import assert_is_not_none
 from zerver.openapi.markdown_extension import generate_curl_example, render_curl_example
@@ -64,7 +64,7 @@ def schema_type(schema: dict[str, Any], defs: Mapping[str, Any] = {}) -> type | 
         return VARMAP[schema["type"]]
 
 
-class OpenAPIToolsTest(ZulipTestCase):
+class OpenAPIToolsTest(DoerTestCase):
     """Make sure that the tools we use to handle our OpenAPI specification
     (located in zerver/openapi/openapi.py) work as expected.
 
@@ -201,7 +201,7 @@ class OpenAPIToolsTest(ZulipTestCase):
         self.assertIs(old_openapi, new_openapi)
 
 
-class OpenAPIArgumentsTest(ZulipTestCase):
+class OpenAPIArgumentsTest(DoerTestCase):
     # This will be filled during test_openapi_arguments:
     checked_endpoints: set[str] = set()
     pending_endpoints = {
@@ -250,14 +250,14 @@ class OpenAPIArgumentsTest(ZulipTestCase):
         "/realm/subdomain/{subdomain}",
         # API for Zoom video calls.  Unclear if this can support other apps.
         "/calls/zoom/create",
-        #### The following are fake endpoints that live in our zulip.yaml
+        #### The following are fake endpoints that live in our doer.yaml
         #### for tooling convenience reasons, and should eventually be moved.
         # Real-time-events endpoint
         "/real-time",
         # Rest error handling endpoint
         "/rest-error-handling",
-        # Zulip outgoing webhook payload
-        "/zulip-outgoing-webhook",
+        # Doer outgoing webhook payload
+        "/doer-outgoing-webhook",
         "/jwt/fetch_api_key",
         #### Bouncer endpoints
         # Higher priority to document
@@ -327,7 +327,7 @@ so maybe we shouldn't mark it as intentionally undocumented in the URLs.
         (between the OpenAPI documentation and the function declaration) don't match."""
 
         msg = f"""
-The types for the request parameters in zerver/openapi/zulip.yaml
+The types for the request parameters in zerver/openapi/doer.yaml
 do not match the types declared in the implementation of {function.__name__}.\n"""
         msg += "=" * 65 + "\n"
         msg += "{:<10}{:^30}{:>10}\n".format(
@@ -506,7 +506,7 @@ so maybe we shouldn't include it in pending_endpoints.
             #   this method accepts.
             #
             # * The documented parameters for the endpoint as recorded in our
-            #   OpenAPI data in zerver/openapi/zulip.yaml.
+            #   OpenAPI data in zerver/openapi/doer.yaml.
             #
             # We now compare these to confirm that the documented
             # argument list matches what actually appears in the
@@ -538,7 +538,7 @@ so maybe we shouldn't include it in pending_endpoints.
         """This end-to-end API documentation test compares the arguments
         defined in the actual code using @typed_endpoint,
         with the arguments declared in our API documentation
-        for every API endpoint in Zulip.
+        for every API endpoint in Doer.
 
         First, we import the fancy-Django version of zproject/urls.py and
         zilencer/urls.py. By doing this, each typed_endpoint wrapper around each
@@ -605,7 +605,7 @@ so maybe we shouldn't include it in pending_endpoints.
         self.check_for_non_existent_openapi_endpoints()
 
 
-class TestCurlExampleGeneration(ZulipTestCase):
+class TestCurlExampleGeneration(DoerTestCase):
     spec_mock_without_examples = {
         "security": [{"basicAuth": []}],
         "paths": {
@@ -874,11 +874,11 @@ class TestCurlExampleGeneration(ZulipTestCase):
 
     def test_generate_and_render_curl_wrapper(self) -> None:
         generated_curl_example = render_curl_example(
-            "/get_stream_id:GET", api_url="https://zulip.example.com/api"
+            "/get_stream_id:GET", api_url="https://doer.example.com/api"
         )
         expected_curl_example = [
             "```curl",
-            "curl -sSX GET -G https://zulip.example.com/api/v1/get_stream_id \\",
+            "curl -sSX GET -G https://doer.example.com/api/v1/get_stream_id \\",
             "    -u BOT_EMAIL_ADDRESS:BOT_API_KEY \\",
             "    --data-urlencode stream=Denmark",
             "```",
@@ -912,7 +912,7 @@ class TestCurlExampleGeneration(ZulipTestCase):
         self.assertEqual(generated_curl_example, expected_curl_example)
 
 
-class OpenAPIAttributesTest(ZulipTestCase):
+class OpenAPIAttributesTest(DoerTestCase):
     def test_attributes(self) -> None:
         """
         Checks:
@@ -986,7 +986,7 @@ class OpenAPIAttributesTest(ZulipTestCase):
                         )
 
 
-class OpenAPIRegexTest(ZulipTestCase):
+class OpenAPIRegexTest(DoerTestCase):
     def test_regex(self) -> None:
         """
         Calls a few documented  and undocumented endpoints and checks whether they
@@ -1012,7 +1012,7 @@ class OpenAPIRegexTest(ZulipTestCase):
         assert find_openapi_endpoint("/realm/emoji/realm_emoji_1") == "/realm/emoji/{emoji_name}"
 
 
-class OpenAPIRequestValidatorTest(ZulipTestCase):
+class OpenAPIRequestValidatorTest(DoerTestCase):
     def test_validator(self) -> None:
         """
         Test to make sure the request validator works properly
@@ -1033,13 +1033,13 @@ class OpenAPIRequestValidatorTest(ZulipTestCase):
         )
 
 
-class APIDocsSidebarTest(ZulipTestCase):
+class APIDocsSidebarTest(DoerTestCase):
     def test_link_in_sidebar(self) -> None:
         """
         Test to make sure that links of API documentation pages exist
         in the sidebar and have the same label as the summary of the endpoint.
         """
-        # These endpoints are in zulip.yaml, but not the actual docs.
+        # These endpoints are in doer.yaml, but not the actual docs.
         exempted_docs = {
             # (No /api/v1/ or /json prefix).
             "get-file-temporary-url",
@@ -1048,7 +1048,7 @@ class APIDocsSidebarTest(ZulipTestCase):
             "update-subscriptions",
             # This is rendered on the "Outgoing webhooks" page and hence is not
             # linked in the sidebar.
-            "zulip-outgoing-webhooks",
+            "doer-outgoing-webhooks",
         }
         sidebar_path = "api_docs/sidebar_index.md"
         rest_endpoints_path = "api_docs/include/rest-endpoints.md"

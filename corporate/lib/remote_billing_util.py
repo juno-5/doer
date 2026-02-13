@@ -11,7 +11,7 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
+    RemoteDoerServer,
 )
 
 billing_logger = logging.getLogger("corporate.stripe")
@@ -162,7 +162,7 @@ def get_remote_realm_and_user_from_session(
 def get_remote_server_and_user_from_session(
     request: HttpRequest,
     server_uuid: str,
-) -> tuple[RemoteZulipServer, RemoteServerBillingUser | None]:
+) -> tuple[RemoteDoerServer, RemoteServerBillingUser | None]:
     identity_dict: LegacyServerIdentityDict | None = get_identity_dict_from_session(
         request, realm_uuid=None, server_uuid=server_uuid
     )
@@ -172,8 +172,8 @@ def get_remote_server_and_user_from_session(
 
     remote_server_uuid = identity_dict["remote_server_uuid"]
     try:
-        remote_server = RemoteZulipServer.objects.get(uuid=remote_server_uuid)
-    except RemoteZulipServer.DoesNotExist:
+        remote_server = RemoteDoerServer.objects.get(uuid=remote_server_uuid)
+    except RemoteDoerServer.DoesNotExist:
         raise JsonableError(_("Invalid remote server."))
 
     if remote_server.deactivated:

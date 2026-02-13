@@ -12,7 +12,7 @@ from tools.lib import sanity_check
 
 sanity_check.check_venv(__file__)
 
-from scripts.lib.zulip_tools import ENDC, FAIL, WARNING
+from scripts.lib.doer_tools import ENDC, FAIL, WARNING
 
 
 def find_handlebars(translatable_strings: list[str]) -> list[str]:

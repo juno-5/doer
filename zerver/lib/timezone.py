@@ -1,6 +1,6 @@
 from functools import cache
 
-from scripts.lib.zulip_tools import get_tzdata_zi
+from scripts.lib.doer_tools import get_tzdata_zi
 
 
 @cache

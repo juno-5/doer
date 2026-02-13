@@ -32,7 +32,7 @@ To resolve port conflicts with another WSL2 instance, stop the conflicting insta
 After stopping the conflicting instance, restart your WSL instance with:
 
 ```console
-> wsl -d <Your_Zulip_Instance_Name>
+> wsl -d <Your_Doer_Instance_Name>
 ```
 
 #### Resolving Port Conflicts with Services Running on Windows
@@ -72,4 +72,4 @@ $ systemctl enable <service_name>
 - Use `wsl --list` to view all running WSL2 instances and their states.
 - Avoid overlapping port usage between WSL2 instances and Windows processes.
 - Keep a record of services and their associated port numbers to prevent conflicts in the future.
-- Ensure that you use a fresh WSL instance to setup the Zulip development environment to avoid dependency conflicts.
+- Ensure that you use a fresh WSL instance to setup the Doer development environment to avoid dependency conflicts.

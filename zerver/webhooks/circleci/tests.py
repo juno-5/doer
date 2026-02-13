@@ -41,7 +41,7 @@ Triggered on [`8ab595d2de9: app.py edited online with Bitbucket`](https://bitbuc
         expected_message = """
 Job `build-and-test` within Pipeline #4 has succeeded.
 
-Triggered on [`a5e30a90822: Fix remove-op on reaction event.`](https://github.com/zulip-testing/circleci-webhook-test/commit/a5e30a908224e46626a796d058289475f6d387b5) on branch `main` by Hari Prashant Bhimaraju.
+Triggered on [`a5e30a90822: Fix remove-op on reaction event.`](https://github.com/doer-testing/circleci-webhook-test/commit/a5e30a908224e46626a796d058289475f6d387b5) on branch `main` by Hari Prashant Bhimaraju.
 """.strip()
         self.check_webhook("github_job_completed", expected_topic_name, expected_message)
 
@@ -57,9 +57,9 @@ Triggered on the latest tag on [0e6e66c14e6](https://github.com/prah23/circleci-
     def test_github_workflow_completed(self) -> None:
         expected_topic_name = "circleci-webhook-test"
         expected_message = """
-Workflow [`sample`](https://app.circleci.com/pipelines/github/zulip-testing/circleci-webhook-test/4/workflows/7381218b-d04c-4aa3-b8b8-8c00a9319d1f) within Pipeline #4 has succeeded.
+Workflow [`sample`](https://app.circleci.com/pipelines/github/doer-testing/circleci-webhook-test/4/workflows/7381218b-d04c-4aa3-b8b8-8c00a9319d1f) within Pipeline #4 has succeeded.
 
-Triggered on [`a5e30a90822: .circleci: Update Webhook URL.`](https://github.com/zulip-testing/circleci-webhook-test/commit/a5e30a908224e46626a796d058289475f6d387b5) on branch `main` by Hari Prashant Bhimaraju.
+Triggered on [`a5e30a90822: .circleci: Update Webhook URL.`](https://github.com/doer-testing/circleci-webhook-test/commit/a5e30a908224e46626a796d058289475f6d387b5) on branch `main` by Hari Prashant Bhimaraju.
 """.strip()
         self.check_webhook("github_workflow_completed", expected_topic_name, expected_message)
 
@@ -68,7 +68,7 @@ Triggered on [`a5e30a90822: .circleci: Update Webhook URL.`](https://github.com/
         expected_message = """
 Job `build-and-test` within Pipeline #3 has succeeded.
 
-Triggered on [`c31f86994c5: app: Enhance message within hello().`](https://gitlab.com/zulip-testing/circleci-webhook-test/-/commit/c31f86994c54672f97b5bd5e544315b7bd40e4c1) on branch `main` by Hari Prashant Bhimaraju.
+Triggered on [`c31f86994c5: app: Enhance message within hello().`](https://gitlab.com/doer-testing/circleci-webhook-test/-/commit/c31f86994c54672f97b5bd5e544315b7bd40e4c1) on branch `main` by Hari Prashant Bhimaraju.
 """.strip()
         self.check_webhook("gitlab_job_completed", expected_topic_name, expected_message)
 
@@ -77,6 +77,6 @@ Triggered on [`c31f86994c5: app: Enhance message within hello().`](https://gitla
         expected_message = """
 Workflow [`sample`](https://app.circleci.com/pipelines/circleci/89xcrx7UvWQfzcUPAEmu5Q/63AY3yf3XeUQojmQcGZTtB/3/workflows/b23ceb64-127a-4075-a27c-d204a7a0a3b3) within Pipeline #3 has succeeded.
 
-Triggered on [`c31f86994c5: app: Enhance message within hello().`](https://gitlab.com/zulip-testing/circleci-webhook-test/-/commit/c31f86994c54672f97b5bd5e544315b7bd40e4c1) on branch `main` by Hari Prashant Bhimaraju.
+Triggered on [`c31f86994c5: app: Enhance message within hello().`](https://gitlab.com/doer-testing/circleci-webhook-test/-/commit/c31f86994c54672f97b5bd5e544315b7bd40e4c1) on branch `main` by Hari Prashant Bhimaraju.
 """.strip()
         self.check_webhook("gitlab_workflow_completed", expected_topic_name, expected_message)

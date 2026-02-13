@@ -9,7 +9,7 @@ from corporate.lib.decorator import (
     authenticated_remote_server_management_endpoint,
     self_hosting_management_endpoint,
 )
-from zerver.decorator import require_organization_member, zulip_login_required
+from zerver.decorator import require_organization_member, doer_login_required
 from zerver.lib.response import json_success
 from zerver.lib.typed_endpoint import typed_endpoint
 from zerver.models import UserProfile
@@ -75,7 +75,7 @@ def remote_server_event_status(
     return json_success(request, data)
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def event_status_page(
     request: HttpRequest,

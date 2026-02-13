@@ -3,7 +3,7 @@
 class kandra::prometheus::akamai {
   include kandra::prometheus::base
   include kandra::vector
-  include zulip::supervisor
+  include doer::supervisor
 
   $pipelines = {
     'static' => zulipsecret('secrets', 'akamai_static_sqs_url', ''),

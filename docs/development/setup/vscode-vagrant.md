@@ -11,7 +11,7 @@ to open VS Code connected to your Vagrant environment. See the
 [Remote development over SSH](https://code.visualstudio.com/docs/remote/ssh-tutorial) tutorial for more information.
 
 When using this plugin with Vagrant, you will want to run the command
-`vagrant ssh-config` from your `zulip` folder:
+`vagrant ssh-config` from your `doer` folder:
 
 ```console
 $ vagrant ssh-config
@@ -22,7 +22,7 @@ Host default
   UserKnownHostsFile /dev/null
   StrictHostKeyChecking no
   PasswordAuthentication no
-  IdentityFile /PATH/TO/zulip/.vagrant/machines/default/docker/private_key
+  IdentityFile /PATH/TO/doer/.vagrant/machines/default/docker/private_key
   IdentitiesOnly yes
   LogLevel FATAL
   PubkeyAcceptedKeyTypes +ssh-rsa
@@ -30,5 +30,5 @@ Host default
 ```
 
 Then copy that config into your `~/.ssh/config` file. You may want to change
-the host name from `default` to something more descriptive, like `zulip`.
+the host name from `default` to something more descriptive, like `doer`.
 Finally, refresh the known remotes in Visual Studio Code's Remote Explorer.

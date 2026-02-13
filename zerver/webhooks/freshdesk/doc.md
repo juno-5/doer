@@ -1,9 +1,9 @@
-# Zulip Freshdesk integration
+# Doer Freshdesk integration
 
-See customer support interactions in Zulip with our Freshdesk
+See customer support interactions in Doer with our Freshdesk
 integration!
 
-### Create Zulip bot for Freshdesk notifications
+### Create Doer bot for Freshdesk notifications
 
 {start_tabs}
 
@@ -23,7 +23,7 @@ integration!
 1. Under **Helpdesk Productivity**, select **Dispatch'r**, and then
    select **New rule**.
 
-1. Set **Rule Name** to a name of your choice, such as `Zulip`.
+1. Set **Rule Name** to a name of your choice, such as `Doer`.
 
 1. There isn't a shortcut to "always generate a notification on ticket
    creation", so we'll have to fake it by picking two complementary
@@ -78,7 +78,7 @@ integration!
 1. Under **Helpdesk Productivity**, select **Observer**, and then select
    **New rule**.
 
-1. Set **Rule Name** to a name of your choice, such as `Zulip`.
+1. Set **Rule Name** to a name of your choice, such as `Doer`.
 
 1. Under **involves any of these events**, create new events as shown below:
 
@@ -137,4 +137,4 @@ integration!
 
 {!webhooks-url-specification.md!}
 
-[create-bot]: #create-zulip-bot-for-freshdesk-notifications
+[create-bot]: #create-doer-bot-for-freshdesk-notifications

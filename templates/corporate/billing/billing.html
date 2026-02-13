@@ -2,7 +2,7 @@
 {% set entrypoint = "billing" %}
 
 {% block title %}
-<title>{{ _("Billing") }} | Zulip</title>
+<title>{{ _("Billing") }} | Doer</title>
 {% endblock %}
 
 {% block portico_content %}
@@ -15,7 +15,7 @@
             {% if is_self_hosted_billing and sponsorship_plan_name != "Community" %}
             discounted
             {% endif %}
-            <a href="{{ billing_base_url }}/plans/">{{ sponsorship_plan_name }}</a> plan.<br/><a href="mailto:support@zulip.com">Contact Zulip support</a> with any questions or updates.
+            <a href="{{ billing_base_url }}/plans/">{{ sponsorship_plan_name }}</a> plan.<br/><a href="mailto:support@zulip.com">Contact Doer support</a> with any questions or updates.
         </div>
         {% endif %}
         {% if success_message %}
@@ -29,7 +29,7 @@
         {% endif %}
         <div class="pitch">
             <h1>
-                Zulip
+                Doer
                 {% if is_self_hosted_billing %}
                 {% else %}
                 Cloud
@@ -63,7 +63,7 @@
                 {% if complimentary_access_plan %}
                 <div class="input-box billing-page-field" id="complimentary-access-end-notice-wrapper">
                     <div id="complimentary-access-end-notice" class="not-editable-realm-field">
-                        <i>Your complimentary access to Zulip Basic ends on {{ complimentary_access_plan_end_date }}.</i>
+                        <i>Your complimentary access to Doer Basic ends on {{ complimentary_access_plan_end_date }}.</i>
                     </div>
                 </div>
                 {% endif %}
@@ -116,7 +116,7 @@
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% else %}
-                        <a href="/help/zulip-cloud-billing#how-does-automatic-license-management-work" target="_blank" rel="noopener noreferrer">
+                        <a href="/help/doer-cloud-billing#how-does-automatic-license-management-work" target="_blank" rel="noopener noreferrer">
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% endif %}
@@ -142,7 +142,7 @@
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% else %}
-                        <a href="/help/zulip-cloud-billing#how-does-manual-license-management-work" target="_blank" rel="noopener noreferrer">
+                        <a href="/help/doer-cloud-billing#how-does-manual-license-management-work" target="_blank" rel="noopener noreferrer">
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% endif %}
@@ -176,7 +176,7 @@
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% else %}
-                        <a href="/help/zulip-cloud-billing#how-does-manual-license-management-work" target="_blank" rel="noopener noreferrer">
+                        <a href="/help/doer-cloud-billing#how-does-manual-license-management-work" target="_blank" rel="noopener noreferrer">
                             <i class="fa fa-question-circle-o" aria-hidden="true"></i>
                         </a>
                         {% endif %}
@@ -236,7 +236,7 @@
                             includes losing access to the
                             <a href="https://zulip.readthedocs.io/en/stable/production/mobile-push-notifications.html">Mobile Push Notification Service</a>.
                             {% else %}
-                            Your organization will be downgraded to <strong>Zulip Cloud Free</strong> at the end of the current billing
+                            Your organization will be downgraded to <strong>Doer Cloud Free</strong> at the end of the current billing
                             period (<strong>{{ renewal_date }}</strong>). You will lose access to unlimited search history and
                             <a href="{{ billing_base_url }}/plans/">other features</a> of your current plan.
                             {% endif %}
@@ -249,7 +249,7 @@
                             includes losing access to the
                             <a href="https://zulip.readthedocs.io/en/stable/production/mobile-push-notifications.html">Mobile Push Notification Service</a>.
                             {% else %}
-                            Your organization will be downgraded to <strong>Zulip Cloud Free</strong> at the end of the free trial
+                            Your organization will be downgraded to <strong>Doer Cloud Free</strong> at the end of the free trial
                             (<strong>{{ renewal_date }}</strong>). You will lose access to unlimited search history and
                             <a href="{{ billing_base_url }}/plans/">other features</a> of your current plan.
                             {% endif %}
@@ -310,7 +310,7 @@
                             {% endif %}
                         {% elif fixed_price_plan %}
                             This is a fixed-price plan. Your plan ends on <strong>{{ renewal_date }}</strong>.
-                            You will be contacted by Zulip Sales a couple of months before <strong>{{renewal_date}}</strong> to discuss plan renewal.
+                            You will be contacted by Doer Sales a couple of months before <strong>{{renewal_date}}</strong> to discuss plan renewal.
                         {% else %}
                             Your plan ends on <strong>{{ renewal_date }}</strong>, and does not renew.
                         {% endif %}
@@ -385,7 +385,7 @@
         <hr />
         <div class="support-link">
             <p>
-                To make changes to your plan or view your billing history <a href="mailto:support@zulip.com">contact Zulip support</a>.
+                To make changes to your plan or view your billing history <a href="mailto:support@zulip.com">contact Doer support</a>.
             </p>
         </div>
         {% else %}
@@ -393,7 +393,7 @@
         <!-- For organizations on free plan we redirect to /plans page. -->
         <div class="billing-status-page">
             <div class="pitch">
-                <h1>Zulip Cloud billing for {{ org_name }}</h1>
+                <h1>Doer Cloud billing for {{ org_name }}</h1>
             </div>
             <div class="white-box">
                 <p>
@@ -414,12 +414,12 @@
                         {% if is_self_hosted_billing %}
                         Free plan?
                         {% else %}
-                        Zulip Cloud Free?
+                        Doer Cloud Free?
                         {% endif %}
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
@@ -432,7 +432,7 @@
                     includes losing access to the
                     <a href="https://zulip.readthedocs.io/en/stable/production/mobile-push-notifications.html">Mobile Push Notification Service</a>.
                     {% else %}
-                    Your organization will be downgraded to <strong>Zulip Cloud Free</strong> at the end of your free trial
+                    Your organization will be downgraded to <strong>Doer Cloud Free</strong> at the end of your free trial
                     ({{ renewal_date }}). You will lose access to unlimited search history and
                     <a href="{{ billing_base_url }}/plans/">other features</a>
                     of your current plan. Are you sure you want to continue?
@@ -458,7 +458,7 @@
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
@@ -495,7 +495,7 @@
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
@@ -524,16 +524,16 @@
             <header class="modal__header">
                 <div class="modal__header-content">
                     <h1 class="modal__title dialog_heading">
-                        Downgrade {{ org_name }} to Zulip Cloud Free?
+                        Downgrade {{ org_name }} to Doer Cloud Free?
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
                 <p>
-                    Your organization will be downgraded to <strong>Zulip Cloud Free</strong> at the end of the current billing
+                    Your organization will be downgraded to <strong>Doer Cloud Free</strong> at the end of the current billing
                     period ({{ renewal_date }}). You will lose access to unlimited search history and
                     <a href="{{ billing_base_url }}/plans/">other features</a>
                     of your current plan. Are you sure you want to continue?
@@ -558,7 +558,7 @@
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
@@ -590,7 +590,7 @@
                     </h1>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <main class="modal__content">
@@ -639,7 +639,7 @@
                     </div>
                 </div>
                 <button type="button" class="modal__close" aria-label="{{ _('Close modal') }}" tabindex="0" data-micromodal-close>
-                    <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                 </button>
             </header>
             <footer class="modal__footer">

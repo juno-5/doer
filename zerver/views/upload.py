@@ -24,7 +24,7 @@ from django.utils.http import content_disposition_header
 from django.utils.translation import gettext as _
 
 from zerver.context_processors import get_valid_realm_from_request
-from zerver.decorator import zulip_redirect_to_login
+from zerver.decorator import doer_redirect_to_login
 from zerver.lib.attachments import validate_attachment_request
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.mime_types import INLINE_MIME_TYPES, bare_content_type, guess_type
@@ -280,7 +280,7 @@ def serve_file(
         if request.get_preferred_type(["text/html", "image/png"]) == "image/png":
             response = serve_image_error(403, "images/errors/image-no-auth.png")
         elif isinstance(maybe_user_profile, AnonymousUser):
-            response = zulip_redirect_to_login(request)
+            response = doer_redirect_to_login(request)
         else:
             response = HttpResponseForbidden(_("<p>You are not authorized to view this file.</p>"))
         patch_vary_headers(response, ("Accept",))

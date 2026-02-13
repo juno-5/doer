@@ -11,9 +11,9 @@ have since all moved to dedicated pages:
 
 Moved to [Troubleshooting](troubleshooting.md#monitoring).
 
-### Securing your Zulip server
+### Securing your Doer server
 
-Moved to [Securing your Zulip server](securing-your-zulip-server.md).
+Moved to [Securing your Doer server](securing-your-doer-server.md).
 
 ### Upgrading
 
@@ -37,6 +37,6 @@ Moved to [Scalability](requirements.md#scalability).
 
 Moved to [Management commands](management-commands.md).
 
-### API and your Zulip URL
+### API and your Doer URL
 
 Moved to [REST API](https://zulip.com/api/rest).

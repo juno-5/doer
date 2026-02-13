@@ -84,7 +84,7 @@ class NotificationTriggers:
 
 class ScheduledMessageNotificationEmail(models.Model):
     """Stores planned outgoing message notification emails. They may be
-    processed earlier should Zulip choose to batch multiple messages
+    processed earlier should Doer choose to batch multiple messages
     in a single email, but typically will be processed just after
     scheduled_timestamp.
     """
@@ -277,9 +277,9 @@ class ScheduledMessage(models.Model):
 
 EMAIL_TYPES = {
     "account_registered": ScheduledEmail.WELCOME,
-    "onboarding_zulip_topics": ScheduledEmail.WELCOME,
-    "onboarding_zulip_guide": ScheduledEmail.WELCOME,
-    "onboarding_team_to_zulip": ScheduledEmail.WELCOME,
+    "onboarding_doer_topics": ScheduledEmail.WELCOME,
+    "onboarding_doer_guide": ScheduledEmail.WELCOME,
+    "onboarding_team_to_doer": ScheduledEmail.WELCOME,
     "digest": ScheduledEmail.DIGEST,
     "invitation_reminder": ScheduledEmail.INVITATION_REMINDER,
 }

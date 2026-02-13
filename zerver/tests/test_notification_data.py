@@ -2,11 +2,11 @@ from zerver.actions.user_groups import check_add_user_group
 from zerver.actions.users import do_deactivate_user
 from zerver.lib.mention import MentionBackend, MentionData
 from zerver.lib.notification_data import UserMessageNotificationsData, get_user_group_mentions_data
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models.scheduled_jobs import NotificationTriggers
 
 
-class TestNotificationData(ZulipTestCase):
+class TestNotificationData(DoerTestCase):
     """
     Because the `UserMessageNotificationsData` does not do any database queries, all user IDs
     used in the following tests are arbitrary, and do not represent real users.

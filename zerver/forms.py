@@ -62,7 +62,7 @@ from zproject.backends import (
 MIT_VALIDATION_ERROR = Markup(
     "That user does not exist at MIT or is a"
     ' <a href="https://ist.mit.edu/email-lists">mailing list</a>.'
-    " If you want to sign up an alias for Zulip,"
+    " If you want to sign up an alias for Doer,"
     ' <a href="mailto:support@zulip.com">contact us</a>.'
 )
 
@@ -165,31 +165,31 @@ class RealmDetailsForm(forms.Form):
 
 
 # These are the matching field names for the options in
-# RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS that
+# RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS that
 # ask for more context when creating a new organization.
-HOW_FOUND_ZULIP_EXTRA_CONTEXT = {
-    "other": "how_realm_creator_found_zulip_other_text",
-    "ad": "how_realm_creator_found_zulip_where_ad",
-    "existing_user": "how_realm_creator_found_zulip_which_organization",
-    "review_site": "how_realm_creator_found_zulip_review_site",
-    "ai_chatbot": "how_realm_creator_found_zulip_which_ai_chatbot",
+HOW_FOUND_DOER_EXTRA_CONTEXT = {
+    "other": "how_realm_creator_found_doer_other_text",
+    "ad": "how_realm_creator_found_doer_where_ad",
+    "existing_user": "how_realm_creator_found_doer_which_organization",
+    "review_site": "how_realm_creator_found_doer_review_site",
+    "ai_chatbot": "how_realm_creator_found_doer_which_ai_chatbot",
 }
 
 
-class HowFoundZulipFormMixin(forms.Form):
-    how_realm_creator_found_zulip = forms.ChoiceField(
-        choices=RealmAuditLog.HOW_REALM_CREATOR_FOUND_ZULIP_OPTIONS.items()
+class HowFoundDoerFormMixin(forms.Form):
+    how_realm_creator_found_doer = forms.ChoiceField(
+        choices=RealmAuditLog.HOW_REALM_CREATOR_FOUND_DOER_OPTIONS.items()
     )
-    how_realm_creator_found_zulip_other_text = forms.CharField(max_length=100, required=False)
-    how_realm_creator_found_zulip_where_ad = forms.CharField(max_length=100, required=False)
-    how_realm_creator_found_zulip_which_organization = forms.CharField(
+    how_realm_creator_found_doer_other_text = forms.CharField(max_length=100, required=False)
+    how_realm_creator_found_doer_where_ad = forms.CharField(max_length=100, required=False)
+    how_realm_creator_found_doer_which_organization = forms.CharField(
         max_length=100, required=False
     )
-    how_realm_creator_found_zulip_review_site = forms.CharField(max_length=100, required=False)
-    how_realm_creator_found_zulip_which_ai_chatbot = forms.CharField(max_length=100, required=False)
+    how_realm_creator_found_doer_review_site = forms.CharField(max_length=100, required=False)
+    how_realm_creator_found_doer_which_ai_chatbot = forms.CharField(max_length=100, required=False)
 
 
-class RegistrationForm(HowFoundZulipFormMixin, RealmDetailsForm):
+class RegistrationForm(HowFoundDoerFormMixin, RealmDetailsForm):
     MAX_PASSWORD_LENGTH = 100
     full_name = forms.CharField(max_length=UserProfile.MAX_NAME_LENGTH)
     # The required-ness of the password field gets overridden if it isn't
@@ -211,7 +211,7 @@ class RegistrationForm(HowFoundZulipFormMixin, RealmDetailsForm):
         super().__init__(*args, **kwargs)
         if settings.TERMS_OF_SERVICE_VERSION is not None:
             self.fields["terms"] = forms.BooleanField(required=True)
-        self.fields["how_realm_creator_found_zulip"].required = self.realm_creation
+        self.fields["how_realm_creator_found_doer"].required = self.realm_creation
 
     def clean_full_name(self) -> str:
         try:
@@ -231,7 +231,7 @@ class RegistrationForm(HowFoundZulipFormMixin, RealmDetailsForm):
         return password
 
 
-class DemoRegistrationForm(HowFoundZulipFormMixin, forms.Form):
+class DemoRegistrationForm(HowFoundDoerFormMixin, forms.Form):
     terms = forms.BooleanField(required=False)
     realm_type = forms.TypedChoiceField(
         coerce=int, choices=[(t["id"], t["name"]) for t in Realm.ORG_TYPES.values()]
@@ -331,7 +331,7 @@ class HomepageForm(forms.Form):
             except LicenseLimitError:
                 raise ValidationError(
                     _(
-                        "New members cannot join this organization because all Zulip licenses are in use. Please contact the person who "
+                        "New members cannot join this organization because all Doer licenses are in use. Please contact the person who "
                         "invited you and ask them to increase the number of licenses, then try again."
                     )
                 )
@@ -511,7 +511,7 @@ class LoggingSetPasswordForm(SetPasswordForm[UserProfile]):
         return self.user
 
 
-class ZulipPasswordResetForm(PasswordResetForm):
+class DoerPasswordResetForm(PasswordResetForm):
     @override
     def save(
         self,
@@ -551,7 +551,7 @@ class ZulipPasswordResetForm(PasswordResetForm):
         if email_belongs_to_ldap(realm, email):
             # TODO: Ideally, we'd provide a user-facing error here
             # about the fact that they aren't allowed to have a
-            # password in the Zulip server and should change it in LDAP.
+            # password in the Doer server and should change it in LDAP.
             logging.info("Password reset not allowed for user in LDAP domain")
             return
         if realm.deactivated:
@@ -607,7 +607,7 @@ class CreateUserForm(forms.Form):
 
 
 class OurAuthenticationForm(AuthenticationForm):
-    logger = logging.getLogger("zulip.auth.OurAuthenticationForm")
+    logger = logging.getLogger("doer.auth.OurAuthenticationForm")
 
     @override
     def clean(self) -> dict[str, Any]:
@@ -678,7 +678,7 @@ class OurAuthenticationForm(AuthenticationForm):
 
     @override
     def add_prefix(self, field_name: str) -> str:
-        """Disable prefix, since Zulip doesn't use this Django forms feature
+        """Disable prefix, since Doer doesn't use this Django forms feature
         (and django-two-factor does use it), and we'd like both to be
         happy with this form.
         """
@@ -735,5 +735,5 @@ class RealmRedirectForm(forms.Form):
         try:
             get_realm(subdomain)
         except Realm.DoesNotExist:
-            raise ValidationError(_("We couldn't find that Zulip organization."))
+            raise ValidationError(_("We couldn't find that Doer organization."))
         return subdomain

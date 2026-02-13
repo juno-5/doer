@@ -34,13 +34,13 @@ curl -X POST {{ api_url }}/v1/messages \
 
 ## Parameters
 
-{generate_api_arguments_table|zulip.yaml|/scheduled_messages:post}
+{generate_api_arguments_table|doer.yaml|/scheduled_messages:post}
 
 {generate_parameter_description(/scheduled_messages:post)}
 
 ## Response
 
-{generate_return_values_table|zulip.yaml|/scheduled_messages:post}
+{generate_return_values_table|doer.yaml|/scheduled_messages:post}
 
 {generate_response_description(/scheduled_messages:post)}
 

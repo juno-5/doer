@@ -20,6 +20,6 @@ class BuildbotHookTests(WebhookTestCase):
         self.check_webhook("finished_failure", expected_topic_name, expected_message)
 
     def test_build_cancelled(self) -> None:
-        expected_topic_name = "zulip/zulip-zapier"
+        expected_topic_name = "doer/doer-zapier"
         expected_message = "Build [#10434](https://ci.example.org/#builders/79/builds/307) (result: cancelled) for **AMD64 Ubuntu 18.04 Python 3** finished."
         self.check_webhook("finished_cancelled", expected_topic_name, expected_message)

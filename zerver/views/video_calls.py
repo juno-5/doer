@@ -26,7 +26,7 @@ from requests_oauthlib import OAuth2Session
 from typing_extensions import TypedDict, override
 
 from zerver.actions.video_calls import do_set_zoom_token
-from zerver.decorator import zulip_login_required
+from zerver.decorator import doer_login_required
 from zerver.lib.cache import (
     cache_with_key,
     flush_zoom_server_access_token_cache,
@@ -198,7 +198,7 @@ class OAuthVideoCallProvider(ABC):
             ""
             if getattr(request, "_dont_enforce_csrf_checks", False)
             else salted_hmac(
-                f"Zulip {self.provider_name.capitalize()} sid", request.META["CSRF_COOKIE"]
+                f"Doer {self.provider_name.capitalize()} sid", request.META["CSRF_COOKIE"]
             ).hexdigest()
         )
 
@@ -285,7 +285,7 @@ class ZoomGeneralOAuthProvider(OAuthVideoCallProvider):
         return json_success(request, data={"url": response.json()["join_url"]})
 
 
-@zulip_login_required
+@doer_login_required
 @never_cache
 def register_zoom_user(request: HttpRequest) -> HttpResponse:
     return ZoomGeneralOAuthProvider().register_user(request=request)
@@ -311,7 +311,7 @@ class ZoomPayload(TypedDict):
 
 
 @never_cache
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def complete_zoom_user(
     request: HttpRequest,
@@ -436,9 +436,9 @@ def get_bigbluebutton_url(
 ) -> HttpResponse:
     # https://docs.bigbluebutton.org/dev/api.html#create for reference on the API calls
     # https://docs.bigbluebutton.org/dev/api.html#usage for reference for checksum
-    id = "zulip-" + str(random.randint(100000000000, 999999999999))
+    id = "doer-" + str(random.randint(100000000000, 999999999999))
 
-    # We sign our data here to ensure a Zulip user cannot tamper with
+    # We sign our data here to ensure a Doer user cannot tamper with
     # the join link to gain access to other meetings that are on the
     # same bigbluebutton server.
     signed = Signer().sign_object(
@@ -453,12 +453,12 @@ def get_bigbluebutton_url(
     return json_success(request, {"url": url})
 
 
-# We use zulip_login_required here mainly to get access to the user's
-# full name from Zulip to prepopulate the user's name in the
+# We use doer_login_required here mainly to get access to the user's
+# full name from Doer to prepopulate the user's name in the
 # BigBlueButton meeting.  Since the meeting's details are encoded in
 # the link the user is clicking, there is no validation tying this
-# meeting to the Zulip organization it was created in.
-@zulip_login_required
+# meeting to the Doer organization it was created in.
+@doer_login_required
 @never_cache
 @typed_endpoint
 def join_bigbluebutton(request: HttpRequest, *, bigbluebutton: str) -> HttpResponse:
@@ -515,7 +515,7 @@ def join_bigbluebutton(request: HttpRequest, *, bigbluebutton: str) -> HttpRespo
             # The createTime option is used to have the user redirected to a link
             # that is only valid for this meeting.
             #
-            # Even if the same link in Zulip is used again, a new
+            # Even if the same link in Doer is used again, a new
             # createTime parameter will be created, as the meeting on
             # the BigBlueButton server has to be recreated. (after a
             # few minutes)
@@ -542,8 +542,8 @@ def make_constructor_groups_video_call(
 
     room_data = service.get_or_create_default_room(
         creator_email=user_profile.delivery_email,
-        name=f"{user_profile.full_name}'s Zulip room",
-        fallback_name=f"{user_profile.full_name}'s Zulip room ({user_profile.realm_id}-{user_profile.id})",
+        name=f"{user_profile.full_name}'s Doer room",
+        fallback_name=f"{user_profile.full_name}'s Doer room ({user_profile.realm_id}-{user_profile.id})",
     )
 
     room_url = room_data.get("url", "")

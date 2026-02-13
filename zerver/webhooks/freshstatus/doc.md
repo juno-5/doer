@@ -1,6 +1,6 @@
-# Zulip Freshstatus integration
+# Doer Freshstatus integration
 
-Receive Freshstatus notifications in Zulip!
+Receive Freshstatus notifications in Doer!
 
 {start_tabs}
 
@@ -12,7 +12,7 @@ Receive Freshstatus notifications in Zulip!
    **Integrations**. Under **Webhooks**, select **Manage**, and click
    **New Webhook**.
 
-1. Set **Webhook Name** to a name of your choice, such as `Zulip`, and
+1. Set **Webhook Name** to a name of your choice, such as `Doer`, and
    **Description** to any suitable description.
 
 1. Under **Condition**, select the [events](#filtering-incoming-events)

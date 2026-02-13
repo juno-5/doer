@@ -1,6 +1,6 @@
-# Zulip Crashlytics integration
+# Doer Crashlytics integration
 
-Get notifications about Crashlytics issues in Zulip.
+Get notifications about Crashlytics issues in Doer.
 
 {start_tabs}
 

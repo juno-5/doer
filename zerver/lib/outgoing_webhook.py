@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from requests import Response
 from typing_extensions import override
 
-from version import ZULIP_VERSION
+from version import DOER_VERSION
 from zerver.actions.message_send import check_send_message
 from zerver.lib.exceptions import JsonableError, StreamDoesNotExistError
 from zerver.lib.message_cache import MessageDict
@@ -34,7 +34,7 @@ class OutgoingWebhookServiceInterface(abc.ABC):
         self.session: requests.Session = OutgoingSession(
             role="webhook",
             timeout=settings.OUTGOING_WEBHOOK_TIMEOUT_SECONDS,
-            headers={"User-Agent": "ZulipOutgoingWebhook/" + ZULIP_VERSION},
+            headers={"User-Agent": "DoerOutgoingWebhook/" + DOER_VERSION},
         )
 
     @abc.abstractmethod
@@ -186,7 +186,7 @@ def send_response_message(
         topic - see get_topic_from_message_info
 
     response_data is what the bot wants to send back and has these fields:
-        content - raw Markdown content for Zulip to render
+        content - raw Markdown content for Doer to render
 
     WARNING: This function sends messages bypassing the stream access check
     for the bot - so use with caution to not call this in codepaths
@@ -320,7 +320,7 @@ def process_success_response(
         raise JsonableError(_("Invalid JSON in response"))
 
     if response_json == "":
-        # Versions of zulip_botserver before 2021-05 used
+        # Versions of doer_botserver before 2021-05 used
         # json.dumps("") as their "no response required" success
         # response; handle that for backwards-compatibility.
         return
@@ -374,7 +374,7 @@ def do_rest_call(
                 response_message = e.msg
                 logging.info("Outhook trigger failed:", stack_info=True)
                 fail_with_message(event, response_message)
-                response_message = f"The outgoing webhook server attempted to send a message in Zulip, but that request resulted in the following error:\n> {e}"
+                response_message = f"The outgoing webhook server attempted to send a message in Doer, but that request resulted in the following error:\n> {e}"
                 notify_bot_owner(
                     event, response_content=response.text, failure_message=response_message
                 )
@@ -419,7 +419,7 @@ def do_rest_call(
     except requests.exceptions.RequestException as e:
         response_message = (
             f"An exception of type *{type(e).__name__}* occurred for message `{event['command']}`! "
-            "See the Zulip server logs for more information."
+            "See the Doer server logs for more information."
         )
         logging.exception("Outhook trigger failed:", stack_info=True)
         fail_with_message(event, response_message)

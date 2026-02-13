@@ -6,8 +6,8 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AddUsersToAGroup from "../include/_AddUsersToAGroup.mdx";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import CloudPaidPlansOnly from "../include/_CloudPaidPlansOnly.mdx";
@@ -19,8 +19,8 @@ import UserGroupsApplications from "../include/_UserGroupsApplications.mdx";
 import UserGroupsIntro from "../include/_UserGroupsIntro.mdx";
 import UserSubgroupsIntro from "../include/_UserSubgroupsIntro.mdx";
 
-import ExpandBothDiagonalsIcon from "~icons/zulip-icon/expand-both-diagonals";
-import UserGroupEditIcon from "~icons/zulip-icon/user-group-edit";
+import ExpandBothDiagonalsIcon from "~icons/doer-icon/expand-both-diagonals";
+import UserGroupEditIcon from "~icons/doer-icon/user-group-edit";
 
 <CloudPaidPlansOnly />
 
@@ -30,10 +30,10 @@ import UserGroupEditIcon from "~icons/zulip-icon/user-group-edit";
 
 ## Create a user group
 
-<ZulipTip>
+<DoerTip>
   You can modify the group's name, description, and other settings after it
   has been created.
-</ZulipTip>
+</DoerTip>
 
 <HowToCreateAUserGroup />
 
@@ -56,15 +56,15 @@ import UserGroupEditIcon from "~icons/zulip-icon/user-group-edit";
 
 ## Configure group permissions
 
-<ZulipNote>
+<DoerNote>
   Guests can never administer user groups, add anyone else to a group, or remove
   anyone else from a group, even if they belong to a group that has permissions
   to do so.
-</ZulipNote>
+</DoerNote>
 
-<ZulipTip>
+<DoerTip>
   Users who can add members to a group can always join the group.
-</ZulipTip>
+</DoerTip>
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -101,11 +101,11 @@ import UserGroupEditIcon from "~icons/zulip-icon/user-group-edit";
       1. Click **Add**.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       Click the <ExpandBothDiagonalsIcon /> icon
       on a user group pill to add all the members of the group, rather than the
       group itself.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -182,5 +182,5 @@ group.
 * [Mention a user or group](/help/mention-a-user-or-group)
 * [Create user groups](/help/create-user-groups)
 * [Deactivate a user group](/help/deactivate-a-user-group)
-* [Moving to Zulip](/help/moving-to-zulip)
+* [Moving to Doer](/help/moving-to-doer)
 * [User roles](/help/user-roles)

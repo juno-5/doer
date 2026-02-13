@@ -1,24 +1,24 @@
-# The Zulip API
+# The Doer API
 
-Zulip's APIs allow you to integrate other services with Zulip.  This
+Doer's APIs allow you to integrate other services with Doer.  This
 guide should help you find the API you need:
 
-* First, check if the tool you'd like to integrate with Zulip
+* First, check if the tool you'd like to integrate with Doer
   [already has a native integration](/integrations/).
 * Next, check if [Zapier](https://zapier.com/apps) or
   [IFTTT](https://ifttt.com/search) has an integration.
-  [Zulip's Zapier integration](/integrations/zapier) and
-  [Zulip's IFTTT integration](/integrations/ifttt) often allow
-  integrating a new service with Zulip without writing any code.
-* If you'd like to send content into Zulip, you can
+  [Doer's Zapier integration](/integrations/zapier) and
+  [Doer's IFTTT integration](/integrations/ifttt) often allow
+  integrating a new service with Doer without writing any code.
+* If you'd like to send content into Doer, you can
   [write a native incoming webhook integration][incoming-webhooks-overview]
-  or use [Zulip's API for sending messages](/api/send-message).
+  or use [Doer's API for sending messages](/api/send-message).
 * If you're building an interactive bot that reacts to activity inside
-  Zulip, you'll want to look at Zulip's
+  Doer, you'll want to look at Doer's
   [Python framework for interactive bots](/help/running-bots) or
-  [Zulip's real-time events API](/api/get-events).
+  [Doer's real-time events API](/api/get-events).
 
-And if you still need to build your own integration with Zulip, check out
+And if you still need to build your own integration with Doer, check out
 the full [REST API](/api/rest), generally starting with
 [installing the API client bindings](/api/installation-instructions).
 

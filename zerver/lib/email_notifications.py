@@ -144,7 +144,7 @@ def fix_emojis(fragment: lxml.html.HtmlElement, emojiset: str) -> None:
 
 def fix_spoilers_in_html(fragment: lxml.html.HtmlElement, language: str) -> None:
     with override_language(language):
-        spoiler_title: str = _("Open Zulip to see the spoiler content")
+        spoiler_title: str = _("Open Doer to see the spoiler content")
     spoilers = fragment.find_class("spoiler-block")
     for spoiler in spoilers:
         header = spoiler.find_class("spoiler-header")[0]
@@ -166,7 +166,7 @@ def fix_spoilers_in_html(fragment: lxml.html.HtmlElement, language: str) -> None
 
 def fix_spoilers_in_text(content: str, language: str) -> str:
     with override_language(language):
-        spoiler_title: str = _("Open Zulip to see the spoiler content")
+        spoiler_title: str = _("Open Doer to see the spoiler content")
     lines = content.split("\n")
     output = []
     open_fence = None
@@ -278,7 +278,7 @@ def build_message_list(
     ) -> dict[str, str | Markup]:
         plain = message.content
         plain = fix_plaintext_image_urls(plain)
-        # There's a small chance of colliding with non-Zulip URLs containing
+        # There's a small chance of colliding with non-Doer URLs containing
         # "/user_uploads/", but we don't have much information about the
         # structure of the URL to leverage. We can't use `relative_to_full_url()`
         # function here because it uses a stricter regex which will not work for
@@ -439,7 +439,7 @@ def prepare_synthetic_root_message_id(
     return f"<{id_left}@{settings.EXTERNAL_HOST_WITHOUT_PORT}>"
 
 
-def do_send_missedmessage_events_reply_in_zulip(
+def do_send_missedmessage_events_reply_in_doer(
     user_profile: UserProfile, missed_messages: list[dict[str, Any]], message_count: int
 ) -> None:
     """
@@ -447,7 +447,7 @@ def do_send_missedmessage_events_reply_in_zulip(
     by being offline.
 
     The email will have its reply to address set to a limited used email
-    address that will send a Zulip message to the correct recipient. This
+    address that will send a Doer message to the correct recipient. This
     allows the user to respond to missed direct messages, direct message
     groups, and @-mentions directly from the email.
 
@@ -518,15 +518,15 @@ def do_send_missedmessage_events_reply_in_zulip(
     )
 
     # If this setting (email mirroring integration) is enabled, only then
-    # can users reply to email to send message to Zulip. Thus, one must
+    # can users reply to email to send message to Doer. Thus, one must
     # ensure to display warning in the template.
     if settings.EMAIL_GATEWAY_PATTERN:
         context.update(
-            reply_to_zulip=True,
+            reply_to_doer=True,
         )
     else:
         context.update(
-            reply_to_zulip=False,
+            reply_to_doer=False,
         )
 
     from zerver.lib.email_mirror import create_missed_message_address
@@ -535,7 +535,7 @@ def do_send_missedmessage_events_reply_in_zulip(
     if reply_to_address == FromAddress.NOREPLY:
         reply_to_name = ""
     else:
-        reply_to_name = "Zulip"
+        reply_to_name = "Doer"
 
     senders = list({m["message"].sender for m in missed_messages})
     message = missed_messages[0]["message"]
@@ -619,7 +619,7 @@ def do_send_missedmessage_events_reply_in_zulip(
     if not message_content_allowed_in_missedmessage_emails(user_profile):
         realm = user_profile.realm
         context.update(
-            reply_to_zulip=False,
+            reply_to_doer=False,
             messages=[],
             sender_str="",
             realm_str=realm.name,
@@ -757,7 +757,7 @@ def handle_missedmessage_emails(
                     message_info.mentioned_user_group_id if message_info is not None else None
                 ),
             )
-        do_send_missedmessage_events_reply_in_zulip(
+        do_send_missedmessage_events_reply_in_doer(
             user_profile,
             list(unique_messages.values()),
             message_count_by_bucket[bucket_tup],
@@ -772,9 +772,9 @@ def get_onboarding_email_schedule(
         # as our goal is to maximize the chance that this email is near the top
         # of the user's inbox when the user sits down to deal with their inbox,
         # or comes in while they are dealing with their inbox.
-        "onboarding_zulip_topics": timedelta(days=2, hours=-1),
-        "onboarding_zulip_guide": timedelta(days=4, hours=-1),
-        "onboarding_team_to_zulip": timedelta(days=6, hours=-1),
+        "onboarding_doer_topics": timedelta(days=2, hours=-1),
+        "onboarding_doer_guide": timedelta(days=4, hours=-1),
+        "onboarding_team_to_doer": timedelta(days=6, hours=-1),
     }
 
     user_tz = user.timezone
@@ -799,52 +799,52 @@ def get_onboarding_email_schedule(
 
     # User registered on Monday
     if day_of_week_user_registered == 1:
-        # Send onboarding_team_to_zulip on Tuesday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=8, hours=-1)
+        # Send onboarding_team_to_doer on Tuesday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=8, hours=-1)
 
     # User registered on Tuesday
     if day_of_week_user_registered == 2:
-        # Send onboarding_zulip_guide on Monday
-        onboarding_emails["onboarding_zulip_guide"] = timedelta(days=6, hours=-1)
-        # Send onboarding_team_to_zulip on Wednesday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=8, hours=-1)
+        # Send onboarding_doer_guide on Monday
+        onboarding_emails["onboarding_doer_guide"] = timedelta(days=6, hours=-1)
+        # Send onboarding_team_to_doer on Wednesday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=8, hours=-1)
 
     # User registered on Wednesday
     if day_of_week_user_registered == 3:
-        # Send onboarding_zulip_guide on Tuesday
-        onboarding_emails["onboarding_zulip_guide"] = timedelta(days=6, hours=-1)
-        # Send onboarding_team_to_zulip on Thursday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=8, hours=-1)
+        # Send onboarding_doer_guide on Tuesday
+        onboarding_emails["onboarding_doer_guide"] = timedelta(days=6, hours=-1)
+        # Send onboarding_team_to_doer on Thursday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=8, hours=-1)
 
     # User registered on Thursday
     if day_of_week_user_registered == 4:
-        # Send onboarding_zulip_topics on Monday
-        onboarding_emails["onboarding_zulip_topics"] = timedelta(days=4, hours=-1)
-        # Send onboarding_zulip_guide on Wednesday
-        onboarding_emails["onboarding_zulip_guide"] = timedelta(days=6, hours=-1)
-        # Send onboarding_team_to_zulip on Friday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=8, hours=-1)
+        # Send onboarding_doer_topics on Monday
+        onboarding_emails["onboarding_doer_topics"] = timedelta(days=4, hours=-1)
+        # Send onboarding_doer_guide on Wednesday
+        onboarding_emails["onboarding_doer_guide"] = timedelta(days=6, hours=-1)
+        # Send onboarding_team_to_doer on Friday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=8, hours=-1)
 
     # User registered on Friday
     if day_of_week_user_registered == 5:
-        # Send onboarding_zulip_topics on Tuesday
-        onboarding_emails["onboarding_zulip_topics"] = timedelta(days=4, hours=-1)
-        # Send onboarding_zulip_guide on Thursday
-        onboarding_emails["onboarding_zulip_guide"] = timedelta(days=6, hours=-1)
-        # Send onboarding_team_to_zulip on Monday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=10, hours=-1)
+        # Send onboarding_doer_topics on Tuesday
+        onboarding_emails["onboarding_doer_topics"] = timedelta(days=4, hours=-1)
+        # Send onboarding_doer_guide on Thursday
+        onboarding_emails["onboarding_doer_guide"] = timedelta(days=6, hours=-1)
+        # Send onboarding_team_to_doer on Monday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=10, hours=-1)
 
     # User registered on Saturday; no adjustments needed
 
     # User registered on Sunday
     if day_of_week_user_registered == 7:
-        # Send onboarding_team_to_zulip on Monday
-        onboarding_emails["onboarding_team_to_zulip"] = timedelta(days=8, hours=-1)
+        # Send onboarding_team_to_doer on Monday
+        onboarding_emails["onboarding_team_to_doer"] = timedelta(days=8, hours=-1)
 
     return onboarding_emails
 
 
-def get_org_type_zulip_guide(realm: Realm) -> tuple[Any, str]:
+def get_org_type_doer_guide(realm: Realm) -> tuple[Any, str]:
     for realm_type, realm_type_details in Realm.ORG_TYPES.items():
         if realm_type_details["id"] == realm.org_type:
             organization_type_in_template = realm_type
@@ -854,9 +854,9 @@ def get_org_type_zulip_guide(realm: Realm) -> tuple[Any, str]:
             if organization_type_in_template == "education_nonprofit":
                 organization_type_in_template = "education"
 
-            return (realm_type_details["onboarding_zulip_guide_url"], organization_type_in_template)
+            return (realm_type_details["onboarding_doer_guide_url"], organization_type_in_template)
 
-    # Log problem, and return values that will not send onboarding_zulip_guide email.
+    # Log problem, and return values that will not send onboarding_doer_guide email.
     logging.error("Unknown organization type '%s'", realm.org_type)
     return (None, "")
 
@@ -894,23 +894,23 @@ def send_account_registered_email(user: UserProfile, realm_creation: bool = Fals
     )
 
     account_registered_context["getting_organization_started_link"] = (
-        realm_url + "/help/moving-to-zulip"
+        realm_url + "/help/moving-to-doer"
     )
 
     account_registered_context["getting_user_started_link"] = (
-        realm_url + "/help/getting-started-with-zulip"
+        realm_url + "/help/getting-started-with-doer"
     )
 
     # Imported here to avoid import cycles.
-    from zproject.backends import ZulipLDAPAuthBackend, email_belongs_to_ldap
+    from zproject.backends import DoerLDAPAuthBackend, email_belongs_to_ldap
 
     if email_belongs_to_ldap(user.realm, user.delivery_email):
         account_registered_context["ldap"] = True
         for backend in get_backends():
             # If the user is doing authentication via LDAP, Note that
-            # we exclude ZulipLDAPUserPopulator here, since that
+            # we exclude DoerLDAPUserPopulator here, since that
             # isn't used for authentication.
-            if isinstance(backend, ZulipLDAPAuthBackend):
+            if isinstance(backend, DoerLDAPAuthBackend):
                 account_registered_context["ldap_username"] = backend.django_to_ldap_username(
                     user.delivery_email
                 )
@@ -953,9 +953,9 @@ def enqueue_welcome_emails(
     onboarding_email_schedule = get_onboarding_email_schedule(user, demo_organization_creator)
 
     if other_account_count == 0:
-        onboarding_zulip_topics_context = common_context(user)
+        onboarding_doer_topics_context = common_context(user)
 
-        onboarding_zulip_topics_context.update(
+        onboarding_doer_topics_context.update(
             unsubscribe_link=unsubscribe_link,
             move_messages_link=realm_url + "/help/move-content-to-another-topic",
             rename_topics_link=realm_url + "/help/rename-a-topic",
@@ -963,66 +963,66 @@ def enqueue_welcome_emails(
         )
 
         send_future_email(
-            "zerver/emails/onboarding_zulip_topics",
+            "zerver/emails/onboarding_doer_topics",
             user.realm,
             to_user_ids=[user.id],
             from_name=from_name,
             from_address=from_address,
-            context=onboarding_zulip_topics_context,
-            delay=onboarding_email_schedule["onboarding_zulip_topics"],
+            context=onboarding_doer_topics_context,
+            delay=onboarding_email_schedule["onboarding_doer_topics"],
         )
 
-    # We only send the onboarding_zulip_guide email for a subset of Realm.ORG_TYPES
-    onboarding_zulip_guide_url, organization_type_reference = get_org_type_zulip_guide(user.realm)
+    # We only send the onboarding_doer_guide email for a subset of Realm.ORG_TYPES
+    onboarding_doer_guide_url, organization_type_reference = get_org_type_doer_guide(user.realm)
 
-    # Only send follow_zulip_guide to "/for/communities/" guide if user is realm admin.
+    # Only send follow_doer_guide to "/for/communities/" guide if user is realm admin.
     # TODO: Remove this condition and related tests when guide is updated;
-    # see https://github.com/zulip/zulip/issues/24822.
+    # see https://github.com/doer/doer/issues/24822.
     if (
-        onboarding_zulip_guide_url == Realm.ORG_TYPES["community"]["onboarding_zulip_guide_url"]
+        onboarding_doer_guide_url == Realm.ORG_TYPES["community"]["onboarding_doer_guide_url"]
         and not user.is_realm_admin
     ):
-        onboarding_zulip_guide_url = None
+        onboarding_doer_guide_url = None
 
-    if onboarding_zulip_guide_url is not None:
-        onboarding_zulip_guide_context = common_context(user)
-        onboarding_zulip_guide_context.update(
-            # We use the same unsubscribe link in both onboarding_zulip_topics
-            # and onboarding_zulip_guide as these links do not expire.
+    if onboarding_doer_guide_url is not None:
+        onboarding_doer_guide_context = common_context(user)
+        onboarding_doer_guide_context.update(
+            # We use the same unsubscribe link in both onboarding_doer_topics
+            # and onboarding_doer_guide as these links do not expire.
             unsubscribe_link=unsubscribe_link,
             organization_type=organization_type_reference,
-            zulip_guide_link=onboarding_zulip_guide_url,
+            doer_guide_link=onboarding_doer_guide_url,
         )
 
         send_future_email(
-            "zerver/emails/onboarding_zulip_guide",
+            "zerver/emails/onboarding_doer_guide",
             user.realm,
             to_user_ids=[user.id],
             from_name=from_name,
             from_address=from_address,
-            context=onboarding_zulip_guide_context,
-            delay=onboarding_email_schedule["onboarding_zulip_guide"],
+            context=onboarding_doer_guide_context,
+            delay=onboarding_email_schedule["onboarding_doer_guide"],
         )
 
-    # We only send the onboarding_team_to_zulip email to user who created the organization.
+    # We only send the onboarding_team_to_doer email to user who created the organization.
     if realm_creation or demo_organization_creator:
-        onboarding_team_to_zulip_context = common_context(user)
-        onboarding_team_to_zulip_context.update(
+        onboarding_team_to_doer_context = common_context(user)
+        onboarding_team_to_doer_context.update(
             unsubscribe_link=unsubscribe_link,
-            get_organization_started=realm_url + "/help/moving-to-zulip",
+            get_organization_started=realm_url + "/help/moving-to-doer",
             invite_users=realm_url + "/help/invite-users-to-join",
-            trying_out_zulip=realm_url + "/help/trying-out-zulip",
-            why_zulip="https://zulip.com/why-zulip/",
+            trying_out_doer=realm_url + "/help/trying-out-doer",
+            why_zulip="https://zulip.com/why-doer/",
         )
 
         send_future_email(
-            "zerver/emails/onboarding_team_to_zulip",
+            "zerver/emails/onboarding_team_to_doer",
             user.realm,
             to_user_ids=[user.id],
             from_name=from_name,
             from_address=from_address,
-            context=onboarding_team_to_zulip_context,
-            delay=onboarding_email_schedule["onboarding_team_to_zulip"],
+            context=onboarding_team_to_doer_context,
+            delay=onboarding_email_schedule["onboarding_team_to_doer"],
         )
 
 

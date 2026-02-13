@@ -1,6 +1,6 @@
-# Zulip Zabbix integration
+# Doer Zabbix integration
 
-Receive Zabbix notifications in Zulip!
+Receive Zabbix notifications in Doer!
 
 !!! warn ""
 
@@ -23,7 +23,7 @@ Receive Zabbix notifications in Zulip!
 1. Go back to **Administration** in your Zabbix web interface. Select
    **Media Types**, and click **Create Media Type**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Set **Type** to
+1. Set **Name** to a name of your choice, such as `Doer`. Set **Type** to
    **Webhook**, and add the following **Parameters**:
 
     * `hostname`: `{HOST.NAME}`
@@ -38,11 +38,11 @@ Receive Zabbix notifications in Zulip!
    with the script below. Then, check the **Enabled** option.
 
          try {
-            Zabbix.Log(4, 'zulip webhook script value='+value);
+            Zabbix.Log(4, 'doer webhook script value='+value);
 
             var result = {
                'tags': {
-                     'endpoint': 'zulip'
+                     'endpoint': 'doer'
                }
             },
             params = JSON.parse(value),
@@ -69,8 +69,8 @@ Receive Zabbix notifications in Zulip!
             result.tags.issue_id = resp.id;
             result.tags.issue_key = resp.key;
          } catch (error) {
-            Zabbix.Log(4, 'zulip issue creation failed json : '+JSON.stringify(payload));
-            Zabbix.Log(4, 'zulip issue creation failed : '+error);
+            Zabbix.Log(4, 'doer issue creation failed json : '+JSON.stringify(payload));
+            Zabbix.Log(4, 'doer issue creation failed : '+error);
 
             result = {};
          }
@@ -97,7 +97,7 @@ Receive Zabbix notifications in Zulip!
    set the notification. Select **Media**, and click **Add**.
 
 1. Set **Type** to the name you assigned to the media type above.
-   Set **Send To** to `Zulip` or any text, as this field requires text, but
+   Set **Send To** to `Doer` or any text, as this field requires text, but
    it isn't used. Set the severity and active periods for notifications as
    suitable, and check the **Enabled** option. Click **Add**, and
    select **Update**.
@@ -105,14 +105,14 @@ Receive Zabbix notifications in Zulip!
 1. Go back to your Zabbix web interface, and click **Configuration**.
    Select **Actions**, and choose **Create Action**.
 
-1. Set **Name** to a name of your choice, such as `Zulip`. Under
+1. Set **Name** to a name of your choice, such as `Doer`. Under
    **New Conditions**, add the conditions for triggering a notification.
    Check the **Enabled** option, and click **Operations**.
 
 1. Under **Operations**, click **Add**, and then set **Operation Type** to
    `Send Message`. Under **Send to Users**, choose **Add**, and select the user
    you added the alert to above, and click **Select**. Under **Send only to**,
-   select **Zulip** or the name of your media type. Click **Add** twice.
+   select **Doer** or the name of your media type. Click **Add** twice.
 
 {end_tabs}
 

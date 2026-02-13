@@ -1,0 +1,48 @@
+# For local IPC -- tusd to Django, or Django to Tornado
+server {
+<% if @nginx_http_only -%>
+    listen 127.0.0.1:<%= @nginx_listen_port %>;
+<% else -%>
+    listen 127.0.0.1:80;
+<% end -%>
+    include /etc/nginx/doer-include/app;
+    include /etc/nginx/doer-include/localhost.d/*.conf;
+}
+
+
+<% if @nginx_http_only -%>
+<% else -%>
+server {
+    listen 80;
+    listen [::]:80;
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+    include /etc/nginx/doer-include/certbot;
+}
+<% end -%>
+
+include /etc/nginx/doer-include/trusted-ip;
+include /etc/nginx/doer-include/trusted-proto;
+include /etc/nginx/doer-include/s3-cache;
+include /etc/nginx/doer-include/upstreams;
+include /etc/zulip/nginx_sharding_map.conf;
+
+
+server {
+<% if @nginx_http_only -%>
+    listen <%= @nginx_listen_port %>;
+    listen [::]:<%= @nginx_listen_port %>;
+<% else -%>
+    listen <%= @nginx_listen_port %> ssl http2;
+    listen [::]:<%= @nginx_listen_port %> ssl http2;
+
+    ssl_certificate <%= @ssl_dir %>/certs/zulip.combined-chain.crt;
+    ssl_certificate_key <%= @ssl_dir %>/private/doer.key;
+<% end -%>
+
+    include /etc/nginx/doer-include/certbot;
+    include /etc/nginx/doer-include/app;
+}

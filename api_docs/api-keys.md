@@ -1,10 +1,10 @@
 # API keys
 
-An **API key** is how a bot identifies itself to Zulip. For the official
+An **API key** is how a bot identifies itself to Doer. For the official
 clients, such as the Python bindings, we recommend [downloading a `zuliprc`
 file](/api/configuring-python-bindings#download-a-zuliprc-file). This file
 contains an API key and other necessary configuration values for using the
-Zulip API with a specific account on a Zulip server.
+Doer API with a specific account on a Doer server.
 
 ## Get API key
 
@@ -15,11 +15,11 @@ Zulip API with a specific account on a Zulip server.
 {settings_tab|your-bots}
 
 1. In the **Actions** column, click the **manage bot**
-   (<i class="zulip-icon zulip-icon-user-cog"></i>) icon,
+   (<i class="doer-icon doer-icon-user-cog"></i>) icon,
    and scroll down to **API key**.
 
 1. Click the **copy**
-   (<i class="zulip-icon zulip-icon-copy"></i>) icon to
+   (<i class="doer-icon doer-icon-copy"></i>) icon to
    copy the bot's API key to your clipboard.
 
 !!! warn ""
@@ -54,11 +54,11 @@ To invalidate an existing API key, you have to generate a new key.
 {settings_tab|your-bots}
 
 1. In the **Actions** column, click the **manage bot**
-   (<i class="zulip-icon zulip-icon-user-cog"></i>) icon,
+   (<i class="doer-icon doer-icon-user-cog"></i>) icon,
    and scroll down to **API key**.
 
 1. Click the **generate new API key**
-   (<i class="zulip-icon zulip-icon-refresh-cw"></i>) icon.
+   (<i class="doer-icon doer-icon-refresh-cw"></i>) icon.
 
 {tab|for-yourself}
 

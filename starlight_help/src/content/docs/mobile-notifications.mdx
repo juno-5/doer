@@ -6,10 +6,10 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 
-Zulip can be configured to send [mobile](/help/mobile-app-install-guide)
+Doer can be configured to send [mobile](/help/mobile-app-install-guide)
 notifications for [DMs, mentions, and
 alerts](/help/dm-mention-alert-notifications), as well as [channel
 messages](/help/channel-notifications) and [followed
@@ -30,12 +30,12 @@ topics](/help/follow-a-topic#configure-notifications-for-followed-topics).
 
 ## End-to-end encryption (E2EE) for mobile push notifications
 
-Zulip Server 11.0+ and Zulip Cloud support end-to-end encryption for mobile push
-notifications. Support is [coming soon][e2ee-flutter-issue] to the Zulip mobile
+Doer Server 11.0+ and Doer Cloud support end-to-end encryption for mobile push
+notifications. Support is [coming soon][e2ee-flutter-issue] to the Doer mobile
 app. Once implemented, all push notifications sent from an up-to-date version of
 the server to an updated version of the app will be end-to-end encrypted.
 
-[e2ee-flutter-issue]: https://github.com/zulip/zulip-flutter/issues/1764
+[e2ee-flutter-issue]: https://github.com/doer/doer-flutter/issues/1764
 
 Organization administrators can require end-to-end encryption for
 message content in mobile push notifications. When this setting is
@@ -58,8 +58,8 @@ for details.
 
 ## Mobile notifications while online
 
-You can customize whether or not Zulip will send mobile push
-notifications while you are actively using one of the Zulip apps.
+You can customize whether or not Doer will send mobile push
+notifications while you are actively using one of the Doer apps.
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -90,20 +90,20 @@ notification.
   </TabItem>
 </Tabs>
 
-Next, test Zulip push notifications on your mobile device.
+Next, test Doer push notifications on your mobile device.
 
 <Tabs>
   <TabItem label="Mobile">
     <Steps>
-      1. [Download](https://zulip.com/apps/) and install the Zulip mobile app if you
+      1. [Download](https://zulip.com/apps/) and install the Doer mobile app if you
          have not done so already.
-      1. If your Zulip organization is self-hosted (not at `*.zulipchat.com`),
+      1. If your Doer organization is self-hosted (not at `*.zulipchat.com`),
          [check](/help/mobile-notifications#enabling-push-notifications-for-self-hosted-servers)
          whether push notifications have been set up. If they were set up recently,
          you will need to [log out](/help/logging-out) of your account.
       1. [Log in](/help/logging-in) to the account you want to test.
       1. Ask *another* user (not yourself) to [send you a direct
-         message](/help/starting-a-new-direct-message). You should see a Zulip message
+         message](/help/starting-a-new-direct-message). You should see a Doer message
          notification in the **notifications area** on your device.
     </Steps>
   </TabItem>
@@ -114,8 +114,8 @@ Next, test Zulip push notifications on your mobile device.
 ### Checking your device settings
 
 Some Android vendors have added extra device-level settings that can impact the
-delivery of mobile notifications to apps like Zulip. If you're having issues
-with Zulip notifications on your Android phone, we recommend Signal's excellent
+delivery of mobile notifications to apps like Doer. If you're having issues
+with Doer notifications on your Android phone, we recommend Signal's excellent
 [troubleshooting guide](https://support.signal.org/hc/en-us/articles/360007318711-Troubleshooting-Notifications#android_notifications_troubleshooting),
 which explains the notification settings for many popular Android vendors.
 
@@ -124,15 +124,15 @@ if microG's "Cloud Messaging" setting is enabled.
 
 ### Enabling push notifications for self-hosted servers
 
-<ZulipNote>
-  These instructions do not apply to Zulip Cloud organizations (`*.zulipchat.com`).
-</ZulipNote>
+<DoerNote>
+  These instructions do not apply to Doer Cloud organizations (`*.zulipchat.com`).
+</DoerNote>
 
 To enable push notifications for your organization:
 
 <Steps>
-  1. Your server administrator needs to register your Zulip server with the
-     [Zulip Mobile Push Notification
+  1. Your server administrator needs to register your Doer server with the
+     [Doer Mobile Push Notification
      Service](https://zulip.readthedocs.io/en/stable/production/mobile-push-notifications.html).
   1. For organizations with more than 10 users, an
      [owner](/help/user-roles) or billing administrator needs to sign

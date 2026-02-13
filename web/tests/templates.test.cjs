@@ -108,7 +108,7 @@ run_test("popover_hotkey_hints mac command", () => {
         override(navigator, "platform", "MacIntel");
         const html = require("./templates/popover_hotkey_hints.hbs")(args);
         const expected_html =
-            '<span class="popover-menu-hotkey-hints"><span class="popover-menu-hotkey-hint"><i class="zulip-icon zulip-icon-mac-command" aria-hidden="true"></i></span><span class="popover-menu-hotkey-hint">[</span></span>\n';
+            '<span class="popover-menu-hotkey-hints"><span class="popover-menu-hotkey-hint"><i class="doer-icon doer-icon-mac-command" aria-hidden="true"></i></span><span class="popover-menu-hotkey-hint">[</span></span>\n';
         assert.equal(html, expected_html);
     });
 });

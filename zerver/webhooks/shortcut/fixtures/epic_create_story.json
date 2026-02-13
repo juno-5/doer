@@ -9,7 +9,7 @@
             "id":23,
             "entity_type":"story",
             "action":"create",
-            "app_url":"https://app.shortcut.com/zulip/story/23",
+            "app_url":"https://app.shortcut.com/doer/story/23",
             "description":"",
             "story_type":"feature",
             "name":"An epic story!",
@@ -30,7 +30,7 @@
             "action":"update",
             "name":"Add super cool feature!",
             "story_type":"bug",
-            "app_url":"https://app.shortcut.com/zulip/story/11",
+            "app_url":"https://app.shortcut.com/doer/story/11",
             "changes":{
                 "subject_story_link_ids":{
                     "adds":[

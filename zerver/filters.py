@@ -7,7 +7,7 @@ from django.views.debug import SafeExceptionReporterFilter
 from typing_extensions import override
 
 
-class ZulipExceptionReporterFilter(SafeExceptionReporterFilter):
+class DoerExceptionReporterFilter(SafeExceptionReporterFilter):
     # Add _SALT to the standard list
     hidden_settings = re.compile(
         r"API|TOKEN|KEY|SECRET|PASS|SIGNATURE|HTTP_COOKIE|_SALT", flags=re.IGNORECASE

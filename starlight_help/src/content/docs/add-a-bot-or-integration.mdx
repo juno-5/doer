@@ -6,9 +6,9 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
+import DoerNote from "../../components/DoerNote.astro";
 
-By default, anyone other than guests can add a bot to a Zulip organization.
+By default, anyone other than guests can add a bot to a Doer organization.
 A bot that sends content to or from another product is often called an
 [integration](/help/integrations-overview).
 
@@ -38,12 +38,12 @@ is visible and available for anyone to use.
   </TabItem>
 </Tabs>
 
-<ZulipNote>
+<DoerNote>
   See [bots overview](/help/bots-overview) for more information about
   the various fields.
   Nearly all third-party integrations should use **Incoming webhook**
   as the **bot type**.
-</ZulipNote>
+</DoerNote>
 
 Depending on the type of bot you're creating, you may need to download its
 [`zuliprc` configuration file](/help/manage-a-bot#download-zuliprc-configuration-file).

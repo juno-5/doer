@@ -6,20 +6,20 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import AdminOnly from "../include/_AdminOnly.mdx";
 import SaveChanges from "../include/_SaveChanges.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import GifIcon from "~icons/zulip-icon/gif";
+import GifIcon from "~icons/doer-icon/gif";
 
-<ZulipNote>
+<DoerNote>
   On self-hosted servers, this feature need to be
   [configured][configure-gifs] by a server administrator.
-</ZulipNote>
+</DoerNote>
 
-Zulip integrates with [GIPHY](https://giphy.com) and [Tenor](https://tenor.com/), allowing you to
+Doer integrates with [GIPHY](https://giphy.com) and [Tenor](https://tenor.com/), allowing you to
 conveniently search for animated GIFs and include them in your
 messages.
 
@@ -40,10 +40,10 @@ how animated images are played.
       1. Click on an image to insert it in the compose box.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can [preview your message](/help/preview-your-message-before-sending)
       before sending.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
@@ -65,7 +65,7 @@ this rating configuration or disable your GIF integration entirely:
 
 ## Privacy
 
-Zulip’s GIF picker supports third-party services, currently GIPHY
+Doer’s GIF picker supports third-party services, currently GIPHY
 and Tenor. Any text you enter into the GIF search box will be
 sent from your browser directly to the corresponding service’s API.
 Because these requests are made client-side, the service you are
@@ -73,7 +73,7 @@ querying (GIPHY or Tenor) will be able to see your IP address
 and may use that data for tracking, similar to if you visited their
 website and performed the same search there.
 
-Zulip proxies all external images in messages through the server,
+Doer proxies all external images in messages through the server,
 including those from GIPHY and Tenor, to prevent images from being used to track
 recipients of GIFs from both the integrations.
 

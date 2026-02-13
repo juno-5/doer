@@ -6,14 +6,14 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ChangePasswordAndAPIKey from "../include/_ChangePasswordAndAPIKey.mdx";
 import MobileSwitchAccount from "../include/_MobileSwitchAccount.mdx";
 
-import GearIcon from "~icons/zulip-icon/gear";
-import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
+import GearIcon from "~icons/doer-icon/gear";
+import MoreVerticalIcon from "~icons/doer-icon/more-vertical";
 
-## Log out of a Zulip account on one device
+## Log out of a Doer account on one device
 
 <Tabs>
   <TabItem label="Desktop/Web">
@@ -29,22 +29,22 @@ import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
       <MobileSwitchAccount />
 
       1. Tap the **ellipsis** (<MoreVerticalIcon />)
-         to the right of the Zulip organization you want to log out of.
+         to the right of the Doer organization you want to log out of.
       1. Tap **Log out**.
       1. Approve by tapping **Log out**.
     </FlattenedSteps>
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   Logging out doesn't affect any other organizations you may be logged in
-  to. To log out of all your Zulip organizations, repeat the steps above
+  to. To log out of all your Doer organizations, repeat the steps above
   for each one.
-</ZulipTip>
+</DoerTip>
 
-## Log out of a Zulip account on all devices
+## Log out of a Doer account on all devices
 
-Resetting the [API key](/api/api-keys) for a Zulip account will immediately log
+Resetting the [API key](/api/api-keys) for a Doer account will immediately log
 you out of that account on all mobile devices. Resetting your password will log
 you out of all browsers and desktop apps.
 

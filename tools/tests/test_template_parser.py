@@ -285,10 +285,10 @@ class ParserTest(unittest.TestCase):
 
         # Even this is fine.
         my_html = """
-            <a class="twitter-timeline" href="https://twitter.com/ZulipStatus"
+            <a class="twitter-timeline" href="https://twitter.com/DoerStatus"
                 data-widget-id="443457763394334720"
-                data-screen-name="ZulipStatus"
-                >@ZulipStatus on Twitter</a>.
+                data-screen-name="DoerStatus"
+                >@DoerStatus on Twitter</a>.
             """
         validate(text=my_html)
 

@@ -18,7 +18,7 @@
             <span class="message-header-stream-archived"><i class="archived-indicator">({{t 'archived' }})</i></span>
             {{/if}}
         </a>
-        <span class="stream_topic_separator"><i class="zulip-icon zulip-icon-chevron-right"></i></span>
+        <span class="stream_topic_separator"><i class="doer-icon doer-icon-chevron-right"></i></span>
 
         {{! hidden narrow icon for copy-pasting }}
         <span class="copy-paste-text">&gt;</span>
@@ -46,7 +46,7 @@
                     {{!-- TODO: Find a way to use the icon_button component with <a> tags,
                     instead of copying over the icon button styles via the utility classes. --}}
                     <a href="{{url}}" target="_blank" rel="noopener noreferrer" class="recipient-bar-control recipient-bar-control-icon no-underline icon-button icon-button-neutral" data-tippy-content="{{t 'Open {text}' }}" aria-label="{{t 'Open {text}' }}" tabindex="0">
-                        <i class="zulip-icon zulip-icon-external-link" aria-hidden="true"></i>
+                        <i class="doer-icon doer-icon-external-link" aria-hidden="true"></i>
                     </a>
                 {{/with}}
             {{/each}}
@@ -102,7 +102,7 @@
           href="{{pm_with_url}}"
           draggable="false"
           data-tippy-content="{{#if is_dm_with_self}}{{t 'Go to direct messages with yourself' }}{{else}}{{t 'Go to direct messages with {display_reply_to_for_tooltip}' }}{{/if}}">
-        <span class="private_message_header_icon"><i class="zulip-icon zulip-icon-user"></i></span>
+        <span class="private_message_header_icon"><i class="doer-icon doer-icon-user"></i></span>
         <span class="private_message_header_name">
             {{#if is_dm_with_self}}
                 {{t 'Messages with yourself' }}
@@ -110,7 +110,7 @@
                 {{~#tr}}You and <z-user-names></z-user-names>
                 {{#*inline "z-user-names"}}
                     {{#each recipient_users}}
-                        {{~full_name}}{{#if is_bot}}<i class="zulip-icon zulip-icon-bot" aria-label="{{t 'Bot' }}"></i>{{/if~}}
+                        {{~full_name}}{{#if is_bot}}<i class="doer-icon doer-icon-bot" aria-label="{{t 'Bot' }}"></i>{{/if~}}
                         {{#if should_add_guest_user_indicator}}&nbsp;<i>({{t 'guest'}})</i>{{/if}}{{#unless @last}}, {{/unless}}
                     {{/each}}
                 {{/inline}}

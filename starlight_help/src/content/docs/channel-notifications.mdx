@@ -6,11 +6,11 @@ import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ChannelActions from "../include/_ChannelActions.mdx";
 import SelectChannelViewPersonal from "../include/_SelectChannelViewPersonal.mdx";
 
-import ResetIcon from "~icons/zulip-icon/reset";
+import ResetIcon from "~icons/doer-icon/reset";
 
 You can configure desktop, mobile, and email notifications on a channel by
 channel basis.
@@ -47,12 +47,12 @@ channels](/help/mute-a-channel), channel notification settings apply only to
          channel.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       To reset a channel's notifications to the default settings, hover
       over its name in the notification triggers table, and click the
       **reset to default notifications**
       (<ResetIcon />) icon.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -60,7 +60,7 @@ channels](/help/mute-a-channel), channel notification settings apply only to
     mobile device browser.
 
     Implementation of this feature in the mobile app is tracked [on
-    GitHub](https://github.com/zulip/zulip-flutter/issues/1223). If
+    GitHub](https://github.com/doer/doer-flutter/issues/1223). If
     you're interested in this feature, please react to the issue's
     description with 👍.
   </TabItem>
@@ -86,7 +86,7 @@ explicitly set a notification preference.
     mobile device browser.
 
     Implementation of this feature in the mobile app is tracked [on
-    GitHub](https://github.com/zulip/zulip-flutter/issues/661). If
+    GitHub](https://github.com/doer/doer-flutter/issues/661). If
     you're interested in this feature, please react to the issue's
     description with 👍.
   </TabItem>

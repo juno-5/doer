@@ -41,10 +41,10 @@ from zerver.models.realms import (
 )
 
 
-class ZulipSCIMUser(SCIMUser):
+class DoerSCIMUser(SCIMUser):
     """With django-scim2, the core of a project's SCIM implementation is
     this user adapter class, which defines how to translate between the
-    concepts of users in the SCIM specification and the Zulip users.
+    concepts of users in the SCIM specification and the Doer users.
     """
 
     id_field = "id"
@@ -386,15 +386,15 @@ def check_can_manage_group_by_scim(user_group: NamedUserGroup) -> bool:
     return True
 
 
-class ZulipSCIMGroup(SCIMGroup):
+class DoerSCIMGroup(SCIMGroup):
     """
     This class contains the core of the implementation of SCIM sync of Groups.
-    A SCIM Group corresponds to a NamedUserGroup object in Zulip.
+    A SCIM Group corresponds to a NamedUserGroup object in Doer.
 
-    This class follows the same architecture as ZulipSCIMUser, so rather than
+    This class follows the same architecture as DoerSCIMUser, so rather than
     re-explaining the purpose of specific method overrides or small bits of
     equivalent logic, defer to checking the corresponding comments in the
-    ZulipSCIMUser implementation.
+    DoerSCIMUser implementation.
     """
 
     id_field = "usergroup_ptr_id"
@@ -499,13 +499,13 @@ class ZulipSCIMGroup(SCIMGroup):
             )
 
         # TODO: We don't currently support DELETE requests for groups. The correct way to handle
-        # a DELETE would be to deactivate the group - but Zulip currently disallows deactivation
+        # a DELETE would be to deactivate the group - but Doer currently disallows deactivation
         # of groups under certain conditions, such as "the group is used for a permission".
         #
         # To be able to process a DELETE request, we need to implement a function to forcibly
         # deactivate a group, by correctly untangling it from all dependencies such as permissions
         # or supergroups.
-        # See https://github.com/zulip/zulip/pull/34605 for current status of this work.
+        # See https://github.com/doer/doer/pull/34605 for current status of this work.
         raise scim_exceptions.NotImplementedError
 
     def save(self) -> None:

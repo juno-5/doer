@@ -28,7 +28,7 @@ from zerver.data_import.sequencer import IdMapper
 from zerver.data_import.user_handler import UserHandler
 from zerver.lib.emoji import name_to_codepoint
 from zerver.lib.import_realm import do_import_realm
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, Reaction, Recipient, UserProfile
 from zerver.models.presence import PresenceSequence
 from zerver.models.realms import get_realm
@@ -36,7 +36,7 @@ from zerver.models.streams import Stream
 from zerver.models.users import get_user
 
 
-class MatterMostImporter(ZulipTestCase):
+class MatterMostImporter(DoerTestCase):
     def test_mattermost_data_file_to_dict(self) -> None:
         fixture_file_name = self.fixture_file_name("export.json", "mattermost_fixtures")
         mattermost_data = mattermost_data_file_to_dict(fixture_file_name)
@@ -267,7 +267,7 @@ class MatterMostImporter(ZulipTestCase):
         self.assertEqual(zerver_stream[0]["realm"], 3)
 
         self.assertEqual(
-            zerver_realm[0]["zulip_update_announcements_stream"], zerver_stream[0]["id"]
+            zerver_realm[0]["doer_update_announcements_stream"], zerver_stream[0]["id"]
         )
         self.assertEqual(zerver_realm[0]["new_stream_announcements_stream"], zerver_stream[0]["id"])
 

@@ -8,11 +8,11 @@ from django.core.management.base import CommandError, CommandParser
 from typing_extensions import override
 
 from zerver.data_import.microsoft_teams import do_convert_directory
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
-    help = """Convert the Microsoft Teams data into Zulip data format."""
+class Command(DoerBaseCommand):
+    help = """Convert the Microsoft Teams data into Doer data format."""
 
     @override
     def add_arguments(self, parser: CommandParser) -> None:

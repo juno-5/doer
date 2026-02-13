@@ -1,2 +1,2 @@
-\connect zulip
+\connect doer
 CREATE EXTENSION pgroonga;

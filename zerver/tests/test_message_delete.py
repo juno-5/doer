@@ -11,7 +11,7 @@ from zerver.actions.realm_settings import do_change_realm_permission_group_setti
 from zerver.actions.streams import do_change_stream_group_based_setting, do_deactivate_stream
 from zerver.actions.user_groups import check_add_user_group
 from zerver.actions.user_settings import do_change_user_setting
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import Message, NamedUserGroup, UserMessage, UserProfile
 from zerver.models.groups import SystemGroups
 from zerver.models.realms import get_realm
@@ -21,16 +21,16 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class DeleteMessageTest(ZulipTestCase):
+class DeleteMessageTest(DoerTestCase):
     def test_do_delete_messages_with_empty_list(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         initial_count = Message.objects.count()
         do_delete_messages(realm, [], acting_user=None)
         final_count = Message.objects.count()
         self.assertEqual(initial_count, final_count)
 
     def test_do_delete_private_messages_with_acting_user(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
 
@@ -62,7 +62,7 @@ class DeleteMessageTest(ZulipTestCase):
         self.assertCountEqual([acting_user.id, hamlet.id, cordelia.id], events[0]["users"])
 
     def test_do_delete_stream_messages_without_acting_user(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
 
         stream_name = "Denmark-Test"
@@ -81,7 +81,7 @@ class DeleteMessageTest(ZulipTestCase):
         self.assertIn(msg_id, events[1]["event"]["message_ids"])
 
     def test_do_delete_stream_messages_with_acting_user(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         iago = self.example_user("iago")
         hamlet = self.example_user("hamlet")
@@ -241,7 +241,7 @@ class DeleteMessageTest(ZulipTestCase):
         self.assertCountEqual([cordelia.id, iago.id], events[1]["users"])
 
     def test_do_delete_messages_grouping_logic(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         cordelia = self.example_user("cordelia")
         hamlet = self.example_user("hamlet")
         iago = self.example_user("iago")
@@ -395,7 +395,7 @@ class DeleteMessageTest(ZulipTestCase):
             result = self.client_delete(f"/json/messages/{msg_id}")
             return result
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         administrators_system_group = NamedUserGroup.objects.get(
             name=SystemGroups.ADMINISTRATORS, realm_for_sharding=realm, is_system_group=True
@@ -570,7 +570,7 @@ class DeleteMessageTest(ZulipTestCase):
             result = self.api_delete(cordelia, f"/api/v1/messages/{msg_id}")
             return result
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         administrators_system_group = NamedUserGroup.objects.get(
             name=SystemGroups.ADMINISTRATORS, realm_for_sharding=realm, is_system_group=True
@@ -685,7 +685,7 @@ class DeleteMessageTest(ZulipTestCase):
             else:
                 self.assert_json_error(result, error_msg)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = get_stream("Verona", realm)
         iago = self.example_user("iago")
 
@@ -882,7 +882,7 @@ class DeleteMessageTest(ZulipTestCase):
             else:
                 self.assert_json_error(result, error_msg)
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream = get_stream("Verona", realm)
         iago = self.example_user("iago")
 
@@ -1069,7 +1069,7 @@ class DeleteMessageTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid message(s)")
 
     def test_update_first_message_id_on_stream_message_deletion(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream_name = "test"
         cordelia = self.example_user("cordelia")
         self.make_stream(stream_name)
@@ -1100,7 +1100,7 @@ class DeleteMessageTest(ZulipTestCase):
         mock_push_notifications: mock.MagicMock,
         mock_send_push_notifications: mock.MagicMock,
     ) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
         self.register_push_device(cordelia.id)

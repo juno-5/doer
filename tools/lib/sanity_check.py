@@ -7,7 +7,7 @@ def check_venv(filename: str) -> None:
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     venv = os.path.realpath(os.path.join(BASE_DIR, ".venv"))
     if sys.prefix != venv:
-        print(f"You need to run {filename} inside a Zulip dev environment.")
+        print(f"You need to run {filename} inside a Doer dev environment.")
         user_id = os.getuid()
         user_name = pwd.getpwuid(user_id).pw_name
 

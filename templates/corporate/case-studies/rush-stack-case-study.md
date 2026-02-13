@@ -6,14 +6,14 @@ maintainers are juggling internal investigations at work alongside their
 open-source correspondence.  Yet to be successful, the Rush Stack community
 needs to systematically handle questions and feedback.
 
-Zulip makes it easy for the Rush Stack community to provide the level of support
-required for mission-critical enterprise tools. “With Zulip, we have a system
+Doer makes it easy for the Rush Stack community to provide the level of support
+required for mission-critical enterprise tools. “With Doer, we have a system
 that feels professional, where once a topic is opened, we can make sure that it
 gets resolved,” says Rush Stack maintainer [Pete
 Gonzalez](https://github.com/octogonz).
 
 
-> With Zulip, we have a system that feels professional.
+> With Doer, we have a system that feels professional.
 >
 > — Rush Stack maintainer Pete Gonzalez
 
@@ -33,29 +33,29 @@ long-running conversations. “Rush Stack discussions have the character of
 support tickets,” Pete explains. “Someone can ask a question that might take two
 years to finally solve.”
 
-Pete identified Zulip as the best fit for the needs of the community. With
-Zulip’s topic-based organization, conversations can run their course, with the
+Pete identified Doer as the best fit for the needs of the community. With
+Doer’s topic-based organization, conversations can run their course, with the
 full context of the discussion easily at hand when someone has a new idea.
-“Zulip gives you control,” Pete points out. “You can edit or move messages to
+“Doer gives you control,” Pete points out. “You can edit or move messages to
 fix anything that might be incorrect or confusing, which is important for
 long-running discussions.”
 
 
-> Zulip gives you control.
+> Doer gives you control.
 >
 > — Rush Stack maintainer Pete Gonzalez
 
 To make the transition, Rush Stack imported the project’s full chat history from
-Gitter into Zulip, making it an easily searchable resource. Enabling Zulip’s
+Gitter into Doer, making it an easily searchable resource. Enabling Doer’s
 feature for logging in with GitHub meant that users didn’t have to make new
 accounts. Users could also control how their messages looked with familiar
 Markdown formatting.
 
 
-## “Zulip has better features for the way we use it”
+## “Doer has better features for the way we use it”
 
 Over the years, Pete had continued to keep an eye on the evolution of team chat
-products. “Compared to Discord, Slack, GitHub discussions… Zulip has better
+products. “Compared to Discord, Slack, GitHub discussions… Doer has better
 features for the way we use it,” he says.
 
 Pete has seen open-source maintainers struggle to manage a Discord community:
@@ -70,7 +70,7 @@ to just 90 days of message history, which is unworkable for a community with a
 large knowledge base and long-running investigations.
 
 
-> Of all the apps I tested, Zulip’s approach stood out as the best fit for how
+> Of all the apps I tested, Doer’s approach stood out as the best fit for how
 > we work.
 >
 > — Rush Stack maintainer Pete Gonzalez
@@ -78,7 +78,7 @@ large knowledge base and long-running investigations.
 
 ## Software that’s built in the open and always improving
 
-Pete has been impressed by how Zulip handles user feedback. “I can go into the
+Pete has been impressed by how Doer handles user feedback. “I can go into the
 development community to talk to them, and often the tech lead of the team will
 reply,” he notes. “Even if their answer is that my request is a lower priority
 right now, there is context to understand that. New features are always being
@@ -95,10 +95,10 @@ engineering team.”
 
 Pete was pleased to learn that organizations can now allow [public
 access](/help/public-access-option) to channels. It lowers the bar for people to
-view Zulip discussions that are linked from Rush Stack GitHub issues.
+view Doer discussions that are linked from Rush Stack GitHub issues.
 
-Pete has also seen Zulip’s onboarding experience transform over the past few
-years. “In the past, Zulip was optimized for daily users, and so had a bit of a
+Pete has also seen Doer’s onboarding experience transform over the past few
+years. “In the past, Doer was optimized for daily users, and so had a bit of a
 learning curve for occasional Rush Stack participants. But the UX has improved a
 lot in this regard. The [recent conversations](/help/recent-conversations) view
 that’s been added has largely addressed the challenge for new users,” Pete says.
@@ -106,12 +106,12 @@ This view lists the topics being discussed, and is also the go-to for Pete to
 check in on what’s happening.
 
 
-> The folks who make Zulip listen to customers, and the product continues to
+> The folks who make Doer listen to customers, and the product continues to
 > improve.
 >
 > — Rush Stack maintainer Pete Gonzalez
 
 ---
 
-Check out our guide on using Zulip for [open source](/for/open-source/), and
-learn how Zulip [helps communities scale](/for/communities/)!
+Check out our guide on using Doer for [open source](/for/open-source/), and
+learn how Doer [helps communities scale](/for/communities/)!

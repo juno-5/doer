@@ -36,8 +36,8 @@ class kandra::app_frontend_tmpfs {
   # directive above doesn't have user/group, and we manage it
   # explicitly via chown.
   exec { 'chown-slack-conversions':
-    command => '/bin/chown zulip:zulip /tmp/slack-conversions',
-    unless  => '/usr/bin/test "$(stat -c %U:%G /tmp/slack-conversions)" = "zulip:zulip"',
+    command => '/bin/chown doer:doer /tmp/slack-conversions',
+    unless  => '/usr/bin/test "$(stat -c %U:%G /tmp/slack-conversions)" = "doer:doer"',
     require => Mount['/tmp/slack-conversions'],
   }
 }

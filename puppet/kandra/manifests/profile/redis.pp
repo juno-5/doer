@@ -1,8 +1,8 @@
 class kandra::profile::redis inherits kandra::profile::base {
-  include zulip::profile::redis
+  include doer::profile::redis
   include kandra::prometheus::redis
 
-  zulip::sysctl { 'redis-somaxconn':
+  doer::sysctl { 'redis-somaxconn':
     key   => 'net.core.somaxconn',
     value => '65535',
   }
@@ -13,7 +13,7 @@ class kandra::profile::redis inherits kandra::profile::base {
     mode    => '0600',
     owner   => 'nagios',
     group   => 'nagios',
-    content => "${zulip::profile::redis::redis_password}\n",
+    content => "${doer::profile::redis::redis_password}\n",
   }
 
   group { 'redistunnel':
@@ -24,7 +24,7 @@ class kandra::profile::redis inherits kandra::profile::base {
     ensure     => present,
     uid        => '1080',
     gid        => '1080',
-    groups     => ['zulip'],
+    groups     => ['doer'],
     shell      => '/bin/true',
     home       => '/home/redistunnel',
     managehome => true,

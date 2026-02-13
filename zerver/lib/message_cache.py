@@ -114,7 +114,7 @@ class ReactionDict:
 class MessageDict:
     """MessageDict is the core class responsible for marshalling Message
     objects obtained from the database into a format that can be sent
-    to clients via the Zulip API, whether via `GET /messages`,
+    to clients via the Doer API, whether via `GET /messages`,
     outgoing webhooks, or other code paths.  There are two core flows through
     which this class is used:
 
@@ -229,7 +229,7 @@ class MessageDict:
             # Enforce inability to access details of inaccessible
             # users. We should be able to remove the realm_host and
             # can_access_user plumbing to this function if/when we
-            # shift the Zulip API to not send these denormalized
+            # shift the Doer API to not send these denormalized
             # fields about message senders favor of just sending the
             # sender's user ID.
             obj["sender_full_name"] = str(UserProfile.INACCESSIBLE_USER_NAME)
@@ -463,7 +463,7 @@ class MessageDict:
             obj["rendered_content"] = rendered_content
         else:
             obj["rendered_content"] = (
-                "<p>[Zulip note: Sorry, we could not understand the formatting of your message]</p>"
+                "<p>[Doer note: Sorry, we could not understand the formatting of your message]</p>"
             )
 
         if rendered_content is not None:

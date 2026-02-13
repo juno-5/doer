@@ -6,7 +6,7 @@ import time_machine
 from django.test.utils import override_settings
 
 from zerver.actions.scheduled_messages import try_deliver_one_scheduled_message
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.timestamp import timestamp_to_datetime
 from zerver.models import Message, ScheduledMessage
 from zerver.models.recipients import Recipient, get_or_create_direct_message_group
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from django.test.client import _MonkeyPatchedWSGIResponse as TestHttpResponse
 
 
-class RemindersTest(ZulipTestCase):
+class RemindersTest(DoerTestCase):
     def do_schedule_reminder(
         self,
         message_id: int,
@@ -61,13 +61,13 @@ class RemindersTest(ZulipTestCase):
     def get_dm_reminder_content(self, msg_content: str, msg_id: int) -> str:
         return (
             "You requested a reminder for the following direct message.\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/dm/10,12/near/{msg_id}):\n```quote\n{msg_content}\n```"
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/dm/10,12/near/{msg_id}):\n```quote\n{msg_content}\n```"
         )
 
     def get_channel_message_reminder_content(self, msg_content: str, msg_id: int) -> str:
         return (
             f"You requested a reminder for #**Verona>test@{msg_id}**.\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/channel/3-Verona/topic/test/near/{msg_id}):\n```quote\n{msg_content}\n```"
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/channel/3-Verona/topic/test/near/{msg_id}):\n```quote\n{msg_content}\n```"
         )
 
     def test_schedule_reminder(self) -> None:
@@ -416,7 +416,7 @@ class RemindersTest(ZulipTestCase):
                 delivered_message.content,
                 "You requested a reminder for the following direct message."
                 "\n\n"
-                f"@_**King Hamlet|10** [sent](http://zulip.testserver/#narrow/dm/10,12/near/{reminder.reminder_target_message_id}) a poll.",
+                f"@_**King Hamlet|10** [sent](http://doer.testserver/#narrow/dm/10,12/near/{reminder.reminder_target_message_id}) a poll.",
             )
             self.assertEqual(delivered_message.date_sent, more_than_scheduled_delivery_datetime)
 
@@ -451,7 +451,7 @@ class RemindersTest(ZulipTestCase):
                 delivered_message.content,
                 "You requested a reminder for the following direct message."
                 "\n\n"
-                f"@_**King Hamlet|10** [sent](http://zulip.testserver/#narrow/dm/10,12/near/{reminder.reminder_target_message_id}) a todo list.",
+                f"@_**King Hamlet|10** [sent](http://doer.testserver/#narrow/dm/10,12/near/{reminder.reminder_target_message_id}) a todo list.",
             )
             self.assertEqual(delivered_message.date_sent, more_than_scheduled_delivery_datetime)
 
@@ -467,7 +467,7 @@ class RemindersTest(ZulipTestCase):
         self.assertEqual(
             scheduled_message.content,
             f"You requested a reminder for #**Verona>test@{message_id}**. Note:\n > {note}\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/channel/3-Verona/topic/test/near/{message_id}):\n```quote\n{content}\n```",
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/channel/3-Verona/topic/test/near/{message_id}):\n```quote\n{content}\n```",
         )
 
         message_id = self.send_dm_from_hamlet_to_othello(content)
@@ -477,7 +477,7 @@ class RemindersTest(ZulipTestCase):
         self.assertEqual(
             scheduled_message.content,
             f"You requested a reminder for the following direct message. Note:\n > {note}\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/dm/10,12/near/{message_id}):\n```quote\n{content}\n```",
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/dm/10,12/near/{message_id}):\n```quote\n{content}\n```",
         )
 
         # Test with no note
@@ -488,7 +488,7 @@ class RemindersTest(ZulipTestCase):
         self.assertEqual(
             scheduled_message.content,
             f"You requested a reminder for the following direct message.\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/dm/10,12/near/{message_id}):\n```quote\n{content}\n```",
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/dm/10,12/near/{message_id}):\n```quote\n{content}\n```",
         )
 
         # Test with note exceeding maximum length
@@ -515,5 +515,5 @@ class RemindersTest(ZulipTestCase):
             "You requested a reminder for #**Verona>{789}@"
             + str(message_id)
             + "**. Note:\n > {123}\n\n"
-            f"@_**King Hamlet|10** [said](http://zulip.testserver/#narrow/channel/3-Verona/topic/.7B789.7D/near/{message_id}):\n```quote\n{content}\n```",
+            f"@_**King Hamlet|10** [said](http://doer.testserver/#narrow/channel/3-Verona/topic/.7B789.7D/near/{message_id}):\n```quote\n{content}\n```",
         )

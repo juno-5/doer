@@ -56,7 +56,7 @@ def list_supervisor_processes(
         if filter_names:
             match = False
             for filter_name in filter_names:
-                # zulip-tornado:* matches zulip-tornado:9800 and zulip-tornado
+                # doer-tornado:* matches doer-tornado:9800 and doer-tornado
                 if filter_name.endswith(":*") and (
                     name.startswith(filter_name.removesuffix("*"))
                     or name == filter_name.removesuffix(":*")

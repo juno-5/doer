@@ -8,14 +8,14 @@ from zerver.actions.reactions import do_add_reaction
 from zerver.actions.streams import bulk_add_subscriptions
 from zerver.actions.user_settings import do_change_avatar_fields
 from zerver.lib.emoji import get_emoji_data
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.streams import ensure_stream
 from zerver.lib.upload import upload_avatar_image
 from zerver.models import Message, UserProfile
 from zerver.models.realms import get_realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Add a mock conversation to the development environment.
 
 Usage: ./manage.py add_mock_conversation
@@ -41,8 +41,8 @@ From image editing program:
         do_change_avatar_fields(user, UserProfile.AVATAR_FROM_USER, acting_user=None)
 
     def add_message_formatting_conversation(self) -> None:
-        realm = get_realm("zulip")
-        stream = ensure_stream(realm, "zulip features", acting_user=None)
+        realm = get_realm("doer")
+        stream = ensure_stream(realm, "doer features", acting_user=None)
 
         UserProfile.objects.filter(email__contains="stage").delete()
         starr = do_create_user(
@@ -70,7 +70,7 @@ From image editing program:
         staged_messages: list[dict[str, Any]] = [
             {
                 "sender": starr,
-                "content": "Hey @**Bel Fisher**, check out Zulip's Markdown formatting! "
+                "content": "Hey @**Bel Fisher**, check out Doer's Markdown formatting! "
                 "You can have:\n* bulleted lists\n  * with sub-bullets too\n"
                 "* **bold**, *italic*, and ~~strikethrough~~ text\n"
                 "* LaTeX for mathematical formulas, both inline -- $$O(n^2)$$ -- and displayed:\n"
@@ -96,7 +96,7 @@ From image editing program:
             {
                 "sender": starr,
                 "content": "I just set up a custom linkifier, "
-                "so `#1234` becomes [#1234](github.com/zulip/zulip/1234), "
+                "so `#1234` becomes [#1234](github.com/doer/doer/1234), "
                 "a link to the corresponding GitHub issue.",
             },
             {
@@ -138,8 +138,8 @@ From image editing program:
             '<div class="inline-preview-twitter"><div class="twitter-tweet">'
             '<a><img class="twitter-avatar" '
             'src="https://pbs.twimg.com/profile_images/424495004/GuidoAvatar_bigger.jpg"></a>'
-            "<p>Great blog post about Zulip's use of mypy: "
-            "<a>http://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy/</a></p>"
+            "<p>Great blog post about Doer's use of mypy: "
+            "<a>http://blog.doer.org/2016/10/13/static-types-in-python-oh-mypy/</a></p>"
             "<span>- Guido van Rossum (@gvanrossum)</span></div></div>"
         )
         twitter_message.save(update_fields=["rendered_content"])

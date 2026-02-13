@@ -6,7 +6,7 @@ import generated_emoji_codes from "../../static/generated/emoji/emoji_codes.json
 import render_compose from "../templates/compose.hbs";
 import render_message_feed_errors from "../templates/message_feed_errors.hbs";
 import render_navbar from "../templates/navbar.hbs";
-import render_try_zulip_modal from "../templates/try_zulip_modal.hbs";
+import render_try_doer_modal from "../templates/try_doer_modal.hbs";
 import render_view_bottom_loading_indicator from "../templates/view_bottom_loading_indicator.hbs";
 
 import * as about_zulip from "./about_zulip.ts";
@@ -340,7 +340,7 @@ export function initialize_kitchen_sink_stuff() {
         $(document.body).removeClass("window_blurred");
     });
 
-    $(document).on("message_selected.zulip", (event) => {
+    $(document).on("message_selected.doer", (event) => {
         if (message_lists.current === undefined || message_lists.current !== event.msg_list) {
             return;
         }
@@ -443,7 +443,7 @@ export async function initialize_everything(state_data) {
             - some fairly dynamic data, like which of
               the other users are "present"
 
-        Except for the actual Zulip messages, basically
+        Except for the actual Doer messages, basically
         any data that you see in the app soon after page
         load comes from `state_data`.
 
@@ -774,10 +774,10 @@ export async function initialize_everything(state_data) {
     $("#app-loading").addClass("loaded");
 }
 
-function show_try_zulip_modal() {
-    const modal_content_html = render_try_zulip_modal();
+function show_try_doer_modal() {
+    const modal_content_html = render_try_doer_modal();
     dialog_widget.launch({
-        modal_title_text: i18n.$t({defaultMessage: "Welcome to the Zulip development community!"}),
+        modal_title_text: i18n.$t({defaultMessage: "Welcome to the Doer development community!"}),
         modal_content_html,
         modal_submit_button_text: i18n.$t({defaultMessage: "Let's go!"}),
         on_click() {
@@ -792,10 +792,10 @@ function show_try_zulip_modal() {
 $(() => {
     update_page_loading_indicator_notice();
 
-    // Remove '?show_try_zulip_modal', if present.
+    // Remove '?show_try_doer_modal', if present.
     const url = new URL(window.location.href);
-    if (url.searchParams.has("show_try_zulip_modal")) {
-        url.searchParams.delete("show_try_zulip_modal");
+    if (url.searchParams.has("show_try_doer_modal")) {
+        url.searchParams.delete("show_try_doer_modal");
         window.history.replaceState(window.history.state, "", url.toString());
     }
 
@@ -819,8 +819,8 @@ $(() => {
             success(response_data) {
                 const state_data = state_data_schema.parse(response_data);
                 initialize_everything(state_data);
-                if (page_params.show_try_zulip_modal) {
-                    show_try_zulip_modal();
+                if (page_params.show_try_doer_modal) {
+                    show_try_doer_modal();
                 }
             },
             error() {

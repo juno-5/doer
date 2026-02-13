@@ -14,7 +14,7 @@ from django.core.management import ManagementUtility, get_commands
 from django.core.management.color import color_style
 from typing_extensions import override
 
-from scripts.lib.zulip_tools import assert_not_running_as_root
+from scripts.lib.doer_tools import assert_not_running_as_root
 
 
 def get_filtered_commands() -> dict[str, str]:
@@ -144,7 +144,7 @@ if __name__ == "__main__":
     from django.conf import settings
     from django.core.management.base import CommandError
 
-    from scripts.lib.zulip_tools import log_management_command
+    from scripts.lib.doer_tools import log_management_command
 
     log_management_command(sys.argv, settings.MANAGEMENT_LOG_PATH)
 

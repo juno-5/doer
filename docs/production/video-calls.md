@@ -1,9 +1,9 @@
 # Video call providers
 
-Zulip makes it convenient to [start a
+Doer makes it convenient to [start a
 call](https://zulip.com/help/start-a-call) with the click of a button, using the
 call provider of your choice. The call providers
-supported by Zulip are:
+supported by Doer are:
 
 - [Jitsi Meet](https://zulip.com/integrations/jitsi), a fully-encrypted,
   100% open source video conferencing solution.
@@ -11,10 +11,10 @@ supported by Zulip are:
 - [BigBlueButton](https://zulip.com/integrations/big-blue-button)
 - [Constructor Groups](https://zulip.com/integrations/category/video-calling)
 
-By default, Zulip uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
+By default, Doer uses the [cloud version of Jitsi Meet](https://meet.jit.si/)
 as its call provider. This page documents the configurations required to support
 other [video call integration
-options](https://zulip.com/help/configure-call-provider) on a self-hosted Zulip
+options](https://zulip.com/help/configure-call-provider) on a self-hosted Doer
 server.
 
 :::{note}
@@ -26,7 +26,7 @@ to "None".
 
 ## Jitsi
 
-You can configure Zulip to use a self-hosted
+You can configure Doer to use a self-hosted
 instance of Jitsi Meet by providing the URL of your self-hosted Jitsi Meet
 server [in organization
 settings](https://zulip.com/help/configure-call-provider#use-a-self-hosted-instance-of-jitsi-meet).
@@ -36,7 +36,7 @@ No server configuration changes are required.
 
 To use a [Zoom](https://zoom.us) integration on a self-hosted
 installation, you'll need to register a custom Zoom application for
-your Zulip server. Zulip supports two types of custom Zoom apps:
+your Doer server. Doer supports two types of custom Zoom apps:
 
 - [Server to Server OAuth app](#server-to-server-oauth-app): Easiest to set up,
   but requires users to be part of the Zoom organization that created the
@@ -44,16 +44,16 @@ your Zulip server. Zulip supports two types of custom Zoom apps:
 
 - [General OAuth app](#general-oauth-app): Recommended for settings where the
   limitations of the Server to Server OAuth app are problematic (e.g., this is
-  used by Zulip Cloud).
+  used by Doer Cloud).
 
 ### Server to Server OAuth app
 
-This Zoom application type, introduced in Zulip 10.0, is easiest to
-set up, and is ideal for most installations that self-host Zulip. To
-[create Zoom meeting links in Zulip
+This Zoom application type, introduced in Doer 10.0, is easiest to
+set up, and is ideal for most installations that self-host Doer. To
+[create Zoom meeting links in Doer
 messages](https://zulip.com/help/start-a-call#start-a-call) using this
 integration, users will will need to be members of your Zoom
-organization and use the same email address in Zulip that they have
+organization and use the same email address in Doer that they have
 registered with Zoom.
 
 You can set up this integration as follows:
@@ -61,7 +61,7 @@ You can set up this integration as follows:
 1. Select [**Build App**](https://marketplace.zoom.us/develop/create)
    at the Zoom Marketplace. Create a **Server to Server OAuth App**.
 
-1. Choose an app name such as "ExampleCorp Zulip".
+1. Choose an app name such as "ExampleCorp Doer".
 
 1. In the **Information** tab:
 
@@ -72,7 +72,7 @@ You can set up this integration as follows:
    `meeting:write:meeting:master` scopes.
 
 1. In the **Activation** tab, activate your app. You can now
-   [configure your Zulip server](#configure-your-zulip-server)
+   [configure your Doer server](#configure-your-doer-server)
    to use the app.
 
 ### General OAuth app
@@ -84,18 +84,18 @@ apps to go through the full Zoom Marketplace review process, even for
 apps](https://developers.zoom.us/docs/platform/key-concepts/#private-vs-beta-vs-published-vs-unlisted-apps)
 that will only be used by a single customer. As a result, you have to
 do quite a bit of publishing overhead work in order to create this
-type of Zoom application for your Zulip server.
+type of Zoom application for your Doer server.
 
 1. Select [**Build App**](https://marketplace.zoom.us/develop/create)
    at the Zoom Marketplace. Create a **General App**.
 
 1. In the **Basic Information** tab:
 
-   - Choose an app name such as "ExampleCorp Zulip".
+   - Choose an app name such as "ExampleCorp Doer".
    - Select **User-managed app**.
    - In the **OAuth Information** section, set the **OAuth Redirect URL**
-     to `https://zulip.example.com/calls/zoom/complete` (replacing
-     `zulip.example.com` by your main Zulip hostname).
+     to `https://doer.example.com/calls/zoom/complete` (replacing
+     `doer.example.com` by your main Doer hostname).
 
 <!--
 If we ever need to increase scopes in the future, we should also include the scopes
@@ -124,12 +124,12 @@ Details: https://chat.zulip.org/#narrow/channel/49-development-help/topic/What's
    [unlisted](https://developers.zoom.us/docs/build-flow/publishing-your-apps/#unlisted-apps).
 
 1. Once your app has been approved by the Zoom app review team, then
-   you can proceed to [configure your Zulip server](#configure-your-zulip-server)
+   you can proceed to [configure your Doer server](#configure-your-doer-server)
    to use the app.
 
-### Configure your Zulip server
+### Configure your Doer server
 
-1. In `/etc/zulip/zulip-secrets.conf`, set `video_zoom_client_secret`
+1. In `/etc/zulip/doer-secrets.conf`, set `video_zoom_client_secret`
    to be your app's "Client Secret".
 
 1. In `/etc/zulip/settings.py`, set `VIDEO_ZOOM_CLIENT_ID` to your
@@ -141,18 +141,18 @@ Details: https://chat.zulip.org/#narrow/channel/49-development-help/topic/What's
    `VIDEO_ZOOM_SERVER_TO_SERVER_ACCOUNT_ID` to be your app's "Account
    ID".
 
-1. Restart the Zulip server with
+1. Restart the Doer server with
    `/home/zulip/deployments/current/scripts/restart-server`.
 
-This enables Zoom support in your Zulip server. Finally, [configure Zoom as the
+This enables Zoom support in your Doer server. Finally, [configure Zoom as the
 video call
 provider](https://zulip.com/help/configure-call-provider)
-in the Zulip organizations where you want to use it.
+in the Doer organizations where you want to use it.
 
 ## BigBlueButton
 
 To use the [BigBlueButton](https://bigbluebutton.org/) video call
-integration on a self-hosted Zulip installation, you'll need to have a
+integration on a self-hosted Doer installation, you'll need to have a
 BigBlueButton server (version 2.4+) and configure it:
 
 1. Get the Shared Secret using the `bbb-conf --secret` command on your
@@ -163,26 +163,26 @@ BigBlueButton server (version 2.4+) and configure it:
    `https://bigbluebutton.example.com/bigbluebutton/` and can also be
    found using the `bbb-conf --secret` command.
 
-You can then configure your Zulip server to use that BigBlueButton
+You can then configure your Doer server to use that BigBlueButton
 Server as follows:
 
-1. In `/etc/zulip/zulip-secrets.conf`, set `big_blue_button_secret`
+1. In `/etc/zulip/doer-secrets.conf`, set `big_blue_button_secret`
    to be your BigBlueButton Server's shared secret.
 
 2. In `/etc/zulip/settings.py`, set `BIG_BLUE_BUTTON_URL` to your
    to be your BigBlueButton Server's API URL.
 
-3. Restart the Zulip server with
+3. Restart the Doer server with
    `/home/zulip/deployments/current/scripts/restart-server`.
 
-This enables BigBlueButton support in your Zulip server. Finally, [configure
+This enables BigBlueButton support in your Doer server. Finally, [configure
 BigBlueButton as the video call
 provider](https://zulip.com/help/configure-call-provider)
-in the Zulip organizations where you want to use it.
+in the Doer organizations where you want to use it.
 
 ## Constructor Groups
 
 To use the [Constructor Groups](https://constructor.tech/products/learning/groups)
-video call integration on a self-hosted Zulip installation, you'll need to
+video call integration on a self-hosted Doer installation, you'll need to
 have a Constructor Groups account. See documentation to configure the Constructor
 Groups video call integration [here](https://zulip.com/integrations/category/video-calling).

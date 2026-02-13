@@ -10,13 +10,13 @@ from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
 from analytics.lib.counts import ALL_COUNT_STATS, logger, process_count_stat
-from zerver.lib.management import ZulipBaseCommand, abort_cron_during_deploy, abort_unless_locked
+from zerver.lib.management import DoerBaseCommand, abort_cron_during_deploy, abort_unless_locked
 from zerver.lib.remote_server import send_server_data_to_push_bouncer, should_send_analytics_data
 from zerver.lib.timestamp import floor_to_hour
 from zerver.models import Realm
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Fills Analytics tables.
 
     Run as a cron job that runs every hour."""
@@ -87,11 +87,11 @@ class Command(ZulipBaseCommand):
             # Based on the specific value of the setting, the exact details to send
             # will be decided. However, we proceed just based on this not being falsey.
 
-            # Skew 0-10 minutes based on a hash of settings.ZULIP_ORG_ID, so
+            # Skew 0-10 minutes based on a hash of settings.DOER_ORG_ID, so
             # that each server will report in at a somewhat consistent time.
-            assert settings.ZULIP_ORG_ID
+            assert settings.DOER_ORG_ID
             delay = int.from_bytes(
-                hashlib.sha256(settings.ZULIP_ORG_ID.encode()).digest(), byteorder="big"
+                hashlib.sha256(settings.DOER_ORG_ID.encode()).digest(), byteorder="big"
             ) % (60 * 10)
             logger.info("Sleeping %d seconds before reporting...", delay)
             time.sleep(delay)

@@ -134,8 +134,8 @@ class GogsHookTests(WebhookTestCase):
         self.check_webhook("issue_comment__edited", expected_topic_name, expected_message)
 
     def test_release_published(self) -> None:
-        expected_topic_name = "zulip_test / v1.4 Title"
-        expected_message = """cestrell published release [Title](https://try.gogs.io/cestrell/zulip_test) for tag v1.4."""
+        expected_topic_name = "doer_test / v1.4 Title"
+        expected_message = """cestrell published release [Title](https://try.gogs.io/cestrell/doer_test) for tag v1.4."""
         self.check_webhook("release__published", expected_topic_name, expected_message)
 
     @patch("zerver.webhooks.gogs.view.check_send_webhook_message")

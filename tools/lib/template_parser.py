@@ -280,7 +280,7 @@ def tokenize(text: str, template_format: str | None = None) -> list[Token]:
 
 
 # The following excludes some obscure tags that are never used
-# in Zulip code.
+# in Doer code.
 HTML_INLINE_TAGS = {
     "a",
     "b",

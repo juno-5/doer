@@ -6,11 +6,11 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_delete_all_realm_attachments
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.models import Message, UserProfile
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Script to permanently delete a realm. Recommended only for removing
 realms used for testing; consider using deactivate_realm instead."""
 

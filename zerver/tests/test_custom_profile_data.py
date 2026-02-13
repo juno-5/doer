@@ -13,18 +13,18 @@ from zerver.actions.custom_profile_fields import (
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.lib.external_accounts import DEFAULT_EXTERNAL_ACCOUNTS
 from zerver.lib.markdown import markdown_convert
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.types import ProfileDataElementUpdateDict, ProfileDataElementValue
 from zerver.models import CustomProfileField, CustomProfileFieldValue, UserProfile
 from zerver.models.custom_profile_fields import custom_profile_fields_for_realm
 from zerver.models.realms import get_realm
 
 
-class CustomProfileFieldTestCase(ZulipTestCase):
+class CustomProfileFieldTestCase(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
         self.original_count = len(custom_profile_fields_for_realm(self.realm.id))
 
     def custom_field_exists_in_realm(self, field_id: int) -> bool:
@@ -36,7 +36,7 @@ class CustomProfileFieldTestCase(ZulipTestCase):
 class CreateCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_create(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         data: dict[str, Any] = {"name": "Phone", "field_type": "text id"}
         result = self.client_post("/json/realm/profile_fields", info=data)
         self.assert_json_error(result, "field_type is not valid JSON")
@@ -185,7 +185,7 @@ class CreateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_create_default_external_account_field(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field_type: int = CustomProfileField.EXTERNAL_ACCOUNT
         field_data: str = orjson.dumps(
             {
@@ -247,7 +247,7 @@ class CreateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_create_external_account_field(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         data: dict[str, str | int | dict[str, str]] = {}
         data["name"] = "X username"
         data["field_type"] = CustomProfileField.EXTERNAL_ACCOUNT
@@ -413,7 +413,7 @@ class CreateCustomProfileFieldTest(CustomProfileFieldTestCase):
 class DeleteCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_delete(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field = CustomProfileField.objects.get(name="Phone number", realm=realm)
         result = self.client_delete("/json/realm/profile_fields/100")
         self.assert_json_error(result, "Field id 100 not found.")
@@ -426,7 +426,7 @@ class DeleteCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_delete_field_value(self) -> None:
         iago = self.example_user("iago")
         self.login_user(iago)
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         invalid_field_id = 1234
         result = self.client_delete(
@@ -561,7 +561,7 @@ class DeleteCustomProfileFieldTest(CustomProfileFieldTestCase):
 class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_update(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         result = self.client_patch(
             "/json/realm/profile_fields/100",
             info={"name": "Phone number"},
@@ -661,7 +661,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_display_in_profile_summary(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         field = CustomProfileField.objects.get(name="Phone number", realm=realm)
 
@@ -723,7 +723,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_use_for_user_matching(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         field = CustomProfileField.objects.get(name="Phone number", realm=realm)
 
@@ -776,7 +776,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_field_data(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field = CustomProfileField.objects.get(name="Favorite editor", realm=realm)
         result = self.client_patch(
             f"/json/realm/profile_fields/{field.id}",
@@ -825,7 +825,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_is_aware_of_uniqueness(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field_1 = try_add_realm_custom_profile_field(realm, "Phone", CustomProfileField.SHORT_TEXT)
 
         field_2 = try_add_realm_custom_profile_field(
@@ -844,7 +844,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
         self, field_name: str, new_value: object, error_msg: str
     ) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field = CustomProfileField.objects.get(name=field_name, realm=realm)
 
         # Update value of field
@@ -895,7 +895,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_profile_data_successfully(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         fields: list[tuple[str, str | list[int]]] = [
             ("Phone number", "*short* text data"),
             ("Biography", "~~short~~ **long** text data"),
@@ -904,7 +904,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
             ("Birthday", "1909-03-05"),
             ("Favorite website", "https://zulip.com"),
             ("Mentor", [self.example_user("cordelia").id]),
-            ("GitHub username", "zulip-mobile"),
+            ("GitHub username", "doer-mobile"),
             ("Pronouns", "he/him"),
         ]
 
@@ -968,7 +968,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_update_select_field_successfully(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field = CustomProfileField.objects.get(name="Favorite editor", realm=realm)
         data = [
             {
@@ -984,7 +984,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_null_value_and_rendered_value(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         quote = try_add_realm_custom_profile_field(
             realm=realm,
@@ -1016,7 +1016,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_do_update_value_not_changed(self) -> None:
         iago = self.example_user("iago")
         self.login_user(iago)
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         # Set field value:
         field = CustomProfileField.objects.get(name="Mentor", realm=realm)
@@ -1035,7 +1035,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_removing_option_from_select_field(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field = CustomProfileField.objects.get(name="Favorite editor", realm=realm)
         self.assertTrue(
             CustomProfileFieldValue.objects.filter(field_id=field.id, value="0").exists()
@@ -1059,7 +1059,7 @@ class UpdateCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_default_external_account_type_field(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         field_data = orjson.dumps(
             {
                 "subtype": "x",
@@ -1196,7 +1196,7 @@ class ListCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_list_order(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = (
             CustomProfileField.objects.filter(realm=realm)
             .order_by("-order")
@@ -1327,7 +1327,7 @@ class ListCustomProfileFieldTest(CustomProfileFieldTestCase):
 class ReorderCustomProfileFieldTest(CustomProfileFieldTestCase):
     def test_reorder(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             CustomProfileField.objects.filter(realm=realm)
             .order_by("-order")
@@ -1343,7 +1343,7 @@ class ReorderCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_reorder_duplicates(self) -> None:
         self.login("iago")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             CustomProfileField.objects.filter(realm=realm)
             .order_by("-order")
@@ -1360,7 +1360,7 @@ class ReorderCustomProfileFieldTest(CustomProfileFieldTestCase):
 
     def test_reorder_unauthorized(self) -> None:
         self.login("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         order = list(
             CustomProfileField.objects.filter(realm=realm)
             .order_by("-order")

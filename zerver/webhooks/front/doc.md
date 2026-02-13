@@ -1,8 +1,8 @@
-# Zulip Front integration
+# Doer Front integration
 
 Front lets you manage all of your communication channels in one place,
 and helps your team collaborate around every message. Follow these steps
-to receive Front notifications without leaving Zulip!
+to receive Front notifications without leaving Doer!
 
 {start_tabs}
 
@@ -19,10 +19,10 @@ to receive Front notifications without leaving Zulip!
    to a Webhook** as the action, and input the URL generated above in
    the **Target Webhook** field. Click **Save**.
 
-1. [Add a new linkifier](/help/add-a-custom-linkifier) in your Zulip
+1. [Add a new linkifier](/help/add-a-custom-linkifier) in your Doer
    organization. Set the pattern to `cnv_(?P<id>[0-9a-z]+)` and the URL
    template to `https://app.frontapp.com/open/cnv_{id}`. This step maps
-   Front conversations to topics in Zulip.
+   Front conversations to topics in Doer.
 
 {end_tabs}
 

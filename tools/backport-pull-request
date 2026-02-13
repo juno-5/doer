@@ -43,7 +43,7 @@ merge_commit="$(
         -F pr_id="$1" \
         -f query='
 query($pr_id:Int!) {
-  repository(name: "zulip", owner: "zulip") {
+  repository(name: "doer", owner: "doer") {
     pullRequest(number:$pr_id) {
       timelineItems(last:1, itemTypes: [MERGED_EVENT]) {
         nodes {
@@ -71,7 +71,7 @@ while true; do
         --jq '.data.repository.ref.target.history.edges[].node.associatedPullRequests.nodes[].number' \
         -f query='
 query($commit_id: String!) {
-  repository(owner: "zulip", name:"zulip") {
+  repository(owner: "doer", name:"doer") {
     ref(qualifiedName:"main") {
       target {
         ... on Commit {

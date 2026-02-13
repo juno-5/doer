@@ -109,12 +109,12 @@ class kandra::profile::nagios inherits kandra::profile::base {
     '/etc/nagios4/conf.d/contacts_nagios2.cfg',
     '/etc/nagios4/conf.d/hostgroups_nagios2.cfg',
     '/etc/nagios4/conf.d/localhost_nagios2.cfg',
-    '/etc/nagios4/conf.d/zulip_nagios.cfg',
+    '/etc/nagios4/conf.d/doer_nagios.cfg',
   ]:
     ensure => absent,
   }
 
-  file { "${zulip::common::supervisor_conf_dir}/autossh_tunnels.conf":
+  file { "${doer::common::supervisor_conf_dir}/autossh_tunnels.conf":
     ensure  => file,
     require => [
       Package['supervisor', 'autossh'],
@@ -126,7 +126,7 @@ class kandra::profile::nagios inherits kandra::profile::base {
     content => template('kandra/supervisor/conf.d/autossh_tunnels.conf.erb'),
     notify  => Service['supervisor'],
   }
-  file { '/etc/nagios4/conf.d/zulip_autossh.cfg':
+  file { '/etc/nagios4/conf.d/doer_autossh.cfg':
     ensure  => file,
     mode    => '0644',
     owner   => 'root',

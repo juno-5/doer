@@ -25,7 +25,7 @@ const waiting_for_server_request_ids = new Set<string>();
 export type ReactionEvent = {
     message_id: number;
     user_id: number;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
     emoji_name: string;
     emoji_code: string;
 };
@@ -54,7 +54,7 @@ function get_message(message_id: number): Message | undefined {
 
 export type RawReaction = {
     emoji_name: string;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
     emoji_code: string;
     user_id: number;
 };
@@ -369,7 +369,7 @@ export let insert_new_reaction = (
 
     const is_realm_emoji =
         emoji_details.reaction_type === "realm_emoji" ||
-        emoji_details.reaction_type === "zulip_extra_emoji";
+        emoji_details.reaction_type === "doer_extra_emoji";
     const reaction_class =
         user_id === current_user.user_id ? "message_reaction reacted" : "message_reaction";
 
@@ -608,7 +608,7 @@ function make_clean_reaction({
     user_ids: number[];
     emoji_name: string;
     emoji_code: string;
-    reaction_type: "zulip_extra_emoji" | "realm_emoji" | "unicode_emoji";
+    reaction_type: "doer_extra_emoji" | "realm_emoji" | "unicode_emoji";
     should_display_reactors: boolean;
 }): MessageCleanReaction {
     const emoji_details = emoji.get_emoji_details_for_rendering({
@@ -619,7 +619,7 @@ function make_clean_reaction({
     const emoji_alt_code = user_settings.emojiset === "text";
     const is_realm_emoji =
         emoji_details.reaction_type === "realm_emoji" ||
-        emoji_details.reaction_type === "zulip_extra_emoji";
+        emoji_details.reaction_type === "doer_extra_emoji";
 
     return {
         local_id,

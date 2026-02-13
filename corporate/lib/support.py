@@ -20,7 +20,7 @@ from corporate.lib.stripe import (
 from corporate.models.customers import Customer
 from corporate.models.licenses import LicenseLedger
 from corporate.models.plans import CustomerPlan, CustomerPlanOffer, get_current_plan_by_customer
-from corporate.models.sponsorships import ZulipSponsorshipRequest
+from corporate.models.sponsorships import DoerSponsorshipRequest
 from zerver.actions.realm_settings import RealmDeactivationReasonType
 from zerver.lib.timestamp import timestamp_to_datetime
 from zerver.models import Realm, UserProfile
@@ -34,8 +34,8 @@ from zilencer.models import (
     RemoteRealm,
     RemoteRealmCount,
     RemoteServerBillingUser,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
     get_remote_realm_guest_and_non_guest_count,
     get_remote_server_guest_and_non_guest_count,
     has_stale_audit_log,
@@ -48,7 +48,7 @@ class SponsorshipRequestDict(TypedDict):
     org_type: str
     org_website: str
     org_description: str
-    plan_to_use_zulip: str
+    plan_to_use_doer: str
     total_users: str
     paid_users: str
     paid_users_description: str
@@ -199,7 +199,7 @@ def get_customer_sponsorship_data(customer: Customer) -> SponsorshipData:
         )
     if pending:
         last_sponsorship_request = (
-            ZulipSponsorshipRequest.objects.filter(customer=customer).order_by("id").last()
+            DoerSponsorshipRequest.objects.filter(customer=customer).order_by("id").last()
         )
         if last_sponsorship_request is not None:
             org_type_name = get_org_type_display_name(last_sponsorship_request.org_type)
@@ -215,7 +215,7 @@ def get_customer_sponsorship_data(customer: Customer) -> SponsorshipData:
                 org_website=website,
                 org_description=last_sponsorship_request.org_description,
                 total_users=last_sponsorship_request.expected_total_users,
-                plan_to_use_zulip=last_sponsorship_request.plan_to_use_zulip,
+                plan_to_use_doer=last_sponsorship_request.plan_to_use_doer,
                 paid_users=last_sponsorship_request.paid_users_count,
                 paid_users_description=last_sponsorship_request.paid_users_description,
                 requested_plan=last_sponsorship_request.requested_plan,
@@ -348,7 +348,7 @@ def get_plan_data_for_support_view(
             )
 
         if isinstance(billing_session, RealmBillingSession):
-            # TODO implement a complimentary access plan/tier for Zulip Cloud.
+            # TODO implement a complimentary access plan/tier for Doer Cloud.
             plan_data.is_complimentary_access_plan = False
         else:
             plan_data.is_complimentary_access_plan = (
@@ -374,8 +374,8 @@ def get_plan_data_for_support_view(
     return plan_data
 
 
-def get_mobile_push_data(remote_entity: RemoteZulipServer | RemoteRealm) -> MobilePushData:
-    if isinstance(remote_entity, RemoteZulipServer):
+def get_mobile_push_data(remote_entity: RemoteDoerServer | RemoteRealm) -> MobilePushData:
+    if isinstance(remote_entity, RemoteDoerServer):
         total_users = (
             RemotePushDeviceToken.objects.filter(server=remote_entity)
             .distinct("user_id", "user_uuid")
@@ -469,7 +469,7 @@ def get_mobile_push_data(remote_entity: RemoteZulipServer | RemoteRealm) -> Mobi
         )
 
 
-def get_deactivation_data(audit_log: RealmAuditLog | RemoteZulipServerAuditLog) -> DeactivationData:
+def get_deactivation_data(audit_log: RealmAuditLog | RemoteDoerServerAuditLog) -> DeactivationData:
     event_time = audit_log.event_time
 
     acting_user = None
@@ -481,7 +481,7 @@ def get_deactivation_data(audit_log: RealmAuditLog | RemoteZulipServerAuditLog) 
         if audit_log.extra_data:
             reason = audit_log.extra_data.get("deactivation_reason", None)
     else:
-        assert isinstance(audit_log, RemoteZulipServerAuditLog)
+        assert isinstance(audit_log, RemoteDoerServerAuditLog)
         if audit_log.acting_remote_user:
             billing_user = audit_log.acting_remote_user
         elif audit_log.acting_support_user:
@@ -500,13 +500,13 @@ def get_data_for_remote_support_view(billing_session: BillingSession) -> RemoteS
     if isinstance(billing_session, RemoteServerBillingSession):
         user_data = get_remote_server_guest_and_non_guest_count(billing_session.remote_server.id)
         stale_audit_log_data = has_stale_audit_log(billing_session.remote_server)
-        date_created = RemoteZulipServerAuditLog.objects.get(
+        date_created = RemoteDoerServerAuditLog.objects.get(
             event_type=AuditLogEventType.REMOTE_SERVER_CREATED,
             server__id=billing_session.remote_server.id,
         ).event_time
         mobile_data = get_mobile_push_data(billing_session.remote_server)
         if billing_session.remote_server.deactivated:
-            deactivation_audit_log = RemoteZulipServerAuditLog.objects.filter(
+            deactivation_audit_log = RemoteDoerServerAuditLog.objects.filter(
                 server=billing_session.remote_server,
                 event_type=AuditLogEventType.REMOTE_SERVER_DEACTIVATED,
             ).last()

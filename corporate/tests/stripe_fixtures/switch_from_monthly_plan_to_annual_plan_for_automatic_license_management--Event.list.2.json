@@ -59,7 +59,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "succeeded",
           "transfer_data": null,
@@ -137,7 +137,7 @@
               {
                 "amount": 4800,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -216,7 +216,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -306,7 +306,7 @@
               {
                 "amount": 4800,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -385,7 +385,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -485,7 +485,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -563,7 +563,7 @@
               {
                 "amount": 4800,
                 "currency": "usd",
-                "description": "Zulip Cloud Standard",
+                "description": "Doer Cloud Standard",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -642,7 +642,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -692,7 +692,7 @@
           "currency": "usd",
           "customer": "switch_from_monthly_plan_to_annual_plan_for_automatic_license_management--Customer.create.1.json",
           "date": 1000000000,
-          "description": "Zulip Cloud Standard",
+          "description": "Doer Cloud Standard",
           "discountable": false,
           "discounts": [],
           "id": "switch_from_monthly_plan_to_annual_plan_for_automatic_license_management--Event.list.2.json",
@@ -829,7 +829,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Cloud Standard",
+          "statement_descriptor": "Doer Cloud Standard",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -869,7 +869,7 @@
           "currency": "usd",
           "default_source": null,
           "delinquent": false,
-          "description": "zulip (Zulip Dev)",
+          "description": "doer (Doer Dev)",
           "discount": null,
           "email": "hamlet@zulip.com",
           "id": "switch_from_monthly_plan_to_annual_plan_for_automatic_license_management--Customer.create.1.json",
@@ -883,7 +883,7 @@
           "livemode": false,
           "metadata": {
             "realm_id": "1",
-            "realm_str": "zulip"
+            "realm_str": "doer"
           },
           "name": null,
           "next_invoice_sequence": 1,

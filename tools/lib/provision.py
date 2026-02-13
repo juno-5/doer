@@ -11,13 +11,13 @@ from typing import NoReturn
 
 os.environ["PYTHONUNBUFFERED"] = "y"
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-sys.path.append(ZULIP_PATH)
+sys.path.append(DOER_PATH)
 
 from scripts.lib.node_cache import setup_node_modules
 from scripts.lib.setup_venv import get_venv_dependencies
-from scripts.lib.zulip_tools import (
+from scripts.lib.doer_tools import (
     ENDC,
     FAIL,
     WARNING,
@@ -27,14 +27,14 @@ from scripts.lib.zulip_tools import (
     run_as_root,
 )
 
-VAR_DIR_PATH = os.path.join(ZULIP_PATH, "var")
+VAR_DIR_PATH = os.path.join(DOER_PATH, "var")
 
 CONTINUOUS_INTEGRATION = "GITHUB_ACTIONS" in os.environ
 
-if not os.path.exists(os.path.join(ZULIP_PATH, ".git")):
-    print(FAIL + "Error: No Zulip Git repository present!" + ENDC)
-    print("To set up the Zulip development environment, you should clone the code")
-    print("from GitHub, rather than using a Zulip production release tarball.")
+if not os.path.exists(os.path.join(DOER_PATH, ".git")):
+    print(FAIL + "Error: No Doer Git repository present!" + ENDC)
+    print("To set up the Doer development environment, you should clone the code")
+    print("from GitHub, rather than using a Doer production release tarball.")
     sys.exit(1)
 
 # Check the RAM on the user's system, and throw an effort if <1.5GB.
@@ -45,7 +45,7 @@ with open("/proc/meminfo") as meminfo:
 ram_gb = float(ram_size) / 1024.0 / 1024.0
 if ram_gb < 1.5:
     print(
-        f"You have insufficient RAM ({round(ram_gb, 2)} GB) to run the Zulip development environment."
+        f"You have insufficient RAM ({round(ram_gb, 2)} GB) to run the Doer development environment."
     )
     print("We recommend at least 2 GB of RAM, and require at least 1.5 GB.")
     sys.exit(1)
@@ -53,13 +53,13 @@ if ram_gb < 1.5:
 try:
     UUID_VAR_PATH = get_dev_uuid_var_path(create_if_missing=True)
     os.makedirs(UUID_VAR_PATH, exist_ok=True)
-    if os.path.exists(os.path.join(VAR_DIR_PATH, "zulip-test-symlink")):
-        os.remove(os.path.join(VAR_DIR_PATH, "zulip-test-symlink"))
+    if os.path.exists(os.path.join(VAR_DIR_PATH, "doer-test-symlink")):
+        os.remove(os.path.join(VAR_DIR_PATH, "doer-test-symlink"))
     os.symlink(
-        os.path.join(ZULIP_PATH, "README.md"),
-        os.path.join(VAR_DIR_PATH, "zulip-test-symlink"),
+        os.path.join(DOER_PATH, "README.md"),
+        os.path.join(VAR_DIR_PATH, "doer-test-symlink"),
     )
-    os.remove(os.path.join(VAR_DIR_PATH, "zulip-test-symlink"))
+    os.remove(os.path.join(VAR_DIR_PATH, "doer-test-symlink"))
 except OSError:
     print(
         FAIL + "Error: Unable to create symlinks. "
@@ -106,7 +106,7 @@ COMMON_DEPENDENCIES = [
     "curl",  # Used for testing our API documentation
     "moreutils",  # Used for sponge command
     "unzip",  # Needed for Slack import
-    "crudini",  # Used for shell tooling w/ zulip.conf
+    "crudini",  # Used for shell tooling w/ doer.conf
     # Puppeteer dependencies from here
     "xdg-utils",
     # Puppeteer dependencies end here.
@@ -206,12 +206,12 @@ if "fedora" in os_families():
 else:
     TSEARCH_STOPWORDS_PATH = f"/usr/share/postgresql/{POSTGRESQL_VERSION}/tsearch_data/"
 REPO_STOPWORDS_PATH = os.path.join(
-    ZULIP_PATH,
+    DOER_PATH,
     "puppet",
-    "zulip",
+    "doer",
     "files",
     "postgresql",
-    "zulip_english.stop",
+    "doer_english.stop",
 )
 
 
@@ -314,7 +314,7 @@ def install_yum_deps(deps_to_install: list[str]) -> None:
         sudo_args=["-H"],
     )
     # Use vendored pg_hba.conf, which enables password authentication.
-    run_as_root(["cp", "-a", "puppet/zulip/files/postgresql/centos_pg_hba.conf", pg_hba_conf])
+    run_as_root(["cp", "-a", "puppet/doer/files/postgresql/centos_pg_hba.conf", pg_hba_conf])
     # Later steps will ensure PostgreSQL is started
 
     # Link in tsearch data files
@@ -344,7 +344,7 @@ def install_yum_deps(deps_to_install: list[str]) -> None:
 def main(options: argparse.Namespace) -> NoReturn:
     # pnpm and management commands expect to be run from the root of the
     # project.
-    os.chdir(ZULIP_PATH)
+    os.chdir(DOER_PATH)
 
     # hash the apt dependencies
     sha_sum = hashlib.sha1()
@@ -433,7 +433,7 @@ def main(options: argparse.Namespace) -> NoReturn:
     )
     # Clean old symlinks used before uv migration
     with contextlib.suppress(FileNotFoundError):
-        os.unlink("zulip-py3-venv")
+        os.unlink("doer-py3-venv")
     if os.path.lexists("/srv/zulip-py3-venv"):
         run_as_root(["rm", "/srv/zulip-py3-venv"])
 
@@ -462,7 +462,7 @@ def main(options: argparse.Namespace) -> NoReturn:
     # bad idea, and empirically it can cause Python to segfault on
     # certain cffi-related imports.  Instead, start a new Python
     # process inside the virtualenv.
-    provision_inner = os.path.join(ZULIP_PATH, "tools", "lib", "provision_inner.py")
+    provision_inner = os.path.join(DOER_PATH, "tools", "lib", "provision_inner.py")
     os.execvp(
         "uv",
         [
@@ -478,7 +478,7 @@ def main(options: argparse.Namespace) -> NoReturn:
 
 
 if __name__ == "__main__":
-    description = "Provision script to install Zulip"
+    description = "Provision script to install Doer"
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
         "--force",

@@ -47,7 +47,7 @@ def remove_reaction(
             raise JsonableError(
                 _("At least one of the following arguments must be present: emoji_name, emoji_code")
             )
-        # A correct full Zulip client implementation should always
+        # A correct full Doer client implementation should always
         # pass an emoji_code, because of the corner cases discussed in
         # the long block comments elsewhere in this file.  However, to
         # make it easy for simple API clients to use the reactions API

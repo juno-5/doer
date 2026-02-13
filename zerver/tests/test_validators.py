@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from zerver.lib.exceptions import InvalidJSONError
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.types import Validator
 from zerver.lib.validator import (
     check_anything,
@@ -35,7 +35,7 @@ if settings.ZILENCER_ENABLED:
     pass
 
 
-class ValidatorTestCase(ZulipTestCase):
+class ValidatorTestCase(DoerTestCase):
     def test_check_string(self) -> None:
         x: Any = "hello"
         check_string("x", x)
@@ -286,7 +286,7 @@ class ValidatorTestCase(ZulipTestCase):
         url: Any = "http://127.0.0.1:5002/"
         check_url("url", url)
 
-        url = "http://zulip-bots.example.com/"
+        url = "http://doer-bots.example.com/"
         check_url("url", url)
 
         url = "http://127.0.0"

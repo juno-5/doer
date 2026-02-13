@@ -16,13 +16,13 @@
 
 ## Parameters
 
-{generate_api_arguments_table|zulip.yaml|API_ENDPOINT_NAME}
+{generate_api_arguments_table|doer.yaml|API_ENDPOINT_NAME}
 
 {generate_parameter_description(API_ENDPOINT_NAME)}
 
 ## Response
 
-{generate_return_values_table|zulip.yaml|API_ENDPOINT_NAME}
+{generate_return_values_table|doer.yaml|API_ENDPOINT_NAME}
 
 {generate_response_description(API_ENDPOINT_NAME)}
 

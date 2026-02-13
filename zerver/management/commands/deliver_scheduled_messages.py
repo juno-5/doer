@@ -6,11 +6,11 @@ from django.utils.timezone import now as timezone_now
 from typing_extensions import override
 
 from zerver.actions.scheduled_messages import try_deliver_one_scheduled_message
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
 ## Setup ##
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Deliver scheduled messages from the ScheduledMessage table.
 Run this command under supervisor.
 

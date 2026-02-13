@@ -19,8 +19,8 @@ from typing_extensions import override
 from confirmation.models import Confirmation, generate_realm_creation_url
 from zerver.actions.create_user import do_create_user
 from zerver.actions.user_settings import do_change_user_setting
-from zerver.lib.management import ZulipBaseCommand
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.management import DoerBaseCommand
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message, stdout_suppressed
 from zerver.models import Realm, RealmAuditLog, Recipient, UserProfile
 from zerver.models.realm_audit_logs import AuditLogEventType
@@ -29,28 +29,28 @@ from zerver.models.streams import get_stream
 from zerver.models.users import get_user_profile_by_email
 
 
-class TestWarnNoEmail(ZulipTestCase):
+class TestWarnNoEmail(DoerTestCase):
     @override_settings(WARN_NO_EMAIL=True)
     def test_check_send_email(self) -> None:
         with self.assertRaisesRegex(CommandError, "Outgoing email not yet configured, see"):
             call_command("send_test_email", "test@example.com")
 
 
-class TestZulipBaseCommand(ZulipTestCase):
+class TestDoerBaseCommand(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.zulip_realm = get_realm("zulip")
-        self.command = ZulipBaseCommand()
+        self.doer_realm = get_realm("doer")
+        self.command = DoerBaseCommand()
 
     def test_get_client(self) -> None:
-        self.assertEqual(self.command.get_client().name, "ZulipServer")
+        self.assertEqual(self.command.get_client().name, "DoerServer")
 
     def test_get_realm(self) -> None:
-        self.assertEqual(self.command.get_realm(dict(realm_id="zulip")), self.zulip_realm)
+        self.assertEqual(self.command.get_realm(dict(realm_id="doer")), self.doer_realm)
         self.assertEqual(self.command.get_realm(dict(realm_id=None)), None)
         self.assertEqual(
-            self.command.get_realm(dict(realm_id=str(self.zulip_realm.id))), self.zulip_realm
+            self.command.get_realm(dict(realm_id=str(self.doer_realm.id))), self.doer_realm
         )
         with self.assertRaisesRegex(CommandError, "There is no realm with id"):
             self.command.get_realm(dict(realm_id="17"))
@@ -62,7 +62,7 @@ class TestZulipBaseCommand(ZulipTestCase):
         user_profile = self.example_user("hamlet")
         email = user_profile.delivery_email
 
-        self.assertEqual(self.command.get_user(email, self.zulip_realm), user_profile)
+        self.assertEqual(self.command.get_user(email, self.doer_realm), user_profile)
         self.assertEqual(self.command.get_user(email, None), user_profile)
 
         error_message = f"The realm '{mit_realm}' does not contain a user with email"
@@ -101,7 +101,7 @@ class TestZulipBaseCommand(ZulipTestCase):
         )
 
         user_emails = ",".join(u.delivery_email for u in expected_user_profiles)
-        user_profiles = self.get_users_sorted(dict(users=user_emails), self.zulip_realm)
+        user_profiles = self.get_users_sorted(dict(users=user_emails), self.doer_realm)
         self.assertEqual(user_profiles, expected_user_profiles)
         user_profiles = self.get_users_sorted(dict(users=user_emails), None)
         self.assertEqual(user_profiles, expected_user_profiles)
@@ -115,12 +115,12 @@ class TestZulipBaseCommand(ZulipTestCase):
         user_emails = ",".join(u.delivery_email for u in expected_user_profiles)
         user_profiles = self.get_users_sorted(dict(users=user_emails), None)
         self.assertEqual(user_profiles, expected_user_profiles)
-        error_message = f"The realm '{self.zulip_realm}' does not contain a user with email"
+        error_message = f"The realm '{self.doer_realm}' does not contain a user with email"
         with self.assertRaisesRegex(CommandError, error_message):
-            self.command.get_users(dict(users=user_emails), self.zulip_realm)
+            self.command.get_users(dict(users=user_emails), self.doer_realm)
 
         self.assertEqual(
-            list(self.command.get_users(dict(users=self.example_email("iago")), self.zulip_realm)),
+            list(self.command.get_users(dict(users=self.example_email("iago")), self.doer_realm)),
             [self.example_user("iago")],
         )
 
@@ -135,7 +135,7 @@ class TestZulipBaseCommand(ZulipTestCase):
         )
         user_emails = ",".join(u.delivery_email for u in expected_user_profiles)
         user_profiles = self.get_users_sorted(
-            dict(users=user_emails, all_users=False), self.zulip_realm
+            dict(users=user_emails, all_users=False), self.doer_realm
         )
         self.assertEqual(user_profiles, expected_user_profiles)
         error_message = "You can't use both -u/--users and -a/--all-users."
@@ -144,29 +144,29 @@ class TestZulipBaseCommand(ZulipTestCase):
 
         # Test the default mode excluding bots and deactivated users
         expected_user_profiles = sorted(
-            UserProfile.objects.filter(realm=self.zulip_realm, is_active=True, is_bot=False),
+            UserProfile.objects.filter(realm=self.doer_realm, is_active=True, is_bot=False),
             key=lambda x: x.email,
         )
         user_profiles = self.get_users_sorted(
-            dict(users=None, all_users=True), self.zulip_realm, is_bot=False
+            dict(users=None, all_users=True), self.doer_realm, is_bot=False
         )
         self.assertEqual(user_profiles, expected_user_profiles)
 
         # Test the default mode excluding bots and deactivated users
         expected_user_profiles = sorted(
-            UserProfile.objects.filter(realm=self.zulip_realm, is_active=True),
+            UserProfile.objects.filter(realm=self.doer_realm, is_active=True),
             key=lambda x: x.email,
         )
-        user_profiles = self.get_users_sorted(dict(users=None, all_users=True), self.zulip_realm)
+        user_profiles = self.get_users_sorted(dict(users=None, all_users=True), self.doer_realm)
         self.assertEqual(user_profiles, expected_user_profiles)
 
         # Test include_deactivated
         expected_user_profiles = sorted(
-            UserProfile.objects.filter(realm=self.zulip_realm, is_bot=False), key=lambda x: x.email
+            UserProfile.objects.filter(realm=self.doer_realm, is_bot=False), key=lambda x: x.email
         )
         user_profiles = self.get_users_sorted(
             dict(users=None, all_users=True),
-            self.zulip_realm,
+            self.doer_realm,
             is_bot=False,
             include_deactivated=True,
         )
@@ -182,15 +182,15 @@ class TestZulipBaseCommand(ZulipTestCase):
 
     def test_get_non_bot_users(self) -> None:
         expected_user_profiles = sorted(
-            UserProfile.objects.filter(realm=self.zulip_realm, is_bot=False), key=lambda x: x.email
+            UserProfile.objects.filter(realm=self.doer_realm, is_bot=False), key=lambda x: x.email
         )
         user_profiles = self.get_users_sorted(
-            dict(users=None, all_users=True), self.zulip_realm, is_bot=False
+            dict(users=None, all_users=True), self.doer_realm, is_bot=False
         )
         self.assertEqual(user_profiles, expected_user_profiles)
 
 
-class TestCommandsCanStart(ZulipTestCase):
+class TestCommandsCanStart(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -212,7 +212,7 @@ class TestCommandsCanStart(ZulipTestCase):
         settings.RUNNING_INSIDE_TORNADO = False
 
 
-class TestSendWebhookFixtureMessage(ZulipTestCase):
+class TestSendWebhookFixtureMessage(DoerTestCase):
     COMMAND_NAME = "send_webhook_fixture_message"
 
     @override
@@ -273,11 +273,11 @@ class TestSendWebhookFixtureMessage(ZulipTestCase):
         self.assertTrue(orjson_mock.loads.called)
         self.assertTrue(open_mock.called)
         client.post.assert_called_once_with(
-            self.url, b"{}", content_type="application/json", HTTP_HOST="zulip.testserver"
+            self.url, b"{}", content_type="application/json", HTTP_HOST="doer.testserver"
         )
 
 
-class TestGenerateRealmCreationLink(ZulipTestCase):
+class TestGenerateRealmCreationLink(DoerTestCase):
     COMMAND_NAME = "generate_realm_creation_link"
 
     @override_settings(OPEN_REALM_CREATION=False)
@@ -287,7 +287,7 @@ class TestGenerateRealmCreationLink(ZulipTestCase):
 
         # Get realm creation page
         result = self.client_get(generated_link)
-        self.assert_in_success_response(["Create a new Zulip organization"], result)
+        self.assert_in_success_response(["Create a new Doer organization"], result)
 
         # Enter email
         with self.assertRaises(Realm.DoesNotExist):
@@ -296,7 +296,7 @@ class TestGenerateRealmCreationLink(ZulipTestCase):
             generated_link,
             {
                 "email": email,
-                "realm_name": "Zulip test",
+                "realm_name": "Doer test",
                 "realm_type": Realm.ORG_TYPES["business"]["id"],
                 "realm_default_language": "en",
                 "realm_subdomain": "custom-test",
@@ -317,7 +317,7 @@ class TestGenerateRealmCreationLink(ZulipTestCase):
     @override_settings(OPEN_REALM_CREATION=False)
     def test_generate_link_confirm_email(self) -> None:
         email = "user1@test.com"
-        realm_name = "Zulip test"
+        realm_name = "Doer test"
         string_id = "custom-test"
         generated_link = generate_realm_creation_url(by_admin=False)
 
@@ -367,14 +367,14 @@ class TestGenerateRealmCreationLink(ZulipTestCase):
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class TestCalculateFirstVisibleMessageID(ZulipTestCase):
+class TestCalculateFirstVisibleMessageID(DoerTestCase):
     COMMAND_NAME = "calculate_first_visible_message_id"
 
     def test_check_if_command_calls_maybe_update_first_visible_message_id(self) -> None:
         func_name = "zilencer.management.commands.calculate_first_visible_message_id.maybe_update_first_visible_message_id"
         with patch(func_name) as m:
-            call_command(self.COMMAND_NAME, "--realm=zulip", "--lookback-hours=30")
-        m.assert_called_with(get_realm("zulip"), 30)
+            call_command(self.COMMAND_NAME, "--realm=doer", "--lookback-hours=30")
+        m.assert_called_with(get_realm("doer"), 30)
 
         with patch(func_name) as m:
             call_command(self.COMMAND_NAME, "--lookback-hours=35")
@@ -382,7 +382,7 @@ class TestCalculateFirstVisibleMessageID(ZulipTestCase):
         m.assert_has_calls(calls, any_order=True)
 
 
-class TestPasswordRestEmail(ZulipTestCase):
+class TestPasswordRestEmail(DoerTestCase):
     COMMAND_NAME = "send_password_reset_email"
 
     def test_if_command_sends_password_reset_email(self) -> None:
@@ -397,16 +397,16 @@ class TestPasswordRestEmail(ZulipTestCase):
         self.assertIn("reset your password", outbox[0].body)
 
 
-class TestRealmReactivationEmail(ZulipTestCase):
+class TestRealmReactivationEmail(DoerTestCase):
     COMMAND_NAME = "send_realm_reactivation_email"
 
     def test_if_realm_not_deactivated(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         with self.assertRaisesRegex(CommandError, f"The realm {realm.name} is already active."):
-            call_command(self.COMMAND_NAME, "--realm=zulip")
+            call_command(self.COMMAND_NAME, "--realm=doer")
 
 
-class TestSendToEmailMirror(ZulipTestCase):
+class TestSendToEmailMirror(DoerTestCase):
     COMMAND_NAME = "send_to_email_mirror"
 
     def test_sending_a_fixture(self) -> None:
@@ -419,7 +419,7 @@ class TestSendToEmailMirror(ZulipTestCase):
             call_command(self.COMMAND_NAME, f"--fixture={fixture_path}")
         self.assertEqual(
             info_log.output,
-            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark (zulip)"],
+            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark (doer)"],
         )
         message = most_recent_message(user_profile)
 
@@ -436,7 +436,7 @@ class TestSendToEmailMirror(ZulipTestCase):
             call_command(self.COMMAND_NAME, f"--fixture={fixture_path}")
         self.assertEqual(
             info_log.output,
-            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark (zulip)"],
+            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark (doer)"],
         )
         message = most_recent_message(user_profile)
 
@@ -453,19 +453,19 @@ class TestSendToEmailMirror(ZulipTestCase):
             call_command(self.COMMAND_NAME, f"--fixture={fixture_path}", "--stream=Denmark2")
         self.assertEqual(
             info_log.output,
-            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark2 (zulip)"],
+            ["INFO:zerver.lib.email_mirror:Successfully processed email to Denmark2 (doer)"],
         )
         message = most_recent_message(user_profile)
 
         # last message should be equal to the body of the email in 1.txt
         self.assertEqual(message.content, "Email fixture 1.txt body")
 
-        stream_id = get_stream("Denmark2", get_realm("zulip")).id
+        stream_id = get_stream("Denmark2", get_realm("doer")).id
         self.assertEqual(message.recipient.type, Recipient.STREAM)
         self.assertEqual(message.recipient.type_id, stream_id)
 
 
-class TestConvertMattermostData(ZulipTestCase):
+class TestConvertMattermostData(DoerTestCase):
     COMMAND_NAME = "convert_mattermost_data"
 
     def test_if_command_calls_do_convert_data(self) -> None:
@@ -486,7 +486,7 @@ class TestConvertMattermostData(ZulipTestCase):
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class TestInvoicePlans(ZulipTestCase):
+class TestInvoicePlans(DoerTestCase):
     COMMAND_NAME = "invoice_plans"
 
     def test_if_command_calls_invoice_plans_as_needed(self) -> None:
@@ -497,7 +497,7 @@ class TestInvoicePlans(ZulipTestCase):
 
 
 @skipUnless(settings.ZILENCER_ENABLED, "requires zilencer")
-class TestDowngradeSmallRealmsBehindOnPayments(ZulipTestCase):
+class TestDowngradeSmallRealmsBehindOnPayments(DoerTestCase):
     COMMAND_NAME = "downgrade_small_realms_behind_on_payments"
 
     def test_if_command_calls_downgrade_small_realms_behind_on_payments_as_needed(self) -> None:
@@ -509,7 +509,7 @@ class TestDowngradeSmallRealmsBehindOnPayments(ZulipTestCase):
         m.assert_called_once()
 
 
-class TestExport(ZulipTestCase):
+class TestExport(DoerTestCase):
     COMMAND_NAME = "export"
 
     def test_command_to_export_full_with_consent(self) -> None:
@@ -524,7 +524,7 @@ class TestExport(ZulipTestCase):
             patch("zerver.management.commands.export.export_realm_wrapper") as m,
             patch("builtins.print") as mock_print,
         ):
-            call_command(self.COMMAND_NAME, "-r=zulip", "--export-full-with-consent")
+            call_command(self.COMMAND_NAME, "-r=doer", "--export-full-with-consent")
             m.assert_called_once_with(
                 export_row=mock.ANY,
                 processes=mock.ANY,
@@ -537,12 +537,12 @@ class TestExport(ZulipTestCase):
         self.assertEqual(
             mock_print.mock_calls,
             [
-                call("\033[94mExporting realm\033[0m: zulip"),
+                call("\033[94mExporting realm\033[0m: doer"),
             ],
         )
 
 
-class TestSendCustomEmail(ZulipTestCase):
+class TestSendCustomEmail(DoerTestCase):
     COMMAND_NAME = "send_custom_email"
 
     def test_custom_email_with_dry_run(self) -> None:
@@ -553,37 +553,37 @@ class TestSendCustomEmail(ZulipTestCase):
         with patch("builtins.print") as mock_print:
             call_command(
                 self.COMMAND_NAME,
-                "-r=zulip",
+                "-r=doer",
                 f"--path={path}",
                 f"-u={user.delivery_email}",
                 "--subject=Test email",
-                "--from-name=zulip@zulip.example.com",
+                "--from-name=doer@doer.example.com",
                 "--dry-run",
             )
             self.assertEqual(
                 mock_print.mock_calls[1:],
                 [
                     call("Would send the above email to:"),
-                    call("  hamlet@zulip.com (zulip)"),
+                    call("  hamlet@zulip.com (doer)"),
                 ],
             )
 
         with patch("builtins.print") as mock_print:
             call_command(
                 self.COMMAND_NAME,
-                "-r=zulip",
+                "-r=doer",
                 f"--path={path}",
                 f"-u={user.delivery_email},{other_user.delivery_email}",
                 "--subject=Test email",
-                "--from-name=zulip@zulip.example.com",
+                "--from-name=doer@doer.example.com",
                 "--dry-run",
             )
             self.assertEqual(
                 mock_print.mock_calls[1:],
                 [
                     call("Would send the above email to:"),
-                    call("  cordelia@zulip.com (zulip)"),
-                    call("  hamlet@zulip.com (zulip)"),
+                    call("  cordelia@zulip.com (doer)"),
+                    call("  hamlet@zulip.com (doer)"),
                 ],
             )
 
@@ -778,7 +778,7 @@ class TestSendCustomEmail(ZulipTestCase):
             call_command(
                 self.COMMAND_NAME,
                 f"--path={path}",
-                "-r=zulip",
+                "-r=doer",
                 f"-u={hamlet.delivery_email},{cordelia.delivery_email}",
             )
 
@@ -792,21 +792,21 @@ class TestSendCustomEmail(ZulipTestCase):
         self.assertEqual(final_audit_count, initial_audit_count)
 
 
-class TestSendZulipUpdateAnnouncements(ZulipTestCase):
-    COMMAND_NAME = "send_zulip_update_announcements"
+class TestSendDoerUpdateAnnouncements(DoerTestCase):
+    COMMAND_NAME = "send_doer_update_announcements"
 
     def test_reset_level(self) -> None:
-        realm = get_realm("zulip")
-        realm.zulip_update_announcements_level = 9
+        realm = get_realm("doer")
+        realm.doer_update_announcements_level = 9
         realm.save()
 
         call_command(self.COMMAND_NAME, "--reset-level=5")
 
         realm.refresh_from_db()
-        self.assertEqual(realm.zulip_update_announcements_level, 5)
+        self.assertEqual(realm.doer_update_announcements_level, 5)
 
 
-class TestUserChangeNotifications(ZulipTestCase):
+class TestUserChangeNotifications(DoerTestCase):
     def test_bulk_change_user_name_sends_notifications(self) -> None:
         hamlet = self.example_user("hamlet")
         bot = self.example_user("default_bot")

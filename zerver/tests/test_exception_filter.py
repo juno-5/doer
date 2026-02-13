@@ -5,12 +5,12 @@ import sys
 from django.test import RequestFactory, override_settings
 from django.views.debug import ExceptionReporter
 
-from zerver.filters import ZulipExceptionReporterFilter
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.filters import DoerExceptionReporterFilter
+from zerver.lib.test_classes import DoerTestCase
 
 
-class TestExceptionFilter(ZulipTestCase):
-    def test_zulip_filter_masks_sensitive_post_data(self) -> None:
+class TestExceptionFilter(DoerTestCase):
+    def test_doer_filter_masks_sensitive_post_data(self) -> None:
         """
         Verifies that specific sensitive POST parameters are masked.
         """
@@ -27,7 +27,7 @@ class TestExceptionFilter(ZulipTestCase):
             },
         )
 
-        filt = ZulipExceptionReporterFilter()
+        filt = DoerExceptionReporterFilter()
         cleaned = filt.get_post_parameters(request)
 
         for var in [
@@ -60,7 +60,7 @@ class TestExceptionFilter(ZulipTestCase):
             tb,
             is_email=True,
         )
-        reporter.filter = ZulipExceptionReporterFilter()
+        reporter.filter = DoerExceptionReporterFilter()
 
         data = reporter.get_traceback_data()
 
@@ -91,7 +91,7 @@ class TestExceptionFilter(ZulipTestCase):
             tb,
             is_email=True,
         )
-        reporter.filter = ZulipExceptionReporterFilter()
+        reporter.filter = DoerExceptionReporterFilter()
 
         data = reporter.get_traceback_data()
 

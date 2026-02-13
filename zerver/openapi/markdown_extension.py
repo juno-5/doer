@@ -1,9 +1,9 @@
-# Zulip's OpenAPI-based API documentation system is documented at
+# Doer's OpenAPI-based API documentation system is documented at
 #   https://zulip.readthedocs.io/en/latest/documentation/api.html
 #
 # This file defines the special Markdown extension that is used to
 # render the code examples, example responses, etc. that appear in
-# Zulip's public API documentation.
+# Doer's public API documentation.
 
 import inspect
 import json
@@ -66,25 +66,25 @@ MACRO_REGEXP_PARAMETER_DESC = re.compile(
 PYTHON_CLIENT_CONFIG = """
 #!/usr/bin/env python3
 
-import zulip
+import doer
 
 # Pass the path to your zuliprc file here.
-client = zulip.Client(config_file="~/zuliprc")
+client = doer.Client(config_file="~/zuliprc")
 
 """
 
 PYTHON_CLIENT_ADMIN_CONFIG = """
 #!/usr/bin/env python
 
-import zulip
+import doer
 
 # The user for this zuliprc file must be an organization administrator
-client = zulip.Client(config_file="~/zuliprc-admin")
+client = doer.Client(config_file="~/zuliprc-admin")
 
 """
 
 JS_CLIENT_CONFIG = """
-const zulipInit = require("zulip-js");
+const doerInit = require("doer-js");
 
 // Pass the path to your zuliprc file here.
 const config = { zuliprc: "zuliprc" };
@@ -92,7 +92,7 @@ const config = { zuliprc: "zuliprc" };
 """
 
 JS_CLIENT_ADMIN_CONFIG = """
-const zulipInit = require("zulip-js");
+const doerInit = require("doer-js");
 
 // The user for this zuliprc file must be an organization administrator.
 const config = { zuliprc: "zuliprc-admin" };
@@ -147,9 +147,9 @@ def render_python_code_example(
     endpoint, endpoint_method = function.split(":")
     extra_imports = check_additional_imports(endpoint, endpoint_method)
     if extra_imports:
-        extra_imports = sorted([*extra_imports, "zulip"])
+        extra_imports = sorted([*extra_imports, "doer"])
         extra_imports = [f"import {each_import}" for each_import in extra_imports]
-        config_string = config_string.replace("import zulip", "\n".join(extra_imports))
+        config_string = config_string.replace("import doer", "\n".join(extra_imports))
 
     config = config_string.splitlines()
 
@@ -186,13 +186,13 @@ def render_javascript_code_example(
 
     code_example = [
         "{tab|js}\n",
-        "More examples and documentation can be found [here](https://github.com/zulip/zulip-js).",
+        "More examples and documentation can be found [here](https://github.com/doer/doer-js).",
     ]
 
     code_example.append("```js")
     code_example.extend(config)
     code_example.append("(async () => {")
-    code_example.append("    const client = await zulipInit(config);")
+    code_example.append("    const client = await doerInit(config);")
     for snippet in snippets:
         code_example.append("")
         # Strip newlines
@@ -320,8 +320,8 @@ def generate_curl_example(
 
     if authentication_required:
         is_zilencer_endpoint = endpoint.startswith("/remotes/")
-        auth_email = "ZULIP_ORG_ID" if is_zilencer_endpoint else DEFAULT_AUTH_EMAIL
-        auth_api_key = "ZULIP_ORG_KEY" if is_zilencer_endpoint else DEFAULT_AUTH_API_KEY
+        auth_email = "DOER_ORG_ID" if is_zilencer_endpoint else DEFAULT_AUTH_EMAIL
+        auth_api_key = "DOER_ORG_KEY" if is_zilencer_endpoint else DEFAULT_AUTH_API_KEY
         lines.append("    -u " + shlex.quote(f"{auth_email}:{auth_api_key}"))
 
     for parameter in parameters:

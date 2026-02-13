@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# This tools generates /etc/zulip/zulip-secrets.conf
+# This tools generates /etc/zulip/doer-secrets.conf
 import json
 import os
 import sys
@@ -8,7 +8,7 @@ from contextlib import suppress
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.append(BASE_DIR)
 from scripts.lib.setup_path import setup_path
-from scripts.lib.zulip_tools import get_config, get_config_file
+from scripts.lib.doer_tools import get_config, get_config_file
 
 setup_path()
 
@@ -79,7 +79,7 @@ def generate_secrets(development: bool = False) -> None:
     if development:
         OUTPUT_SETTINGS_FILENAME = "zproject/dev-secrets.conf"
     else:
-        OUTPUT_SETTINGS_FILENAME = "/etc/zulip/zulip-secrets.conf"
+        OUTPUT_SETTINGS_FILENAME = "/etc/zulip/doer-secrets.conf"
     current_conf = get_old_conf(OUTPUT_SETTINGS_FILENAME)
 
     lines: list[str] = []
@@ -97,7 +97,7 @@ def generate_secrets(development: bool = False) -> None:
         if need_secret(name):
             add_secret(name, random_token())
 
-    # These secrets are exclusive to a Zulip development environment.
+    # These secrets are exclusive to a Doer development environment.
     # We use PostgreSQL peer authentication by default in production,
     # and initial_password_salt is used to generate passwords for the
     # test/development database users.  See `manage.py
@@ -110,8 +110,8 @@ def generate_secrets(development: bool = False) -> None:
     # We only need a secret if the database username does not match
     # the OS username, as identd auth works in that case.
     if get_config(
-        get_config_file(), "postgresql", "database_user", "zulip"
-    ) != "zulip" and need_secret("postgres_password"):
+        get_config_file(), "postgresql", "database_user", "doer"
+    ) != "doer" and need_secret("postgres_password"):
         add_secret("postgres_password", random_token())
 
     # The core Django SECRET_KEY setting, used by Django internally to
@@ -165,11 +165,11 @@ def generate_secrets(development: bool = False) -> None:
 
                 redis_password = random_token()
 
-                for filename in ["/etc/redis/zuli-redis.conf", "/etc/redis/zulip-redis.conf"]:
+                for filename in ["/etc/redis/zuli-redis.conf", "/etc/redis/doer-redis.conf"]:
                     if os.path.exists(filename):
                         with open(filename, "a") as f:
                             f.write(
-                                "# Set a Redis password based on zulip-secrets.conf\n"
+                                "# Set a Redis password based on doer-secrets.conf\n"
                                 f"requirepass '{redis_password}'\n",
                             )
                         break
@@ -180,13 +180,13 @@ def generate_secrets(development: bool = False) -> None:
                 add_secret("redis_password", redis_password)
 
     # Random id and secret used to identify this installation when
-    # accessing the Zulip mobile push notifications service.
-    # * zulip_org_key is generated using os.urandom().
-    # * zulip_org_id only needs to be unique, so we use a UUID.
-    if need_secret("zulip_org_key"):
-        add_secret("zulip_org_key", random_string(64))
-    if need_secret("zulip_org_id"):
-        add_secret("zulip_org_id", str(uuid.uuid4()))
+    # accessing the Doer mobile push notifications service.
+    # * doer_org_key is generated using os.urandom().
+    # * doer_org_id only needs to be unique, so we use a UUID.
+    if need_secret("doer_org_key"):
+        add_secret("doer_org_key", random_string(64))
+    if need_secret("doer_org_id"):
+        add_secret("doer_org_id", str(uuid.uuid4()))
 
     if development and need_secret("push_registration_encryption_keys"):
         # 'settings.ZILENCER_ENABLED' would be a better check than
@@ -215,13 +215,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
-        "--development", action="store_true", help="For setting up the developer env for zulip"
+        "--development", action="store_true", help="For setting up the developer env for doer"
     )
     group.add_argument(
         "--production",
         action="store_false",
         dest="development",
-        help="For setting up the production env for zulip",
+        help="For setting up the production env for doer",
     )
     results = parser.parse_args()
 

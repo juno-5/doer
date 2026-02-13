@@ -6,7 +6,7 @@
 # using bmemcached.
 class kandra::prometheus::memcached {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
   # We embed the hash of the contents into the name of the process, so
   # that `supervisorctl reread` knows that it has updated.
@@ -23,10 +23,10 @@ class kandra::prometheus::memcached {
   }
 
   kandra::firewall_allow { 'memcached_exporter': port => '11212' }
-  file { "${zulip::common::supervisor_conf_dir}/memcached_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/memcached_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],

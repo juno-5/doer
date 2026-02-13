@@ -13,7 +13,7 @@ from typing_extensions import override
 from zerver.lib.mime_types import guess_type
 from zerver.lib.thumbnail import resize_logo, resize_realm_icon
 from zerver.lib.timestamp import timestamp_to_datetime
-from zerver.lib.upload.base import StreamingSourceWithSize, ZulipUploadBackend
+from zerver.lib.upload.base import StreamingSourceWithSize, DoerUploadBackend
 from zerver.lib.utils import assert_is_not_none
 from zerver.models import Realm, RealmEmoji, UserProfile
 
@@ -72,7 +72,7 @@ def delete_local_file(
         prune_empty_dirs(file_path)
 
 
-class LocalUploadBackend(ZulipUploadBackend):
+class LocalUploadBackend(DoerUploadBackend):
     @override
     def get_public_upload_root_url(self) -> str:
         return "/user_avatars/"

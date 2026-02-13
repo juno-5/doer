@@ -5,12 +5,12 @@ title: Format a quote
 import {TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import QuotesExamples from "../include/_QuotesExamples.mdx";
 import QuotesIntro from "../include/_QuotesIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import QuoteIcon from "~icons/zulip-icon/quote";
+import QuoteIcon from "~icons/doer-icon/quote";
 
 <QuotesIntro />
 
@@ -26,10 +26,10 @@ import QuoteIcon from "~icons/zulip-icon/quote";
          bottom of the compose box to insert quote block formatting.
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also use the **Quote** (<QuoteIcon />)
       icon to remove existing quote formatting from the selected text.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via Markdown">

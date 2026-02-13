@@ -5,10 +5,10 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_scrub_realm
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Script to scrub a deactivated realm."""
 
     @override

@@ -1,16 +1,16 @@
 # Configuring the Python bindings
 
-Zulip provides a set of tools that allows interacting with its API more
-easily, called the [Python bindings](https://pypi.python.org/pypi/zulip/).
+Doer provides a set of tools that allows interacting with its API more
+easily, called the [Python bindings](https://pypi.python.org/pypi/doer/).
 One of the most notable use cases for these bindings are bots developed
-using Zulip's [bot framework](/help/writing-bots).
+using Doer's [bot framework](/help/writing-bots).
 
 In order to use them, you need to configure them with your identity
-(account, API key, and Zulip server URL). There are a few ways to
+(account, API key, and Doer server URL). There are a few ways to
 achieve that:
 
 - Using a `zuliprc` file, referenced via the `--config-file` option or
-  the `config_file` option to the `zulip.Client` constructor
+  the `config_file` option to the `doer.Client` constructor
   (recommended for bots).
 - Using a `zuliprc` file in your home directory at `~/.zuliprc`
   (recommended for your own API key).
@@ -20,7 +20,7 @@ achieve that:
 - Using the `--api-key`, `--email`, and `--site` variables as command
   line parameters.
 - Using the `api_key`, `email`, and `site` parameters to the
-  `zulip.Client` constructor.
+  `doer.Client` constructor.
 
 ## Download a `zuliprc` file
 
@@ -31,13 +31,13 @@ achieve that:
 {settings_tab|your-bots}
 
 1. In the **Actions** column, click the **manage bot**
-   (<i class="zulip-icon zulip-icon-user-cog"></i>) icon,
+   (<i class="doer-icon doer-icon-user-cog"></i>) icon,
    and scroll down to **Zuliprc configuration**.
 
 1. Click the **download**
-   (<i class="zulip-icon zulip-icon-download"></i>) icon
+   (<i class="doer-icon doer-icon-download"></i>) icon
    to download the bot's `zuliprc` file, or the **copy**
-   (<i class="zulip-icon zulip-icon-copy"></i>) icon to
+   (<i class="doer-icon doer-icon-copy"></i>) icon to
    copy the file's content to your clipboard.
 
 !!! warn ""
@@ -57,7 +57,7 @@ achieve that:
 1. Click **Download zuliprc** to download your `zuliprc` file.
 
 1. (optional) If you'd like your credentials to be used by default
-   when using the Zulip API on your computer, move the `zuliprc` file
+   when using the Doer API on your computer, move the `zuliprc` file
    to `~/.zuliprc` in your home directory.
 
 !!! warn ""
@@ -76,7 +76,7 @@ which contains key-value pairs as shown in the following example:
 [api]
 key=<API key from the web interface>
 email=<your email address>
-site=<your Zulip server's URI>
+site=<your Doer server's URI>
 ...
 ```
 
@@ -94,16 +94,16 @@ can be found in the following table:
     </thead>
     <tr>
         <td><code>key</code></td>
-        <td><code>ZULIP_API_KEY</code></td>
+        <td><code>DOER_API_KEY</code></td>
         <td>Yes</td>
         <td>
             <a href="/api/api-keys">API key</a>, which you can get through
-            Zulip's web interface.
+            Doer's web interface.
         </td>
     </tr>
     <tr>
         <td><code>email</code></td>
-        <td><code>ZULIP_EMAIL</code></td>
+        <td><code>DOER_EMAIL</code></td>
         <td>Yes</td>
         <td>
             The email address of the user who owns the API key mentioned
@@ -112,15 +112,15 @@ can be found in the following table:
     </tr>
     <tr>
         <td><code>site</code></td>
-        <td><code>ZULIP_SITE</code></td>
+        <td><code>DOER_SITE</code></td>
         <td>No</td>
         <td>
-            URL where your Zulip server is located.
+            URL where your Doer server is located.
         </td>
     </tr>
     <tr>
         <td><code>client_cert_key</code></td>
-        <td><code>ZULIP_CERT_KEY</code></td>
+        <td><code>DOER_CERT_KEY</code></td>
         <td>No</td>
         <td>
             Path to the SSL/TLS private key that the binding should use to
@@ -129,17 +129,17 @@ can be found in the following table:
     </tr>
     <tr>
         <td><code>client_cert</code></td>
-        <td><code>ZULIP_CERT</code></td>
+        <td><code>DOER_CERT</code></td>
         <td>No*</td>
         <td>
             The public counterpart of <code>client_cert_key</code>/
-            <code>ZULIP_CERT_KEY</code>. <i>This setting is required if a cert
+            <code>DOER_CERT_KEY</code>. <i>This setting is required if a cert
             key has been set.</i>
         </td>
     </tr>
     <tr>
         <td><code>client_bundle</code></td>
-        <td><code>ZULIP_CERT_BUNDLE</code></td>
+        <td><code>DOER_CERT_BUNDLE</code></td>
         <td>No</td>
         <td>
             Path where the server's PEM-encoded certificate is located. CA
@@ -150,10 +150,10 @@ can be found in the following table:
     </tr>
     <tr>
         <td><code>insecure</code></td>
-        <td><code>ZULIP_ALLOW_INSECURE</code></td>
+        <td><code>DOER_ALLOW_INSECURE</code></td>
         <td>No</td>
         <td>
-            Allows connecting to Zulip servers with an invalid SSL/TLS
+            Allows connecting to Doer servers with an invalid SSL/TLS
             certificate. Please note that enabling this will make the HTTPS
             connection insecure. Defaults to <code>false</code>.
         </td>

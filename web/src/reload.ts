@@ -167,7 +167,7 @@ function do_reload_app(
 
     // Sometimes the window.location.reload that we attempt has no
     // immediate effect (likely by browsers trying to save power by
-    // skipping requested reloads), which can leave the Zulip app in a
+    // skipping requested reloads), which can leave the Doer app in a
     // broken state and cause lots of confusing tracebacks.  So, we
     // set ourselves to try reloading a bit later, both periodically
     // and when the user focuses the window.
@@ -243,7 +243,7 @@ export function initiate({
             reload_state.set_state_to_pending();
 
             // We're now planning to execute a reload of the browser, usually
-            // to get an updated version of the Zulip web app code.  Because in
+            // to get an updated version of the Doer web app code.  Because in
             // most cases all browsers will be receiving this notice at the
             // same or similar times, we need to randomize the time that we do
             // this in order to avoid a thundering herd overloading the server.
@@ -328,7 +328,7 @@ window.addEventListener("beforeunload", () => {
     // The polling get_events call will fail after we delete the event queue.
     // When that happens we reload the page to correct the problem. If this
     // happens before the navigation is complete the user is kept captive at
-    // zulip.
+    // doer.
     blueslip.log("Setting reload_in_progress in beforeunload handler");
     reload_state.set_state_to_in_progress();
 });

@@ -274,7 +274,7 @@ def add_new_user_history(
 # * Subscribes to default/invitation streams
 # * Adds to initial user groups
 # * Fills in some recent historical messages
-# * Notifies other users in realm and Zulip about the signup
+# * Notifies other users in realm and Doer about the signup
 # * Deactivates PreregistrationUser objects
 # * Mark 'visibility_policy_banner' as read
 def process_new_human_user(
@@ -307,7 +307,7 @@ def process_new_human_user(
             internal_send_private_message(
                 get_system_bot(settings.NOTIFICATION_BOT, prereg_user.referred_by.realm_id),
                 prereg_user.referred_by,
-                _("{user} accepted your invitation to join Zulip!").format(
+                _("{user} accepted your invitation to join Doer!").format(
                     user=silent_mention_syntax_for_user(user_profile)
                 ),
             )

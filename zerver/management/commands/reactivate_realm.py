@@ -4,10 +4,10 @@ from typing import Any
 from typing_extensions import override
 
 from zerver.actions.realm_settings import do_reactivate_realm
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Script to reactivate a deactivated realm."""
 
     @override

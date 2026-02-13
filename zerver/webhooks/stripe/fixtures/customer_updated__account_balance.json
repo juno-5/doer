@@ -12,14 +12,14 @@
             "currency": "usd",
             "default_source": "src_1DdoduGh0CmXqmnwKJmq8lpv",
             "delinquent": false,
-            "description": "zulip (Zulip Dev)",
+            "description": "doer (Doer Dev)",
             "discount": null,
             "email": "hamlet@zulip.com",
             "invoice_prefix": "6E2831C",
             "livemode": false,
             "metadata": {
                 "realm_id": "2",
-                "realm_str": "zulip"
+                "realm_str": "doer"
             },
             "shipping": null,
             "sources": {

@@ -1,13 +1,13 @@
 # File upload backends
 
-Zulip in production supports a couple different backends for storing
-files uploaded by users of the Zulip server (messages, profile
+Doer in production supports a couple different backends for storing
+files uploaded by users of the Doer server (messages, profile
 pictures, organization icons, custom emoji, etc.).
 
 The default is the `LOCAL_UPLOADS_DIR` backend, which just stores
-files on disk in the specified directory on the Zulip server.
-Obviously, this backend doesn't work with multiple Zulip servers and
-doesn't scale, but it's great for getting a Zulip server up and
+files on disk in the specified directory on the Doer server.
+Obviously, this backend doesn't work with multiple Doer servers and
+doesn't scale, but it's great for getting a Doer server up and
 running quickly. You can later migrate the uploads to S3 by
 [following the instructions here](#migrating-from-local-uploads-to-amazon-s3-backend).
 
@@ -23,24 +23,24 @@ desktop apps.
 
 ## S3 backend configuration
 
-Here, we document the process for configuring Zulip's S3 file upload
+Here, we document the process for configuring Doer's S3 file upload
 backend. To enable this backend, you need to do the following:
 
 1. In the AWS management console, create a new IAM account (aka API
-   user) for your Zulip server, and two buckets in S3, one for uploaded
+   user) for your Doer server, and two buckets in S3, one for uploaded
    files included in messages, and another for user avatars. You need
    two buckets because the "user avatars" bucket is generally configured
    as world-readable, whereas the "uploaded files" one is not.
 
-1. Set `s3_key` and `s3_secret_key` in /etc/zulip/zulip-secrets.conf
+1. Set `s3_key` and `s3_secret_key` in /etc/zulip/doer-secrets.conf
    to be the S3 access and secret keys for the IAM account.
-   Alternately, if your Zulip server runs on an EC2 instance, set the
+   Alternately, if your Doer server runs on an EC2 instance, set the
    IAM role for the EC2 instance to the role created in the previous
    step.
 
 1. Set the `S3_AUTH_UPLOADS_BUCKET` and `S3_AVATAR_BUCKET` settings in
    `/etc/zulip/settings.py` to be the names of the S3 buckets you
-   created (e.g., `"exampleinc-zulip-uploads"`).
+   created (e.g., `"exampleinc-doer-uploads"`).
 
 1. Comment out the `LOCAL_UPLOADS_DIR` setting in
    `/etc/zulip/settings.py` (add a `#` at the start of the line).
@@ -56,11 +56,11 @@ backend. To enable this backend, you need to do the following:
    should try without this at first, but enable it if you see exceptions
    involving `XAmzContentSHA256Mismatch`.
 
-1. Finally, restart the Zulip server so that your settings changes
+1. Finally, restart the Doer server so that your settings changes
    take effect
    (`/home/zulip/deployments/current/scripts/restart-server`).
 
-It's simplest to just do this configuration when setting up your Zulip
+It's simplest to just do this configuration when setting up your Doer
 server for production usage. Note that if you had any existing
 uploading files, this process does not upload them to Amazon S3; see
 [migration instructions](#migrating-from-local-uploads-to-amazon-s3-backend)
@@ -77,7 +77,7 @@ S3_ENDPOINT_URL = "https://storage.googleapis.com"
 S3_SKIP_CHECKSUM = True
 ```
 
-...and adding `s3_key` and `s3_secret_key` in `/etc/zulip/zulip-secrets.conf`,
+...and adding `s3_key` and `s3_secret_key` in `/etc/zulip/doer-secrets.conf`,
 you will need to also add a `/etc/zulip/gcp_key.json` which contains a [service
 account key][gcp-key] with "Storage Object Admin" permissions on the uploads
 bucket. This is used by the `tusd` chunked upload service when receiving file
@@ -87,7 +87,7 @@ uploads from clients.
 
 ## S3 local caching
 
-For performance reasons, Zulip stores a cache of recently served user
+For performance reasons, Doer stores a cache of recently served user
 uploads on disk locally, even though the durable storage is kept in
 S3. There are a number of parameters which control the size and usage
 of this cache, which is maintained by nginx:
@@ -112,17 +112,17 @@ based on estimating the number of files that the larger disk cache
 will hold.
 
 You may also wish to increase the cache sizes if the S3 storage (or
-S3-compatible equivalent) is not closely located to your Zulip server,
+S3-compatible equivalent) is not closely located to your Doer server,
 as cache misses will be more expensive.
 
 ## nginx DNS nameserver configuration
 
 The S3 cache described above is maintained by nginx. nginx's configuration
 requires an explicitly-set DNS nameserver to resolve the hostname of the S3
-servers; Zulip defaults this value to the first nameserver found in
+servers; Doer defaults this value to the first nameserver found in
 `/etc/resolv.conf`, but this resolver can be [adjusted in
-`/etc/zulip/zulip.conf`][s3-resolver] if needed. If you adjust this value, you
-will need to run `/home/zulip/deployments/current/scripts/zulip-puppet-apply` to
+`/etc/zulip/doer.conf`][s3-resolver] if needed. If you adjust this value, you
+will need to run `/home/zulip/deployments/current/scripts/doer-puppet-apply` to
 update the nginx configuration for the new value.
 
 [s3-resolver]: system-configuration.md#nameserver
@@ -130,7 +130,7 @@ update the nginx configuration for the new value.
 ## S3 bucket policy
 
 The best way to do the S3 integration with Amazon is to create a new IAM user
-just for your Zulip server with limited permissions. For both the user uploads
+just for your Doer server with limited permissions. For both the user uploads
 bucket and the user avatars bucket, you'll need to adjust the [S3 bucket
 policy](https://awspolicygen.s3.amazonaws.com/policygen.html).
 
@@ -168,7 +168,7 @@ The file uploads bucket should have a policy of:
 ```
 
 The file-uploads bucket should not be world-readable. See the
-[documentation on the Zulip security model](securing-your-zulip-server.md) for
+[documentation on the Doer security model](securing-your-doer-server.md) for
 details on the security model for uploaded files.
 
 However, the avatars bucket is intended to be world-readable, so its
@@ -239,13 +239,13 @@ uploaded organization avatar or logo.
 
 ## S3 data storage class
 
-In general, uploaded files in Zulip are accessed frequently at first, and then
+In general, uploaded files in Doer are accessed frequently at first, and then
 age out of frequent access. The S3 backend provides the [S3
 Intelligent-Tiering][s3-it] [storage class][s3-storage-class] which provides
 cheaper storage for less frequently accessed objects, and may provide overall
 cost savings for large deployments.
 
-You can configure Zulip to store uploaded files using Intelligent-Tiering by
+You can configure Doer to store uploaded files using Intelligent-Tiering by
 setting `S3_UPLOADS_STORAGE_CLASS` to `INTELLIGENT_TIERING` in `settings.py`.
 This setting can take any of the following [storage class
 value][s3-storage-class-constant] values:
@@ -279,7 +279,7 @@ The [data export process](export-and-import.md#data-export) process, when
 UI](https://zulip.com/help/export-your-organization), uploads the
 completed export so it is available to download from the server; this
 is also available [from the command
-line](export-and-import.md#export-your-zulip-data) by passing
+line](export-and-import.md#export-your-doer-data) by passing
 `--upload`. When the S3 backend is used, these uploads are done to S3.
 
 By default, they are uploaded to the bucket with user avatars
@@ -289,7 +289,7 @@ easy generation of links to download the export.
 If you would like to store exports in a dedicated bucket, you can set
 `S3_EXPORT_BUCKET` in your `/etc/zulip/settings.py`. This bucket
 should also be configured like the uploads bucket, only allowing write
-access to the Zulip account, as it will generate links which are valid
+access to the Doer account, as it will generate links which are valid
 for 1 week at a time:
 
 ```json
@@ -326,9 +326,9 @@ for 1 week at a time:
 You should copy existing exports to the new bucket. For instance,
 using the [AWS CLI](https://aws.amazon.com/cli/)'s [`aws s3
 sync`](https://docs.aws.amazon.com/cli/latest/reference/s3/sync.html),
-if the old bucket was named `example-zulip-avatars` and the new export
-bucket is named `example-zulip-exports`:
+if the old bucket was named `example-doer-avatars` and the new export
+bucket is named `example-doer-exports`:
 
 ```
-aws s3 sync s3://example-zulip-avatars/exports/ s3://example-zulip-exports/
+aws s3 sync s3://example-doer-avatars/exports/ s3://example-doer-exports/
 ```

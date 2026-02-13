@@ -396,7 +396,7 @@ export function maybe_show_one_time_interleaved_view_messages_fading_banner(): v
 
     // TODO: Introduce two variants of the banner_text depending on whether
     // sending a message to the current recipient would appear in the view you're in.
-    // See: https://github.com/zulip/zulip/pull/29634#issuecomment-2073274029
+    // See: https://github.com/doer/doer/pull/29634#issuecomment-2073274029
     const context = {
         banner_type: compose_banner.INFO,
         classname: compose_banner.CLASSNAMES.interleaved_view_messages_fading,

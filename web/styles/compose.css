@@ -169,7 +169,7 @@
     }
 }
 
-/* Main geometry for this element is in zulip.css */
+/* Main geometry for this element is in doer.css */
 #compose-content {
     background-color: var(--color-compose-box-background);
     padding: 4px 4px 6px;
@@ -1270,7 +1270,7 @@ textarea.new_message_textarea {
 
         &#compose-recipient {
             .decorated-channel-name,
-            .zulip-icon-chevron-down,
+            .doer-icon-chevron-down,
             .conversation-arrow,
             #stream_message_recipient_topic {
                 transition: var(--compose-recipient-row-transition);
@@ -1292,7 +1292,7 @@ textarea.new_message_textarea {
             opacity: 0.9;
         }
 
-        .zulip-icon-chevron-down {
+        .doer-icon-chevron-down {
             opacity: 0;
         }
     }
@@ -1323,7 +1323,7 @@ textarea.new_message_textarea {
             opacity: 1;
 
             .decorated-channel-name,
-            .zulip-icon-chevron-down,
+            .doer-icon-chevron-down,
             .conversation-arrow,
             #stream_message_recipient_topic {
                 opacity: 1;
@@ -1340,11 +1340,11 @@ textarea.new_message_textarea {
     }
 
     #compose_select_recipient_widget {
-        .channel-privacy-type-icon.zulip-icon {
+        .channel-privacy-type-icon.doer-icon {
             color: var(--privacy-icon-color-modified);
         }
 
-        &:hover .channel-privacy-type-icon.zulip-icon {
+        &:hover .channel-privacy-type-icon.doer-icon {
             color: var(--privacy-icon-color-original);
         }
 
@@ -1357,7 +1357,7 @@ textarea.new_message_textarea {
             }
 
             .decorated-channel-name,
-            .zulip-icon-chevron-down {
+            .doer-icon-chevron-down {
                 opacity: 1;
             }
         }
@@ -1419,7 +1419,7 @@ textarea.new_message_textarea {
         flex-grow: 0;
     }
 
-    .zulip-icon-send {
+    .doer-icon-send {
         display: block;
         font-size: 1.2143em; /* 17px at 14px/em */
         line-height: 0.9412; /* 16px at 17px/em */
@@ -1568,7 +1568,7 @@ textarea.new_message_textarea {
         margin: 1px;
         color: var(--color-compose-embedded-button-text-color);
 
-        .zulip-icon {
+        .doer-icon {
             display: block;
         }
 
@@ -1761,7 +1761,7 @@ textarea.new_message_textarea {
             width: 1em;
             height: 1em;
 
-            &.zulip-icon-lock {
+            &.doer-icon-lock {
                 /* The lock looks better centered without
                    a negative margin-top adjustment. */
                 margin-top: 0;
@@ -1784,7 +1784,7 @@ textarea.new_message_textarea {
     }
 
     /* We suppress the chevron on the channel picker. */
-    .zulip-icon-chevron-down {
+    .doer-icon-chevron-down {
         display: none;
     }
 }
@@ -1874,7 +1874,7 @@ textarea.new_message_textarea {
         border-radius: 4px;
     }
 
-    .zulip-icon {
+    .doer-icon {
         padding: 5px 0 5px 4px;
         /* 17px at 14px/1em */
         font-size: 1.2143em;

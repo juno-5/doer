@@ -22,7 +22,7 @@
     --color-user-circle-deactivated: hsl(0deg 0% 50%);
     /* stylelint-enable color-no-hex */
 
-    /* NOTE: These colors are also used in zulip web app for banner
+    /* NOTE: These colors are also used in doer web app for banner
        colors. Do grep for these variables when changing them and
        confirm on CZO on whether the colors there need to change as
        well. */
@@ -91,7 +91,7 @@
     padding: 1rem var(--sl-content-pad-x);
 }
 
-.zulip-unplugin-icon {
+.doer-unplugin-icon {
     /* Make sure the icon does not occupy it's own row. */
     display: inline;
     vertical-align: text-bottom;
@@ -115,7 +115,7 @@
     fill: currentcolor;
 }
 
-.navigation-step-relative-type .zulip-unplugin-icon {
+.navigation-step-relative-type .doer-unplugin-icon {
     /* There's no space between the icon and text for navigation
     step labels because of any text decoration rules when these
     steps have a relative link. So we add a right margin to the

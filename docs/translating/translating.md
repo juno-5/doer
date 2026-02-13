@@ -1,26 +1,26 @@
 # Translation guidelines
 
-Zulip has full support for Unicode (and partial support for RTL
+Doer has full support for Unicode (and partial support for RTL
 languages), so you can use your preferred language everywhere in
-Zulip.
+Doer.
 
-Additionally, the Zulip UI is translated into more than a dozen major
+Additionally, the Doer UI is translated into more than a dozen major
 languages, including Spanish, German, Hindi, French, Chinese, Russian,
 and Japanese, and we're always excited to add more. If you speak a
-language other than English, your help with translating Zulip would be
+language other than English, your help with translating Doer would be
 greatly appreciated!
 
 If you are interested in knowing about the technical end-to-end
 tooling and processes for tagging strings for translation and syncing
-translations in Zulip, read about [Internationalization for
+translations in Doer, read about [Internationalization for
 Developers](internationalization.md).
 
 ## Translators' workflow
 
 These are the steps you should follow if you want to help translate
-Zulip:
+Doer:
 
-1. Join [#translation][translation-channel] in the [Zulip development
+1. Join [#translation][translation-channel] in the [Doer development
    community server](https://zulip.com/development-community/), and say hello.
    That channel is also the right place for any questions, updates on your
    progress, reporting problematic strings, etc.
@@ -31,29 +31,29 @@ Zulip:
    Unless you plan to contribute country-specific translations, do not
    select a country-specific language in the **Languages** list when
    you sign up. E.g., use **English (United Kingdom) (en_GB)** if you
-   plan to translate Zulip into UK English, but select **Spanish
+   plan to translate Doer into UK English, but select **Spanish
    (es)** rather than **Spanish (Colombia) (es_CO)** for general
    Spanish translations.
    :::
 
-1. Navigate to the [Zulip project on Weblate](https://hosted.weblate.org/projects/zulip/).
+1. Navigate to the [Doer project on Weblate](https://hosted.weblate.org/projects/doer/).
 
 1. Choose the language you'd like to translate into; your preferred
    languages should be at the top.
 
 1. Optionally, use the "Components" tab at the top to translate only
-   part of the project. Zulip has several different components, split
+   part of the project. Doer has several different components, split
    up by where they are used:
 
    - `Flutter` is used for the mobile app.
-   - `Desktop` is for the parts of the Zulip desktop apps that are not
-     shared with the Zulip web app. This is a fairly small number of
+   - `Desktop` is for the parts of the Doer desktop apps that are not
+     shared with the Doer web app. This is a fairly small number of
      strings.
    - `Django` and `Frontend` have strings for the next major release
-     of the Zulip server and web app (which is what we run on
-     chat.zulip.org and Zulip Cloud).
+     of the Doer server and web app (which is what we run on
+     chat.zulip.org and Doer Cloud).
    - The variants of `Django` and `Frontend` with names
-     ending with a version, like `(10.x)`, are strings for Zulip's
+     ending with a version, like `(10.x)`, are strings for Doer's
      current [stable release series](../overview/release-lifecycle.md).
 
    Weblate is smart about only asking you to translate a string once
@@ -68,7 +68,7 @@ Zulip:
 
 1. If possible, test your translations (details below).
 
-1. Ask in Zulip for a maintainer to merge the strings from Weblate,
+1. Ask in Doer for a maintainer to merge the strings from Weblate,
    and deploy the update to chat.zulip.org so you can verify them in
    action there.
 
@@ -80,7 +80,7 @@ Some useful tips for your translating journey:
   you go along and will help any future translators a lot.
 
 - Use, and update, the [Weblate
-  glossary](https://hosted.weblate.org/projects/zulip/glossary/) for
+  glossary](https://hosted.weblate.org/projects/doer/glossary/) for
   your language. This will help by providing consistent, inline
   translation references for terms (e.g., "channel") which are used
   repeatedly throughout the application.
@@ -95,7 +95,7 @@ Some useful tips for your translating journey:
 
 - When in doubt, ask for context in
   [#translation](https://chat.zulip.org/#narrow/channel/58-translation) in
-  the [Zulip development community server](https://zulip.com/development-community/).
+  the [Doer development community server](https://zulip.com/development-community/).
 
 - Pay attention to capital letters and punctuation. Details make the
   difference! Weblate will catch, and warn about, some cases of
@@ -113,14 +113,14 @@ Some useful tips for your translating journey:
 ### Testing translations
 
 This section assumes you have a
-[Zulip development environment](../development/overview.md) set up;
+[Doer development environment](../development/overview.md) set up;
 if setting one up is a problem for you, ask in chat.zulip.org and we
 can usually just deploy the latest translations there.
 
 1. Add the Weblate remote to your Git repository:
 
    ```shell
-   git remote add weblate https://hosted.weblate.org/git/zulip/django/
+   git remote add weblate https://hosted.weblate.org/git/doer/django/
    ```
 
 1. Merge the changes into your local repository:
@@ -129,21 +129,21 @@ can usually just deploy the latest translations there.
    git cherry-pick weblate/main ^upstream/main
    ```
 
-There are a few ways to see your translations in the Zulip UI:
+There are a few ways to see your translations in the Doer UI:
 
 - You can insert the language code as a URL prefix. For example, you
   can view the login page in German using
   `http://localhost:9991/de/login/`. This works for any part of the
-  Zulip UI, including portico (logged-out) pages.
-- For Zulip's logged-in UI (i.e. the actual web app), you can [pick the
+  Doer UI, including portico (logged-out) pages.
+- For Doer's logged-in UI (i.e. the actual web app), you can [pick the
   language](https://zulip.com/help/change-your-language) in the
-  Zulip UI.
-- If your system has languages configured in your OS/browser, Zulip's
+  Doer UI.
+- If your system has languages configured in your OS/browser, Doer's
   portico (logged-out) pages will automatically use your configured
   language. Note that we only tag for translation strings in pages
   that individual users need to use (e.g., `/login/`, `/register/`,
   etc.), not marketing pages like `/features/`.
-- In case you need to understand how the above interact, Zulip figures
+- In case you need to understand how the above interact, Doer figures
   out the language the user requests in a browser using the following
   prioritization (mostly copied from the Django docs):
 
@@ -151,7 +151,7 @@ There are a few ways to see your translations in the Zulip UI:
   1. It looks for the cookie named 'django_language'. You can set a
      different name through the `LANGUAGE_COOKIE_NAME` setting.
   1. It looks for the `Accept-Language` HTTP header in the HTTP request
-     (this is how browsers tell Zulip about the OS/browser language).
+     (this is how browsers tell Doer about the OS/browser language).
 
 - Using an HTTP client library like `requests`, `cURL` or `urllib`,
   you can pass the `Accept-Language` header; here is some sample code to
@@ -174,13 +174,13 @@ If machine translation is enabled for your language, you can generate one by
 clicking the **Automatic suggestions** tab below the translation box.
 
 Bear in mind that we expect human-quality translations for
-Zulip. While machine translation can be a helpful aid, please be sure
+Doer. While machine translation can be a helpful aid, please be sure
 to review all machine translated strings.
 
 ### Translation style guides
 
-We maintain translation style guides for Zulip, giving guidance on how
-Zulip should be translated into specific languages (e.g., what word to
+We maintain translation style guides for Doer, giving guidance on how
+Doer should be translated into specific languages (e.g., what word to
 translate words like "channel" to), with reasoning, so that future
 translators can understand and preserve those decisions:
 
@@ -195,7 +195,7 @@ translators can understand and preserve those decisions:
 - [Spanish](spanish.md)
 
 We encourage this information to also be placed in [Weblate's
-glossary](https://hosted.weblate.org/projects/zulip/glossary/), which
+glossary](https://hosted.weblate.org/projects/doer/glossary/), which
 will help provide inline suggestions when translating.
 
 Some translated languages don't have these, but we highly encourage
@@ -208,22 +208,22 @@ submit your changes.
 
 ### Capitalization
 
-We expect that all the English translatable strings in Zulip are
-properly capitalized in a way consistent with how Zulip does
+We expect that all the English translatable strings in Doer are
+properly capitalized in a way consistent with how Doer does
 capitalization in general. This means that:
 
 - The first letter of a sentence or phrase should be capitalized.
   - Correct: "Channel settings"
   - Incorrect: "Channel Settings"
 - All proper nouns should be capitalized.
-  - Correct: "This is Zulip"
-  - Incorrect: "This is zulip"
+  - Correct: "This is Doer"
+  - Incorrect: "This is doer"
 - All common words like URL, HTTP, etc. should be written in their
   standard forms.
   - Correct: "URL"
   - Incorrect: "Url"
 
-The Zulip test suite enforces these capitalization guidelines in the
+The Doer test suite enforces these capitalization guidelines in the
 web app codebase [in our test
 suite](../testing/testing.md#other-test-suites)
 (`./tools/check-capitalization`; `tools/lib/capitalization.py` has

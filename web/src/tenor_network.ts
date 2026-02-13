@@ -128,7 +128,7 @@ export class TenorNetwork extends GifNetwork {
 function get_base_payload(): TenorPayload {
     return {
         key: realm.tenor_api_key,
-        client_key: "ZulipWeb",
+        client_key: "DoerWeb",
         limit: "15",
         // We use the tinygif size for the picker UI, and the mediumgif size
         // for what gets actually uploaded.

@@ -57,7 +57,7 @@ from zerver.lib.push_notifications import (
     get_message_payload_gcm,
 )
 from zerver.lib.streams import get_default_values_for_stream_permission_group_settings
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import activate_push_notification_service
 from zerver.lib.timestamp import TimeZoneNotUTCError, ceiling_to_day, floor_to_day
 from zerver.lib.topic import DB_TOPIC_NAME
@@ -85,12 +85,12 @@ from zilencer.models import (
     RemotePushDeviceToken,
     RemoteRealm,
     RemoteRealmCount,
-    RemoteZulipServer,
+    RemoteDoerServer,
 )
 from zilencer.views import get_last_id_from_server
 
 
-class AnalyticsTestCase(ZulipTestCase):
+class AnalyticsTestCase(DoerTestCase):
     MINUTE = timedelta(seconds=60)
     HOUR = MINUTE * 60
     DAY = HOUR * 24
@@ -1410,7 +1410,7 @@ class TestLoggingCountStats(AnalyticsTestCase):
     @activate_push_notification_service()
     def test_mobile_pushes_received_count(self) -> None:
         self.server_uuid = "6cde5f7a-1f7e-4978-9716-49f69ebfc9fe"
-        self.server = RemoteZulipServer.objects.create(
+        self.server = RemoteDoerServer.objects.create(
             uuid=self.server_uuid,
             api_key="magic_secret_api_key",
             hostname="demo.example.com",
@@ -2135,14 +2135,14 @@ class TestRealmActiveHumans(AnalyticsTestCase):
         self.assertEqual(RealmCount.objects.filter(property="realm_active_humans::day").count(), 1)
 
 
-class GetLastIdFromServerTest(ZulipTestCase):
+class GetLastIdFromServerTest(DoerTestCase):
     def test_get_last_id_from_server_ignores_null(self) -> None:
         """
         Verifies that get_last_id_from_server ignores null remote_ids, since this goes
         against the default Postgres ordering behavior, which treats nulls as the largest value.
         """
         self.server_uuid = "6cde5f7a-1f7e-4978-9716-49f69ebfc9fe"
-        self.server = RemoteZulipServer.objects.create(
+        self.server = RemoteDoerServer.objects.create(
             uuid=self.server_uuid,
             api_key="magic_secret_api_key",
             hostname="demo.example.com",

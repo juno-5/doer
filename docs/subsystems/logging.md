@@ -1,7 +1,7 @@
 # Logging and error reporting
 
 Having a good system for logging error reporting is essential to
-making a large project like Zulip successful. Without reliable error
+making a large project like Doer successful. Without reliable error
 reporting, one has to rely solely on bug reports from users in order
 to produce a working product.
 
@@ -31,7 +31,7 @@ infrastructure needed by our error reporting system:
 - Middleware for handling `JsonableError`, which is our standard
   system for API code to return a JSON-format HTTP error response.
 
-Since 500 errors in any Zulip server are usually a problem the server
+Since 500 errors in any Doer server are usually a problem the server
 administrator should investigate and/or report upstream, we have this
 email reporting system configured to report errors by default.
 
@@ -39,7 +39,7 @@ email reporting system configured to report errors by default.
 
 ### Sentry error logging
 
-Zulip's optional backend [Sentry][sentry] integration will aggregate
+Doer's optional backend [Sentry][sentry] integration will aggregate
 errors to show which users and realms are affected, any logging which
 happened prior to the exception, local variables in each frame of the
 exception, and the full request headers which triggered it.
@@ -54,12 +54,12 @@ You can enable it by:
     ## Controls the DSN used to report errors to Sentry.io
     SENTRY_DSN = "https://bbb@bbb.ingest.sentry.io/1234"
     ```
-3.  As the `zulip` user, restart Zulip by running:
+3.  As the `doer` user, restart Doer by running:
     ```shell
     /home/zulip/deployments/current/scripts/restart-server
     ```
 
-You may also want to enable Zulip's [Sentry deploy
+You may also want to enable Doer's [Sentry deploy
 hook][sentry-deploy-hook].
 
 [sentry-project]: https://docs.sentry.io/product/projects/
@@ -79,7 +79,7 @@ server log (as well as in the log for corresponding process, be it
 
 #### Backend logging format
 
-The main Zulip server log contains a line for each backend request.
+The main Doer server log contains a line for each backend request.
 It also contains warnings, errors, and the full tracebacks for any
 Python exceptions. In production, it goes to
 `/var/log/zulip/server.log`; in development, it goes to the terminal
@@ -94,21 +94,21 @@ since the main server log can be very verbose, but the main server log
 can be extremely valuable for investigating performance problems.
 
 ```text
-2016-05-20 14:50:22.056 INFO [zr] 127.0.0.1       GET     302 528ms (db: 1ms/1q) (+start: 123ms) / (unauth@zulip via ?)
+2016-05-20 14:50:22.056 INFO [zr] 127.0.0.1       GET     302 528ms (db: 1ms/1q) (+start: 123ms) / (unauth@doer via ?)
 [20/May/2016 14:50:22]"GET / HTTP/1.0" 302 0
-2016-05-20 14:50:22.272 INFO [zr] 127.0.0.1       GET     200 124ms (db: 3ms/2q) /login/ (unauth@zulip via ?)
-2016-05-20 14:50:26.333 INFO [zr] 127.0.0.1       POST    302  37ms (db: 6ms/7q) /accounts/login/local/ (unauth@zulip via ?)
+2016-05-20 14:50:22.272 INFO [zr] 127.0.0.1       GET     200 124ms (db: 3ms/2q) /login/ (unauth@doer via ?)
+2016-05-20 14:50:26.333 INFO [zr] 127.0.0.1       POST    302  37ms (db: 6ms/7q) /accounts/login/local/ (unauth@doer via ?)
 [20/May/2016 14:50:26]"POST /accounts/login/local/ HTTP/1.0" 302 0
-2016-05-20 14:50:26.538 INFO [zr] 127.0.0.1       POST    200  12ms (db: 1ms/2q) (+start: 53ms) /api/v1/events/internal [1463769771:0/0] (8@zulip via internal)
-2016-05-20 14:50:26.657 INFO [zr] 127.0.0.1       POST    200  10ms (+start: 8ms) /api/v1/events/internal [1463769771:0/0] (8@zulip via internal)
-2016-05-20 14:50:26.959 INFO [zr] 127.0.0.1       GET     200 588ms (db: 26ms/21q) / [1463769771:0] (8@zulip via website)
+2016-05-20 14:50:26.538 INFO [zr] 127.0.0.1       POST    200  12ms (db: 1ms/2q) (+start: 53ms) /api/v1/events/internal [1463769771:0/0] (8@doer via internal)
+2016-05-20 14:50:26.657 INFO [zr] 127.0.0.1       POST    200  10ms (+start: 8ms) /api/v1/events/internal [1463769771:0/0] (8@doer via internal)
+2016-05-20 14:50:26.959 INFO [zr] 127.0.0.1       GET     200 588ms (db: 26ms/21q) / [1463769771:0] (8@doer via website)
 ```
 
 The format of this output is:
 
 - Timestamp
 - Log level
-- Logger name, abbreviated as "zr" for these Zulip request logs
+- Logger name, abbreviated as "zr" for these Doer request logs
 - IP address
 - HTTP method
 - HTTP status code
@@ -134,7 +134,7 @@ numbers.
 
 #### Searching backend log files
 
-Zulip comes with a tool, `./scripts/log-search`, to quickly search
+Doer comes with a tool, `./scripts/log-search`, to quickly search
 through the main `server.log` log file based on a number of different
 axes -- including client IP address, client user-id, request path,
 response code. It can also search the NGINX logs, which provide
@@ -149,7 +149,7 @@ response code, and request method, hostname, and path; any property
 which is limited by the tool is not displayed, for conciseness:
 
 ```
-zulip@example-prod:~/deployments/current$ ./scripts/log-search realm-name
+doer@example-prod:~/deployments/current$ ./scripts/log-search realm-name
 22:30:36.593     1ms         2606:2800:220:1:248:1893:25c8:1946       302 GET    /
 22:30:42.508   366ms         2606:2800:220:1:248:1893:25c8:1946       200 GET    /login/
 23:18:30.977     1ms         93.184.216.34                            302 GET    /
@@ -168,7 +168,7 @@ zulip@example-prod:~/deployments/current$ ./scripts/log-search realm-name
 23:19:29.704   362ms 8@      93.184.216.34                            200 GET    /
 23:20:04.980   110ms 8@      93.184.216.34                            200 DELETE /json/users/me/subscriptions
 
-zulip@example-prod:~/deployments/current$ ./scripts/log-search 2606:2800:220:1:248:1893:25c8:1946
+doer@example-prod:~/deployments/current$ ./scripts/log-search 2606:2800:220:1:248:1893:25c8:1946
 22:30:36.593     1ms          302 GET    https://realm-one.example-prod.example.com/
 22:30:42.508   366ms          200 GET    https://realm-one.example-prod.example.com/login/
 ```
@@ -187,7 +187,7 @@ miss.
 - Blueslip is implemented in `web/src/blueslip.ts`.
 - In order to capture essentially any error occurring in the browser, in
   development mode Blueslip listens for the `error` event on `window`.
-- It also has methods for being manually triggered by Zulip JavaScript code for
+- It also has methods for being manually triggered by Doer JavaScript code for
   warnings and assertion failures. Explicit `blueslip.error` calls are sent to
   Sentry, if configured.
 - Blueslip keeps a log of all the notices it has received during a browser
@@ -217,7 +217,7 @@ Blueslip supports several error levels:
 
 ### Sentry JavaScript error logging
 
-Zulip's optional JavaScript [Sentry][sentry] integration will aggregate errors
+Doer's optional JavaScript [Sentry][sentry] integration will aggregate errors
 to show which users and realms are affected, any logging which happened prior to
 the exception, and any DOM interactions which happened prior to the error.
 
@@ -233,12 +233,12 @@ You can enable it by:
     ```
 3.  If you wish to [sample][sentry-sample] some fraction of the errors, you
     should adjust `SENTRY_FRONTEND_SAMPLE_RATE` down from `1.0`.
-4.  As the `zulip` user, restart Zulip by running:
+4.  As the `doer` user, restart Doer by running:
     ```shell
     /home/zulip/deployments/current/scripts/restart-server
     ```
 
-You may also want to enable Zulip's [Sentry deploy
+You may also want to enable Doer's [Sentry deploy
 hook][sentry-deploy-hook].
 
 [sentry-sample]: https://docs.sentry.io/platforms/javascript/configuration/sampling/

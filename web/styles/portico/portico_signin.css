@@ -1565,11 +1565,11 @@ button#register_auth_button_gitlab {
     }
 }
 
-#registration #how-realm-creator-found-zulip label {
+#registration #how-realm-creator-found-doer label {
     top: -5px;
 }
 
-#how-realm-creator-found-zulip .how-found-zulip-extra-data-input {
+#how-realm-creator-found-doer .how-found-doer-extra-data-input {
     margin-top: 5px;
     display: none;
 }

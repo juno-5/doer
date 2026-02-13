@@ -4,13 +4,13 @@ title: Non-webhook integrations
 
 [Incoming webhook integrations][incoming-webhooks-overview] are the
 fastest to write, but sometimes a third-party product just doesn't support
-them. Zulip supports several other types of integrations.
+them. Doer supports several other types of integrations.
 
 * **Python script integrations**
   (examples: SVN, Git), where we can get the service to call our integration
   (by shelling out or otherwise), passing in the required data.  Our preferred
   model for these is to ship these integrations in the
-  [Zulip Python API distribution](https://github.com/zulip/python-zulip-api/tree/main/zulip),
+  [Doer Python API distribution](https://github.com/doer/python-doer-api/tree/main/doer),
   within the `integrations` directory there.
 
 * **Plugin integrations** (examples:
@@ -27,10 +27,10 @@ them. Zulip supports several other types of integrations.
 A few notes on how to do these:
 
 * You should always send messages by POSTing to URLs of the form
-  `https://zulip.example.com/v1/messages/`.
+  `https://doer.example.com/v1/messages/`.
 
 * We usually build Python script integrations with (at least) 2 files:
-  `zulip_foo_config.py` containing the configuration for the
+  `doer_foo_config.py` containing the configuration for the
   integration including the bots' API keys, plus a script that reads
   from this configuration to actually do the work (that way, it's
   possible to update the script without breaking users' configurations).
@@ -46,9 +46,9 @@ A few notes on how to do these:
   examples of ideal UAs are:
 
   ```
-  ZulipDesktop/0.7.0 (Ubuntu; 14.04)
-  ZulipJenkins/0.1.0 (Windows; 7.2)
-  ZulipMobile/0.5.4 (Android; 4.2; maguro)
+  DoerDesktop/0.7.0 (Ubuntu; 14.04)
+  DoerJenkins/0.1.0 (Windows; 7.2)
+  DoerMobile/0.5.4 (Android; 4.2; maguro)
   ```
 
 * The [general advice][webhooks-general-advice] for webhook integrations applies here as well.

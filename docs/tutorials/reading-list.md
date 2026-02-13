@@ -6,7 +6,7 @@ learning new skills, or polishing the ones you already have.
 The list covers a wide variety of topics, from basic Python coding to
 general development guidelines.
 
-Feel free to create a pull request in Zulip's [GitHub repository](https://github.com/zulip/zulip/) with any interesting books, articles or
+Feel free to create a pull request in Doer's [GitHub repository](https://github.com/doer/doer/) with any interesting books, articles or
 videos you would like to see in this list.
 
 Some titles have been shortened for organizational purposes.
@@ -61,7 +61,7 @@ _Video_ - [Python Language, by Guido van Rossum (PyCon 2016)](https://youtu.be/Y
 
 _Video_ - [The Mighty Dictionary, by Brandon Rhodes (PyCon 2010)](https://pyvideo.org/pycon-us-2010/the-mighty-dictionary-55.html)
 
-_Article_ - [Static types in Python, oh my(py)!](https://blog.zulip.org/2016/10/13/static-types-in-python-oh-mypy)
+_Article_ - [Static types in Python, oh my(py)!](https://blog.doer.org/2016/10/13/static-types-in-python-oh-mypy)
 
 _Guide_ - [The Hitchhiker’s Guide to Python!](https://docs.python-guide.org/)
 
@@ -115,9 +115,9 @@ _Article_ - [How to ask good questions](https://jvns.ca/blog/good-questions)
 
 _Article_ - [Notes for New FLOSS Contributors](https://www.harihareswara.net/sumana/2016/10/12/0)
 
-_Article_ - [To be mentored](https://trueskawka.github.io/zulip/outreachy/blog/2017/01/02/to-be-mentored.html)
+_Article_ - [To be mentored](https://trueskawka.github.io/doer/outreachy/blog/2017/01/02/to-be-mentored.html)
 
-_Article_ - [To mentor](https://trueskawka.github.io/zulip/outreachy/gci/blog/2017/01/03/to-mentor.html)
+_Article_ - [To mentor](https://trueskawka.github.io/doer/outreachy/gci/blog/2017/01/03/to-mentor.html)
 
 [List of good projects for new contributors](https://github.com/MunGell/awesome-for-beginners)
 

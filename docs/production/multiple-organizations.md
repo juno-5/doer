@@ -1,21 +1,21 @@
 # Hosting multiple organizations
 
-The vast majority of Zulip servers host just a single organization (or
-"realm", as the Zulip code calls organizations). This article
-documents what's involved in hosting multiple Zulip organizations on a
+The vast majority of Doer servers host just a single organization (or
+"realm", as the Doer code calls organizations). This article
+documents what's involved in hosting multiple Doer organizations on a
 single server.
 
-Throughout this article, we'll assume you're working on a Zulip server
-with hostname `zulip.example.com`. You may also find the more
+Throughout this article, we'll assume you're working on a Doer server
+with hostname `doer.example.com`. You may also find the more
 [technically focused article on realms](../subsystems/realms.md) to be useful
 reading.
 
 ## Subdomains
 
-Zulip's approach for supporting multiple organizations on a single
-Zulip server is for each organization to be hosted on its own
-subdomain. E.g., you'd have `org1.zulip.example.com` and
-`org2.zulip.example.com`.
+Doer's approach for supporting multiple organizations on a single
+Doer server is for each organization to be hosted on its own
+subdomain. E.g., you'd have `org1.doer.example.com` and
+`org2.doer.example.com`.
 
 Web security standards mean that one subdomain per organization is
 required to support a user logging into multiple organizations on a
@@ -41,9 +41,9 @@ things:
 ### SSL certificates
 
 You'll need to install an SSL certificate valid for all the
-(sub)domains you're using your Zulip server with. You can get an SSL
+(sub)domains you're using your Doer server with. You can get an SSL
 certificate covering several domains for free by using
-[our Certbot wrapper tool](ssl-certificates.md#after-zulip-is-already-installed),
+[our Certbot wrapper tool](ssl-certificates.md#after-doer-is-already-installed),
 though if you're going to host a large number of organizations, you
 may want to get a wildcard certificate. You can also get a wildcard
 certificate for
@@ -67,26 +67,26 @@ REALM_HOSTS = {
 
 This will make `hostname.example.com` the hostname for the realm that
 would, without this configuration, have been
-`mysubdomain.zulip.example.com`. To create your new realm on
+`mysubdomain.doer.example.com`. To create your new realm on
 `hostname.example.com`, one should enter `mysubdomain` as the
 "subdomain" for the new realm.
 
 The value you choose for `mysubdomain` will not be displayed to users;
 the main constraint is that it will be impossible to create a
-different realm on `mysubdomain.zulip.example.com`.
+different realm on `mysubdomain.doer.example.com`.
 
-In a future version of Zulip, we expect to move this configuration
+In a future version of Doer, we expect to move this configuration
 into the database.
 
 ### The root domain
 
-Most Zulip servers host a single Zulip organization on the root domain
-(e.g., `zulip.example.com`). The way this is implemented internally
+Most Doer servers host a single Doer organization on the root domain
+(e.g., `doer.example.com`). The way this is implemented internally
 involves the organization having the empty string (`''`) as its
 "subdomain".
 
 You can mix having an organization on the root domain and some others
-on subdomains (e.g., `subdivision.zulip.example.com`), but this only
+on subdomains (e.g., `subdivision.doer.example.com`), but this only
 works well if there are no users in common between the two
 organizations, because the auth cookies for the root domain are
 visible to the subdomain (so it's not possible for a single
@@ -105,25 +105,25 @@ before doing so, as it can be disruptive to users.
 
 ### Authentication
 
-Many of Zulip's supported authentication methods (Google, GitHub,
+Many of Doer's supported authentication methods (Google, GitHub,
 SAML, etc.) can require providing the third-party authentication
-provider with a whitelist of callback URLs to your Zulip server (or
+provider with a whitelist of callback URLs to your Doer server (or
 even a single URL). For those vendors that support a whitelist, you
-can provide the callback URLs for each of your Zulip organizations.
+can provide the callback URLs for each of your Doer organizations.
 
 The cleaner solution is to register a special subdomain, e.g.,
-`auth.zulip.example.com` with the third-party provider, and then set
+`auth.doer.example.com` with the third-party provider, and then set
 `SOCIAL_AUTH_SUBDOMAIN = 'auth'` in `/etc/zulip/settings.py`, so that
-Zulip knows to use that subdomain for these authentication callbacks.
+Doer knows to use that subdomain for these authentication callbacks.
 
 ### The system bot realm
 
 This is very much an implementation detail, but worth documenting to
 avoid confusion as to why there's an extra realm when inspecting the
-Zulip database.
+Doer database.
 
-Every Zulip server comes with 1 realm that isn't created by users: the
-`zulipinternal` realm. By default, this realm only contains the Zulip "system
+Every Doer server comes with 1 realm that isn't created by users: the
+`zulipinternal` realm. By default, this realm only contains the Doer "system
 bots". You can get a list of these on your system via
 `./scripts/get-django-setting INTERNAL_BOTS`, but this is where bots
 like "Notification Bot", "Welcome Bot", etc. exist. In the future,
@@ -139,9 +139,9 @@ browsers will experience weird/confusing redirects.
 
 ## Open realm creation
 
-Installations like [Zulip Cloud](https://zulip.com/plans/) that wish to
-allow anyone on the Internet to create new Zulip organizations can do
+Installations like [Doer Cloud](https://zulip.com/plans/) that wish to
+allow anyone on the Internet to create new Doer organizations can do
 so by setting `OPEN_REALM_CREATION = True` in
-`/etc/zulip/settings.py`. Note that offering Zulip hosting to anyone
+`/etc/zulip/settings.py`. Note that offering Doer hosting to anyone
 on the Internet entails significant responsibility around security,
 abuse/spam, legal issues like GDPR/CCPA compliance, and more.

@@ -10,7 +10,7 @@ from zerver.actions.streams import do_deactivate_stream
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.actions.user_topics import do_set_user_topic_visibility_policy
 from zerver.lib.stream_topic import StreamTopicTarget
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_subscription
 from zerver.lib.user_topics import get_topic_mutes, topic_has_visibility_policy
 from zerver.models import Message, Reaction, UserProfile, UserTopic
@@ -18,7 +18,7 @@ from zerver.models.constants import MAX_TOPIC_NAME_LENGTH
 from zerver.models.streams import get_stream
 
 
-class MutedTopicsTestsDeprecated(ZulipTestCase):
+class MutedTopicsTestsDeprecated(DoerTestCase):
     # Tests the deprecated URL: "/api/v1/users/me/subscriptions/muted_topics".
     # It exists for backward compatibility and should be removed once
     # we remove the deprecated URL.
@@ -247,7 +247,7 @@ class MutedTopicsTestsDeprecated(ZulipTestCase):
         )
 
 
-class MutedTopicsTests(ZulipTestCase):
+class MutedTopicsTests(DoerTestCase):
     def test_get_deactivated_muted_topic(self) -> None:
         user = self.example_user("hamlet")
         self.login_user(user)
@@ -489,7 +489,7 @@ class MutedTopicsTests(ZulipTestCase):
         )
 
 
-class UnmutedTopicsTests(ZulipTestCase):
+class UnmutedTopicsTests(DoerTestCase):
     def test_user_ids_unmuting_topic(self) -> None:
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
@@ -687,7 +687,7 @@ class UnmutedTopicsTests(ZulipTestCase):
         self.assert_json_error(result, "Invalid channel ID")
 
 
-class UserTopicsTests(ZulipTestCase):
+class UserTopicsTests(DoerTestCase):
     def test_invalid_visibility_policy(self) -> None:
         user = self.example_user("hamlet")
         self.login_user(user)
@@ -707,7 +707,7 @@ class UserTopicsTests(ZulipTestCase):
         )
 
 
-class AutomaticallyFollowTopicsTests(ZulipTestCase):
+class AutomaticallyFollowTopicsTests(DoerTestCase):
     def test_automatically_follow_topic_on_initiation(self) -> None:
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")
@@ -1171,7 +1171,7 @@ class AutomaticallyFollowTopicsTests(ZulipTestCase):
         self.assertEqual(user_ids, {othello.id})
 
 
-class AutomaticallyUnmuteTopicsTests(ZulipTestCase):
+class AutomaticallyUnmuteTopicsTests(DoerTestCase):
     def test_automatically_unmute_topic_on_initiation(self) -> None:
         hamlet = self.example_user("hamlet")
         cordelia = self.example_user("cordelia")

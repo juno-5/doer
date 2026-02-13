@@ -3,7 +3,7 @@ from django.db.models import CASCADE, Q
 from typing_extensions import override
 
 from zerver.models import Realm
-from zilencer.models import RemoteRealm, RemoteZulipServer
+from zilencer.models import RemoteRealm, RemoteDoerServer
 
 
 class Customer(models.Model):
@@ -17,7 +17,7 @@ class Customer(models.Model):
     # with. Exactly one of the following will be non-null.
     realm = models.OneToOneField(Realm, on_delete=CASCADE, null=True)
     remote_realm = models.OneToOneField(RemoteRealm, on_delete=CASCADE, null=True)
-    remote_server = models.OneToOneField(RemoteZulipServer, on_delete=CASCADE, null=True)
+    remote_server = models.OneToOneField(RemoteDoerServer, on_delete=CASCADE, null=True)
 
     stripe_customer_id = models.CharField(max_length=255, null=True, unique=True)
     sponsorship_pending = models.BooleanField(default=False)
@@ -81,7 +81,7 @@ def get_customer_by_realm(realm: Realm) -> Customer | None:
     return Customer.objects.filter(realm=realm).first()
 
 
-def get_customer_by_remote_server(remote_server: RemoteZulipServer) -> Customer | None:
+def get_customer_by_remote_server(remote_server: RemoteDoerServer) -> Customer | None:
     return Customer.objects.filter(remote_server=remote_server).first()
 
 

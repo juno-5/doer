@@ -3,11 +3,11 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.onboarding import send_initial_direct_messages_to_user
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Sends the initial welcome bot message."""
 
     @override

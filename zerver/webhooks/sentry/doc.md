@@ -1,13 +1,13 @@
-# Zulip Sentry integration
+# Doer Sentry integration
 
-Get Zulip notifications for the issues in your Sentry projects!
+Get Doer notifications for the issues in your Sentry projects!
 
 !!! warn ""
 
     **Note:** This integration supports Sentry's Node, Python, and Go
     [platforms](https://sentry.io/platforms/). If there's a platform
     you're interested in seeing support for that's missing, let us
-    know in the [integrations][dev-community] channel of the Zulip
+    know in the [integrations][dev-community] channel of the Doer
     development community.
 
 {start_tabs}
@@ -22,7 +22,7 @@ Get Zulip notifications for the issues in your Sentry projects!
 
     !!! warn ""
 
-        **Note**: Zulip also supports configuring this integration as a
+        **Note**: Doer also supports configuring this integration as a
         webhook in Sentry. While this is easier to configure (navigate
         to **Settings &gt; Integrations**, and search for **WebHooks**),
         it doesn't support the full breadth of event types. For instance,

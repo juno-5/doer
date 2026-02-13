@@ -11,21 +11,21 @@
   "project_id": 46186758,
   "project": {
     "id": 46186758,
-    "name": "testing-zulip-gitlab-integration",
+    "name": "testing-doer-gitlab-integration",
     "description": null,
-    "web_url": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration",
+    "web_url": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration",
     "avatar_url": null,
-    "git_ssh_url": "git@gitlab.com:sbansal1999/testing-zulip-gitlab-integration.git",
-    "git_http_url": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration.git",
+    "git_ssh_url": "git@gitlab.com:sbansal1999/testing-doer-gitlab-integration.git",
+    "git_http_url": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration.git",
     "namespace": "Satyam Bansal",
     "visibility_level": 0,
-    "path_with_namespace": "sbansal1999/testing-zulip-gitlab-integration",
+    "path_with_namespace": "sbansal1999/testing-doer-gitlab-integration",
     "default_branch": "main",
     "ci_config_path": "",
-    "homepage": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration",
-    "url": "git@gitlab.com:sbansal1999/testing-zulip-gitlab-integration.git",
-    "ssh_url": "git@gitlab.com:sbansal1999/testing-zulip-gitlab-integration.git",
-    "http_url": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration.git"
+    "homepage": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration",
+    "url": "git@gitlab.com:sbansal1999/testing-doer-gitlab-integration.git",
+    "ssh_url": "git@gitlab.com:sbansal1999/testing-doer-gitlab-integration.git",
+    "http_url": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration.git"
   },
   "object_attributes": {
     "attachment": null,
@@ -51,13 +51,13 @@
     "updated_at": "2023-05-25 17:12:06 UTC",
     "updated_by_id": null,
     "description": "Some more comments",
-    "url": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1#note_1406130881"
+    "url": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1#note_1406130881"
   },
   "repository": {
-    "name": "testing-zulip-gitlab-integration",
-    "url": "git@gitlab.com:sbansal1999/testing-zulip-gitlab-integration.git",
+    "name": "testing-doer-gitlab-integration",
+    "url": "git@gitlab.com:sbansal1999/testing-doer-gitlab-integration.git",
     "description": null,
-    "homepage": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration"
+    "homepage": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration"
   },
   "issue": {
     "author_id": 14613894,
@@ -83,7 +83,7 @@
     "updated_by_id": null,
     "weight": null,
     "health_status": null,
-    "url": "https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1",
+    "url": "https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1",
     "total_time_spent": 0,
     "time_change": 0,
     "human_total_time_spent": null,

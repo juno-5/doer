@@ -6,16 +6,16 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import KeyboardTip from "../../components/KeyboardTip.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import GoToRecentConversations from "../include/_GoToRecentConversations.mdx";
 import MessageActionsMenu from "../include/_MessageActionsMenu.mdx";
 import MessageLongPressMenu from "../include/_MessageLongPressMenu.mdx";
 
-import FollowIcon from "~icons/zulip-icon/follow";
-import MoreVerticalIcon from "~icons/zulip-icon/more-vertical";
-import MuteIcon from "~icons/zulip-icon/mute";
+import FollowIcon from "~icons/doer-icon/follow";
+import MoreVerticalIcon from "~icons/doer-icon/more-vertical";
+import MuteIcon from "~icons/doer-icon/mute";
 
-Zulip lets you manually mark messages as unread. Specifically, Zulip offers a
+Doer lets you manually mark messages as unread. Specifically, Doer offers a
 **Mark as unread from here** option, which lets you mark the selected message
 and all newer messages in your current view as unread.
 
@@ -66,11 +66,11 @@ There are many ways to use this feature, including:
          messages in the topic or channel are currently marked as read.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       You can also mark all messages in your current view as unread by
       jumping to the top with the <kbd>Home</kbd> key, and marking as unread
       [from the first message](#mark-as-unread-from-selected-message).
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via recent conversations">

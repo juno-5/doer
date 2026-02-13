@@ -1,11 +1,11 @@
 {
     "event": {
       "repo": {
-        "repo_name": "u/yuroitaki/zulip-testing",
+        "repo_name": "u/yuroitaki/doer-testing",
         "permalink_url": "https://code.rhodecode.com/_1936",
         "repo_type": "git",
         "extra_fields": {},
-        "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing",
+        "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing",
         "repo_id": 1936
       },
       "actor_ip": "14.192.212.32",
@@ -28,7 +28,7 @@
             "permalink_url": "https://code.rhodecode.com/1936/changeset/delete_branch=%3Edev",
             "message_html": "Deleted branch dev",
             "mentions": [],
-            "url": "https://code.rhodecode.com/u/yuroitaki/zulip-testing/changeset/delete_branch=%3Edev",
+            "url": "https://code.rhodecode.com/u/yuroitaki/doer-testing/changeset/delete_branch=%3Edev",
             "message": "Deleted branch dev",
             "issues": [],
             "refs": {

@@ -136,7 +136,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -214,7 +214,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -344,7 +344,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -422,7 +422,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "open",
           "status_transitions": {
             "finalized_at": 1000000000,
@@ -522,7 +522,7 @@
           "setup_future_usage": null,
           "shipping": null,
           "source": null,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "statement_descriptor_suffix": null,
           "status": "requires_payment_method",
           "transfer_data": null,
@@ -640,7 +640,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -718,7 +718,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -744,7 +744,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -908,7 +908,7 @@
               {
                 "amount": 200000,
                 "currency": "usd",
-                "description": "Zulip Business",
+                "description": "Doer Business",
                 "discount_amounts": [],
                 "discountable": false,
                 "discounts": [],
@@ -986,7 +986,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -1036,7 +1036,7 @@
           "currency": "usd",
           "customer": "upgrade_user_to_business_plan--Customer.create.1.json",
           "date": 1000000000,
-          "description": "Zulip Business",
+          "description": "Doer Business",
           "discountable": false,
           "discounts": [],
           "id": "upgrade_user_to_business_plan--Event.list.2.json",
@@ -1172,7 +1172,7 @@
           "shipping_cost": null,
           "shipping_details": null,
           "starting_balance": 0,
-          "statement_descriptor": "Zulip Business",
+          "statement_descriptor": "Doer Business",
           "status": "draft",
           "status_transitions": {
             "finalized_at": null,
@@ -1212,7 +1212,7 @@
           "currency": "usd",
           "default_source": null,
           "delinquent": false,
-          "description": "zulip.testserver 696c2d4f-86b",
+          "description": "doer.testserver 696c2d4f-86b",
           "discount": null,
           "email": "hamlet@zulip.com",
           "id": "upgrade_user_to_business_plan--Customer.create.1.json",
@@ -1225,7 +1225,7 @@
           },
           "livemode": false,
           "metadata": {
-            "remote_realm_host": "zulip.testserver",
+            "remote_realm_host": "doer.testserver",
             "remote_realm_uuid": "696c2d4f-86ba-44c0-9137-8d2908ba59b6"
           },
           "name": null,

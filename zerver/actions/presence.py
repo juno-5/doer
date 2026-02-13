@@ -79,12 +79,12 @@ def send_presence_changed(
 
 def consolidate_client(client: Client) -> Client:
     # The web app reports a client as 'website'
-    # The desktop app reports a client as ZulipDesktop
+    # The desktop app reports a client as DoerDesktop
     # due to it setting a custom user agent. We want both
     # to count as web users
 
-    # Alias ZulipDesktop to website
-    if client.name == "ZulipDesktop":
+    # Alias DoerDesktop to website
+    if client.name == "DoerDesktop":
         return get_client("website")
     else:
         return client

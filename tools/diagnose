@@ -9,7 +9,7 @@ from collections.abc import Callable
 TOOLS_DIR = os.path.dirname(__file__)
 ROOT_DIR = os.path.dirname(TOOLS_DIR)
 sys.path.insert(0, ROOT_DIR)
-from scripts.lib.zulip_tools import get_dev_uuid_var_path
+from scripts.lib.doer_tools import get_dev_uuid_var_path
 
 UUID_VAR_PATH = get_dev_uuid_var_path()
 

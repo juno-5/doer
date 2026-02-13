@@ -101,7 +101,7 @@
       "title": "A simple message-based issue.",
       "type": "default",
       "version": "7",
-      "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/8da63b42375e4d3b803c377fefb062f8/",
+      "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/8da63b42375e4d3b803c377fefb062f8/",
       "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1635261062/events/8da63b42375e4d3b803c377fefb062f8/",
       "issue_url": "https://sentry.io/api/0/issues/1635261062/"
     },

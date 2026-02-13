@@ -2211,7 +2211,7 @@ export function get_users_that_match_role_ids(
 
 export async function fetch_users(user_ids: Set<number>): Promise<UsersFetchResponse["members"]> {
     // Requested users outside the set of known valid user IDs likely
-    // reflect some sort of Zulip bug, so fetch and log them.
+    // reflect some sort of Doer bug, so fetch and log them.
     const invalid_user_ids = user_ids.difference(valid_user_ids);
     if (invalid_user_ids.size > 0) {
         blueslip.error("Ignored invalid user_ids: " + [...invalid_user_ids].join(", "));

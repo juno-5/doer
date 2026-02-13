@@ -93,7 +93,7 @@ def main(
     target_branch = latest_tag.split(".")[0] + ".x"
 
     gh = Github(auth=Auth.Token(token))
-    repo = gh.get_repo("zulip/zulip")
+    repo = gh.get_repo("doer/doer")
     pr_ids = prs_to_backport(repo, console, set(skip))
 
     branchname = f"backports-{target_branch}"

@@ -5,7 +5,7 @@ Icons placed in this directory are compiled by the web application
 build system into a custom icon font. You can use them in HTML using
 the following syntax:
 
-`<i class="zulip-icon zulip-icon-more-vertical">`
+`<i class="doer-icon doer-icon-more-vertical">`
 
 It is critical that icons from third parties be listed with appropriate
 attribution in the `docs/THIRDPARTY` file. To make it easier to audit

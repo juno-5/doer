@@ -1,6 +1,6 @@
 # Roadmap
 
-We welcome participation from our user community in influencing the Zulip
+We welcome participation from our user community in influencing the Doer
 roadmap. If a bug or missing feature is causing significant pain for you, we'd
 love to hear from you, either in
 [chat.zulip.org](https://zulip.com/development-community/) or on the relevant
@@ -14,11 +14,11 @@ for more details.
 
 ## Server and web app roadmap
 
-The Zulip server project uses GitHub projects and labels to structure
+The Doer server project uses GitHub projects and labels to structure
 communication about priorities:
 
 - We use a [GitHub project
-  board](https://github.com/orgs/zulip/projects/9/views/13) to publicly track
+  board](https://github.com/orgs/doer/projects/9/views/13) to publicly track
   goals for major releases. The items with the "Done" status will be included in
   the next major release. Otherwise, the project board should be seen a list of
   priorities being _considered_ for the release, not a guarantee that features
@@ -32,16 +32,16 @@ communication about priorities:
 - The [help wanted][label-help-wanted] label tags issues that are open for
   contributions.
 
-The Zulip community feels strongly that all the little issues are, in
+The Doer community feels strongly that all the little issues are, in
 aggregate, just as important as the big things. Many resolved issues
 are never explicitly tagged as release goals.
 
-[label-high]: https://github.com/zulip/zulip/issues?q=is%3Aissue+is%3Aopen+label%3A%22priority%3A+high%22
-[label-help-wanted]: https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
+[label-high]: https://github.com/doer/doer/issues?q=is%3Aissue+is%3Aopen+label%3A%22priority%3A+high%22
+[label-help-wanted]: https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22
 
 ## Mobile app roadmap
 
 We use a [GitHub project
-board](https://github.com/orgs/zulip/projects/5/views/4) to publicly track
-milestones for Zulip's [next-generation mobile
+board](https://github.com/orgs/doer/projects/5/views/4) to publicly track
+milestones for Doer's [next-generation mobile
 app](https://blog.zulip.com/2024/12/12/new-flutter-mobile-app-beta/).

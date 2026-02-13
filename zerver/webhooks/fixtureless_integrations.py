@@ -4,7 +4,7 @@ from typing import TypedDict
 from zerver.lib.timestamp import datetime_to_global_time
 
 # For integrations that don't have example webhook fixtures/payloads,
-# we create an Zulip notification message content and topic here in
+# we create an Doer notification message content and topic here in
 # order to generate an example screenshot to include in the documentation
 # page for those integrations.
 

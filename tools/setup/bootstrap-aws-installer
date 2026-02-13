@@ -67,12 +67,12 @@ GITHUB_KEYS="inline!puppet/kandra/files/github.keys"
 cat "$GITHUB_KEYS" >>/root/.ssh/known_hosts
 
 cd /root
-git clone "$REPO_URL" zulip -b "$BRANCH"
-git -C zulip checkout "$BRANCH"
+git clone "$REPO_URL" doer -b "$BRANCH"
+git -C doer checkout "$BRANCH"
 
 (
     export APT_OPTIONS="-o Dpkg::Options::=--force-confnew"
-    /root/zulip/scripts/setup/install --puppet-classes "$FULL_ROLES" --postgresql-version=17
+    /root/doer/scripts/setup/install --puppet-classes "$FULL_ROLES" --postgresql-version=17
 )
 
 # Delete the ubuntu user

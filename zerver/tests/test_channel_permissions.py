@@ -14,7 +14,7 @@ from zerver.actions.streams import (
     do_deactivate_stream,
 )
 from zerver.actions.user_groups import add_subgroups_to_user_group, check_add_user_group
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import get_subscription
 from zerver.lib.types import UserGroupMembersData
 from zerver.lib.user_groups import get_group_setting_value_for_api
@@ -24,7 +24,7 @@ from zerver.models.realms import get_realm
 from zerver.models.streams import StreamTopicsPolicyEnum, get_stream
 
 
-class ChannelSubscriptionPermissionTest(ZulipTestCase):
+class ChannelSubscriptionPermissionTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -399,7 +399,7 @@ class ChannelSubscriptionPermissionTest(ZulipTestCase):
         self.assert_json_error(result, "Unable to access channel (private_stream).")
 
     def test_stream_settings_for_subscribing(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         stream = self.make_stream("public_stream")
 
@@ -543,7 +543,7 @@ class ChannelSubscriptionPermissionTest(ZulipTestCase):
         check_user_can_subscribe(desdemona, f"Unable to access channel ({stream.name}).")
 
     def test_can_remove_subscribers_group(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         iago = self.example_user("iago")
         leadership_group = check_add_user_group(
             realm,
@@ -763,11 +763,11 @@ class PermissionCheckConfigDict(TypedDict):
     users_without_permission: list[UserProfile]
 
 
-class ChannelAdministerPermissionTest(ZulipTestCase):
+class ChannelAdministerPermissionTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
         self.admin = self.example_user("iago")
         self.moderator = self.example_user("shiva")
         self.guest = self.example_user("polonius")
@@ -1371,7 +1371,7 @@ class ChannelAdministerPermissionTest(ZulipTestCase):
         result = self.subscribe_via_post(
             user,
             subscriptions,
-            subdomain="zulip",
+            subdomain="doer",
             extra_post_data={
                 "can_delete_any_message_group": orjson.dumps(owners_system_group.id).decode()
             },
@@ -1382,7 +1382,7 @@ class ChannelAdministerPermissionTest(ZulipTestCase):
         result = self.subscribe_via_post(
             user,
             subscriptions,
-            subdomain="zulip",
+            subdomain="doer",
             extra_post_data={
                 "can_delete_own_message_group": orjson.dumps(owners_system_group.id).decode()
             },
@@ -1426,7 +1426,7 @@ class ChannelAdministerPermissionTest(ZulipTestCase):
         result = self.subscribe_via_post(
             moderator,
             subscriptions,
-            subdomain="zulip",
+            subdomain="doer",
             extra_post_data={
                 "can_delete_any_message_group": orjson.dumps(owners_system_group.id).decode()
             },
@@ -1437,7 +1437,7 @@ class ChannelAdministerPermissionTest(ZulipTestCase):
         result = self.subscribe_via_post(
             moderator,
             subscriptions,
-            subdomain="zulip",
+            subdomain="doer",
             extra_post_data={
                 "can_delete_own_message_group": orjson.dumps(owners_system_group.id).decode()
             },

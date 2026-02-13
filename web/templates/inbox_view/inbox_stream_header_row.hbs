@@ -13,12 +13,12 @@
                         </span>
                     {{/if}}
                 </div>
-                <div class="collapsible-button toggle-inbox-header-icon {{#if is_collapsed}}icon-collapsed-state{{/if}}"><i class="channel-row-chevron zulip-icon zulip-icon-chevron-down"></i></div>
-                <span class="unread_mention_info tippy-zulip-tooltip
+                <div class="collapsible-button toggle-inbox-header-icon {{#if is_collapsed}}icon-collapsed-state{{/if}}"><i class="channel-row-chevron doer-icon doer-icon-chevron-down"></i></div>
+                <span class="unread_mention_info tippy-doer-tooltip
                   {{#unless mention_in_unread}}hidden{{/unless}}"
                   data-tippy-content="{{t 'You have unread mentions'}}">@</span>
                 <div class="unread-count-focus-outline" tabindex="0" data-col-index="{{ column_indexes.UNREAD_COUNT }}">
-                    <span class="unread_count tippy-zulip-tooltip on_hover_topic_read"
+                    <span class="unread_count tippy-doer-tooltip on_hover_topic_read"
                       data-stream-id="{{stream_id}}" data-tippy-content="{{t 'Mark as read' }}"
                       aria-label="{{t 'Mark as read' }}">{{unread_count}}</span>
                 </div>
@@ -27,12 +27,12 @@
         <div class="inbox-right-part-wrapper">
             <div class="inbox-right-part">
                 {{#if is_muted}}
-                <span class="channel-visibility-policy-indicator toggle-channel-visibility tippy-zulip-tooltip" data-stream-id="{{stream_id}}" tabindex="0" data-col-index="{{ column_indexes.TOPIC_VISIBILITY }}" data-tooltip-template-id="inbox-channel-mute-toggle-tooltip-template">
-                    <i class="zulip-icon zulip-icon-mute recipient_bar_icon" role="button"></i>
+                <span class="channel-visibility-policy-indicator toggle-channel-visibility tippy-doer-tooltip" data-stream-id="{{stream_id}}" tabindex="0" data-col-index="{{ column_indexes.TOPIC_VISIBILITY }}" data-tooltip-template-id="inbox-channel-mute-toggle-tooltip-template">
+                    <i class="doer-icon doer-icon-mute recipient_bar_icon" role="button"></i>
                 </span>
                 {{/if}}
                 <div class="inbox-action-button inbox-stream-menu" data-stream-id="{{stream_id}}" tabindex="0" data-col-index="{{ column_indexes.ACTION_MENU }}">
-                    <i class="zulip-icon zulip-icon-more-vertical" aria-hidden="true"></i>
+                    <i class="doer-icon doer-icon-more-vertical" aria-hidden="true"></i>
                 </div>
             </div>
         </div>

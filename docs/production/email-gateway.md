@@ -1,14 +1,14 @@
 # Incoming email integration
 
-Zulip's incoming email gateway integration makes it possible to send
-messages into Zulip by sending an email. It's highly recommended
+Doer's incoming email gateway integration makes it possible to send
+messages into Doer by sending an email. It's highly recommended
 because it enables:
 
-- When users reply to one of Zulip's message notification emails
+- When users reply to one of Doer's message notification emails
   from their email client, the reply can go directly
-  into Zulip.
+  into Doer.
 - Integrating third-party services that can send email notifications
-  into Zulip. See the [integration
+  into Doer. See the [integration
   documentation](https://zulip.com/integrations/email) for
   details.
 
@@ -16,11 +16,11 @@ Once this integration is configured, each channel will have a special
 email address displayed on the channel settings page. Emails sent to
 that address will be delivered into the channel.
 
-There are two ways to configure Zulip's email gateway:
+There are two ways to configure Doer's email gateway:
 
-1. Local delivery (recommended): A server runs on the Zulip
-   server and passes the emails directly to Zulip.
-1. Polling: A cron job running on the Zulip server checks an IMAP
+1. Local delivery (recommended): A server runs on the Doer
+   server and passes the emails directly to Doer.
+1. Polling: A cron job running on the Doer server checks an IMAP
    inbox (`username@example.com`) every minute for new emails.
 
 The local delivery configuration is preferred for production because
@@ -40,7 +40,7 @@ Incoming emails are rate-limited, with the following limits:
 
 ## Local delivery setup
 
-Zulip's Puppet configuration provides everything needed to run this
+Doer's Puppet configuration provides everything needed to run this
 integration; you just need to enable and configure it as follows.
 
 The main decision you need to make is what email domain you want to
@@ -49,7 +49,7 @@ use for the gateway; for this discussion we'll use
 will look like `foo@emaildomain.example.com`, so we recommend using
 `EXTERNAL_HOST` here.
 
-We will use `hostname.example.com` as the hostname of the Zulip server
+We will use `hostname.example.com` as the hostname of the Doer server
 (this will usually also be the same as `EXTERNAL_HOST`, unless you are
 using an [HTTP reverse proxy][reverse-proxy]).
 
@@ -63,26 +63,26 @@ using an [HTTP reverse proxy][reverse-proxy]).
    ```
 
 1. If you have a network firewall enabled, configure it to allow incoming access
-   to port 25 on the Zulip server from the public internet. Other mail servers
-   will need to use it to deliver emails to Zulip.
+   to port 25 on the Doer server from the public internet. Other mail servers
+   will need to use it to deliver emails to Doer.
 
-1. Log in to your Zulip server; the remaining steps all happen there.
+1. Log in to your Doer server; the remaining steps all happen there.
 
-1. Add `, zulip::local_mailserver` to `puppet_classes` in
-   `/etc/zulip/zulip.conf`. A typical value after this change is:
+1. Add `, doer::local_mailserver` to `puppet_classes` in
+   `/etc/zulip/doer.conf`. A typical value after this change is:
 
    ```ini
-   puppet_classes = zulip::profile::standalone, zulip::local_mailserver
+   puppet_classes = doer::profile::standalone, doer::local_mailserver
    ```
 
-1. Run `/home/zulip/deployments/current/scripts/zulip-puppet-apply`
-   (and answer `y`) to apply your new `/etc/zulip/zulip.conf`
-   configuration to your Zulip server.
+1. Run `/home/zulip/deployments/current/scripts/doer-puppet-apply`
+   (and answer `y`) to apply your new `/etc/zulip/doer.conf`
+   configuration to your Doer server.
 
 1. Edit `/etc/zulip/settings.py`, and set `EMAIL_GATEWAY_PATTERN`
    to `"%s@emaildomain.example.com"`.
 
-1. Restart your Zulip server with
+1. Restart your Doer server with
    `/home/zulip/deployments/current/scripts/restart-server`.
 
 Congratulations! The integration should be fully operational.
@@ -91,7 +91,7 @@ Congratulations! The integration should be fully operational.
 
 ## Polling setup
 
-1. Create an email account dedicated to Zulip's email gateway
+1. Create an email account dedicated to Doer's email gateway
    messages. We assume the address is of the form
    `username@example.com`. The email provider needs to support the
    standard model of delivering emails sent to
@@ -103,17 +103,17 @@ Congratulations! The integration should be fully operational.
 1. Set up IMAP for your email account and obtain the authentication details.
    ([Here's how it works with Gmail](https://support.google.com/mail/answer/7126229?hl=en))
 
-1. Configure IMAP access in the appropriate Zulip settings:
+1. Configure IMAP access in the appropriate Doer settings:
 
    - Login and server connection details in `/etc/zulip/settings.py`
      in the email gateway integration section (`EMAIL_GATEWAY_LOGIN` and others).
-   - Password in `/etc/zulip/zulip-secrets.conf` as `email_gateway_password`.
+   - Password in `/etc/zulip/doer-secrets.conf` as `email_gateway_password`.
 
 1. Test your configuration by sending emails to the target email
-   account and then running the Zulip tool to poll that inbox:
+   account and then running the Doer tool to poll that inbox:
 
    ```bash
-   su zulip -c '/home/zulip/deployments/current/manage.py email_mirror'
+   su doer -c '/home/zulip/deployments/current/manage.py email_mirror'
    ```
 
 1. Once everything is working, install the cron job which will poll
@@ -121,7 +121,7 @@ Congratulations! The integration should be fully operational.
    in the last step:
    ```bash
    cd /home/zulip/deployments/current/
-   sudo cp puppet/zulip/files/cron.d/email-mirror /etc/cron.d/
+   sudo cp puppet/doer/files/cron.d/email-mirror /etc/cron.d/
    ```
 
 Congratulations! The integration should be fully operational.

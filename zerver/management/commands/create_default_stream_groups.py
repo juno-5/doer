@@ -3,16 +3,16 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.streams import ensure_stream
 from zerver.models import DefaultStreamGroup
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """
 Create default stream groups which the users can choose during sign up.
 
-./manage.py create_default_stream_groups -s gsoc-1,gsoc-2,gsoc-3 -d "Google summer of code"  -r zulip
+./manage.py create_default_stream_groups -s gsoc-1,gsoc-2,gsoc-3 -d "Google summer of code"  -r doer
 """
 
     @override

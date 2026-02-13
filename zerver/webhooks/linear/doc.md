@@ -1,6 +1,6 @@
-# Zulip Linear integration
+# Doer Linear integration
 
-Get Linear notifications in Zulip!
+Get Linear notifications in Doer!
 
 {start_tabs}
 

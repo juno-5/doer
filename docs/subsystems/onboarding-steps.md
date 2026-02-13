@@ -1,7 +1,7 @@
 # Onboarding Steps
 
 Onboarding steps introduce users to important UI elements. They are an
-effective means of providing context where Zulip's UI may not be self-evident.
+effective means of providing context where Doer's UI may not be self-evident.
 
 Currently, an onboarding step is a one-time notice in the form of a banner or modal.
 Previously, hotspots were another type of onboarding step available.
@@ -9,7 +9,7 @@ Previously, hotspots were another type of onboarding step available.
 ## Configuring a New Onboarding Step
 
 ...is easy! If you think highlighting a certain UI element would improve
-Zulip's user experience, we welcome you to [open an issue](https://github.com/zulip/zulip/issues/new?title=onboarding_step_request:) for discussion.
+Doer's user experience, we welcome you to [open an issue](https://github.com/doer/doer/issues/new?title=onboarding_step_request:) for discussion.
 
 ### Step 1: Add the Onboarding Step Name
 

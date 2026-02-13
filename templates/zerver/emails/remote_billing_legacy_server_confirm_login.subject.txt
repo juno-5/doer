@@ -1,1 +1,1 @@
-{% trans %}Log in to Zulip plan management{% endtrans %}
+{% trans %}Log in to Doer plan management{% endtrans %}

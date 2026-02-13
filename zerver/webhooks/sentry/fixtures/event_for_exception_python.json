@@ -176,7 +176,7 @@
       "title": "Exception: Custom exception!",
       "type": "error",
       "version": "7",
-      "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/zulip-integration-testing/events/599349254a1447a99774b5310711c1a8/",
+      "url": "https://sentry.io/api/0/projects/hypro999-personal-organization/doer-integration-testing/events/599349254a1447a99774b5310711c1a8/",
       "web_url": "https://sentry.io/organizations/hypro999-personal-organization/issues/1635244907/events/599349254a1447a99774b5310711c1a8/",
       "issue_url": "https://sentry.io/api/0/issues/1635244907/"
     },

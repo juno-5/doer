@@ -421,10 +421,10 @@
     },
     {
       "name": "two_inline_images",
-      "input": "Google logo today: https://www.google.com/images/srpr/logo4w.png\nKinda boring\nZulip logo: https://zulip.com/static/images/logo/zulip-icon-128x128.png",
-      "expected_output": "<p>Google logo today: <a href=\"https:\/\/www.google.com\/images\/srpr\/logo4w.png\">https:\/\/www.google.com\/images\/srpr\/logo4w.png<\/a><br>\nKinda boring<br>\nZulip logo: <a href=\"https:\/\/zulip.com\/static\/images\/logo\/zulip-icon-128x128.png\">https:\/\/zulip.com\/static\/images\/logo\/zulip-icon-128x128.png<\/a><\/p>\n<div class=\"message_inline_image\"><a href=\"https:\/\/www.google.com\/images\/srpr\/logo4w.png\"><img src=\"https://external-content.zulipcdn.net/external_content/56c362a24201593891955ff526b3b412c0f9fcd2/68747470733a2f2f7777772e676f6f676c652e636f6d2f696d616765732f737270722f6c6f676f34772e706e67\"><\/a><\/div><div class=\"message_inline_image\"><a href=\"https:\/\/zulip.com\/static\/images\/logo\/zulip-icon-128x128.png\"><img src=\"https://external-content.zulipcdn.net/external_content/213b3c6f660b53018c3cb27d48d34f0940a74954/68747470733a2f2f7a756c69702e636f6d2f7374617469632f696d616765732f6c6f676f2f7a756c69702d69636f6e2d313238783132382e706e67\"><\/a><\/div>",
+      "input": "Google logo today: https://www.google.com/images/srpr/logo4w.png\nKinda boring\nZulip logo: https://zulip.com/static/images/logo/doer-icon-128x128.png",
+      "expected_output": "<p>Google logo today: <a href=\"https:\/\/www.google.com\/images\/srpr\/logo4w.png\">https:\/\/www.google.com\/images\/srpr\/logo4w.png<\/a><br>\nKinda boring<br>\nZulip logo: <a href=\"https:\/\/zulip.com\/static\/images\/logo\/doer-icon-128x128.png\">https:\/\/zulip.com\/static\/images\/logo\/doer-icon-128x128.png<\/a><\/p>\n<div class=\"message_inline_image\"><a href=\"https:\/\/www.google.com\/images\/srpr\/logo4w.png\"><img src=\"https://external-content.zulipcdn.net/external_content/56c362a24201593891955ff526b3b412c0f9fcd2/68747470733a2f2f7777772e676f6f676c652e636f6d2f696d616765732f737270722f6c6f676f34772e706e67\"><\/a><\/div><div class=\"message_inline_image\"><a href=\"https:\/\/zulip.com\/static\/images\/logo\/doer-icon-128x128.png\"><img src=\"https://external-content.zulipcdn.net/external_content/213b3c6f660b53018c3cb27d48d34f0940a74954/68747470733a2f2f7a756c69702e636f6d2f7374617469632f696d616765732f6c6f676f2f7a756c69702d69636f6e2d313238783132382e706e67\"><\/a><\/div>",
       "backend_only_rendering": true,
-      "text_content": "Google logo today: https:\/\/www.google.com\/images\/srpr\/logo4w.png\nKinda boring\nZulip logo: https:\/\/zulip.com\/static\/images\/logo\/zulip-icon-128x128.png\n"
+      "text_content": "Google logo today: https:\/\/www.google.com\/images\/srpr\/logo4w.png\nKinda boring\nZulip logo: https:\/\/zulip.com\/static\/images\/logo\/doer-icon-128x128.png\n"
     },
     {
       "name": "deduplicate_inline_previews",
@@ -494,14 +494,14 @@
     },
     {
       "name": "fragment_link",
-      "input": "[foo](http://zulip.testserver/#narrow/channel/1-Denmark)",
+      "input": "[foo](http://doer.testserver/#narrow/channel/1-Denmark)",
       "expected_output": "<p><a href=\"#narrow/channel/1-Denmark\">foo</a></p>",
-      "marked_expected_output": "<p><a href=\"http://zulip.testserver/#narrow/channel/1-Denmark\">foo</a></p>"
+      "marked_expected_output": "<p><a href=\"http://doer.testserver/#narrow/channel/1-Denmark\">foo</a></p>"
     },
     {
       "name": "not_fragment_link",
-      "input": "[foo](http://zulip.testserver/https://example.com)",
-      "expected_output": "<p><a href=\"http://zulip.testserver/https://example.com\">foo</a></p>"
+      "input": "[foo](http://doer.testserver/https://example.com)",
+      "expected_output": "<p><a href=\"http://doer.testserver/https://example.com\">foo</a></p>"
     },
     {
       "name": "nl2br",
@@ -598,9 +598,9 @@
     },
     {
       "name": "zulip_emoji",
-      "input": ":zulip:",
-      "expected_output": "<p><img alt=\":zulip:\" class=\"emoji\" src=\"/static/generated/emoji/images/emoji/unicode/zulip.png\" title=\"zulip\"></p>",
-      "text_content": ":zulip:"
+      "input": ":doer:",
+      "expected_output": "<p><img alt=\":doer:\" class=\"emoji\" src=\"/static/generated/emoji/images/emoji/unicode/doer.png\" title=\"doer\"></p>",
+      "text_content": ":doer:"
     },
     {
       "name": "random_emoji_2",
@@ -806,9 +806,9 @@
     },
     {
       "name": "ulist_with_inline_code",
-      "input": "gonna take a break for a bit--all yours if you want to play around too. what I did:\n\n* install cmake\n* git clone zulip desktop\n* run `cmake-gui ..` in `c:\\zulip\\zulip-desktop\\msvcbuild`\n* hit configure/generate until it generated the msvc project (had to make a fix to some cmake files)\n* opened vs2013 \n* tried to build\n",
-      "expected_output": "<p>gonna take a break for a bit--all yours if you want to play around too. what I did:</p>\n<ul>\n<li>install cmake</li>\n<li>git clone zulip desktop</li>\n<li>run <code>cmake-gui ..</code> in <code>c:\\zulip\\zulip-desktop\\msvcbuild</code></li>\n<li>hit configure/generate until it generated the msvc project (had to make a fix to some cmake files)</li>\n<li>opened vs2013 </li>\n<li>tried to build</li>\n</ul>",
-      "text_content": "gonna take a break for a bit--all yours if you want to play around too. what I did:\n\ninstall cmake\ngit clone zulip desktop\nrun cmake-gui .. in c:\\zulip\\zulip-desktop\\msvcbuild\nhit configure\/generate until it generated the msvc project (had to make a fix to some cmake files)\nopened vs2013 \ntried to build\n"
+      "input": "gonna take a break for a bit--all yours if you want to play around too. what I did:\n\n* install cmake\n* git clone doer desktop\n* run `cmake-gui ..` in `c:\\doer\\doer-desktop\\msvcbuild`\n* hit configure/generate until it generated the msvc project (had to make a fix to some cmake files)\n* opened vs2013 \n* tried to build\n",
+      "expected_output": "<p>gonna take a break for a bit--all yours if you want to play around too. what I did:</p>\n<ul>\n<li>install cmake</li>\n<li>git clone doer desktop</li>\n<li>run <code>cmake-gui ..</code> in <code>c:\\doer\\doer-desktop\\msvcbuild</code></li>\n<li>hit configure/generate until it generated the msvc project (had to make a fix to some cmake files)</li>\n<li>opened vs2013 </li>\n<li>tried to build</li>\n</ul>",
+      "text_content": "gonna take a break for a bit--all yours if you want to play around too. what I did:\n\ninstall cmake\ngit clone doer desktop\nrun cmake-gui .. in c:\\doer\\doer-desktop\\msvcbuild\nhit configure\/generate until it generated the msvc project (had to make a fix to some cmake files)\nopened vs2013 \ntried to build\n"
     },
     {
       "name": "timestamp_backend_markdown_only",
@@ -1063,16 +1063,16 @@
     },
     {
       "name": "normal_quote_message",
-      "input": "@_**Zoe|7** [said](http://zulip.testserver/#narrow/channel/13-social/topic/party/near/103):\n```quote\nHow are you?\n```\n\nGreat",
+      "input": "@_**Zoe|7** [said](http://doer.testserver/#narrow/channel/13-social/topic/party/near/103):\n```quote\nHow are you?\n```\n\nGreat",
       "expected_output": "<p><span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> <a href=\"#narrow/channel/13-social/topic/party/near/103\">said</a>:</p>\n<blockquote>\n<p>How are you?</p>\n</blockquote>\n<p>Great</p>",
-      "marked_expected_output": "<p><span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> <a href=\"http://zulip.testserver/#narrow/channel/13-social/topic/party/near/103\">said</a>:</p>\n<blockquote>\n<p>How are you?</p>\n</blockquote>\n<p>Great</p>",
+      "marked_expected_output": "<p><span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> <a href=\"http://doer.testserver/#narrow/channel/13-social/topic/party/near/103\">said</a>:</p>\n<blockquote>\n<p>How are you?</p>\n</blockquote>\n<p>Great</p>",
       "text_content": "[…]\nGreat"
     },
     {
       "name": "user_mention_with_no_message_link",
-      "input": "Hello @_**Zoe|7** see [this](http://zulip.testserver/#narrow/search/database).",
+      "input": "Hello @_**Zoe|7** see [this](http://doer.testserver/#narrow/search/database).",
       "expected_output": "<p>Hello <span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> see <a href=\"#narrow/search/database\">this</a>.</p>",
-      "marked_expected_output": "<p>Hello <span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> see <a href=\"http://zulip.testserver/#narrow/search/database\">this</a>.</p>",
+      "marked_expected_output": "<p>Hello <span class=\"user-mention silent\" data-user-id=\"7\">Zoe</span> see <a href=\"http://doer.testserver/#narrow/search/database\">this</a>.</p>",
       "text_content": "Hello Zoe see this."
     },
     {
@@ -1339,14 +1339,14 @@
       ""
     ],
     [
-      "http://zulip.testserver/#narrow/channel/1-Denmark",
-      "<p><a href=\"#narrow/channel/1-Denmark\">http://zulip.testserver/#narrow/channel/1-Denmark</a></p>",
+      "http://doer.testserver/#narrow/channel/1-Denmark",
+      "<p><a href=\"#narrow/channel/1-Denmark\">http://doer.testserver/#narrow/channel/1-Denmark</a></p>",
       ""
     ],
     [
-      "http://zulip.testserver/https://example.com",
+      "http://doer.testserver/https://example.com",
       "<p>%s</p>",
-      "http://zulip.testserver/https://example.com"
+      "http://doer.testserver/https://example.com"
     ],
     [
       "a@b.com",
@@ -1439,9 +1439,9 @@
       ""
     ],
     [
-      "nested with autodetection zulip.us/(we_like_(to_n(e)st_)_n(es)t)_nest",
+      "nested with autodetection doer.us/(we_like_(to_n(e)st_)_n(es)t)_nest",
       "<p>nested with autodetection %s</p>",
-      "zulip.us/(we_like_(to_n(e)st_)_n(es)t)_nest"
+      "doer.us/(we_like_(to_n(e)st_)_n(es)t)_nest"
     ],
     [
       "quora http://generate.quora.net/render?width=700&from=-4hours&until=now&height=400&bgcolor=black&lineMode=connected&title=arb%20hint%20status&target=alias(ans.hintland.hand.arb.enhint_rate%2C%22enhint%20rate%22)&target=alias(ans.hintland.hand.arb.unhint_rate%2C%22unhint%20rate%22)&target=alias(ans.hintland.hand.arb.size%2C%22hint%20size%22)&target=alias(scale(ans.vagabond.dingarb_cube_count%2C10000)%2C%22cube%20count%20x%2010K%22)&target=alias(scale(hnumbers.time.ding.gegevens.query.count%2C10)%2C%22ding%20gegevens%20query%20count%20x%2010%22)&fgcolor=white&uniq=0.44046106841415167",

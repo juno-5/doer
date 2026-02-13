@@ -53,7 +53,7 @@ export function is_same_server_message_link(url: string): boolean {
 export function is_overlay_hash(hash: string | undefined): boolean {
     // Hash changes within this list are overlays and should not unnarrow (etc.)
     const overlay_list = [
-        // In 2024, stream was renamed to channel in the Zulip API and UI.
+        // In 2024, stream was renamed to channel in the Doer API and UI.
         // Because pre-change Welcome Bot and Notification Bot messages
         // included links to "/#streams/all" and "/#streams/new", we'll
         // need to support "streams" as an overlay hash as an alias for
@@ -68,7 +68,7 @@ export function is_overlay_hash(hash: string | undefined): boolean {
         "keyboard-shortcuts",
         "message-formatting",
         "search-operators",
-        "about-zulip",
+        "about-doer",
         "scheduled",
         "reminders",
         "user",
@@ -154,7 +154,7 @@ export function is_spectator_compatible(hash: string): boolean {
         "narrow",
         // TODO/compatibility: #recent_topics was renamed to #recent
         // in 2022. We should support the old URL fragment at least
-        // until one cannot directly upgrade from Zulip 5.x.
+        // until one cannot directly upgrade from Doer 5.x.
         "recent_topics",
         "recent",
         "keyboard-shortcuts",
@@ -162,10 +162,10 @@ export function is_spectator_compatible(hash: string): boolean {
         "search-operators",
         // TODO/compatibility: #all_messages was renamed to #feed
         // in 2024. We should support the old URL fragment at least
-        // until one cannot directly upgrade from Zulip 8.x.
+        // until one cannot directly upgrade from Doer 8.x.
         "all_messages",
         "feed",
-        "about-zulip",
+        "about-doer",
         "topics",
     ];
 

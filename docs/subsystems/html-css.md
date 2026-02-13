@@ -1,19 +1,19 @@
 # HTML and CSS
 
-## Zulip CSS organization
+## Doer CSS organization
 
 There are two high-level sections of CSS: the "portico" (logged-out
-pages like `/help/`, `/login/`, etc.), and the app. The Zulip
+pages like `/help/`, `/login/`, etc.), and the app. The Doer
 application's CSS can be found in the `web/styles/` directory, while
 the portico CSS lives under the `web/styles/portico/` subdirectory.
 
-To generate its CSS files, Zulip uses [PostCSS](https://postcss.org/)
+To generate its CSS files, Doer uses [PostCSS](https://postcss.org/)
 and a number of PostCSS plugins, including
 [postcss-nesting](https://github.com/csstools/postcss-nesting#readme),
 whose rules are derived from the [CSS Nesting](https://drafts.csswg.org/css-nesting-1/)
 specification.
 
-## Editing Zulip CSS
+## Editing Doer CSS
 
 If you aren't experienced with doing web development and want to make
 CSS changes, we recommend reading the excellent [Chrome developer tools
@@ -29,7 +29,7 @@ tool](../testing/linters.md) with `tools/lint --only=prettier --fix`.
 You can also [integrate it with your
 editor](https://prettier.io/docs/en/editors.html).
 
-Zulip's development environment has hot code-reloading configured, so
+Doer's development environment has hot code-reloading configured, so
 changes made in source files will immediately take effect in open
 browser windows, either by live-updating the CSS or reloading the
 browser window (following backend changes).
@@ -56,7 +56,7 @@ elements dynamically, in files like `user_stream_list_item.hbs`:
 ```
 
 But for most other cases, its preferable to define logical classes and
-put your styles in external CSS files such as `zulip.css` or a more
+put your styles in external CSS files such as `doer.css` or a more
 specific CSS file, if one exists. See the contents of the `web/styles/`
 directory.
 
@@ -81,7 +81,7 @@ with its corresponding CSS selector as `.my-multiword-class`.
 
 ## Validating CSS
 
-When changing any part of the Zulip CSS, it's important to check that
+When changing any part of the Doer CSS, it's important to check that
 the new CSS looks good at a wide range of screen widths, from very
 wide screen (e.g., 1920px) all the way down to narrow phone screens
 (e.g., 480px).
@@ -115,7 +115,7 @@ found [here][jconditionals].
 
 The context for Jinja2 templates is assembled from a couple places:
 
-- `zulip_default_context` in `zerver/context_processors.py`. This is
+- `doer_default_context` in `zerver/context_processors.py`. This is
   the default context available to all Jinja2 templates.
 
 - As an argument in the `render` call in the relevant function that
@@ -141,7 +141,7 @@ wherever possible).
 The syntax for using conditionals and other common structures can be
 found [here][hconditionals].
 
-There's no equivalent of `zulip_default_context` for the Handlebars
+There's no equivalent of `doer_default_context` for the Handlebars
 templates.
 
 ### Toolchain
@@ -158,12 +158,12 @@ developers) should be tagged for [translation][trans].
 
 ### Tooltips
 
-Zulip uses [TippyJS](https://atomiks.github.io/tippyjs/) for its tooltips.
+Doer uses [TippyJS](https://atomiks.github.io/tippyjs/) for its tooltips.
 
 ## Static asset pipeline
 
 This section documents additional information that may be useful when
-developing new features for Zulip that require front-end changes,
+developing new features for Doer that require front-end changes,
 especially those that involve adding new files. For a more general
 overview, see the [new feature tutorial](../tutorials/new-feature-tutorial.md).
 
@@ -172,7 +172,7 @@ relevant background as well.
 
 ### Primary build process
 
-Zulip's frontend is primarily JavaScript in the `web/src` directory;
+Doer's frontend is primarily JavaScript in the `web/src` directory;
 we are working on migrating these to TypeScript modules. Stylesheets
 are written in CSS extended by various PostCSS plugins; they are
 converted from plain CSS, and we have yet to take full advantage of
@@ -185,7 +185,7 @@ In development mode, bundles are built and served on the fly using
 webpack-dev-server with live reloading. In production mode (and when creating a
 release tarball using `tools/build-release-tarball`), the
 `tools/update-prod-static` tool (called by both `tools/build-release-tarball`
-and `tools/upgrade-zulip-from-git`) is responsible for orchestrating the
+and `tools/upgrade-doer-from-git`) is responsible for orchestrating the
 webpack build, JS minification and a host of other steps for getting the assets
 ready for deployment.
 
@@ -243,7 +243,7 @@ If you want to test minified files in development, look for the
 
 A few useful notes are:
 
-- Zulip installs static assets in production in
+- Doer installs static assets in production in
   `/home/zulip/prod-static`. When a new version is deployed, before the
   server is restarted, files are copied into that directory.
 - We use the VFL (versioned file layout) strategy, where each file in
@@ -294,10 +294,10 @@ module with `let _ = require("lodash")`. This mechanism is **not** a
 stable API and should not be used for any purpose other than
 interactive debugging.
 
-We have one module, `zulip_test`, that’s exposed as a global variable
+We have one module, `doer_test`, that’s exposed as a global variable
 using `expose-loader` for direct use in Puppeteer tests and in the
 production browser console. If you need to access a variable or
-function in those scenarios, add it to `zulip_test`. This is also
+function in those scenarios, add it to `doer_test`. This is also
 **not** a stable API.
 
 [jinja2]: http://jinja.pocoo.org/

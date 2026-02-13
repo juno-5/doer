@@ -6,12 +6,12 @@ from django.http import HttpRequest, HttpResponse
 from django.template.loader import render_to_string
 from django.utils.timezone import now as timezone_now
 
-from zerver.decorator import zulip_login_required
+from zerver.decorator import doer_login_required
 from zerver.lib.digest import DIGEST_CUTOFF, get_digest_context
 from zerver.lib.send_email import get_inliner_instance
 
 
-@zulip_login_required
+@doer_login_required
 def digest_page(request: HttpRequest) -> HttpResponse:
     user_profile = request.user
     assert user_profile.is_authenticated

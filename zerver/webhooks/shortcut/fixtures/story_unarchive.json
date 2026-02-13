@@ -11,7 +11,7 @@
             "action":"update",
             "name":"Story 2",
             "story_type":"feature",
-            "app_url":"https://app.shortcut.com/zulip/story/9",
+            "app_url":"https://app.shortcut.com/doer/story/9",
             "changes":{
                 "archived":{
                     "new":false,

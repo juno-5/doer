@@ -23,7 +23,7 @@ from zerver.lib.webhooks.common import check_send_webhook_message, get_setup_web
 from zerver.models import UserProfile
 
 FILE_LINK_TEMPLATE = "\n*[{file_name}]({file_link})*"
-ZULIP_MESSAGE_TEMPLATE = "**{sender}**: {text}"
+DOER_MESSAGE_TEMPLATE = "**{sender}**: {text}"
 VALID_OPTIONS = {"SHOULD_NOT_BE_MAPPED": "0", "SHOULD_BE_MAPPED": "1"}
 
 SlackFileListT: TypeAlias = list[dict[str, str]]
@@ -32,7 +32,7 @@ SlackAPIResponseT: TypeAlias = dict[str, Any]
 SLACK_CHANNELMENTION_REGEX = r"(?<=<#)(.*)(?=>)"
 
 
-def is_zulip_slack_bridge_bot_message(payload: WildValue) -> bool:
+def is_doer_slack_bridge_bot_message(payload: WildValue) -> bool:
     app_api_id = payload.get("api_app_id").tame(check_none_or(check_string))
     bot_app_id = (
         payload.get("event", {})
@@ -76,13 +76,13 @@ def convert_slack_user_and_channel_mentions(text: str, app_token: str) -> str:
         )
         if slack_usermention_match:
             # Convert Slack user mentions to a mention-like syntax since there
-            # is no way to map Slack and Zulip users.
+            # is no way to map Slack and Doer users.
             slack_id = slack_usermention_match.group(2)
             user_name = get_slack_sender_name(user_id=slack_id, token=app_token)
             tokens[iterator] = "@**" + user_name + "**"
         elif slack_channelmention_match:
             # Convert Slack channel mentions to a mention-like syntax so that
-            # a mention isn't triggered for a Zulip channel with the same name.
+            # a mention isn't triggered for a Doer channel with the same name.
             channel_info: list[str] = slack_channelmention_match.group(0).split("|")
             channel_name = channel_info[1]
             tokens[iterator] = (
@@ -92,11 +92,11 @@ def convert_slack_user_and_channel_mentions(text: str, app_token: str) -> str:
     return text
 
 
-# This is a modified version of `convert_to_zulip_markdown` in
+# This is a modified version of `convert_to_doer_markdown` in
 # `slack_message_conversion.py`, which cannot be used directly
 # due to differences in the Slack import data and Slack webhook
 # payloads.
-def convert_to_zulip_markdown(text: str, slack_app_token: str) -> str:
+def convert_to_doer_markdown(text: str, slack_app_token: str) -> str:
     text = convert_slack_formatting(text)
     text = convert_slack_workspace_mentions(text)
     text = convert_slack_user_and_channel_mentions(text, slack_app_token)
@@ -115,7 +115,7 @@ def convert_raw_file_data(file_dict: WildValue) -> SlackFileListT:
 
 
 def get_message_body(text: str, sender: str, files: SlackFileListT) -> str:
-    body = ZULIP_MESSAGE_TEMPLATE.format(sender=sender, text=text)
+    body = DOER_MESSAGE_TEMPLATE.format(sender=sender, text=text)
     for file in files:
         body += FILE_LINK_TEMPLATE.format(**file)
     return body
@@ -171,7 +171,7 @@ below to see if you're missing anything:
 
 Error: {error_message}
 
-Feel free to reach out to the [Zulip development community](https://chat.zulip.org/#narrow/channel/127-integrations)
+Feel free to reach out to the [Doer development community](https://chat.zulip.org/#narrow/channel/127-integrations)
 if you need further help!
 """
 
@@ -249,9 +249,9 @@ def api_slack_webhook(
     if is_retry_call_from_slack(request):
         return json_success(request)
 
-    # Prevent any Zulip messages sent through the Slack Bridge from looping
+    # Prevent any Doer messages sent through the Slack Bridge from looping
     # back here.
-    if is_zulip_slack_bridge_bot_message(payload):
+    if is_doer_slack_bridge_bot_message(payload):
         return json_success(request)
 
     event_dict = payload.get("event", {})
@@ -263,7 +263,7 @@ def api_slack_webhook(
     raw_files = event_dict.get("files")
     files = convert_raw_file_data(raw_files) if raw_files else []
     raw_text = event_dict.get("text", "").tame(check_string)
-    text = convert_to_zulip_markdown(raw_text, slack_app_token)
+    text = convert_to_doer_markdown(raw_text, slack_app_token)
     user_id = event_dict.get("user").tame(check_none_or(check_string))
     if user_id is None:
         # This is likely a Slack integration bot message. The sender of these

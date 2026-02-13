@@ -235,8 +235,8 @@ export function dispatch_normal_event(event) {
             break;
 
         case "restart":
-            realm.zulip_version = event.zulip_version;
-            realm.zulip_merge_base = event.zulip_merge_base;
+            realm.doer_version = event.doer_version;
+            realm.doer_merge_base = event.doer_merge_base;
             break;
 
         case "web_reload_client": {
@@ -331,7 +331,7 @@ export function dispatch_normal_event(event) {
                 enable_spectator_access: noop,
                 send_channel_events_messages: noop,
                 signup_announcements_stream_id: noop,
-                zulip_update_announcements_stream_id: noop,
+                doer_update_announcements_stream_id: noop,
                 emails_restricted_to_domains: noop,
                 video_chat_provider: compose_call_ui.update_audio_and_video_chat_button_display,
                 jitsi_server_url: compose_call_ui.update_audio_and_video_chat_button_display,
@@ -749,9 +749,9 @@ export function dispatch_normal_event(event) {
                         if (realm.realm_signup_announcements_stream_id === stream_id) {
                             settings_org.sync_realm_settings("signup_announcements_stream_id");
                         }
-                        if (realm.realm_zulip_update_announcements_stream_id === stream_id) {
+                        if (realm.realm_doer_update_announcements_stream_id === stream_id) {
                             settings_org.sync_realm_settings(
-                                "zulip_update_announcements_stream_id",
+                                "doer_update_announcements_stream_id",
                             );
                         }
                         const message_ids = message_store.get_message_ids_in_stream(stream_id);

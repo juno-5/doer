@@ -124,16 +124,16 @@ class GitlabHookTests(WebhookTestCase):
         )
 
     def test_create_issue_with_two_assignees_event_message(self) -> None:
-        expected_subject = "Zulip GitLab Test / issue #2 Zulip Test Issue 2"
-        expected_message = "Adam Birds created [issue #2](https://gitlab.com/adambirds/zulip-gitlab-test/issues/2) (assigned to Adam Birds and Eeshan Garg):\n\n~~~ quote\nZulip Test Issue 2\n~~~"
+        expected_subject = "Doer GitLab Test / issue #2 Doer Test Issue 2"
+        expected_message = "Adam Birds created [issue #2](https://gitlab.com/adambirds/doer-gitlab-test/issues/2) (assigned to Adam Birds and Eeshan Garg):\n\n~~~ quote\nZulip Test Issue 2\n~~~"
 
         self.check_webhook(
             "issue_hook__issue_created_with_two_assignees", expected_subject, expected_message
         )
 
     def test_create_issue_with_three_assignees_event_message(self) -> None:
-        expected_subject = "Zulip GitLab Test / issue #2 Zulip Test Issue 2"
-        expected_message = "Adam Birds created [issue #2](https://gitlab.com/adambirds/zulip-gitlab-test/issues/2) (assigned to Adam Birds, Eeshan Garg and Tim Abbott):\n\n~~~ quote\nZulip Test Issue 2\n~~~"
+        expected_subject = "Doer GitLab Test / issue #2 Doer Test Issue 2"
+        expected_message = "Adam Birds created [issue #2](https://gitlab.com/adambirds/doer-gitlab-test/issues/2) (assigned to Adam Birds, Eeshan Garg and Tim Abbott):\n\n~~~ quote\nZulip Test Issue 2\n~~~"
 
         self.check_webhook(
             "issue_hook__issue_created_with_three_assignees", expected_subject, expected_message
@@ -226,20 +226,20 @@ class GitlabHookTests(WebhookTestCase):
         )
 
     def test_note_commit_event_message(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/commit/82689ddf00fd7bdadb5c2afb3b94bd555edc9d01#note_1406241063) on [82689ddf00f](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/commit/82689ddf00fd7bdadb5c2afb3b94bd555edc9d01):\n~~~ quote\nWow what a beautiful commit.\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/commit/82689ddf00fd7bdadb5c2afb3b94bd555edc9d01#note_1406241063) on [82689ddf00f](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/commit/82689ddf00fd7bdadb5c2afb3b94bd555edc9d01):\n~~~ quote\nWow what a beautiful commit.\n~~~"
 
         self.check_webhook("note_hook__commit_note", expected_topic_name, expected_message)
 
     def test_note_merge_request_event_message(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration / MR #1 add new-feature"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/merge_requests/1#note_1406328457):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration / MR #1 add new-feature"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/merge_requests/1#note_1406328457):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
 
         self.check_webhook("note_hook__merge_request_note", expected_topic_name, expected_message)
 
     def test_note_merge_request_event_message_without_merge_request_title(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration / MR #1"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/merge_requests/1#note_1406328457):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration / MR #1"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/merge_requests/1#note_1406328457):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
         # To keep things as valid JSON.
         self.url = self.build_webhook_url(use_merge_request_title="false")
         self.check_webhook("note_hook__merge_request_note", expected_topic_name, expected_message)
@@ -247,39 +247,39 @@ class GitlabHookTests(WebhookTestCase):
     def test_note_merge_request_with_custom_topic_in_url(self) -> None:
         self.url = self.build_webhook_url(topic="notifications")
         expected_topic_name = "notifications"
-        expected_message = "[[testing-zulip-gitlab-integration](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/merge_requests/1#note_1406328457) on [MR #1 add new-feature](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/merge_requests/1):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
+        expected_message = "[[testing-doer-gitlab-integration](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/merge_requests/1#note_1406328457) on [MR #1 add new-feature](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/merge_requests/1):\n\n~~~ quote\nI am not sure if this new feature is even required or not.\n~~~"
 
         self.check_webhook("note_hook__merge_request_note", expected_topic_name, expected_message)
 
     def test_note_issue_event_message(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration / issue #1 Add more lines"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1#note_1406279810):\n\n~~~ quote\nThis is again a random comment.\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration / issue #1 Add more lines"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1#note_1406279810):\n\n~~~ quote\nThis is again a random comment.\n~~~"
 
         self.check_webhook("note_hook__issue_note", expected_topic_name, expected_message)
 
     def test_note_design_event_message(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration / design Screenshot.png"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1/designs/Screenshot.png#note_1458583152):\n\n~~~ quote\nhello\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration / design Screenshot.png"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1/designs/Screenshot.png#note_1458583152):\n\n~~~ quote\nhello\n~~~"
 
         self.check_webhook("note_hook__design_note", expected_topic_name, expected_message)
 
     def test_note_confidential_issue_event_message(self) -> None:
-        expected_subject = "testing-zulip-gitlab-integration / issue #1 Add more lines"
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1#note_1406130881):\n\n~~~ quote\nSome more comments\n~~~"
+        expected_subject = "testing-doer-gitlab-integration / issue #1 Add more lines"
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1#note_1406130881):\n\n~~~ quote\nSome more comments\n~~~"
 
         self.check_webhook("note_hook__confidential_issue_note", expected_subject, expected_message)
 
     def test_note_issue_with_custom_topic_in_url(self) -> None:
         self.url = self.build_webhook_url(topic="notifications")
         expected_topic_name = "notifications"
-        expected_message = "[[testing-zulip-gitlab-integration](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1#note_1406279810) on [issue #1 Add more lines](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1):\n\n~~~ quote\nThis is again a random comment.\n~~~"
+        expected_message = "[[testing-doer-gitlab-integration](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1#note_1406279810) on [issue #1 Add more lines](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1):\n\n~~~ quote\nThis is again a random comment.\n~~~"
 
         self.check_webhook("note_hook__issue_note", expected_topic_name, expected_message)
 
     def test_note_design_with_custom_topic_in_url(self) -> None:
         self.url = self.build_webhook_url(topic="notifications")
         expected_topic_name = "notifications"
-        expected_message = "[[testing-zulip-gitlab-integration](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1/designs/Screenshot.png#note_1458583152) on design [Screenshot.png](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/issues/1/designs/Screenshot.png):\n\n~~~ quote\nhello\n~~~"
+        expected_message = "[[testing-doer-gitlab-integration](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1/designs/Screenshot.png#note_1458583152) on design [Screenshot.png](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/issues/1/designs/Screenshot.png):\n\n~~~ quote\nhello\n~~~"
 
         self.check_webhook("note_hook__design_note", expected_topic_name, expected_message)
 
@@ -290,15 +290,15 @@ class GitlabHookTests(WebhookTestCase):
         self.check_webhook("note_hook__snippet_note_old", expected_topic_name, expected_message)
 
     def test_note_snippet_event_message(self) -> None:
-        expected_topic_name = "testing-zulip-gitlab-integration / snippet #2547713 a ver..."
-        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/snippets/2547713#note_1424268837):\n\n~~~ quote\nsome comment\n~~~"
+        expected_topic_name = "testing-doer-gitlab-integration / snippet #2547713 a ver..."
+        expected_message = "Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/snippets/2547713#note_1424268837):\n\n~~~ quote\nsome comment\n~~~"
 
         self.check_webhook("note_hook__snippet_note", expected_topic_name, expected_message)
 
     def test_note_snippet_with_custom_topic_in_url(self) -> None:
         self.url = self.build_webhook_url(topic="notifications")
         expected_topic_name = "notifications"
-        expected_message = "[[testing-zulip-gitlab-integration](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/snippets/2547713#note_1424268837) on [snippet #2547713 a very new new feature](https://gitlab.com/sbansal1999/testing-zulip-gitlab-integration/-/snippets/2547713):\n\n~~~ quote\nsome comment\n~~~"
+        expected_message = "[[testing-doer-gitlab-integration](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration)] Satyam Bansal [commented](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/snippets/2547713#note_1424268837) on [snippet #2547713 a very new new feature](https://gitlab.com/sbansal1999/testing-doer-gitlab-integration/-/snippets/2547713):\n\n~~~ quote\nsome comment\n~~~"
 
         self.check_webhook("note_hook__snippet_note", expected_topic_name, expected_message)
 
@@ -516,7 +516,7 @@ A trivial change that should probably be ignored.
         )
 
     def test_pipeline_succeeded_with_artifacts_event_message(self) -> None:
-        expected_topic_name = "onlysomeproject / test/links-in-zulip-pipeline-message"
+        expected_topic_name = "onlysomeproject / test/links-in-doer-pipeline-message"
         expected_message = "[Pipeline (22668)](https://gitlab.example.com/group1/onlysomeproject/-/pipelines/22668) changed status to success with build(s):\n* [cleanup:cleanup docker image](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58592) - success\n* [pages](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58591) - success\n  * built artifact: *artifacts.zip* [[Browse](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58591/artifacts/browse)|[Download](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58591/artifacts/download)]\n* [black+pytest:future environment](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58590) - success\n* [docs:anaconda environment](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58589) - success\n  * built artifact: *sphinx-docs.zip* [[Browse](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58589/artifacts/browse)|[Download](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58589/artifacts/download)]\n* [pytest:current environment](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58588) - success\n* [black:current environment](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58587) - success\n* [setup:docker image](https://gitlab.example.com/group1/onlysomeproject/-/jobs/58586) - success."
 
         self.check_webhook(

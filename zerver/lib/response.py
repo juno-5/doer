@@ -144,7 +144,7 @@ def json_response_from_error(exception: JsonableError) -> MutableJsonResponse:
 class AsynchronousResponse(HttpResponse):
     """
     This response is just a sentinel to be discarded by Tornado and replaced
-    with a real response later; see zulip_finish.
+    with a real response later; see doer_finish.
     """
 
     status_code = 399

@@ -1,6 +1,6 @@
-# Zulip UptimeRobot integration
+# Doer UptimeRobot integration
 
-Receive Zulip notifications from UptimeRobot!
+Receive Doer notifications from UptimeRobot!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Receive Zulip notifications from UptimeRobot!
 1. On UptimeRobot, go to **My Settings**, and select **Add Alert Contact**.
 
 1. Set **Alert Contact Type** to **webhook**, set **Friendly Name** to
-   a name of your choice, such as `Zulip`, and set **URL to notify** to the
+   a name of your choice, such as `Doer`, and set **URL to notify** to the
    URL generated above.
 
 1. Under **POST Value (JSON Format)**, select **Send as JSON (application/json)**,

@@ -43,7 +43,7 @@
         "closed_at": null,
         "author_association": "OWNER",
         "active_lock_reason": null,
-        "body": "This is some random Issue description which will be used to test the Zulip GitHub Integration.",
+        "body": "This is some random Issue description which will be used to test the Doer GitHub Integration.",
         "reactions": {
             "url": "https://api.github.com/repos/sbansal1999/testing-gh/issues/9/reactions",
             "total_count": 0,

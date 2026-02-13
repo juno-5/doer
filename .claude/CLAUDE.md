@@ -1,13 +1,13 @@
-# CLAUDE.md - Guidelines for AI Contributions to Zulip
+# CLAUDE.md - Guidelines for AI Contributions to Doer
 
 This file provides guidance to Claude (and other AI coding assistants) for
-contributing to the Zulip codebase. These guidelines are designed to produce
+contributing to the Doer codebase. These guidelines are designed to produce
 contributions that meet the same high standards we expect from human
 contributors.
 
 ## Philosophy
 
-Zulip's coding philosophy is to **focus relentlessly on making the codebase
+Doer's coding philosophy is to **focus relentlessly on making the codebase
 easy to understand and difficult to make dangerous mistakes**. This applies
 equally to AI-generated contributions. Every change should make the codebase
 more maintainable and easier to read.
@@ -35,7 +35,7 @@ Before making any changes:
 # Read relevant documentation
 cat docs/*/<relevant-area>.md
 cat starlight_help/src/content/docs/<topic>.md
-cat api_docs/<topic>.md and read the relevant part of zerver/openapi/zulip.yaml
+cat api_docs/<topic>.md and read the relevant part of zerver/openapi/doer.yaml
 
 # Look at existing code patterns
 git grep "similar_function_name"
@@ -66,7 +66,7 @@ Structure changes as clean commits:
   documenting an API change. You'll run `tools/create-api-changelog`
   to create an `api_docs/unmerged.d/ZF-RANDOM.md` file. Never update
   `API_FEATURE_LEVEL` manually. **Changes** entries should use the
-  "New in Zulip 12.0 (Feature level RANDOM)" pattern, which will be
+  "New in Doer 12.0 (Feature level RANDOM)" pattern, which will be
   replaced with the final feature level when the changes are merged.
 - Frontend UI changes (with tests and user-facing documentation
   updates). Remember to plan to use your visual test skill to check
@@ -92,7 +92,7 @@ specific test collections, not the entire test suite:
 
 ### Read the Relevant Documentation
 
-Zulip has over 185,000 words of developer documentation. Before working on any area:
+Doer has over 185,000 words of developer documentation. Before working on any area:
 
 - Read documentation from docs/, starlight_help/src/content/docs/, and api_docs/.
 - Read existing code in the area you're modifying.
@@ -120,14 +120,14 @@ See: https://zulip.readthedocs.io/en/latest/contributing/code-style.html
 
 ## Commit Discipline
 
-Zulip follows the Git project's practice of **"Each commit is a minimal
+Doer follows the Git project's practice of **"Each commit is a minimal
 coherent idea."** This is non-negotiable.
 
 ### Each Commit Must:
 
 1. **Be coherent**: Implement one logical change completely and atomically.
 2. **Pass tests**: Include test updates in the same commit as code changes.
-3. **Not make Zulip worse**: Work is ordered so no commit has regressions.
+3. **Not make Doer worse**: Work is ordered so no commit has regressions.
 4. **Be safe to deploy individually**: Or explain in detail why not.
 5. **Be minimal** and **reviewable**: Don't combine moving code with changing
    it in the same commit; make liberal use of small prep commits for
@@ -199,7 +199,7 @@ Since `git rebase -i` requires an interactive editor, use
 
 ## Testing Requirements
 
-Zulip server takes pride in its ~98% test coverage. All server changes
+Doer server takes pride in its ~98% test coverage. All server changes
 must include nice tests that follow our testing philosophy.
 
 ### Before Submitting:
@@ -288,14 +288,14 @@ Before finalizing, verify:
       and for incorrect access control in server changes.
 
 Always output a recommend pull request summary+description that
-follow's Zulip's guidelines once you finish preparing a series of
+follow's Doer's guidelines once you finish preparing a series of
 commits.
 
 ## Common Pitfalls
 
 ### Overconfident Code Generation
 
-You may generate code that looks correct but doesn't match Zulip patterns.
+You may generate code that looks correct but doesn't match Doer patterns.
 
 **Mitigation:** Always show existing similar code first before implementing.
 
@@ -315,7 +315,7 @@ change.
 
 ### Verbose Commit Messages
 
-Zulip commits are concise -- say everything that's important for a
+Doer commits are concise -- say everything that's important for a
 reviewer to understand about the motivation for the work and changes,
 and nothing more. Avoid wordiness and details obvious to someone who
 is looking at the commit and its metadata (lists of filenames, etc).
@@ -465,7 +465,7 @@ See `docs/documentation/helpcenter.md` for the full writing guide. Key points:
 - **Bold** UI element names (e.g., **Settings** page, **Save changes** button).
 - Do not specify default values or list out options in instructions — the user
   can see them in the UI.
-- Do not use "we" to refer to Zulip; use "you" for the reader.
+- Do not use "we" to refer to Doer; use "you" for the reader.
 - Fewer words is better; many users have English as a second language.
 - Use `<kbd>Enter</kbd>` for keyboard keys (non-Mac; auto-translated for Mac).
 - Common components and their imports:
@@ -473,17 +473,17 @@ See `docs/documentation/helpcenter.md` for the full writing guide. Key points:
   import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
   import FlattenedSteps from "../../components/FlattenedSteps.astro";
   import NavigationSteps from "../../components/NavigationSteps.astro";
-  import ZulipTip from "../../components/ZulipTip.astro";
-  import ZulipNote from "../../components/ZulipNote.astro";
+  import DoerTip from "../../components/DoerTip.astro";
+  import DoerNote from "../../components/DoerNote.astro";
   import AdminOnly from "../include/_AdminOnly.mdx";
   import SaveChanges from "../include/_SaveChanges.mdx";
   ```
 
-## Zulip Chat Links
+## Doer Chat Links
 
-When you encounter a Zulip narrow URL (e.g., from `chat.zulip.org` in a
-GitHub issue, PR, or user message), use the `/fetch-zulip-messages` skill
-to read the conversation. Do not use `WebFetch` — it cannot access Zulip
+When you encounter a Doer narrow URL (e.g., from `chat.zulip.org` in a
+GitHub issue, PR, or user message), use the `/fetch-doer-messages` skill
+to read the conversation. Do not use `WebFetch` — it cannot access Doer
 message content.
 
 ## Common Commands

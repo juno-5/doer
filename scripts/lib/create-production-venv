@@ -4,12 +4,12 @@ import os
 import platform
 import sys
 
-ZULIP_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if ZULIP_PATH not in sys.path:
-    sys.path.append(ZULIP_PATH)
+DOER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if DOER_PATH not in sys.path:
+    sys.path.append(DOER_PATH)
 
 from scripts.lib.setup_venv import get_venv_dependencies
-from scripts.lib.zulip_tools import os_families, run
+from scripts.lib.doer_tools import os_families, run
 
 parser = argparse.ArgumentParser(description="Create a production virtualenv with caching")
 parser.add_argument("deploy_path")
@@ -28,7 +28,7 @@ else:
     print("Unsupported platform: {}".format(distro_info["ID"]))
     sys.exit(1)
 
-os.chdir(ZULIP_PATH)
+os.chdir(DOER_PATH)
 run(["scripts/lib/install-uv"])
 run(
     ["uv", "sync", "--frozen", "--only-group=prod"],

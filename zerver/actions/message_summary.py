@@ -45,8 +45,8 @@ def ai_stats_finish() -> None:
     ai_total_time += time.time() - ai_time_start
 
 
-def format_zulip_messages_for_model(zulip_messages: list[dict[str, Any]]) -> str:
-    # Format the Zulip messages for processing by the model.
+def format_doer_messages_for_model(doer_messages: list[dict[str, Any]]) -> str:
+    # Format the Doer messages for processing by the model.
     #
     # - We don't need to encode the recipient, since that's the same for
     #   every message in the conversation.
@@ -60,11 +60,11 @@ def format_zulip_messages_for_model(zulip_messages: list[dict[str, Any]]) -> str
     #   the emoji themselves or just the counter).
     # - Polls/TODO widgets are currently sent to the model as empty messages,
     #   since this logic doesn't inspect SubMessage objects.
-    zulip_messages_list = [
+    doer_messages_list = [
         {"sender": message["sender_full_name"], "content": message["content"]}
-        for message in zulip_messages
+        for message in doer_messages
     ]
-    return orjson.dumps(zulip_messages_list).decode()
+    return orjson.dumps(doer_messages_list).decode()
 
 
 def make_message(content: str, role: str = "user") -> dict[str, str]:
@@ -132,7 +132,7 @@ def do_summarize_narrow(
     # is primarily trained on English.
     conversation_length = len(message_list)
     max_summary_length = get_max_summary_length(conversation_length)
-    intro = "The following is a chat conversation in the Zulip team chat app."
+    intro = "The following is a chat conversation in the Doer team chat app."
     topic: str | None = None
     channel: str | None = None
     if narrow and len(narrow) == 2:
@@ -147,12 +147,12 @@ def do_summarize_narrow(
     if topic:
         intro += f", topic: {topic}"
 
-    formatted_conversation = format_zulip_messages_for_model(message_list)
+    formatted_conversation = format_doer_messages_for_model(message_list)
     prompt = (
         f"Succinctly summarize this conversation based only on the information provided, "
         f"in up to {max_summary_length} sentences, for someone who is familiar with the context. "
         f"Mention key conclusions and actions, if any. Refer to specific people as appropriate. "
-        f"Don't use an intro phrase. You can use Zulip's CommonMark based formatting."
+        f"Don't use an intro phrase. You can use Doer's CommonMark based formatting."
     )
     messages = [
         make_message(intro, "system"),

@@ -112,13 +112,13 @@ export const topic_visibility_policy_tooltip_props = {
             // the message header instead of the button itself. This results in
             // the need for a different logic to extract the required data.
             should_render_privacy_icon = $elem
-                .children(".zulip-icon")
-                .hasClass("zulip-icon-inherit");
+                .children(".doer-icon")
+                .hasClass("doer-icon-inherit");
             current_stream_obj = stream_data.get_sub_by_id(
                 Number($elem.closest(".message_header").attr("data-stream-id")),
             );
         } else {
-            should_render_privacy_icon = $elem.hasClass("zulip-icon-inherit");
+            should_render_privacy_icon = $elem.hasClass("doer-icon-inherit");
             current_stream_obj = stream_data.get_sub_by_id(
                 Number($elem.parent().attr("data-stream-id")),
             );
@@ -142,19 +142,19 @@ export function initialize(): void {
     $("#tooltip-templates-container").html(render_tooltip_templates());
 
     // Our default tooltip configuration. For this, one simply needs to:
-    // * Set `class="tippy-zulip-tooltip"` on an element for enable this.
+    // * Set `class="tippy-doer-tooltip"` on an element for enable this.
     // * Set `data-tippy-content="{{t 'Tooltip content' }}"`, often
     //   replacing a `title` attribute on an element that had both.
     // * Set placement; we typically use `data-tippy-placement="top"`.
     tippy.delegate("body", {
-        target: ".tippy-zulip-tooltip",
+        target: ".tippy-doer-tooltip",
     });
 
-    // variant of tippy-zulip-tooltip above having delay=LONG_HOVER_DELAY,
+    // variant of tippy-doer-tooltip above having delay=LONG_HOVER_DELAY,
     // default placement="top" with fallback placement="bottom",
     // and appended to body
     tippy.delegate("body", {
-        target: ".tippy-zulip-delayed-tooltip",
+        target: ".tippy-doer-delayed-tooltip",
         // Disable trigger on focus, to avoid displaying on-click.
         trigger: "mouseenter",
         delay: LONG_HOVER_DELAY,
@@ -212,7 +212,7 @@ export function initialize(): void {
     // The below definitions are for specific tooltips that require
     // custom JavaScript code or configuration.  Note that since the
     // below specify the target directly, elements using those should
-    // not have the tippy-zulip-tooltip class.
+    // not have the tippy-doer-tooltip class.
 
     tippy.delegate("body", {
         target: ".draft-selection-tooltip",
@@ -309,7 +309,7 @@ export function initialize(): void {
         target: [
             "#scroll-to-bottom-button-clickable-area",
             ".spectator_narrow_login_button",
-            ".error-icon-message-recipient .zulip-icon",
+            ".error-icon-message-recipient .doer-icon",
             "#personal-menu-dropdown .status-circle",
             ".popover-group-menu-member-list .popover-group-menu-user-presence",
             ".delete-code-playground",
@@ -841,7 +841,7 @@ export function initialize(): void {
     tippy.delegate("body", {
         target: ".folder_id-dropdown-list-container .dropdown-list-manage-folder, .new_channel_folder_id-dropdown-list-container .dropdown-list-manage-folder",
         content(reference) {
-            if (reference.querySelector(".zulip-icon-preview")) {
+            if (reference.querySelector(".doer-icon-preview")) {
                 return $t({defaultMessage: "View details"});
             }
             return $t({defaultMessage: "Manage folder"});
@@ -1051,7 +1051,7 @@ export function initialize(): void {
             function show_inbox_collapse_expand_tooltip(elt: HTMLElement): void {
                 const $collapse_button = $(elt)
                     .closest(".inbox-header")
-                    .find(".collapsible-button .zulip-icon");
+                    .find(".collapsible-button .doer-icon");
                 collapse_or_expand_tooltip = tippy.default($collapse_button[0]!, {
                     showOnCreate: true,
                     trigger: "manual",

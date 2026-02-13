@@ -12,7 +12,7 @@ from typing_extensions import override
 from zerver.lib.exceptions import ApiParamValidationError, JsonableError
 from zerver.lib.request import RequestConfusingParamsError, RequestVariableMissingError
 from zerver.lib.response import MutableJsonResponse, json_success
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import HostRequestMock
 from zerver.lib.typed_endpoint import (
     ApiParamConfig,
@@ -38,7 +38,7 @@ def call_endpoint(
     return view(request, *args, **kwargs)
 
 
-class TestEndpoint(ZulipTestCase):
+class TestEndpoint(DoerTestCase):
     def test_is_optional(self) -> None:
         """This test is only needed because we don't
         have coverage of is_optional in Python 3.11.
@@ -554,7 +554,7 @@ class TestEndpoint(ZulipTestCase):
         call_endpoint(bar, HostRequestMock({"val": orjson.dumps(None).decode()}))
 
 
-class ValidationErrorHandlingTest(ZulipTestCase):
+class ValidationErrorHandlingTest(DoerTestCase):
     def test_special_handling_errors(self) -> None:
         """Test for errors that require special handling beyond an ERROR_TEMPLATES lookup.
         Not all error types need to be tested here."""

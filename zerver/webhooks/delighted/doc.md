@@ -1,7 +1,7 @@
-# Zulip Delighted integration
+# Doer Delighted integration
 
 Get notifications about updates in feedback responses organized by
-Delighted in Zulip.
+Delighted in Doer.
 
 {start_tabs}
 

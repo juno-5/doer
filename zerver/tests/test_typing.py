@@ -1,13 +1,13 @@
 import orjson
 
 from zerver.actions.streams import do_deactivate_stream, do_unarchive_stream
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.models import DirectMessageGroup
 from zerver.models.recipients import get_direct_message_group_hash
 from zerver.models.streams import get_stream
 
 
-class TypingValidateOperatorTest(ZulipTestCase):
+class TypingValidateOperatorTest(DoerTestCase):
     def test_missing_parameter(self) -> None:
         """
         Sending typing notification without op parameter fails
@@ -51,7 +51,7 @@ class TypingValidateOperatorTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid op")
 
 
-class TypingMessagetypeTest(ZulipTestCase):
+class TypingMessagetypeTest(DoerTestCase):
     def test_invalid_type(self) -> None:
         sender = self.example_user("hamlet")
         params = dict(
@@ -63,7 +63,7 @@ class TypingMessagetypeTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid type")
 
 
-class TypingValidateToArgumentsTest(ZulipTestCase):
+class TypingValidateToArgumentsTest(DoerTestCase):
     def test_invalid_to_for_direct_messages(self) -> None:
         """
         Sending dms typing notifications without 'to' as a list fails.
@@ -121,7 +121,7 @@ class TypingValidateToArgumentsTest(ZulipTestCase):
         self.assert_json_error(result, "You don't have permission to edit this message")
 
 
-class TypingValidateStreamIdTopicMessageIdArgumentsTest(ZulipTestCase):
+class TypingValidateStreamIdTopicMessageIdArgumentsTest(DoerTestCase):
     def test_missing_stream_id(self) -> None:
         """
         Sending stream typing notifications without 'stream_id' fails.
@@ -218,7 +218,7 @@ class TypingValidateStreamIdTopicMessageIdArgumentsTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid channel ID")
 
 
-class TypingHappyPathTestDirectMessages(ZulipTestCase):
+class TypingHappyPathTestDirectMessages(DoerTestCase):
     def test_valid_type_and_op_parameters(self) -> None:
         operator_type = ["start", "stop"]
         sender = self.example_user("hamlet")
@@ -444,7 +444,7 @@ class TypingHappyPathTestDirectMessages(ZulipTestCase):
         self.assertEqual(event["op"], "stop")
 
 
-class TypingHappyPathTestStreams(ZulipTestCase):
+class TypingHappyPathTestStreams(DoerTestCase):
     def test_valid_type_and_op_parameters(self) -> None:
         recipient_type_name = ["channel", "stream"]
         operator_type = ["start", "stop"]
@@ -627,7 +627,7 @@ class TypingHappyPathTestStreams(ZulipTestCase):
         self.assertEqual("start", event["op"])
 
 
-class TestSendTypingNotificationsSettings(ZulipTestCase):
+class TestSendTypingNotificationsSettings(DoerTestCase):
     def test_send_private_typing_notifications_setting(self) -> None:
         sender = self.example_user("hamlet")
         recipient_user = self.example_user("othello")

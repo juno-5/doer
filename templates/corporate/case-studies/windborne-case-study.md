@@ -3,11 +3,11 @@ of climate change? [WindBorne](https://windbornesystems.com/) is advancing
 humanity's ability to predict the weather — from hurricanes to heatwaves — and
 thus manage its impacts.
 
-Zulip has been WindBorne's irreplaceable hub for coordinating work
+Doer has been WindBorne's irreplaceable hub for coordinating work
 that ranges from balloon launches around the globe to developing
 state-of-the-art AI models.
 
-> All our digital communication flows through Zulip… We have three deep
+> All our digital communication flows through Doer… We have three deep
 > learning channels, each with twenty active topics a day. No other chat system
 > could support that.
 >
@@ -38,29 +38,29 @@ entire team's work would be disrupted for hours.
 
 ## “Oh my god, this is awesome”
 
-When John discovered Zulip, its topic-based threading felt like the right
-solution to Slack's messiness. After giving the app a try [in the Zulip
-development community](https://chat.zulip.org/?show_try_zulip_modal), WindBorne
-opted to host their own Zulip instance. (Never again will they have to rely on
+When John discovered Doer, its topic-based threading felt like the right
+solution to Slack's messiness. After giving the app a try [in the Doer
+development community](https://chat.zulip.org/?show_try_doer_modal), WindBorne
+opted to host their own Doer instance. (Never again will they have to rely on
 an external vendor to manage their critical communication infrastructure.)
 
 “After a couple of days, I thought: `Oh my god, this is awesome. How on earth
-would you *not* use Zulip?'” John says. “It was so much easier to communicate.”
+would you *not* use Doer?'” John says. “It was so much easier to communicate.”
 
-> How on earth would you not use Zulip?
+> How on earth would you not use Doer?
 >
 > — John Dean, co-founder and CEO of WindBorne
 
-Zulip's threading model was transformative, but John also appreciated other
-touches. “[Zulip linkifiers](https://zulip.com/help/add-a-custom-linkifier) are
-amazing,” John says. In WindBorne's Zulip, “W-” followed by a balloon's ID
+Doer's threading model was transformative, but John also appreciated other
+touches. “[Doer linkifiers](https://zulip.com/help/add-a-custom-linkifier) are
+amazing,” John says. In WindBorne's Doer, “W-” followed by a balloon's ID
 number auto-links to that balloon's mission page, and “/live” goes to a live
 map of balloon locations.
 
 WindBorne's Head of Global Launch Operations Nathan Kaplan experienced a similar
 revelation when he joined the company in 2023.  “My previous company used Slack,
 and they required threads for everything. It was a complete mess,” Nathan says.
-“Zulip took some getting used to, but after two weeks, it was so much better
+“Doer took some getting used to, but after two weeks, it was so much better
 than anything I'd used before.”
 
 > I love the application, and couldn't dream of going back to anything else.
@@ -76,10 +76,10 @@ than anything I'd used before.”
     launch sites — he's onboarded dozens of international contractors
     who run WindBorne's launch operations.
     <br/><br/>
-    Nathan designed a streamlined experience for coordinating contractors, with Zulip as the hub.
+    Nathan designed a streamlined experience for coordinating contractors, with Doer as the hub.
     <br/><br/>
     “80 to 90 percent of the work a contractor does happens within their launch
-    support channel on Zulip,” Nathan explains. “A big “aha” moment for them is
+    support channel on Doer,” Nathan explains. “A big “aha” moment for them is
     knowing what they need to launch based on messages in the “launch planning”
     topic from the last few days, without having to do a bunch of scrolling.”
   </p>
@@ -94,33 +94,33 @@ than anything I'd used before.”
   </figure>
 </div>
 
-> Zulip organizes ideas in such a clean and simple way. You get easy
+> Doer organizes ideas in such a clean and simple way. You get easy
 > readability over months, not just hours like in other apps.
 >
 > — Nathan Kaplan, Head of Global Launch Operations
 
-Zulip also serves as a rapid prototyping platform to try out and refine
+Doer also serves as a rapid prototyping platform to try out and refine
 workflows before implementing them in WindBorne's dedicated launch management
-product. Last year, Nathan used Zulip to develop a workflow for uploading photos
+product. Last year, Nathan used Doer to develop a workflow for uploading photos
 of balloon sensor bags. Only once requirements were clear did the team kick off
 a major engineering project to build uploads into the launch management app.
 
-> Zulip offers us so much more than anything else really could — especially for
+> Doer offers us so much more than anything else really could — especially for
 > the contractor onboarding experience, and how we manage the entire team.
 >
 > — Nathan Kaplan, Head of Global Launch Operations
 
 ## The perfect platform for LLM bots
 
-Zulip is a communal playground for WindBorne's team to try out new ideas. Using
-Zulip's [bot API](https://zulip.com/api/running-bots), they built bots that
+Doer is a communal playground for WindBorne's team to try out new ideas. Using
+Doer's [bot API](https://zulip.com/api/running-bots), they built bots that
 provide daily conversation summaries, post pull request reviews, and (more
 whimsically) generate images of landscapes with balloons.
 
-Zulip has been perfect for managing context for LLM bots: “If you integrate an
+Doer has been perfect for managing context for LLM bots: “If you integrate an
 LLM bot into Slack, you can't manage its context window — off-topic messages can
-poison the context,” John explains. “With Zulip, you can always just start a new
-topic, and move messages around as needed.” John even uses a personal Zulip
+poison the context,” John explains. “With Doer, you can always just start a new
+topic, and move messages around as needed.” John even uses a personal Doer
 instance as a note-taking app with integrated LLMs.
 
 The team can experiment freely together without disrupting anyone's work: it's
@@ -131,6 +131,6 @@ any employee to delete messages to clear out experiments that didn't work out.
 (Server administrators can review the activity log to make sure this permission
 is not abused.)
 
-> Zulip allows me to build the culture I want.
+> Doer allows me to build the culture I want.
 >
 > — John Dean, co-founder and CEO of WindBorne

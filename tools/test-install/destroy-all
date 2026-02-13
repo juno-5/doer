@@ -33,7 +33,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 lxc-ls -f \
-    | perl -lane '$_ = $F[0]; print if (/^zulip-install-/ && !/-base$/)' \
+    | perl -lane '$_ = $F[0]; print if (/^doer-install-/ && !/-base$/)' \
     | while read -r c; do
         echo "$c"
         lxc-destroy -f -n "$c"

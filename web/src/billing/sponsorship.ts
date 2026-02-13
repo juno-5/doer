@@ -45,10 +45,10 @@ function validate_data(data: helpers.FormDataObject): boolean {
         found_error = true;
     }
 
-    assert(data["plan_to_use_zulip"] !== undefined);
-    if (data["plan_to_use_zulip"].trim() === "") {
-        $("#sponsorship-plan-to-use-zulip-error").text(
-            "Description of how you plan to use Zulip cannot be blank.",
+    assert(data["plan_to_use_doer"] !== undefined);
+    if (data["plan_to_use_doer"].trim() === "") {
+        $("#sponsorship-plan-to-use-doer-error").text(
+            "Description of how you plan to use Doer cannot be blank.",
         );
         hide_submit_loading_indicator();
         found_error = true;

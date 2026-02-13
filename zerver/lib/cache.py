@@ -19,7 +19,7 @@ from django.core.cache.backends.base import BaseCache
 from django.db.models import Q, QuerySet
 from typing_extensions import ParamSpec
 
-from scripts.lib.zulip_tools import DEPLOYMENTS_DIR, get_recent_deployments
+from scripts.lib.doer_tools import DEPLOYMENTS_DIR, get_recent_deployments
 
 if TYPE_CHECKING:
     # These modules have to be imported for type annotations but

@@ -58,10 +58,10 @@ class CustomerPlanOffer(AbstractCustomerPlan):
     @staticmethod
     def name_from_tier(tier: int) -> str:
         return {
-            CustomerPlanOffer.TIER_CLOUD_STANDARD: "Zulip Cloud Standard",
-            CustomerPlanOffer.TIER_CLOUD_PLUS: "Zulip Cloud Plus",
-            CustomerPlanOffer.TIER_SELF_HOSTED_BASIC: "Zulip Basic",
-            CustomerPlanOffer.TIER_SELF_HOSTED_BUSINESS: "Zulip Business",
+            CustomerPlanOffer.TIER_CLOUD_STANDARD: "Doer Cloud Standard",
+            CustomerPlanOffer.TIER_CLOUD_PLUS: "Doer Cloud Plus",
+            CustomerPlanOffer.TIER_SELF_HOSTED_BASIC: "Doer Basic",
+            CustomerPlanOffer.TIER_SELF_HOSTED_BUSINESS: "Doer Business",
         }[tier]
 
     @property
@@ -110,12 +110,12 @@ class CustomerPlan(AbstractCustomerPlan):
     # next_invoice_date.
     next_invoice_date = models.DateTimeField(db_index=True, null=True)
 
-    # Flag to track if an email has been sent to Zulip team for delay
+    # Flag to track if an email has been sent to Doer team for delay
     # of invoicing by >= one day. Helps to send an email only once
     # and not every time when cron run.
     stale_audit_log_data_email_sent = models.BooleanField(default=False)
 
-    # Flag to track if an email has been sent to Zulip team to
+    # Flag to track if an email has been sent to Doer team to
     # review the pricing, 60 days before the end date. Helps to send
     # an email only once and not every time when cron run.
     reminder_to_review_plan_email_sent = models.BooleanField(default=False)
@@ -195,15 +195,15 @@ class CustomerPlan(AbstractCustomerPlan):
         # Stripe has a 22 character limit on the statement descriptor length.
         # https://stripe.com/docs/payments/account/statement-descriptors
         return {
-            CustomerPlan.TIER_CLOUD_STANDARD: "Zulip Cloud Standard",
-            CustomerPlan.TIER_CLOUD_PLUS: "Zulip Cloud Plus",
-            CustomerPlan.TIER_CLOUD_ENTERPRISE: "Zulip Enterprise",
-            CustomerPlan.TIER_SELF_HOSTED_BASIC: "Zulip Basic",
-            CustomerPlan.TIER_SELF_HOSTED_BUSINESS: "Zulip Business",
+            CustomerPlan.TIER_CLOUD_STANDARD: "Doer Cloud Standard",
+            CustomerPlan.TIER_CLOUD_PLUS: "Doer Cloud Plus",
+            CustomerPlan.TIER_CLOUD_ENTERPRISE: "Doer Enterprise",
+            CustomerPlan.TIER_SELF_HOSTED_BASIC: "Doer Basic",
+            CustomerPlan.TIER_SELF_HOSTED_BUSINESS: "Doer Business",
             CustomerPlan.TIER_SELF_HOSTED_COMMUNITY: "Community",
             # Complimentary access plans should never be billed through Stripe,
             # so the tier name can exceed the 22 character limit noted above.
-            CustomerPlan.TIER_SELF_HOSTED_LEGACY: "Zulip Basic (complimentary)",
+            CustomerPlan.TIER_SELF_HOSTED_LEGACY: "Doer Basic (complimentary)",
         }[tier]
 
     @property

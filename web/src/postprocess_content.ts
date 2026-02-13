@@ -43,12 +43,12 @@ export function postprocess_content(html: string): string {
     for (const elt of template.content.querySelectorAll("a")) {
         // Ensure that all external links have target="_blank"
         // rel="opener noreferrer".  This ensures that external links
-        // never replace the Zulip web app while also protecting
+        // never replace the Doer web app while also protecting
         // against reverse tabnapping attacks, without relying on the
-        // correctness of how Zulip's Markdown processor generates links.
+        // correctness of how Doer's Markdown processor generates links.
         //
         // Fragment links, which we intend to only open within the
-        // Zulip web app using our hashchange system, do not require
+        // Doer web app using our hashchange system, do not require
         // these attributes.
         const href = elt.getAttribute("href");
         if (href === null) {
@@ -186,7 +186,7 @@ export function postprocess_content(html: string): string {
         }
 
         // Replace the legacy .message_inline_image class, whose
-        // name would add confusion when Zulip supports inline
+        // name would add confusion when Doer supports inline
         // images via standard Markdown, with dedicated classes
         // for video and image previews.
         if (message_media_video) {

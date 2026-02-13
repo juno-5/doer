@@ -2,11 +2,11 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.onboarding import create_if_missing_realm_internal_bots
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """\
 Create realm internal bots if absent, in all realms.
 

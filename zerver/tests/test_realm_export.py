@@ -11,7 +11,7 @@ from analytics.models import RealmCount
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.lib.exceptions import JsonableError
 from zerver.lib.queue import queue_json_publish_rollback_unsafe
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import (
     HostRequestMock,
     create_dummy_file,
@@ -24,7 +24,7 @@ from zerver.models.realms import RealmExportSlug
 from zerver.views.realm_export import export_realm
 
 
-class RealmExportTest(ZulipTestCase):
+class RealmExportTest(DoerTestCase):
     """
     API endpoint testing covers the full end-to-end flow
     from both the S3 and local uploads perspective.
@@ -58,13 +58,13 @@ class RealmExportTest(ZulipTestCase):
                 self.captureOnCommitCallbacks(execute=True),
             ):
                 result = self.client_post("/json/export/realm")
-            self.assertTrue("INFO:root:Completed data export for zulip in " in info_logs.output[0])
+            self.assertTrue("INFO:root:Completed data export for doer in " in info_logs.output[0])
         self.assert_json_success(result)
         self.assertFalse(os.path.exists(tarball_path))
         args = mock_export.call_args_list[0][1]
         self.assertEqual(args["realm"], admin.realm)
         self.assertEqual(args["export_type"], RealmExport.EXPORT_PUBLIC)
-        self.assertTrue(os.path.basename(args["output_dir"]).startswith("zulip-export-"))
+        self.assertTrue(os.path.basename(args["output_dir"]).startswith("doer-export-"))
         self.assertEqual(args["processes"], 6)
 
         # Get the entry and test that iago initiated it.
@@ -78,7 +78,7 @@ class RealmExportTest(ZulipTestCase):
         assert export_path is not None
         assert export_path.startswith("/")
         path_id = export_path.removeprefix("/")
-        self.assertEqual(bucket.Object(path_id).get()["Body"].read(), b"zulip!")
+        self.assertEqual(bucket.Object(path_id).get()["Body"].read(), b"doer!")
 
         result = self.client_get("/json/export/realm")
         response_dict = self.assert_json_success(result)
@@ -130,7 +130,7 @@ class RealmExportTest(ZulipTestCase):
         ) -> tuple[str, dict[str, int | dict[str, int]]]:
             self.assertEqual(realm, admin.realm)
             self.assertEqual(export_type, RealmExport.EXPORT_PUBLIC)
-            self.assertTrue(os.path.basename(output_dir).startswith("zulip-export-"))
+            self.assertTrue(os.path.basename(output_dir).startswith("doer-export-"))
             self.assertEqual(processes, 6)
 
             # Check that the export shows up as in progress
@@ -160,7 +160,7 @@ class RealmExportTest(ZulipTestCase):
                 self.captureOnCommitCallbacks(execute=True),
             ):
                 result = self.client_post("/json/export/realm")
-            self.assertTrue("INFO:root:Completed data export for zulip in " in info_logs.output[0])
+            self.assertTrue("INFO:root:Completed data export for doer in " in info_logs.output[0])
         mock_export.assert_called_once()
         data = self.assert_json_success(result)
         self.assertFalse(os.path.exists(tarball_path))
@@ -177,7 +177,7 @@ class RealmExportTest(ZulipTestCase):
         assert export_path is not None
         response = self.client_get(export_path)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.getvalue(), b"zulip!")
+        self.assertEqual(response.getvalue(), b"doer!")
 
         result = self.client_get("/json/export/realm")
         response_dict = self.assert_json_success(result)
@@ -220,7 +220,7 @@ class RealmExportTest(ZulipTestCase):
         ):
             result = self.client_post("/json/export/realm")
         self.assertTrue(
-            info_logs.output[0].startswith("ERROR:root:Data export for zulip failed after ")
+            info_logs.output[0].startswith("ERROR:root:Data export for doer failed after ")
         )
         mock_export.assert_called_once()
         # This is a success because the failure is swallowed in the queue worker
@@ -265,7 +265,7 @@ class RealmExportTest(ZulipTestCase):
             info_logs.output,
             [
                 (
-                    "ERROR:zerver.worker.deferred_work:Marking export for realm zulip "
+                    "ERROR:zerver.worker.deferred_work:Marking export for realm doer "
                     "as failed due to retry -- possible OOM during export?"
                 )
             ],
@@ -312,7 +312,7 @@ class RealmExportTest(ZulipTestCase):
             result = self.client_post("/json/export/realm")
         self.assert_json_error(
             result,
-            f"The export you requested is too large for automatic processing. Please request a manual export by contacting {settings.ZULIP_ADMINISTRATOR}.",
+            f"The export you requested is too large for automatic processing. Please request a manual export by contacting {settings.DOER_ADMINISTRATOR}.",
         )
 
         # Message limit is set as 250000
@@ -321,7 +321,7 @@ class RealmExportTest(ZulipTestCase):
         result = self.client_post("/json/export/realm")
         self.assert_json_error(
             result,
-            f"The export you requested is too large for automatic processing. Please request a manual export by contacting {settings.ZULIP_ADMINISTRATOR}.",
+            f"The export you requested is too large for automatic processing. Please request a manual export by contacting {settings.DOER_ADMINISTRATOR}.",
         )
 
     def test_get_users_export_consents(self) -> None:

@@ -18,15 +18,15 @@ def flush_cache(sender: AppConfig | None, **kwargs: Any) -> None:
     cache.clear()
 
 
-def create_zulip_schema(sender: AppConfig, **kwargs: Any) -> None:  # nocoverage
+def create_doer_schema(sender: AppConfig, **kwargs: Any) -> None:  # nocoverage
     # We do this here, and not in a zerver migration, because we
     # cannot be sure that zerver migrations run _first_, of all of the
     # Django apps.  Updating `SET search_path` is just for the current
     # connection; the user's default search_path is set in the
     # zerver/0001 migrations.
     with connection.cursor() as cursor:
-        cursor.execute("CREATE SCHEMA IF NOT EXISTS zulip")
-        cursor.execute("SET search_path = zulip,public")
+        cursor.execute("CREATE SCHEMA IF NOT EXISTS doer")
+        cursor.execute("SET search_path = doer,public")
 
 
 class ZerverConfig(AppConfig):
@@ -58,4 +58,4 @@ class ZerverConfig(AppConfig):
         if settings.POST_MIGRATION_CACHE_FLUSHING:
             post_migrate.connect(flush_cache, sender=self)
 
-        pre_migrate.connect(create_zulip_schema)
+        pre_migrate.connect(create_doer_schema)

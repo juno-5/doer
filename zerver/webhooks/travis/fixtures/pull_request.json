@@ -17,7 +17,7 @@
     "notifications": {
       "email": [ ],
       "webhooks": [
-        "https://zulip.example.com/api/v1/external/travis?stream=travis&/topic=builds&api_key=abcdefg"
+        "https://doer.example.com/api/v1/external/travis?stream=travis&/topic=builds&api_key=abcdefg"
       ]
     },
     "after_success": [ ],
@@ -61,7 +61,7 @@
         "notifications": {
           "email": [ ],
           "webhooks": [
-            "https://zulip.example.com/api/v1/external/travis?stream=travis&topic=builds&api_key=abcdefg"
+            "https://doer.example.com/api/v1/external/travis?stream=travis&topic=builds&api_key=abcdefg"
           ]
         },
         "after_success": [ ],

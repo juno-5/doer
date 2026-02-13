@@ -12,11 +12,11 @@ Useful for anyone reading or reviewing a PR, in order to
 run the code and to study it with a full local set of tools.
 
 REMOTE defaults to the value of the Git config variable
-\`zulip.zulipRemote\` if set, else to \`upstream\`.
+\`doer.zulipRemote\` if set, else to \`upstream\`.
 
-If the Git config variable \`zulip.prPseudoRemote\` is set,
+If the Git config variable \`doer.prPseudoRemote\` is set,
 e.g. with:
-  git config zulip.prPseudoRemote pr
+  git config doer.prPseudoRemote pr
 then the PR branch is also recorded as a local ref, like a
 remote-tracking branch as if the PRs make up a "remote".  In
 the example, PR #1234 is recorded as \`pr/1234\`, or in full
@@ -29,8 +29,8 @@ EOF
     exit 1
 }
 
-remote_default="$(git config zulip.zulipRemote || echo upstream)"
-pseudo_remote="$(git config zulip.prPseudoRemote || echo)"
+remote_default="$(git config doer.zulipRemote || echo upstream)"
+pseudo_remote="$(git config doer.prPseudoRemote || echo)"
 
 request_id="$1"
 remote=${2:-"$remote_default"}

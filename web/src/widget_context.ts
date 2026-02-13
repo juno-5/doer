@@ -2,10 +2,10 @@ import * as message_lists from "./message_lists.ts";
 import type {Message} from "./message_store.ts";
 import * as people from "./people.ts";
 
-// The name ZulipWidgetContext (as opposed to WidgetContext)
+// The name DoerWidgetContext (as opposed to WidgetContext)
 // is intentional here, as we will eventually want to have
-// widgets live in a non-Zulip context. That's the dream.
-export class ZulipWidgetContext {
+// widgets live in a non-Doer context. That's the dream.
+export class DoerWidgetContext {
     message: Message;
     sender_id: number;
 

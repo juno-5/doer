@@ -6,9 +6,9 @@ import * as common from "./lib/common.ts";
 
 async function navigate_using_left_sidebar(page: Page, stream_name: string): Promise<void> {
     console.log("Visiting #" + stream_name);
-    const stream_id = await page.evaluate(() => zulip_test.get_sub("Verona")!.stream_id);
+    const stream_id = await page.evaluate(() => doer_test.get_sub("Verona")!.stream_id);
     await page.click(`.narrow-filter[data-stream-id="${stream_id}"] .stream-name`);
-    await page.waitForSelector("#message_view_header .zulip-icon-hashtag", {visible: true});
+    await page.waitForSelector("#message_view_header .doer-icon-hashtag", {visible: true});
 }
 
 async function open_menu(page: Page): Promise<void> {
@@ -59,18 +59,18 @@ async function navigate_to_private_messages(page: Page): Promise<void> {
     await page.waitForSelector(all_private_messages_icon, {visible: true});
     await page.click(all_private_messages_icon);
 
-    await page.waitForSelector("#message_view_header .zulip-icon-user", {visible: true});
+    await page.waitForSelector("#message_view_header .doer-icon-user", {visible: true});
 }
 
 async function test_reload_hash(page: Page): Promise<void> {
-    const initial_page_load_time = await page.evaluate(() => zulip_test.page_load_time);
+    const initial_page_load_time = await page.evaluate(() => doer_test.page_load_time);
     assert.ok(initial_page_load_time !== undefined);
     console.log(`initial load time: ${initial_page_load_time}`);
 
     const initial_hash = await page.evaluate(() => window.location.hash);
 
     await page.evaluate(() => {
-        zulip_test.initiate_reload({immediate: true});
+        doer_test.initiate_reload({immediate: true});
     });
     await page.waitForNavigation();
     const message_list_id = await common.get_current_msg_list_id(page, true);
@@ -78,7 +78,7 @@ async function test_reload_hash(page: Page): Promise<void> {
         visible: true,
     });
 
-    const page_load_time = await page.evaluate(() => zulip_test.page_load_time);
+    const page_load_time = await page.evaluate(() => doer_test.page_load_time);
     assert.ok(page_load_time !== undefined);
     assert.ok(page_load_time > initial_page_load_time, "Page not reloaded.");
 
@@ -94,12 +94,12 @@ async function navigation_tests(page: Page): Promise<void> {
     await navigate_using_left_sidebar(page, "Verona");
 
     await page.click("#left-sidebar-navigation-list .top_left_all_messages");
-    await page.waitForSelector("#message_view_header .zulip-icon-all-messages", {visible: true});
+    await page.waitForSelector("#message_view_header .doer-icon-all-messages", {visible: true});
 
     await navigate_to_subscriptions(page);
 
     await page.click("#left-sidebar-navigation-list .top_left_all_messages");
-    await page.waitForSelector("#message_view_header .zulip-icon-all-messages", {visible: true});
+    await page.waitForSelector("#message_view_header .doer-icon-all-messages", {visible: true});
 
     await navigate_to_settings(page);
     await navigate_to_private_messages(page);

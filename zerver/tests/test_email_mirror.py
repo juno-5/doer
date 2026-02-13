@@ -38,17 +38,17 @@ from zerver.lib.email_mirror import (
     strip_from_subject,
 )
 from zerver.lib.email_mirror_helpers import (
-    ZulipEmailForwardError,
+    DoerEmailForwardError,
     decode_email_address,
     encode_email_address,
     get_channel_email_token,
     get_email_gateway_message_string_from_address,
 )
-from zerver.lib.email_mirror_server import ZulipMessageHandler, send_to_postmaster
+from zerver.lib.email_mirror_server import DoerMessageHandler, send_to_postmaster
 from zerver.lib.email_notifications import convert_html_to_markdown
 from zerver.lib.send_email import FromAddress
 from zerver.lib.streams import ensure_stream
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import most_recent_message, most_recent_usermessage
 from zerver.models import Attachment, Recipient, Stream, UserProfile
 from zerver.models.groups import NamedUserGroup, SystemGroups
@@ -60,7 +60,7 @@ from zerver.models.users import get_system_bot
 logger_name = "zerver.lib.email_mirror"
 
 
-class TestEncodeDecode(ZulipTestCase):
+class TestEncodeDecode(DoerTestCase):
     def _assert_options(
         self,
         options: dict[str, bool],
@@ -79,7 +79,7 @@ class TestEncodeDecode(ZulipTestCase):
         self.assertEqual(prefer_text, options.get("prefer_text", True))
 
     def test_encode_decode(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream_name = "dev. help"
         stream = ensure_stream(realm, stream_name, acting_user=None)
         hamlet = self.example_user("hamlet")
@@ -111,15 +111,15 @@ class TestEncodeDecode(ZulipTestCase):
         self._assert_options(options, show_sender=True, include_footer=True, include_quotes=True)
         self.assertEqual(token, email_token)
 
-        email_address = email_address.replace("@testserver", "@zulip.org")
-        email_address_all_options = email_address_all_options.replace("@testserver", "@zulip.org")
-        with self.assertRaises(ZulipEmailForwardError):
+        email_address = email_address.replace("@testserver", "@doer.org")
+        email_address_all_options = email_address_all_options.replace("@testserver", "@doer.org")
+        with self.assertRaises(DoerEmailForwardError):
             decode_email_address(email_address)
 
-        with self.assertRaises(ZulipEmailForwardError):
+        with self.assertRaises(DoerEmailForwardError):
             decode_email_address(email_address_all_options)
 
-        with self.settings(EMAIL_GATEWAY_EXTRA_PATTERN_HACK="@zulip.org"):
+        with self.settings(EMAIL_GATEWAY_EXTRA_PATTERN_HACK="@doer.org"):
             token, options = decode_email_address(email_address)
             self._assert_options(options)
             self.assertEqual(token, email_token)
@@ -130,13 +130,13 @@ class TestEncodeDecode(ZulipTestCase):
             )
             self.assertEqual(token, email_token)
 
-        with self.assertRaises(ZulipEmailForwardError):
+        with self.assertRaises(DoerEmailForwardError):
             decode_email_address("bogus")
 
     # Test stream name encoding changes introduced due to
-    # https://github.com/zulip/zulip/issues/9840
+    # https://github.com/doer/doer/issues/9840
     def test_encode_decode_nonlatin_alphabet_stream_name(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         stream_name = "Тестовы some ascii letters"
         stream = ensure_stream(realm, stream_name, acting_user=None)
         hamlet = self.example_user("hamlet")
@@ -161,7 +161,7 @@ class TestEncodeDecode(ZulipTestCase):
         self.assertTrue(email_address.startswith("aezc."))
 
     def test_decode_ignores_stream_name(self) -> None:
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
         hamlet = self.example_user("hamlet")
         email_token = get_channel_email_token(stream, creator=hamlet, sender=hamlet)
         stream_to_address = encode_email_address(stream.name, email_token)
@@ -172,7 +172,7 @@ class TestEncodeDecode(ZulipTestCase):
         self.assertEqual(token, email_token)
 
     def test_encode_with_show_sender(self) -> None:
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
         hamlet = self.example_user("hamlet")
         email_token = get_channel_email_token(stream, creator=hamlet, sender=hamlet)
         stream_to_address = encode_email_address(stream.name, email_token, show_sender=True)
@@ -182,7 +182,7 @@ class TestEncodeDecode(ZulipTestCase):
         self.assertEqual(token, email_token)
 
     def test_decode_prefer_text_options(self) -> None:
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
         hamlet = self.example_user("hamlet")
         email_token = get_channel_email_token(stream, creator=hamlet, sender=hamlet)
         encode_email_address(stream.name, email_token)
@@ -196,7 +196,7 @@ class TestEncodeDecode(ZulipTestCase):
         self._assert_options(options, prefer_text=False)
 
 
-class TestGetMissedMessageToken(ZulipTestCase):
+class TestGetMissedMessageToken(DoerTestCase):
     def test_get_missed_message_token(self) -> None:
         with self.settings(EMAIL_GATEWAY_PATTERN="%s@example.com"):
             address = "mm" + ("x" * 32) + "@example.com"
@@ -209,7 +209,7 @@ class TestGetMissedMessageToken(ZulipTestCase):
             # the special mm+32chars tokens.
             address = "mmathers@example.com"
             self.assertFalse(is_missed_message_address(address))
-            with self.assertRaises(ZulipEmailForwardError):
+            with self.assertRaises(DoerEmailForwardError):
                 get_missed_message_token_from_address(address)
 
             # Now test the case where we our address does not match the
@@ -218,11 +218,11 @@ class TestGetMissedMessageToken(ZulipTestCase):
             # exception.
             address = "alice@not-the-domain-we-were-expecting.com"
             self.assertFalse(is_missed_message_address(address))
-            with self.assertRaises(ZulipEmailForwardError):
+            with self.assertRaises(DoerEmailForwardError):
                 get_missed_message_token_from_address(address)
 
 
-class TestFilterFooter(ZulipTestCase):
+class TestFilterFooter(DoerTestCase):
     def test_filter_footer(self) -> None:
         text = """Test message
         --Not a delimiter--
@@ -246,7 +246,7 @@ class TestFilterFooter(ZulipTestCase):
         self.assertEqual(result, text)
 
 
-class TestStreamEmailMessages(ZulipTestCase):
+class TestStreamEmailMessages(DoerTestCase):
     def create_incoming_valid_message(
         self, msgtext: str, stream: Stream, include_quotes: bool
     ) -> EmailMessage:
@@ -296,7 +296,7 @@ class TestStreamEmailMessages(ZulipTestCase):
 
     # Test receiving an email with the address on an UnstructuredHeader
     # (e.g. Envelope-To) instead of an AddressHeader (e.g. To).
-    # https://github.com/zulip/zulip/issues/15864
+    # https://github.com/doer/doer/issues/15864
     def test_receive_stream_email_messages_other_header_success(self) -> None:
         user_profile = self.example_user("hamlet")
         self.login_user(user_profile)
@@ -523,7 +523,7 @@ I hope you enjoy reading it!
 -Glen
 
 From: John Doe johndoe@wherever
-To: A Zulip-subscribed mailing list somelist@elsewhere
+To: A Doer-subscribed mailing list somelist@elsewhere
 Subject: Some subject
 
 Here is the original email. It is full of text
@@ -652,7 +652,7 @@ and other things
         self.assertEqual(message.topic_name(), incoming_valid_message["Subject"])
 
 
-class TestChannelEmailMessagesPermissions(ZulipTestCase):
+class TestChannelEmailMessagesPermissions(DoerTestCase):
     def create_incoming_valid_message(self, channel_email_address: str) -> EmailMessage:
         incoming_valid_message = EmailMessage()
         incoming_valid_message.set_content("message body")
@@ -662,7 +662,7 @@ class TestChannelEmailMessagesPermissions(ZulipTestCase):
 
     def test_valid_sender_id(self) -> None:
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel = get_stream("Denmark", realm)
         self.login("hamlet")
 
@@ -695,7 +695,7 @@ class TestChannelEmailMessagesPermissions(ZulipTestCase):
 
     def test_creator_with_send_message_permission(self) -> None:
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel = get_stream("Denmark", realm)
 
         self.set_user_role(hamlet, UserProfile.ROLE_MODERATOR)
@@ -767,7 +767,7 @@ class TestChannelEmailMessagesPermissions(ZulipTestCase):
 
     def test_creator_without_send_message_permission(self) -> None:
         hamlet = self.example_user("hamlet")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         channel = get_stream("Denmark", realm)
 
         self.set_user_role(hamlet, UserProfile.ROLE_MODERATOR)
@@ -838,7 +838,7 @@ class TestChannelEmailMessagesPermissions(ZulipTestCase):
         )
 
 
-class TestEmailMirrorMessagesWithAttachments(ZulipTestCase):
+class TestEmailMirrorMessagesWithAttachments(DoerTestCase):
     def test_message_with_valid_attachment(self) -> None:
         user_profile = self.example_user("hamlet")
         self.login_user(user_profile)
@@ -1186,7 +1186,7 @@ class TestEmailMirrorMessagesWithAttachments(ZulipTestCase):
         self.assertEqual(list(attachment.messages.values_list("id", flat=True)), [message.id])
 
 
-class TestStreamEmailMessagesEmptyBody(ZulipTestCase):
+class TestStreamEmailMessagesEmptyBody(DoerTestCase):
     def test_receive_stream_email_messages_empty_body(self) -> None:
         # build dummy messages for stream
         # test message with empty body is not sent
@@ -1272,7 +1272,7 @@ class TestStreamEmailMessagesEmptyBody(ZulipTestCase):
         self.assertEqual(message.content, "(No email body)")
 
 
-class TestMissedMessageEmailMessages(ZulipTestCase):
+class TestMissedMessageEmailMessages(DoerTestCase):
     def test_receive_missed_personal_message_email_messages(self) -> None:
         # Build dummy messages for message notification email reply.
         # Have Hamlet send Othello a direct message. Othello will
@@ -1655,7 +1655,7 @@ class TestMissedMessageEmailMessages(ZulipTestCase):
         self.assertEqual(message, most_recent_message(hamlet))
 
 
-class TestEmptyGatewaySetting(ZulipTestCase):
+class TestEmptyGatewaySetting(DoerTestCase):
     def test_missed_message(self) -> None:
         self.login("othello")
         cordelia = self.example_user("cordelia")
@@ -1676,7 +1676,7 @@ class TestEmptyGatewaySetting(ZulipTestCase):
 
     def test_encode_email_addr(self) -> None:
         user_profile = self.example_user("hamlet")
-        stream = get_stream("Denmark", get_realm("zulip"))
+        stream = get_stream("Denmark", get_realm("doer"))
 
         with self.settings(EMAIL_GATEWAY_PATTERN=""):
             email_token = get_channel_email_token(stream, creator=user_profile, sender=user_profile)
@@ -1684,7 +1684,7 @@ class TestEmptyGatewaySetting(ZulipTestCase):
             self.assertEqual(test_address, "")
 
 
-class TestReplyExtraction(ZulipTestCase):
+class TestReplyExtraction(DoerTestCase):
     def test_is_forwarded(self) -> None:
         self.assertTrue(is_forwarded("FWD: hey"))
         self.assertTrue(is_forwarded("fwd: hi"))
@@ -1788,7 +1788,7 @@ class TestReplyExtraction(ZulipTestCase):
         self.assertEqual(message.content, convert_html_to_markdown(html))
 
 
-class TestStreamEmailMessagesSubjectStripping(ZulipTestCase):
+class TestStreamEmailMessagesSubjectStripping(DoerTestCase):
     def test_process_message_strips_subject(self) -> None:
         user_profile = self.example_user("hamlet")
         self.login_user(user_profile)
@@ -1823,7 +1823,7 @@ class TestStreamEmailMessagesSubjectStripping(ZulipTestCase):
 
 # If the Content-Type header didn't specify a charset, the text content
 # of the email used to not be properly found. Test that this is fixed:
-class TestContentTypeUnspecifiedCharset(ZulipTestCase):
+class TestContentTypeUnspecifiedCharset(DoerTestCase):
     def test_charset_not_specified(self) -> None:
         message_as_string = self.fixture_data("1.txt", type="email")
         message_as_string = message_as_string.replace(
@@ -1848,7 +1848,7 @@ class TestContentTypeUnspecifiedCharset(ZulipTestCase):
         self.assertEqual(message.content, "Email fixture 1.txt body")
 
 
-class TestContentTypeInvalidCharset(ZulipTestCase):
+class TestContentTypeInvalidCharset(DoerTestCase):
     def test_unknown_charset(self) -> None:
         message_as_string = self.fixture_data("1.txt", type="email")
         message_as_string = message_as_string.replace(
@@ -1874,13 +1874,13 @@ class TestContentTypeInvalidCharset(ZulipTestCase):
         self.assertEqual(message.content, "Email fixture 1.txt body")
 
 
-class TestEmailMirrorProcessMessageNoValidRecipient(ZulipTestCase):
+class TestEmailMirrorProcessMessageNoValidRecipient(DoerTestCase):
     def test_process_message_no_valid_recipient(self) -> None:
         incoming_valid_message = EmailMessage()
         incoming_valid_message.set_content("Test body")
         incoming_valid_message["Subject"] = "Test subject"
         incoming_valid_message["From"] = self.example_email("hamlet")
-        incoming_valid_message["To"] = "address@wrongdomain, address@notzulip"
+        incoming_valid_message["To"] = "address@wrongdomain, address@notdoer"
         incoming_valid_message["Reply-to"] = self.example_email("othello")
 
         with mock.patch("zerver.lib.email_mirror.log_error") as mock_log_error:
@@ -1890,7 +1890,7 @@ class TestEmailMirrorProcessMessageNoValidRecipient(ZulipTestCase):
             )
 
 
-class TestEmailMirrorLogAndReport(ZulipTestCase):
+class TestEmailMirrorLogAndReport(DoerTestCase):
     def test_log_error(self) -> None:
         user_profile = self.example_user("hamlet")
         self.login_user(user_profile)
@@ -1992,9 +1992,9 @@ class TestEmailMirrorLogAndReport(ZulipTestCase):
         self.assertEqual(redacted_message, expected_message)
 
         # Test with EMAIL_GATEWAY_EXTRA_PATTERN_HACK:
-        with self.settings(EMAIL_GATEWAY_EXTRA_PATTERN_HACK="@zulip.org"):
-            stream_to_address = stream_to_address.replace("@testserver", "@zulip.org")
-            scrubbed_stream_address = scrubbed_stream_address.replace("@testserver", "@zulip.org")
+        with self.settings(EMAIL_GATEWAY_EXTRA_PATTERN_HACK="@doer.org"):
+            stream_to_address = stream_to_address.replace("@testserver", "@doer.org")
+            scrubbed_stream_address = scrubbed_stream_address.replace("@testserver", "@doer.org")
             error_message = "test message {}"
             error_message = error_message.format(stream_to_address)
             expected_message = "test message {} <Address to stream id: {}>"
@@ -2004,7 +2004,7 @@ class TestEmailMirrorLogAndReport(ZulipTestCase):
             self.assertEqual(redacted_message, expected_message)
 
 
-class TestEmailMirrorServer(ZulipTestCase):
+class TestEmailMirrorServer(DoerTestCase):
     def test_send_postmaster(self) -> None:
         email = EmailMessage()
         email.set_content("Hello postmaster!")
@@ -2062,9 +2062,9 @@ class TestEmailMirrorServer(ZulipTestCase):
         transport.write = responses.append
 
         protocol = SMTP(
-            handler=ZulipMessageHandler(),
+            handler=DoerMessageHandler(),
             hostname="testhost",
-            ident="Zulip 1.2.3",
+            ident="Doer 1.2.3",
         )
         protocol.connection_made(transport)
 
@@ -2088,7 +2088,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
                 "550 5.1.1 Bad destination mailbox address: This server is not configured for incoming email.\r\n",
@@ -2096,11 +2096,11 @@ class TestEmailMirrorServer(ZulipTestCase):
             ],
         )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_error(self) -> None:
         with (
             mock.patch.object(
-                ZulipMessageHandler, "handle_RCPT", side_effect=Exception("Some bug")
+                DoerMessageHandler, "handle_RCPT", side_effect=Exception("Some bug")
             ) as m,
             self.assertLogs("zerver.lib.email_mirror", level="WARNING") as error_logs,
         ):
@@ -2114,7 +2114,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                     ]
                 ),
                 [
-                    "220 testhost Zulip 1.2.3\r\n",
+                    "220 testhost Doer 1.2.3\r\n",
                     "250 testhost\r\n",
                     "250 OK\r\n",
                     "500 Server error\r\n",
@@ -2125,7 +2125,7 @@ class TestEmailMirrorServer(ZulipTestCase):
             self.assert_length(error_logs.output, 1)
             self.assertTrue("Exception: Some bug" in error_logs.output[0])
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_invalid_domain(self) -> None:
         self.assertEqual(
             await self.handler_response(
@@ -2137,7 +2137,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
                 "550 5.1.1 Bad destination mailbox address: Address not recognized by gateway.\r\n",
@@ -2145,29 +2145,29 @@ class TestEmailMirrorServer(ZulipTestCase):
             ],
         )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_invalid_recipient(self) -> None:
         self.assertEqual(
             await self.handler_response(
                 [
                     "HELO localhost",
                     "MAIL FROM: <test@example.com>",
-                    "RCPT TO: <bogus@zulip.example.com>",
+                    "RCPT TO: <bogus@doer.example.com>",
                     "QUIT",
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
-                "550 5.1.1 Bad destination mailbox address: Bad stream token from email recipient bogus@zulip.example.com\r\n",
+                "550 5.1.1 Bad destination mailbox address: Bad stream token from email recipient bogus@doer.example.com\r\n",
                 "221 Bye\r\n",
             ],
         )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_postmaster(self) -> None:
-        for postmaster_email in ("postmaster", "postmaster@zulip.example.com"):
+        for postmaster_email in ("postmaster", "postmaster@doer.example.com"):
             self.assertEqual(
                 await self.handler_response(
                     [
@@ -2185,7 +2185,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                     ]
                 ),
                 [
-                    "220 testhost Zulip 1.2.3\r\n",
+                    "220 testhost Doer 1.2.3\r\n",
                     "250 testhost\r\n",
                     "250 OK\r\n",
                     "250 Continue\r\n",
@@ -2199,11 +2199,11 @@ class TestEmailMirrorServer(ZulipTestCase):
             mail.outbox = []
 
     @override_settings(
-        EMAIL_GATEWAY_PATTERN="%s@zulip.example.com", RATE_LIMITING_MIRROR_REALM_RULES=[(10, 2)]
+        EMAIL_GATEWAY_PATTERN="%s@doer.example.com", RATE_LIMITING_MIRROR_REALM_RULES=[(10, 2)]
     )
     async def test_handler_stream_rate_limiting(self) -> None:
         stream_name = "some str"
-        realm = await sync_to_async(lambda: get_realm("zulip"))()
+        realm = await sync_to_async(lambda: get_realm("doer"))()
         stream = await sync_to_async(lambda: ensure_stream(realm, stream_name, acting_user=None))()
         hamlet = await sync_to_async(lambda: self.example_user("hamlet"))()
         email_token = await sync_to_async(
@@ -2243,7 +2243,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                     ]
                 ),
                 [
-                    "220 testhost Zulip 1.2.3\r\n",
+                    "220 testhost Doer 1.2.3\r\n",
                     "250 testhost\r\n",
                     "250 OK\r\n",
                     "550 4.7.0 Rate-limited due to too many emails on this realm.\r\n",
@@ -2271,7 +2271,7 @@ class TestEmailMirrorServer(ZulipTestCase):
             )
             m.assert_called_once()
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_invalid_missedmessage(self) -> None:
         email_address = settings.EMAIL_GATEWAY_PATTERN % (generate_missed_message_token(),)
         self.assertEqual(
@@ -2284,15 +2284,15 @@ class TestEmailMirrorServer(ZulipTestCase):
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
-                "550 5.1.1 Bad destination mailbox address: Zulip notification reply address is invalid.\r\n",
+                "550 5.1.1 Bad destination mailbox address: Doer notification reply address is invalid.\r\n",
                 "221 Bye\r\n",
             ],
         )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_missedmessage_denied(self) -> None:
         hamlet = await sync_to_async(lambda: self.example_user("hamlet"))()
         othello = await sync_to_async(lambda: self.example_user("othello"))()
@@ -2314,7 +2314,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
                 "550 5.7.1 Permission denied: Not authorized to send to channel 'Denmark'\r\n",
@@ -2322,7 +2322,7 @@ class TestEmailMirrorServer(ZulipTestCase):
             ],
         )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_missedmessage(self) -> None:
         othello = await sync_to_async(lambda: self.example_user("othello"))()
         usermessage = await sync_to_async(lambda: most_recent_usermessage(othello))()
@@ -2347,7 +2347,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                     ]
                 ),
                 [
-                    "220 testhost Zulip 1.2.3\r\n",
+                    "220 testhost Doer 1.2.3\r\n",
                     "250 testhost\r\n",
                     "250 OK\r\n",
                     "250 Continue\r\n",
@@ -2376,10 +2376,10 @@ class TestEmailMirrorServer(ZulipTestCase):
                 },
             )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_stream(self) -> None:
         stream_name = "some str"
-        realm = await sync_to_async(lambda: get_realm("zulip"))()
+        realm = await sync_to_async(lambda: get_realm("doer"))()
         stream = await sync_to_async(lambda: ensure_stream(realm, stream_name, acting_user=None))()
         hamlet = await sync_to_async(lambda: self.example_user("hamlet"))()
         email_gateway_bot = await sync_to_async(
@@ -2410,7 +2410,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                         ]
                     ),
                     [
-                        "220 testhost Zulip 1.2.3\r\n",
+                        "220 testhost Doer 1.2.3\r\n",
                         "250 testhost\r\n",
                         "250 OK\r\n",
                         "250 Continue\r\n",
@@ -2439,10 +2439,10 @@ class TestEmailMirrorServer(ZulipTestCase):
                     },
                 )
 
-    @override_settings(EMAIL_GATEWAY_PATTERN="%s@zulip.example.com")
+    @override_settings(EMAIL_GATEWAY_PATTERN="%s@doer.example.com")
     async def test_handler_stream_deactivated(self) -> None:
         stream_name = "some str"
-        realm = await sync_to_async(lambda: get_realm("zulip"))()
+        realm = await sync_to_async(lambda: get_realm("doer"))()
         stream = await sync_to_async(lambda: ensure_stream(realm, stream_name, acting_user=None))()
         hamlet = await sync_to_async(lambda: self.example_user("hamlet"))()
         email_token = await sync_to_async(
@@ -2463,7 +2463,7 @@ class TestEmailMirrorServer(ZulipTestCase):
                 ]
             ),
             [
-                "220 testhost Zulip 1.2.3\r\n",
+                "220 testhost Doer 1.2.3\r\n",
                 "250 testhost\r\n",
                 "250 OK\r\n",
                 "550 5.7.1 Permission denied: Not authorized to send to channel 'some str'\r\n",

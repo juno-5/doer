@@ -3,14 +3,14 @@ from typing import Any
 
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = (
         "Set the owner_full_content_access flag for a realm. The flag determines "
         "whether the organization's owner will have the ability to access private "
-        "content in the organization in the Zulip UI."
+        "content in the organization in the Doer UI."
     )
 
     @override

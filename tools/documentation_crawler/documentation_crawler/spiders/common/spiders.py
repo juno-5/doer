@@ -34,7 +34,7 @@ EXCLUDED_URLS = [
     "https://marketplace.visualstudio.com/items?itemName=rafaelmaiolla.remote-vscode",
     "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh",
     # Requires authentication
-    "https://www.linkedin.com/company/zulip-project",
+    "https://www.linkedin.com/company/doer-project",
     # Returns 403 errors to HEAD requests
     "https://giphy.com",
     "https://giphy.com/apps/giphycapture",
@@ -53,8 +53,8 @@ VNU_IGNORE_REGEX = re.compile(r"|".join(VNU_IGNORE))
 
 DEPLOY_ROOT = os.path.abspath(os.path.join(__file__, "../../../../../.."))
 
-ZULIP_SERVER_GITHUB_FILE_PATH_PREFIX = "/zulip/zulip/blob/main"
-ZULIP_SERVER_GITHUB_DIRECTORY_PATH_PREFIX = "/zulip/zulip/tree/main"
+DOER_SERVER_GITHUB_FILE_PATH_PREFIX = "/doer/doer/blob/main"
+DOER_SERVER_GITHUB_DIRECTORY_PATH_PREFIX = "/doer/doer/tree/main"
 
 
 class BaseDocumentationSpider(scrapy.Spider):
@@ -87,25 +87,25 @@ class BaseDocumentationSpider(scrapy.Spider):
             # cosmic irony, often itself offline.
             return True
         if split_url.hostname == "zulip.readthedocs.io" or f".{split_url.hostname}".endswith(
-            (".zulip.com", ".zulip.org")
+            (".zulip.com", ".doer.org")
         ):
-            # We want CI to check any links to Zulip sites.
+            # We want CI to check any links to Doer sites.
             return False
         if split_url.scheme == "file" or split_url.hostname == "localhost":
             # We also want CI to check any links to built documentation.
             return False
         if split_url.hostname == "github.com" and f"{split_url.path}/".startswith(
             (
-                f"{ZULIP_SERVER_GITHUB_FILE_PATH_PREFIX}/",
-                f"{ZULIP_SERVER_GITHUB_DIRECTORY_PATH_PREFIX}/",
+                f"{DOER_SERVER_GITHUB_FILE_PATH_PREFIX}/",
+                f"{DOER_SERVER_GITHUB_DIRECTORY_PATH_PREFIX}/",
             )
         ):
             # We can verify these links directly in the local Git repo without making any requests to GitHub servers.
             return False
-        if split_url.hostname == "github.com" and split_url.path.startswith("/zulip/"):
+        if split_url.hostname == "github.com" and split_url.path.startswith("/doer/"):
             # We want to check these links but due to rate limiting from GitHub, these checks often
             # fail in the CI. Thus, we should treat these as external links for now.
-            # TODO: Figure out how to test github.com/zulip links in CI.
+            # TODO: Figure out how to test github.com/doer links in CI.
             return True
         return True
 
@@ -140,7 +140,7 @@ class BaseDocumentationSpider(scrapy.Spider):
         return callback
 
     def _make_requests(self, url: str) -> Iterator[Request]:
-        # These URLs are for Zulip's web app, which with recent changes
+        # These URLs are for Doer's web app, which with recent changes
         # can be accessible without logging into an account.  While we
         # do crawl documentation served by the web app (e.g. /help/),
         # we don't want to crawl the web app itself, so we exclude
@@ -164,10 +164,10 @@ class BaseDocumentationSpider(scrapy.Spider):
             method = "HEAD"
 
             if split_url.hostname == "github.com" and f"{split_url.path}/".startswith(
-                f"{ZULIP_SERVER_GITHUB_FILE_PATH_PREFIX}/"
+                f"{DOER_SERVER_GITHUB_FILE_PATH_PREFIX}/"
             ):
                 file_path = DEPLOY_ROOT + split_url.path.removeprefix(
-                    ZULIP_SERVER_GITHUB_FILE_PATH_PREFIX
+                    DOER_SERVER_GITHUB_FILE_PATH_PREFIX
                 )
                 if not os.path.isfile(file_path):
                     self.logger.error(
@@ -175,10 +175,10 @@ class BaseDocumentationSpider(scrapy.Spider):
                     )
                 return
             elif split_url.hostname == "github.com" and f"{split_url.path}/".startswith(
-                f"{ZULIP_SERVER_GITHUB_DIRECTORY_PATH_PREFIX}/"
+                f"{DOER_SERVER_GITHUB_DIRECTORY_PATH_PREFIX}/"
             ):
                 dir_path = DEPLOY_ROOT + split_url.path.removeprefix(
-                    ZULIP_SERVER_GITHUB_DIRECTORY_PATH_PREFIX
+                    DOER_SERVER_GITHUB_DIRECTORY_PATH_PREFIX
                 )
                 if not os.path.isdir(dir_path):
                     self.logger.error(

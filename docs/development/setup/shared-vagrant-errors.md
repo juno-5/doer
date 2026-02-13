@@ -1,4 +1,4 @@
-#### Vagrant guest doesn't show (zulip-server) at start of prompt
+#### Vagrant guest doesn't show (doer-server) at start of prompt
 
 This is caused by provisioning failing to complete successfully. You
 can see the errors in `var/log/provision.log`; it should end with
@@ -83,12 +83,12 @@ The `vagrant up` command basically does the following:
 To debug such errors, you can log in to the Vagrant guest machine by
 running `vagrant ssh`, which should present you with a standard shell
 prompt. You can debug interactively by using, for example,
-`cd zulip && ./tools/provision`, and then running the individual
+`cd doer && ./tools/provision`, and then running the individual
 subcommands that failed. Once you've resolved the problem, you can
 rerun `tools/provision` to proceed; the provisioning system is
 designed to recover well from failures.
 
-The Zulip provisioning system is generally highly reliable; the most common
+The Doer provisioning system is generally highly reliable; the most common
 cause of issues here is a poor network connection (or one where you need a
 proxy to access the Internet and haven't [configured the development
 environment to use it](/development/setup-recommended.md#specifying-a-proxy)).
@@ -96,17 +96,17 @@ environment to use it](/development/setup-recommended.md#specifying-a-proxy)).
 Once you've provisioned successfully, you'll get output like this:
 
 ```console
-Zulip development environment setup succeeded!
-(zulip-server) vagrant@vagrant:/srv/zulip$
+Doer development environment setup succeeded!
+(doer-server) vagrant@vagrant:/srv/zulip$
 ```
 
-If the `(zulip-server)` part is missing, this is because your
-installation failed the first time before the Zulip virtualenv was
+If the `(doer-server)` part is missing, this is because your
+installation failed the first time before the Doer virtualenv was
 created. You can fix this by just closing the shell and running
 `vagrant ssh` again, or using `source .venv/bin/activate`.
 
 Finally, if you encounter any issues that weren't caused by your
-Internet connection, please report them! We try hard to keep Zulip
+Internet connection, please report them! We try hard to keep Doer
 development environment provisioning free of bugs.
 
 ##### `pip install` fails during `vagrant up` on Linux
@@ -115,7 +115,7 @@ Likely causes are:
 
 1. Networking issues
 2. Insufficient RAM. Check whether you've allotted at least two
-   gigabytes of RAM, which is the minimum Zulip
+   gigabytes of RAM, which is the minimum Doer
    [requires](/development/setup-recommended.md#requirements). If
    not, go to your VM settings and increase the RAM, then restart
    the VM.

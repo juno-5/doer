@@ -1,14 +1,14 @@
-"""Cron job implementation of Zulip's incoming email gateway's helper
-for forwarding emails into Zulip.
+"""Cron job implementation of Doer's incoming email gateway's helper
+for forwarding emails into Doer.
 
 https://zulip.readthedocs.io/en/latest/production/email-gateway.html
 
 The email gateway supports two major modes of operation: An email
 server where the email address configured in EMAIL_GATEWAY_PATTERN
-delivers emails directly to Zulip, and this, a cron job that connects
+delivers emails directly to Doer, and this, a cron job that connects
 to an IMAP inbox (which receives the emails) periodically.
 
-Run this in a cron job every N minutes if you have configured Zulip to
+Run this in a cron job every N minutes if you have configured Doer to
 poll an external IMAP mailbox for messages. The script will then
 connect to your IMAP server and batch-process all messages.
 
@@ -30,7 +30,7 @@ from django.core.management.base import CommandError
 from typing_extensions import override
 
 from zerver.lib.email_mirror import logger, process_message
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 ## Setup ##
 
@@ -79,7 +79,7 @@ def get_imap_messages() -> Generator[EmailMessage, None, None]:
         mbox.logout()
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = __doc__
 
     @override

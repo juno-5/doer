@@ -17,7 +17,7 @@
 
 Some terms are very tricky to translate, so be sure to communicate
 with other Hindi speakers in the community. It's all about making
-Zulip friendly and usable.
+Doer friendly and usable.
 
 ## Terms (शर्तें)
 

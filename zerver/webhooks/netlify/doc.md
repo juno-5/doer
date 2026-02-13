@@ -1,6 +1,6 @@
-# Zulip Netlify integration
+# Doer Netlify integration
 
-Get Zulip notifications for your Netlify deployments!
+Get Doer notifications for your Netlify deployments!
 
 {start_tabs}
 

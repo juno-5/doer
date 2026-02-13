@@ -16,7 +16,7 @@ from typing_extensions import override
 from zerver.lib.mime_types import INLINE_MIME_TYPES, bare_content_type
 from zerver.lib.partial import partial
 from zerver.lib.thumbnail import resize_logo, resize_realm_icon
-from zerver.lib.upload.base import StreamingSourceWithSize, ZulipUploadBackend
+from zerver.lib.upload.base import StreamingSourceWithSize, DoerUploadBackend
 from zerver.models import Realm, RealmEmoji, UserProfile
 
 if TYPE_CHECKING:
@@ -157,7 +157,7 @@ def get_signed_upload_url(path: str, filename: str, force_download: bool = False
     )
 
 
-class S3UploadBackend(ZulipUploadBackend):
+class S3UploadBackend(DoerUploadBackend):
     def __init__(self) -> None:
         from mypy_boto3_s3.service_resource import Bucket
 
@@ -186,7 +186,7 @@ class S3UploadBackend(ZulipUploadBackend):
         #     f"https://{self.avatar_bucket.name}.{network_location}/{key}"
         #
         # However, we need this function to properly handle S3 style
-        # file upload backends that Zulip supports, which can have a
+        # file upload backends that Doer supports, which can have a
         # different URL format. Configuring no signature and providing
         # no access key makes `generate_presigned_url` just return the
         # normal public URL for a key.

@@ -4,11 +4,11 @@ from django.core.management.base import CommandParser
 from typing_extensions import override
 
 from zerver.actions.streams import bulk_add_subscriptions
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 from zerver.lib.streams import ensure_stream
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     help = """Add some or all users in a realm to a set of streams."""
 
     @override

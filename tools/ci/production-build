@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# In short, this provisions a Zulip development environment and then
-# builds a Zulip release tarball (the same way we build them for an
+# In short, this provisions a Doer development environment and then
+# builds a Doer release tarball (the same way we build them for an
 # actual release).  The actual test job will then install that.
 
 set -e
@@ -31,7 +31,7 @@ fi
 # Move all the required artifacts to /tmp/production-build
 # that will be later sent down to downstream install jobs.
 mkdir /tmp/production-build
-mv /tmp/tmp.*/zulip-server-test.tar.gz /tmp/production-build
+mv /tmp/tmp.*/doer-server-test.tar.gz /tmp/production-build
 cp -a \
     tools/ci/success-http-headers.template.txt \
     tools/ci/production-install \
@@ -46,8 +46,8 @@ cp -a \
 # Check that webpack bundles use only ES2022 syntax.
 # Use the pnpm binary installed by tools/provision.
 PNPM="/usr/local/bin/pnpm"
-tar -C /tmp -xzf /tmp/production-build/zulip-server-test.tar.gz zulip-server-test/prod-static/serve/webpack-bundles
+tar -C /tmp -xzf /tmp/production-build/doer-server-test.tar.gz doer-server-test/prod-static/serve/webpack-bundles
 (
-    GLOBIGNORE="/tmp/zulip-server-test/prod-static/serve/webpack-bundles/katex*.js"
-    "$PNPM" exec es-check es2022 /tmp/zulip-server-test/prod-static/serve/webpack-bundles/*.js
+    GLOBIGNORE="/tmp/doer-server-test/prod-static/serve/webpack-bundles/katex*.js"
+    "$PNPM" exec es-check es2022 /tmp/doer-server-test/prod-static/serve/webpack-bundles/*.js
 )

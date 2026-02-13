@@ -6,19 +6,19 @@ import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
 import NavigationSteps from "../../components/NavigationSteps.astro";
-import ZulipNote from "../../components/ZulipNote.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerNote from "../../components/DoerNote.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import EmojiAndEmoticonsExamples from "../include/_EmojiAndEmoticonsExamples.mdx";
 import EmojiAndEmoticonsIntro from "../include/_EmojiAndEmoticonsIntro.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import SmileBiggerIcon from "~icons/zulip-icon/smile-bigger";
+import SmileBiggerIcon from "~icons/doer-icon/smile-bigger";
 
 <EmojiAndEmoticonsIntro />
 
-<ZulipTip>
+<DoerTip>
   You can also quickly respond to a message by using [emoji reactions](/help/emoji-reactions).
-</ZulipTip>
+</DoerTip>
 
 ## Use an emoji in your message
 
@@ -50,19 +50,19 @@ import SmileBiggerIcon from "~icons/zulip-icon/smile-bigger";
     <FlattenedSteps>
       <StartComposing />
 
-      1. Paste an emoji copied from outside of Zulip directly into the compose box.
+      1. Paste an emoji copied from outside of Doer directly into the compose box.
     </FlattenedSteps>
   </TabItem>
 </Tabs>
 
-<ZulipTip>
+<DoerTip>
   You can hover over an emoji in the emoji picker, a message, or an [emoji
   reaction](/help/emoji-reactions) to learn its name.
-</ZulipTip>
+</DoerTip>
 
 ### Use an emoticon
 
-You can configure Zulip to convert emoticons into emoji, so that, e.g., `:)`
+You can configure Doer to convert emoticons into emoji, so that, e.g., `:)`
 will be displayed as 🙂 .
 
 <FlattenedSteps>
@@ -133,19 +133,19 @@ names.
   <TabItem label="Via paste">
     <Steps>
       1. [Start a new topic](/help/introduction-to-topics#how-to-start-a-new-topic).
-      1. Paste an emoji copied from outside of Zulip directly into the text input box.
+      1. Paste an emoji copied from outside of Doer directly into the text input box.
     </Steps>
 
-    <ZulipTip>
+    <DoerTip>
       [https://emojipedia.org/](https://emojipedia.org/) may be a helpful resource.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 </Tabs>
 
 ## Change your emoji set
 
 Your emoji set determines how you see emoji. It has no effect on the emoji
-you send. Zulip emoji are compatible with screen readers and other accessibility tools.
+you send. Doer emoji are compatible with screen readers and other accessibility tools.
 
 <FlattenedSteps>
   <NavigationSteps target="settings/preferences" />

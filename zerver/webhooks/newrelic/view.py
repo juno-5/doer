@@ -112,11 +112,11 @@ def parse_payload(payload: WildValue) -> dict[str, str]:
     return message_context
 
 
-def format_zulip_custom_fields(payload: WildValue) -> str:
+def format_doer_custom_fields(payload: WildValue) -> str:
     body_custom_field_detail: str = ""
-    zulip_custom_fields = payload.get("zulipCustomFields", {})
+    doer_custom_fields = payload.get("zulipCustomFields", {})
 
-    for key, value in zulip_custom_fields.items():
+    for key, value in doer_custom_fields.items():
         custom_field_name = key.capitalize()
         try:
             details = value.tame(
@@ -173,7 +173,7 @@ def api_newrelic_webhook(
 
     message_context = parse_payload(payload)
     incident_details = NOTIFICATION_DETAILS.format(**message_context)
-    incident_details += format_zulip_custom_fields(payload)
+    incident_details += format_doer_custom_fields(payload)
     content = NOTIFICATION_TEMPLATE.format(details=incident_details, **message_context)
     topic = message_context["title"]
     check_send_webhook_message(request, user_profile, topic, content, message_context["state"])

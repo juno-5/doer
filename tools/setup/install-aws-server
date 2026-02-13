@@ -6,7 +6,7 @@ usage() {
     cat <<EOF
 USAGE: $0 [--roles=roles] [--branch=main] [--debug-key=username] server
 
-Installs an empty Ubuntu server in AWS with a Zulip server role.
+Installs an empty Ubuntu server in AWS with a Doer server role.
 
  * server is the local part of the hostname (e.g. postgres0)
 
@@ -18,10 +18,10 @@ Installs an empty Ubuntu server in AWS with a Zulip server role.
    'ubuntu' with during initial boot; this is purely for debugging the
    bootstrapping process.
 
-Reads configuration from $HOME/.zulip-install-server.conf, which should look like:
+Reads configuration from $HOME/.doer-install-server.conf, which should look like:
 
 [repo]
-repo_url=git@github.com:zulip/zulip.git
+repo_url=git@github.com:doer/doer.git
 [aws]
 zone_id=Z2U988IEXAMPLE
 security_groups=sg-01234567
@@ -80,13 +80,13 @@ cd "$(dirname "$0")/../.."
 ./puppet/kandra/files/install-aws-cli
 AWS=/srv/zulip-aws-tools/bin/aws
 
-zulip_install_config_file="$HOME/.zulip-install-server.conf"
-if [ ! -f "$zulip_install_config_file" ]; then
-    echo "No configuration file found in $zulip_install_config_file"
+doer_install_config_file="$HOME/.doer-install-server.conf"
+if [ ! -f "$doer_install_config_file" ]; then
+    echo "No configuration file found in $doer_install_config_file"
     exit 1
 fi
 
-REPO_URL=$(crudini --get "$zulip_install_config_file" repo repo_url)
+REPO_URL=$(crudini --get "$doer_install_config_file" repo repo_url)
 
 for role in ${ROLES//,/ }; do
     if ! [ -f "./puppet/kandra/manifests/profile/$role.pp" ]; then
@@ -98,8 +98,8 @@ FULL_ROLES=$(echo "$ROLES" | perl -pe '$_=join(",",map{"kandra::profile::$_"} sp
 
 function lookup() {
     KEY="$1"
-    crudini --get "$zulip_install_config_file" "aws-$ROLES" "$KEY" 2>/dev/null \
-        || crudini --get "$zulip_install_config_file" aws "$KEY"
+    crudini --get "$doer_install_config_file" "aws-$ROLES" "$KEY" 2>/dev/null \
+        || crudini --get "$doer_install_config_file" aws "$KEY"
 }
 
 AWS_ZONE_ID=$(lookup zone_id)

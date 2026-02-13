@@ -41,7 +41,7 @@ from corporate.models.plans import (
     get_current_plan_by_customer,
     get_current_plan_by_realm,
 )
-from corporate.models.sponsorships import SponsoredPlanTypes, ZulipSponsorshipRequest
+from corporate.models.sponsorships import SponsoredPlanTypes, DoerSponsorshipRequest
 from corporate.models.stripe_state import Invoice, Session
 from zerver.lib.cache import cache_with_key, get_realm_seat_count_cache_key
 from zerver.lib.exceptions import JsonableError
@@ -64,8 +64,8 @@ from zilencer.models import (
     RemoteRealmAuditLog,
     RemoteRealmBillingUser,
     RemoteServerBillingUser,
-    RemoteZulipServer,
-    RemoteZulipServerAuditLog,
+    RemoteDoerServer,
+    RemoteDoerServerAuditLog,
     get_remote_realm_guest_and_non_guest_count,
     get_remote_server_guest_and_non_guest_count,
     has_stale_audit_log,
@@ -224,7 +224,7 @@ def validate_licenses(
         message = _(
             "Invoices with more than {max_licenses} licenses can't be processed from this page. To"
             " complete the upgrade, please contact {email}."
-        ).format(max_licenses=max_licenses, email=settings.ZULIP_ADMINISTRATOR)
+        ).format(max_licenses=max_licenses, email=settings.DOER_ADMINISTRATOR)
         raise BillingError("too many licenses", message)
 
 
@@ -371,7 +371,7 @@ def payment_method_string(stripe_customer: stripe.Customer) -> str:
     # automatic payments, but in theory we could add it for a customer via
     # the Stripe dashboard.
     return _("Unknown payment method. Please contact {email}.").format(
-        email=settings.ZULIP_ADMINISTRATOR,
+        email=settings.DOER_ADMINISTRATOR,
     )  # nocoverage
 
 
@@ -406,7 +406,7 @@ class BillingError(JsonableError):
     def __init__(self, description: str, message: str | None = None) -> None:
         self.error_description = description
         if message is None:
-            message = BillingError.CONTACT_SUPPORT.format(email=settings.ZULIP_ADMINISTRATOR)
+            message = BillingError.CONTACT_SUPPORT.format(email=settings.DOER_ADMINISTRATOR)
         super().__init__(message)
 
 
@@ -683,12 +683,12 @@ class UpgradePageContext(TypedDict):
 
 class SponsorshipRequestForm(forms.Form):
     website = forms.URLField(
-        max_length=ZulipSponsorshipRequest.MAX_ORG_URL_LENGTH, required=False, assume_scheme="https"
+        max_length=DoerSponsorshipRequest.MAX_ORG_URL_LENGTH, required=False, assume_scheme="https"
     )
     organization_type = forms.IntegerField()
     description = forms.CharField(widget=forms.Textarea)
     expected_total_users = forms.CharField(widget=forms.Textarea)
-    plan_to_use_zulip = forms.CharField(widget=forms.Textarea)
+    plan_to_use_doer = forms.CharField(widget=forms.Textarea)
     paid_users_count = forms.CharField(widget=forms.Textarea)
     paid_users_description = forms.CharField(widget=forms.Textarea, required=False)
     requested_plan = forms.ChoiceField(
@@ -782,7 +782,7 @@ class BillingSession(ABC):
             limit=1,
             status="paid",
         )
-        list_params["total"] = 0  # type: ignore[typeddict-unknown-key]  # Not documented or annotated, but https://github.com/zulip/zulip/pull/28785/files#r1477005528 says it works
+        list_params["total"] = 0  # type: ignore[typeddict-unknown-key]  # Not documented or annotated, but https://github.com/doer/doer/pull/28785/files#r1477005528 says it works
         if stripe.Invoice.list(**list_params).data:  # nocoverage
             # These are payment for upgrades which were paid directly by the customer and then we
             # created an invoice for them resulting in `$0` invoices since there was no amount due.
@@ -1041,7 +1041,7 @@ class BillingSession(ABC):
 
         plan_tier = CustomerPlan.TIER_SELF_HOSTED_LEGACY
         if isinstance(self, RealmBillingSession):
-            # TODO implement a complimentary access plan/tier for Zulip Cloud.
+            # TODO implement a complimentary access plan/tier for Doer Cloud.
             return None
 
         # status = CustomerPlan.ACTIVE means the plan is not scheduled for an upgrade.
@@ -1433,7 +1433,7 @@ class BillingSession(ABC):
                     f"Cannot configure a complimentary access plan for {self.billing_entity_display_name} because of current plan."
                 )
         if isinstance(self, RealmBillingSession):
-            # TODO implement a complimentary access plan/tier for Zulip Cloud.
+            # TODO implement a complimentary access plan/tier for Doer Cloud.
             raise SupportRequestError(
                 f"Cannot currently configure a complimentary access plan for {self.billing_entity_display_name}."
             )  # nocoverage
@@ -3575,7 +3575,7 @@ class BillingSession(ABC):
             # For sponsorship pending requests, we also show the type of sponsorship requested.
             # In other cases, we just show the plan user is currently on.
             sponsorship_request = (
-                ZulipSponsorshipRequest.objects.filter(customer=customer).order_by("-id").first()
+                DoerSponsorshipRequest.objects.filter(customer=customer).order_by("-id").first()
             )
             # It's possible that we marked `customer.sponsorship_pending` via support page
             # without user submitting a sponsorship request.
@@ -3605,7 +3605,7 @@ class BillingSession(ABC):
         is_remotely_hosted = isinstance(
             self, RemoteRealmBillingSession | RemoteServerBillingSession
         )
-        plan_name = "Free" if is_remotely_hosted else "Zulip Cloud Free"
+        plan_name = "Free" if is_remotely_hosted else "Doer Cloud Free"
 
         context: dict[str, Any] = {
             "billing_base_url": self.billing_base_url,
@@ -3641,14 +3641,14 @@ class BillingSession(ABC):
         with transaction.atomic(durable=True):
             # Ensures customer is created first before updating sponsorship status.
             self.update_customer_sponsorship_status(True)
-            sponsorship_request = ZulipSponsorshipRequest(
+            sponsorship_request = DoerSponsorshipRequest(
                 customer=self.get_customer(),
                 requested_by=request_context["realm_user"],
                 org_website=form.cleaned_data["website"],
                 org_description=form.cleaned_data["description"],
                 org_type=form.cleaned_data["organization_type"],
                 expected_total_users=form.cleaned_data["expected_total_users"],
-                plan_to_use_zulip=form.cleaned_data["plan_to_use_zulip"],
+                plan_to_use_doer=form.cleaned_data["plan_to_use_doer"],
                 paid_users_count=form.cleaned_data["paid_users_count"],
                 paid_users_description=form.cleaned_data["paid_users_description"],
                 requested_plan=form.cleaned_data["requested_plan"],
@@ -3671,7 +3671,7 @@ class BillingSession(ABC):
             "website": sponsorship_request.org_website,
             "description": sponsorship_request.org_description,
             "expected_total_users": sponsorship_request.expected_total_users,
-            "plan_to_use_zulip": sponsorship_request.plan_to_use_zulip,
+            "plan_to_use_doer": sponsorship_request.plan_to_use_doer,
             "paid_users_count": sponsorship_request.paid_users_count,
             "paid_users_description": sponsorship_request.paid_users_description,
             "requested_plan": sponsorship_request.requested_plan,
@@ -3681,7 +3681,7 @@ class BillingSession(ABC):
             "zerver/emails/sponsorship_request",
             to_emails=[BILLING_SUPPORT_EMAIL],
             # Sent to the server's support team, so this email is not user-facing.
-            from_name="Zulip sponsorship request",
+            from_name="Doer sponsorship request",
             from_address=FromAddress.tokenized_no_reply_address(),
             reply_to_email=user_info["email"],
             context=context,
@@ -3942,7 +3942,7 @@ class BillingSession(ABC):
     ) -> None:
         plan_tier = CustomerPlan.TIER_SELF_HOSTED_LEGACY
         if isinstance(self, RealmBillingSession):  # nocoverage
-            # TODO implement a complimentary access plan/tier for Zulip Cloud.
+            # TODO implement a complimentary access plan/tier for Doer Cloud.
             return None
         customer = self.update_or_create_customer()
 
@@ -3992,7 +3992,7 @@ class BillingSession(ABC):
         self.do_change_plan_type(tier=CustomerPlan.TIER_SELF_HOSTED_LEGACY, is_sponsored=False)
 
     def add_customer_to_community_plan(self) -> None:
-        # There is no CustomerPlan for organizations on Zulip Cloud and
+        # There is no CustomerPlan for organizations on Doer Cloud and
         # they enjoy the same benefits as the Standard plan.
         # For self-hosted organizations, sponsored organizations have
         # a Community CustomerPlan and they have different benefits compared
@@ -4316,13 +4316,13 @@ class RealmBillingSession(BillingSession):
                 message = _(
                     "Your organization's request for sponsored hosting has been approved! "
                     "You have been upgraded to {plan_name}, free of charge. {emoji}\n\n"
-                    "If you could {begin_link}list Zulip as a sponsor on your website{end_link}, "
+                    "If you could {begin_link}list Doer as a sponsor on your website{end_link}, "
                     "we would really appreciate it!"
                 ).format(
                     plan_name=CustomerPlan.name_from_tier(CustomerPlan.TIER_CLOUD_STANDARD),
                     emoji=":tada:",
                     begin_link="[",
-                    end_link="](/help/linking-to-zulip-website)",
+                    end_link="](/help/linking-to-doer-website)",
                 )
                 internal_send_private_message(notification_bot, user, message)
         return f"Sponsorship approved for {self.billing_entity_display_name}; Emailed organization owners and users with billing permission."
@@ -4443,7 +4443,7 @@ class RealmBillingSession(BillingSession):
 
     @override
     def sync_license_ledger_if_needed(self) -> None:  # nocoverage
-        # TODO: For zulip cloud, currently we use 'update_license_ledger_if_needed'
+        # TODO: For doer cloud, currently we use 'update_license_ledger_if_needed'
         # to update the ledger. For consistency, we plan to use RealmAuditlog
         # to update the ledger as we currently do for self-hosted system using
         # RemoteRealmAuditlog. This will also help the cloud billing system to
@@ -4721,7 +4721,7 @@ class RemoteRealmBillingSession(BillingSession):
                 context={
                     "billing_entity": self.billing_entity_display_name,
                     "plans_link": "https://zulip.com/plans/#self-hosted",
-                    "link_to_zulip": "https://zulip.com/help/linking-to-zulip-website",
+                    "link_to_zulip": "https://zulip.com/help/linking-to-doer-website",
                 },
             )
             emailed_string = "Emailed existing billing users."
@@ -4908,7 +4908,7 @@ class RemoteServerBillingSession(BillingSession):
 
     def __init__(
         self,
-        remote_server: RemoteZulipServer,
+        remote_server: RemoteDoerServer,
         remote_billing_user: RemoteServerBillingUser | None = None,
         support_staff: UserProfile | None = None,
     ) -> None:
@@ -4959,8 +4959,8 @@ class RemoteServerBillingSession(BillingSession):
         return remote_server_counts.non_guest_user_count + remote_server_counts.guest_user_count
 
     def missing_data_error_page(self, request: HttpRequest) -> HttpResponse:  # nocoverage
-        # The remedy for a RemoteZulipServer login is usually
-        # upgrading to Zulip 8.0 or enabling SUBMIT_USAGE_STATISTICS.
+        # The remedy for a RemoteDoerServer login is usually
+        # upgrading to Doer 8.0 or enabling SUBMIT_USAGE_STATISTICS.
         missing_data_context = {
             "remote_realm_session": False,
             "supports_remote_realms": self.remote_server.last_api_feature_level is not None,
@@ -5033,7 +5033,7 @@ class RemoteServerBillingSession(BillingSession):
         if extra_data:
             log_data["extra_data"] = extra_data
 
-        RemoteZulipServerAuditLog.objects.create(**log_data)
+        RemoteDoerServerAuditLog.objects.create(**log_data)
 
     @override
     def get_data_for_stripe_customer(self) -> StripeCustomerData:
@@ -5094,16 +5094,16 @@ class RemoteServerBillingSession(BillingSession):
         self, *, tier: int | None, is_sponsored: bool = False, background_update: bool = False
     ) -> None:
         # This function needs to translate between the different
-        # formats of CustomerPlan.tier and RealmZulipServer.plan_type.
+        # formats of CustomerPlan.tier and RealmDoerServer.plan_type.
         if is_sponsored:
-            plan_type = RemoteZulipServer.PLAN_TYPE_COMMUNITY
+            plan_type = RemoteDoerServer.PLAN_TYPE_COMMUNITY
             self.add_customer_to_community_plan()
         elif tier == CustomerPlan.TIER_SELF_HOSTED_BASIC:
-            plan_type = RemoteZulipServer.PLAN_TYPE_BASIC
+            plan_type = RemoteDoerServer.PLAN_TYPE_BASIC
         elif tier == CustomerPlan.TIER_SELF_HOSTED_BUSINESS:
-            plan_type = RemoteZulipServer.PLAN_TYPE_BUSINESS
+            plan_type = RemoteDoerServer.PLAN_TYPE_BUSINESS
         elif tier == CustomerPlan.TIER_SELF_HOSTED_LEGACY:
-            plan_type = RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY
+            plan_type = RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY
         else:
             raise AssertionError("Unexpected tier")
 
@@ -5138,7 +5138,7 @@ class RemoteServerBillingSession(BillingSession):
             if error_message != "":
                 raise SupportRequestError(error_message)
 
-            if self.remote_server.plan_type == RemoteZulipServer.PLAN_TYPE_SELF_MANAGED_LEGACY:
+            if self.remote_server.plan_type == RemoteDoerServer.PLAN_TYPE_SELF_MANAGED_LEGACY:
                 plan = get_current_plan_by_customer(customer)
                 # Ideally we should have always have a plan here but since this is support page, we can be lenient about it.
                 if plan is not None:
@@ -5167,7 +5167,7 @@ class RemoteServerBillingSession(BillingSession):
                 context={
                     "billing_entity": self.billing_entity_display_name,
                     "plans_link": "https://zulip.com/plans/#self-hosted",
-                    "link_to_zulip": "https://zulip.com/help/linking-to-zulip-website",
+                    "link_to_zulip": "https://zulip.com/help/linking-to-doer-website",
                 },
             )
             emailed_string = "Emailed existing billing users."
@@ -5182,7 +5182,7 @@ class RemoteServerBillingSession(BillingSession):
     ) -> None:  # nocoverage
         with transaction.atomic(savepoint=False):
             old_plan_type = self.remote_server.plan_type
-            new_plan_type = RemoteZulipServer.PLAN_TYPE_SELF_MANAGED
+            new_plan_type = RemoteDoerServer.PLAN_TYPE_SELF_MANAGED
             self.remote_server.plan_type = new_plan_type
             self.remote_server.save(update_fields=["plan_type"])
             self.write_to_audit_log(
@@ -5272,9 +5272,9 @@ class RemoteServerBillingSession(BillingSession):
         return True
 
     PAID_PLANS = [
-        RemoteZulipServer.PLAN_TYPE_BASIC,
-        RemoteZulipServer.PLAN_TYPE_BUSINESS,
-        RemoteZulipServer.PLAN_TYPE_ENTERPRISE,
+        RemoteDoerServer.PLAN_TYPE_BASIC,
+        RemoteDoerServer.PLAN_TYPE_BUSINESS,
+        RemoteDoerServer.PLAN_TYPE_ENTERPRISE,
     ]
 
     @override
@@ -5365,7 +5365,7 @@ class RemoteServerBillingSession(BillingSession):
 
         self.remote_server.deactivated = False
         self.remote_server.save(update_fields=["deactivated"])
-        RemoteZulipServerAuditLog.objects.create(
+        RemoteDoerServerAuditLog.objects.create(
             event_type=AuditLogEventType.REMOTE_SERVER_REACTIVATED,
             server=self.remote_server,
             event_time=timezone_now(),
@@ -5414,7 +5414,7 @@ class RemoteServerBillingSession(BillingSession):
 
         self.remote_server.deactivated = True
         self.remote_server.save(update_fields=["deactivated"])
-        RemoteZulipServerAuditLog.objects.create(
+        RemoteDoerServerAuditLog.objects.create(
             event_type=AuditLogEventType.REMOTE_SERVER_DEACTIVATED,
             server=self.remote_server,
             event_time=timezone_now(),
@@ -5635,7 +5635,7 @@ def maybe_send_stale_audit_log_data_email(
 
 
 def check_remote_server_audit_log_data(
-    remote_server: RemoteZulipServer, plan: CustomerPlan, billing_session: BillingSession
+    remote_server: RemoteDoerServer, plan: CustomerPlan, billing_session: BillingSession
 ) -> bool:
     # If this is a complimentary access plan without an upgrade scheduled,
     # we do not need the remote server's audit log data to downgrade the plan.
@@ -5693,7 +5693,7 @@ def review_and_maybe_invoice_plan(
     plan: CustomerPlan,
     event_time: datetime,
 ) -> None:
-    remote_server: RemoteZulipServer | None = None
+    remote_server: RemoteDoerServer | None = None
     if plan.customer.realm is not None:
         billing_session: BillingSession = RealmBillingSession(realm=plan.customer.realm)
     elif plan.customer.remote_realm is not None:
@@ -5861,7 +5861,7 @@ MAX_USERS_WITHOUT_PLAN = 10
 
 
 def get_push_status_for_remote_request(
-    remote_server: RemoteZulipServer, remote_realm: RemoteRealm | None
+    remote_server: RemoteDoerServer, remote_realm: RemoteRealm | None
 ) -> PushNotificationsEnabledStatus:
     # First, get the operative Customer object for this
     # installation.

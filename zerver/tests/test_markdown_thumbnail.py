@@ -10,7 +10,7 @@ from zerver.actions.message_send import check_message, do_send_messages
 from zerver.lib.addressee import Addressee
 from zerver.lib.camo import get_camo_url
 from zerver.lib.markdown import render_message_markdown
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import read_test_image_file
 from zerver.lib.thumbnail import ThumbnailFormat
 from zerver.lib.upload import upload_message_attachment
@@ -27,7 +27,7 @@ from zerver.models.realms import get_realm
 from zerver.worker.thumbnail import ensure_thumbnails
 
 
-class MarkdownThumbnailTest(ZulipTestCase):
+class MarkdownThumbnailTest(DoerTestCase):
     @override
     def setUp(self) -> None:
         self.login("othello")
@@ -551,7 +551,7 @@ class MarkdownThumbnailTest(ZulipTestCase):
         # past
         self.assertEqual(
             Message.objects.filter(
-                realm_id=get_realm("zulip").id,
+                realm_id=get_realm("doer").id,
                 has_image=True,
                 rendered_content__contains='class="image-loading-placeholder"',
             ).count(),
@@ -562,7 +562,7 @@ class MarkdownThumbnailTest(ZulipTestCase):
         message.save()
         self.assertEqual(
             Message.objects.filter(
-                realm_id=get_realm("zulip").id,
+                realm_id=get_realm("doer").id,
                 has_image=True,
                 rendered_content__contains='class="image-loading-placeholder"',
             ).count(),
@@ -607,7 +607,7 @@ class MarkdownThumbnailTest(ZulipTestCase):
         # Force-update to the version without thumbnails
         self.assertEqual(
             Message.objects.filter(
-                realm_id=get_realm("zulip").id,
+                realm_id=get_realm("doer").id,
                 has_image=True,
                 rendered_content__contains='<img src="/user_uploads/',
             )
@@ -624,7 +624,7 @@ class MarkdownThumbnailTest(ZulipTestCase):
         message.save()
         self.assertEqual(
             Message.objects.filter(
-                realm_id=get_realm("zulip").id,
+                realm_id=get_realm("doer").id,
                 has_image=True,
                 rendered_content__contains='<img src="/user_uploads/',
             )

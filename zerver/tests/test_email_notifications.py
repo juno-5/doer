@@ -16,14 +16,14 @@ from zerver.lib.email_notifications import (
     send_account_registered_email,
 )
 from zerver.lib.send_email import send_custom_email, send_custom_server_email
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import mock_queue_publish
 from zerver.models import Realm, ScheduledEmail, UserProfile
 from zerver.models.realms import get_realm
-from zilencer.models import RemoteZulipServer
+from zilencer.models import RemoteDoerServer
 
 
-class TestCustomEmails(ZulipTestCase):
+class TestCustomEmails(DoerTestCase):
     def test_send_custom_email_argument(self) -> None:
         hamlet = self.example_user("hamlet")
         email_subject = "subject_test"
@@ -50,7 +50,7 @@ class TestCustomEmails(ZulipTestCase):
         self.assertEqual(msg.reply_to[0], reply_to)
         self.assertNotIn("{% block content %}", msg.body)
         self.assertIn("# Some heading", msg.body)
-        self.assertIn("Zulip Dev", msg.body)
+        self.assertIn("Doer Dev", msg.body)
         self.assertNotIn("{{ realm_name }}", msg.body)
         self.assertNotIn("</div>", msg.body)
 
@@ -64,7 +64,7 @@ class TestCustomEmails(ZulipTestCase):
         from_name = "from_name_test"
         markdown_template_path = "templates/corporate/policies/index.md"
         send_custom_server_email(
-            remote_servers=RemoteZulipServer.objects.all(),
+            remote_servers=RemoteDoerServer.objects.all(),
             dry_run=False,
             options={
                 "markdown_template_path": markdown_template_path,
@@ -83,13 +83,13 @@ class TestCustomEmails(ZulipTestCase):
         # Verify that the HTML version contains the footer.
         assert isinstance(msg, EmailMultiAlternatives)
         self.assertIn(
-            "You are receiving this email to update you about important changes to Zulip",
+            "You are receiving this email to update you about important changes to Doer",
             str(msg.alternatives[0][0]),
         )
         self.assertIn("Unsubscribe", str(msg.alternatives[0][0]))
         # Verify that the Text version contains the footer.
         self.assertIn(
-            "You are receiving this email to update you about important changes to Zulip", msg.body
+            "You are receiving this email to update you about important changes to Doer", msg.body
         )
         self.assertIn("Unsubscribe", msg.body)
 
@@ -237,7 +237,7 @@ class TestCustomEmails(ZulipTestCase):
             self.assert_length(mail.outbox, 0)
 
 
-class TestFollowupEmails(ZulipTestCase):
+class TestFollowupEmails(DoerTestCase):
     def test_account_registered_email_context(self) -> None:
         hamlet = self.example_user("hamlet")
         with mock_queue_publish("zerver.lib.send_email.queue_event_on_commit") as m:
@@ -248,7 +248,7 @@ class TestFollowupEmails(ZulipTestCase):
         self.assertEqual(email_data["context"]["is_realm_admin"], False)
         self.assertEqual(
             email_data["context"]["getting_user_started_link"],
-            "http://zulip.testserver/help/getting-started-with-zulip",
+            "http://doer.testserver/help/getting-started-with-doer",
         )
         self.assertNotIn("ldap_username", email_data["context"])
 
@@ -263,11 +263,11 @@ class TestFollowupEmails(ZulipTestCase):
         self.assertEqual(email_data["context"]["is_realm_admin"], True)
         self.assertEqual(
             email_data["context"]["getting_organization_started_link"],
-            "http://zulip.testserver/help/moving-to-zulip",
+            "http://doer.testserver/help/moving-to-doer",
         )
         self.assertEqual(
             email_data["context"]["getting_user_started_link"],
-            "http://zulip.testserver/help/getting-started-with-zulip",
+            "http://doer.testserver/help/getting-started-with-doer",
         )
         self.assertNotIn("ldap_username", email_data["context"])
 
@@ -275,12 +275,12 @@ class TestFollowupEmails(ZulipTestCase):
     # for case details.
     @override_settings(
         AUTHENTICATION_BACKENDS=(
-            "zproject.backends.ZulipLDAPAuthBackend",
-            "zproject.backends.ZulipDummyBackend",
+            "zproject.backends.DoerLDAPAuthBackend",
+            "zproject.backends.DoerDummyBackend",
         ),
         # configure email search for email address in the uid attribute:
         AUTH_LDAP_REVERSE_EMAIL_SEARCH=LDAPSearch(
-            "ou=users,dc=zulip,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(email)s)"
+            "ou=users,dc=doer,dc=com", ldap.SCOPE_ONELEVEL, "(uid=%(email)s)"
         ),
     )
     def test_account_registered_email_ldap_case_a_login_credentials(self) -> None:
@@ -306,8 +306,8 @@ class TestFollowupEmails(ZulipTestCase):
 
     @override_settings(
         AUTHENTICATION_BACKENDS=(
-            "zproject.backends.ZulipLDAPAuthBackend",
-            "zproject.backends.ZulipDummyBackend",
+            "zproject.backends.DoerLDAPAuthBackend",
+            "zproject.backends.DoerDummyBackend",
         )
     )
     def test_account_registered_email_ldap_case_b_login_credentials(self) -> None:
@@ -331,8 +331,8 @@ class TestFollowupEmails(ZulipTestCase):
 
     @override_settings(
         AUTHENTICATION_BACKENDS=(
-            "zproject.backends.ZulipLDAPAuthBackend",
-            "zproject.backends.ZulipDummyBackend",
+            "zproject.backends.DoerLDAPAuthBackend",
+            "zproject.backends.DoerDummyBackend",
         )
     )
     def test_account_registered_email_ldap_case_c_login_credentials(self) -> None:
@@ -355,9 +355,9 @@ class TestFollowupEmails(ZulipTestCase):
         hamlet = self.example_user("hamlet")
         iago = self.example_user("iago")
         cordelia = self.example_user("cordelia")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
-        # Hamlet has account only in Zulip realm so all onboarding emails should be sent
+        # Hamlet has account only in Doer realm so all onboarding emails should be sent
         with mock_queue_publish("zerver.lib.send_email.queue_event_on_commit") as m:
             send_account_registered_email(self.example_user("hamlet"))
             enqueue_welcome_emails(self.example_user("hamlet"))
@@ -370,21 +370,21 @@ class TestFollowupEmails(ZulipTestCase):
         self.assert_length(scheduled_emails, 2)
         self.assertEqual(
             orjson.loads(scheduled_emails[0].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_topics",
+            "zerver/emails/onboarding_doer_topics",
         )
         self.assertEqual(
             orjson.loads(scheduled_emails[1].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_guide",
+            "zerver/emails/onboarding_doer_guide",
         )
 
         ScheduledEmail.objects.all().delete()
 
-        # The onboarding_zulip_guide email should not be sent to non-admin users in organizations
+        # The onboarding_doer_guide email should not be sent to non-admin users in organizations
         # that are sent the `/for/communities/` guide; see note in enqueue_welcome_emails.
         realm.org_type = Realm.ORG_TYPES["community"]["id"]
         realm.save()
 
-        # Hamlet is not an admin so the `/for/communities/` zulip_guide should not be sent
+        # Hamlet is not an admin so the `/for/communities/` doer_guide should not be sent
         with mock_queue_publish("zerver.lib.send_email.queue_event_on_commit") as m:
             send_account_registered_email(self.example_user("hamlet"))
             enqueue_welcome_emails(self.example_user("hamlet"))
@@ -397,12 +397,12 @@ class TestFollowupEmails(ZulipTestCase):
         self.assert_length(scheduled_emails, 1)
         self.assertEqual(
             orjson.loads(scheduled_emails[0].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_topics",
+            "zerver/emails/onboarding_doer_topics",
         )
 
         ScheduledEmail.objects.all().delete()
 
-        # Iago is an admin so the `/for/communities/` zulip_guide should be sent
+        # Iago is an admin so the `/for/communities/` doer_guide should be sent
         with mock_queue_publish("zerver.lib.send_email.queue_event_on_commit") as m:
             send_account_registered_email(self.example_user("iago"))
             enqueue_welcome_emails(self.example_user("iago"))
@@ -413,11 +413,11 @@ class TestFollowupEmails(ZulipTestCase):
         self.assert_length(scheduled_emails, 2)
         self.assertEqual(
             orjson.loads(scheduled_emails[0].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_topics",
+            "zerver/emails/onboarding_doer_topics",
         )
         self.assertEqual(
             orjson.loads(scheduled_emails[1].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_guide",
+            "zerver/emails/onboarding_doer_guide",
         )
 
         ScheduledEmail.objects.all().delete()
@@ -426,7 +426,7 @@ class TestFollowupEmails(ZulipTestCase):
         realm.org_type = Realm.ORG_TYPES["education_nonprofit"]["id"]
         realm.save()
 
-        # Cordelia has account in more than 1 realm so onboarding_zulip_topics email should not be sent
+        # Cordelia has account in more than 1 realm so onboarding_doer_topics email should not be sent
         with mock_queue_publish("zerver.lib.send_email.queue_event_on_commit") as m:
             send_account_registered_email(self.example_user("cordelia"))
             enqueue_welcome_emails(self.example_user("cordelia"))
@@ -439,12 +439,12 @@ class TestFollowupEmails(ZulipTestCase):
         self.assert_length(scheduled_emails, 1)
         self.assertEqual(
             orjson.loads(scheduled_emails[0].data)["template_prefix"],
-            "zerver/emails/onboarding_zulip_guide",
+            "zerver/emails/onboarding_doer_guide",
         )
 
         ScheduledEmail.objects.all().delete()
 
-        # Only a subset of Realm.ORG_TYPES are sent the zulip_guide_followup email
+        # Only a subset of Realm.ORG_TYPES are sent the doer_guide_followup email
         realm.org_type = Realm.ORG_TYPES["other"]["id"]
         realm.save()
 
@@ -469,11 +469,11 @@ class TestFollowupEmails(ZulipTestCase):
             self.assert_length(scheduled_emails, 2)
             self.assertEqual(
                 orjson.loads(scheduled_emails[0].data)["template_prefix"],
-                "zerver/emails/onboarding_zulip_guide",
+                "zerver/emails/onboarding_doer_guide",
             )
             self.assertEqual(
                 orjson.loads(scheduled_emails[1].data)["template_prefix"],
-                "zerver/emails/onboarding_team_to_zulip",
+                "zerver/emails/onboarding_team_to_doer",
             )
 
         # The insert into the deferred_email_senders queue
@@ -485,12 +485,12 @@ class TestFollowupEmails(ZulipTestCase):
         self.assert_length(outbox, 1)
 
         message = outbox[0]
-        self.assertIn("you have created a new Zulip organization", message.body)
+        self.assertIn("you have created a new Doer organization", message.body)
         self.assertNotIn("demo org", message.body)
 
-    def test_onboarding_zulip_guide_with_invalid_org_type(self) -> None:
+    def test_onboarding_doer_guide_with_invalid_org_type(self) -> None:
         cordelia = self.example_user("cordelia")
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         invalid_org_type_id = 999
         realm.org_type = invalid_org_type_id
@@ -507,14 +507,14 @@ class TestFollowupEmails(ZulipTestCase):
         )
 
 
-class TestOnboardingEmailDelay(ZulipTestCase):
+class TestOnboardingEmailDelay(DoerTestCase):
     def verify_onboarding_email_schedule(
         self,
         user: UserProfile,
         date_joined: str,
-        onboarding_zulip_topics: int,
-        onboarding_zulip_guide: int,
-        onboarding_team_to_zulip: int,
+        onboarding_doer_topics: int,
+        onboarding_doer_guide: int,
+        onboarding_team_to_doer: int,
     ) -> None:
         DAY_OF_WEEK = {
             "Monday": datetime(2018, 1, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
@@ -530,25 +530,25 @@ class TestOnboardingEmailDelay(ZulipTestCase):
         user.date_joined = DAY_OF_WEEK[date_joined]
         onboarding_email_schedule = get_onboarding_email_schedule(user)
 
-        # onboarding_zulip_topics
+        # onboarding_doer_topics
         day_sent = (
-            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_zulip_topics"]
+            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_doer_topics"]
         ).isoweekday()
-        self.assertEqual(day_sent, onboarding_zulip_topics)
+        self.assertEqual(day_sent, onboarding_doer_topics)
         self.assertNotIn(day_sent, WEEKEND)
 
-        # onboarding_zulip_guide
+        # onboarding_doer_guide
         day_sent = (
-            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_zulip_guide"]
+            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_doer_guide"]
         ).isoweekday()
-        self.assertEqual(day_sent, onboarding_zulip_guide)
+        self.assertEqual(day_sent, onboarding_doer_guide)
         self.assertNotIn(day_sent, WEEKEND)
 
-        # onboarding_team_to_zulip
+        # onboarding_team_to_doer
         day_sent = (
-            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_team_to_zulip"]
+            DAY_OF_WEEK[date_joined] + onboarding_email_schedule["onboarding_team_to_doer"]
         ).isoweekday()
-        self.assertEqual(day_sent, onboarding_team_to_zulip)
+        self.assertEqual(day_sent, onboarding_team_to_doer)
         self.assertNotIn(day_sent, WEEKEND)
 
     def test_get_onboarding_email_schedule(self) -> None:
@@ -590,26 +590,26 @@ class TestOnboardingEmailDelay(ZulipTestCase):
         user_profile.date_joined = datetime(2018, 1, 5, 1, 0, 0, 0, tzinfo=timezone.utc)
         onboarding_email_schedule = get_onboarding_email_schedule(user_profile)
 
-        # onboarding_zulip_topics email sent on Monday
+        # onboarding_doer_topics email sent on Monday
         self.assertEqual(
-            onboarding_email_schedule["onboarding_zulip_topics"],
+            onboarding_email_schedule["onboarding_doer_topics"],
             days_delayed["4"],
         )
 
-        # onboarding_zulip_guide sent on Wednesday
+        # onboarding_doer_guide sent on Wednesday
         self.assertEqual(
-            onboarding_email_schedule["onboarding_zulip_guide"],
+            onboarding_email_schedule["onboarding_doer_guide"],
             days_delayed["6"],
         )
 
-        # onboarding_team_to_zulip sent on Friday
+        # onboarding_team_to_doer sent on Friday
         self.assertEqual(
-            onboarding_email_schedule["onboarding_team_to_zulip"],
+            onboarding_email_schedule["onboarding_team_to_doer"],
             days_delayed["8"],
         )
 
 
-class TestCustomWelcomeEmailSender(ZulipTestCase):
+class TestCustomWelcomeEmailSender(DoerTestCase):
     def test_custom_welcome_email_sender(self) -> None:
         name = "Nonreg Email"
         email = self.nonreg_email("test")
@@ -629,7 +629,7 @@ class TestCustomWelcomeEmailSender(ZulipTestCase):
             self.assertEqual(email_data["from_address"], email)
 
 
-class TestHtmlToMarkdown(ZulipTestCase):
+class TestHtmlToMarkdown(DoerTestCase):
     def test_html_to_markdown_unicode(self) -> None:
         self.assertEqual(
             convert_html_to_markdown("a rose is not a ros&eacute;"), "a rose is not a rosé"

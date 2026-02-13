@@ -2,25 +2,25 @@
 #
 class kandra::prometheus::uwsgi {
   include kandra::prometheus::base
-  include zulip::supervisor
+  include doer::supervisor
 
-  $version = $zulip::common::versions['uwsgi_exporter']['version']
+  $version = $doer::common::versions['uwsgi_exporter']['version']
   $dir = "/srv/zulip-uwsgi_exporter-${version}"
   $bin = "${dir}/uwsgi_exporter"
 
-  zulip::external_dep { 'uwsgi_exporter':
+  doer::external_dep { 'uwsgi_exporter':
     version        => $version,
-    url            => "https://github.com/timonwong/uwsgi_exporter/releases/download/v${version}/uwsgi_exporter-${version}.linux-${zulip::common::goarch}.tar.gz",
-    tarball_prefix => "uwsgi_exporter-${version}.linux-${zulip::common::goarch}",
+    url            => "https://github.com/timonwong/uwsgi_exporter/releases/download/v${version}/uwsgi_exporter-${version}.linux-${doer::common::goarch}.tar.gz",
+    tarball_prefix => "uwsgi_exporter-${version}.linux-${doer::common::goarch}",
     bin            => [$bin],
     cleanup_after  => [Service[supervisor]],
   }
 
   kandra::firewall_allow { 'uwsgi_exporter': port => '9238' }
-  file { "${zulip::common::supervisor_conf_dir}/prometheus_uwsgi_exporter.conf":
+  file { "${doer::common::supervisor_conf_dir}/prometheus_uwsgi_exporter.conf":
     ensure  => file,
     require => [
-      User[zulip],
+      User[doer],
       Package[supervisor],
       File[$bin],
     ],

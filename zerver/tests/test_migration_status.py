@@ -9,10 +9,10 @@ from zerver.lib.migration_status import (
     get_migration_status,
     parse_migration_status,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class MigrationStatusTests(ZulipTestCase):
+class MigrationStatusTests(DoerTestCase):
     def parse_showmigrations(
         self,
         migration_status_print: str,

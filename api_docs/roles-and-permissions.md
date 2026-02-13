@@ -1,15 +1,15 @@
 # Roles and permissions
 
-Zulip offers several levels of permissions based on a
-[user's role](/help/user-roles) in a Zulip organization.
+Doer offers several levels of permissions based on a
+[user's role](/help/user-roles) in a Doer organization.
 
 Here are some important details to note when working with these
-roles and permissions in Zulip's API:
+roles and permissions in Doer's API:
 
 ## A user's role
 
 A user's account data include a `role` property, which contains the
-user's role in the Zulip organization. These roles are encoded as:
+user's role in the Doer organization. These roles are encoded as:
 
 * Organization owner: 100
 
@@ -40,10 +40,10 @@ at least an organization moderator. The property will be true for admins
 and owners too.
 
 Additionally, user account data include an `is_billing_admin` property
-specifying whether the user is a billing administrator for the Zulip
+specifying whether the user is a billing administrator for the Doer
 organization, which is not related to one of the roles listed above,
 but rather allows for specific permissions related to billing
-administration in [paid Zulip Cloud plans](https://zulip.com/plans/).
+administration in [paid Doer Cloud plans](https://zulip.com/plans/).
 
 ### User account data in the API
 
@@ -74,7 +74,7 @@ event](/api/get-events#realm_user-add), and the
 
 ## Permission levels
 
-Many areas of Zulip are customizable by the roles
+Many areas of Doer are customizable by the roles
 above, such as (but not limited to) [restricting message editing and
 deletion](/help/restrict-message-editing-and-deletion) and various
 permissions for different [channel types](/help/channel-permissions).
@@ -100,7 +100,7 @@ specified ability or access. For example, a permission level documented
 as 'moderators only' includes organization moderators, administrators,
 and owners.
 
-Note that specific settings and policies in the Zulip API that use these
+Note that specific settings and policies in the Doer API that use these
 permission levels will likely support a subset of those listed above.
 
 ## Group-based permissions
@@ -110,7 +110,7 @@ Some settings have been migrated to a more flexible system based on
 
 ## Determining if a user is a full member
 
-When a Zulip organization has set up a [waiting period before new members
+When a Doer organization has set up a [waiting period before new members
 turn into full members](/help/restrict-permissions-of-new-members),
 clients will need to determine if a user's account has aged past the
 organization's waiting period threshold.

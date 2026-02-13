@@ -23,7 +23,7 @@ from zerver.lib.validator import (
 
 # stubs
 ZerverFieldsT: TypeAlias = dict[str, Any]
-SlackToZulipUserIDT: TypeAlias = dict[str, int]
+SlackToDoerUserIDT: TypeAlias = dict[str, int]
 AddedChannelsT: TypeAlias = dict[str, tuple[str, int]]
 SlackFieldsT: TypeAlias = dict[str, Any]
 
@@ -52,9 +52,9 @@ SLACK_USERMENTION_REGEX = r"""
                                ([a-zA-Z0-9]+)?   # If vertical line is present, this is short name
                            (>)                   # ends with '>'
                            """
-# Slack doesn't have mid-word message-formatting like Zulip.
+# Slack doesn't have mid-word message-formatting like Doer.
 # Hence, ~stri~ke doesn't format the word in Slack, but ~~stri~~ke
-# formats the word in Zulip
+# formats the word in Doer
 SLACK_STRIKETHROUGH_REGEX = r"""
                              (
                                 # Capture punctuation (\p{P}), white space (\p{Zs}),
@@ -119,7 +119,7 @@ def get_user_full_name(user: ZerverFieldsT) -> str:
         return user["name"]
 
 
-def get_zulip_mention_for_slack_user(
+def get_doer_mention_for_slack_user(
     slack_user_id: str | None,
     slack_user_shortname: str | None,
     users: list[ZerverFieldsT],
@@ -137,16 +137,16 @@ def get_zulip_mention_for_slack_user(
 def get_user_mentions(
     token: str,
     users: list[ZerverFieldsT],
-    slack_user_id_to_zulip_user_id: SlackToZulipUserIDT,
+    slack_user_id_to_doer_user_id: SlackToDoerUserIDT,
 ) -> tuple[str, int | None]:
     slack_usermention_match = re.search(SLACK_USERMENTION_REGEX, token, re.VERBOSE)
     assert slack_usermention_match is not None
     short_name = slack_usermention_match.group(4)
     slack_id = slack_usermention_match.group(2)
-    zulip_mention = get_zulip_mention_for_slack_user(slack_id, short_name, users)
-    if zulip_mention is not None:
-        token = re.sub(SLACK_USERMENTION_REGEX, zulip_mention, token, flags=re.VERBOSE)
-        user_id = slack_user_id_to_zulip_user_id[slack_id]
+    doer_mention = get_doer_mention_for_slack_user(slack_id, short_name, users)
+    if doer_mention is not None:
+        token = re.sub(SLACK_USERMENTION_REGEX, doer_mention, token, flags=re.VERBOSE)
+        user_id = slack_user_id_to_doer_user_id[slack_id]
         return token, user_id
     return token, None
 
@@ -184,23 +184,23 @@ def convert_mailto_format(text: str) -> tuple[str, bool]:
 
 
 # Map italic, bold and strikethrough Markdown
-def convert_markdown_syntax(text: str, pattern: str, zulip_keyword: str) -> str:
+def convert_markdown_syntax(text: str, pattern: str, doer_keyword: str) -> str:
     """
     Returns:
-    1. For strikethrough formatting: This maps Slack's '~strike~' to Zulip's '~~strike~~'
-    2. For bold formatting: This maps Slack's '*bold*' to Zulip's '**bold**'
-    3. For italic formatting: This maps Slack's '_italic_' to Zulip's '*italic*'
+    1. For strikethrough formatting: This maps Slack's '~strike~' to Doer's '~~strike~~'
+    2. For bold formatting: This maps Slack's '*bold*' to Doer's '**bold**'
+    3. For italic formatting: This maps Slack's '_italic_' to Doer's '*italic*'
     """
 
     def replace_slack_format(match: regex.Match[str]) -> str:
-        return match.group(1) + zulip_keyword + match.group(3) + zulip_keyword
+        return match.group(1) + doer_keyword + match.group(3) + doer_keyword
 
     return regex.sub(pattern, replace_slack_format, text, flags=re.VERBOSE | re.MULTILINE)
 
 
 def convert_slack_workspace_mentions(text: str) -> str:
     # Map Slack's '<!everyone>', '<!channel>' and '<!here>'
-    # mentions to Zulip's '@**all**' wildcard mention.
+    # mentions to Doer's '@**all**' wildcard mention.
     # No regex for these as they can be present anywhere
     # in the sentence.
     text = text.replace("<!everyone>", "@**all**")
@@ -217,11 +217,11 @@ def convert_slack_formatting(text: str) -> str:
 
 
 # Markdown mapping
-def convert_to_zulip_markdown(
+def convert_to_doer_markdown(
     text: str,
     users: list[ZerverFieldsT],
     added_channels: AddedChannelsT,
-    slack_user_id_to_zulip_user_id: SlackToZulipUserIDT,
+    slack_user_id_to_doer_user_id: SlackToDoerUserIDT,
 ) -> tuple[str, list[int], bool]:
     mentioned_users_id = []
     text = convert_slack_formatting(text)
@@ -238,7 +238,7 @@ def convert_to_zulip_markdown(
         # '<@slack_id|short_name>' to '@**full_name**'
         if re.findall(SLACK_USERMENTION_REGEX, tokens[iterator], re.VERBOSE):
             tokens[iterator], user_id = get_user_mentions(
-                tokens[iterator], users, slack_user_id_to_zulip_user_id
+                tokens[iterator], users, slack_user_id_to_doer_user_id
             )
             if user_id is not None:
                 mentioned_users_id.append(user_id)
@@ -289,7 +289,7 @@ def render_block(block: WildValue) -> str:
         "file",
         "table",
         # The "actions" block is used to format literal in-message clickable
-        # buttons and similar elements, which Zulip currently doesn't support.
+        # buttons and similar elements, which Doer currently doesn't support.
         # https://docs.slack.dev/reference/block-kit/blocks/actions-block
         "actions",
         # All user-sent messages contain at least a "block" component with a
@@ -388,7 +388,7 @@ def check_text_block(plain_text_only: bool = False) -> Validator[TextField]:
 
 def render_block_element(element: WildValue) -> str:
     # https://api.slack.com/reference/block-kit/block-elements
-    # Zulip doesn't support interactive elements, so we only render images here
+    # Doer doesn't support interactive elements, so we only render images here
     element_type = element["type"].tame(check_string)
     if element_type == "image":
         try:

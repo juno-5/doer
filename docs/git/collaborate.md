@@ -3,11 +3,11 @@
 ## Fetch another contributor's branch
 
 What happens when you would like to collaborate with another contributor and
-they have work-in-progress on their own fork of Zulip? No problem! Just add
+they have work-in-progress on their own fork of Doer? No problem! Just add
 their fork as a remote and pull their changes.
 
 ```console
-$ git remote add <username> https://github.com/<username>/zulip.git
+$ git remote add <username> https://github.com/<username>/doer.git
 $ git fetch <username>
 ```
 
@@ -56,4 +56,4 @@ tools/fetch-pull-request <PR-number>
 ```
 
 [github-help-co-pr-locally]: https://help.github.com/en/articles/checking-out-pull-requests-locally
-[tools-pr]: zulip-tools.md#fetch-a-pull-request-and-rebase
+[tools-pr]: doer-tools.md#fetch-a-pull-request-and-rebase

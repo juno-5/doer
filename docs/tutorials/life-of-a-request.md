@@ -2,14 +2,14 @@
 
 It can sometimes be confusing to figure out how to write a new feature,
 or debug an existing one. Let us try to follow a request through the
-Zulip codebase, and dive deep into how each part works.
+Doer codebase, and dive deep into how each part works.
 
 We will use as our example the creation of users through the API, but we
 will also highlight how alternative requests are handled.
 
 ## A request is sent to the server, and handled by [nginx](https://nginx.org/en/docs/)
 
-When Zulip is deployed in production, all requests go through nginx.
+When Doer is deployed in production, all requests go through nginx.
 For the most part we don't need to know how this works, except for when
 it isn't working. nginx does the first level of routing--deciding which
 application will serve the request (or deciding to serve the request
@@ -20,7 +20,7 @@ are in your Git checkout under `static`, and are served unminified.
 
 ## Static files are [served directly][served-directly] by nginx
 
-[served-directly]: https://github.com/zulip/zulip/blob/main/puppet/zulip/files/nginx/zulip-include-frontend/app
+[served-directly]: https://github.com/doer/doer/blob/main/puppet/doer/files/nginx/doer-include-frontend/app
 
 Static files include JavaScript, CSS, and static assets (like emoji, avatars).
 
@@ -42,14 +42,14 @@ location /static/ {
 
 All our connected clients hold open long-polling connections so that
 they can receive events (messages, presence notifications, and so on) in
-real-time. Events are served by Zulip's `tornado` application.
+real-time. Events are served by Doer's `tornado` application.
 
 Nearly every other kind of request is served by the `zerver` Django
 application.
 
 [Here is the relevant nginx routing configuration.][nginx-config-link]
 
-[nginx-config-link]: https://github.com/zulip/zulip/blob/main/puppet/zulip/files/nginx/zulip-include-frontend/app
+[nginx-config-link]: https://github.com/doer/doer/blob/main/puppet/doer/files/nginx/doer-include-frontend/app
 
 ## Django routes the request to a view in urls.py files
 
@@ -59,7 +59,7 @@ files throughout the server codebase, which are covered in more detail
 in
 [the directory structure doc](../overview/directory-structure.md).
 
-The main Zulip Django app is `zerver`. The routes are found in
+The main Doer Django app is `zerver`. The routes are found in
 `zproject/urls.py`.
 
 There are HTML-serving, REST API, and webhook url patterns. We
@@ -69,7 +69,7 @@ on how the REST API handles our user creation example.
 ## Views serving HTML are internationalized by server path
 
 If we look in
-[zproject/urls.py](https://github.com/zulip/zulip/blob/main/zproject/urls.py),
+[zproject/urls.py](https://github.com/doer/doer/blob/main/zproject/urls.py),
 we can see something called `i18n_urls`. These urls show up in the
 address bar of the browser, and serve HTML.
 
@@ -85,7 +85,7 @@ Note the `zh-hans` prefix--that url pattern gets added by `i18n_patterns`.
 Our example is a REST API endpoint. It's a PUT to `/users`.
 
 With the exception of incoming webhooks (which we do not usually control the
-format of) and logged-out endpoints, Zulip uses REST
+format of) and logged-out endpoints, Doer uses REST
 for its API. This means that we use:
 
 - POST for creating something new where we don't have a unique
@@ -104,7 +104,7 @@ state on the server. You might get a different response after the first
 request, as we like to give our clients an error so they know that no
 new change was made by the extra requests.
 
-POST is not idempotent--if I send a message multiple times, Zulip will
+POST is not idempotent--if I send a message multiple times, Doer will
 show my message multiple times. PATCH is special--it can be
 idempotent, and we like to write API endpoints in an idempotent fashion,
 as much as possible.
@@ -134,7 +134,7 @@ This request:
 yields a response with this HTTP header:
 `Allow: GET, HEAD, POST`
 
-We can see this reflected in [zproject/urls.py](https://github.com/zulip/zulip/blob/main/zproject/urls.py):
+We can see this reflected in [zproject/urls.py](https://github.com/doer/doer/blob/main/zproject/urls.py):
 
 ```python
 rest_path('users',
@@ -146,15 +146,15 @@ In this way, the API is partially self-documenting.
 
 ### Incoming webhook integrations may not be RESTful
 
-Zulip endpoints that are called by other services for integrations have
+Doer endpoints that are called by other services for integrations have
 to conform to the service's request format. They are likely to use
 only POST.
 
 ## Django calls rest_dispatch for REST endpoints, and authenticates
 
-For requests that correspond to a REST url pattern, Zulip configures
+For requests that correspond to a REST url pattern, Doer configures
 its url patterns (see
-[zerver/lib/rest.py](https://github.com/zulip/zulip/blob/main/zerver/lib/rest.py))
+[zerver/lib/rest.py](https://github.com/doer/doer/blob/main/zerver/lib/rest.py))
 so that the action called is `rest_dispatch`. This method will
 authenticate the user, either through a session token from a cookie,
 or from an `email:api-key` string given via HTTP basic auth for API
@@ -201,7 +201,7 @@ object](https://docs.djangoproject.com/en/5.0/ref/request-response/).
 The `data` argument is a Python object which can be converted to a JSON
 string and has a default value of an empty Python dictionary.
 
-Zulip stores additional metadata it has associated with that HTTP
+Doer stores additional metadata it has associated with that HTTP
 request in a `RequestNotes` object, which is primarily accessed in
 common code used in all requests (middleware, logging, rate limiting,
 etc.).

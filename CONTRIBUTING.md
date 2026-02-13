@@ -1,33 +1,33 @@
 # Contributing guide
 
 Welcome! This is a step-by-step guide on how to get started contributing code to
-the [Zulip](https://zulip.com/) organized team chat [open-source
-project](https://github.com/zulip). Thousands of people use Zulip every day, and
-your work on Zulip will have a meaningful impact on their experience. We hope
+the [Doer](https://zulip.com/) organized team chat [open-source
+project](https://github.com/doer). Thousands of people use Doer every day, and
+your work on Doer will have a meaningful impact on their experience. We hope
 you'll join us!
 
 To learn about ways to contribute without writing code, please see our
-suggestions for how you can [support the Zulip
-project](https://zulip.com/help/support-zulip-project).
+suggestions for how you can [support the Doer
+project](https://zulip.com/help/support-doer-project).
 
-## How to use Zulip's documentation for contributors
+## How to use Doer's documentation for contributors
 
 ::: note
 
 **Reading and following our written guidelines** to the very best of your ability is
-the only way to become a successful Zulip contributor.
+the only way to become a successful Doer contributor.
 
 :::
 
-Zulip has a documentation-based approach to onboarding new contributors. As you
+Doer has a documentation-based approach to onboarding new contributors. As you
 are getting started, this page will be your go-to for figuring out what to do
 next. You will also explore other guides, learning about how to put together
-your first pull request, diving into [Zulip's
+your first pull request, diving into [Doer's
 subsystems](https://zulip.readthedocs.io/en/latest/subsystems/index.html), and
 much more.
 
 We hope you'll find this process to be a great learning experience. If you
-_aren't_ excited to learn from our series of contributor guides, then Zulip is
+_aren't_ excited to learn from our series of contributor guides, then Doer is
 not the right project for you.
 
 Please read the following sections of this guide at the times described (or
@@ -58,22 +58,22 @@ likely somewhere on this page (perhaps in the list of [common
 questions](#common-questions)), or in one of the many references it points to.
 
 If you've done all you can with the documentation and are still feeling stuck,
-join the [Zulip development community](https://zulip.com/development-community/)
+join the [Doer development community](https://zulip.com/development-community/)
 to ask for help! Before you post, be sure to review [community
 norms](https://zulip.com/development-community/#community-norms) and [where to
 post](https://zulip.com/development-community/#where-do-i-send-my-message) your
-question. The Zulip community is governed by a [code of
+question. The Doer community is governed by a [code of
 conduct](https://zulip.readthedocs.io/en/latest/code-of-conduct.html).
 
 ## How to be a successful contributor
 
-In our experience, to become an effective Zulip contributor, you should be
+In our experience, to become an effective Doer contributor, you should be
 excited to:
 
-- **Learn from documentation.** Zulip has over 185,000 words of [documentation
+- **Learn from documentation.** Doer has over 185,000 words of [documentation
   for contributors][documentation for contributors], and we expect you to make
   good use of it.
-- **Aim for understanding**. To produce work that improves Zulip, you’ll need to
+- **Aim for understanding**. To produce work that improves Doer, you’ll need to
   understand the relevant existing code, and figure out a good set of changes to
   accomplish what you’re trying to do. Fiddling or vibe coding until things seem
   to work, and then asking maintainers to verify code that you don’t understand
@@ -89,23 +89,23 @@ excited to:
   to avoid similar mistakes in future work.
 - **Communicate with intention.** Any piece of communication from you (a pull
   request, a [question][great-questions] in the development community, etc.), is
-  a request for time and attention from Zulip’s maintainers. Successful
+  a request for time and attention from Doer’s maintainers. Successful
   contributors put in the reasoning and writing effort required to
   [communicate][how we communicate] clearly and succinctly, and don’t waste the
   community’s time with AI slop. See our [AI use policy and
   guidelines](#ai-use-policy-and-guidelines).
 - **Communicate in the open.** Technical and product decisions are discussed
-  openly in the [Zulip development
+  openly in the [Doer development
   community](https://zulip.com/development-community/) and [on
-  GitHub](https://github.com/zulip), so that we can all learn from each other.
+  GitHub](https://github.com/doer), so that we can all learn from each other.
 
 What about technical skills? You will need a baseline level of technical
-expertise to be able to understand the part of Zulip’s code base you’re working
+expertise to be able to understand the part of Doer’s code base you’re working
 in, and make quality changes. If you find that you are constantly getting stuck
 as you work towards this, it might be best to hold off on trying to contribute,
 and focus on learning the relevant software engineering skills for now.
 
-[documentation for contributors]: https://zulip.readthedocs.io/en/latest/index.html#zulip-documentation-overview
+[documentation for contributors]: https://zulip.readthedocs.io/en/latest/index.html#doer-documentation-overview
 [commit discipline]: https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html
 [reviewing code]: https://zulip.readthedocs.io/en/latest/contributing/code-reviewing.html
 [submitting a PR]: https://zulip.readthedocs.io/en/latest/contributing/reviewable-prs.html
@@ -114,13 +114,13 @@ and focus on learning the relevant software engineering skills for now.
 
 ## AI use policy and guidelines
 
-Our goal in the Zulip project is to develop an excellent software
+Our goal in the Doer project is to develop an excellent software
 system. This requires careful attention to detail in every change we
 integrate. Maintainer time and attention is very limited, so it's
 important that changes you ask us to review represent
 your _best_ work.
 
-You can use any tools that help you understand the Zulip codebase and
+You can use any tools that help you understand the Doer codebase and
 write good code, including AI tools. However, as noted above, you
 always need to understand and explain the changes you're proposing to
 make, whether or not you used an LLM as part of your process to
@@ -139,8 +139,8 @@ guideline will be closed without review.
    you're working on. This will let you write better prompts and
    validate their output if you use an LLM. Code assistants can be a
    useful search engine/discovery tool in this process, but don't
-   trust claims they make about how Zulip works. LLMs are often wrong,
-   even about details that are clearly answered in the Zulip
+   trust claims they make about how Doer works. LLMs are often wrong,
+   even about details that are clearly answered in the Doer
    documentation.
 1. Split up your changes into **[coherent
    commits](https://zulip.readthedocs.io/en/latest/contributing/commit-discipline.html)**,
@@ -153,13 +153,13 @@ guideline will be closed without review.
 
 ### Using AI for communication
 
-As noted above, Zulip's contributors are expected to communicate with
+As noted above, Doer's contributors are expected to communicate with
 intention, to avoid wasting maintainer time with long, sloppy
 writing. We strongly prefer clear and concise communication about
 points that actually require discussion over long AI-generated
 comments.
 
-**Do not post AI-generated messages** in the [Zulip development
+**Do not post AI-generated messages** in the [Doer development
 community](https://zulip.com/development-community/) -- we want to read your
 own genuine expression of your thoughts. It's fine to use whatever tools you
 like for help with spelling, grammar, or translation.
@@ -182,7 +182,7 @@ workflows.
    reasoning**. Don't prompt an LLM to re-describe what can already be seen from
    the code.
 1. Verify that **everything you write is accurate**, whether or not an LLM
-   generated any part of it. Zulip's maintainers will be unable to review your
+   generated any part of it. Doer's maintainers will be unable to review your
    contributions if you misrepresent your work (e.g., misdescribing your code
    changes, their effect, or your testing process).
 1. Complete all parts of the **PR description template**, including screenshots
@@ -195,27 +195,27 @@ workflows.
 1. Quoting an LLM answer is usually less helpful than linking to
    **relevant primary sources**, like source code, reference
    documentation, or web standards. If you do need to quote an LLM
-   answer in a Zulip conversation, put the answer in a [Zulip quote
+   answer in a Doer conversation, put the answer in a [Doer quote
    block](https://zulip.com/help/format-a-quote), to distinguish LLM
    output from your own thoughts.
 
 ## Getting started
 
-### Learning how to use Git (the Zulip way)
+### Learning how to use Git (the Doer way)
 
-Zulip uses GitHub for source control and code review, and becoming familiar with
-Git is essential for navigating and contributing to the Zulip codebase. [Our
+Doer uses GitHub for source control and code review, and becoming familiar with
+Git is essential for navigating and contributing to the Doer codebase. [Our
 guide to Git](https://zulip.readthedocs.io/en/latest/git/index.html) will help
 you get started even if you've never used Git before.
 
 If you're familiar with Git, you'll still want to take a look at [our
-Zulip-specific Git
-tools](https://zulip.readthedocs.io/en/latest/git/zulip-tools.html).
+Doer-specific Git
+tools](https://zulip.readthedocs.io/en/latest/git/doer-tools.html).
 
 ### Setting up your development environment and diving in
 
-To get started contributing code to Zulip, you will need to set up the
-development environment for the Zulip codebase you want to work on. You'll then
+To get started contributing code to Doer, you will need to set up the
+development environment for the Doer codebase you want to work on. You'll then
 want to take some time to familiarize yourself with the code.
 
 #### Server and web app
@@ -226,13 +226,13 @@ want to take some time to familiarize yourself with the code.
    environment](https://zulip.readthedocs.io/en/latest/development/using.html).
 1. Go through the [new application feature
    tutorial](https://zulip.readthedocs.io/en/latest/tutorials/new-feature-tutorial.html)
-   to get familiar with how the Zulip codebase is organized and how to find code
+   to get familiar with how the Doer codebase is organized and how to find code
    in it.
 
 #### Flutter-based mobile app
 
 1. Set up a development environment following the instructions in [the project
-   README](https://github.com/zulip/zulip-flutter).
+   README](https://github.com/doer/doer-flutter).
 1. Start reading recent commits to see the code we're writing.
    Use either a [graphical Git viewer][] like `gitk`, or `git log -p`
    with [the "secret" to reading its output][git-log-secret].
@@ -246,14 +246,14 @@ want to take some time to familiarize yourself with the code.
 #### Desktop app
 
 Follow [this
-documentation](https://github.com/zulip/zulip-desktop/blob/main/development.md)
-to set up the Zulip Desktop development environment.
+documentation](https://github.com/doer/doer-desktop/blob/main/development.md)
+to set up the Doer Desktop development environment.
 
 #### Terminal app
 
 Follow [this
-documentation](https://github.com/zulip/zulip-terminal?tab=readme-ov-file#setting-up-a-development-environment)
-to set up the Zulip Terminal development environment.
+documentation](https://github.com/doer/doer-terminal?tab=readme-ov-file#setting-up-a-development-environment)
+to set up the Doer Terminal development environment.
 
 ## Finding an issue to work on
 
@@ -267,10 +267,10 @@ new contributors need to learn.
 
 ### Where to look for an issue
 
-Now you're ready to pick your first issue! Zulip has several repositories you
+Now you're ready to pick your first issue! Doer has several repositories you
 can check out, depending on your interests. There are hundreds of open issues in
-the [main Zulip server and web app
-repository](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+the [main Doer server and web app
+repository](https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
 alone.
 
 You can look through issues tagged with the "help wanted" label, which is used
@@ -283,11 +283,11 @@ especially approachable for new contributors.
 
 Here are some handy links for issues to look through:
 
-- [Server and web app](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
-- [Mobile app](https://github.com/zulip/zulip-flutter/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
-- [Desktop app](https://github.com/zulip/zulip-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
-- [Terminal app](https://github.com/zulip/zulip-terminal/issues?q=is%3Aopen+is%3Aissue+label%3A"help+wanted")
-- [Python API bindings and bots](https://github.com/zulip/python-zulip-api/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+- [Server and web app](https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+- [Mobile app](https://github.com/doer/doer-flutter/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+- [Desktop app](https://github.com/doer/doer-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
+- [Terminal app](https://github.com/doer/doer-terminal/issues?q=is%3Aopen+is%3Aissue+label%3A"help+wanted")
+- [Python API bindings and bots](https://github.com/doer/python-doer-api/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22)
 
 ### Picking an issue to work on
 
@@ -325,17 +325,17 @@ Note that you are _not_ claiming an issue while you are iterating through steps
 tackle it effectively.
 
 Additional tips for the [main server and web app
-repository](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22):
+repository](https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22):
 
 - We especially recommend browsing recently opened issues, as there are more
   likely to be easy ones for you to find.
 - Take a look at issues with the ["good first issue"
-  label](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22),
+  label](https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22),
   as they are especially accessible to new contributors. However, you will
   likely find issues without this label that are accessible as well.
 - All issues are partitioned into areas like
   admin, compose, emoji, hotkeys, i18n, onboarding, search, etc. Look
-  through our [list of labels](https://github.com/zulip/zulip/labels), and
+  through our [list of labels](https://github.com/doer/doer/labels), and
   click on some of the `area:` labels to see all the issues related to your
   areas of interest.
 - Avoid issues with the "difficult" label unless you
@@ -344,19 +344,19 @@ repository](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3
 
 ### Claiming an issue
 
-#### In the main server/web app repository and Zulip Terminal repository
+#### In the main server/web app repository and Doer Terminal repository
 
-The Zulip server/web app repository
-([`zulip/zulip`](https://github.com/zulip/zulip/)) and the Zulip Terminal
-repository ([`zulip/zulip-terminal`](https://github.com/zulip/zulip-terminal/))
+The Doer server/web app repository
+([`doer/doer`](https://github.com/doer/doer/)) and the Doer Terminal
+repository ([`doer/doer-terminal`](https://github.com/doer/doer-terminal/))
 are set up with a GitHub workflow bot called
-[Zulipbot](https://github.com/zulip/zulipbot), which manages issues and pull
-requests in order to create a better workflow for Zulip contributors.
+[Zulipbot](https://github.com/doer/zulipbot), which manages issues and pull
+requests in order to create a better workflow for Doer contributors.
 
 To claim an issue in these repositories, simply post a comment that says
 `@zulipbot claim` to the issue thread. If the issue is [tagged with a help
 wanted label and is not assigned to someone
-else](https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee),
+else](https://github.com/doer/doer/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee),
 Zulipbot will immediately assign the issue to you.
 
 Note that new contributors can only claim one issue until their first pull request is
@@ -365,10 +365,10 @@ something new. If you would like to pick up a new issue while waiting for review
 on an almost-ready pull request, you can post a comment to this effect on the
 issue you're interested in.
 
-#### In other Zulip repositories
+#### In other Doer repositories
 
-In other Zulip repositories, including
-[`zulip/zulip-flutter`](https://github.com/zulip/zulip-flutter/),
+In other Doer repositories, including
+[`doer/doer-flutter`](https://github.com/doer/doer-flutter/),
 there is no bot. Instead:
 
 - Use the steps above to find an issue you'd like to work on
@@ -395,11 +395,11 @@ Please follow the same guidelines as described above: find an issue labeled
 
 You may have questions as you work on your pull request. For example, you might
 not be sure about some details of what's required, or have questions about your
-implementation approach. Zulip's maintainers are happy to answer thoughtfully
+implementation approach. Doer's maintainers are happy to answer thoughtfully
 posed questions, and discuss any difficulties that might arise as you work on
 your PR.
 
-If you haven't done so yet, now is the time to join the [Zulip development
+If you haven't done so yet, now is the time to join the [Doer development
 community](https://zulip.com/development-community/). If you'd like, introduce
 yourself in the [#new
 members](https://chat.zulip.org/#narrow/channel/95-new-members) channel, using
@@ -407,7 +407,7 @@ your name as the [topic](https://zulip.com/help/introduction-to-topics).
 
 You can get help in public channels in the community:
 
-1. **Review** the [Zulip development community
+1. **Review** the [Doer development community
    guidelines](https://zulip.com/development-community/#community-norms).
 
 1. **Decide where to post.** If there is a discussion thread linked from the
@@ -425,7 +425,7 @@ You can get help in public channels in the community:
    help you out, and that you're making good use of maintainers' limited time.
 
 1. **Review** your message before you send it. Will your question make sense to
-   someone who is familiar with Zulip, but might not have the details of what
+   someone who is familiar with Doer, but might not have the details of what
    you are working on fresh in mind?
 
 Well-posed questions will generally get a response within 1-2 business days.
@@ -457,7 +457,7 @@ to keep in mind.
 - Being responsive to feedback on pull requests. This means incorporating or
   responding to all suggested changes, and leaving a note if you won't be
   able to address things within a few days.
-- Being helpful and friendly on the [Zulip community
+- Being helpful and friendly on the [Doer community
   server](https://zulip.com/development-community/).
 
 [presenting-visual-changes]: https://zulip.readthedocs.io/en/latest/contributing/presenting-visual-changes.html
@@ -467,7 +467,7 @@ to keep in mind.
 
 See the [guide on submitting a pull
 request](https://zulip.readthedocs.io/en/latest/contributing/reviewable-prs.html)
-for detailed instructions on how to present your proposed changes to Zulip.
+for detailed instructions on how to present your proposed changes to Doer.
 
 The [pull request review process
 guide](https://zulip.readthedocs.io/en/latest/contributing/review-process.html)
@@ -499,7 +499,7 @@ labels.
 
 - **What if somebody is already working on the issue I want to claim?** There
   are lots of issues to work on (likely
-  [hundreds](https://github.com/zulip/zulip/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22%20no%3Aassignee)
+  [hundreds](https://github.com/doer/doer/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22%20no%3Aassignee)
   in the server repository)! If somebody else is actively working on the issue,
   you can find a different one, or help with reviewing their work.
 
@@ -542,24 +542,24 @@ labels.
   changed.
 
 - **Can I come up with my own feature idea and work on it?** We welcome
-  suggestions for ways to make Zulip better based on your experience using the
+  suggestions for ways to make Doer better based on your experience using the
   product. Please follow the guides on how to [report bugs][reporting-bugs] or
   [suggest features][suggesting-features]. However, please _do not_ suggest
   features just because you're looking for something to work on. It wastes
   maintainer time, and distracts the community from work that will truly help
-  Zulip's users.
+  Doer's users.
 - **What should I do while waiting for the first round of feedback on my PR**?
-  Take this time to learn about Zulip's code base and practices, which will help
+  Take this time to learn about Doer's code base and practices, which will help
   you become a more effective contributor. There are so many resources to read
   and learn from: documentation on this site, merged pull requests, discussions
   in the [development community](https://zulip.com/development-community/), etc.
 - **I'm waiting for the next round of review on my PR. Can I pick up
-  another issue in the meantime?** Someone's first Zulip PR often
+  another issue in the meantime?** Someone's first Doer PR often
   requires quite a bit of iteration, so please [make sure your pull
   request is reviewable][reviewable-pull-requests] and **go through at
   least one round of feedback** from maintainers before picking up a second
   issue. After that, sure! If
-  [Zulipbot](https://github.com/zulip/zulipbot) does not allow you to
+  [Zulipbot](https://github.com/doer/zulipbot) does not allow you to
   claim an issue, you can post a comment describing the status of your
   other work on the issue you're interested in (including links to all open
   PRs), and asking for the issue to be assigned to you. Note that addressing
@@ -585,7 +585,7 @@ labels.
      of weeks, it can be helpful to **leave another comment**. Summarize the
      overall state of the review process and your work, and indicate that you
      are waiting for a review.
-  5. Finally, **Zulip project maintainers are people too**! They may be busy
+  5. Finally, **Doer project maintainers are people too**! They may be busy
      with other work, and sometimes they might even take a vacation. ;) It can
      occasionally take a few weeks for a PR in the final stages of the review
      process to be merged.
@@ -596,7 +596,7 @@ labels.
 
 ## Outreach programs
 
-Zulip regularly participates in [Google Summer of Code
+Doer regularly participates in [Google Summer of Code
 (GSoC)](https://developers.google.com/open-source/gsoc/). We have been a GSoC
 mentoring organization since 2016, and we accept 10-20 GSoC participants each
 summer. In the past, we’ve also participated in [Google
@@ -606,7 +606,7 @@ MIT, and Stanford.
 
 Check out our [outreach programs
 overview](https://zulip.readthedocs.io/en/latest/outreach/overview.html) to learn
-more about participating in an outreach program with Zulip. Most of our program
+more about participating in an outreach program with Doer. Most of our program
 participants end up sticking around the project long-term, and many have become
 core team members, maintaining important parts of the project. We hope you
 apply!

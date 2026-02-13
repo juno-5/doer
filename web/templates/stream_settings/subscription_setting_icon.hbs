@@ -1,13 +1,13 @@
 <div class="icon" style="background-color: {{color}}">
     <div class="flex">
         {{#if is_archived}}
-        <i class="zulip-icon zulip-icon-archive fa-lg" aria-hidden="true"></i>
+        <i class="doer-icon doer-icon-archive fa-lg" aria-hidden="true"></i>
         {{else if invite_only}}
-        <i class="zulip-icon zulip-icon-lock" aria-hidden="true"></i>
+        <i class="doer-icon doer-icon-lock" aria-hidden="true"></i>
         {{else if is_web_public}}
-        <i class="zulip-icon zulip-icon-globe fa-lg" aria-hidden="true"></i>
+        <i class="doer-icon doer-icon-globe fa-lg" aria-hidden="true"></i>
         {{else}}
-        <span class="zulip-icon zulip-icon-hashtag"></span>
+        <span class="doer-icon doer-icon-hashtag"></span>
         {{/if}}
     </div>
 </div>

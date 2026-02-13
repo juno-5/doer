@@ -6,32 +6,32 @@
                     <h1 class="modal__title user-profile-name-heading" id="name">
                         {{#unless is_bot}}
                             {{#if is_active}}
-                                <span class="tippy-zulip-tooltip user-status-icon-wrapper" data-tippy-content="{{last_seen}}">
-                                    <span class="zulip-icon zulip-icon-{{user_circle_class}} {{user_circle_class}} user-circle user_profile_presence" data-presence-indicator-user-id="{{user_id}}"></span>
+                                <span class="tippy-doer-tooltip user-status-icon-wrapper" data-tippy-content="{{last_seen}}">
+                                    <span class="doer-icon doer-icon-{{user_circle_class}} {{user_circle_class}} user-circle user_profile_presence" data-presence-indicator-user-id="{{user_id}}"></span>
                                 </span>
                             {{else}}
                                 <span>
-                                    <i class="fa fa-ban deactivated-user-icon tippy-zulip-tooltip" data-tippy-content="Deactivated user"></i>
+                                    <i class="fa fa-ban deactivated-user-icon tippy-doer-tooltip" data-tippy-content="Deactivated user"></i>
                                 </span>
                             {{/if}}
                         {{/unless}}
                         {{#if is_bot}}
-                            <i class="zulip-icon zulip-icon-bot" aria-hidden="true"></i>
+                            <i class="doer-icon doer-icon-bot" aria-hidden="true"></i>
                         {{/if}}
                         <span class="user-profile-name">{{> user_full_name name=full_name}}</span>
                         <span class="user-profile-header-actions">
-                            {{> components/icon_button custom_classes="copy-link-to-user-profile tippy-zulip-delayed-tooltip" icon="link-alt" intent="neutral" data-tippy-content=(t "Copy link to profile") aria-label=(t "Copy link to profile") }}
+                            {{> components/icon_button custom_classes="copy-link-to-user-profile tippy-doer-delayed-tooltip" icon="link-alt" intent="neutral" data-tippy-content=(t "Copy link to profile") aria-label=(t "Copy link to profile") }}
                             {{#if is_me}}
                                 {{#if can_manage_profile}}
-                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-zulip-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Edit profile") aria-label=(t "Edit profile") }}
+                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-doer-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Edit profile") aria-label=(t "Edit profile") }}
                                 {{else}}
-                                    {{> components/icon_button custom_classes="user-profile-profile-settings-button tippy-zulip-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Edit profile") aria-label=(t "Edit profile") }}
+                                    {{> components/icon_button custom_classes="user-profile-profile-settings-button tippy-doer-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Edit profile") aria-label=(t "Edit profile") }}
                                 {{/if}}
                             {{else if can_manage_profile}}
                                 {{#if is_bot}}
-                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-zulip-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Manage bot") aria-label=(t "Manage bot") }}
+                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-doer-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Manage bot") aria-label=(t "Manage bot") }}
                                 {{else}}
-                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-zulip-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Manage user") aria-label=(t 'Manage user') }}
+                                    {{> components/icon_button custom_classes="user-profile-update-user-tab-button tippy-doer-delayed-tooltip" icon="edit" intent="neutral" data-tippy-content=(t "Manage user") aria-label=(t 'Manage user') }}
                                 {{/if}}
                             {{/if}}
                         </span>
@@ -124,10 +124,10 @@
                             </div>
                             <div class="stream-list-container">
                                 <div class="stream-search-container filter-input has-input-icon has-input-button input-element-wrapper">
-                                    <i class="input-icon zulip-icon zulip-icon-search" aria-hidden="true"></i>
+                                    <i class="input-icon doer-icon doer-icon-search" aria-hidden="true"></i>
                                     <input type="text" class="input-element stream-search" placeholder="{{t 'Filter' }}" />
                                     <button type="button" class="input-button input-close-filter-button icon-button icon-button-square icon-button-neutral">
-                                        <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                                        <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                                     </button>
                                 </div>
                                 <div class="stream-list-loader"></div>
@@ -153,10 +153,10 @@
                             </div>
                             <div class="group-list-container">
                                 <div class="group-search-container filter-input has-input-icon has-input-button input-element-wrapper">
-                                    <i class="input-icon zulip-icon zulip-icon-search"></i>
+                                    <i class="input-icon doer-icon doer-icon-search"></i>
                                     <input type="text" class="input-element group-search" placeholder="{{t 'Filter' }}" />
                                     <button type="button" class="input-button input-close-filter-button icon-button icon-button-square icon-button-neutral">
-                                        <i class="zulip-icon zulip-icon-close" aria-hidden="true"></i>
+                                        <i class="doer-icon doer-icon-close" aria-hidden="true"></i>
                                     </button>
                                 </div>
                                 <div class="subscription-group-list" data-simplebar data-simplebar-tab-index="-1">

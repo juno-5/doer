@@ -1,6 +1,6 @@
-# Zulip GitLab integration
+# Doer GitLab integration
 
-Receive GitLab notifications in Zulip!
+Receive GitLab notifications in Doer!
 
 {start_tabs}
 
@@ -15,12 +15,12 @@ Receive GitLab notifications in Zulip!
    sidebar.  Click on **Webhooks** and select **Add new webhook**.
 
 1. Set **URL** to the URL you generated, and **Name** to a name of your
-   choice, such as `Zulip`. Select the [events](#filtering-incoming-events)
+   choice, such as `Doer`. Select the [events](#filtering-incoming-events)
    you would like to receive notifications for, and click **Add Webhook**.
 
 !!! warn ""
 
-    **Note**: If your GitLab server and your Zulip server are on a local network
+    **Note**: If your GitLab server and your Doer server are on a local network
     together, and you're running GitLab 10.5 or newer, you may need to enable
     GitLab's "Allow requests to the local network from hooks and
     services" setting (by default, recent GitLab versions refuse to post
@@ -37,7 +37,7 @@ Receive GitLab notifications in Zulip!
 
 ### Configuration options
 
-* By default, the Zulip topics for merge requests will contain the title
+* By default, the Doer topics for merge requests will contain the title
   of the GitLab merge request. You can change the topic format to just
   contain the merge request ID by adding `&use_merge_request_title=false`
   to the generated URL.

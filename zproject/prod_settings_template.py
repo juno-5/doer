@@ -3,17 +3,17 @@ from typing import Any
 from .config import get_secret
 
 ################################################################
-## Zulip Server settings.
+## Doer Server settings.
 ##
-## This file controls settings that affect the whole Zulip server.
+## This file controls settings that affect the whole Doer server.
 ## See our documentation at:
 ##   https://zulip.readthedocs.io/en/latest/production/settings.html
 ##
-## For developer documentation on the Zulip settings system, see:
+## For developer documentation on the Doer settings system, see:
 ##   https://zulip.readthedocs.io/en/latest/subsystems/settings.html
 ##
 ## Remember to restart the server after making changes here!
-##   su zulip -c /home/zulip/deployments/current/scripts/restart-server
+##   su doer -c /home/zulip/deployments/current/scripts/restart-server
 
 
 ################
@@ -22,39 +22,39 @@ from .config import get_secret
 ## These settings MUST be set in production. In a development environment,
 ## sensible default values will be used.
 
-## The email address for the person or team who maintains the Zulip
+## The email address for the person or team who maintains the Doer
 ## installation. Note that this is a public-facing email address; it may
 ## appear on 404 pages, is used as the sender's address for many automated
 ## emails, and is advertised as a support address. An email address like
 ## support@example.com is totally reasonable, as is admin@example.com.
 ## Do not put a display name; e.g. "support@example.com", not
-## "Zulip Support <support@example.com>".
-ZULIP_ADMINISTRATOR = "zulip-admin@example.com"
+## "Doer Support <support@example.com>".
+DOER_ADMINISTRATOR = "doer-admin@example.com"
 
-## The user-accessible Zulip hostname for this installation, e.g.
-## zulip.example.com.  This should match what users will put in their
+## The user-accessible Doer hostname for this installation, e.g.
+## doer.example.com.  This should match what users will put in their
 ## web browser.  If you want to allow multiple hostnames, add the rest
 ## to ALLOWED_HOSTS.
 ##
 ## If you need to access the server on a specific port, you should set
-## EXTERNAL_HOST to e.g. zulip.example.com:1234 here.
-EXTERNAL_HOST = "zulip.example.com"
+## EXTERNAL_HOST to e.g. doer.example.com:1234 here.
+EXTERNAL_HOST = "doer.example.com"
 
 ## Alternative hostnames.  A comma-separated list of strings
 ## representing the host/domain names that your users can enter in
-## their browsers to access Zulip.  This is a security measure; for
+## their browsers to access Doer.  This is a security measure; for
 ## details, see the Django documentation:
 ## https://docs.djangoproject.com/en/5.0/ref/settings/#allowed-hosts
 ##
-## Zulip automatically adds to this list "localhost", "127.0.0.1", and
+## Doer automatically adds to this list "localhost", "127.0.0.1", and
 ## patterns representing EXTERNAL_HOST and subdomains of it.  If you are
 ## accessing your server by other hostnames, list them here.
 ##
 ## Note that these should just be hostnames, without port numbers.
-# ALLOWED_HOSTS = ["zulip-alias.example.com", "192.0.2.1"]
+# ALLOWED_HOSTS = ["doer-alias.example.com", "192.0.2.1"]
 
 ## If EXTERNAL_HOST is not a valid domain name (e.g. an IP address),
-## set FAKE_EMAIL_DOMAIN below to a domain that Zulip can use when
+## set FAKE_EMAIL_DOMAIN below to a domain that Doer can use when
 ## generating (fake) email addresses for bots, dummy users, etc.
 # FAKE_EMAIL_DOMAIN = "fake-domain.example.com"
 
@@ -62,13 +62,13 @@ EXTERNAL_HOST = "zulip.example.com"
 ################
 ## Outgoing email (SMTP) settings.
 ##
-## Zulip needs to be able to send email (that is, use SMTP) so it can
+## Doer needs to be able to send email (that is, use SMTP) so it can
 ## confirm new users' email addresses and send notifications.
 ##
 ## If you don't already have an SMTP provider, free ones are available.
 ##
 ## For more details, including a list of free SMTP providers and
-## advice for troubleshooting, see the Zulip documentation:
+## advice for troubleshooting, see the Doer documentation:
 ##   https://zulip.readthedocs.io/en/latest/production/email.html
 
 ## EMAIL_HOST and EMAIL_HOST_USER are generally required.  If your
@@ -78,7 +78,7 @@ EXTERNAL_HOST = "zulip.example.com"
 # EMAIL_HOST_USER = ""
 
 ## Passwords and secrets are not stored in this file.  The password
-## for user EMAIL_HOST_USER goes in `/etc/zulip/zulip-secrets.conf`.
+## for user EMAIL_HOST_USER goes in `/etc/zulip/doer-secrets.conf`.
 ## In that file, set `email_password`.  For example:
 # email_password = abcd1234
 
@@ -89,8 +89,8 @@ EXTERNAL_HOST = "zulip.example.com"
 ## The noreply address to be used as the sender for certain generated
 ## emails.  Messages sent to this address could contain sensitive user
 ## data and should not be delivered anywhere.  The default is
-## e.g. noreply-{token}@zulip.example.com (if EXTERNAL_HOST is
-## zulip.example.com).  There are potential security issues if you set
+## e.g. noreply-{token}@doer.example.com (if EXTERNAL_HOST is
+## doer.example.com).  There are potential security issues if you set
 ## ADD_TOKENS_TO_NOREPLY_ADDRESS=False to remove the token; see
 ## https://zulip.readthedocs.io/en/latest/production/email.html for details.
 # ADD_TOKENS_TO_NOREPLY_ADDRESS = True
@@ -101,12 +101,12 @@ EXTERNAL_HOST = "zulip.example.com"
 ## confirmation emails when ADD_TOKENS_TO_NOREPLY_ADDRESS=False.
 # NOREPLY_EMAIL_ADDRESS = "noreply@example.com"
 
-## Emails sent by the Zulip server will use a sender name starting
+## Emails sent by the Doer server will use a sender name starting
 ## with INSTALLATION_NAME. The default is EXTERNAL_HOST. If INSTALLATION_NAME is
-## "zulip.example.com", email senders names will include:
-## * "zulip.example.com notifications" (message notification emails).
-## * "zulip.example.com account security" (account security emails).
-# INSTALLATION_NAME = "My Zulip Server"
+## "doer.example.com", email senders names will include:
+## * "doer.example.com notifications" (message notification emails).
+## * "doer.example.com account security" (account security emails).
+# INSTALLATION_NAME = "My Doer Server"
 
 ## Many countries and bulk mailers require certain types of email to display
 ## a physical mailing address to comply with anti-spam legislation.
@@ -119,7 +119,7 @@ EXTERNAL_HOST = "zulip.example.com"
 ################
 ## Email gateway integration.
 ##
-## The email gateway integration supports sending messages into Zulip
+## The email gateway integration supports sending messages into Doer
 ## by sending an email.
 ## For details, see the documentation:
 ##   https://zulip.readthedocs.io/en/latest/production/email-gateway.html
@@ -128,7 +128,7 @@ EMAIL_GATEWAY_PATTERN = ""
 ## If you are using polling, edit the IMAP settings below:
 ##
 ## The IMAP login; username here and password as email_gateway_password in
-## zulip-secrets.conf.
+## doer-secrets.conf.
 EMAIL_GATEWAY_LOGIN = ""
 ## The IMAP server & port to connect to
 EMAIL_GATEWAY_IMAP_SERVER = ""
@@ -156,14 +156,14 @@ AUTHENTICATION_BACKENDS: tuple[str, ...] = (
     # "zproject.backends.AzureADAuthBackend",  # Microsoft Entra ID (AzureAD) auth, setup below
     # "zproject.backends.AppleAuthBackend",  # Apple auth, setup below
     # "zproject.backends.SAMLAuthBackend",  # SAML, setup below
-    # "zproject.backends.ZulipLDAPAuthBackend",  # LDAP, setup below
-    # "zproject.backends.ZulipRemoteUserBackend",  # Local SSO, setup docs on readthedocs
+    # "zproject.backends.DoerLDAPAuthBackend",  # LDAP, setup below
+    # "zproject.backends.DoerRemoteUserBackend",  # Local SSO, setup docs on readthedocs
     # "zproject.backends.GenericOpenIdConnectBackend",  # Generic OIDC integration, setup below
 )
 
 ## LDAP integration.
 ##
-## Zulip supports retrieving information about users via LDAP, and
+## Doer supports retrieving information about users via LDAP, and
 ## optionally using LDAP as an authentication mechanism.
 
 import ldap
@@ -187,33 +187,33 @@ from django_auth_ldap.config import (  # noqa: F401
 
 ## Connecting to the LDAP server.
 ##
-## For detailed instructions, see the Zulip documentation:
+## For detailed instructions, see the Doer documentation:
 ##   https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#ldap
 
-## The LDAP server to connect to.  Setting this enables Zulip
+## The LDAP server to connect to.  Setting this enables Doer
 ## automatically fetching each new user's name from LDAP.
 # AUTH_LDAP_SERVER_URI = "ldaps://ldap.example.com"
 
 ## The DN of the user to bind as (i.e., authenticate as) in order to
-## query LDAP.  If unset, Zulip does an anonymous bind.
+## query LDAP.  If unset, Doer does an anonymous bind.
 # AUTH_LDAP_BIND_DN = ""
 
 ## Passwords and secrets are not stored in this file.  The password
-## corresponding to AUTH_LDAP_BIND_DN goes in `/etc/zulip/zulip-secrets.conf`.
+## corresponding to AUTH_LDAP_BIND_DN goes in `/etc/zulip/doer-secrets.conf`.
 ## In that file, set `auth_ldap_bind_password`.  For example:
 # auth_ldap_bind_password = abcd1234
 
-## Mapping user info from LDAP to Zulip.
+## Mapping user info from LDAP to Doer.
 ##
-## For detailed instructions, see the Zulip documentation:
+## For detailed instructions, see the Doer documentation:
 ##   https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#ldap
 
 ## The LDAP search query to find a given user.
 ##
 ## The arguments to `LDAPSearch` are (base DN, scope, filter).  In the
-## filter, the string `%(user)s` is a Python placeholder.  The Zulip
-## server will replace this with the user's Zulip username, i.e. the
-## name they type into the Zulip login form.
+## filter, the string `%(user)s` is a Python placeholder.  The Doer
+## server will replace this with the user's Doer username, i.e. the
+## name they type into the Doer login form.
 ##
 ## For more details and alternatives, see the documentation linked above.
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
@@ -221,7 +221,7 @@ AUTH_LDAP_USER_SEARCH = LDAPSearch(
 )
 
 ## Configuration to look up a user's LDAP data given their email address
-## (for Zulip reverse mapping).  If users log in as e.g. "sam" when
+## (for Doer reverse mapping).  If users log in as e.g. "sam" when
 ## their email address is "sam@example.com", set LDAP_APPEND_DOMAIN to
 ## "example.com".  Otherwise, leave LDAP_APPEND_DOMAIN=None and set
 ## AUTH_LDAP_REVERSE_EMAIL_SEARCH and AUTH_LDAP_USERNAME_ATTR below.
@@ -239,25 +239,25 @@ AUTH_LDAP_USER_SEARCH = LDAPSearch(
 # AUTH_LDAP_REVERSE_EMAIL_SEARCH = LDAPSearch("ou=users,dc=example,dc=com",
 #                                             ldap.SCOPE_SUBTREE, "(email=%(email)s)")
 
-## AUTH_LDAP_USERNAME_ATTR should be the Zulip username attribute
+## AUTH_LDAP_USERNAME_ATTR should be the Doer username attribute
 ## (defined in AUTH_LDAP_USER_SEARCH).
 # AUTH_LDAP_USERNAME_ATTR = "uid"
 
-## This map defines how to populate attributes of a Zulip user from LDAP.
+## This map defines how to populate attributes of a Doer user from LDAP.
 ##
-## The format is `zulip_name: ldap_name`; each entry maps a Zulip
+## The format is `doer_name: ldap_name`; each entry maps a Doer
 ## concept (on the left) to the LDAP attribute name (on the right) your
 ## LDAP database uses for the same concept.
 AUTH_LDAP_USER_ATTR_MAP = {
     ## full_name is required; common values include "cn" or "displayName".
     ## If names are encoded in your LDAP directory as first and last
     ## name, you can instead specify first_name and last_name, and
-    ## Zulip will combine those to construct a full_name automatically.
+    ## Doer will combine those to construct a full_name automatically.
     "full_name": "cn",
     # "first_name": "fn",
     # "last_name": "ln",
     #
-    ## A stable unique identifier for a user allows Zulip to
+    ## A stable unique identifier for a user allows Doer to
     ## automatically handle email address changes.
     ## See https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#synchronizing-email-addresses
     # "unique_account_id": "objectSid",
@@ -265,7 +265,7 @@ AUTH_LDAP_USER_ATTR_MAP = {
     ## Profile pictures can be pulled from the LDAP "thumbnailPhoto"/"jpegPhoto" field.
     # "avatar": "thumbnailPhoto",
     ##
-    ## This line is for having Zulip to automatically deactivate users
+    ## This line is for having Doer to automatically deactivate users
     ## who are disabled in LDAP/Active Directory (and reactivate users who are not).
     ## See docs for usage details and precise semantics.
     # "userAccountControl": "userAccountControl",
@@ -285,7 +285,7 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 ## See: https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#restricting-ldap-user-access-to-specific-organizations
 # AUTH_LDAP_ADVANCED_REALM_ACCESS_CONTROL = {
-#    "zulip":
+#    "doer":
 #    [ # OR
 #      { # AND
 #          "department": "main",
@@ -315,7 +315,7 @@ AUTH_LDAP_USER_ATTR_MAP = {
 ##
 ## (1) Visit https://console.developers.google.com/ , navigate to
 ## "APIs & Services" > "Credentials", and create a "Project" which will
-## correspond to your Zulip instance.
+## correspond to your Doer instance.
 ##
 ## (2) Go to "Oauth consent screen" and create a consent screen,
 ## authorizing your domain and enabling the .../auth/userinfo.email,
@@ -327,12 +327,12 @@ AUTH_LDAP_USER_ATTR_MAP = {
 ## (3) Return to "Credentials", and select "Create credentials".
 ## Choose "OAuth client ID", and fill in the app name as desired
 ## and "Authorized redirect URIs" with a value like
-##   https://zulip.example.com/complete/google/
+##   https://doer.example.com/complete/google/
 ## based on your value for EXTERNAL_HOST.
 ##
 ## (4) You should get a client ID and a client secret. Copy them.
 ## Use the client ID as `SOCIAL_AUTH_GOOGLE_KEY` here, and put the
-## client secret in zulip-secrets.conf as `social_auth_google_secret`.
+## client secret in doer-secrets.conf as `social_auth_google_secret`.
 # SOCIAL_AUTH_GOOGLE_KEY = "<your client ID from Google>"
 
 ########
@@ -344,13 +344,13 @@ AUTH_LDAP_USER_ATTR_MAP = {
 ##       https://gitlab.com/oauth/applications
 ##     Or the equivalent URL on a self-hosted GitLab server.
 ## (2) Fill in the "Redirect URI" with a value like
-##       http://zulip.example.com/complete/gitlab/
+##       http://doer.example.com/complete/gitlab/
 ## based on your value for EXTERNAL_HOST.
 ## (3) For "scopes", select only "read_user", and create the application.
 ## (4) You'll end up on a page with the Application ID and Secret for
 ## your new GitLab application. Use the Application ID as
 ## `SOCIAL_AUTH_GITLAB_KEY` here, and put the Secret in
-## zulip-secrets.conf as `social_auth_gitlab_secret`.
+## doer-secrets.conf as `social_auth_gitlab_secret`.
 ## (5) If you are self-hosting GitLab, provide the URL of the
 ## GitLab server as SOCIAL_AUTH_GITLAB_API_URL here.
 # SOCIAL_AUTH_GITLAB_KEY = "<your Application ID from GitLab>"
@@ -365,28 +365,28 @@ AUTH_LDAP_USER_ATTR_MAP = {
 ##   https://github.com/settings/developers
 ##   https://github.com/organizations/ORGNAME/settings/developers
 ## Fill in "Callback URL" with a value like
-##   https://zulip.example.com/complete/github/ as
+##   https://doer.example.com/complete/github/ as
 ## based on your values for EXTERNAL_HOST and SOCIAL_AUTH_SUBDOMAIN.
 ##
 ## (2) You should get a page with settings for your new application,
 ## showing a client ID and a client secret.  Use the client ID as
 ## `SOCIAL_AUTH_GITHUB_KEY` here, and put the client secret in
-## zulip-secrets.conf as `social_auth_github_secret`.
+## doer-secrets.conf as `social_auth_github_secret`.
 # SOCIAL_AUTH_GITHUB_KEY = "<your client ID from GitHub>"
 
 ## (3) Optionally, you can configure the GitHub integration to only
 ## allow members of a particular GitHub team or organization to log
-## into your Zulip server through GitHub authentication.  To enable
+## into your Doer server through GitHub authentication.  To enable
 ## this, set one of the two parameters below:
 # SOCIAL_AUTH_GITHUB_TEAM_ID = "<your team id>"
 # SOCIAL_AUTH_GITHUB_ORG_NAME = "<your org name>"
 
-## (4) If you are serving multiple Zulip organizations on different
+## (4) If you are serving multiple Doer organizations on different
 ## subdomains, you need to set SOCIAL_AUTH_SUBDOMAIN.  You can set it
-## to any subdomain on which you do not plan to host a Zulip
+## to any subdomain on which you do not plan to host a Doer
 ## organization.  The default recommendation, `auth`, is a reserved
 ## subdomain; if you're using this setting, the "Callback URL" should be e.g.:
-##   https://auth.zulip.example.com/complete/github/
+##   https://auth.doer.example.com/complete/github/
 #
 # SOCIAL_AUTH_SUBDOMAIN = "auth"
 
@@ -400,7 +400,7 @@ SOCIAL_AUTH_OIDC_ENABLED_IDPS: dict[str, Any] = {
     ## This field (example: "idp_name") may appear in URLs during
     ## authentication, but is otherwise not user-visible.
     "idp_name": {
-        ## The base path to the provider's OIDC API. Zulip fetches the
+        ## The base path to the provider's OIDC API. Doer fetches the
         ## IdP's configuration from the discovery endpoint, which will be
         ## "{oidc_url}/.well-known/openid-configuration".
         "oidc_url": "https://example.com/api/openid",
@@ -410,7 +410,7 @@ SOCIAL_AUTH_OIDC_ENABLED_IDPS: dict[str, Any] = {
         "display_icon": None,
         ## The client_id and secret provided by your OIDC IdP. To keep
         ## settings.py free of secrets, the get_secret call below
-        ## reads the secret with the specified name from zulip-secrets.conf.
+        ## reads the secret with the specified name from doer-secrets.conf.
         "client_id": "<your client id>",
         "secret": get_secret("social_auth_oidc_secret"),
         ## If you want this IdP to only be enabled for authentication
@@ -419,7 +419,7 @@ SOCIAL_AUTH_OIDC_ENABLED_IDPS: dict[str, Any] = {
         ##
         ## Determines whether "Log in with OIDC" will automatically
         ## register a new account if one does not already exist. By
-        ## default, Zulip asks the user whether they want to create an
+        ## default, Doer asks the user whether they want to create an
         ## account or try to log in again using another method.
         # "auto_signup": False,
     }
@@ -441,8 +441,8 @@ SOCIAL_AUTH_OIDC_ENABLED_IDPS: dict[str, Any] = {
 ## You will need to modify these SAML settings:
 SOCIAL_AUTH_SAML_ORG_INFO = {
     "en-US": {
-        "displayname": "Example, Inc. Zulip",
-        "name": "zulip",
+        "displayname": "Example, Inc. Doer",
+        "name": "doer",
         "url": "{}{}".format("https://", EXTERNAL_HOST),
     },
 }
@@ -468,7 +468,7 @@ SOCIAL_AUTH_SAML_ENABLED_IDPS: dict[str, Any] = {
         ## List of additional attributes to fetch from the SAMLResponse.
         ## These attributes will be available for synchronizing user profile fields.
         ## in SOCIAL_AUTH_SYNC_ATTRS_DICT.
-        # "extra_attrs": ["title", "mobilePhone", "zulip_role"],
+        # "extra_attrs": ["title", "mobilePhone", "doer_role"],
         ##
         ## The "x509cert" attribute is automatically read from
         ## /etc/zulip/saml/idps/{idp_name}.crt; don't specify it here.
@@ -481,7 +481,7 @@ SOCIAL_AUTH_SAML_ENABLED_IDPS: dict[str, Any] = {
         ## URL of a square image file containing a logo to appear at
         ## the left end of the login/register buttons for this IDP.
         ## This can be a relative path, on the same host, most likely
-        ## under /static/ (stored in ~zulip/prod-static/). The default
+        ## under /static/ (stored in ~doer/prod-static/). The default
         ## of None results in a text-only button.
         # "display_icon": "https://example.com/path/to/icon.png",
         ##
@@ -495,7 +495,7 @@ SOCIAL_AUTH_SAML_ENABLED_IDPS: dict[str, Any] = {
         ##
         ## Determines whether "Log in with SAML" will automatically
         ## register a new account if one does not already exist. By
-        ## default, Zulip asks the user whether they want to create an
+        ## default, Doer asks the user whether they want to create an
         ## account or try to log in again using another method.
         # "auto_signup": False,
         ## Determines whether Service Provider initiated SAML Single Logout should be enabled.
@@ -511,7 +511,7 @@ SOCIAL_AUTH_SAML_SECURITY_CONFIG: dict[str, Any] = {
     ## set this to True to enable signing of SAMLRequests using the
     ## private key.
     "authnRequestsSigned": False,
-    ## If you'd like the Zulip server to request that the IdP limit user identity
+    ## If you'd like the Doer server to request that the IdP limit user identity
     ## verification to a specific set of authentication contexts, you can do this
     ## by changing the requestedAuthnContext parameter to a list of specific
     ## Authentication Context Classes that you want to include in the AuthnContext. E.g.:
@@ -528,11 +528,11 @@ SOCIAL_AUTH_SAML_SECURITY_CONFIG: dict[str, Any] = {
 SOCIAL_AUTH_SAML_SP_ENTITY_ID = "https://" + EXTERNAL_HOST
 SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {
     "givenName": "Technical team",
-    "emailAddress": ZULIP_ADMINISTRATOR,
+    "emailAddress": DOER_ADMINISTRATOR,
 }
 SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
     "givenName": "Support team",
-    "emailAddress": ZULIP_ADMINISTRATOR,
+    "emailAddress": DOER_ADMINISTRATOR,
 }
 
 ## Note: Any additional SAML attributes that'll be used here must be
@@ -542,12 +542,12 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 #     "example_org": {
 #         "saml": {
 #             # role is currently the only supported major attribute.
-#             "role": "zulip_role",
+#             "role": "doer_role",
 #             # Specify custom profile fields with a custom__ prefix for the
-#             # Zulip field name.
+#             # Doer field name.
 #             "custom__title": "title",
-#             # Sync the membership of the listed Zulip groups with
-#             # the list of group names sent in the "zulip_groups"
+#             # Sync the membership of the listed Doer groups with
+#             # the list of group names sent in the "doer_groups"
 #             # attribute in the SAMLResponse.
 #             "groups": ["group1", "group2", ("samlgroup3", "zulipgroup3"), "group4"],
 #         }
@@ -576,20 +576,20 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ## and click "New registration".
 ##
 ## (2) In the "Redirect URI (optional)" section, select Web as the platform
-## and enter https://zulip.example.com/complete/azuread-oauth2/ as the redirect URI,
+## and enter https://doer.example.com/complete/azuread-oauth2/ as the redirect URI,
 ## based on your values of EXTERNAL_HOST and SOCIAL_AUTH_SUBDOMAIN.
 ##
 ## (3) After registering the app, go to "Certificates & secrets" and
 ## generate a new client secret. Make sure to save the generated Value.
 ##
 ## (4) Enter the application ID for the app as SOCIAL_AUTH_AZUREAD_OAUTH2_KEY below
-## and the generated secret Value in zulip-secrets.conf as `social_auth_azuread_oauth2_secret`.
+## and the generated secret Value in doer-secrets.conf as `social_auth_azuread_oauth2_secret`.
 # SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = ""
 
 ########
 ## SSO via REMOTE_USER.
 ##
-## If you are using the ZulipRemoteUserBackend authentication backend,
+## If you are using the DoerRemoteUserBackend authentication backend,
 ## and REMOTE_USER does not already include a domain, set this to your
 ## domain (e.g. if REMOTE_USER is "username" and the corresponding
 ## email address is "username@example.com", set SSO_APPEND_DOMAIN =
@@ -599,15 +599,15 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ## JWT authentication.
 ##
 ## JWT authentication is supported both to transparently log users
-## into Zulip or to fetch users' API keys. The JWT secret key and
+## into Doer or to fetch users' API keys. The JWT secret key and
 ## algorithm must be configured here.
 ##
 ## See https://zulip.readthedocs.io/en/latest/production/authentication-methods.html#json-web-tokens-jwt
 # JWT_AUTH_KEYS = {
 #     # Subdomain for which this JWT configuration will apply.
-#     "zulip": {
+#     "doer": {
 #         # Shared secret key used to validate jwt tokens, which should be stored
-#         # in zulip-secrets.conf and is read by the get_secret call below.
+#         # in doer-secrets.conf and is read by the get_secret call below.
 #         # The key needs to be securely, randomly generated. Note that if you're
 #         # using the default HS256 algorithm, per RFC 7518, the key needs
 #         # to have at least 256 bits of entropy.
@@ -636,16 +636,16 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ########
 ## RabbitMQ configuration.
 ##
-## By default, Zulip connects to RabbitMQ running locally on the
-## machine, but Zulip also supports connecting to RabbitMQ over the
+## By default, Doer connects to RabbitMQ running locally on the
+## machine, but Doer also supports connecting to RabbitMQ over the
 ## network; to use a remote RabbitMQ instance, set RABBITMQ_HOST, and
 ## optionally RABBITMQ_PORT, to the hostname and port here.
 # RABBITMQ_HOST = "127.0.0.1"
 # RABBITMQ_PORT = 5672
 ## To use a different RabbitMQ "virtual host", adjust this.
 # RABBITMQ_VHOST = "/"
-## To use another RabbitMQ user than the default "zulip", set RABBITMQ_USERNAME here.
-# RABBITMQ_USERNAME = "zulip"
+## To use another RabbitMQ user than the default "doer", set RABBITMQ_USERNAME here.
+# RABBITMQ_USERNAME = "doer"
 ## To access the RabbitMQ server over TLS, set this to True; this is
 ## generally only necessary if RabbitMQ is running on a separate,
 ## cloud-managed, host.
@@ -654,24 +654,24 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ########
 ## Redis configuration.
 ##
-## By default, Zulip connects to Redis running locally on the machine,
-## but Zulip also supports connecting to Redis over the network;
+## By default, Doer connects to Redis running locally on the machine,
+## but Doer also supports connecting to Redis over the network;
 ## to use a remote Redis instance, set REDIS_HOST here.
 # REDIS_HOST = "127.0.0.1"
 ## For a different Redis port set the REDIS_PORT here.
 # REDIS_PORT = 6379
-## If you set redis_password in zulip-secrets.conf, Zulip will use that password
+## If you set redis_password in doer-secrets.conf, Doer will use that password
 ## to connect to the Redis server.
 
 ########
 ## Memcached configuration.
 ##
-## By default, Zulip connects to memcached running locally on the machine,
-## but Zulip also supports connecting to memcached over the network;
+## By default, Doer connects to memcached running locally on the machine,
+## but Doer also supports connecting to memcached over the network;
 ## to use a remote Memcached instance, set MEMCACHED_LOCATION here.
 ## Format HOST:PORT
 # MEMCACHED_LOCATION = 127.0.0.1:11211
-## To authenticate to memcached, set memcached_password in zulip-secrets.conf,
+## To authenticate to memcached, set memcached_password in doer-secrets.conf,
 ## and optionally change the default username "zulip@localhost" here.
 # MEMCACHED_USERNAME = "zulip@localhost"
 
@@ -682,12 +682,12 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ########
 ## Image and URL previews.
 ##
-## Controls whether or not Zulip will provide inline image preview when
+## Controls whether or not Doer will provide inline image preview when
 ## a link to an image is referenced in a message.  Note: this feature
 ## can also be disabled in a realm's organization settings.
 # INLINE_IMAGE_PREVIEW = True
 
-## Controls whether or not Zulip will provide inline previews of
+## Controls whether or not Doer will provide inline previews of
 ## websites that are referenced in links in messages.  Note: this feature
 ## can also be disabled in a realm's organization settings.
 # INLINE_URL_EMBED_PREVIEW = True
@@ -741,12 +741,12 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 # JITSI_SERVER_URL = "https://jitsi.example.com"
 
 ## Controls the BigBlueButton video call integration.  You must also
-## set big_blue_button_secret in zulip-secrets.conf.
+## set big_blue_button_secret in doer-secrets.conf.
 # BIG_BLUE_BUTTON_URL = "https://bbb.example.com/bigbluebutton/"
 
 ## Controls the Constructor Groups video call integration. You must also
 ## set constructor_groups_access_key and constructor_groups_secret_key in
-## zulip-secrets.conf.
+## doer-secrets.conf.
 # CONSTRUCTOR_GROUPS_URL = "https://example.constructor.app/api/groups/xapi"
 
 
@@ -770,7 +770,7 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ################
 ## Miscellaneous settings.
 
-## If you host multiple organizations on the same Zulip server, you
+## If you host multiple organizations on the same Doer server, you
 ## can customize the hostname that one of them uses by adding it here.
 ## See https://zulip.readthedocs.io/en/latest/production/multiple-organizations.html#other-hostnames
 ## Note that you still need SSL certificates for this other custom hostname:
@@ -782,22 +782,22 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ## How long outgoing webhook requests time out after
 # OUTGOING_WEBHOOK_TIMEOUT_SECONDS = 10
 
-## Mobile push notifications require registering for the Zulip Mobile
+## Mobile push notifications require registering for the Doer Mobile
 ## Push Notification Service and configuring your server to use the
 ## service here. For complete documentation, see:
 ##
 ##   https://zulip.readthedocs.io/en/stable/production/mobile-push-notifications.html
 ##
-# ZULIP_SERVICE_PUSH_NOTIFICATIONS = True
+# DOER_SERVICE_PUSH_NOTIFICATIONS = True
 
-## By default, a Zulip server that has registered for Zulip services
+## By default, a Doer server that has registered for Doer services
 ## submits both basic metadata (required for billing and for determining
 ## free plan eligibility), as well as aggregate usage statistics. You
 ## can disable submitting usage statistics here.
-# ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = False
+# DOER_SERVICE_SUBMIT_USAGE_STATISTICS = False
 
-## Whether to lightly advertise sponsoring Zulip in the gear menu.
-# PROMOTE_SPONSORING_ZULIP = True
+## Whether to lightly advertise sponsoring Doer in the gear menu.
+# PROMOTE_SPONSORING_DOER = True
 
 ## Controls whether session cookies expire when the browser closes
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -806,26 +806,26 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 # SESSION_COOKIE_AGE = 60 * 60 * 24 * 7 * 2  # 2 weeks
 
 ## Password strength requirements; learn about configuration at
-## https://zulip.readthedocs.io/en/latest/production/securing-your-zulip-server.html.
+## https://zulip.readthedocs.io/en/latest/production/securing-your-doer-server.html.
 # PASSWORD_MIN_LENGTH = 6
 # PASSWORD_MAX_LENGTH = 100
 # PASSWORD_MIN_GUESSES = 10000
 
-## Controls whether Zulip sends "new login" email notifications.
+## Controls whether Doer sends "new login" email notifications.
 # SEND_LOGIN_EMAILS = True
 
-## Controls whether or not Zulip will parse links starting with
+## Controls whether or not Doer will parse links starting with
 ## "file:///" as a hyperlink (useful if you have e.g. an NFS share).
 # ENABLE_FILE_LINKS = False
 
 ## By default, files uploaded by users and profile pictures are stored
-## directly on the Zulip server.  You can configure files being instead
+## directly on the Doer server.  You can configure files being instead
 ## stored in Amazon S3 or another scalable data store here.  See docs at:
 ##
 ##   https://zulip.readthedocs.io/en/latest/production/upload-backends.html
 ##
 ## If you change LOCAL_UPLOADS_DIR to a different path, you will also
-## need to manually edit Zulip's nginx configuration to use the new
+## need to manually edit Doer's nginx configuration to use the new
 ## path.  For that reason, we recommend replacing /home/zulip/uploads
 ## with a symlink instead of changing LOCAL_UPLOADS_DIR.
 LOCAL_UPLOADS_DIR = "/home/zulip/uploads"
@@ -865,19 +865,19 @@ LOCAL_UPLOADS_DIR = "/home/zulip/uploads"
 # DEFAULT_AVATAR_URI = "/local-static/default-avatar.png"
 
 ## The default CAMO_URI of "/external_content/" is served by the camo
-## setup in the default Zulip nginx configuration.  Setting CAMO_URI
+## setup in the default Doer nginx configuration.  Setting CAMO_URI
 ## to "" will disable the Camo integration.
 CAMO_URI = "/external_content/"
 
-## Controls various features explaining Zulip to new users. Disabling
+## Controls various features explaining Doer to new users. Disabling
 ## this is only recommended for installations that are using a limited
-## subset of the Zulip UI, such as embedding it in a larger app.
+## subset of the Doer UI, such as embedding it in a larger app.
 # TUTORIAL_ENABLED = True
 
-## Controls whether Zulip will rate-limit user requests.
+## Controls whether Doer will rate-limit user requests.
 # RATE_LIMITING = True
 
-## Entries in this dictionary will override Zulip's default rate
+## Entries in this dictionary will override Doer's default rate
 ## limits. Rules which are not explicitly overridden here
 ## will be as default. View the current rules using:
 ##   /home/zulip/deployments/current/scripts/get-django-setting RATE_LIMITING_RULES
@@ -900,7 +900,7 @@ CAMO_URI = "/external_content/"
 # RATE_LIMIT_TOR_TOGETHER = False
 
 ## Configuration for Terms of Service and Privacy Policy for the
-## server.  If unset, Zulip will never prompt users to accept Terms of
+## server.  If unset, Doer will never prompt users to accept Terms of
 ## Service.  Users will be prompted to accept the terms during account
 ## registration, and during login if this value has changed.
 # TERMS_OF_SERVICE_VERSION = "1.0"
@@ -910,7 +910,7 @@ CAMO_URI = "/external_content/"
 
 ## URL of the navigation tour video to show to new users. You can use this
 ## to host the official video on your network, or to provide your own
-## introductory video with details on how your organization uses Zulip.
+## introductory video with details on how your organization uses Doer.
 ##
 ## A value of None disables the navigation tour video experience.
-# NAVIGATION_TOUR_VIDEO_URL = "https://static.zulipchat.com/static/navigation-tour-video/zulip-10.mp4"
+# NAVIGATION_TOUR_VIDEO_URL = "https://static.zulipchat.com/static/navigation-tour-video/doer-10.mp4"

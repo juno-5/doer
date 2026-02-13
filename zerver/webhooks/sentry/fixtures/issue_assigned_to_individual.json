@@ -31,7 +31,7 @@
             "subscriptionDetails": null,
             "isPublic": false,
             "hasSeen": false,
-            "shortId": "ZULIP-INTEGRATION-TESTING-G",
+            "shortId": "DOER-INTEGRATION-TESTING-G",
             "shareId": null,
             "firstSeen": "2020-04-30T06:14:13.611851Z",
             "count": "1",
@@ -41,9 +41,9 @@
             "isBookmarked": false,
             "project": {
                 "platform": "python",
-                "slug": "zulip-integration-testing",
+                "slug": "doer-integration-testing",
                 "id": "5216640",
-                "name": "Zulip Integration Testing"
+                "name": "Doer Integration Testing"
             },
             "statusDetails": {}
         }

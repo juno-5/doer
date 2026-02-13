@@ -4,17 +4,17 @@ title: Share and upload files
 
 import {Steps, TabItem, Tabs} from "@astrojs/starlight/components";
 
-import ZulipIconCircle from "../../../../static/images/logo/zulip-icon-circle.svg";
+import DoerIconCircle from "../../../../static/images/logo/doer-icon-circle.svg";
 import FlattenedSteps from "../../components/FlattenedSteps.astro";
-import ZulipTip from "../../components/ZulipTip.astro";
+import DoerTip from "../../components/DoerTip.astro";
 import ModifyLinkText from "../include/_ModifyLinkText.mdx";
 import StartComposing from "../include/_StartComposing.mdx";
 
-import AttachmentIcon from "~icons/zulip-icon/attachment";
-import MobileCameraIcon from "~icons/zulip-icon/mobile-camera";
-import MobileImageIcon from "~icons/zulip-icon/mobile-image";
+import AttachmentIcon from "~icons/doer-icon/attachment";
+import MobileCameraIcon from "~icons/doer-icon/mobile-camera";
+import MobileImageIcon from "~icons/doer-icon/mobile-image";
 
-Zulip supports attaching multiple files to messages, including images,
+Doer supports attaching multiple files to messages, including images,
 documents, sound, and video. You can edit the names of the files others see
 after you [upload](#uploading-files) or
 [share](#sharing-files-from-other-mobile-apps) them.
@@ -28,19 +28,19 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
 <Tabs>
   <TabItem label="Via drag-and-drop">
     <FlattenedSteps>
-      1. Drag and drop one or more files anywhere in the Zulip app,
+      1. Drag and drop one or more files anywhere in the Doer app,
          whether or not the compose box is open.
-         Zulip will upload the files, and insert named links using
+         Doer will upload the files, and insert named links using
          [Markdown formatting](/help/format-your-message-using-markdown#links):
          `[Link text](URL)`.
 
       <ModifyLinkText />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can [preview the message](/help/preview-your-message-before-sending)
       before sending to see what your uploaded files will look like.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via paste">
@@ -48,17 +48,17 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
       <StartComposing />
 
       1. Copy and paste one or more files into the compose box.
-         Zulip will upload the files, and insert named links using
+         Doer will upload the files, and insert named links using
          [Markdown formatting](/help/format-your-message-using-markdown#links):
          `[Link text](URL)`.
 
       <ModifyLinkText />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can [preview the message](/help/preview-your-message-before-sending)
       before sending to see what your uploaded files will look like.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Via compose box button">
@@ -67,17 +67,17 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
 
       1. Click the **paperclip** (<AttachmentIcon />)
          icon at the bottom of the compose box to select one or more files.
-         Zulip will upload the files, and insert named links using
+         Doer will upload the files, and insert named links using
          [Markdown formatting](/help/format-your-message-using-markdown#links):
          `[Link text](URL)`.
 
       <ModifyLinkText />
     </FlattenedSteps>
 
-    <ZulipTip>
+    <DoerTip>
       You can [preview the message](/help/preview-your-message-before-sending)
       before sending to see what your uploaded files will look like.
-    </ZulipTip>
+    </DoerTip>
   </TabItem>
 
   <TabItem label="Mobile">
@@ -87,7 +87,7 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
          **paperclip** (<AttachmentIcon />),
          **image** (<MobileImageIcon />),
          or **camera** (<MobileCameraIcon />)
-         button at the bottom of the app to select one or more files. Zulip will
+         button at the bottom of the app to select one or more files. Doer will
          upload the files, and insert named links using
          [Markdown formatting](/help/format-your-message-using-markdown#links):
          `[Link text](URL)`.
@@ -104,7 +104,7 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
     <Steps>
       1. In another mobile app, select text or one or more files, and tap the
          **share** button.
-      1. Tap the **Zulip** (<img src={ZulipIconCircle.src} alt="logo" class="help-center-icon" />) logo to share to Zulip.
+      1. Tap the **Doer** (<img src={DoerIconCircle.src} alt="logo" class="help-center-icon" />) logo to share to Doer.
       1. *(optional)* Tap the organization profile picture in the top right
          corner of the app to switch to another account.
       1. To send a channel message, select a channel and type a topic name.
@@ -118,7 +118,7 @@ preview to [view the full-size image or video](/help/view-images-and-videos).
 
   <TabItem label="iOS">
     Implementation of this feature for the IOS version of the mobile app is
-    tracked [on GitHub](https://github.com/zulip/zulip-flutter/issues/54).
+    tracked [on GitHub](https://github.com/doer/doer-flutter/issues/54).
     If you're interested in this feature, please react to the issue's
     description with 👍.
   </TabItem>
@@ -152,11 +152,11 @@ When pasting a large amount of text, you can convert it to a text file upload.
 
 ## File upload limits
 
-The Zulip Cloud Standard and Zulip Cloud Plus
+The Doer Cloud Standard and Doer Cloud Plus
 [plans](https://zulip.com/plans/#cloud) include 5 GB of file storage per user.
 Each uploaded file can be up to 1 GB.
 
-The Zulip Cloud Free [plan](https://zulip.com/plans/#cloud) includes a total of
+The Doer Cloud Free [plan](https://zulip.com/plans/#cloud) includes a total of
 5 GB of file storage. Each uploaded file can be up to 10 MB.
 
 In organizations on a self-hosted server, server administrators can configure

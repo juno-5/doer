@@ -51,7 +51,7 @@ export function user_can_change_email(): boolean {
 }
 
 export function user_can_change_logo(): boolean {
-    return current_user.is_admin && realm.zulip_plan_is_not_limited;
+    return current_user.is_admin && realm.doer_plan_is_not_limited;
 }
 
 export function user_has_permission_for_group_setting(

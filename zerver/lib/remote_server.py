@@ -14,7 +14,7 @@ from pydantic import UUID4, BaseModel, ConfigDict, Field, Json, field_validator
 
 from analytics.lib.counts import LOGGING_COUNT_STAT_PROPERTIES_NOT_SENT_TO_BOUNCER
 from analytics.models import InstallationCount, RealmCount
-from version import API_FEATURE_LEVEL, ZULIP_MERGE_BASE, ZULIP_VERSION
+from version import API_FEATURE_LEVEL, DOER_MERGE_BASE, DOER_VERSION
 from zerver.actions.realm_settings import (
     do_set_push_notifications_enabled_end_timestamp,
     do_set_realm_property,
@@ -144,13 +144,13 @@ def send_to_push_bouncer(
       vs. client-side errors like an invalid token.
 
     """
-    assert settings.ZULIP_SERVICES_URL is not None
-    assert settings.ZULIP_ORG_ID is not None
-    assert settings.ZULIP_ORG_KEY is not None
-    url = urljoin(settings.ZULIP_SERVICES_URL, "/api/v1/remotes/" + endpoint)
-    api_auth = requests.auth.HTTPBasicAuth(settings.ZULIP_ORG_ID, settings.ZULIP_ORG_KEY)
+    assert settings.DOER_SERVICES_URL is not None
+    assert settings.DOER_ORG_ID is not None
+    assert settings.DOER_ORG_KEY is not None
+    url = urljoin(settings.DOER_SERVICES_URL, "/api/v1/remotes/" + endpoint)
+    api_auth = requests.auth.HTTPBasicAuth(settings.DOER_ORG_ID, settings.DOER_ORG_KEY)
 
-    headers = {"User-agent": f"ZulipServer/{ZULIP_VERSION}"}
+    headers = {"User-agent": f"DoerServer/{DOER_VERSION}"}
     headers.update(extra_headers)
 
     if endpoint == "server/analytics":
@@ -193,8 +193,8 @@ def send_to_push_bouncer(
         result_dict = orjson.loads(res.content)
         msg = result_dict["msg"]
         code = result_dict["code"] if "code" in result_dict else None
-        if code == "INVALID_ZULIP_SERVER":
-            # Invalid Zulip server credentials should email this server's admins
+        if code == "INVALID_DOER_SERVER":
+            # Invalid Doer server credentials should email this server's admins
             raise PushNotificationBouncerError(
                 _("Push notifications bouncer error: {error}").format(error=msg)
             )
@@ -234,7 +234,7 @@ def send_to_push_bouncer(
             raise JsonableError(msg)
     elif res.status_code != 200:
         # Anything else is unexpected and likely suggests a bug in
-        # this version of Zulip, so we throw an exception that will
+        # this version of Doer, so we throw an exception that will
         # email the server admins.
         raise PushNotificationBouncerError(
             f"Push notification bouncer returned unexpected status code {res.status_code}"
@@ -289,7 +289,7 @@ def maybe_mark_pushes_disabled(
     if isinstance(e, JsonableError):
         logger.warning(e.msg)
     else:
-        logger.exception("Exception communicating with %s", settings.ZULIP_SERVICES_URL)
+        logger.exception("Exception communicating with %s", settings.DOER_SERVICES_URL)
 
     # An exception was thrown talking to the push bouncer. There may
     # be certain transient failures that we could ignore here -
@@ -391,7 +391,7 @@ def should_send_analytics_data() -> bool:  # nocoverage
 def send_server_data_to_push_bouncer(
     consider_usage_statistics: bool = True, raise_on_error: bool = False
 ) -> None:
-    logger = logging.getLogger("zulip.analytics")
+    logger = logging.getLogger("doer.analytics")
     # first, check what's latest
     try:
         result = send_to_push_bouncer("GET", "server/analytics/status", {})
@@ -446,8 +446,8 @@ def send_server_data_to_push_bouncer(
         installation_counts=installation_count_data,
         realmauditlog_rows=realmauditlog_data,
         realms=get_realms_info_for_push_bouncer(),
-        version=ZULIP_VERSION,
-        merge_base=ZULIP_MERGE_BASE,
+        version=DOER_VERSION,
+        merge_base=DOER_MERGE_BASE,
         api_feature_level=API_FEATURE_LEVEL,
     )
 

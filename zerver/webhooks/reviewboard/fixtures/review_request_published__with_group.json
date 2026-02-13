@@ -16,65 +16,65 @@
         "id":2,
         "links":{
             "diffs":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/diffs/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/diffs/",
                 "method":"GET"
             },
             "latest_diff":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/diffs/1/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/diffs/1/",
                 "method":"GET"
             },
             "repository":{
-                "href":"https://rbcommons.com/s/zulip/api/repositories/2147/",
+                "href":"https://rbcommons.com/s/doer/api/repositories/2147/",
                 "method":"GET",
                 "title":"Scheduler"
             },
             "screenshots":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/screenshots/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/screenshots/",
                 "method":"GET"
             },
             "self":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/",
                 "method":"GET"
             },
             "status_updates":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/status-updates/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/status-updates/",
                 "method":"GET"
             },
             "update":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/",
                 "method":"PUT"
             },
             "last_update":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/last-update/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/last-update/",
                 "method":"GET"
             },
             "reviews":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/reviews/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/reviews/",
                 "method":"GET"
             },
             "file_attachments":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/file-attachments/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/file-attachments/",
                 "method":"GET"
             },
             "draft":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/draft/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/draft/",
                 "method":"GET"
             },
             "diff_context":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/diff-context/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/diff-context/",
                 "method":"GET"
             },
             "submitter":{
-                "href":"https://rbcommons.com/s/zulip/api/users/eeshangarg/",
+                "href":"https://rbcommons.com/s/doer/api/users/eeshangarg/",
                 "method":"GET",
                 "title":"eeshangarg"
             },
             "changes":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/changes/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/changes/",
                 "method":"GET"
             },
             "delete":{
-                "href":"https://rbcommons.com/s/zulip/api/review-requests/2/",
+                "href":"https://rbcommons.com/s/doer/api/review-requests/2/",
                 "method":"DELETE"
             }
         },
@@ -99,11 +99,11 @@
         "testing_done_text_type":"markdown",
         "issue_open_count":0,
         "approved":false,
-        "url":"/s/zulip/r/2/",
-        "absolute_url":"https://rbcommons.com/s/zulip/r/2/",
+        "url":"/s/doer/r/2/",
+        "absolute_url":"https://rbcommons.com/s/doer/r/2/",
         "target_groups":[
             {
-                "href":"https://rbcommons.com/s/zulip/api/groups/people/",
+                "href":"https://rbcommons.com/s/doer/api/groups/people/",
                 "method":"GET",
                 "title":"people"
             }

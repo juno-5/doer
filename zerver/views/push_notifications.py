@@ -9,7 +9,7 @@ from django.utils.translation import gettext as _
 from pydantic import Json
 
 from zerver.actions.push_notifications import do_register_push_device
-from zerver.decorator import human_users_only, zulip_login_required
+from zerver.decorator import human_users_only, doer_login_required
 from zerver.lib import redis_utils
 from zerver.lib.exceptions import (
     ErrorCode,
@@ -189,7 +189,7 @@ def self_hosting_auth_view_common(
     return redirect_url
 
 
-@zulip_login_required
+@doer_login_required
 @typed_endpoint
 def self_hosting_auth_redirect_endpoint(
     request: HttpRequest,
@@ -238,7 +238,7 @@ def self_hosting_auth_json_endpoint(
     return json_success(request, data={"billing_access_url": redirect_url})
 
 
-@zulip_login_required
+@doer_login_required
 def self_hosting_auth_not_configured(request: HttpRequest) -> HttpResponse:
     # Use the same access model as the main endpoints for consistency
     # and to not have to worry about this endpoint leaking some kind of

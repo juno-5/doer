@@ -10,7 +10,7 @@ from typing_extensions import override
 
 from zerver.actions.user_groups import check_add_user_group, do_deactivate_user_group
 from zerver.lib.stream_subscription import get_subscribed_stream_ids_for_user
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.user_groups import get_user_group_direct_member_ids
 from zerver.models import UserProfile
 from zerver.models.groups import NamedUserGroup
@@ -24,14 +24,14 @@ class SCIMHeadersDict(TypedDict):
     HTTP_AUTHORIZATION: str
 
 
-class SCIMTestCase(ZulipTestCase):
+class SCIMTestCase(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
-        self.realm = get_realm("zulip")
+        self.realm = get_realm("doer")
 
     def scim_headers(self) -> SCIMHeadersDict:
-        return {"HTTP_AUTHORIZATION": f"Bearer {settings.SCIM_CONFIG['zulip']['bearer_token']}"}
+        return {"HTTP_AUTHORIZATION": f"Bearer {settings.SCIM_CONFIG['doer']['bearer_token']}"}
 
     def generate_user_schema(self, user_profile: UserProfile) -> dict[str, Any]:
         return {
@@ -46,7 +46,7 @@ class SCIMTestCase(ZulipTestCase):
                 "resourceType": "User",
                 "created": user_profile.date_joined.isoformat(),
                 "lastModified": user_profile.date_joined.isoformat(),
-                "location": f"http://zulip.testserver/scim/v2/Users/{user_profile.id}",
+                "location": f"http://doer.testserver/scim/v2/Users/{user_profile.id}",
             },
         }
 
@@ -65,7 +65,7 @@ class SCIMTestCase(ZulipTestCase):
     @contextmanager
     def mock_name_formatted_included(self, value: bool) -> Iterator[None]:
         config_dict = copy.deepcopy(settings.SCIM_CONFIG)
-        config_dict["zulip"]["name_formatted_included"] = value
+        config_dict["doer"]["name_formatted_included"] = value
         with self.settings(SCIM_CONFIG=config_dict):
             yield
 
@@ -103,7 +103,7 @@ class TestExceptionDetailsNotRevealedToClient(SCIMTestCase):
         """
         with (
             mock.patch(
-                "zerver.lib.scim.ZulipSCIMUser.to_dict", side_effect=Exception("test exception")
+                "zerver.lib.scim.DoerSCIMUser.to_dict", side_effect=Exception("test exception")
             ),
             self.assertLogs("django_scim.views", "ERROR") as mock_scim_logger,
             self.assertLogs("django.request", "ERROR") as mock_request_logger,
@@ -218,7 +218,7 @@ class TestSCIMUser(SCIMTestCase):
         self.assertEqual(output_data, expected_response_schema)
 
     def test_get_all_with_pagination(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         result_all = self.client_get("/scim/v2/Users", {}, **self.scim_headers())
         self.assertEqual(result_all.status_code, 200)
@@ -289,7 +289,7 @@ class TestSCIMUser(SCIMTestCase):
         Tests a basic .search POST query:
         https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.3
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         # A payload to find all users whose email ends with @zulip.com
         payload = {
@@ -398,7 +398,7 @@ class TestSCIMUser(SCIMTestCase):
         @contextmanager
         def mock_create_guests_without_streams() -> Iterator[None]:
             config_dict = copy.deepcopy(settings.SCIM_CONFIG)
-            config_dict["zulip"]["create_guests_without_streams"] = True
+            config_dict["doer"]["create_guests_without_streams"] = True
             with self.settings(SCIM_CONFIG=config_dict):
                 yield
 
@@ -515,7 +515,7 @@ class TestSCIMUser(SCIMTestCase):
         )
 
     def test_post_email_domain_not_allow(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         realm.emails_restricted_to_domains = True
         realm.save(update_fields=["emails_restricted_to_domains"])
 
@@ -817,10 +817,10 @@ class TestSCIMUser(SCIMTestCase):
 
     def test_scim_client_requester_for_logs(self) -> None:
         hamlet = self.example_user("hamlet")
-        with self.assertLogs("zulip.requests", level="INFO") as m:
+        with self.assertLogs("doer.requests", level="INFO") as m:
             result = self.client_get(f"/scim/v2/Users/{hamlet.id}", {}, **self.scim_headers())
         self.assertIn(
-            f"scim-client:{settings.SCIM_CONFIG['zulip']['scim_client_name']}:realm:{hamlet.realm.id}",
+            f"scim-client:{settings.SCIM_CONFIG['doer']['scim_client_name']}:realm:{hamlet.realm.id}",
             m.output[0],
         )
         self.assertEqual(result.status_code, 200)
@@ -840,7 +840,7 @@ class TestSCIMGroup(SCIMTestCase):
             "members": [
                 {
                     "value": str(user_profile.id),
-                    "$ref": f"http://zulip.testserver/scim/v2/Users/{user_profile.id}",
+                    "$ref": f"http://doer.testserver/scim/v2/Users/{user_profile.id}",
                     "display": user_profile.full_name,
                     "type": "User",
                 }
@@ -850,12 +850,12 @@ class TestSCIMGroup(SCIMTestCase):
             ],
             "meta": {
                 "resourceType": "Group",
-                "location": f"http://zulip.testserver/scim/v2/Groups/{user_group.id}",
+                "location": f"http://doer.testserver/scim/v2/Groups/{user_group.id}",
             },
         }
 
     def test_get_by_id(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         desdemona = self.example_user("desdemona")
         hamlet = self.example_user("hamlet")
         bot = self.create_test_bot("whatever", hamlet)
@@ -876,7 +876,7 @@ class TestSCIMGroup(SCIMTestCase):
         self.assertNotIn(bot.id, member_ids)
 
     def test_get_basic_filter_by_display_name(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
         test_group = check_add_user_group(realm, "Test group", [hamlet], acting_user=desdemona)
@@ -920,7 +920,7 @@ class TestSCIMGroup(SCIMTestCase):
         self.assertEqual(output_data, expected_response_schema)
 
     def test_get_all_with_pagination(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
 
         result_all = self.client_get("/scim/v2/Groups", {}, **self.scim_headers())
         self.assertEqual(result_all.status_code, 200)
@@ -1017,7 +1017,7 @@ class TestSCIMGroup(SCIMTestCase):
         )
 
     def test_put_change_name_and_members(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
         othello = self.example_user("othello")
@@ -1089,7 +1089,7 @@ class TestSCIMGroup(SCIMTestCase):
         self.assertEqual(test_group.name, "New test group name")
 
     def test_patch_add_remove_operations(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
         othello = self.example_user("othello")
@@ -1198,8 +1198,8 @@ class TestSCIMGroup(SCIMTestCase):
         # requests from Okta, which for some reason are sent with
         # complex paths.
         #
-        # See ZulipSCIMGroup.handle_remove for details.
-        realm = get_realm("zulip")
+        # See DoerSCIMGroup.handle_remove for details.
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
 
@@ -1226,7 +1226,7 @@ class TestSCIMGroup(SCIMTestCase):
         self.assertEqual(output_data, expected_response_schema)
 
     def test_patch_replace_operation(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
         othello = self.example_user("othello")
@@ -1325,7 +1325,7 @@ class TestSCIMGroup(SCIMTestCase):
         )
 
     def test_patch_add_user_wrong_realm(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         mit_user = self.mit_user("sipbtest")
         desdemona = self.example_user("desdemona")
@@ -1391,7 +1391,7 @@ class TestSCIMGroup(SCIMTestCase):
         )
 
     def test_patch_add_invalid_user_id(self) -> None:
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
         othello = self.example_user("othello")
@@ -1435,7 +1435,7 @@ class TestSCIMGroup(SCIMTestCase):
         """
         Verifies that system groups are not allowed to be managed by SCIM requests.
         """
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         system_group = NamedUserGroup.objects.get(realm_for_sharding=realm, name="role:owners")
 
         payload = {
@@ -1507,7 +1507,7 @@ class TestSCIMGroup(SCIMTestCase):
     def test_delete(self) -> None:
         # The DELETE endpoint is currently disabled.
 
-        realm = get_realm("zulip")
+        realm = get_realm("doer")
         hamlet = self.example_user("hamlet")
         desdemona = self.example_user("desdemona")
 

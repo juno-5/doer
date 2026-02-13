@@ -20,7 +20,7 @@ from zerver.lib.webhooks.common import (
     default_fixture_to_headers,
     get_event_header,
     get_setup_webhook_message,
-    guess_zulip_user_from_external_account,
+    guess_doer_user_from_external_account,
 )
 from zerver.lib.webhooks.git import (
     CONTENT_MESSAGE_TEMPLATE,
@@ -933,14 +933,14 @@ def get_organization_name(payload: WildValue) -> str:
 
 def get_user_mention(helper: Helper, github_username: str) -> str:
     external_account_field_name = str(DEFAULT_EXTERNAL_ACCOUNTS["github"].name)
-    zulip_user = guess_zulip_user_from_external_account(
+    doer_user = guess_doer_user_from_external_account(
         helper.realm,
         github_username,
         external_account_field_name,
         external_username_case_insensitive=True,
     )
-    if zulip_user is not None:
-        return silent_mention_syntax_for_user(zulip_user)
+    if doer_user is not None:
+        return silent_mention_syntax_for_user(doer_user)
     return github_username
 
 
@@ -1137,7 +1137,7 @@ def api_github_webhook(
 ) -> HttpResponse:
     """
     GitHub sends the event as an HTTP header.  We have our
-    own Zulip-specific concept of an event that often maps
+    own Doer-specific concept of an event that often maps
     directly to the X-GitHub-Event header's event, but we sometimes
     refine it based on the payload.
     """
@@ -1163,7 +1163,7 @@ def api_github_webhook(
     ):
         return json_success(request)
 
-    event = get_zulip_event_name(header_event, payload, branches)
+    event = get_doer_event_name(header_event, payload, branches)
     if event is None:
         # This is nothing to worry about--get_event() returns None
         # for events that are valid but not yet handled by us.
@@ -1240,7 +1240,7 @@ def get_push_event_name(payload: WildValue, branches: str | None) -> str | None:
     return "push_commits"
 
 
-def get_zulip_event_name(
+def get_doer_event_name(
     header_event: str,
     payload: WildValue,
     branches: str | None,

@@ -60,8 +60,8 @@ def create_internal_realm() -> None:
     # These are currently also present in DATA_IMPORT_CLIENTS.
     get_client("Internal")
     get_client("website")
-    get_client("ZulipMobile")
-    get_client("ZulipElectron")
+    get_client("DoerMobile")
+    get_client("DoerElectron")
 
     internal_bots = [
         (bot["name"], bot["email_template"] % (settings.INTERNAL_BOT_DOMAIN,))

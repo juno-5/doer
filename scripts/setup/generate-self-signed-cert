@@ -46,7 +46,7 @@ if [ -e /etc/redhat-release ]; then
 else
     SSLDIR=/etc/ssl
 fi
-KEYFILE=$SSLDIR/private/zulip.key
+KEYFILE=$SSLDIR/private/doer.key
 CERTFILE=$SSLDIR/certs/zulip.combined-chain.crt
 
 if [ -n "$EXISTS_OK" ] && [ -e "$KEYFILE" ] && [ -e "$CERTFILE" ]; then

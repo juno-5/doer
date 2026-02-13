@@ -1,6 +1,6 @@
-# Zulip Sonarqube integration
+# Doer Sonarqube integration
 
-Get Zulip notifications for your Sonarqube code analysis!
+Get Doer notifications for your Sonarqube code analysis!
 
 {start_tabs}
 
@@ -11,7 +11,7 @@ Get Zulip notifications for your Sonarqube code analysis!
 1. To configure webhooks for a specific SonarQube project, go to the project,
     and select **Administration**. Select **Webhooks**, and click **Create**.
 
-1. Set **Name** of the webhook to a name of your choice, such as `Zulip`.
+1. Set **Name** of the webhook to a name of your choice, such as `Doer`.
     Set **URL** to the URL generated above, and click **Create**.
 
 !!! tip ""

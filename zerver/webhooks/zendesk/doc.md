@@ -1,6 +1,6 @@
-# Zulip Zendesk integration
+# Doer Zendesk integration
 
-Get notifications about Zendesk tickets in Zulip!
+Get notifications about Zendesk tickets in Doer!
 
 {start_tabs}
 
@@ -17,7 +17,7 @@ Get notifications about Zendesk tickets in Zulip!
 
 1. Click the **URL target**, and fill in the form with the following:
 
-    * **Title**: Zulip
+    * **Title**: Doer
     * **URL**: the URL generated and updated above
     * **Method**: POST
     * **Attribute Name**: message
@@ -25,7 +25,7 @@ Get notifications about Zendesk tickets in Zulip!
     * **Password**: your bot's API key
 
 1. Select **Test Target**, and click **Submit**. A test message should
-   appear Zulip. Save the target by selecting **Create target**, and
+   appear Doer. Save the target by selecting **Create target**, and
    clicking **Submit**.
 
 1. Add a new trigger, for every action you'd like to be notified about.
@@ -36,10 +36,10 @@ Get notifications about Zendesk tickets in Zulip!
    Under **Meet all of the following conditions**, select the conditions
    for the trigger. In the **Perform these actions** section, select
    **Notification: Notify target**, and select the target created above
-   (e.g., "Zulip").
+   (e.g., "Doer").
 
 1. Enter the message body into the **Message** field. You can use both
-   Zulip Markdown and Zendesk placeholders. Here's an example message
+   Doer Markdown and Zendesk placeholders. Here's an example message
    body template that you can optionally use:
 
         {% raw %}Ticket [#{{ ticket.id }}: {{ ticket.title }}]({{ ticket.link }}), was updated by {{ current_user.name }}

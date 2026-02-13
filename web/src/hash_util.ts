@@ -332,7 +332,7 @@ export function validate_group_settings_hash(hash: string): string {
     const section = hash_components[1];
 
     const can_create_groups =
-        settings_data.user_can_create_user_groups() && realm.zulip_plan_is_not_limited;
+        settings_data.user_can_create_user_groups() && realm.doer_plan_is_not_limited;
     if (section === "new" && !can_create_groups) {
         return "#groups/your";
     }

@@ -14,7 +14,7 @@ from zerver.actions.message_send import get_service_bot_events
 from zerver.lib.bot_config import ConfigError, load_bot_config_template, set_bot_config
 from zerver.lib.bot_lib import EmbeddedBotEmptyRecipientsListError, EmbeddedBotHandler, StateHandler
 from zerver.lib.bot_storage import StateError
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 from zerver.lib.test_helpers import mock_queue_publish
 from zerver.lib.validator import check_string
 from zerver.models import Recipient, UserProfile
@@ -28,12 +28,12 @@ BOT_TYPE_TO_QUEUE_NAME = {
 }
 
 
-class TestServiceBotBasics(ZulipTestCase):
+class TestServiceBotBasics(DoerTestCase):
     def _get_outgoing_bot(self) -> UserProfile:
         outgoing_bot = do_create_user(
             email="bar-bot@zulip.com",
             password="test",
-            realm=get_realm("zulip"),
+            realm=get_realm("doer"),
             full_name="BarBot",
             bot_type=UserProfile.OUTGOING_WEBHOOK_BOT,
             bot_owner=self.example_user("cordelia"),
@@ -175,7 +175,7 @@ class TestServiceBotBasics(ZulipTestCase):
         )
 
 
-class TestServiceBotStateHandler(ZulipTestCase):
+class TestServiceBotStateHandler(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -183,7 +183,7 @@ class TestServiceBotStateHandler(ZulipTestCase):
         self.bot_profile = do_create_user(
             email="embedded-bot-1@zulip.com",
             password="test",
-            realm=get_realm("zulip"),
+            realm=get_realm("doer"),
             full_name="EmbeddedBo1",
             bot_type=UserProfile.EMBEDDED_BOT,
             bot_owner=self.user_profile,
@@ -192,7 +192,7 @@ class TestServiceBotStateHandler(ZulipTestCase):
         self.second_bot_profile = do_create_user(
             email="embedded-bot-2@zulip.com",
             password="test",
-            realm=get_realm("zulip"),
+            realm=get_realm("doer"),
             full_name="EmbeddedBot2",
             bot_type=UserProfile.EMBEDDED_BOT,
             bot_owner=self.user_profile,
@@ -353,7 +353,7 @@ class TestServiceBotStateHandler(ZulipTestCase):
         self.assertEqual(response_dict["storage"], {})
 
 
-class TestServiceBotConfigHandler(ZulipTestCase):
+class TestServiceBotConfigHandler(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -458,7 +458,7 @@ def patch_queue_publish(
     return inner
 
 
-class TestServiceBotEventTriggers(ZulipTestCase):
+class TestServiceBotEventTriggers(DoerTestCase):
     @override
     def setUp(self) -> None:
         super().setUp()
@@ -466,7 +466,7 @@ class TestServiceBotEventTriggers(ZulipTestCase):
         self.bot_profile = do_create_user(
             email="foo-bot@zulip.com",
             password="test",
-            realm=get_realm("zulip"),
+            realm=get_realm("doer"),
             full_name="FooBot",
             bot_type=UserProfile.OUTGOING_WEBHOOK_BOT,
             bot_owner=self.user_profile,
@@ -475,7 +475,7 @@ class TestServiceBotEventTriggers(ZulipTestCase):
         self.second_bot_profile = do_create_user(
             email="bar-bot@zulip.com",
             password="test",
-            realm=get_realm("zulip"),
+            realm=get_realm("doer"),
             full_name="BarBot",
             bot_type=UserProfile.OUTGOING_WEBHOOK_BOT,
             bot_owner=self.user_profile,

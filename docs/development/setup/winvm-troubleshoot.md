@@ -54,7 +54,7 @@ some of the solutions mentioned
 
 If you ran Git BASH as administrator but you already had VirtualBox
 running, you might still get this error because VirtualBox is not
-running as administrator. In that case: close the Zulip VM with
+running as administrator. In that case: close the Doer VM with
 `vagrant halt`; close any other VirtualBox VMs that may be running;
 exit VirtualBox; and try again with `vagrant up --provision` from a
 Git BASH running as administrator.
@@ -72,9 +72,9 @@ then print out the custom settings for this virtual machine with
 
 ```console
 $ vboxmanage list vms
-"zulip_default_1462498139595_55484" {5a65199d-8afa-4265-b2f6-6b1f162f157d}
+"doer_default_1462498139595_55484" {5a65199d-8afa-4265-b2f6-6b1f162f157d}
 
-$ vboxmanage getextradata zulip_default_1462498139595_55484 enumerate
+$ vboxmanage getextradata doer_default_1462498139595_55484 enumerate
 Key: VBoxInternal2/SharedFoldersEnableSymlinksCreate/srv_zulip, Value: 1
 Key: supported, Value: false
 ```
@@ -180,7 +180,7 @@ $ vagrant ssh -- 'sudo modinfo -F version vboxsf'
 
 The bug has not been fixed upstream as of this writing, but you may be
 able to work around it by downgrading VirtualBox Guest Additions to
-5.2.44. To do this, create a `~/.zulip-vagrant-config` file and add
+5.2.44. To do this, create a `~/.doer-vagrant-config` file and add
 this line:
 
 ```text

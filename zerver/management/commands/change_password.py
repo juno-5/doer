@@ -7,10 +7,10 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import CommandError
 from typing_extensions import override
 
-from zerver.lib.management import ZulipBaseCommand
+from zerver.lib.management import DoerBaseCommand
 
 
-class Command(ZulipBaseCommand):
+class Command(DoerBaseCommand):
     # This is our version of the original Django changepassword command adjusted
     # to be able to find UserProfiles by email+realm.
     # We change the arguments the command takes to fit our

@@ -24,26 +24,26 @@ optional_address_tokens = {
 }
 
 
-class ZulipEmailForwardError(Exception):
+class DoerEmailForwardError(Exception):
     pass
 
 
-class ZulipEmailForwardUserError(ZulipEmailForwardError):
+class DoerEmailForwardUserError(DoerEmailForwardError):
     pass
 
 
 def get_email_gateway_message_string_from_address(address: str) -> str:
     if settings.EMAIL_GATEWAY_PATTERN == "":
-        raise ZulipEmailForwardError("This server is not configured for incoming email.")
+        raise DoerEmailForwardError("This server is not configured for incoming email.")
     pattern_parts = [re.escape(part) for part in settings.EMAIL_GATEWAY_PATTERN.split("%s")]
     if settings.EMAIL_GATEWAY_EXTRA_PATTERN_HACK:
-        # Accept mails delivered to any Zulip server
+        # Accept mails delivered to any Doer server
         pattern_parts[-1] = settings.EMAIL_GATEWAY_EXTRA_PATTERN_HACK
     match_email_re = re.compile(r"(.*?)".join(pattern_parts))
     match = match_email_re.match(address)
 
     if not match:
-        raise ZulipEmailForwardError("Address not recognized by gateway.")
+        raise DoerEmailForwardError("Address not recognized by gateway.")
     msg_string = match.group(1)
 
     return msg_string
@@ -100,7 +100,7 @@ def decode_email_address(email: str) -> tuple[str, dict[str, bool]]:
     # tokens in the email addresses we generate.
     #
     # We need to keep supporting `+` indefinitely for backwards
-    # compatibility with older versions of Zulip that offered users
+    # compatibility with older versions of Doer that offered users
     # email addresses prioritizing using `+` for better aesthetics.
     msg_string = msg_string.replace(".", "+")
 

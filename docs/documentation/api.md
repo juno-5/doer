@@ -1,34 +1,34 @@
 # Documenting REST API endpoints
 
-This document explains the system for documenting [Zulip's REST
+This document explains the system for documenting [Doer's REST
 API](https://zulip.com/api/rest).
 
-Zulip's API documentation is an essential resource both for users and
-for the developers of Zulip's mobile and terminal apps. Our vision is
+Doer's API documentation is an essential resource both for users and
+for the developers of Doer's mobile and terminal apps. Our vision is
 for the documentation to be sufficiently good that developers of
-Zulip's apps should never need to look at the server's implementation
+Doer's apps should never need to look at the server's implementation
 to answer questions about the API's semantics.
 
-To achieve these goals, Zulip leverages the popular OpenAPI format as
-the data source to ensure that Zulip's API documentation is correct
-and remains so as Zulip's API evolves.
+To achieve these goals, Doer leverages the popular OpenAPI format as
+the data source to ensure that Doer's API documentation is correct
+and remains so as Doer's API evolves.
 
 In particular, the top goal for this system is that all mistakes in
 verifiable content (i.e. not the English explanations) should cause
-the Zulip test suite to fail. This is incredibly important, because
+the Doer test suite to fail. This is incredibly important, because
 once you notice one error in API documentation, you no longer trust it
 to be correct, which ends up wasting the time of its users.
 
 Since it's very difficult to not make little mistakes when writing any
 untested code, the only good solution to this is a way to test
 the documentation. We found dozens of errors in the process of adding
-the validation Zulip has today.
+the validation Doer has today.
 
 Our API documentation is defined by a few sets of files:
 
-- The primary source of our API documentation is the Zulip server's
+- The primary source of our API documentation is the Doer server's
   [OpenAPI description](openapi.md) at
-  `zerver/openapi/zulip.yaml`.
+  `zerver/openapi/doer.yaml`.
 - The documentation is written the same Markdown framework that powers
   our [integration docs](integrations.md), with some special
   extensions for rendering nice code blocks and example
@@ -40,7 +40,7 @@ Our API documentation is defined by a few sets of files:
 - We have an extensive set of tests designed to validate that the data
   in the OpenAPI file matching the implementation. Specifically,
   `zerver/tests/test_openapi.py` compares every endpoint's accepted
-  parameters in `views` code with those declared in `zulip.yaml`. And
+  parameters in `views` code with those declared in `doer.yaml`. And
   the [backend test suite](../testing/testing-with-django.md) checks
   that every API response served during our extensive backend test
   suite matches one the declared OpenAPI schema for that endpoint.
@@ -48,7 +48,7 @@ Our API documentation is defined by a few sets of files:
   Python API documentation (`zerver/openapi/python_examples.py`; run via
   `tools/test-api`). The `generate_code_example` macro will magically
   read content from that test suite and render it as the code example.
-  This structure ensures that Zulip's API documentation is robust to a
+  This structure ensures that Doer's API documentation is robust to a
   wide range of possible typos and other bugs in the API
   documentation.
 - The JavaScript examples are similarly generated and tested using
@@ -72,7 +72,7 @@ We highly recommend looking at these resources while reading the above
 documentation page:
 
 - `api_docs/api-doc-template.md`
-- `zerver/openapi/zulip.yaml`, specifically the section with
+- `zerver/openapi/doer.yaml`, specifically the section with
   `operationId: render-message`
 - `zerver/openapi/python_examples.py`
 
@@ -97,7 +97,7 @@ information for our API endpoint documentation:
 
 At the top of the endpoint documentation page is the title, and it
 comes from the `summary` parameter in the OpenAPI data,
-`zerver/openapi/zulip.yaml`.
+`zerver/openapi/doer.yaml`.
 
 The endpoint `description` in the OpenAPI data explains what the
 endpoint does in clear English. It should include details on how to
@@ -151,7 +151,7 @@ parameter in the OpenAPI data.
 
 For the Python examples, you'll write the example in
 `zerver/openapi/python_examples.py`, and it'll be run and verified
-automatically in Zulip's automated test suite. The code for our
+automatically in Doer's automated test suite. The code for our
 example API endpoint looks like this:
 
 ```python
@@ -171,7 +171,7 @@ def render_message(client: Client) -> None:
 This is an actual Python function which will be run as part of the
 `tools/test-api` test suite. The `validate_against_openapi_schema`
 function will verify that the result of that request is as defined in
-the examples in `zerver/openapi/zulip.yaml`.
+the examples in `zerver/openapi/doer.yaml`.
 
 To run as part of the test suite, the `render_message` function needs
 to be called from `test_messages` (or one of the other functions at
@@ -180,7 +180,7 @@ actually runs the tests. Tests with the `openapi_test_function`
 decorator that are not called will fail tests, as will new endpoints
 that are not covered by an `openapi_test_function`-decorated test.
 
-You will still want to manually test the example using Zulip's Python
+You will still want to manually test the example using Doer's Python
 API client by copy-pasting from the website; it's easy to make typos
 and other mistakes where variables are defined outside the tested
 block, and the tests are not foolproof.
@@ -203,7 +203,7 @@ an API endpoint supports. Implemented in
 this in `api-doc-template.md` after the **Parameters** header:
 
 ```
-{generate_api_arguments_table|zulip.yaml|API_ENDPOINT_NAME}
+{generate_api_arguments_table|doer.yaml|API_ENDPOINT_NAME}
 ```
 
 This generates the information from the endpoint's parameter
@@ -222,7 +222,7 @@ example response(s) from the OpenAPI data. Implemented in
 see this in after the **Response** header in `api-doc-template.md`:
 
 ```
-{generate_return_values_table|zulip.yaml|API_ENDPOINT_NAME}
+{generate_return_values_table|doer.yaml|API_ENDPOINT_NAME}
 ```
 
 To generate the example responses from the OpenAPI data, we again
@@ -245,14 +245,14 @@ for a new API endpoint. It assumes you've read and understood the
 above.
 
 1. Start by adding [OpenAPI format](openapi.md)
-   data to `zerver/openapi/zulip.yaml` for the endpoint. If you
+   data to `zerver/openapi/doer.yaml` for the endpoint. If you
    copy-paste (which is helpful to get the indentation structure
    right), be sure to update all the content that you copied to
    correctly describe your endpoint!
 
    In order to do this, you need to figure out how the endpoint in
    question works by reading the code! To understand how arguments
-   are specified in Zulip backend endpoints, read our [REST API
+   are specified in Doer backend endpoints, read our [REST API
    tutorial][rest-api-tutorial], paying special attention to the
    details of `typed_endpoint`.
 
@@ -264,11 +264,11 @@ above.
 
    You can check your formatting using these helpful tools.
 
-   - `tools/check-openapi.ts` will verify the syntax of `zerver/openapi/zulip.yaml`.
+   - `tools/check-openapi.ts` will verify the syntax of `zerver/openapi/doer.yaml`.
    - `tools/test-backend zerver/tests/test_openapi.py`; this test compares
      your documentation against the code and can find many common
      mistakes in how arguments are declared.
-   - `test-backend`: The full Zulip backend test suite will fail if
+   - `test-backend`: The full Doer backend test suite will fail if
      any actual API responses generated by the tests don't match your
      defined OpenAPI schema. Use `test-backend --rerun` for a fast
      edit/refresh cycle when debugging.
@@ -285,12 +285,12 @@ above.
 1. Make the desired API call inside the function. If our Python
    bindings don't have a dedicated method for a specific API call,
    you may either use `client.call_endpoint` or add a dedicated
-   function to the [zulip PyPI
-   package](https://github.com/zulip/python-zulip-api/tree/main/zulip).
+   function to the [doer PyPI
+   package](https://github.com/doer/python-doer-api/tree/main/doer).
    Ultimately, the goal is for every endpoint to be documented the
    latter way, but it's useful to be able to write working
    documentation for an endpoint that isn't supported by
-   `python-zulip-api` yet.
+   `python-doer-api` yet.
 
 1. Add the function to one of the `test_*` functions at the end of
    `zerver/openapi/python_examples.py`; this will ensure your
@@ -303,7 +303,7 @@ above.
    <https://jsonformatter.curiousconcept.com/> to format the JSON
    fixtures. Add the fixture to the `example` subsection of the
    `responses` section for the endpoint in
-   `zerver/openapi/zulip.yaml`.
+   `zerver/openapi/doer.yaml`.
 
 1. Run `./tools/test-api` to make sure your new test function is being
    run and the tests pass.
@@ -343,13 +343,13 @@ above.
    with the content in `api_docs/changelog.md`.
 
 1. Add a `**Changes**` note in the description of all updates and
-   additions to the API documentation (`zerver/openapi/zulip.yaml`),
+   additions to the API documentation (`zerver/openapi/doer.yaml`),
    and mention the name of the file generated in the previous step
    (without the `.md` extension) in place of the API feature level,
    for example:
 
    ```yaml
-   **Changes**: New in Zulip 11.0 (feature level ZF-1f4a39).
+   **Changes**: New in Doer 11.0 (feature level ZF-1f4a39).
    ```
 
 1. Proofread your new documentation in its rendered HTML, including
@@ -360,16 +360,16 @@ above.
 
 From time to time, we might want to rename an article in the REST API
 documentation. This change will break incoming links, including links
-in published Zulip blog posts, links in other branches of the
+in published Doer blog posts, links in other branches of the
 repository that haven't been rebased, and more importantly links from
-previous versions of Zulip.
+previous versions of Doer.
 
 To fix these broken links, you can easily add a URL redirect in:
 `zerver/lib/url_redirects.py`.
 
 For REST API documentation, you will either need to rename the file,
 or you will need to update the endpoint's `operationId` in
-`zerver/openapi/zulip.yaml`. Then, you need to add a new `URLRedirect`
+`zerver/openapi/doer.yaml`. Then, you need to add a new `URLRedirect`
 to the `API_DOCUMENTATION_REDIRECTS` list in `url_redirects.py`:
 
 ```python
@@ -382,13 +382,13 @@ API_DOCUMENTATION_REDIRECTS: List[URLRedirect] = [
 You should still check for references to the old URL in your branch
 and replace those with the new URL (e.g., `git grep "/api/foo"`).
 One exception to this are links with the old URL that were included
-in the content of `zulip_update_announcements`, which can be found
-in `zerver/lib/zulip_update_announcements.py`. It's preferable to
+in the content of `doer_update_announcements`, which can be found
+in `zerver/lib/doer_update_announcements.py`. It's preferable to
 have the source code accurately reflect what was sent to users in
-those [Zulip update announcements][zulip-updates], so these should
+those [Doer update announcements][doer-updates], so these should
 not be replaced with the new URL.
 
-If you have the Zulip development environment set up, you can manually
+If you have the Doer development environment set up, you can manually
 test your changes by loading the old URL in your browser (e.g.,
 `http://localhost:9991/api/foo`), and confirming that it redirects to
 the new url (e.g., `http://localhost:9991/api`/bar`).
@@ -400,7 +400,7 @@ checks all the URL redirects, which you can run from the command line:
 ./tools/test-backend zerver.tests.test_urls.URLRedirectTest
 ```
 
-[zulip-updates]: https://zulip.com/help/configure-automated-notices#zulip-update-announcements
+[doer-updates]: https://zulip.com/help/configure-automated-notices#doer-update-announcements
 
 ## Why a custom system?
 
@@ -410,10 +410,10 @@ it? There's several major benefits to this system:
 
 - It is extremely common for API documentation to become out of date
   as an API evolves; this automated testing system helps make it
-  possible for Zulip to maintain accurate documentation without a lot
+  possible for Doer to maintain accurate documentation without a lot
   of manual management.
-- Every Zulip server can host correct API documentation for its
-  version, with the key variables (like the Zulip server URL) already
+- Every Doer server can host correct API documentation for its
+  version, with the key variables (like the Doer server URL) already
   pre-substituted for the user.
 - We're able to share implementation language and visual styling with
   our help center, which is especially useful for the extensive
@@ -425,13 +425,13 @@ the actual documentation work in order to migrate tools.
 
 ## Debugging schema validation errors
 
-A common function used to validate and test Zulip's REST API is
+A common function used to validate and test Doer's REST API is
 `validate_against_openapi_schema`. It is used to verify that every
 successful API response returned in the backend and documentation test
 suites are a documented possibility in the API documentation.
 
-Therefore, when you add a new feature or setting to Zulip, you will most
-likely need to update the API documentation (`zerver/openapi/zulip.yaml`)
+Therefore, when you add a new feature or setting to Doer, you will most
+likely need to update the API documentation (`zerver/openapi/doer.yaml`)
 in order to pass existing tests that use this function. Additionally, if
 you're writing documentation for a new or undocumented REST API endpoint,
 you'll want to use this function to validate and test your changes in
@@ -444,7 +444,7 @@ through the examples, we recommend reviewing the
 with the format.
 
 If you use Visual Studio Code, an OpenAPI extension can be very helpful in
-navigating Zulip's large and detailed OpenAPI file; see
+navigating Doer's large and detailed OpenAPI file; see
 `.vscode/extensions.json`.
 
 ### Deconstructing the error output
@@ -456,7 +456,7 @@ documentation for the REST API endpoint for uploading a file,
 There are no parameters for this endpoint, and only one return value
 specific to this endpoint, `uri`, which is the URL of the uploaded file.
 If we comment out that return value and example from the existing API
-documentation in `zerver/openapi/zulip.yaml`, for example:
+documentation in `zerver/openapi/doer.yaml`, for example:
 
 ```yaml
   /user_uploads:
@@ -483,7 +483,7 @@ documentation in `zerver/openapi/zulip.yaml`, for example:
                       {
                         "msg": "",
                         "result": "success",
-                        # "uri": "/user_uploads/1/4e/m2A3MSqFnWRLUf9SaPzQ0Up_/zulip.txt",
+                        # "uri": "/user_uploads/1/4e/m2A3MSqFnWRLUf9SaPzQ0Up_/doer.txt",
                       }
 ```
 

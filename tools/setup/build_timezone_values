@@ -5,12 +5,12 @@ import sys
 import zoneinfo
 from datetime import datetime, timedelta
 
-ZULIP_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../")
-sys.path.insert(0, ZULIP_PATH)
+DOER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../")
+sys.path.insert(0, DOER_PATH)
 
 from zerver.lib.timezone import get_canonical_timezone_map
 
-OUT_PATH = os.path.join(ZULIP_PATH, "web", "generated", "timezones.json")
+OUT_PATH = os.path.join(DOER_PATH, "web", "generated", "timezones.json")
 
 
 def get_utc_offset(tz_name: str) -> str:

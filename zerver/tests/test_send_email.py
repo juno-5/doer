@@ -13,10 +13,10 @@ from zerver.lib.send_email import (
     logger,
     send_email,
 )
-from zerver.lib.test_classes import ZulipTestCase
+from zerver.lib.test_classes import DoerTestCase
 
 
-class TestBuildEmail(ZulipTestCase):
+class TestBuildEmail(DoerTestCase):
     def test_limited_from_length(self) -> None:
         hamlet = self.example_user("hamlet")
         # This is exactly the max length
@@ -69,7 +69,7 @@ class TestBuildEmail(ZulipTestCase):
         self.assertEqual(mail.to[0], hamlet.delivery_email)
 
 
-class TestSendEmail(ZulipTestCase):
+class TestSendEmail(DoerTestCase):
     def test_initialize_connection(self) -> None:
         # Test the new connection case
         with mock.patch.object(EmailBackend, "open", return_value=True):
@@ -148,7 +148,7 @@ class TestSendEmail(ZulipTestCase):
                     info_log.output[0],
                     f"INFO:{logger.name}:Sending password_reset email to {mail.to}",
                 )
-                self.assertTrue(info_log.output[1].startswith(f"ERROR:zulip.send_email:{message}"))
+                self.assertTrue(info_log.output[1].startswith(f"ERROR:doer.send_email:{message}"))
 
     def test_send_email_config_error_logging(self) -> None:
         hamlet = self.example_user("hamlet")
@@ -168,7 +168,7 @@ class TestSendEmail(ZulipTestCase):
         self.assertEqual(
             error_log.output,
             [
-                "ERROR:zulip.send_email:"
+                "ERROR:doer.send_email:"
                 "An SMTP username was set (EMAIL_HOST_USER), but password is unset (EMAIL_HOST_PASSWORD).  "
                 "To disable SMTP authentication, set EMAIL_HOST_USER to an empty string."
             ],

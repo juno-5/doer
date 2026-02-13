@@ -63,7 +63,7 @@ class ThinkstHookTests(WebhookTestCase):
             "**User:** guest\n"
             "**Filename:** secret/bar.doc\n"
             "**Additional Information:** This file 'secret/bar.doc' was "
-            "previously opened by the host 'zulip-dev' on 2020-07-20 16:18:56.\n\n"
+            "previously opened by the host 'doer-dev' on 2020-07-20 16:18:56.\n\n"
             "It was also opened 2 times before by the same host, on 2020-06-10 "
             "14:33:50, 2020-06-18 19:02:33.\n"
             "**Background Context:** You have had 20 incidents from 1.1.1.1 previously."

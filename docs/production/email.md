@@ -1,11 +1,11 @@
 # Outgoing email
 
-Zulip needs to be able to send email so it can confirm new users'
+Doer needs to be able to send email so it can confirm new users'
 email addresses and send notifications.
 
 ## How to configure
 
-1. Identify an outgoing email (SMTP) account where you can have Zulip
+1. Identify an outgoing email (SMTP) account where you can have Doer
    send mail. If you don't already have one you want to use, see
    [Email services](#email-services) below.
 
@@ -17,37 +17,37 @@ email addresses and send notifications.
    email section.
 
 1. Put the password for the SMTP user account in
-   `/etc/zulip/zulip-secrets.conf` by setting `email_password`. For
+   `/etc/zulip/doer-secrets.conf` by setting `email_password`. For
    example: `email_password = abcd1234`.
 
-   Like any other change to the Zulip configuration, be sure to
+   Like any other change to the Doer configuration, be sure to
    [restart the server](settings.md) to make your changes take
    effect.
 
-1. Configure your SMTP server to allows your Zulip server to send
+1. Configure your SMTP server to allows your Doer server to send
    emails originating from the email addresses listed in
-   `/etc/zulip/settings.py` as `ZULIP_ADMINISTRATOR`,
+   `/etc/zulip/settings.py` as `DOER_ADMINISTRATOR`,
    `NOREPLY_EMAIL_ADDRESS` and if `ADD_TOKENS_TO_NOREPLY_ADDRESS=True`
    (the default), `TOKENIZED_NOREPLY_EMAIL_ADDRESS`.
 
    If you don't know how to do this, we recommend using a [free
    transactional email service](#free-outgoing-email-services); they
    will guide you through everything you need to do, covering details
-   like configuring DKIM/SPF authentication so your Zulip emails won't
+   like configuring DKIM/SPF authentication so your Doer emails won't
    be spam filtered.
 
-1. Use Zulip's email configuration test tool, documented in the
+1. Use Doer's email configuration test tool, documented in the
    [Troubleshooting section](#troubleshooting), to verify that your
    configuration is working.
 
-1. Once your configuration is working, restart the Zulip server with
-   `su zulip -c '/home/zulip/deployments/current/scripts/restart-server'`.
+1. Once your configuration is working, restart the Doer server with
+   `su doer -c '/home/zulip/deployments/current/scripts/restart-server'`.
 
 ## Email services
 
 ### Free outgoing email services
 
-For sending outgoing email from your Zulip server, we highly recommend
+For sending outgoing email from your Doer server, we highly recommend
 using a "transactional email" service like
 [Mailgun](https://documentation.mailgun.com/docs/mailgun/user-manual/sending-messages/send-smtp),
 [SendGrid](https://www.twilio.com/docs/sendgrid/for-developers/sending-email/integrating-with-the-smtp-api),
@@ -60,7 +60,7 @@ the best documentation).
 If you don't have an existing outgoing SMTP provider, don't worry!
 Each of the options we recommend above (as well as dozens of other
 services) have free options. Once you've signed up, you'll want to
-find the service's provided "SMTP credentials", and configure Zulip as
+find the service's provided "SMTP credentials", and configure Doer as
 follows:
 
 - The hostname like `EMAIL_HOST = 'smtp.mailgun.org'` in `/etc/zulip/settings.py`
@@ -70,7 +70,7 @@ follows:
   `/etc/zulip/settings.py`, for most providers
 - The port as `EMAIL_PORT = 587` in `/etc/zulip/settings.py`, for most
   providers
-- The password like `email_password = abcd1234` in `/etc/zulip/zulip-secrets.conf`.
+- The password like `email_password = abcd1234` in `/etc/zulip/doer-secrets.conf`.
 
 If your SMTP provider uses implicit SSL/TLS on port 465 (and not `STARTTLS` on
 port 587), you need to set `EMAIL_PORT = 465`, as well as replacing
@@ -94,7 +94,7 @@ EMAIL_HOST_USER = ""
 
 We should emphasize that because modern spam filtering is very
 aggressive, you should make sure your downstream email system is
-configured to properly sign outgoing email sent by your Zulip server
+configured to properly sign outgoing email sent by your Doer server
 (or check your spam folder) when using this configuration. See
 [documentation on using Django with a local postfix server][postfix-email]
 for additional advice.
@@ -108,8 +108,8 @@ email, because Gmail's anti-spam measures make this annoying. But if
 you want to use a Gmail account to send outgoing email anyway, here's
 how to make it work:
 
-- Create a totally new Gmail account for your Zulip server; you don't
-  want Zulip's automated emails to come from your personal email address.
+- Create a totally new Gmail account for your Doer server; you don't
+  want Doer's automated emails to come from your personal email address.
 - If you're using 2-factor authentication on the Gmail account, you'll
   need to use an
   [app-specific password](https://support.google.com/accounts/answer/185833).
@@ -125,7 +125,7 @@ how to make it work:
 ### Logging outgoing email to a file for prototyping
 
 For prototyping, you might want to proceed without setting up an email
-provider. If you want to see the emails Zulip would have sent, you
+provider. If you want to see the emails Doer would have sent, you
 can log them to a file instead.
 
 To do so, add these lines to `/etc/zulip/settings.py`:
@@ -135,7 +135,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/var/log/zulip/emails'
 ```
 
-Then outgoing emails that Zulip would have sent will just be written
+Then outgoing emails that Doer would have sent will just be written
 to files in `/var/log/zulip/emails/`.
 
 Remember to delete this configuration (and restart the server) if you
@@ -146,12 +146,12 @@ later set up a real SMTP provider!
 You can quickly test your outgoing email configuration using:
 
 ```bash
-su zulip -c '/home/zulip/deployments/current/manage.py send_test_email user@example.com'
+su doer -c '/home/zulip/deployments/current/manage.py send_test_email user@example.com'
 ```
 
 If it doesn't throw an error, it probably worked; you can confirm by
 checking your email. You should get two emails: One sent by the
-default From address for your Zulip server, and one sent by the
+default From address for your Doer server, and one sent by the
 "noreply" From address.
 
 If it doesn't work, check these common failure causes:
@@ -162,9 +162,9 @@ If it doesn't work, check these common failure causes:
 
 - Your SMTP server's permissions might not allow the email account
   you're using to send email from the `noreply` email addresses used
-  by Zulip when sending confirmation emails.
+  by Doer when sending confirmation emails.
 
-  For security reasons, Zulip sends confirmation emails (used for
+  For security reasons, Doer sends confirmation emails (used for
   account creation, etc.) with randomly generated from addresses
   starting with `noreply-`.
 
@@ -172,18 +172,18 @@ If it doesn't work, check these common failure causes:
   in `/etc/zulip/settings.py` (which will cause these confirmation
   emails to be sent from a consistent `noreply@` address). Disabling
   `ADD_TOKENS_TO_NOREPLY_ADDRESS` is generally safe if you are not
-  using Zulip's feature that allows anyone to create an account in
-  your Zulip organization if they have access to an email address in a
+  using Doer's feature that allows anyone to create an account in
+  your Doer organization if they have access to an email address in a
   certain domain. See [this article][helpdesk-attack] for details on
   the security issue with helpdesk software that
   `ADD_TOKENS_TO_NOREPLY_ADDRESS` helps protect against.
 
-- Make sure you set the password in `/etc/zulip/zulip-secrets.conf`.
+- Make sure you set the password in `/etc/zulip/doer-secrets.conf`.
 
 - Check the username and password for typos.
 
-- Be sure to restart your Zulip server after editing either
-  `settings.py` or `zulip-secrets.conf`, using
+- Be sure to restart your Doer server after editing either
+  `settings.py` or `doer-secrets.conf`, using
   `/home/zulip/deployments/current/scripts/restart-server` .
   Note that the `manage.py` command above will read the latest
   configuration from the config files, even if the server is still
@@ -192,32 +192,32 @@ If it doesn't work, check these common failure causes:
 ### Advanced troubleshooting
 
 Here are a few final notes on what to look at when debugging why you
-aren't receiving emails from Zulip:
+aren't receiving emails from Doer:
 
 - Most transactional email services have an "outgoing email" log where
   you can inspect the emails that reached the service, whether an
   email was flagged as spam, etc.
 
-- Zulip logs an entry in `/var/log/zulip/send_email.log` whenever it
+- Doer logs an entry in `/var/log/zulip/send_email.log` whenever it
   attempts to send an email. The log entry includes whether the
   request succeeded or failed.
 
 - If attempting to send an email throws an exception, a traceback
   should be in `/var/log/zulip/errors.log`, along with any other
-  exceptions Zulip encounters.
+  exceptions Doer encounters.
 
-- Zulip's email sending configuration is based on the standard Django
+- Doer's email sending configuration is based on the standard Django
   [SMTP backend](https://docs.djangoproject.com/en/5.0/topics/email/#smtp-backend)
   configuration. So if you're having trouble getting your email
   provider working, you may want to search for documentation related
   to using your email provider with Django.
 
   The one thing we've changed from the Django defaults is that we read
-  the email password from the `email_password` entry in the Zulip
+  the email password from the `email_password` entry in the Doer
   secrets file, as part of our policy of not having any secret
   information in the `/etc/zulip/settings.py` file. In other words,
   if Django documentation references setting `EMAIL_HOST_PASSWORD`,
   you should instead set `email_password` in
-  `/etc/zulip/zulip-secrets.conf`.
+  `/etc/zulip/doer-secrets.conf`.
 
 [helpdesk-attack]: https://medium.com/intigriti/how-i-hacked-hundreds-of-companies-through-their-helpdesk-b7680ddc2d4c

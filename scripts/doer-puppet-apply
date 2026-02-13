@@ -50,7 +50,7 @@ puppet_module_path = os.path.join(BASE_DIR, "puppet")
 puppet_cmd = [
     "puppet",
     "apply",
-    f"--modulepath={puppet_module_path}:/srv/zulip-puppet-cache/current",
+    f"--modulepath={puppet_module_path}:/srv/doer-puppet-cache/current",
     "-e",
     puppet_config,
 ]

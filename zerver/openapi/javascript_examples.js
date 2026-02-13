@@ -7,7 +7,7 @@
   that the documented examples are all correct, runnable code.
 */
 
-import zulipInit from "doer-js";
+import zulipInit from "zulip-js";
 
 const examples_handler = function () {
     const config = {

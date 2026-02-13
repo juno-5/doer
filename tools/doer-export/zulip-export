@@ -35,13 +35,13 @@ Example: doer-export --user=wdaher@zulip.com --api-key=a0b1c2d3e4f5a6b7c8d9e0f1a
 You can omit --user and --api-key arguments if you have a properly set up ~/.zuliprc
 This script requires the Doer API bindings to be installed."""
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../api"))
-import doer
+import zulip
 
-parser = doer.add_default_arguments(argparse.ArgumentParser(usage=usage))
+parser = zulip.add_default_arguments(argparse.ArgumentParser(usage=usage))
 parser.add_argument("--stream", required=True)
 options = parser.parse_args()
 
-client = doer.init_from_options(options)
+client = zulip.init_from_options(options)
 
 client.add_subscriptions([{"name": options.stream}])
 queue = client.register(event_types=["message"])

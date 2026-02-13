@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 import orjson
 from django.core import mail
 from django.test import override_settings
-from doer_bots.custom_exceptions import ConfigValidationError
+from zulip_bots.custom_exceptions import ConfigValidationError
 
 from zerver.actions.bots import do_change_bot_owner, do_change_default_sending_stream
 from zerver.actions.realm_settings import (
@@ -1989,7 +1989,7 @@ class BotTest(DoerTestCase, UploadSerializeMixin):
         service_payload_url = orjson.loads(result.content)["service_payload_url"]
         self.assertEqual(service_payload_url, "http://foo.bar2.com")
 
-    @patch("doer_bots.bots.giphy.giphy.GiphyHandler.validate_config")
+    @patch("zulip_bots.bots.giphy.giphy.GiphyHandler.validate_config")
     def test_patch_bot_config_data(self, mock_validate_config: MagicMock) -> None:
         self.create_test_bot(
             "test",
@@ -2054,7 +2054,7 @@ class BotTest(DoerTestCase, UploadSerializeMixin):
         test_bot_handler = get_bot_handler(test_service_name)
         self.assertEqual(
             str(type(test_bot_handler)),
-            "<class 'doer_bots.bots.converter.converter.ConverterHandler'>",
+            "<class 'zulip_bots.bots.converter.converter.ConverterHandler'>",
         )
 
         # Test for invalid service.
@@ -2144,7 +2144,7 @@ class BotTest(DoerTestCase, UploadSerializeMixin):
         }
         bot_info.update(extras)
         with patch(
-            "doer_bots.bots.giphy.giphy.GiphyHandler.validate_config",
+            "zulip_bots.bots.giphy.giphy.GiphyHandler.validate_config",
             side_effect=ConfigValidationError,
         ):
             result = self.client_post("/json/bots", bot_info)

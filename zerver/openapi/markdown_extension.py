@@ -66,25 +66,25 @@ MACRO_REGEXP_PARAMETER_DESC = re.compile(
 PYTHON_CLIENT_CONFIG = """
 #!/usr/bin/env python3
 
-import doer
+import zulip
 
 # Pass the path to your zuliprc file here.
-client = doer.Client(config_file="~/zuliprc")
+client = zulip.Client(config_file="~/zuliprc")
 
 """
 
 PYTHON_CLIENT_ADMIN_CONFIG = """
 #!/usr/bin/env python
 
-import doer
+import zulip
 
 # The user for this zuliprc file must be an organization administrator
-client = doer.Client(config_file="~/zuliprc-admin")
+client = zulip.Client(config_file="~/zuliprc-admin")
 
 """
 
 JS_CLIENT_CONFIG = """
-const doerInit = require("doer-js");
+const zulipInit = require("zulip-js");
 
 // Pass the path to your zuliprc file here.
 const config = { zuliprc: "zuliprc" };
@@ -92,7 +92,7 @@ const config = { zuliprc: "zuliprc" };
 """
 
 JS_CLIENT_ADMIN_CONFIG = """
-const doerInit = require("doer-js");
+const zulipInit = require("zulip-js");
 
 // The user for this zuliprc file must be an organization administrator.
 const config = { zuliprc: "zuliprc-admin" };
@@ -147,9 +147,9 @@ def render_python_code_example(
     endpoint, endpoint_method = function.split(":")
     extra_imports = check_additional_imports(endpoint, endpoint_method)
     if extra_imports:
-        extra_imports = sorted([*extra_imports, "doer"])
+        extra_imports = sorted([*extra_imports, "zulip"])
         extra_imports = [f"import {each_import}" for each_import in extra_imports]
-        config_string = config_string.replace("import doer", "\n".join(extra_imports))
+        config_string = config_string.replace("import zulip", "\n".join(extra_imports))
 
     config = config_string.splitlines()
 
@@ -186,13 +186,13 @@ def render_javascript_code_example(
 
     code_example = [
         "{tab|js}\n",
-        "More examples and documentation can be found [here](https://github.com/doer/doer-js).",
+        "More examples and documentation can be found [here](https://github.com/zulip/zulip-js).",
     ]
 
     code_example.append("```js")
     code_example.extend(config)
     code_example.append("(async () => {")
-    code_example.append("    const client = await doerInit(config);")
+    code_example.append("    const client = await zulipInit(config);")
     for snippet in snippets:
         code_example.append("")
         # Strip newlines

@@ -21,7 +21,7 @@ from functools import wraps
 from typing import Any, TypeVar
 
 from typing_extensions import ParamSpec
-from doer import Client
+from zulip import Client
 
 from zerver.models.realms import get_realm
 from zerver.models.users import get_user

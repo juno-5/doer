@@ -34,10 +34,10 @@ instead use the raw [register](/api/register-queue) and
 #!/usr/bin/env python
 
 import sys
-import doer
+import zulip
 
 # Pass the path to your zuliprc file here.
-client = doer.Client(config_file="~/zuliprc")
+client = zulip.Client(config_file="~/zuliprc")
 
 # Print every message the current user would receive
 # This is a blocking call that will run forever

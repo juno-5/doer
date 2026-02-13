@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 import digitalocean
-import doer
+import zulip
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
@@ -12,7 +12,7 @@ manager = digitalocean.Manager(token=os.environ["DIGITALOCEAN_API_KEY"])
 # We just temporarily create the client now, to validate that we can
 # auth to the server; reusing it after the whole install fails because
 # the connection has been half-closed in a way that breaks it.
-doer.Client()
+zulip.Client()
 TEST_DROPLET_SUBDOMAIN = "do"
 
 
@@ -137,7 +137,7 @@ def send_message(content: str) -> None:
         "topic": "digitalocean installer",
         "content": content,
     }
-    doer.Client().send_message(request)
+    zulip.Client().send_message(request)
 
 
 if __name__ == "__main__":

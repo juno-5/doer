@@ -8,14 +8,14 @@ from typing import Any
 
 # This import (and its dependencies) come from the production venv,
 # because we use `uv run` to execute this script.
-import doer
+import zulip
 
 config_file = configparser.RawConfigParser()
 config_file.read("/etc/zulip/doer.conf")
 send_to_channel = config_file.get("mirror_to_czo", "send_to_channel")
 
-reading = doer.Client(config_file="/etc/zulip/mirror_to_czo.zulipcore.zuliprc")
-sending = doer.Client(config_file="/etc/zulip/mirror_to_czo.czo.zuliprc")
+reading = zulip.Client(config_file="/etc/zulip/mirror_to_czo.zulipcore.zuliprc")
+sending = zulip.Client(config_file="/etc/zulip/mirror_to_czo.czo.zuliprc")
 
 logging.Formatter.converter = time.gmtime
 logging.basicConfig(format="%(asctime)s mirror_to_czo: %(message)s", level=logging.INFO)

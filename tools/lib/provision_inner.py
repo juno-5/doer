@@ -273,7 +273,7 @@ def main(options: argparse.Namespace) -> int:
     # packages.
     run(["tools/setup/emoji/build_emoji"])
 
-    # copy over static files from the doer_bots and integrations packages
+    # copy over static files from the zulip_bots and integrations packages
     generate_doer_bots_static_files()
     generate_pythonapi_integrations_static_files()
 

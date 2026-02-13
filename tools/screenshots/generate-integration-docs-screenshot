@@ -10,7 +10,7 @@ import sys
 from typing import Any
 from urllib.parse import parse_qsl, urlencode
 
-import doer
+import zulip
 
 SCREENSHOTS_DIR = os.path.abspath(os.path.dirname(__file__))
 TOOLS_DIR = os.path.abspath(os.path.dirname(SCREENSHOTS_DIR))
@@ -221,7 +221,7 @@ def send_bot_mock_message(bot: UserProfile, channel: str, topic: str, message: s
     Message.objects.filter(realm_id=bot.realm_id, sender=bot).delete()
     assert bot.bot_owner is not None
     url = f"{bot.bot_owner.realm.url}"
-    client = doer.Client(email=bot.email, api_key=bot.api_key, site=url)
+    client = zulip.Client(email=bot.email, api_key=bot.api_key, site=url)
 
     request = {"type": "stream", "to": channel, "topic": topic, "content": message}
     client.send_message(request)

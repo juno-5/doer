@@ -12,7 +12,7 @@ from scripts.lib.setup_path import setup_path
 setup_path()
 
 import integrations
-from doer_bots.lib import get_bots_directory_path
+from zulip_bots.lib import get_bots_directory_path
 
 
 def generate_pythonapi_integrations_static_files() -> None:
@@ -25,7 +25,7 @@ def generate_pythonapi_integrations_static_files() -> None:
     package_integrations_dir = os.path.dirname(os.path.abspath(integrations.__file__))
 
     def copy_integrations_data(integration_names: list[str]) -> None:
-        # The integration name as used in doer/python-doer-api.
+        # The integration name as used in zulip/python-zulip-api.
         for name in integration_names:
             src_dir = os.path.join(package_integrations_dir, name)
             dst_dir = os.path.join(integrations_dir, name)

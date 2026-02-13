@@ -10,7 +10,7 @@ In order to use them, you need to configure them with your identity
 achieve that:
 
 - Using a `zuliprc` file, referenced via the `--config-file` option or
-  the `config_file` option to the `doer.Client` constructor
+  the `config_file` option to the `zulip.Client` constructor
   (recommended for bots).
 - Using a `zuliprc` file in your home directory at `~/.zuliprc`
   (recommended for your own API key).
@@ -20,7 +20,7 @@ achieve that:
 - Using the `--api-key`, `--email`, and `--site` variables as command
   line parameters.
 - Using the `api_key`, `email`, and `site` parameters to the
-  `doer.Client` constructor.
+  `zulip.Client` constructor.
 
 ## Download a `zuliprc` file
 

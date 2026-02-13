@@ -320,7 +320,7 @@ def process_success_response(
         raise JsonableError(_("Invalid JSON in response"))
 
     if response_json == "":
-        # Versions of doer_botserver before 2021-05 used
+        # Versions of zulip_botserver before 2021-05 used
         # json.dumps("") as their "no response required" success
         # response; handle that for backwards-compatibility.
         return

@@ -8,7 +8,7 @@ import json
 import os
 import subprocess
 
-from doer import Client
+from zulip import Client
 
 from zerver.openapi.openapi import validate_against_openapi_schema
 

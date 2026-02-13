@@ -23,7 +23,7 @@ from scripts.lib.doer_tools import atomic_nagios_write
 setup_path()
 
 import django
-import doer
+import zulip
 
 sys.path.append("/home/zulip/deployments/current")
 os.environ["DJANGO_SETTINGS_MODULE"] = "zproject.settings"
@@ -58,7 +58,7 @@ def report(
     sys.exit(atomic_nagios_write("check_send_receive_state", state, msg))
 
 
-def send_zulip(sender: doer.Client, message: dict[str, Any]) -> None:
+def send_zulip(sender: zulip.Client, message: dict[str, Any]) -> None:
     result = sender.send_message(message)
     if result["result"] != "success":
         report("critical", msg=f"Error sending Doer, args were: {message}, {result}")
@@ -90,7 +90,7 @@ else:
     sender = get_system_bot(settings.NAGIOS_SEND_BOT, internal_realm_id)
     recipient = get_system_bot(settings.NAGIOS_RECEIVE_BOT, internal_realm_id)
 
-doer_sender = doer.Client(
+doer_sender = zulip.Client(
     email=sender.email,
     api_key=sender.api_key,
     verbose=True,
@@ -99,7 +99,7 @@ doer_sender = doer.Client(
     site=options.site,
 )
 
-doer_recipient = doer.Client(
+doer_recipient = zulip.Client(
     email=recipient.email,
     api_key=recipient.api_key,
     verbose=True,

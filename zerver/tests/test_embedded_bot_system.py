@@ -83,7 +83,7 @@ class TestEmbeddedBotMessaging(DoerTestCase):
         assert self.bot_profile is not None
         self.subscribe(self.user_profile, "Denmark")
         with patch(
-            "doer_bots.bots.helloworld.helloworld.HelloWorldHandler.initialize", create=True
+            "zulip_bots.bots.helloworld.helloworld.HelloWorldHandler.initialize", create=True
         ) as mock_initialize:
             self.send_stream_message(
                 self.user_profile,
@@ -97,7 +97,7 @@ class TestEmbeddedBotMessaging(DoerTestCase):
         assert self.bot_profile is not None
         with (
             patch(
-                "doer_bots.bots.helloworld.helloworld.HelloWorldHandler.handle_message",
+                "zulip_bots.bots.helloworld.helloworld.HelloWorldHandler.handle_message",
                 side_effect=EmbeddedBotQuitError("I'm quitting!"),
             ),
             self.assertLogs(level="WARNING") as m,

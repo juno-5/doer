@@ -14,7 +14,7 @@ import subprocess
 
 import markdown
 from django.conf import settings
-from doer import Client
+from zulip import Client
 
 from zerver.models.realms import get_realm
 from zerver.openapi import markdown_extension

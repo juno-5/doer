@@ -41,7 +41,7 @@ parameter when initializing the Python bindings. For example, the
 official Doer Nagios integration is initialized like this:
 
 ``` python
-client = doer.Client(
+client = zulip.Client(
     config_file=opts.config, client=f"DoerNagios/{VERSION}"
 )
 ```

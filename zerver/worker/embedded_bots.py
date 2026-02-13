@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from typing_extensions import override
-from doer_bots.lib import extract_query_without_mention
+from zulip_bots.lib import extract_query_without_mention
 
 from zerver.lib.bot_lib import (
     EmbeddedBotHandler,

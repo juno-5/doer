@@ -14,7 +14,7 @@ from django.db.models.functions import Upper
 from django.utils.translation import gettext as _
 from django_otp.middleware import is_verified
 from typing_extensions import NotRequired
-from doer_bots.custom_exceptions import ConfigValidationError
+from zulip_bots.custom_exceptions import ConfigValidationError
 
 from zerver.lib.avatar import avatar_url, get_avatar_field, get_avatar_for_inaccessible_user
 from zerver.lib.cache import cache_with_key, get_cross_realm_dicts_key
@@ -179,7 +179,7 @@ def check_valid_bot_config(
         except ConfigValidationError:
             # The exception provides a specific error message, but that
             # message is not tagged translatable, because it is
-            # triggered in the external doer_bots package.
+            # triggered in the external zulip_bots package.
             # TODO: Think of some clever way to provide a more specific
             # error message.
             raise JsonableError(_("Invalid configuration data!"))
